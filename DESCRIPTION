@@ -1,0 +1,46 @@
+Package: llmsa
+Type: Package
+Title: Measurement System Analysis for Pipelines Built on Large Language Models
+Version: 0.1.0
+Authors@R:
+    person("Daniel Andreas", "Moj", , "daniel.moj2@gmail.com", role = c("aut", "cre"),
+           comment = c(ORCID = "0009-0008-1594-6065"))
+Description: Treats a pipeline built on a large language model (LLM) as a
+    measurement system and validates it with the tools that analytical
+    laboratories already use: crossed precision studies with variance
+    components (gauge repeatability and reproducibility), attribute
+    agreement with kappa statistics, bias against a reference,
+    Plackett-Burman screening of robustness against prompt and formatting
+    perturbations, simulation-based planning of study size, Westgard-rule
+    control charts for ongoing system suitability, and a reproducible
+    validation report. The package is pipeline-agnostic: any backend that
+    turns a prompt and a model identifier into a text response can be
+    validated, and results produced elsewhere can be imported.
+License: MIT + file LICENSE
+URL: https://github.com/DanielMoj/llmsa
+BugReports: https://github.com/DanielMoj/llmsa/issues
+Encoding: UTF-8
+Language: en-US
+LazyData: true
+Depends:
+    R (>= 4.1)
+Imports:
+    graphics,
+    lme4,
+    ordinal,
+    stats,
+    tools,
+    utils
+Suggests:
+    DBI,
+    ellmer,
+    httr2,
+    jsonlite,
+    knitr,
+    rmarkdown,
+    RSQLite,
+    testthat (>= 3.0.0)
+VignetteBuilder: knitr
+Config/testthat/edition: 3
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.1

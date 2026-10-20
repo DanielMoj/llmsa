@@ -1,0 +1,30 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+type: software
+title: "llmsa: Measurement System Analysis for Pipelines Built on Large Language Models"
+version: 0.1.0
+date-released: 2026-10-20
+license: MIT
+repository-code: "https://github.com/DanielMoj/llmsa"
+url: "https://github.com/DanielMoj/llmsa"
+authors:
+  - family-names: Moj
+    given-names: Daniel Andreas
+    orcid: "https://orcid.org/0009-0008-1594-6065"
+keywords:
+  - measurement system analysis
+  - gauge R&R
+  - large language models
+  - validation
+  - variance components
+  - robustness
+  - Plackett-Burman
+  - Westgard rules
+  - R package
+abstract: >-
+  Treats a pipeline built on a large language model as a measurement system
+  and validates it with crossed precision studies (variance components,
+  gauge repeatability and reproducibility), attribute agreement (Krippendorff's
+  alpha, Cohen's kappa), bias and linearity, Plackett-Burman robustness
+  screening with Lenth's method, simulation-based study planning,
+  Westgard-rule control charts and a reproducible validation report.

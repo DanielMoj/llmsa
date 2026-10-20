@@ -1,0 +1,25 @@
+{
+  "title": "llmsa: Measurement System Analysis for Pipelines Built on Large Language Models",
+  "upload_type": "software",
+  "description": "Treats a pipeline built on a large language model as a measurement system and validates it with crossed precision studies (variance components, gauge repeatability and reproducibility), attribute agreement (Krippendorff's alpha, Cohen's kappa), bias and linearity, Plackett-Burman robustness screening with Lenth's method, simulation-based study planning, Westgard-rule control charts and a reproducible validation report. R package.",
+  "creators": [
+    {
+      "name": "Moj, Daniel Andreas",
+      "orcid": "0009-0008-1594-6065"
+    }
+  ],
+  "license": "MIT",
+  "keywords": [
+    "measurement system analysis",
+    "gauge R&R",
+    "large language models",
+    "validation",
+    "variance components",
+    "robustness",
+    "Plackett-Burman",
+    "Westgard rules",
+    "R package"
+  ],
+  "language": "eng",
+  "access_right": "open"
+}

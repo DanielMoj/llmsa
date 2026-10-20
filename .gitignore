@@ -1,0 +1,15 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+*.Rproj
+docs/
+inst/doc
+/doc/
+/Meta/
+*.sqlite
+*.db
+*.tar.gz
+*.Rcheck/
+validation_report*.html
+validation_report*.pdf

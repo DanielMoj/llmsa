@@ -1,0 +1,184 @@
+---
+title: "`r params$title`"
+author: "`r params$author`"
+date: "`r params$rendered_at`"
+output:
+  html_document:
+    toc: true
+    toc_depth: 2
+    theme: default
+params:
+  grr: NULL
+  runs: NULL
+  boot: NULL
+  agreement: NULL
+  bias: NULL
+  robustness: NULL
+  cou: ""
+  question: ""
+  risk: "medium"
+  acceptance: ""
+  title: ""
+  author: ""
+  data_hash: NA
+  package_version: ""
+  rendered_at: ""
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE, comment = "")
+grr <- params$grr
+fmt <- function(x, d = 3) ifelse(is.na(x), "NA", formatC(x, digits = d, format = "f"))
+esc <- function(x) gsub("|", "\\|", x, fixed = TRUE)   # pipes break markdown tables
+na_text <- "*Not assessed in this validation.*"
+```
+
+## 1. Context of use and model risk
+
+| | |
+|---|---|
+| **Question of interest** | `r if (nzchar(params$question)) esc(params$question) else "*not stated*"` |
+| **Context of use** | `r if (nzchar(params$cou)) esc(params$cou) else "*not stated*"` |
+| **Model risk tier** | `r params$risk` (model influence x decision consequence) |
+| **Acceptance criteria** | `r if (nzchar(params$acceptance)) esc(params$acceptance) else "*not stated*"` |
+
+The pipeline under validation is treated as a measurement system. Its
+precision is characterised by a crossed study (items x prompt variants x
+models x replicates), its accuracy against a reference, its robustness by
+a screening design, following the logic of AIAG MSA, CLSI EP05 and ICH
+Q2(R2) and the risk-based credibility framework for AI models proposed by
+the FDA (2025).
+
+## 2. Study design as realised
+
+```{r design, results='asis'}
+n <- grr$n
+cat(sprintf("%d items x %d prompt variants x %d models x %d block(s); %d valid observations; %d to %d valid replicates per cell.\n",
+            n$items, n$prompts, n$models, n$blocks, n$observations, n$reps_per_cell[1], n$reps_per_cell[2]))
+```
+
+```{r counts}
+if (!is.null(params$runs)) {
+  cnt <- llmsa::msa_counts(params$runs)
+  knitr::kable(cnt, caption = "Planned and valid responses per prompt variant and model.")
+} else cat(na_text)
+```
+
+```{r counts-note, results='asis'}
+if (!is.null(params$runs)) {
+  r <- params$runs
+  cat(sprintf("Backend errors: %d. Unparseable responses: %d. Cells with fewer than two valid replicates: %d.\n\n",
+              if ("error" %in% names(r)) sum(!is.na(r$error)) else 0L,
+              sum(is.na(r$value)), attr(cnt, "cells_under_two")))
+}
+```
+
+## 3. Precision: gauge repeatability and reproducibility
+
+```{r grr}
+tab <- grr$table
+tab$variance <- fmt(tab$variance, 4); tab$sd <- fmt(tab$sd, 4)
+tab$pct_contribution <- fmt(tab$pct_contribution, 1); tab$pct_study_var <- fmt(tab$pct_study_var, 1)
+names(tab) <- c("Source", "Variance", "SD", "% Contribution", "% Study variation")
+knitr::kable(tab, align = "lrrrr",
+             caption = sprintf("Variance components (%s outcome%s).", grr$type,
+                               if (grr$type != "numeric") ", latent scale" else ""))
+```
+
+```{r grr-summary, results='asis'}
+s <- grr$summary
+cat(sprintf("* Total gauge R&R: **%.1f %% of study variation** (%.1f %% contribution)\n", s[["grr_pct_study_var"]], s[["grr_pct_contribution"]]))
+cat(sprintf("* Repeatability %.1f %%, reproducibility %.1f %% of study variation\n", s[["repeatability_pct_study_var"]], s[["reproducibility_pct_study_var"]]))
+cat(sprintf("* Number of distinct categories (ndc): %s; ICC(items) = %.3f\n", if (is.finite(s[["ndc"]])) format(s[["ndc"]]) else "Inf", s[["icc_items"]]))
+cat(sprintf("* Classification: **%s** (basis %s, thresholds %g / %g)\n", toupper(grr$verdict),
+            if (grr$basis == "study_var") "% study variation" else "% contribution", grr$threshold[1], grr$threshold[2]))
+if (isTRUE(grr$singular)) cat("* Note: singular fit; at least one variance component was estimated at zero. With few prompt or model levels this is expected; see the bootstrap intervals.\n")
+```
+
+```{r boot}
+if (!is.null(params$boot)) {
+  b <- as.data.frame(params$boot)
+  b$estimate <- fmt(b$estimate, 2); b$lower <- fmt(b$lower, 2); b$upper <- fmt(b$upper, 2)
+  knitr::kable(b, caption = sprintf("Parametric bootstrap, %d replicates, %.0f %% percentile intervals.",
+                                    nrow(attr(params$boot, "boot")), 100 * attr(params$boot, "level")))
+} else cat(na_text)
+```
+
+## 4. Agreement and accuracy
+
+```{r agreement, results='asis'}
+ag <- params$agreement
+if (!is.null(ag)) {
+  cat(sprintf("Categories: %s (weights: %s). %d items, %d responses, %d missing.\n\n",
+              paste(ag$levels, collapse = " < "), ag$weights, ag$n[["items"]], ag$n[["responses"]], ag$n[["missing"]]))
+  cat(sprintf("* Repeatability: %.1f %% of item-prompt-model cells have identical replicates\n", ag$repeatability_overall))
+  r <- ag$reproducibility
+  cat(sprintf("* Reproducibility: items consistent across prompts %.1f %%, across models %.1f %%, under all conditions %.1f %%\n", r[[1]], r[[2]], r[[3]]))
+  if (!is.null(ag$accuracy)) {
+    cat(sprintf("* Accuracy: %.1f %% of responses correct; %.1f %% of items correct in every call; Cohen's kappa (modal response vs reference) %.3f, (all responses vs reference) %.3f\n",
+                ag$accuracy_overall, ag$pct_items_all_correct, ag$kappa[[1]], ag$kappa[[2]]))
+  }
+  cat("\n")
+  al <- ag$alpha; al$alpha <- fmt(al$alpha, 3)
+  print(knitr::kable(al, caption = "Krippendorff's alpha by scope."))
+  if (!is.null(ag$accuracy)) {
+    ac <- ag$accuracy; ac$pct_correct <- fmt(ac$pct_correct, 1)
+    print(knitr::kable(ac, caption = "Percent correct per prompt variant and model."))
+  }
+} else cat(na_text)
+```
+
+## 5. Bias and linearity
+
+```{r bias, results='asis'}
+bi <- params$bias
+if (!is.null(bi)) {
+  o <- bi$overall
+  cat(sprintf("Mean bias %.4f (%.0f %% CI %.4f to %.4f; sd %.4f; n = %d; p = %.3g). Linearity: bias = %.4f + %.4f x reference (slope p = %.3g).\n\n",
+              o[["bias"]], 100 * bi$level, o[["lower"]], o[["upper"]], o[["sd"]], as.integer(o[["n"]]), o[["p_value"]],
+              bi$linearity[["intercept"]], bi$linearity[["slope"]], bi$linearity[["slope_p_value"]]))
+  bc <- bi$by_condition
+  for (nm in c("bias", "sd", "lower", "upper")) bc[[nm]] <- fmt(bc[[nm]], 4)
+  bc$p_value <- formatC(bc$p_value, digits = 3, format = "g")
+  print(knitr::kable(bc, caption = "Bias per prompt variant and model."))
+} else cat(na_text)
+```
+
+## 6. Robustness
+
+```{r robustness, results='asis'}
+ro <- params$robustness
+if (!is.null(ro)) {
+  cat(sprintf("Screening design with %d runs and %d factors; response mean %.4f (sd %.4f). Lenth PSE %.4f, ME %.4f, SME %.4f.\n\n",
+              attr(ro, "n_runs"), nrow(ro), attr(ro, "response_mean"), attr(ro, "response_sd"),
+              attr(ro, "pse"), attr(ro, "me"), attr(ro, "sme")))
+  d <- as.data.frame(ro); d$effect <- fmt(d$effect, 4); d$t_lenth <- fmt(d$t_lenth, 2)
+  print(knitr::kable(d, caption = "Main effects of the screened perturbations."))
+  if (any(ro$active)) cat(sprintf("\nActive factors: **%s**. The pipeline is sensitive to these perturbations and the procedure must control them.\n", paste(ro$factor[ro$active], collapse = ", ")))
+  else cat("\nNo active factor: the pipeline is robust to all screened perturbations at this level.\n")
+} else cat(na_text)
+```
+
+## 7. Conclusion
+
+```{r conclusion, results='asis'}
+cat(sprintf("Measured against the acceptance criteria (%s), the precision study classifies the pipeline as **%s** for the stated context of use at model risk tier *%s*. ",
+            if (nzchar(params$acceptance)) params$acceptance else "not stated", toupper(grr$verdict), params$risk))
+cat("The verdict applies to the model snapshots, prompts and parsing used in this study; a change to any of them requires re-validation, and a system-suitability control set should be run before every productive batch (see `msa_control_chart()`).\n")
+```
+
+## 8. Traceability
+
+| | |
+|---|---|
+| Rendered | `r params$rendered_at` |
+| llmsa version | `r params$package_version` |
+| R version | `r R.version.string` |
+| lme4 / ordinal | `r as.character(utils::packageVersion("lme4"))` / `r as.character(utils::packageVersion("ordinal"))` |
+| Data hash (md5 of the analysed runs) | `r if (is.na(params$data_hash)) "not available (runs not supplied)" else params$data_hash` |
+
+```{r session}
+si <- utils::sessionInfo()
+cat(paste(c(si$R.version$platform, paste("Packages:", paste(sort(names(si$otherPkgs)), collapse = ", ")),
+            paste("Loaded:", paste(sort(names(si$loadedOnly)), collapse = ", "))), collapse = "\n"))
+```

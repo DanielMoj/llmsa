@@ -1,0 +1,33 @@
+url: https://danielmoj.github.io/llmsa/
+template:
+  bootstrap: 5
+
+reference:
+- title: Plan and run a study
+  contents:
+  - msa_design
+  - msa_run
+  - as_msa_runs
+  - msa_counts
+  - backends
+  - parsers
+- title: Precision and accuracy
+  contents:
+  - msa_fit
+  - msa_grr
+  - msa_boot
+  - msa_agreement
+  - msa_bias
+- title: Robustness, planning, control
+  contents:
+  - pb_design
+  - msa_robustness
+  - msa_simulate
+  - msa_plan
+  - msa_control_chart
+- title: Report and data
+  contents:
+  - msa_report
+  - acmg_demo
+  - ic50_demo
+  - llmsa-package

@@ -1,0 +1,255 @@
+---
+title: "Validating an LLM pipeline as a measurement system"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Validating an LLM pipeline as a measurement system}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>", fig.width = 6, fig.height = 4)
+```
+
+A pipeline that sends laboratory data, variant descriptions or assay
+reports to a large language model and parses a value or a label out of the
+answer is a measurement procedure. Before a measurement procedure is used
+for decisions, a laboratory asks four questions: how precise is it, how
+accurate, how robust against small changes in the way it is operated, and
+how is it kept under control once in routine use. `llmsa` answers these
+questions for LLM pipelines with the methods laboratories already trust:
+variance components (gauge repeatability and reproducibility), attribute
+agreement, bias and linearity, Plackett-Burman robustness screening,
+simulation-based study planning and Westgard control charts.
+
+This vignette walks through a complete validation offline, using a mock
+backend that behaves like a noisy model. Replace the backend with
+`backend_openai_compatible()` or `backend_ellmer()` to validate a real
+pipeline; nothing else changes.
+
+```{r setup}
+library(llmsa)
+```
+
+## 1. The study: items x prompts x models x replicates
+
+Items play the role of parts in a gauge study. Here they are variant
+descriptions with a reference classification; a real study would draw
+them from an expert-curated set (and, for the accuracy question, from
+variants the model cannot have memorised).
+
+```{r items}
+set.seed(1)
+n <- 24
+items <- data.frame(
+  item_id = sprintf("VAR%02d", seq_len(n)),
+  text = sprintf("NM_%06d.1:c.%dG>A in gene G%d", 1000 + seq_len(n), 100 * seq_len(n), seq_len(n)),
+  stringsAsFactors = FALSE)
+truth <- setNames(rnorm(n, 0, 1.6), items$item_id)
+tiers <- c("Benign", "Likely benign", "VUS", "Likely pathogenic", "Pathogenic")
+cuts <- c(-1.5, -0.5, 0.5, 1.5)
+items$reference <- tiers[findInterval(truth, cuts) + 1]
+```
+
+Prompt variants are the "appraisers": semantically equivalent ways of
+asking. Models are the "instruments".
+
+```{r design}
+prompts <- c(
+  concise  = "Classify the variant {text} using the ACMG/AMP five-tier scheme. Answer with the tier only.",
+  role     = "You are a board-certified clinical geneticist. Give the ACMG/AMP classification of {text}.",
+  criteria = "List the applicable ACMG/AMP criteria for {text}, then state the resulting tier.")
+models <- c("model-a", "model-b")
+design <- msa_design(items, prompts, models, reps = 3, blocks = 2, seed = 42)
+design
+```
+
+Two blocks mean that each replicate set is run twice, ideally on
+different days: inference endpoints are not deterministic even at
+temperature 0, and the amount of drift is itself a quantity worth
+knowing.
+
+## 2. Running it with an audit trail
+
+The mock backend draws a latent score from the item's truth plus a
+prompt effect, a model effect and replicate noise, and writes a sentence
+containing the tier, so that the parser is exercised too. `store` keeps
+every raw response; an interrupted study resumes from the store.
+
+```{r run}
+backend <- backend_mock(truth, levels = tiers, thresholds = cuts,
+                        sd_prompt = 0.25, sd_model = 0.3, sd_rep = 0.45,
+                        p_fail = 0.02, seed = 7)
+store <- tempfile(fileext = ".csv")
+runs <- msa_run(design, backend, parse = parse_choice(tiers), store = store, verbose = FALSE)
+runs
+msa_counts(runs)
+```
+
+A response that cannot be parsed is a failed measurement and is counted
+as such; it does not silently disappear.
+
+## 3. Precision: variance components and gauge R&R
+
+For an ordinal outcome the model is a cumulative link mixed model; the
+variance components live on the latent (probit) scale.
+
+```{r fit}
+fit <- msa_fit(runs, type = "ordinal", levels = tiers)
+fit
+grr <- msa_grr(fit)
+grr
+```
+
+The table reads like any gauge R&R report: how much of the variation the
+pipeline sees between items is its own noise (total gauge R&R), split
+into replicate noise (repeatability) and the effect of asking differently
+or using another model (reproducibility). The number of distinct
+categories says how many groups of items the pipeline can tell apart
+reliably.
+
+## 4. Agreement and accuracy
+
+`msa_agreement()` is the categorical view of the same study: percent
+consistent cells and items, Krippendorff's alpha at several scopes, and,
+against the reference, accuracy and Cohen's kappa.
+
+```{r agreement}
+ag <- msa_agreement(runs, levels = tiers, reference = "reference", weights = "linear")
+ag
+```
+
+A pipeline can score well on the modal answer while a single call is
+unreliable. Both numbers belong in the report, because a production
+pipeline usually makes one call.
+
+## 5. Uncertainty of the estimates
+
+With two models and three prompts the reproducibility components rest on
+very few levels. For numeric and binary outcomes `msa_boot()` gives
+parametric bootstrap intervals; the same difficulty is addressed at the
+planning stage below.
+
+```{r boot}
+num <- msa_simulate(n_items = 30, n_prompts = 3, n_models = 2, n_reps = 3,
+                    vc = list(item = 1, prompt = 0.05, model = 0.05, residual = 0.1), seed = 3)
+fit_num <- msa_fit(num, type = "numeric")
+msa_boot(fit_num, nsim = 30, seed = 1)
+```
+
+## 6. Bias and linearity (numeric outcomes)
+
+```{r bias}
+num$reference <- num$latent
+msa_bias(num, reference = "reference")
+```
+
+## 7. Robustness screening
+
+Robustness asks whether deliberate small changes to the way the pipeline
+is operated change the result. A Plackett-Burman design screens up to
+eleven such factors in twelve runs. Each run is itself a (small) study;
+the response is a summary statistic such as the percent correct.
+
+```{r robustness}
+factors <- list(
+  number_format = c("plain", "scientific"),
+  typos         = c("none", "two per prompt"),
+  extra_context = c("none", "unrelated paragraph"),
+  system_prompt = c("A", "B"),
+  temperature   = c("0", "0.7"),
+  order         = c("original", "shuffled"))
+rob <- pb_design(factors, seed = 1)
+rob
+```
+
+Here the runs are simulated: typos and temperature hurt, nothing else
+does.
+
+```{r robustness-run}
+set.seed(2)
+pct_correct <- 90 - 7 * (rob$typos > 0) - 4 * (rob$temperature > 0) + rnorm(nrow(rob), 0, 0.8)
+res <- msa_robustness(rob, pct_correct)
+res
+plot(res)
+```
+
+Lenth's pseudo standard error needs no replicate runs; effects beyond the
+margin of error are flagged as active and must be controlled by the
+procedure (here: spell-check the input, fix the temperature).
+
+## 8. Planning the size of a study
+
+How many items, prompt variants, models and replicates are needed before
+the estimated percent gauge R&R can be trusted? `msa_plan()` simulates
+candidate designs from assumed variance components.
+
+```{r plan}
+scenarios <- expand.grid(n_items = c(20, 40), n_prompts = c(3, 6), n_models = 3, n_reps = 3)
+msa_plan(scenarios, vc = list(item = 1, prompt = 0.05, model = 0.05, residual = 0.1),
+         nsim = 10, seed = 1, verbose = FALSE)
+```
+
+(Use a few hundred simulations in practice.) The share of singular fits
+and the width of the interval both shrink with the number of prompt
+variants, not with the number of items: the levels of the factor whose
+variance is being estimated are what count.
+
+## 9. Keeping the pipeline under control
+
+A validation is a snapshot. Providers change models silently and prompts
+get edited. A small control set with known answers, run before every
+productive batch and charted with Westgard rules, catches drift.
+
+```{r spc}
+set.seed(3)
+control <- c(rnorm(15, 0.92, 0.02), rnorm(6, 0.84, 0.02))   # drift after a silent model update
+cc <- msa_control_chart(control, center = 0.92, sd = 0.02)
+cc
+plot(cc)
+```
+
+## 10. The validation report
+
+`msa_report()` writes everything into one self-contained document with the
+structure a reviewer expects, including a traceability section with the
+data hash and the package versions.
+
+```{r report, eval = FALSE}
+msa_report(grr, runs = runs, agreement = ag, robustness = res,
+           cou = "Pre-classification of sequence variants for review by a geneticist",
+           question = "Does the pipeline reproduce the expert tier reliably enough to triage?",
+           risk = "medium",
+           acceptance = "%GRR < 30 % of study variation; kappa (modal) >= 0.8; no active robustness factor",
+           output_file = "validation_report.html")
+```
+
+## Using your own pipeline or results
+
+* Wrap any client as `function(prompt, model, row)` returning the text, or
+  use `backend_openai_compatible()` (OpenAI, Ollama, vLLM, LM Studio) and
+  `backend_ellmer()`.
+* Results produced elsewhere go through `as_msa_runs()`: one row per call
+  with item, prompt variant, model, replicate and parsed value.
+
+## References
+
+* AIAG (2010). *Measurement Systems Analysis*, 4th ed.
+* Burdick, R. K., Borror, C. M., Montgomery, D. C. (2003). A review of
+  methods for measurement systems capability analysis. *Journal of Quality
+  Technology* 35, 342-354.
+* CLSI EP05-A3 (2014). *Evaluation of Precision of Quantitative Measurement
+  Procedures*.
+* ICH Q2(R2) (2023). *Validation of Analytical Procedures*.
+* Krippendorff, K. (2011). *Computing Krippendorff's Alpha-Reliability*.
+* Lenth, R. V. (1989). Quick and easy analysis of unreplicated factorials.
+  *Technometrics* 31, 469-473.
+* Plackett, R. L., Burman, J. P. (1946). The design of optimum
+  multifactorial experiments. *Biometrika* 33, 305-325.
+* Westgard, J. O. et al. (1981). A multi-rule Shewhart chart for quality
+  control in clinical chemistry. *Clinical Chemistry* 27, 493-501.
+* U.S. FDA (2025). *Considerations for the Use of Artificial Intelligence
+  to Support Regulatory Decision-Making for Drug and Biological Products*
+  (draft guidance).
+* He, H. and Thinking Machines Lab (2025). *Defeating Nondeterminism in
+  LLM Inference*.
