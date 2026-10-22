@@ -1,0 +1,9 @@
+pandoc: 3.8.3
+pkgdown: 2.2.1
+pkgdown_sha: ~
+articles:
+  llmsa: llmsa.html
+last_built: 2026-10-22T09:56Z
+urls:
+  reference: https://danielmoj.github.io/llmsa/reference
+  article: https://danielmoj.github.io/llmsa/articles
