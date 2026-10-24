@@ -1,0 +1,84 @@
+{
+  "id": "ANK-01",
+  "title": "SHA-256 der 13 Dateien unter R/ in Commit 332a2d5 (v0.1.0)",
+  "criteria": [
+    "K-M0-4"
+  ],
+  "value": {
+    "R/agreement.R": {
+      "sha256": "eeb92e3b38a6505d9e9331b1feb680da04586f97324afb3ff8638153f1cb5484",
+      "bytes": 12835,
+      "git_blob": "3783af9114642776d69a77089a068f1c0c616451"
+    },
+    "R/backends.R": {
+      "sha256": "f8ce5f381df2dd870d16827f17d613121f0b6c1e057b68360f1b37ea8cd6851c",
+      "bytes": 7870,
+      "git_blob": "99302b64d82048cf7794a7a117fec55849fdb3eb"
+    },
+    "R/data.R": {
+      "sha256": "3762c06061cd9bc087bef98ccbd18a0eb2ec5361dd91e181fac4c707f56d0e6f",
+      "bytes": 1437,
+      "git_blob": "03d337616504ef33f6ed10e8efc84fb92bc10d3c"
+    },
+    "R/design.R": {
+      "sha256": "f7685ba99e5816ae31f2229886556da2fb50caba1eb890e65f8129a0055435ed",
+      "bytes": 5275,
+      "git_blob": "c6a4d0c98b2dad7436c37b34e3b7e1b5f1577048"
+    },
+    "R/fit.R": {
+      "sha256": "761faa4c4519cea2770f4c746fe002f72b91979bb625cb3a598f2af7655c93e1",
+      "bytes": 9631,
+      "git_blob": "c7895a80ba454b41cf1f6ce28054008ac2274ac6"
+    },
+    "R/grr.R": {
+      "sha256": "6c0d8b57e54f4a72a5667ad89f3b0119acd9ca020bb669a060e3ec2ed9224fed",
+      "bytes": 8886,
+      "git_blob": "23f3d669429ec47fd96a3f43717606aa6b3d0937"
+    },
+    "R/parse.R": {
+      "sha256": "c7747d5047744b6b8d7bd6f310ef95049f1e05a55325991165efc424ca2f6eb7",
+      "bytes": 3968,
+      "git_blob": "7eadae1bd9e8246303fb5e79a3ad4ca914f43195"
+    },
+    "R/plan.R": {
+      "sha256": "dea07208f6f08bc28b7353a4a5076e3776cf1f7c9eb0fd6534fd1c44ac8384b4",
+      "bytes": 5989,
+      "git_blob": "62829bdc1e895dd9bb0b5d39142e0b60b7cb9b47"
+    },
+    "R/report.R": {
+      "sha256": "e1a21395ed5558a86d43843791a15be6bce086ca58fae164fc01493976ba5fb7",
+      "bytes": 4458,
+      "git_blob": "df5bf5159e7723d10ac69203132e21b189c7a8c3"
+    },
+    "R/robustness.R": {
+      "sha256": "ced468dc9a6f9c0ae59cd8174fd9fba32ddbbe2dc18220a92ab1cb7c0a56cd5f",
+      "bytes": 8684,
+      "git_blob": "70c768acb1d806bd335bc55076481fc4e8687edf"
+    },
+    "R/run.R": {
+      "sha256": "3651b28189658dd0600b0c0cc666a3ad06e9bdef54c251d879a725f4b43677e8",
+      "bytes": 9824,
+      "git_blob": "2f9e0ae1fcdf0c7968b361a0aed9de05f2390d75"
+    },
+    "R/spc.R": {
+      "sha256": "c72dc7eafb242a86824e82dc5a4a165ba9b304472cc04b34ffe5c42366db5b2a",
+      "bytes": 4571,
+      "git_blob": "9bf69b76da066d4fdaea5657db073084941c6be2"
+    },
+    "R/utils.R": {
+      "sha256": "3352d76837ddcfd3a11fe5123ae95c68421639f8e770efd35eb2c46097cacfe2",
+      "bytes": 2809,
+      "git_blob": "d7a6994d5b72072b2d0d76b21cacf58dc53e5979"
+    }
+  },
+  "unit": "je Datei unter R/: sha256 = SHA-256 des Dateiinhalts (hexadezimal, Kleinbuchstaben); bytes = Dateigröße in Byte; git_blob = Git-Objekt-ID (SHA-1) des Blobs im Commit-Baum",
+  "tolerance": 0,
+  "tolerance_note": "exakt (byte-identisch)",
+  "source_url": "https://github.com/DanielMoj/llmsa/tree/332a2d5897598685c17efe893e2ad65478ec04eb/R",
+  "source": "Repo DanielMoj/llmsa, Commit 332a2d5897598685c17efe893e2ad65478ec04eb (v0.1.0), Verzeichnis R/; gleichwertig zu git show 332a2d5:R/<datei> | sha256sum",
+  "quote": "llmsa 0.1.0: measurement system analysis for LLM pipelines",
+  "quote_location": "Betreffzeile der Commit-Nachricht von 332a2d5",
+  "retrieved": "2026-10-25",
+  "method": "Ohne Git-Kommando (Reviewer-Regel): Baum des Commits über https://api.github.com/repos/DanielMoj/llmsa/git/trees/332a2d5897598685c17efe893e2ad65478ec04eb?recursive=1 (nicht gekürzt, genau 13 Blobs unter R/); jede Datei über https://raw.githubusercontent.com/DanielMoj/llmsa/332a2d5897598685c17efe893e2ad65478ec04eb/<pfad> geladen und gegen die Blob-ID des Baums geprüft (SHA-1 über blob <n>\\0<inhalt>); SHA-256 mit tools::sha256sum (R 4.6.1).",
+  "verification": "Zweitbeleg: digest::digest(algo = \"sha256\", file = TRUE) und openssl::sha256 liefern dieselben 13 Werte; alle 60 Blobs des Commits stimmen mit ihrer Blob-ID überein; der lokale Arbeitsbaum (HEAD 265b712) ist für alle 13 Dateien byte-identisch, ohne CR-Zeichen."
+}

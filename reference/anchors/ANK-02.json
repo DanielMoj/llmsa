@@ -1,0 +1,524 @@
+{
+  "id": "ANK-02",
+  "title": "API-Snapshot v0.1.0: Exportliste (NAMESPACE) und formals() der 22 exportierten Funktionen aus Commit 332a2d5",
+  "criteria": [
+    "K-M0-7",
+    "Schnittstellenregel, docs/01-fachspezifikation.md §4"
+  ],
+  "value": {
+    "exports": [
+      "as_msa_runs",
+      "backend_ellmer",
+      "backend_mock",
+      "backend_openai_compatible",
+      "msa_agreement",
+      "msa_bias",
+      "msa_boot",
+      "msa_control_chart",
+      "msa_counts",
+      "msa_design",
+      "msa_fit",
+      "msa_grr",
+      "msa_plan",
+      "msa_report",
+      "msa_robustness",
+      "msa_run",
+      "msa_simulate",
+      "parse_choice",
+      "parse_identity",
+      "parse_json_field",
+      "parse_number",
+      "pb_design"
+    ],
+    "functions": {
+      "as_msa_runs": [
+        {
+          "name": "x",
+          "default": null
+        },
+        {
+          "name": "item",
+          "default": "\"item_id\""
+        },
+        {
+          "name": "prompt",
+          "default": "\"prompt_id\""
+        },
+        {
+          "name": "model",
+          "default": "\"model_id\""
+        },
+        {
+          "name": "rep",
+          "default": "\"rep\""
+        },
+        {
+          "name": "value",
+          "default": "\"value\""
+        },
+        {
+          "name": "block",
+          "default": "\"block\""
+        },
+        {
+          "name": "design",
+          "default": "NULL"
+        }
+      ],
+      "backend_ellmer": [
+        {
+          "name": "chats",
+          "default": null
+        }
+      ],
+      "backend_mock": [
+        {
+          "name": "truth",
+          "default": null
+        },
+        {
+          "name": "levels",
+          "default": "NULL"
+        },
+        {
+          "name": "thresholds",
+          "default": "NULL"
+        },
+        {
+          "name": "sd_prompt",
+          "default": "0.2"
+        },
+        {
+          "name": "sd_model",
+          "default": "0.2"
+        },
+        {
+          "name": "sd_rep",
+          "default": "0.3"
+        },
+        {
+          "name": "p_fail",
+          "default": "0"
+        },
+        {
+          "name": "template",
+          "default": "\"The result is: %s.\""
+        },
+        {
+          "name": "seed",
+          "default": "NULL"
+        }
+      ],
+      "backend_openai_compatible": [
+        {
+          "name": "base_url",
+          "default": "\"https://api.openai.com/v1\""
+        },
+        {
+          "name": "api_key",
+          "default": "Sys.getenv(\"OPENAI_API_KEY\")"
+        },
+        {
+          "name": "temperature",
+          "default": "0"
+        },
+        {
+          "name": "system",
+          "default": "NULL"
+        },
+        {
+          "name": "max_tokens",
+          "default": "NULL"
+        },
+        {
+          "name": "timeout",
+          "default": "120"
+        },
+        {
+          "name": "...",
+          "default": null
+        }
+      ],
+      "msa_agreement": [
+        {
+          "name": "runs",
+          "default": null
+        },
+        {
+          "name": "levels",
+          "default": "NULL"
+        },
+        {
+          "name": "reference",
+          "default": "NULL"
+        },
+        {
+          "name": "weights",
+          "default": "c(\"unweighted\", \"linear\", \"quadratic\")"
+        }
+      ],
+      "msa_bias": [
+        {
+          "name": "runs",
+          "default": null
+        },
+        {
+          "name": "reference",
+          "default": null
+        },
+        {
+          "name": "level",
+          "default": "0.95"
+        }
+      ],
+      "msa_boot": [
+        {
+          "name": "fit",
+          "default": null
+        },
+        {
+          "name": "nsim",
+          "default": "200"
+        },
+        {
+          "name": "level",
+          "default": "0.95"
+        },
+        {
+          "name": "seed",
+          "default": "NULL"
+        },
+        {
+          "name": "...",
+          "default": null
+        }
+      ],
+      "msa_control_chart": [
+        {
+          "name": "x",
+          "default": null
+        },
+        {
+          "name": "center",
+          "default": "NULL"
+        },
+        {
+          "name": "sd",
+          "default": "NULL"
+        },
+        {
+          "name": "n_baseline",
+          "default": "10"
+        },
+        {
+          "name": "rules",
+          "default": "c(\"1_2s\", \"1_3s\", \"2_2s\", \"R_4s\", \"4_1s\", \"10_x\")"
+        }
+      ],
+      "msa_counts": [
+        {
+          "name": "runs",
+          "default": null
+        }
+      ],
+      "msa_design": [
+        {
+          "name": "items",
+          "default": null
+        },
+        {
+          "name": "prompts",
+          "default": null
+        },
+        {
+          "name": "models",
+          "default": null
+        },
+        {
+          "name": "reps",
+          "default": "3"
+        },
+        {
+          "name": "blocks",
+          "default": "1"
+        },
+        {
+          "name": "order",
+          "default": "c(\"random\", \"fixed\")"
+        },
+        {
+          "name": "seed",
+          "default": "NULL"
+        }
+      ],
+      "msa_fit": [
+        {
+          "name": "runs",
+          "default": null
+        },
+        {
+          "name": "type",
+          "default": "c(\"numeric\", \"ordinal\", \"binary\")"
+        },
+        {
+          "name": "levels",
+          "default": "NULL"
+        },
+        {
+          "name": "interactions",
+          "default": "NULL"
+        },
+        {
+          "name": "link",
+          "default": "c(\"probit\", \"logit\")"
+        },
+        {
+          "name": "...",
+          "default": null
+        }
+      ],
+      "msa_grr": [
+        {
+          "name": "fit",
+          "default": null
+        },
+        {
+          "name": "threshold",
+          "default": "NULL"
+        },
+        {
+          "name": "basis",
+          "default": "c(\"study_var\", \"contribution\")"
+        }
+      ],
+      "msa_plan": [
+        {
+          "name": "scenarios",
+          "default": null
+        },
+        {
+          "name": "vc",
+          "default": "list(item = 1, prompt = 0.05, model = 0.05, residual = 0.1)"
+        },
+        {
+          "name": "nsim",
+          "default": "100"
+        },
+        {
+          "name": "seed",
+          "default": "NULL"
+        },
+        {
+          "name": "verbose",
+          "default": "TRUE"
+        }
+      ],
+      "msa_report": [
+        {
+          "name": "grr",
+          "default": null
+        },
+        {
+          "name": "runs",
+          "default": "NULL"
+        },
+        {
+          "name": "boot",
+          "default": "NULL"
+        },
+        {
+          "name": "agreement",
+          "default": "NULL"
+        },
+        {
+          "name": "bias",
+          "default": "NULL"
+        },
+        {
+          "name": "robustness",
+          "default": "NULL"
+        },
+        {
+          "name": "cou",
+          "default": "\"\""
+        },
+        {
+          "name": "question",
+          "default": "\"\""
+        },
+        {
+          "name": "risk",
+          "default": "c(\"medium\", \"low\", \"high\")"
+        },
+        {
+          "name": "acceptance",
+          "default": "\"\""
+        },
+        {
+          "name": "title",
+          "default": "\"Validation report: LLM pipeline as a measurement system\""
+        },
+        {
+          "name": "author",
+          "default": "\"\""
+        },
+        {
+          "name": "output_file",
+          "default": "\"validation_report.html\""
+        },
+        {
+          "name": "output_format",
+          "default": "\"html_document\""
+        },
+        {
+          "name": "quiet",
+          "default": "TRUE"
+        }
+      ],
+      "msa_robustness": [
+        {
+          "name": "design",
+          "default": null
+        },
+        {
+          "name": "response",
+          "default": null
+        },
+        {
+          "name": "factors",
+          "default": "NULL"
+        },
+        {
+          "name": "alpha",
+          "default": "0.05"
+        }
+      ],
+      "msa_run": [
+        {
+          "name": "design",
+          "default": null
+        },
+        {
+          "name": "backend",
+          "default": null
+        },
+        {
+          "name": "parse",
+          "default": "parse_identity"
+        },
+        {
+          "name": "block",
+          "default": "NULL"
+        },
+        {
+          "name": "store",
+          "default": "NULL"
+        },
+        {
+          "name": "resume",
+          "default": "FALSE"
+        },
+        {
+          "name": "delay",
+          "default": "0"
+        },
+        {
+          "name": "verbose",
+          "default": "TRUE"
+        }
+      ],
+      "msa_simulate": [
+        {
+          "name": "n_items",
+          "default": null
+        },
+        {
+          "name": "n_prompts",
+          "default": null
+        },
+        {
+          "name": "n_models",
+          "default": null
+        },
+        {
+          "name": "n_reps",
+          "default": null
+        },
+        {
+          "name": "n_blocks",
+          "default": "1"
+        },
+        {
+          "name": "vc",
+          "default": "list(item = 1, prompt = 0.05, model = 0.05, residual = 0.1)"
+        },
+        {
+          "name": "mean",
+          "default": "0"
+        },
+        {
+          "name": "seed",
+          "default": "NULL"
+        }
+      ],
+      "parse_choice": [
+        {
+          "name": "levels",
+          "default": null
+        },
+        {
+          "name": "aliases",
+          "default": "NULL"
+        }
+      ],
+      "parse_identity": [
+        {
+          "name": "text",
+          "default": null
+        }
+      ],
+      "parse_json_field": [
+        {
+          "name": "field",
+          "default": null
+        }
+      ],
+      "parse_number": [
+        {
+          "name": "decimal",
+          "default": "\".\""
+        }
+      ],
+      "pb_design": [
+        {
+          "name": "factors",
+          "default": null
+        },
+        {
+          "name": "n_runs",
+          "default": "NULL"
+        },
+        {
+          "name": "randomize",
+          "default": "TRUE"
+        },
+        {
+          "name": "seed",
+          "default": "NULL"
+        }
+      ]
+    }
+  },
+  "unit": "exports: Funktionsnamen in der Reihenfolge der NAMESPACE-Datei; functions: je Funktion die Argumente in ihrer Reihenfolge mit name (Argumentname) und default (Vorgabewert als deparse(x, width.cutoff = 500L), mehrere Zeilen mit \"\\n\" verbunden; null = kein Vorgabewert)",
+  "tolerance": 0,
+  "tolerance_note": "exakt je Snapshot-Eintrag; geprüft wird die Obermenge nach docs/01-fachspezifikation.md §4: zusätzliche Exporte und zusätzliche Argumente hinter den Snapshot-Argumenten sind zulässig",
+  "source_url": "https://github.com/DanielMoj/llmsa/blob/332a2d5897598685c17efe893e2ad65478ec04eb/NAMESPACE",
+  "source": "Repo DanielMoj/llmsa, Commit 332a2d5897598685c17efe893e2ad65478ec04eb (v0.1.0): NAMESPACE und R/*.R",
+  "quote": "export(as_msa_runs)",
+  "quote_location": "NAMESPACE in 332a2d5, erste export()-Zeile",
+  "retrieved": "2026-10-25",
+  "method": "Dateien des Commits wie in ANK-01 geladen und gegen ihre Blob-IDs geprüft; Paket mit pkgload::load_all(export_all = FALSE) geladen (R 4.6.1, pkgload 1.5.3); Exporte aus parseNamespaceFile() (keine exportPattern-Direktive); je Export formals() mit deparse(x, width.cutoff = 500L).",
+  "verification": "Zweitbeleg ohne Laden des Pakets: statisches parse() von R/*.R (Zuweisungen name <- function(...)) ergibt für alle 22 Exporte dieselben Argumentlisten und Vorgabewerte; getNamespaceExports() gleich der NAMESPACE-Liste; die 22 Namen gleichen der Aufzählung in docs/01-fachspezifikation.md §4; NAMESPACE des Arbeitsbaums byte-identisch mit dem Commit.",
+  "note": "Diese Datei ist zugleich der Snapshot des Abnahmetests (keine zweite Kopie unter tests/); sie ändert sich nur, wenn eine bestehende Schnittstelle sich ändert, und dann mit ADR (Gate golden-adr).",
+  "r_version": "4.6.1"
+}

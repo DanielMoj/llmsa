@@ -1,0 +1,65 @@
+{
+  "criteria": [
+    {
+      "id": "K-M0-1",
+      "quote": "**K-M0-1:** Das deps-Gate meldet `pass`: alle in `DESCRIPTION` unter Depends, Imports und Suggests genannten Pakete sind in der Gate-Umgebung installiert, Versionen im Gate-Log. (Prüfweg: Gate deps)",
+      "source": "docs/01-fachspezifikation.md"
+    },
+    {
+      "id": "K-M0-2",
+      "quote": "**K-M0-2:** Das tests-Gate meldet `pass`: ein testthat-Lauf über `tests/testthat`, `tests/acceptance`, `tests/e2e`, `tests/fuzz` mit aus den Quellen geladenem Paket endet ohne Fehlschlag und Fehler, und die Zahl der ausgeführten Tests unter `tests/testthat/` ist mindestens `ankerRef: ANK-03`. (Prüfweg: Gate tests)",
+      "source": "docs/01-fachspezifikation.md"
+    },
+    {
+      "id": "K-M0-3",
+      "quote": "**K-M0-3:** Das lint-Gate meldet `pass`: `R CMD build` und `R CMD check --as-cran --no-manual` außerhalb des Repos enden ohne ERROR und ohne WARNING. (Prüfweg: Gate lint)",
+      "source": "docs/01-fachspezifikation.md"
+    },
+    {
+      "id": "K-M0-4",
+      "quote": "**K-M0-4:** Die 13 Dateien unter `R/` sind byte-identisch mit Commit `332a2d5`: die SHA-256-Summen gleichen `ankerRef: ANK-01`. (Prüfweg: Test)",
+      "source": "docs/01-fachspezifikation.md"
+    },
+    {
+      "id": "K-M0-5",
+      "quote": "**K-M0-5:** Repository-Layout nach Preset: `git check-ignore docs/00-vision.md` ist leer; `git check-ignore reference/quellen/probe.txt` ist nicht leer; `_pkgdown.yml` enthält `destination: pkgdown-site`; `.Rbuildignore` enthält `^pkgdown-site$`, `^docs$`, `^reference$`, `^orchestrator$`, `^tests/acceptance$`, `^tests/simulation$`, `^tests/fixtures$`; `git check-ignore reference/privat/probe.txt` ist nicht leer. (Prüfweg: Test)",
+      "source": "docs/01-fachspezifikation.md"
+    },
+    {
+      "id": "K-M0-6",
+      "quote": "**K-M0-6:** `orchestrator/state/M0/gates.json` meldet `pass` für deps, lint, tests, trace, territory, mutgate und golden-adr; mutgate meldet „kein geänderter Mutations-Scope“. (Prüfweg: Gate, Aggregat)",
+      "source": "docs/01-fachspezifikation.md"
+    },
+    {
+      "id": "K-M0-7",
+      "quote": "**K-M0-7:** Der API-Snapshot liegt als Anker `reference/anchors/ANK-02.json` vor (Exportliste und `formals()` der 22 Funktionen, erhoben aus Commit `332a2d5`, `ankerRef: ANK-02`), und ein Abnahmetest prüft das geladene Paket als Obermenge des Snapshots: jede Snapshot-Funktion ist exportiert, jedes Snapshot-Argument steht an derselben Position mit demselben Vorgabewert; zusätzliche Exporte und zusätzliche Argumente hinter den Snapshot-Argumenten bestehen den Test (negativ geprüft mit einer konstruierten Funktionsliste, in der ein Argument fehlt, einen anderen Vorgabewert trägt oder umsortiert ist). Eine Änderung des Snapshots ohne ADR im selben Meilenstein lässt das Gate golden-adr fehlschlagen. (Prüfweg: Test)",
+      "source": "docs/01-fachspezifikation.md"
+    }
+  ],
+  "open": [
+    {
+      "id": "ACC-1",
+      "ref": "K-M0-4; docs/01-fachspezifikation.md §10 („M0 ändert `R/` nicht.“)",
+      "kind": "Spec schweigt; Auslegung des Reviewers, ADR ausstehend",
+      "owner": "Reviewer, 30-plan-review (ADR unter docs/decisions/)",
+      "blocking_builder": false,
+      "note": "Die Spec sagt nicht, was K-M0-4 nach M0 bedeutet: Ab M2 ändert sich R/ planmäßig, während die Abnahmetests in allen späteren Test- und Mutationsläufen weiterlaufen. Ein dauerhaft gegen den Arbeitsbaum prüfender Test würde M2 blockieren und im Mutationslauf jeden Mutanten von R/fit.R und R/grr.R töten. Auslegung in tests/acceptance/test-m0-r-unchanged.R: Solange orchestrator/state/M0/8-done.done fehlt, wird der Arbeitsbaum R/ gegen ANK-01 geprüft, danach der eingefrorene Stand des Tags done/M0 (git ls-tree, git cat-file)."
+    },
+    {
+      "id": "ACC-2",
+      "ref": "K-M0-5; docs/01-fachspezifikation.md §2 Nr. 1",
+      "kind": "Auslegung des Reviewers, ADR ausstehend",
+      "owner": "Reviewer, 30-plan-review",
+      "blocking_builder": false,
+      "note": "git check-ignore meldet ohne --no-index keine versionierten Dateien; docs/00-vision.md ist versioniert, die wörtliche Prüfung könnte also nie scheitern („Ein Test zählt erst, wenn er ein falsches Ergebnis erkennen würde.“). Der Test prüft die wörtliche Form und zusätzlich git check-ignore --no-index docs/00-vision.md (Exit 1, leere Ausgabe); die Probepfade unter reference/ prüft er auf Exit 0 und genau den Pfad als Ausgabe; ein Git-Fehler (Exit 128) zählt nie als leer."
+    },
+    {
+      "id": "ACC-3",
+      "ref": "K-M0-2",
+      "kind": "Auslegung des Reviewers, ADR ausstehend",
+      "owner": "Reviewer, 30-plan-review",
+      "blocking_builder": false,
+      "note": "„Zahl der ausgeführten Tests unter tests/testthat/“ = Zahl der test_that()-Blöcke im testthat-Ergebnis einschließlich übersprungener Blöcke, wie das Test-Gate (orchestrator/lib/r-tests.R) sie zählt; ANK-03 = 27 ist so gezählt (in der Gate-Umgebung sind 2 davon übersprungen). Das Test-Gate prüft die Untergrenze nicht; der Abnahmetest zählt mit einem eigenen testthat::test_dir()-Lauf über tests/testthat (rund 10 s, im Mutationslauf je Mutant). Ob der Gesamtlauf ohne Fehlschlag und Fehler endet, entscheidet das Test-Gate."
+    }
+  ]
+}

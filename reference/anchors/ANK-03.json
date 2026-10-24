@@ -1,0 +1,18 @@
+{
+  "id": "ANK-03",
+  "title": "Zahl der testthat-Tests in v0.1.0 (Commit 332a2d5)",
+  "criteria": [
+    "K-M0-2"
+  ],
+  "value": 27,
+  "unit": "Anzahl der test_that()-Blöcke, die ein testthat-Lauf über tests/testthat/ ausführt: Zeilen von as.data.frame() des Ergebnisses von testthat::test_dir(), übersprungene Blöcke eingeschlossen (dieselbe Zählung wie das Test-Gate orchestrator/lib/r-tests.R)",
+  "tolerance": 0,
+  "tolerance_note": "Untergrenze: K-M0-2 verlangt mindestens diesen Wert",
+  "source_url": "https://github.com/DanielMoj/llmsa/tree/332a2d5897598685c17efe893e2ad65478ec04eb/tests/testthat",
+  "source": "Betreiberfestlegung in docs/00-vision.md, Abschnitt „Quellen und Originale“ (ANKER-TODO nennt als Ursprung das Projektdokument „Das R-Paket llmsa 0.1.0“, das nicht im Repo liegt), und testthat-Lauf auf Commit 332a2d5897598685c17efe893e2ad65478ec04eb",
+  "quote": "Commit `332a2d5` (v0.1.0, 22 exportierte Funktionen, 27 Tests)",
+  "quote_location": "docs/00-vision.md, Abschnitt „Quellen und Originale“, erster Punkt",
+  "retrieved": "2026-10-25",
+  "method": "testthat::test_dir(\"tests/testthat\", load_package = \"source\", stop_on_failure = FALSE, reporter = \"silent\") auf der blob-geprüften Kopie von Commit 332a2d5 (wie ANK-01) außerhalb des Repos; R 4.6.1, testthat 3.3.2; Zählung nrow(as.data.frame(Ergebnis)).",
+  "verification": "Lauf: 27 Blöcke, davon 25 bestanden und 2 übersprungen („backend_ellmer needs ellmer“, weil ellmer installiert ist; „the validation report renders“ durch skip_on_cran()), 0 fehlgeschlagen, 0 Fehler, 138 Erwartungen, 9,2 s. Zweitbeleg: parse() der 6 Testdateien zählt 27 test_that()-Aufrufe (test-agreement.R 3, test-backends.R 3, test-design-run.R 8, test-fit-grr.R 6, test-report.R 1, test-robustness-plan-spc.R 6). tests/testthat/ im Arbeitsbaum ist byte-identisch mit dem Commit."
+}
