@@ -1,0 +1,72 @@
+[
+  {
+    "id": "M0",
+    "title": "Gerüst steht: Toolchain, Preset r-paket und alle gewählten Gates laufen grün auf v0.1.0, ohne Änderung an R/",
+    "criteriaRef": ["K-M0-1", "K-M0-2", "K-M0-3", "K-M0-4", "K-M0-5", "K-M0-6", "K-M0-7"],
+    "deps": [],
+    "effort": "low"
+  },
+  {
+    "id": "M2",
+    "title": "Pipeline für das Anwendungsbeispiel ACMG/AMP: Itemsatz mit SHA-256, Prompt-Vorlagen, Backends mit festem Routing, Auswertung, Validierungsplan; läuft vor dem Statistikkern, damit die AP1-Erhebung parallel zu M1 beginnt",
+    "criteriaRef": ["K-M2-1", "K-M2-2", "K-M2-3", "K-M2-4", "K-M2-5", "K-M2-6"],
+    "deps": ["M0"],
+    "effort": "high"
+  },
+  {
+    "id": "M1a",
+    "title": "Statistikkern numerisch nach Prüfstandard: Varianzkomponenten gleich ANOVA, AIAG-Beispiel, Gegenrechnung, NIST StRD, Kennzahlen und Verdikt, Invarianzen",
+    "criteriaRef": ["K-M1a-1", "K-M1a-2", "K-M1a-3", "K-M1a-4", "K-M1a-5", "K-M1a-6", "K-M1a-7"],
+    "deps": ["M0"],
+    "effort": "max"
+  },
+  {
+    "id": "M1b",
+    "title": "Statistikkern ordinal und binär: Engine-Gleichheit, Recovery- und β²/2-Studien als Skripte mit reproduziertem Kurzlauf, rptR, Randfälle",
+    "criteriaRef": ["K-M1b-1", "K-M1b-2", "K-M1b-3", "K-M1b-4", "K-M1b-5", "K-M1b-6", "K-M1b-7"],
+    "deps": ["M1a"],
+    "effort": "max"
+  },
+  {
+    "id": "M1c",
+    "title": "Bootstrap wie lme4::bootMer, Überdeckungsstudie als Skript mit reproduziertem Kurzlauf, Mutationslauf über R/fit.R und R/grr.R",
+    "criteriaRef": ["K-M1c-1", "K-M1c-2", "K-M1c-3", "K-M1c-4", "K-M1c-5", "K-M1c-6"],
+    "deps": ["M1b"],
+    "effort": "max"
+  },
+  {
+    "id": "M1d",
+    "title": "Vignetten auf echten Daten ohne Modellaufruf (llm-stability, ClinVar-Einreichungen) und Abnahme der Klasse-B-Simulationsergebnisse aus M1b und M1c",
+    "criteriaRef": ["K-M1d-1", "K-M1d-2", "K-M1d-3", "K-M1d-4", "K-M1d-5", "K-M1d-6", "K-M1d-7"],
+    "deps": ["M1c"],
+    "effort": "max"
+  },
+  {
+    "id": "M3a",
+    "title": "Übereinstimmung (Cohen, Fleiss, Krippendorff, Attributkennzahlen), Bias und Linearität nach Prüfstandard",
+    "criteriaRef": ["K-M3a-1", "K-M3a-2", "K-M3a-3", "K-M3a-4", "K-M3a-5", "K-M3a-6", "K-M3a-7"],
+    "deps": ["M0"],
+    "effort": "high"
+  },
+  {
+    "id": "M3b",
+    "title": "Robustheit: Plackett-Burman-Pläne, Lenth, Half-Normal-Plot, Fehlalarmrate",
+    "criteriaRef": ["K-M3b-1", "K-M3b-2", "K-M3b-3", "K-M3b-4", "K-M3b-5", "K-M3b-6"],
+    "deps": ["M0"],
+    "effort": "high"
+  },
+  {
+    "id": "M3c",
+    "title": "Systemeignung: Westgard-Regelkarte, Simulator und Fallzahlplanung",
+    "criteriaRef": ["K-M3c-1", "K-M3c-2", "K-M3c-3", "K-M3c-4", "K-M3c-5", "K-M3c-6"],
+    "deps": ["M1a"],
+    "effort": "high"
+  },
+  {
+    "id": "M3d",
+    "title": "Ausführung mit Fortsetzen, Parser, Backends gegen Aufzeichnungen, zahlentreuer Bericht mit SHA-256",
+    "criteriaRef": ["K-M3d-1", "K-M3d-2", "K-M3d-3", "K-M3d-4", "K-M3d-5", "K-M3d-6"],
+    "deps": ["M2"],
+    "effort": "high"
+  }
+]

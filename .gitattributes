@@ -1,0 +1,3 @@
+# harness-template (tools/install-into.sh): LF für Skripte
+* text=auto eol=lf
+*.sh text eol=lf

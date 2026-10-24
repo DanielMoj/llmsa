@@ -1,4 +1,5 @@
 url: https://danielmoj.github.io/llmsa/
+destination: pkgdown-site
 template:
   bootstrap: 5
 
