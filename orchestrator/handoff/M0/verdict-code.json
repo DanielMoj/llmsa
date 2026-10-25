@@ -1,0 +1,44 @@
+{
+  "milestone": "M0",
+  "phase": "code",
+  "round": 1,
+  "verdict": "PASS",
+  "blocking": [],
+  "nonblocking": [
+    {
+      "id": "E5",
+      "ref": "[INFRA] orchestrator/orchestrate.sh all_untracked_paths/changed_paths (Z. 365–376, git ls-files --others ohne --exclude-standard) und restore_worktree (Z. 449–470); orchestrate.log 2026-10-25 08:10:07",
+      "note": "Die Territoriumsprüfung rechnet auch git-ignorierte Pfade der laufenden Rolle zu; Betreiberdateien unter reference/quellen/data/aiag/ verwarfen Versuch 1, der Rollback löschte sie, ein zweiter Treffer wäre FATAL. Betreiber schreibt während einer Modellphase nicht in den Arbeitsbaum (RUNBOOK-Hinweis); Template prüft Melden statt Löschen. Für den Builder nichts zu tun. BL-55."
+    },
+    {
+      "id": "E6",
+      "ref": "[INFRA] Prompt-Hinweis 50-code-review r1 (fremde Änderung im Handoff); BL-42; docs/01-fachspezifikation.md §6",
+      "note": "reference/quellen/data/aiag/anova_example.csv und QUELLE.txt fehlen nach dem Rollback. Betreiber stellt sie nach Phasenende wieder her und gleicht die SHA-256 aus REVIEW.md ab (Werte aus dem Log von Versuch 1); Abgleich am Original durch den Reviewer in M1a-ACCEPTANCE offen."
+    },
+    {
+      "id": "E7",
+      "ref": "[INFRA] BL-48; PLAN-REVIEW E3; docs/01-fachspezifikation.md §9 („Zuordnung in gates-auswahl.md“)",
+      "note": "gates-auswahl.md liegt seit 25.10. 07:25 unter reference/privat/ (git-ignoriert); E3 („fehlt“) ist überholt. Die Zuordnung dort deckt sich mit der bestätigten M0-Zuordnung; maschinelle Prüfung fehlt weiter. Betreiber nennt den Ablageort an den verweisenden Stellen (Spec, config.env:136)."
+    },
+    {
+      "id": "E8",
+      "ref": "ADR-001, Konsequenzen (Restrisiko Tag-Zweig); K-M0-4",
+      "note": "Der done/M0-Zweig von test-m0-r-unchanged.R läuft zum ersten Mal echt im ersten Test-Gate von M2; der Reviewer prüft dort gate-tests.log. BL-53."
+    },
+    {
+      "id": "E9",
+      "ref": "PLAN-REVIEW E1; orchestrator/orchestrate.sh:1052–1053; PROGRESS.md („Die Gate-Abnahme steht aus.“)",
+      "note": "PROGRESS.md bleibt nach PASS auf dem BUILD-Stand; DONE-Prüfung besteht trotzdem. Builder ergänzt im ersten BUILD von M2 einen M0-Abschlussvermerk mit Verweis auf gates.json (Runde 1, result pass) und REVIEW.md. BL-54."
+    },
+    {
+      "id": "E10",
+      "ref": "[INFRA] ADR-003, Kontext; tests/testthat/test-report.R:5 (skip_on_cran) und test-backends.R:32; gate-tests.log „Skipped tests (2)“; docs/01-fachspezifikation.md §2 Nr. 1",
+      "note": "Der Berichtstest läuft in keinem Gate (NOT_CRAN ungesetzt in r-tests.R und R CMD check), der ellmer-Fehlerpfad nie, weil ellmer installiert ist. Kein M0-Mangel (ADR-003). Betreiber entscheidet vor der ersten Berichtsänderung über NOT_CRAN=true im Test-Gate; ellmer bei BL-17. BL-56."
+    },
+    {
+      "id": "E11",
+      "ref": "PLAN-REVIEW E4; docs/01-fachspezifikation.md §4 („neue Argumente mit Vorgabewert am Ende der Argumentliste“)",
+      "note": "Übertrag ins BACKLOG: Die Obermengenprüfung von K-M0-7 lässt angehängte Argumente ohne Vorgabewert passieren; §4 erlaubt ohne ADR nur solche mit Vorgabewert. Reviewer prüft ab M2 im Code-Review und erwägt eine eigene Abnahmeprüfung. BL-57."
+    }
+  ]
+}
