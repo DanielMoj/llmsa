@@ -9,7 +9,7 @@
   {
     "id": "M2",
     "title": "Pipeline für das Anwendungsbeispiel ACMG/AMP: Itemsatz mit SHA-256, Prompt-Vorlagen, Backends mit festem Routing, Auswertung, Validierungsplan; läuft vor dem Statistikkern, damit die AP1-Erhebung parallel zu M1 beginnt",
-    "criteriaRef": ["K-M2-1", "K-M2-2", "K-M2-3", "K-M2-4", "K-M2-5", "K-M2-6"],
+    "criteriaRef": ["K-M2-1", "K-M2-2", "K-M2-3", "K-M2-4", "K-M2-5", "K-M2-6", "K-M2-7"],
     "deps": ["M0"],
     "effort": "high"
   },
