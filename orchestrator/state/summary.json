@@ -1,24 +1,24 @@
 {
   "contract": 1,
   "project": "llmsa",
-  "ts": "2026-10-25T07:39:39+01:00",
+  "ts": "2026-10-25T07:43:18+01:00",
   "milestone": {
     "id": "M0",
     "index": 1,
     "total": 10
   },
-  "phase": "30-plan-review",
+  "phase": "30-plan-approved",
   "round": 1,
   "needs_human": false,
   "reason": "",
   "gates": {},
   "parked": [],
   "last_events": [
-    "[20261025-012911] RUN builder 20-plan (M0 r1, Versuch 1) -> /mnt/c/Users/Danie/dev/Llmsa/llmsa/orchestrator/logs/M0-20-plan-r1-a1-20261025-012911.log",
-    "[20261025-013533] AUTONOMY_LEVEL=0: Halt nach Phase 20-plan",
-    "[20261025-072540] CONFIG: AUTONOMY=0 PLAN<=2 REWORK<=5 REBUILD@r4 ARBITER+2 TIMEOUT=3600 RETRY=2x/120s GATE_ERROR_RETRIES=2 MAX_MS=1 QA=0(ab M1a) ROLE_GUARDS=on NOTIFY=an BUILDER=codex REVIEWER=claude",
     "[20261025-072540] === M0 start ===",
-    "[20261025-072552] RUN reviewer 30-plan-review (M0 r1, Versuch 1) -> /mnt/c/Users/Danie/dev/Llmsa/llmsa/orchestrator/logs/M0-30-plan-review-r1-a1-20261025-072552.log"
+    "[20261025-072552] RUN reviewer 30-plan-review (M0 r1, Versuch 1) -> /mnt/c/Users/Danie/dev/Llmsa/llmsa/orchestrator/logs/M0-30-plan-review-r1-a1-20261025-072552.log",
+    "[20261025-073940] AUTONOMY_LEVEL=0: Halt nach Phase 30-plan-review",
+    "[20261025-074318] CONFIG: AUTONOMY=0 PLAN<=2 REWORK<=5 REBUILD@r4 ARBITER+2 TIMEOUT=3600 RETRY=2x/120s GATE_ERROR_RETRIES=2 MAX_MS=1 QA=0(ab M1a) ROLE_GUARDS=on NOTIFY=an BUILDER=codex REVIEWER=claude",
+    "[20261025-074318] === M0 start ==="
   ],
   "exit": null,
   "role_guards": "on"
