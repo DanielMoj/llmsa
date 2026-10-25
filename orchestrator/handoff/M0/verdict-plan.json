@@ -1,0 +1,29 @@
+{
+  "milestone": "M0",
+  "phase": "plan",
+  "round": 1,
+  "verdict": "PASS",
+  "blocking": [],
+  "nonblocking": [
+    {
+      "id": "E1",
+      "ref": "orchestrator/orchestrate.sh:1052–1053 (DONE verlangt PROGRESS.md-Änderung seit plan/M0); PLAN Reihenfolge Nr. 3",
+      "note": "PROGRESS.md in BUILD unbedingt fortschreiben (M0-Umfang, mindestens die gitfreie ANK-01-Prüfung mit echtem Output, offene Gates); sonst endet M0 trotz grüner Gates FATAL. Gate-Ergebnisse erst eintragen, wenn gates.json sie enthält."
+    },
+    {
+      "id": "E2",
+      "ref": "projektierung/presets/r-paket/PRESET.md, Abschnitt „Artefakte“; orchestrator/orchestrate.sh commit_phase (git add -A)",
+      "note": "BUILD-Diagnosen nur lesend oder unter /tmp ausführen; keine Builds, Checks oder Testläufe im Checkout, die Artefakte (_snaps, Rplots.pdf, *.Rcheck, Tarball) hinterlassen."
+    },
+    {
+      "id": "E3",
+      "ref": "[INFRA] docs/01-fachspezifikation.md §9 („Zuordnung in gates-auswahl.md“); BL-48",
+      "note": "gates-auswahl.md fehlt im Repo. Die Gate-Kriterien-Zuordnung des PLANs ist vom Reviewer bestätigt (Tabelle in PLAN-REVIEW.md). Der Betreiber legt die Datei ab oder berichtigt den Verweis; der Reviewer trägt BL-48 in 50-code-review nach. Für den Builder ist nichts zu tun."
+    },
+    {
+      "id": "E4",
+      "ref": "docs/01-fachspezifikation.md §4 („neue Argumente mit Vorgabewert am Ende“) und K-M0-7",
+      "note": "Die Obermengenprüfung lässt angehängte Argumente auch ohne Vorgabewert passieren (dem Wortlaut von K-M0-7 entsprechend). Kein Widerspruch; ab M2 prüft der Reviewer Vorgabewerte neuer Argumente im Code-Review. Für M0 ohne Belang; für den Builder ist nichts zu tun."
+    }
+  ]
+}
