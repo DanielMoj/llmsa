@@ -371,7 +371,7 @@
 </tr><tr><td>ANK-58</td>
 <td>Akzeptanzkriterien AP1: %GRR-Schwelle auf der latenten Skala, Kappa-Grenzen 0,8/0,6, gefährliche Fehlklassifikation (P/LP ↔︎ B/LB; unter den 75 ERepo-Items 0 akzeptabel, 1 bedingt, ab 2 nicht akzeptabel), Robustheit (drei disjunkte Bänder: akzeptabel, wenn kein Faktor |Δp| über 5 Prozentpunkten hat; nicht akzeptabel, wenn mindestens ein Faktor |Δp| über 5 Prozentpunkten hat und zugleich die SME überschreitet; bedingt, wenn Faktoren über 5 Prozentpunkten liegen, aber keiner davon die SME überschreitet; SME- oder ME-Überschreitungen bei |Δp| bis 5 Prozentpunkte werden berichtet und ändern das Verdikt nicht); Verdikt je Modell, Kappa am Punktschätzer (Intervall nach <code>ANK-68</code> nur berichtet), Gesamtverdikt als schlechtestes Band der vier Kriterien</td>
 <td>K-M2-5, K-M2-6, K-M2-7, A.1</td>
-<td>Betreiberentscheidung aus Context of Use und Risikostufe (Validierungsplan, Freigabe ADR-004 vom 25.10.2026, BL-27); keine Literaturevidenz für die Grenzen: AIAG-Schwellen sind auf der latenten Skala nur Konvention (Formelsammlung §4), Landis &amp; Koch 1977 (Biometrics 33:159–174, Tab. 3; BL-41) liefert nur die Bezeichnungen der Bänder; das gefährliche Fehlurteil ist das einzige inhaltlich zwingende Element; seine Bänder begründet die Dreierregel (Hanley &amp; Lippman-Hand 1983, JAMA 249:1743–1745; BL-58), Vergleichswert <code>ANK-44</code> (Belegprüfung 25.10.2026)</td>
+<td>Betreiberentscheidung aus Context of Use und Risikostufe (Validierungsplan, Freigabe ADR-004 vom 25.10.2026, BL-27); keine Literaturevidenz für die Grenzen: AIAG-Schwellen sind auf der latenten Skala nur Konvention (Formelsammlung §4), Landis &amp; Koch 1977 (Biometrics 33:159–174, Tab. 3; BL-41) liefert nur die Bezeichnungen der Bänder; das gefährliche Fehlurteil ist das einzige inhaltlich zwingende Element; seine Bänder begründet die Dreierregel (Hanley1983, Katalog A: Hanley &amp; Lippman-Hand 1983, JAMA 249:1743–1745, S. 1744, PDF 2: 3/n für n &gt; 30; Stelle am Seitenbild geprüft (25.10.2026)), Vergleichswert <code>ANK-44</code> (Belegprüfung 25.10.2026)</td>
 <td>Betreiberfestlegung</td>
 <td>Betreiber bestätigt 25.10.2026 (ADR-004)</td>
 </tr><tr><td>ANK-59</td>
@@ -384,13 +384,13 @@
 <td>OpenRouter: Namen der Routing-Felder im Request; Antwort ohne Anbieter- und Quantisierungsfeld; Feld <code>provider_name</code> von <code>GET /api/v1/generation</code>
 </td>
 <td>K-M2-4</td>
-<td>Routing-Felder: OpenRouter Provider Routing Doku (Katalog D, HTML-Schnappschuss); Antwort und Generation-Endpunkt: OpenRouter-API-Referenz (Belegprüfung 25.10.2026; kein Schnappschuss, BL-58); ob die Antwort trotzdem ein Feld <code>provider</code> trägt, zeigt die Aufzeichnung (<code>ANK-94</code>)</td>
+<td>Routing-Felder: OpenRouter Provider Routing Doku (Katalog D, HTML-Schnappschuss); Antwort und Generation-Endpunkt: OpenRouter-API-Referenz, Schnappschüsse 25.10.2026 (Katalog: Anbieterdokumentation 25.10.2026) <code>quellen/anbieter_2026-10-25/openrouter/API_Reference_Overview.md</code> (Abschnitt Responses, CompletionsResponse format; Abschnitt Querying cost and stats) und <code>quellen/anbieter_2026-10-25/openrouter/API_Reference_Get_a_generation.md</code> (Parameter <code>id</code>, Antwortfeld <code>provider_name</code>); ob die Antwort trotzdem ein Feld <code>provider</code> trägt, zeigt die Aufzeichnung (<code>ANK-94</code>)</td>
 <td>Anbieterdokumentation</td>
-<td>Routing-Felder vorhanden; API-Referenz als Schnappschuss sichern (Betreiber, vor M2)</td>
+<td>vorhanden (Schnappschüsse 22.10. und 25.10.2026)</td>
 </tr><tr><td>ANK-61</td>
 <td>Temperatur-, Seed- und Reasoning-Policy je Modell: Llama und Qwen Temperatur 0; GPT-6.1 Sol ohne Feld (<code>temperature = NULL</code>), weil Sol <code>temperature</code> nicht unterstützt (keine Reasoning-Stufe <code>none</code>); Seed 20261024 in allen Aufrufen aller Modelle; Qwen ohne Reasoning über <code>reasoning = {"enabled": false}</code>, im Pilot geprüft</td>
 <td>K-M2-4, K-M2-5, A.4</td>
-<td>Betreiberfestlegung (Projektierung Anhang A.4); OpenAI Models-Dokumentation zu Reasoning-Modellen; Belegprüfung 25.10.2026; Seed und Reasoning-Schalter: ADR-004 (Betreiberfestlegung 25.10.2026)</td>
+<td>Betreiberfestlegung (Projektierung Anhang A.4); OpenAI Models-Dokumentation zu Reasoning-Modellen; Belegprüfung 25.10.2026; Zweitbeleg zu Sol: LiteLLM, „Day 0 Support: GPT-6.1 Sol“, Abschnitt Notes (<code>quellen/anbieter_2026-10-25/litellm/Blog_GPT-6.1_Sol.html</code>, Schnappschuss 25.10.2026); Seed und Reasoning-Schalter: ADR-004 (Betreiberfestlegung 25.10.2026)</td>
 <td>Betreiberfestlegung</td>
 <td>Betreiber bestätigt 25.10.2026 (ADR-004)</td>
 </tr><tr><td>ANK-62</td>
@@ -414,9 +414,9 @@
 </tr><tr><td>ANK-65</td>
 <td>Wissensstand Llama 3.3 70B Instruct; die Katalogangabe ist der Stichtag der Kennzeichen <code>_llama</code> (K-M2-2)</td>
 <td>K-M2-2, K-M2-5, A.1, A.4</td>
-<td>Katalogangabe: <code>quellen/anbieter_2026-10-22/openrouter/models.json</code> (Schnappschuss 22.10.2026, Eintrag <code>meta-llama/llama-3.3-70b-instruct</code>, Feld <code>knowledge_cutoff</code>); Monatsangabe als Zweitbeleg: Meta-Modellkarte zu Llama 3.3 (Belegprüfung 25.10.2026; kein Schnappschuss, BL-58)</td>
+<td>Katalogangabe: <code>quellen/anbieter_2026-10-22/openrouter/models.json</code> (Schnappschuss 22.10.2026, Eintrag <code>meta-llama/llama-3.3-70b-instruct</code>, Feld <code>knowledge_cutoff</code>); Monatsangabe als Zweitbeleg: Meta-Modellkarte Llama 3.3 70B Instruct, Schnappschuss 25.10.2026 <code>quellen/anbieter_2026-10-25/meta/Llama-3.3-70B-Instruct_Model_Card.html</code> (Model Information, Tabellenspalte Knowledge cutoff; Training Data, Data Freshness)</td>
 <td>Anbieterdokumentation</td>
-<td>Katalogangabe vorhanden; Modellkarte als Schnappschuss sichern (Betreiber)</td>
+<td>vorhanden</td>
 </tr><tr><td>ANK-66</td>
 <td>Wissensstand Qwen3-32B: keine Herstellerangabe; die Katalogangabe ist der Stichtag der Kennzeichen <code>_qwen</code> (K-M2-2); Veröffentlichungsdatum als obere Schranke</td>
 <td>K-M2-2, K-M2-5, A.1, A.4</td>
@@ -433,7 +433,7 @@
 </tr><tr><td>ANK-68</td>
 <td>Auswertungsregeln AP1: Modalantwort je Item und Modell über die 18 Hauptplanaufrufe (NA als eigener Wert, bei Gleichstand keine Modalantwort); NA-Regel (NA-Anteil als Kennzahl, in Trefferquote und Kappa Fehlklassifikation mit Übereinstimmungsgewicht 0, im Fit fehlender Wert); Kappa-Bootstrap über Items mit 2.000 Wiederholungen, Perzentilintervall 95 %, Seed 20261024; Rückfall-Fit numerisch auf den Klassenscores 1 bis 5 (Benign = 1 bis Pathogenic = 5) bei Fehler oder Konvergenzwarnung des ordinalen Fits; Antwortgröße der Robustheit als empirischer Logit mit Korrektur ½</td>
 <td>K-M2-5, K-M2-6, K-M2-7, A.1, A.5</td>
-<td>ADR-004 (Betreiberfestlegung 25.10.2026); Korrektur ½: Haldane 1956 (Ann Hum Genet 20(4):309–311) und Anscombe 1956 (Biometrika 43(3/4):461–464), beide nicht im Katalog (BL-58)</td>
+<td>ADR-004 (Betreiberfestlegung 25.10.2026); Korrektur ½: Haldane1956 (Katalog A: Haldane 1956, Ann Hum Genet 20(4):309–311, S. 310, PDF 2: t = ½) und Anscombe1956 (Katalog A: Anscombe 1956, Biometrika 43(3/4):461–464, S. 462, PDF 2, Gl. (9)); beide Scans mit OCR, Stellen am Seitenbild geprüft (25.10.2026)</td>
 <td>Betreiberfestlegung</td>
 <td>Betreiber bestätigt 25.10.2026 (ADR-004)</td>
 </tr></tbody></table></div>
