@@ -94,7 +94,7 @@
 </tr><tr><td>BL-11</td>
 <td>R</td>
 <td>Builder-Kosten im Harness: keine Kostenspur im Template; M0 ist der Messlauf</td>
-<td>Kosten je Builder-Aufruf aus dem OpenAI-Dashboard × 9 je Meilenstein nach M0 prüfen; sechs Meilensteine bis 26.11.2026 (M0, M2, M1a–M1d); Zusatzkosten von M3a–M3d nach derselben Rechnung schätzen, Entscheidung nach M1d</td>
+<td>Kosten je Builder-Aufruf aus dem OpenAI-Dashboard × 9 je Meilenstein nach M0 prüfen; sechs Meilensteine bis 26.11.2026 (M0, M2, M1a–M1d); Zusatzkosten von M3a–M3d nach derselben Rechnung schätzen, Entscheidung nach M1d. Messwerte M0 (Codex-Log „tokens used“, M0 REVIEW): PLAN r1 128.452 Tokens, BUILD r1 91.764 Tokens; Dashboard-Abgleich offen</td>
 <td>Intake 8</td>
 </tr><tr><td>BL-12</td>
 <td>R</td>
@@ -105,7 +105,7 @@
 <td>R</td>
 <td>
 <code>tests/simulation/</code> und die Klasse-B-Kurzläufe verlängern jeden Gate-Lauf; ob die Gates unter <code>PHASE_TIMEOUT=3600</code> fallen und wie lang deps, <code>R CMD check</code> mit vier Vignetten, Tests und mutgate zusammen dauern, ist nicht gemessen</td>
-<td>Laufzeitgrenze <code>ANK-TOL.sim_runtime</code> (20 Minuten); Gate-Dauern in M0 und M1a aus <code>orchestrator/state/&lt;MS&gt;/</code> ablesen, Timeout-Regel der Gates im RUNBOOK prüfen; bei Überschreitung Studie nach Klasse B verschieben (ADR) oder <code>PHASE_TIMEOUT</code> anheben</td>
+<td>Laufzeitgrenze <code>ANK-TOL.sim_runtime</code> (20 Minuten); Gate-Dauern in M0 und M1a aus <code>orchestrator/state/&lt;MS&gt;/</code> ablesen, Timeout-Regel der Gates im RUNBOOK prüfen; bei Überschreitung Studie nach Klasse B verschieben (ADR) oder <code>PHASE_TIMEOUT</code> anheben. M0 gemessen (M0 REVIEW, Ende je Gate aus <code>gate-*.log</code>): deps ≈ 1 s, lint ≈ 63 s (build ≈ 13 s, check ≈ 50 s, eine Vignette), tests ≈ 20 s, trace bis mutfull ≈ 1 s (kein Mutationslauf), gesamt ≈ 86 s; der Verifier läuft ohne <code>PHASE_TIMEOUT</code> (<code>orchestrate.sh:750</code>), <code>r-check.sh</code> begrenzt build und check je über <code>R_CHECK_TIMEOUT</code> (3600 s); Messung in M1a offen</td>
 <td>01 §8, gates-auswahl</td>
 </tr><tr><td>BL-14</td>
 <td>B</td>
@@ -136,9 +136,10 @@
 <td>04, 02</td>
 </tr><tr><td>BL-19</td>
 <td>B</td>
+<td><del><code>.gitignore</code> von llmsa ignoriert <code>docs/</code>; pkgdown baut nach <code>docs/</code> (<code>build_site_github_pages</code>, Deploy-Ordner <code>docs</code>)</del></td>
 <td>
-<code>.gitignore</code> von llmsa ignoriert <code>docs/</code>; pkgdown baut nach <code>docs/</code> (<code>build_site_github_pages</code>, Deploy-Ordner <code>docs</code>)</td>
-<td>Beim Einsetzen (Schritt 5) umstellen: <code>docs/</code> aus <code>.gitignore</code>, <code>pkgdown-site/</code> ergänzen, <code>_pkgdown.yml</code> <code>destination</code>, Workflow <code>dest_dir</code> und <code>folder</code>; M0 prüft (K-M0-5)</td>
+<del>Beim Einsetzen (Schritt 5) umstellen: <code>docs/</code> aus <code>.gitignore</code>, <code>pkgdown-site/</code> ergänzen, <code>_pkgdown.yml</code> <code>destination</code>, Workflow <code>dest_dir</code> und <code>folder</code>; M0 prüft (K-M0-5)</del> <strong>Erledigt</strong> 25.10.2026 (M0 REVIEW r1, Reviewer): K-M0-5 im Test-Gate grün mit echtem <code>git check-ignore</code> einschließlich <code>--no-index</code> (ADR-002); <code>_pkgdown.yml</code> <code>destination: pkgdown-site</code>; Workflow <code>dest_dir = "pkgdown-site"</code>, <code>folder: pkgdown-site</code>
+</td>
 <td>01 §10</td>
 </tr><tr><td>BL-20</td>
 <td>B</td>
@@ -203,9 +204,10 @@
 <td>Startanleitung</td>
 </tr><tr><td>BL-32</td>
 <td>O</td>
+<td><del><code>core.filemode=false</code> auf <code>/mnt/c</code>: Gates mit <code>git add --chmod=+x</code> eintragen; <code>tests/testthat.R</code> behalten; <code>.Rbuildignore</code> um <code>^tests/simulation$</code>, <code>^tests/fixtures$</code> ergänzen</del></td>
 <td>
-<code>core.filemode=false</code> auf <code>/mnt/c</code>: Gates mit <code>git add --chmod=+x</code> eintragen; <code>tests/testthat.R</code> behalten; <code>.Rbuildignore</code> um <code>^tests/simulation$</code>, <code>^tests/fixtures$</code> ergänzen</td>
-<td>Schritt 5, Betreiber-Commit</td>
+<del>Schritt 5, Betreiber-Commit</del> <strong>Erledigt</strong> 25.10.2026 (M0 REVIEW r1, Reviewer): Im HEAD-Baum tragen alle acht <code>orchestrator/gates.d/NN-*.sh</code> den Modus <code>100755</code>; <code>tests/testthat.R</code> liegt unverändert vor; beide <code>.Rbuildignore</code>-Zeilen prüft K-M0-5 (grün). Für neue Gates gilt weiter <code>git add --chmod=+x</code>
+</td>
 <td>01 §9</td>
 </tr><tr><td>BL-33</td>
 <td>O</td>
@@ -257,7 +259,7 @@
 </tr><tr><td>BL-42</td>
 <td>Q</td>
 <td>Geschützte Datenblätter (AIAG ANOVA-, Bias-, Linearitäts-, Attributstudie; Lenth 1989 Tab. 2–3) müssen als CSV unter <code>reference/quellen/data/</code> angelegt werden</td>
-<td>Betreiber tippt ab, Reviewer gleicht am Original ab; zweites Abtippen erwogen</td>
+<td>Betreiber tippt ab, Reviewer gleicht am Original ab; zweites Abtippen erwogen. Stand 25.10. (M0 REVIEW E6): <code>reference/quellen/data/aiag/anova_example.csv</code> und <code>QUELLE.txt</code> entstanden während M0 <code>50-code-review</code> und wurden beim Rollback gelöscht (BL-55); Betreiber stellt sie nach Phasenende wieder her (Prüfsummen in <code>orchestrator/handoff/M0/REVIEW.md</code>); Abgleich am Original durch den Reviewer offen (M1a-ACCEPTANCE)</td>
 <td>01 §6, Katalog 1.2</td>
 </tr><tr><td>BL-43</td>
 <td>Q</td>
@@ -288,7 +290,7 @@
 </tr><tr><td>BL-48</td>
 <td>O</td>
 <td>Maschinelle Prüfung „jedes Gate trägt ein Kriterium“ liefert der Trace-Fallback nicht</td>
-<td>Zuordnungstabelle in <code>gates-auswahl.md</code>; Reviewer prüft bei ACCEPTANCE</td>
+<td>Zuordnungstabelle in <code>gates-auswahl.md</code>; Reviewer prüft bei ACCEPTANCE. M0 (REVIEW E7): Zuordnung im Code-Review bestätigt (deps → K-M0-1; lint → K-M0-3; tests → K-M0-2 und Läufer der Tests zu K-M0-1, -4, -5, -7; alle sieben Preset-Gates → K-M0-6; golden-adr zusätzlich K-M0-7; mutfull → K-M1c-6); <code>gates-auswahl.md</code> liegt seit 25.10. 07:25 unter <code>reference/privat/</code> (git-ignoriert), ihr §3 deckt sich; Betreiber nennt den Ablageort an den verweisenden Stellen (Spec, <code>config.env</code>); maschinelle Prüfung fehlt weiter</td>
 <td>gates-auswahl</td>
 </tr><tr><td>BL-49</td>
 <td>R</td>
@@ -312,6 +314,32 @@
 <td>M2 läuft vor dem Statistikkern; die AP1-Erhebung beginnt parallel zu M1a–M1d, und ihre erste Auswertung nutzt den Statistikkern von v0.1.0</td>
 <td>Zahlen aus AP1 vor der Abnahme von M1 sind vorläufig und gehen nicht in den Preprint oder andere Veröffentlichungen; Auswertung nach M1 mit demselben Store wiederholen (Minuten); Go/No-Go (BL-10) bleibt an M1-Abnahme und AP1-Auswertung gebunden; Store außerhalb des Arbeitsbaums, damit PREFLIGHT sauber bleibt</td>
 <td>03, milestones.json</td>
+</tr><tr><td>BL-53</td>
+<td>O</td>
+<td>Tag-Zweig von K-M0-4 (ADR-001): Nach dem DONE von M0 prüft <code>test-m0-r-unchanged.R</code> den Baum von <code>done/M0</code> über <code>git ls-tree</code> und <code>git cat-file</code>; dieser Zweig lief bisher nur gegen eine Git-Attrappe</td>
+<td>Zuständig Reviewer: im ersten Code-Review von M2 in <code>gate-tests.log</code> prüfen, dass <code>m0-r-unchanged</code> grün ist; ein Fehler im Test ist Reviewer-Sache, kein Builder-Befund</td>
+<td>ADR-001, M0 REVIEW E8</td>
+</tr><tr><td>BL-54</td>
+<td>O</td>
+<td>
+<code>PROGRESS.md</code> endet auf dem BUILD-Stand von M0 („Die Gate-Abnahme steht aus.“); nach PASS in Runde 1 folgte keine Builder-Phase mehr</td>
+<td>Zuständig Builder: im ersten BUILD von M2 einen kurzen M0-Abschlussvermerk mit Verweis auf <code>orchestrator/state/M0/gates.json</code> (Runde 1, <code>result: pass</code>) und <code>orchestrator/handoff/M0/REVIEW.md</code> ergänzen</td>
+<td>PLAN-REVIEW E1, M0 REVIEW E9</td>
+</tr><tr><td>BL-55</td>
+<td>T</td>
+<td>Die Territoriumsprüfung rechnet auch git-ignorierte Pfade der laufenden Modellrolle zu (<code>changed_paths</code> mit <code>git ls-files --others</code> ohne <code>--exclude-standard</code>): Betreiberdateien, die während einer Modellphase entstehen, verwerfen den Versuch, <code>restore_worktree</code> löscht sie, ein zweiter Treffer ist FATAL; geschehen in M0 <code>50-code-review</code> r1 (<code>reference/quellen/data/aiag/*</code>, BL-42)</td>
+<td>Betreiber legt während einer Modellphase (lebende PID in <code>orchestrator/.lock/pid</code>, noch kein „Halt nach Phase …“ in <code>orchestrate.log</code>) nichts im Arbeitsbaum an, auch nicht unter <code>reference/quellen/</code>; Daten außerhalb vorbereiten und zwischen zwei Phasen kopieren; Hinweis ins RUNBOOK; Template-Backlog: Melden statt Löschen für Betreiberpfade prüfen, ohne die Prüfung ignorierter Pfade aufzugeben</td>
+<td>orchestrate.sh <code>changed_paths</code>, <code>restore_worktree</code>; M0 REVIEW E5</td>
+</tr><tr><td>BL-56</td>
+<td>O</td>
+<td>Zwei Bestandstests laufen in keinem Gate: „the validation report renders“ (<code>test-report.R</code>, <code>skip_on_cran()</code>; weder <code>orchestrator/lib/r-tests.R</code> noch <code>R CMD check</code> setzen <code>NOT_CRAN</code>) und „backend_ellmer needs ellmer“ (<code>test-backends.R</code>, läuft nur ohne ellmer, das deps-Gate installiert es); kein Gate prüft, ob <code><a href="reference/msa_report.html">msa_report()</a></code> rendert</td>
+<td>Betreiber entscheidet vor dem ersten Meilenstein, der <code><a href="reference/msa_report.html">msa_report()</a></code> oder den Validierungsbericht ändert, ob das Test-Gate <code>NOT_CRAN=true</code> setzt; die ANK-03-Zählung bleibt unberührt (Skips zählen mit, ADR-003); ellmer-Abdeckung bei BL-17</td>
+<td>ADR-003, BL-14, BL-17, M0 REVIEW E10</td>
+</tr><tr><td>BL-57</td>
+<td>O</td>
+<td>Die Obermengenprüfung von K-M0-7 lässt angehängte Argumente ohne Vorgabewert passieren (Wortlaut K-M0-7); §4 erlaubt ohne ADR nur „neue Argumente mit Vorgabewert am Ende der Argumentliste“</td>
+<td>Zuständig Reviewer: ab M2 im Code-Review die Vorgabewerte neu angehängter Argumente prüfen; eine eigene Abnahmeprüfung in einer ACCEPTANCE-Phase erwägen (<code>...</code> ausgenommen)</td>
+<td>01 §4, PLAN-REVIEW E4, M0 REVIEW E11</td>
 </tr></tbody></table></div>
 
   </main></div>
