@@ -1,0 +1,5 @@
+# stdout
+golden-adr: keine Golden-/Ankeränderung
+
+# runner
+exit=0 status=pass script=87-golden-adr.sh

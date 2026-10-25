@@ -1,0 +1,90 @@
+# stdout
+r-tests: tests/testthat: 6 Testdatei(en)
+✔ | F W  S  OK | Context
+
+⠏ |          0 | agreement                                                      
+⠧ |          8 | agreement                                                      
+✔ |         13 | agreement
+
+⠏ |          0 | backends                                                       
+⠋ |      1  10 | backends                                                       
+✔ |      1  10 | backends
+
+⠏ |          0 | design-run                                                     
+⠧ |         18 | design-run                                                     
+⠹ |         23 | design-run                                                     
+⠦ |         27 | design-run                                                     
+✔ |         37 | design-run
+
+⠏ |          0 | fit-grr                                                        
+⠋ |          1 | fit-grr                                                        
+⠧ |          8 | fit-grr                                                        
+⠙ |         12 | fit-grr                                                        
+⠸ |         14 | fit-grr                                                        
+⠦ |         17 | fit-grr                                                        
+⠙ |         22 | fit-grr                                                        
+⠸ |         24 | fit-grr                                                        
+✔ |         27 | fit-grr [7.4s]
+
+⠏ |          0 | report                                                         
+✔ |      1   0 | report
+
+⠏ |          0 | robustness-plan-spc                                            
+⠙ |         32 | robustness-plan-spc                                            
+⠼ |         35 | robustness-plan-spc                                            
+✔ |         49 | robustness-plan-spc
+
+══ Results ═════════════════════════════════════════════════════════════════════
+Duration: 8.5 s
+
+── Skipped tests (2) ───────────────────────────────────────────────────────────
+• On CRAN (1): 'test-report.R:5:3'
+• requireNamespace("ellmer", quietly = TRUE) is TRUE (1):
+  'test-backends.R:32:3'
+
+[ FAIL 0 | WARN 0 | SKIP 2 | PASS 136 ]
+r-tests: tests/acceptance: 6 Testdatei(en)
+✔ | F W  S  OK | Context
+
+⠏ |          0 | m0-api-snapshot                                                
+⠇ |         49 | m0-api-snapshot                                                
+⠴ |        106 | m0-api-snapshot                                                
+⠸ |        164 | m0-api-snapshot                                                
+⠇ |        219 | m0-api-snapshot                                                
+⠧ |        248 | m0-api-snapshot                                                
+✔ |        259 | m0-api-snapshot
+
+⠏ |          0 | m0-deps                                                        
+✔ |         31 | m0-deps
+
+⠏ |          0 | m0-gates                                                       
+✔ |          7 | m0-gates
+
+⠏ |          0 | m0-layout                                                      
+⠦ |          7 | m0-layout                                                      
+✔ |         16 | m0-layout
+
+⠏ |          0 | m0-r-unchanged                                                 
+⠇ |         29 | m0-r-unchanged                                                 
+✔ |         55 | m0-r-unchanged
+
+⠏ |          0 | m0-testthat-count                                              
+⠙ |          2 | m0-testthat-count                                              
+✔ |          2 | m0-testthat-count [7.9s]
+
+══ Results ═════════════════════════════════════════════════════════════════════
+Duration: 9.0 s
+
+[ FAIL 0 | WARN 0 | SKIP 0 | PASS 370 ]
+r-tests: tests/simulation: keine Testdateien, übersprungen
+r-tests: tests/e2e: keine Testdateien, übersprungen
+r-tests: tests/fuzz: keine Testdateien, übersprungen
+r-tests: pass — 42 Tests in tests/testthat, tests/acceptance; 0 fehlgeschlagen, 0 Fehler, 2 übersprungen
+tests: Kommando erfolgreich
+
+# stderr
+boundary (singular) fit: see help('isSingular')
+boundary (singular) fit: see help('isSingular')
+
+# runner
+exit=0 status=pass script=30-tests.sh

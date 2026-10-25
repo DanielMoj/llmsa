@@ -1,0 +1,5 @@
+# stdout
+territory: letzter Diff sauber (builder/40-build, Runde 1, Basis 6783f2874340f62c4de53d30b5415708e1a45073, 2026-10-25T07:45:50+01:00)
+
+# runner
+exit=0 status=pass script=82-territory.sh

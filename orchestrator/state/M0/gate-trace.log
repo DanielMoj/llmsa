@@ -1,0 +1,5 @@
+# stdout
+trace: alle Kriterien sind wörtlich und beidseitig verknüpft
+
+# runner
+exit=0 status=pass script=70-trace.sh

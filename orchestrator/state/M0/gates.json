@@ -1,0 +1,37 @@
+{
+  "milestone": "M0",
+  "round": 1,
+  "base": "6783f2874340f62c4de53d30b5415708e1a45073",
+  "baseRef": "plan/M0",
+  "env": {
+    "ts": "2026-10-25T07:48:22+01:00",
+    "sha": "9866ba2f5fcef6538338a1612f4e849cb77355e9",
+    "bash": "5.3.9(1)-release",
+    "git": "2.53.0",
+    "toolchain": {
+      "R": "Rscript (R) version 4.6.1 (2026-06-24)",
+      "pandoc": "pandoc 3.7.0.2"
+    }
+  },
+  "gates": {
+    "deps": "pass",
+    "lint": "pass",
+    "tests": "pass",
+    "trace": "pass",
+    "territory": "pass",
+    "mutgate": "pass",
+    "golden-adr": "pass",
+    "mutfull": "pass"
+  },
+  "summaries": {
+    "deps": "deps: Kommando erfolgreich",
+    "lint": "lint: Kommando erfolgreich",
+    "tests": "tests: Kommando erfolgreich",
+    "trace": "trace: alle Kriterien sind wörtlich und beidseitig verknüpft",
+    "territory": "territory: letzter Diff sauber (builder/40-build, Runde 1, Basis 6783f2874340f62c4de53d30b5415708e1a45073, 2026-10-25T07:45:50+01:00)",
+    "mutgate": "mutgate: pass (kein geänderter Mutations-Scope)",
+    "golden-adr": "golden-adr: keine Golden-/Ankeränderung",
+    "mutfull": "mutfull: pass (nicht fällig in M0)"
+  },
+  "result": "pass"
+}

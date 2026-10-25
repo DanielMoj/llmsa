@@ -1,0 +1,5 @@
+# stdout
+mutfull: pass (nicht fällig in M0)
+
+# runner
+exit=0 status=pass script=88-mutfull.sh
