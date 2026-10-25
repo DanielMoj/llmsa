@@ -54,8 +54,8 @@
 </tr><tr><td>BL-03</td>
 <td>R</td>
 <td>Ordinale Zielgrößen: <code>clmm</code> braucht mehr als zwei Stufen je Zufallseffekt; β²/2 ist unvalidiert</td>
-<td>Skript K-M1b-3, Verhalten K-M1b-4, Befund K-M1d-7; der Betreiber sieht die Zahlen nach seinem Volllauf direkt nach M1b; bei Nichttragen ADR mit Ersatz (Half-t, Mindeststufen)</td>
-<td>02</td>
+<td>Skript K-M1b-3, Verhalten K-M1b-4, Befund K-M1d-7; der Betreiber sieht die Zahlen nach seinem Volllauf direkt nach M1b; bei Nichttragen ADR mit Ersatz (Half-t, Mindeststufen). Stand 25.10. (ADR-004): In AP1 tritt bei Fehler oder Konvergenzwarnung des ordinalen Fits ein numerischer Fit auf den Klassenscores als gekennzeichneter Rückfall ein (03 A.1, K-M2-6, <code>ANK-68</code>)</td>
+<td>02, 03</td>
 </tr><tr><td>BL-04</td>
 <td>R</td>
 <td>Bootstrap bei drei bis fünf Stufen vermutlich unterdeckend</td>
@@ -74,7 +74,7 @@
 </tr><tr><td>BL-07</td>
 <td>R</td>
 <td>OpenRouter verteilt auf wechselnde Hoster/Quantisierungen</td>
-<td>Routing festgelegt (K-M2-4); Anbieter je Antwort speichern; bei Routing-Fehler Abbruch statt Fallback</td>
+<td>Routing festgelegt (K-M2-4); Anbieter je Antwort speichern; bei Routing-Fehler Abbruch statt Fallback. Stand 25.10. (Belegprüfung): <code>provider.order</code> mit Endpunkt-Tag (<code>coreweave/fp16</code>, <code>deepinfra/fp8</code>); die Quantisierung kommt aus der Anfrage, der Anbieter aus dem Feld <code>provider</code> der Antwort, falls die Aufzeichnung es zeigt, sonst stichprobenweise aus <code>GET /api/v1/generation</code> (K-M2-4)</td>
 <td>03</td>
 </tr><tr><td>BL-08</td>
 <td>R</td>
@@ -121,7 +121,7 @@
 <td>B</td>
 <td>
 <code><a href="reference/backends.html">backend_openai_compatible()</a></code> reicht <code>...</code> bereits in den Body; es fehlt nur das Speichern von Anbieter und Quantisierung aus der Antwort</td>
-<td>K-M2-4</td>
+<td>K-M2-4. Stand 25.10. (Belegprüfung): Die Antwort enthält laut OpenRouter-API-Referenz weder Anbieter noch Quantisierung (<code>ANK-60</code>); K-M2-4 speichert die Quantisierung aus der Anfrage und den Anbieter wie in BL-07. Außerdem schickt das Backend <code>temperature</code> immer mit; <code>temperature = NULL</code> muss das Feld weglassen (httr2 schreibt <code>NULL</code> sonst als JSON <code>null</code>)</td>
 <td>03</td>
 </tr><tr><td>BL-17</td>
 <td>B</td>
@@ -175,18 +175,19 @@
 </tr><tr><td>BL-26</td>
 <td>O</td>
 <td>httptest2-Aufzeichnungen je Modell des Plans fehlen; nur der Betreiber hat Schlüssel</td>
-<td>Vor BUILD von M2 aufzeichnen und unter <code>tests/fixtures/httptest2/</code> committen (<code>ANK-94</code>)</td>
+<td>Vor BUILD von M2 aufzeichnen und unter <code>tests/fixtures/httptest2/</code> committen (<code>ANK-94</code>). Stand 25.10.: K-M2-4 liest den Anbieter aus dem Feld <code>provider</code> nur, falls die Aufzeichnung es zeigt; der Reviewer braucht die Aufzeichnungen damit schon in der ACCEPTANCE-Phase von M2; fehlt das Feld, zusätzlich eine Antwort von <code>GET /api/v1/generation</code> aufzeichnen. Aufzeichnen mit der Produktionskonfiguration (Endpunkt-Tag, Quantisierung), je Modell ein Erfolg; die Zuordnung läuft über URL und Modellkennung (<code>httptest2::set_requester()</code>, K-M2-4); vor dem Commit die Fixtures auf Schlüsselreste prüfen, weil httptest2 nur <code>Authorization</code> redigiert</td>
 <td>03</td>
 </tr><tr><td>BL-27</td>
 <td>O</td>
-<td>Validierungsplan AP1 (Anhang A) ist Entwurf: Prompt-Wortlaut, acht Faktoren, Akzeptanzschwellen, Temperatur-Policy</td>
-<td>Vor Start von M2 freigeben; Freigabe in <code>plan.yaml</code> und ADR festhalten</td>
+<td><del>Validierungsplan AP1 (Anhang A) ist Entwurf: Prompt-Wortlaut, acht Faktoren, Akzeptanzschwellen, Temperatur-Policy</del></td>
+<td>
+<del>Vor Start von M2 freigeben; Freigabe in <code>plan.yaml</code> und ADR festhalten</del> <strong>Erledigt</strong> 25.10.2026 (Betreiber): Freigabe mit ADR-004 einschließlich der Wortlaute in A.3 und A.5; <code>plan.yaml</code> übernimmt den Plan in M2 wörtlich (K-M2-5)</td>
 <td>03</td>
 </tr><tr><td>BL-28</td>
 <td>O</td>
 <td>Zugänge für AP1: OpenAI-Projekt mit Schlüssel und Ausgabelimit, OpenRouter-Konto mit Guthaben und Limit, ntfy-Topic</td>
-<td>Vor M2 anlegen; Schlüssel nach <code>orchestrator/secrets.env</code>; Limits unter den Euro-Beträgen</td>
-<td>Intake 8</td>
+<td>Vor M2 anlegen; Schlüssel nach <code>orchestrator/secrets.env</code>; Limits unter den Euro-Beträgen. Stand 25.10.: Ablauf und Limits stehen in 03 A.8 (<code>ANK-57</code>)</td>
+<td>Intake 8, 03 A.8</td>
 </tr><tr><td>BL-29</td>
 <td>O</td>
 <td>Anfrage an Infevers (aktueller Stand, Export, Nennungsrecht) offen seit 23.10.</td>
@@ -340,6 +341,17 @@
 <td>Die Obermengenprüfung von K-M0-7 lässt angehängte Argumente ohne Vorgabewert passieren (Wortlaut K-M0-7); §4 erlaubt ohne ADR nur „neue Argumente mit Vorgabewert am Ende der Argumentliste“</td>
 <td>Zuständig Reviewer: ab M2 im Code-Review die Vorgabewerte neu angehängter Argumente prüfen; eine eigene Abnahmeprüfung in einer ACCEPTANCE-Phase erwägen (<code>...</code> ausgenommen)</td>
 <td>01 §4, PLAN-REVIEW E4, M0 REVIEW E11</td>
+</tr><tr><td>BL-58</td>
+<td>Q</td>
+<td>Die Belegprüfung vom 25.10.2026 stützt sich auf Quellen ohne Schnappschuss oder Katalogeintrag: OpenRouter-API-Referenz (Antwort ohne Anbieter und Quantisierung; <code>GET /api/v1/generation</code> mit <code>provider_name</code>), Meta-Modellkarte Llama 3.3 70B (Wissensstand), Fundstelle des Veröffentlichungsdatums von Qwen3-32B, Hanley &amp; Lippman-Hand 1983 (JAMA 249:1743–1745, Dreierregel). Der Katalogeintrag Harrison2017 nennt nur „3,5 % medizinisch bedeutsam“; das sind P/LP gegen VUS/LB/B, nicht die gefährlichen Fehler</td>
+<td>API-Referenz vor Start von M2 als Schnappschuss unter <code>quellen/anbieter_&lt;Datum&gt;/</code> sichern und registrieren, sonst bleibt ANK-60 blocking offen (01 §6); Modellkarte und Fundstelle des Qwen-Datums vor dem AP1-Bericht (ANK-65, ANK-66); Hanley &amp; Lippman-Hand beschaffen (Zitat in A.1); Katalogeintrag Harrison2017 um P/LP gegen LB/B ergänzen (12 von 6.169, Manuskript S. 5, PDF 6). Stand 25.10. (Betreiber): Fundstellen für Qwen in <code>quellen/anbieter_2026-10-22/openrouter/models.json</code>, Eintrag <code>qwen/qwen3-32b</code>: Wissensstand im Feld <code>knowledge_cutoff</code>, Obergrenze im Feld <code>created</code> (ANK-66); das Feld <code>knowledge_cutoff</code> liefert für Llama die Katalogangabe, die jetzt Stichtag der Kennzeichen <code>_llama</code> ist, die Modellkarte bleibt Zweitbeleg (ANK-65). Offen bleiben API-Referenz, Modellkarte, Hanley &amp; Lippman-Hand, der Katalogeintrag Harrison2017 und zusätzlich Haldane 1956 (Ann Hum Genet 20(4):309–311) und Anscombe 1956 (Biometrika 43(3/4):461–464) für die Korrektur ½ (A.5, <code>ANK-68</code>)</td>
+<td>03 A.1, A.4, A.5, K-M2-4; ANK-44, ANK-58, ANK-60, ANK-65, ANK-66, ANK-68</td>
+</tr><tr><td>BL-59</td>
+<td>O</td>
+<td><del>Memorisierungsvorbehalt je Modell: <code>prior_differs</code> bezieht sich auf den Wissensstand von Sol; <code>prior_date</code> hält das Datum der letzten Voreinreichung vor diesem Stichtag, aber keine früheren Einreichungen, die vor dem Wissensstand von Llama oder Qwen lagen</del></td>
+<td>
+<del>Auswertungsregel je Modell nach AP1 per ADR (03 A.1); dabei prüfen, ob dafür Spalten je Modell nötig sind</del> <strong>Erledigt</strong> 25.10.2026 (Betreiber, ADR-004): Kennzeichen je Stichtag der drei Modelle mit den Suffixen <code>_sol</code>, <code>_llama</code>, <code>_qwen</code>; die Hauptauswertung nutzt <code>_sol</code>, die Auswertung je Modell die eigenen Spalten (03 K-M2-2, K-M2-6, A.1)</td>
+<td>03 K-M2-2, A.1; ANK-50, ANK-65, ANK-66</td>
 </tr></tbody></table></div>
 
   </main></div>

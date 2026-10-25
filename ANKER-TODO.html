@@ -79,7 +79,7 @@
 <td>Genauigkeit gegen zertifizierte NIST-Werte (zwei Regeln)</td>
 <td>K-M1a-4</td>
 <td>niedrige Schwierigkeit (<code>SiRstv</code>, <code>SmLs01</code>–<code>SmLs03</code>, <code>AtmWtAg</code>): 1e-8 relativ; mittlere Schwierigkeit (<code>SmLs04</code>–<code>SmLs06</code>): LRE von <code>msa_fit</code> mindestens LRE von <code><a href="https://rdrr.io/r/stats/aov.html" class="external-link">stats::aov</a></code> auf denselben Daten minus 1, beide LRE in der Vignette</td>
-<td>NIST StRD „Background Information“ (LRE = −log₁₀</td>
+<td>NIST StRD „Background Information“ (LRE = −log₁₀ |x − c| / |c|); Werte um 10¹² mit Abweichungen 0,1 liegen an der Grenze der Double-Darstellung (Auflösung etwa 1e-4 je Wert), die erreichbare Genauigkeit ist vor der Messung unbekannt, deshalb Kopplung an <code>aov</code> statt geratener Zahl (Revision 22:20); BL-23</td>
 </tr><tr><td>invariance</td>
 <td>Toleranz für Permutation, Umbenennung, Verschiebung, Skalierung</td>
 <td>K-M1a-6, 01 §2</td>
@@ -177,8 +177,7 @@
 </tr></thead><tbody><tr><td>ANK-10</td>
 <td>AIAG-ANOVA-Beispiel: Datenblatt (10 Teile × 3 Prüfer × 3 Wiederholungen), EV, AV, GRR, PV, TV, % Studienvariation, % Contribution je Quelle, ndc</td>
 <td>K-M1a-2, K-M1a-5</td>
-<td>AIAG2010, Tab. III-B 6a (Datenblatt) und Tab. III-B 7–10, Druck S. 103 und 127–129 (PDF 112, 136–138); Datenblatt als CSV <code>reference/quellen/data/aiag/anova_example.csv</code>
-</td>
+<td>AIAG2010, Datenblatt Tab. III-B 6a, Druck S. 105 (PDF 114), dieselben Daten ausgefüllt in Abb. III-B 15, Druck S. 118 (PDF 127); Auswertung Tab. III-B 7–10, Druck S. 127–129 (PDF 136–138); Datenblatt als CSV <code>reference/quellen/data/aiag/anova_example.csv</code>. Beim Ernten beachten (Prüfung 25.10.2026): Die F-Werte der Tab. III-B 7 haben auch bei den Haupteffekten MS Equipment im Nenner; der ndc steht in Tab. III-B 10 und im Text auf S. 128 verschieden gerundet (die Projektkonvention trunkiert); % Contribution GRR steht in Tab. III-B 8 und III-B 10 verschieden gerundet, der Anker folgt Tab. III-B 8</td>
 <td>Literatur (geschützt, lokal)</td>
 <td>Datei anlegen (Betreiber), Reviewer prüft</td>
 </tr><tr><td>ANK-13</td>
@@ -283,9 +282,9 @@
 <td>Literatur (Verlags-PDF, geschützt, lokal)</td>
 <td>vorhanden (seit 24.10.)</td>
 </tr><tr><td>ANK-44</td>
-<td>Harrison et al. 2017: Anteil konkordanter gemeinsamer Varianten, medizinisch bedeutsame Unterschiede, Konkordanz nach Neubewertung</td>
-<td>K-M1d-4</td>
-<td>Harrison2017 (Katalog E): Genet Med 19:1096–1104, doi 10.1038/gim.2017.14; Autorenmanuskript Harvard DASH (17 Seiten, Seitenzahlen des Manuskripts); Abstract und Results</td>
+<td>Harrison et al. 2017: Anteil konkordanter gemeinsamer Varianten, medizinisch bedeutsame Unterschiede, Konkordanz nach Neubewertung; Zahl der gemeinsamen Varianten mit P/LP gegen LB/B (Vergleichswert für gefährliche Fehler)</td>
+<td>K-M1d-4, A.1</td>
+<td>Harrison2017 (Katalog E): Genet Med 19:1096–1104, doi 10.1038/gim.2017.14; Autorenmanuskript Harvard DASH (17 Seiten, Seitenzahlen des Manuskripts); Abstract und Results; P/LP gegen LB/B: Manuskriptfassung S. 5 (PDF 6); „medizinisch bedeutsam“ umfasst P/LP gegen VUS/LB/B (Belegprüfung 25.10.2026)</td>
 <td>Literatur (frei lesbar)</td>
 <td>vorhanden (seit 24.10.)</td>
 </tr><tr><td>ANK-45</td>
@@ -316,14 +315,14 @@
 <th>Art</th>
 <th>Status</th>
 </tr></thead><tbody><tr><td>ANK-50</td>
-<td>Stichtag Wissensstand GPT-6.1 Sol</td>
-<td>K-M2-1, K-M2-2, A.2</td>
+<td>Stichtag Wissensstand GPT-6.1 Sol (Kennzeichen <code>_sol</code>, K-M2-2)</td>
+<td>K-M2-1, K-M2-2, K-M2-5, A.1, A.2, A.4</td>
 <td>
-<code>quellen/anbieter_2026-10-22/openai/Models.html</code> (Schnappschuss); Intake Abschnitt 6 (30.04.2026)</td>
+<code>quellen/anbieter_2026-10-22/openai/Models.html</code> (OpenAI-Modellseite, Schnappschuss 22.10.2026); Intake Abschnitt 6 (30.04.2026); bestätigt in der Belegprüfung 25.10.2026</td>
 <td>Anbieterdokumentation</td>
 <td>vorhanden</td>
 </tr><tr><td>ANK-51</td>
-<td>ClinGen ERepo Stand 22.10.2026: Gesamtzahl Einstufungen, Pool nach Stichtag (Einstufungen, Varianten, Gene, Minimum je Klasse)</td>
+<td>ClinGen ERepo Stand 22.10.2026: Gesamtzahl Einstufungen, Pool nach Stichtag mit c.-Bezeichnung auf einem NM-Transkript nach K-M2-1 (Einstufungen, Varianten, Gene, Minimum je Klasse)</td>
 <td>K-M2-1</td>
 <td>
 <code>quellen/daten/clingen-erepo_2026-10-22/QUELLE.txt</code> und <code>erepo_classifications_all.tsv</code>; Projektdokument „Offene Punkte“ (Itemsatz)</td>
@@ -345,14 +344,14 @@
 <td>Anbieterdokumentation (Stand 22.10.2026)</td>
 <td>vorhanden; vor AP1 live prüfen</td>
 </tr><tr><td>ANK-54</td>
-<td>Llama 3.3 70B Instruct auf OpenRouter: Modell-Slug, Provider-Slug CoreWeave, Quantisierung fp16, Kontext, Preise</td>
+<td>Llama 3.3 70B Instruct auf OpenRouter: Modell-Slug, Endpunkt-Tag <code>coreweave/fp16</code> für <code>provider.order</code>, Quantisierung fp16, Kontext, Preise</td>
 <td>K-M2-4, K-M2-5, A.4</td>
 <td>
 <code>quellen/anbieter_2026-10-22/openrouter/</code> (models.json, Endpunktdatei des Modells)</td>
 <td>Anbieterdokumentation</td>
 <td>vorhanden; vor AP1 live prüfen</td>
 </tr><tr><td>ANK-55</td>
-<td>Qwen3-32B auf OpenRouter: Modell-Slug, Provider-Slug DeepInfra, Quantisierung fp8, Seed-Unterstützung, Preise</td>
+<td>Qwen3-32B auf OpenRouter: Modell-Slug, Endpunkt-Tag <code>deepinfra/fp8</code> für <code>provider.order</code>, Quantisierung fp8, Seed-Unterstützung, Preise</td>
 <td>K-M2-4, K-M2-5, A.4</td>
 <td>ebenda</td>
 <td>Anbieterdokumentation</td>
@@ -364,17 +363,17 @@
 <td>Betreiberfestlegung</td>
 <td>vorhanden</td>
 </tr><tr><td>ANK-57</td>
-<td>Budget AP1 in Euro</td>
-<td>K-M2-5, A.6</td>
-<td>Intake Abschnitt 8</td>
+<td>Budget AP1 in Euro; Limits der Zugänge: OpenAI-Projekt nur für AP1 mit Budget etwa 100 $ und Warnung bei 60 $, OpenRouter-Schlüssel mit eigenem Limit</td>
+<td>K-M2-5, A.6, A.8</td>
+<td>Intake Abschnitt 8; Limits: ADR-004 (Betreiberfestlegung 25.10.2026)</td>
 <td>Betreiberfestlegung</td>
-<td>vorhanden</td>
+<td>vorhanden; Limits bestätigt 25.10.2026 (ADR-004)</td>
 </tr><tr><td>ANK-58</td>
-<td>Akzeptanzkriterien AP1: %GRR-Schwelle auf der latenten Skala, Kappa-Grenzen 0,8/0,6, gefährliche Fehlklassifikation (P/LP ↔︎ B/LB)</td>
-<td>K-M2-5, K-M2-6, A.1</td>
-<td>Betreiberentscheidung aus Context of Use und Risikostufe (Validierungsplan nach Freigabe, BL-27); keine Literaturevidenz für die Grenzen: AIAG-Schwellen sind auf der latenten Skala nur Konvention (Formelsammlung §4), Landis &amp; Koch 1977 (Biometrics 33:159–174, Tab. 3; BL-41) liefert nur die Bezeichnungen der Bänder; das gefährliche Fehlurteil ist das einzige inhaltlich zwingende Element</td>
+<td>Akzeptanzkriterien AP1: %GRR-Schwelle auf der latenten Skala, Kappa-Grenzen 0,8/0,6, gefährliche Fehlklassifikation (P/LP ↔︎ B/LB; unter den 75 ERepo-Items 0 akzeptabel, 1 bedingt, ab 2 nicht akzeptabel), Robustheit (drei disjunkte Bänder: akzeptabel, wenn kein Faktor |Δp| über 5 Prozentpunkten hat; nicht akzeptabel, wenn mindestens ein Faktor |Δp| über 5 Prozentpunkten hat und zugleich die SME überschreitet; bedingt, wenn Faktoren über 5 Prozentpunkten liegen, aber keiner davon die SME überschreitet; SME- oder ME-Überschreitungen bei |Δp| bis 5 Prozentpunkte werden berichtet und ändern das Verdikt nicht); Verdikt je Modell, Kappa am Punktschätzer (Intervall nach <code>ANK-68</code> nur berichtet), Gesamtverdikt als schlechtestes Band der vier Kriterien</td>
+<td>K-M2-5, K-M2-6, K-M2-7, A.1</td>
+<td>Betreiberentscheidung aus Context of Use und Risikostufe (Validierungsplan, Freigabe ADR-004 vom 25.10.2026, BL-27); keine Literaturevidenz für die Grenzen: AIAG-Schwellen sind auf der latenten Skala nur Konvention (Formelsammlung §4), Landis &amp; Koch 1977 (Biometrics 33:159–174, Tab. 3; BL-41) liefert nur die Bezeichnungen der Bänder; das gefährliche Fehlurteil ist das einzige inhaltlich zwingende Element; seine Bänder begründet die Dreierregel (Hanley &amp; Lippman-Hand 1983, JAMA 249:1743–1745; BL-58), Vergleichswert <code>ANK-44</code> (Belegprüfung 25.10.2026)</td>
 <td>Betreiberfestlegung</td>
-<td>Betreiber gibt frei</td>
+<td>Betreiber bestätigt 25.10.2026 (ADR-004)</td>
 </tr><tr><td>ANK-59</td>
 <td>Itemsatz-Festlegung: 100 Items = 75 ERepo + 25 INSAID, 15 bzw. 5 je Klasse, Panels/Gene im Umlauf, Seed 20261024</td>
 <td>K-M2-1, A.2</td>
@@ -382,29 +381,61 @@
 <td>Betreiberfestlegung</td>
 <td>vorhanden</td>
 </tr><tr><td>ANK-60</td>
-<td>OpenRouter: Namen der Routing-Felder im Request und des Anbieterfelds in der Antwort</td>
+<td>OpenRouter: Namen der Routing-Felder im Request; Antwort ohne Anbieter- und Quantisierungsfeld; Feld <code>provider_name</code> von <code>GET /api/v1/generation</code>
+</td>
 <td>K-M2-4</td>
-<td>OpenRouter Provider Routing Doku (Katalog D, HTML-Schnappschuss)</td>
+<td>Routing-Felder: OpenRouter Provider Routing Doku (Katalog D, HTML-Schnappschuss); Antwort und Generation-Endpunkt: OpenRouter-API-Referenz (Belegprüfung 25.10.2026; kein Schnappschuss, BL-58); ob die Antwort trotzdem ein Feld <code>provider</code> trägt, zeigt die Aufzeichnung (<code>ANK-94</code>)</td>
 <td>Anbieterdokumentation</td>
-<td>vorhanden</td>
+<td>Routing-Felder vorhanden; API-Referenz als Schnappschuss sichern (Betreiber, vor M2)</td>
 </tr><tr><td>ANK-61</td>
-<td>Temperatur-Policy je Modell (0 wo angenommen; Reasoning-Endpunkt ohne Parameter)</td>
-<td>K-M2-5, A.4</td>
-<td>Betreiberfestlegung (Projektierung Anhang A.4); OpenAI Models-Dokumentation zu Reasoning-Modellen</td>
+<td>Temperatur-, Seed- und Reasoning-Policy je Modell: Llama und Qwen Temperatur 0; GPT-6.1 Sol ohne Feld (<code>temperature = NULL</code>), weil Sol <code>temperature</code> nicht unterstützt (keine Reasoning-Stufe <code>none</code>); Seed 20261024 in allen Aufrufen aller Modelle; Qwen ohne Reasoning über <code>reasoning = {"enabled": false}</code>, im Pilot geprüft</td>
+<td>K-M2-4, K-M2-5, A.4</td>
+<td>Betreiberfestlegung (Projektierung Anhang A.4); OpenAI Models-Dokumentation zu Reasoning-Modellen; Belegprüfung 25.10.2026; Seed und Reasoning-Schalter: ADR-004 (Betreiberfestlegung 25.10.2026)</td>
 <td>Betreiberfestlegung</td>
-<td>Betreiber gibt frei</td>
+<td>Betreiber bestätigt 25.10.2026 (ADR-004)</td>
 </tr><tr><td>ANK-62</td>
-<td>Acht Störfaktoren mit Stufen</td>
-<td>K-M2-5, A.5</td>
-<td>Validierungsplan Anhang A.5 nach Freigabe</td>
+<td>Acht Störfaktoren mit Stufen, Bausteine (Wortlaute englisch und deutsch) und Kompositionsregel</td>
+<td>K-M2-5, K-M2-7, A.5</td>
+<td>Validierungsplan Anhang A.5; Faktoren, Kompositionsregel und Wortlaute freigegeben mit ADR-004 (25.10.2026)</td>
 <td>Betreiberfestlegung</td>
-<td>Betreiber gibt frei</td>
+<td>Betreiber bestätigt 25.10.2026 (ADR-004)</td>
 </tr><tr><td>ANK-63</td>
 <td>ClinVar <code>submission_summary</code>: Spaltenbelegung für Einreicher, Einstufung, Datum, Bewertungsstatus (Stand 19.10.2026)</td>
 <td>K-M2-2, K-M1d-3</td>
 <td><code>quellen/daten/clinvar_2026-10-22/README</code></td>
 <td>Datenstand</td>
 <td>vorhanden</td>
+</tr><tr><td>ANK-64</td>
+<td>INSAID-Transkripte je Gen (MEFV, MVK, NLRP3, TNFRSF1A) für <code>hgvs</code> der INSAID-Items; Widerspruch zwischen Methoden und Tab. 1 für MEFV</td>
+<td>K-M2-1, A.2</td>
+<td>VanGijn2018, Methoden (PDF 2) und Tab. 1; die Methoden gelten, der Widerspruch wird im Anker vermerkt (Belegprüfung 25.10.2026)</td>
+<td>Literatur (geschützt, lokal)</td>
+<td>vorhanden</td>
+</tr><tr><td>ANK-65</td>
+<td>Wissensstand Llama 3.3 70B Instruct; die Katalogangabe ist der Stichtag der Kennzeichen <code>_llama</code> (K-M2-2)</td>
+<td>K-M2-2, K-M2-5, A.1, A.4</td>
+<td>Katalogangabe: <code>quellen/anbieter_2026-10-22/openrouter/models.json</code> (Schnappschuss 22.10.2026, Eintrag <code>meta-llama/llama-3.3-70b-instruct</code>, Feld <code>knowledge_cutoff</code>); Monatsangabe als Zweitbeleg: Meta-Modellkarte zu Llama 3.3 (Belegprüfung 25.10.2026; kein Schnappschuss, BL-58)</td>
+<td>Anbieterdokumentation</td>
+<td>Katalogangabe vorhanden; Modellkarte als Schnappschuss sichern (Betreiber)</td>
+</tr><tr><td>ANK-66</td>
+<td>Wissensstand Qwen3-32B: keine Herstellerangabe; die Katalogangabe ist der Stichtag der Kennzeichen <code>_qwen</code> (K-M2-2); Veröffentlichungsdatum als obere Schranke</td>
+<td>K-M2-2, K-M2-5, A.1, A.4</td>
+<td>
+<code>quellen/anbieter_2026-10-22/openrouter/models.json</code> (Schnappschuss 22.10.2026, Eintrag <code>qwen/qwen3-32b</code>): Wissensstand im Feld <code>knowledge_cutoff</code>, Obergrenze im Feld <code>created</code> (Unix-Zeit; 28.04.2025 UTC, 29.04.2025 in China)</td>
+<td>Anbieterdokumentation</td>
+<td>vorhanden</td>
+</tr><tr><td>ANK-67</td>
+<td>Pilot AP1: 10 Pilotitems in <code>pilot.csv</code> (ERepo, je Klasse die nächsten zwei im Umlauf nach den 75 Hauptitems), 3 Vorlagen, 1 Replikat, 30 Aufrufe je Modell; Bestehensregeln je Modell: keine 4xx-Antwort, Anbieter gleich dem angeforderten, Parser-Trefferquote mindestens 27 von 30, Kostenprojektion aus dem 90-%-Quantil der Ausgabetokens unter <code>ANK-57</code>, bei Qwen kein Reasoning; berichtet: Median der Latenz; Auslöser des Wiederholungstags: Anbieterwechsel in der Antwort, wechselnde Modellkennung innerhalb eines Blocks, mehr als 5 % Fehler eines Modells in einem Block</td>
+<td>K-M2-1, K-M2-5, K-M2-7, A.6</td>
+<td>ADR-004 (Betreiberfestlegung 25.10.2026)</td>
+<td>Betreiberfestlegung</td>
+<td>Betreiber bestätigt 25.10.2026 (ADR-004)</td>
+</tr><tr><td>ANK-68</td>
+<td>Auswertungsregeln AP1: Modalantwort je Item und Modell über die 18 Hauptplanaufrufe (NA als eigener Wert, bei Gleichstand keine Modalantwort); NA-Regel (NA-Anteil als Kennzahl, in Trefferquote und Kappa Fehlklassifikation mit Übereinstimmungsgewicht 0, im Fit fehlender Wert); Kappa-Bootstrap über Items mit 2.000 Wiederholungen, Perzentilintervall 95 %, Seed 20261024; Rückfall-Fit numerisch auf den Klassenscores 1 bis 5 (Benign = 1 bis Pathogenic = 5) bei Fehler oder Konvergenzwarnung des ordinalen Fits; Antwortgröße der Robustheit als empirischer Logit mit Korrektur ½</td>
+<td>K-M2-5, K-M2-6, K-M2-7, A.1, A.5</td>
+<td>ADR-004 (Betreiberfestlegung 25.10.2026); Korrektur ½: Haldane 1956 (Ann Hum Genet 20(4):309–311) und Anscombe 1956 (Biometrika 43(3/4):461–464), beide nicht im Katalog (BL-58)</td>
+<td>Betreiberfestlegung</td>
+<td>Betreiber bestätigt 25.10.2026 (ADR-004)</td>
 </tr></tbody></table></div>
 <div class="section level2">
 <h2 id="m3a--übereinstimmung-bias-linearität">M3a — Übereinstimmung, Bias, Linearität<a class="anchor" aria-label="anchor" href="#m3a--%C3%BCbereinstimmung-bias-linearit%C3%A4t"></a></h2>
@@ -535,7 +566,7 @@
 </tr></tbody></table></div>
 <div class="section level2">
 <h2 id="nicht-vergeben">Nicht vergeben<a class="anchor" aria-label="anchor" href="#nicht-vergeben"></a></h2>
-<p>ANK-04, 05, 07–09, 11, 12, 15, 17–20, 22–24, 26, 27, 29–31, 33–39, 48, 49, 64–69, 71, 77–79, 83–85, 88, 90–92 sind frei für Nachträge des Reviewers (jeder Nachtrag mit ADR, wenn er ein Kriterium ändert); die am 24.10. gestrichenen Nummern (Toleranzen, jetzt in ANK-TOL; Orakel ohne Anker) werden nicht neu belegt, damit alte Verweise eindeutig bleiben.</p>
+<p>ANK-04, 05, 07–09, 11, 12, 15, 17–20, 22–24, 26, 27, 29–31, 33–39, 48, 49, 69, 71, 77–79, 83–85, 88, 90–92 sind frei für Nachträge des Reviewers (jeder Nachtrag mit ADR, wenn er ein Kriterium ändert); die am 24.10. gestrichenen Nummern (Toleranzen, jetzt in ANK-TOL; Orakel ohne Anker) werden nicht neu belegt, damit alte Verweise eindeutig bleiben.</p>
 </div>
 </div>
 
