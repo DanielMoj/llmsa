@@ -174,8 +174,9 @@
 <td>01 §6</td>
 </tr><tr><td>BL-26</td>
 <td>O</td>
-<td>httptest2-Aufzeichnungen je Modell des Plans fehlen; nur der Betreiber hat Schlüssel</td>
-<td>Vor BUILD von M2 aufzeichnen und unter <code>tests/fixtures/httptest2/</code> committen (<code>ANK-94</code>). Stand 25.10.: K-M2-4 liest den Anbieter aus dem Feld <code>provider</code> nur, falls die Aufzeichnung es zeigt; der Reviewer braucht die Aufzeichnungen damit schon in der ACCEPTANCE-Phase von M2; fehlt das Feld, zusätzlich eine Antwort von <code>GET /api/v1/generation</code> aufzeichnen. Aufzeichnen mit der Produktionskonfiguration (Endpunkt-Tag, Quantisierung), je Modell ein Erfolg; die Zuordnung läuft über URL und Modellkennung (<code>httptest2::set_requester()</code>, K-M2-4); vor dem Commit die Fixtures auf Schlüsselreste prüfen, weil httptest2 nur <code>Authorization</code> redigiert</td>
+<td><del>API-Aufzeichnungen je Modell des Plans fehlen; nur der Betreiber hat Schlüssel</del></td>
+<td>
+<del>Vor BUILD von M2 aufzeichnen und unter <code>tests/fixtures/api/</code> committen (<code>ANK-94</code>). Stand 25.10.: K-M2-4 liest den Anbieter aus dem Feld <code>provider</code> nur, falls die Aufzeichnung es zeigt; der Reviewer braucht die Aufzeichnungen damit schon in der ACCEPTANCE-Phase von M2; fehlt das Feld, zusätzlich eine Antwort von <code>GET /api/v1/generation</code> aufzeichnen. Aufzeichnen mit der Produktionskonfiguration (Endpunkt-Tag, Quantisierung), je Modell ein Erfolg; die Zuordnung läuft über URL und Modellkennung (K-M2-4). Stand 26.10. (Berichtigung, Nachtrag zu ADR-004): Aufzeichnungen sind die unveränderten JSON-Antwortkörper je Modell, dazu Aufnahmeskript <code>record.R</code> und <code>README.md</code>; Tests spielen sie mit <code><a href="https://httr2.r-lib.org/reference/with_mocked_responses.html" class="external-link">httr2::local_mocked_responses()</a></code> ein, die Mock-Funktion ordnet über URL und Feld <code>model</code> des JSON-Bodys zu; nur Antwortkörper ablegen, keine Header (OpenAI schickt dort Organisations- und Projektkennung mit); vor dem Commit die Fixtures auf Schlüsselreste prüfen</del> <strong>Erledigt</strong> 26.10.2026 (Betreiber): <code>sol.json</code>, <code>llama.json</code> und <code>qwen.json</code> unter <code>tests/fixtures/api/</code> mit <code>record.R</code> und <code>README.md</code>; je Modell ein Aufruf mit der Produktionskonfiguration zwischen 20:36 und 20:37 UTC, alle mit HTTP 200; beide OpenRouter-Antworten tragen das Feld <code>provider</code> (<code>CoreWeave</code>, <code>DeepInfra</code>), eine Antwort von <code>GET /api/v1/generation</code> war deshalb nicht nötig (<code>ANK-60</code>, <code>ANK-94</code>); keine Datei enthält einen der Schlüssel oder ein 12-Zeichen-Stück daraus; Wiedergabe mit <code><a href="https://httr2.r-lib.org/reference/with_mocked_responses.html" class="external-link">httr2::local_mocked_responses()</a></code> und Zuordnung über URL und <code>model</code> außerhalb des Repos erprobt. Befund: Die Qwen-Antwort enthält trotz <code>reasoning = {"enabled": false}</code> Reasoning-Text (<code>message.reasoning</code>) und meldet 308 Reasoning-Tokens (03 A.4, A.6)</td>
 <td>03</td>
 </tr><tr><td>BL-27</td>
 <td>O</td>
@@ -213,7 +214,7 @@
 </tr><tr><td>BL-33</td>
 <td>O</td>
 <td>Gemini CLI: <code>~/.gemini/.env</code> nur in vertrauten Ordnern; <code>security.folderTrust.enabled=false</code>; ripgrep; Codex braucht bubblewrap</td>
-<td>Vor M1a prüfen (PREFLIGHT-Routenprobe)</td>
+<td>Vor M2 prüfen (PREFLIGHT-Routenprobe)</td>
 <td>Intake 8</td>
 </tr><tr><td>BL-34</td>
 <td>O</td>
@@ -353,6 +354,22 @@
 <td>
 <del>Auswertungsregel je Modell nach AP1 per ADR (03 A.1); dabei prüfen, ob dafür Spalten je Modell nötig sind</del> <strong>Erledigt</strong> 25.10.2026 (Betreiber, ADR-004): Kennzeichen je Stichtag der drei Modelle mit den Suffixen <code>_sol</code>, <code>_llama</code>, <code>_qwen</code>; die Hauptauswertung nutzt <code>_sol</code>, die Auswertung je Modell die eigenen Spalten (03 K-M2-2, K-M2-6, A.1)</td>
 <td>03 K-M2-2, A.1; ANK-50, ANK-65, ANK-66</td>
+</tr><tr><td>BL-60</td>
+<td>R</td>
+<td>K-M3d-3 prüft auch <code><a href="reference/backends.html">backend_ellmer()</a></code> gegen die Aufzeichnungen unter <code>tests/fixtures/api/</code>, eingespielt mit <code><a href="https://httr2.r-lib.org/reference/with_mocked_responses.html" class="external-link">httr2::local_mocked_responses()</a></code>; ob diese Mocks die Aufrufe von <code><a href="reference/backends.html">backend_ellmer()</a></code> abfangen, ist ungeprüft: ellmer nutzt httr2, eventuell mit Streaming</td>
+<td>Vor M3d prüfen, ob die httr2-Mocks die Aufrufe von <code><a href="reference/backends.html">backend_ellmer()</a></code> abfangen</td>
+<td>04 K-M3d-3; BL-17</td>
+</tr><tr><td>BL-61</td>
+<td>R</td>
+<td><del>Qwen3-32B über OpenRouter (<code>deepinfra/fp8</code>) liefert Reasoning trotz Abschalter: Die Aufzeichnung vom 26.10.2026, 20:37:10 UTC, mit <code>reasoning = {"enabled": false}</code> meldet 308 Reasoning-Tokens und Reasoning-Text in <code>message.reasoning</code>; ein Test mit <code>{"effort": "none"}</code> (20:54:34 UTC) wird angenommen und ignoriert (274 Reasoning-Tokens); <code>/no_think</code> in der Systemnachricht (20:54:53 UTC) lässt einen leeren Denkblock (1 Reasoning-Token, <code>"\n\n"</code>) und ändert den Prompt nur für Qwen</del></td>
+<td>
+<del>Vor M2 entscheiden, ob Qwen ohne Reasoning laufen kann oder der Plan angepasst wird</del> <strong>Erledigt</strong> 26.10.2026 (Betreiber, ADR-004 Nachtrag 2): Qwen läuft mit dem Reasoning, das der Endpunkt ausliefert, ohne Feld <code>reasoning</code> und ohne <code>/no_think</code>; Pilotregel „bei Qwen kein Reasoning“ und Prüfregel „kein Feld <code>reasoning</code>“ gestrichen; der Pilot berichtet je Modell die Reasoning-Tokens (Median und 90-%-Quantil), die Kostenprojektion schließt Reasoning ein, ausgewertet wird nur <code>content</code> (03 A.4, A.6; ANK-61, ANK-67); <code>qwen.json</code> ohne Feld <code>reasoning</code> neu aufgezeichnet (21:08:26 UTC, 197 Reasoning-Tokens); Schnappschuss der OpenRouter-Doku „Reasoning Tokens“ unter <code>quellen/anbieter_2026-10-26/</code> mit MANIFEST, Katalog und Textspiegel</td>
+<td>03 K-M2-4, A.4, A.6; ANK-61, ANK-67</td>
+</tr><tr><td>BL-62</td>
+<td>O</td>
+<td>Reasoning und Modellidentität bei Sol nur begrenzt prüfbar: Sol meldet bei <code>reasoning_effort</code> <code>medium</code> auf die Testfrage 0 Reasoning-Tokens (<code>sol.json</code>, 26.10.2026); <code>system_fingerprint</code> ist in allen drei Aufzeichnungen <code>null</code>, und Sol meldet nur <code>gpt-6.1-sol</code>, ein Modellwechsel hinter der Kennung ist also nicht erkennbar</td>
+<td>Offen bis Pilot und Bericht: im Pilot die Reasoning-Tokens von Sol je Aufruf berichten; bleibt es bei 0, die Wirkung von <code>reasoning_effort</code> über Chat Completions klären; im Bericht (A.7) die fehlende Erkennbarkeit eines Modellwechsels als Grenze nennen</td>
+<td>03 A.4, A.6, A.7; ANK-53, ANK-67</td>
 </tr></tbody></table></div>
 
   </main></div>

@@ -384,15 +384,15 @@
 <td>OpenRouter: Namen der Routing-Felder im Request; Antwort ohne Anbieter- und Quantisierungsfeld; Feld <code>provider_name</code> von <code>GET /api/v1/generation</code>
 </td>
 <td>K-M2-4</td>
-<td>Routing-Felder: OpenRouter Provider Routing Doku (Katalog D, HTML-Schnappschuss); Antwort und Generation-Endpunkt: OpenRouter-API-Referenz, Schnappschüsse 25.10.2026 (Katalog: Anbieterdokumentation 25.10.2026) <code>quellen/anbieter_2026-10-25/openrouter/API_Reference_Overview.md</code> (Abschnitt Responses, CompletionsResponse format; Abschnitt Querying cost and stats) und <code>quellen/anbieter_2026-10-25/openrouter/API_Reference_Get_a_generation.md</code> (Parameter <code>id</code>, Antwortfeld <code>provider_name</code>); ob die Antwort trotzdem ein Feld <code>provider</code> trägt, zeigt die Aufzeichnung (<code>ANK-94</code>)</td>
+<td>Routing-Felder: OpenRouter Provider Routing Doku (Katalog D, HTML-Schnappschuss); Antwort und Generation-Endpunkt: OpenRouter-API-Referenz, Schnappschüsse 25.10.2026 (Katalog: Anbieterdokumentation 25.10.2026) <code>quellen/anbieter_2026-10-25/openrouter/API_Reference_Overview.md</code> (Abschnitt Responses, CompletionsResponse format; Abschnitt Querying cost and stats) und <code>quellen/anbieter_2026-10-25/openrouter/API_Reference_Get_a_generation.md</code> (Parameter <code>id</code>, Antwortfeld <code>provider_name</code>); die Aufzeichnungen vom 26.10.2026 (<code>ANK-94</code>, <code>tests/fixtures/api/</code>) tragen trotzdem ein Feld <code>provider</code>: <code>CoreWeave</code> bei Llama (<code>llama.json</code>), <code>DeepInfra</code> bei Qwen (<code>qwen.json</code>); ein Feld zur Quantisierung fehlt</td>
 <td>Anbieterdokumentation</td>
 <td>vorhanden (Schnappschüsse 22.10. und 25.10.2026)</td>
 </tr><tr><td>ANK-61</td>
-<td>Temperatur-, Seed- und Reasoning-Policy je Modell: Llama und Qwen Temperatur 0; GPT-6.1 Sol ohne Feld (<code>temperature = NULL</code>), weil Sol <code>temperature</code> nicht unterstützt (keine Reasoning-Stufe <code>none</code>); Seed 20261024 in allen Aufrufen aller Modelle; Qwen ohne Reasoning über <code>reasoning = {"enabled": false}</code>, im Pilot geprüft</td>
+<td>Temperatur-, Seed- und Reasoning-Policy je Modell: Llama und Qwen Temperatur 0; GPT-6.1 Sol ohne Feld (<code>temperature = NULL</code>), weil Sol <code>temperature</code> nicht unterstützt (keine Reasoning-Stufe <code>none</code>); Seed 20261024 in allen Aufrufen aller Modelle; Qwen ohne Feld <code>reasoning</code>, mit dem Reasoning, das der Endpunkt ausliefert: <code>reasoning = {"enabled": false}</code> (Aufzeichnung 26.10.2026) und <code>{"effort": "none"}</code> (Test 26.10.2026, 20:54:34 UTC) nimmt der Endpunkt an, ignoriert sie aber; <code>/no_think</code> verworfen, weil es den Prompt nur für Qwen ändert (Test 26.10.2026, 20:54:53 UTC); Reasoning-Tokens je Modell im Pilot berichtet</td>
 <td>K-M2-4, K-M2-5, A.4</td>
-<td>Betreiberfestlegung (Projektierung Anhang A.4); OpenAI Models-Dokumentation zu Reasoning-Modellen; Belegprüfung 25.10.2026; Zweitbeleg zu Sol: LiteLLM, „Day 0 Support: GPT-6.1 Sol“, Abschnitt Notes (<code>quellen/anbieter_2026-10-25/litellm/Blog_GPT-6.1_Sol.html</code>, Schnappschuss 25.10.2026); Seed und Reasoning-Schalter: ADR-004 (Betreiberfestlegung 25.10.2026)</td>
+<td>Betreiberfestlegung (Projektierung Anhang A.4); OpenAI Models-Dokumentation zu Reasoning-Modellen; Belegprüfung 25.10.2026; Zweitbeleg zu Sol: LiteLLM, „Day 0 Support: GPT-6.1 Sol“, Abschnitt Notes (<code>quellen/anbieter_2026-10-25/litellm/Blog_GPT-6.1_Sol.html</code>, Schnappschuss 25.10.2026); Seed: ADR-004 (Betreiberfestlegung 25.10.2026); Reasoning bei Qwen: ADR-004, Nachtrag 2 (Betreiberentscheidung 26.10.2026), Aufzeichnung und Tests in <code>tests/fixtures/api/README.md</code>, OpenRouter-Doku „Reasoning Tokens“ (<code>quellen/anbieter_2026-10-26/openrouter/Reasoning_Tokens.md</code>, Schnappschuss 26.10.2026; Abschnitt Reasoning Effort Level: <code>"effort": "none"</code> ist der dokumentierte Abschalter)</td>
 <td>Betreiberfestlegung</td>
-<td>Betreiber bestätigt 25.10.2026 (ADR-004)</td>
+<td>Betreiber bestätigt 25.10.2026 (ADR-004); Reasoning bei Qwen geändert 26.10.2026 (ADR-004, Nachtrag 2)</td>
 </tr><tr><td>ANK-62</td>
 <td>Acht Störfaktoren mit Stufen, Bausteine (Wortlaute englisch und deutsch) und Kompositionsregel</td>
 <td>K-M2-5, K-M2-7, A.5</td>
@@ -425,11 +425,11 @@
 <td>Anbieterdokumentation</td>
 <td>vorhanden</td>
 </tr><tr><td>ANK-67</td>
-<td>Pilot AP1: 10 Pilotitems in <code>pilot.csv</code> (ERepo, je Klasse die nächsten zwei im Umlauf nach den 75 Hauptitems), 3 Vorlagen, 1 Replikat, 30 Aufrufe je Modell; Bestehensregeln je Modell: keine 4xx-Antwort, Anbieter gleich dem angeforderten, Parser-Trefferquote mindestens 27 von 30, Kostenprojektion aus dem 90-%-Quantil der Ausgabetokens unter <code>ANK-57</code>, bei Qwen kein Reasoning; berichtet: Median der Latenz; Auslöser des Wiederholungstags: Anbieterwechsel in der Antwort, wechselnde Modellkennung innerhalb eines Blocks, mehr als 5 % Fehler eines Modells in einem Block</td>
+<td>Pilot AP1: 10 Pilotitems in <code>pilot.csv</code> (ERepo, je Klasse die nächsten zwei im Umlauf nach den 75 Hauptitems), 3 Vorlagen, 1 Replikat, 30 Aufrufe je Modell; Bestehensregeln je Modell: keine 4xx-Antwort, Anbieter gleich dem angeforderten, Parser-Trefferquote mindestens 27 von 30, Kostenprojektion aus dem 90-%-Quantil der Ausgabetokens (<code>usage.completion_tokens</code>, schließt Reasoning ein) unter <code>ANK-57</code>; berichtet: Median der Latenz, je Modell die Reasoning-Tokens (Median und 90-%-Quantil); Auslöser des Wiederholungstags: Anbieterwechsel in der Antwort, wechselnde Modellkennung innerhalb eines Blocks, mehr als 5 % Fehler eines Modells in einem Block</td>
 <td>K-M2-1, K-M2-5, K-M2-7, A.6</td>
-<td>ADR-004 (Betreiberfestlegung 25.10.2026)</td>
+<td>ADR-004 (Betreiberfestlegung 25.10.2026); Reasoning: ADR-004, Nachtrag 2 (Betreiberentscheidung 26.10.2026)</td>
 <td>Betreiberfestlegung</td>
-<td>Betreiber bestätigt 25.10.2026 (ADR-004)</td>
+<td>Betreiber bestätigt 25.10.2026 (ADR-004); geändert 26.10.2026 (ADR-004, Nachtrag 2)</td>
 </tr><tr><td>ANK-68</td>
 <td>Auswertungsregeln AP1: Modalantwort je Item und Modell über die 18 Hauptplanaufrufe (NA als eigener Wert, bei Gleichstand keine Modalantwort); NA-Regel (NA-Anteil als Kennzahl, in Trefferquote und Kappa Fehlklassifikation mit Übereinstimmungsgewicht 0, im Fit fehlender Wert); Kappa-Bootstrap über Items mit 2.000 Wiederholungen, Perzentilintervall 95 %, Seed 20261024; Rückfall-Fit numerisch auf den Klassenscores 1 bis 5 (Benign = 1 bis Pathogenic = 5) bei Fehler oder Konvergenzwarnung des ordinalen Fits; Antwortgröße der Robustheit als empirischer Logit mit Korrektur ½</td>
 <td>K-M2-5, K-M2-6, K-M2-7, A.1, A.5</td>
@@ -557,12 +557,12 @@
 <td>Datenstand</td>
 <td>Reviewer liest aus Vorlage</td>
 </tr><tr><td>ANK-94</td>
-<td>httptest2-Aufzeichnungen: Datum, Modellkennungen, Anbieter je Aufzeichnung</td>
+<td>API-Aufzeichnungen (unveränderte JSON-Antwortkörper je Modell): Datum, Modellkennungen, Anbieter je Aufzeichnung</td>
 <td>K-M2-4, K-M3d-3</td>
 <td>
-<code>tests/fixtures/httptest2/</code> (Betreiber zeichnet vor M2 auf, BL-26)</td>
+<code>tests/fixtures/api/</code> mit <code>README.md</code> (Betreiber zeichnet vor M2 mit <code>record.R</code> auf, BL-26)</td>
 <td>Datenstand</td>
-<td>Betreiber erzeugt</td>
+<td>vorhanden (aufgezeichnet 26.10.2026)</td>
 </tr></tbody></table></div>
 <div class="section level2">
 <h2 id="nicht-vergeben">Nicht vergeben<a class="anchor" aria-label="anchor" href="#nicht-vergeben"></a></h2>

@@ -140,7 +140,7 @@ Abnahmekriterien werden erfüllt, niemals passend gemacht:
   4.1; Imports nur `lme4`, `ordinal`, `stats`, `graphics`, `tools`,
   `utils`; neue Imports nur mit ADR; Suggests frei erweiterbar
   (Validierungssuite: VCA, SixSigma, irr, psych, DescTools, rptR,
-  performance, FrF2, unrepx, qcc, daewr, muttest, httptest2, digest).
+  performance, FrF2, unrepx, qcc, daewr, muttest, digest).
 - Sprache: Code, Kommentare, Dokumentation, Fehlermeldungen, Testnamen,
   `NEWS.md`, Commit-Nachrichten englisch; Specs, ADRs, Handoffs,
   `BACKLOG.md`, `PROGRESS.md` deutsch.
@@ -177,7 +177,9 @@ Abnahmekriterien werden erfüllt, niemals passend gemacht:
 - **Keine lokalen Modelle.** Alle Modelle über APIs; offene Modelle über
   OpenRouter mit `provider.order`, `allow_fallbacks = false`,
   `quantizations`. Kein Rollen-Zugriff auf API-Schlüssel; Aufzeichnungen
-  (httptest2) liefert der Betreiber unter `tests/fixtures/httptest2/`.
+  (unveränderte JSON-Antwortkörper, in Tests eingespielt mit
+  [`httr2::local_mocked_responses()`](https://httr2.r-lib.org/reference/with_mocked_responses.html))
+  liefert der Betreiber unter `tests/fixtures/api/`.
 - **Daten:** eingefrorene Teilmengen unter
   `inst/extdata/<quelle>_<stand>/` mit `SHA256SUMS` und `QUELLE.txt`,
   erzeugt von Skripten unter `data-raw/` aus `../quellen/daten/`;
@@ -218,7 +220,7 @@ oder unter `reference/anchors/` braucht ein ADR im selben Meilenstein.
   Builder-Aufrufe je Meilenstein). Fünf erfolglose Runden deuten auf
   eine Lücke in Spec oder Ankern, die der Betreiber schließt; kein
   Weichklopfen von Tests.
-- Effort: M0 low; M1a–M1d max; M2, M3a–M3d high. QA ab M1a Pflicht
+- Effort: M0 low; M1a–M1d max; M2, M3a–M3d high. QA ab M2 Pflicht
   (Gemini 4 Argon, Ersatz Kimi K3). Geld: AP1 150 €. M0 ist der Messlauf
   für die Kosten je Builder-Aufruf; nach der Messung ergibt sich, was
   M3a–M3d zusätzlich kosten.
