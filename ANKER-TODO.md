@@ -128,7 +128,7 @@ Vorschläge der Projektierung, am 24.10.2026, 22:20 vom Betreiber mit den Änder
 | ANK | Was | Kriterien | Vermutete Quelle und Fundstelle | Art | Status |
 | --- | --- | --- | --- | --- | --- |
 | ANK-93 | Rundungsstellen der Berichtsvorlage je Kennzahl | K-M3d-4 | `inst/templates/validation_report.Rmd` (Stand `332a2d5`) | Datenstand | Reviewer liest aus Vorlage |
-| ANK-94 | httptest2-Aufzeichnungen: Datum, Modellkennungen, Anbieter je Aufzeichnung | K-M2-4, K-M3d-3 | `tests/fixtures/httptest2/` (Betreiber zeichnet vor M2 auf, BL-26) | Datenstand | Betreiber erzeugt |
+| ANK-94 | API-Aufzeichnungen (unveränderte JSON-Antwortkörper je Modell): Datum, Modellkennungen, Anbieter je Aufzeichnung | K-M2-4, K-M3d-3 | `tests/fixtures/api/` mit `README.md` (Betreiber zeichnet vor M2 mit `record.R` auf, BL-26) | Datenstand | Betreiber erzeugt |
 
 ## Nicht vergeben
 

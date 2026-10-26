@@ -71,7 +71,7 @@ Wechsel je Phase (Betreiber-Commits zwischen Meilensteinen):
 
 | Zeitpunkt | Änderung |
 | --- | --- |
-| vor M2 (zweiter Meilenstein, direkt nach M0) | Validierungsplan Anhang A freigegeben; httptest2-Aufzeichnungen unter `tests/fixtures/httptest2/`; Zugänge und Ausgabelimits angelegt; `--store`-Pfad außerhalb des Repos |
+| vor M2 (zweiter Meilenstein, direkt nach M0) | Validierungsplan Anhang A freigegeben; API-Aufzeichnungen unter `tests/fixtures/api/` (BL-26); Zugänge und Ausgabelimits angelegt; `--store`-Pfad außerhalb des Repos |
 | vor M1a | `QA_ENABLED=1`; Formelsammlung gegen Quellen geprüft (erledigt 24.10.) |
 | nach M1b | Vollläufe `ordinal_recovery`, `binary_recovery`, `two_level` mit den Builder-Skripten rechnen und `*_results.csv`, `*_replicates.csv`, `*_session.txt` committen (01 §8) |
 | nach M1c, vor M1d | Volllauf `boot_coverage` rechnen (Nachtlauf, BL-12) und committen; erst dann M1d starten |

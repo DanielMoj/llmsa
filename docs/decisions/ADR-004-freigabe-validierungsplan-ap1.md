@@ -37,3 +37,12 @@ Die neuen Zahlen dieser Freigabe sind Betreiberfestlegungen vom 25.10.2026 und s
 - Die Stichtage für die Kennzeichen `_llama` und `_qwen` sind Anker von K-M2-2; der Reviewer erntet sie in der ACCEPTANCE-Phase von M2 aus `models.json` (`ANK-65`, `ANK-66`).
 - Nach dem Start von M2 ändert sich der Plan nur durch ein neues ADR; das gilt auch für Änderungen, die der Pilot nahelegt.
 - BL-27 und BL-59 sind geschlossen.
+
+## Nachtrag 26.10.2026 — Berichtigung zu Punkt 12
+
+- Punkt 12 verlangt einen mit `httptest2::set_requester()` gesetzten Requester. Diese Funktion gibt es in httptest2 nicht: Das Referenzhandbuch 1.2.2 (CRAN) und die Exportliste der Entwicklungsfassung 1.2.2.9000 (`NAMESPACE` auf GitHub) kennen nur `set_redactor()`, das Antworten beim Aufzeichnen redigiert; `set_requester()` stammt aus httptest für httr. Nachgeprüft am 26.10.2026, zusätzlich an der installierten httptest2 1.2.2 (`getNamespaceExports()`).
+- Ersatz für Punkt 12:
+  1. Die Aufzeichnungen sind die unveränderten JSON-Antwortkörper je Modell unter `tests/fixtures/api/` (statt `tests/fixtures/httptest2/`), dazu das Aufnahmeskript `record.R` und `README.md`.
+  2. Tests spielen sie mit `httr2::local_mocked_responses()` ein. Die Mock-Funktion ordnet über die URL und das Feld `model` des JSON-Bodys zu, sodass Feldreihenfolge und übrige Body-Felder die Zuordnung nicht ändern; findet sie keine Aufzeichnung, bricht sie mit Fehler ab, statt `NULL` zu liefern (httr2 schickte die Anfrage sonst ab). Der konstruierte Fehlerfall ist eine Mock-Antwort mit HTTP 4xx.
+  3. httptest2 entfällt als Abhängigkeit.
+- Angepasst: `docs/03-anwendungspipeline.md` K-M2-4, `docs/04-weitere-bausteine.md` K-M3d-3, `docs/01-fachspezifikation.md` (Suggests in §5, Betreiber-Territorium in §9), `AGENTS.md` (Suggests, Aufzeichnungen), `ANKER-TODO.md` ANK-94, `BACKLOG.md` BL-26 und neu BL-60 (vor M3d prüfen, ob die httr2-Mocks die Aufrufe von `backend_ellmer()` abfangen), `docs/gates-auswahl.md` §2. `orchestrator/handoff/M0/PLAN.md` bleibt als Verlauf unverändert. Punkt 12 bleibt als Verlauf stehen; an seiner Stelle gilt dieser Nachtrag.
