@@ -96,23 +96,41 @@ one.
 
 ### `qwen.json`
 
-- Time (UTC): 2026-10-26T20:37:10Z
+- Time (UTC): 2026-10-26T21:08:26Z
 - Request: `POST https://openrouter.ai/api/v1/chat/completions`
 - Request body (the key travels only in the `Authorization` header):
 
   ```json
-  {"model":"qwen/qwen3-32b","messages":[{"role":"system","content":"You are a clinical variant scientist. Answer with exactly one of: Pathogenic, Likely pathogenic, Uncertain significance, Likely benign, Benign."},{"role":"user","content":"Which ACMG/AMP class applies to a variant with insufficient or conflicting evidence?"}],"temperature":0,"seed":20261024,"provider":{"order":["deepinfra/fp8"],"allow_fallbacks":false,"quantizations":["fp8"]},"reasoning":{"enabled":false}}
+  {"model":"qwen/qwen3-32b","messages":[{"role":"system","content":"You are a clinical variant scientist. Answer with exactly one of: Pathogenic, Likely pathogenic, Uncertain significance, Likely benign, Benign."},{"role":"user","content":"Which ACMG/AMP class applies to a variant with insufficient or conflicting evidence?"}],"temperature":0,"seed":20261024,"provider":{"order":["deepinfra/fp8"],"allow_fallbacks":false,"quantizations":["fp8"]}}
   ```
 
 - HTTP status: 200
 - Model (response field `model`): `qwen/qwen3-32b`
-- `id`: `gen-1793047030-WmkckdbKXsQmpJkpLtbG`
+- `id`: `gen-1793048907-K4AerrvpXD14PyK7BjO0`
 - Provider: `DeepInfra` (response field `provider`)
 - `system_fingerprint`: null
-- `usage`: `{"prompt_tokens":60,"completion_tokens":246,"total_tokens":306,"cost":7.368e-05,"is_byok":false,"prompt_tokens_details":{"cached_tokens":0,"cache_write_tokens":0,"audio_tokens":0,"video_tokens":0},"cost_details":{"upstream_inference_cost":7.368e-05,"upstream_inference_prompt_cost":4.8e-06,"upstream_inference_completions_cost":6.888e-05},"completion_tokens_details":{"reasoning_tokens":308,"image_tokens":0,"audio_tokens":0}}`
-- Note: although the request sets `reasoning.enabled` to false, the response
-  carries reasoning text in `message.reasoning` and `message.reasoning_details`
-  and reports 308 reasoning tokens; `message.content` is the bare class.
+- `usage`: `{"prompt_tokens":60,"completion_tokens":157,"total_tokens":217,"cost":4.876e-05,"is_byok":false,"prompt_tokens_details":{"cached_tokens":0,"cache_write_tokens":0,"audio_tokens":0,"video_tokens":0},"cost_details":{"upstream_inference_cost":4.876e-05,"upstream_inference_prompt_cost":4.8e-06,"upstream_inference_completions_cost":4.396e-05},"completion_tokens_details":{"reasoning_tokens":197,"image_tokens":0,"audio_tokens":0}}`
 
 The `usage` lines are printed by `record.R` after parsing, so numbers such as
 `cost` appear in exponent notation; the JSON files keep the original text.
+
+## Qwen and reasoning
+
+Qwen runs with the reasoning its endpoint delivers, and the request carries no
+field `reasoning` (ADR-004, second addendum of 2026-10-26; BL-61). Only
+`message.content` is evaluated; `message.reasoning` does not go into the
+parser. The current `qwen.json` replaces a first recording, and two tests
+preceded it. Their responses are not stored:
+
+| Time (UTC) | Request, otherwise as for `qwen.json` | Result |
+| --- | --- | --- |
+| 2026-10-26T20:37:10Z | first recording with `"reasoning": {"enabled": false}` | HTTP 200, DeepInfra; 246 completion tokens, 308 reasoning tokens; reasoning text in `message.reasoning`; content "Uncertain significance" |
+| 2026-10-26T20:54:34Z | test 1 with `"reasoning": {"effort": "none"}` | HTTP 200, DeepInfra; 223 completion tokens, 274 reasoning tokens; reasoning text (1087 characters) in `message.reasoning`; content "Uncertain significance" |
+| 2026-10-26T20:54:53Z | test 2 without field `reasoning`, system message ending in " /no_think" | HTTP 200, DeepInfra; 7 completion tokens, 1 reasoning token; `message.reasoning` is `"\n\n"`; content "Uncertain significance" |
+
+The endpoint accepts both switches and ignores them; `/no_think` was rejected
+because it would change the prompt for Qwen only. Where the response carries
+reasoning text, `reasoning_tokens` exceeds `completion_tokens` (197 against
+157 in `qwen.json`), while `cost` is the prompt tokens at the input price plus
+`completion_tokens` at the output price. The bill thus counts
+`completion_tokens`, which includes the reasoning.

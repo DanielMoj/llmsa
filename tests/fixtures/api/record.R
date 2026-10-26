@@ -32,7 +32,9 @@ openrouter <- list(base_url = "https://openrouter.ai/api/v1",
                    env_file = "~/.config/llmsa/openrouter.env", env_var = "OPENROUTER_API_KEY")
 
 # Production settings (docs/03 A.4; ANK-53 to ANK-55, ANK-61). Sol sends no
-# temperature and no max_tokens; arrays are lists so that they stay JSON arrays.
+# temperature and no max_tokens; Qwen sends no reasoning field, because the
+# endpoint ignores the switches (ADR-004, second addendum); arrays are lists so
+# that they stay JSON arrays.
 plans <- list(
   sol = c(openai, list(
     model = "gpt-6.1-sol",
@@ -46,8 +48,7 @@ plans <- list(
     model = "qwen/qwen3-32b",
     extra = list(temperature = 0, seed = seed,
                  provider = list(order = list("deepinfra/fp8"), allow_fallbacks = FALSE,
-                                 quantizations = list("fp8")),
-                 reasoning = list(enabled = FALSE))))
+                                 quantizations = list("fp8")))))
 )
 p <- plans[[key]]
 
