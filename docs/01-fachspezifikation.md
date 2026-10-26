@@ -98,7 +98,7 @@ Zwei Klassen:
 - `tests/testthat.R` gehört keiner Rolle; der Betreiber legt es an oder behält es. `tests/fixtures/` (API-Aufzeichnungen unter `tests/fixtures/api/`) ist Betreiber-Territorium.
 - `.Rbuildignore` ergänzt der Betreiber um `^tests/simulation$` und `^tests/fixtures$`; die Preset-Einträge bleiben.
 - Jedes Kriterium nennt seinen Prüfweg; bei Vignetten-Kriterien trägt der Abnahmetest Struktur und Einlesen, das lint-Gate den Bau. Jeder Abnahmetest nennt mindestens eine Kriteriums-ID; jedes Gate trägt mindestens ein Kriterium (Zuordnung in `gates-auswahl.md`).
-- Rework-Runden: `MAX_ROUNDS_PLAN=2`, `MAX_ROUNDS_REWORK=5`, `REBUILD_ROUND=4`, `ARBITER_EXTRA_ROUNDS=2`; QA ab M1a Pflicht (`QA_REQUIRED_FROM=M1a`, `QA_ENABLED=1` ab M1a).
+- Rework-Runden: `MAX_ROUNDS_PLAN=2`, `MAX_ROUNDS_REWORK=5`, `REBUILD_ROUND=4`, `ARBITER_EXTRA_ROUNDS=2`; QA ab M2 Pflicht (`QA_REQUIRED_FROM=M2`, `QA_ENABLED=1` ab M2).
 
 ## 10. Kriterien M0 — Gerüst und Gates auf v0.1.0
 
