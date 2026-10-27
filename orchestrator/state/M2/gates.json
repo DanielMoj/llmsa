@@ -1,11 +1,11 @@
 {
   "milestone": "M2",
-  "round": 2,
+  "round": 3,
   "base": "f4b81117beed7f6ef4e75a9e37ac39f64edbedc4",
   "baseRef": "plan/M2",
   "env": {
-    "ts": "2026-10-27T05:09:05+01:00",
-    "sha": "ec55d9086d821de8fc0b43ee851afac7b78970be",
+    "ts": "2026-10-27T06:00:19+01:00",
+    "sha": "5e3541daf575ad14afa5058f2f3b7eb77149997e",
     "bash": "5.3.9(1)-release",
     "git": "2.53.0",
     "toolchain": {
@@ -28,7 +28,7 @@
     "lint": "lint: Kommando erfolgreich",
     "tests": "tests: Kommando erfolgreich",
     "trace": "trace: alle Kriterien sind wörtlich und beidseitig verknüpft",
-    "territory": "territory: letzter Diff sauber (builder/60-rework, Runde 2, Basis ad6801cc83092afbcbc3e9e4dccb85b5a71bc81e, 2026-10-27T04:51:31+01:00)",
+    "territory": "territory: letzter Diff sauber (builder/60-rework, Runde 3, Basis 6f2ae76f1661ba57c711e74d628265ca1d04ca04, 2026-10-27T05:42:27+01:00)",
     "mutgate": "mutgate: pass (kein geänderter Mutations-Scope)",
     "golden-adr": "golden-adr: Änderung und ADR liegen im selben Meilenstein",
     "mutfull": "mutfull: pass (nicht fällig in M2)"
