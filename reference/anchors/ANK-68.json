@@ -1,0 +1,31 @@
+{
+  "id": "ANK-68",
+  "title": "Auswertungsregeln AP1: Modalantwort, NA-Regel, Kappa-Bootstrap, Rückfall-Fit, Antwortgröße der Robustheit",
+  "criteria": ["K-M2-5", "K-M2-6", "K-M2-7", "docs/03 A.1, A.5"],
+  "value": {
+    "modal_calls_per_item_and_model": 18,
+    "modal_rule": "NA zählt als eigener Wert; bei Gleichstand keine Modalantwort (Item gezählt, aus Kappa und Trefferquote ausgeschlossen, in der Stabilität nicht übereinstimmend)",
+    "na_rule": "NA-Anteil aller Antworten als eigene Kennzahl; in Trefferquote und Kappa Fehlklassifikation (Übereinstimmungsgewicht 0 zu jeder Klasse), im Fit fehlender Wert",
+    "kappa_weights": "linear",
+    "kappa_bootstrap": {"unit": "Items", "replicates": 2000, "interval": "Perzentil", "level": 0.95, "seed": 20261024},
+    "fallback_fit": {"type": "numeric", "trigger": "Fehler oder Konvergenzwarnung des ordinalen Fits", "scores": {"Benign": 1, "Likely benign": 2, "Uncertain significance": 3, "Likely pathogenic": 4, "Pathogenic": 5}},
+    "robustness_response": {"measure": "Stabilität: Anteil der Items eines Laufs, deren Antwort der Modalantwort des Modells aus dem Hauptplan gleicht", "transform": "empirischer Logit log((x + c)/(n − x + c))", "correction": 0.5}
+  },
+  "unit": "Anzahlen, Anteile, Seed; Scores dimensionslos; correction c dimensionslos",
+  "tolerance": 0,
+  "tolerance_note": "Betreiberfestlegung, exakt",
+  "source_url": "docs/03-anwendungspipeline.md, Anhang A.1 und A.5; docs/decisions/ADR-004-freigabe-validierungsplan-ap1.md",
+  "source": "Betreiberfestlegung ADR-004 (25.10.2026). Korrektur ½: Haldane 1956, Ann Hum Genet 20(4):309–311, doi 10.1111/j.1469-1809.1955.tb01285.x, S. 310 (PDF 2); Anscombe 1956, Biometrika 43(3/4):461–464, doi 10.1093/biomet/43.3-4.461, S. 462 (PDF 2), Gl. (9); beide Scans mit OCR",
+  "quote": "Modalantwort je Item und Modell über alle 18 Hauptplanaufrufe (3 Prompts × 3 Replikate × 2 Blöcke); NA zählt als eigener Wert. Bei Gleichstand hat das Item keine Modalantwort: Es wird gezählt, fällt aus Kappa und Trefferquote heraus und gilt in der Stabilität (A.5) als nicht übereinstimmend.",
+  "quote_location": "docs/03 A.1, Auswertungsregeln, erster Punkt",
+  "further_quotes": [
+    {"quote": "NA-Regel: Der NA-Anteil aller Antworten ist je Modell eine eigene Kennzahl. In Trefferquote und Kappa zählt NA als Fehlklassifikation (im gewichteten Kappa mit dem Übereinstimmungsgewicht 0 zu jeder Klasse), im Fit als fehlender Wert.", "location": "docs/03 A.1, Auswertungsregeln, zweiter Punkt"},
+    {"quote": "Kappa-Bootstrap über Items mit 2.000 Wiederholungen, Perzentilintervall 95 %, Seed 20261024; Rückfall-Fit numerisch auf den Klassenscores 1 bis 5 (Benign = 1 bis Pathogenic = 5) bei Fehler oder Konvergenzwarnung des ordinalen Fits", "location": "ANKER-TODO.md, ANK-68 (Betreiber bestätigt 25.10.2026, ADR-004)"},
+    {"quote": "als empirischer Logit mit Korrektur ½: log((x + ½)/(n − x + ½)) mit x übereinstimmenden Items und n Items des Laufs", "location": "docs/03 A.5, Antwortgröße je Lauf"},
+    {"quote": "l = In T + i . / n-r + b", "location": "Anscombe 1956, S. 462 (PDF 2), Gl. (9), OCR-Text des Textspiegels (reference/quellen/text/literatur/A_statistikkern/Anscombe_1956_…layout.txt, Zeilen 98–99); gemeint ist l = ln((r + ½)/(n − r + ½)) laut Quellenkatalog, Stelle vom Betreiber am Seitenbild geprüft (25.10.2026)"},
+    {"quote": "When t = i it can be shown that the sampling", "location": "Haldane 1956, S. 310 (PDF 2), OCR-Text des Textspiegels (…AnnHumGenet20_309.pdf.layout.txt, Zeile 77); gemeint ist t = ½ laut Quellenkatalog, Stelle vom Betreiber am Seitenbild geprüft (25.10.2026)"}
+  ],
+  "retrieved": "2026-10-26",
+  "method": "Wortlaut der freigegebenen Spec und von ANKER-TODO übernommen. Die OCR-Stellen der beiden Aufsätze sind im Textspiegel verstümmelt (½ als „i“ bzw. „b“); die Korrektur selbst ist Betreiberfestlegung und steht im Klartext in docs/03 A.5.",
+  "verification": "Der Reviewer konnte die Seitenbilder nicht einsehen; die Prüfung am Seitenbild ist laut ANKER-TODO und Quellenkatalog vom Betreiber am 25.10.2026 erfolgt. Für die Abnahmetests trägt nur der Klartext der Spec (Korrektur 0,5)."
+}

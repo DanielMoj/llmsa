@@ -1,0 +1,25 @@
+{
+  "id": "ANK-54",
+  "title": "Llama 3.3 70B Instruct auf OpenRouter: Modell-Slug, Endpunkt-Tag coreweave/fp16, Quantisierung, Kontext, Preise, Seed",
+  "criteria": ["K-M2-4", "K-M2-5", "docs/03 A.4"],
+  "value": {
+    "model_slug": "meta-llama/llama-3.3-70b-instruct",
+    "endpoint_tag": "coreweave/fp16",
+    "provider_name": "CoreWeave",
+    "quantization": "fp16",
+    "context_length": 128000,
+    "price_in_usd_per_mtok": 0.71,
+    "price_out_usd_per_mtok": 0.71,
+    "seed_supported": true
+  },
+  "unit": "Zeichenketten; context_length in Tokens; Preise in US-Dollar je 1 Million Tokens (Katalog: US-Dollar je Token, 0.00000071)",
+  "tolerance": 0.005,
+  "tolerance_note": "Preise: halbe Einheit der letzten publizierten Stelle (0.00000071 $ je Token = 0,71 $ je 1M; letzte Stelle 0,01 $ je 1M); Zeichenketten und Ganzzahlen exakt",
+  "source_url": "https://openrouter.ai/api/v1/models/meta-llama/llama-3.3-70b-instruct/endpoints",
+  "source": "OpenRouter-Endpunktliste, Schnappschuss 22.10.2026 (quellen/anbieter_2026-10-22/openrouter/endpoints/meta-llama_llama-3.3-70b-instruct.json, SHA-256 0ac147cba021e0e749d751b5fac45b983e99acd9a9c94ba12cffe9bea165600d); Modellkatalog https://openrouter.ai/api/v1/models (models.json, SHA-256 19818773f49dda7abf5032132290121eaab3de2232cc0d3a2d31e8a0cb6c31e6)",
+  "quote": "\"name\":\"CoreWeave | meta-llama/llama-3.3-70b-instruct\",\"model_id\":\"meta-llama/llama-3.3-70b-instruct\",\"model_name\":\"Meta: Llama 3.3 70B Instruct\",\"context_length\":128000,\"pricing\":{\"prompt\":\"0.00000071\",\"completion\":\"0.00000071\",\"input_cache_read\":\"0.00000071\",\"discount\":0},\"provider_name\":\"CoreWeave\",\"tag\":\"coreweave/fp16\",\"service_tier\":null,\"quantization\":\"fp16\"",
+  "quote_location": "endpoints/meta-llama_llama-3.3-70b-instruct.json, data.endpoints, Eintrag mit tag coreweave/fp16 (wörtlicher Ausschnitt der minimierten JSON-Datei); supported_parameters dieses Eintrags enthält seed und temperature",
+  "retrieved": "2026-10-26",
+  "method": "JSON mit jsonlite gelesen; Eintrag über tag ausgewählt. Der einzige fp16-Endpunkt des Modells ist coreweave/fp16. Der Katalog models.json nennt für das Modell context_length 131072 und die Preise des günstigsten Endpunkts (0.0000001/0.00000032), nicht die von CoreWeave.",
+  "verification": "Zweitbeleg: Intake-Destillat Abschnitt 8 („Llama 3.3 70B Instruct über OpenRouter bei CoreWeave, fp16 (… 0,71 $/0,71 $; einziger Endpunkt mit bekannter voller Genauigkeit und 128k Kontext)“); Aufzeichnung tests/fixtures/api/llama.json meldet provider CoreWeave (ANK-94). Vor AP1 live prüfen (BL-43)."
+}

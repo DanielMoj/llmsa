@@ -1,0 +1,21 @@
+{
+  "id": "ANK-66",
+  "title": "Wissensstand Qwen3-32B: keine Herstellerangabe; Katalogangabe knowledge_cutoff als Stichtag der Kennzeichen _qwen; Veröffentlichung als obere Schranke",
+  "criteria": ["K-M2-2", "K-M2-5", "docs/03 A.1, A.4"],
+  "value": "2025-03-31",
+  "unit": "Datum (ISO 8601), Stichtag der Kennzeichen prior_*_qwen",
+  "tolerance": 0,
+  "tolerance_note": "Datum, exakte Gleichheit",
+  "upper_bound": {
+    "created_unix": 1745875945,
+    "created_utc": "2025-04-28T21:32:25Z",
+    "created_china": "2025-04-29 (UTC+8)"
+  },
+  "source_url": "https://openrouter.ai/api/v1/models",
+  "source": "OpenRouter-Modellkatalog, Schnappschuss 22.10.2026 (quellen/anbieter_2026-10-22/openrouter/models.json, SHA-256 19818773f49dda7abf5032132290121eaab3de2232cc0d3a2d31e8a0cb6c31e6), Eintrag qwen/qwen3-32b",
+  "quote": "\"knowledge_cutoff\":\"2025-03-31\"",
+  "quote_location": "models.json, data[id = qwen/qwen3-32b], Felder knowledge_cutoff und created (1745875945)",
+  "retrieved": "2026-10-26",
+  "method": "models.json mit jsonlite gelesen; created als Unix-Zeit nach UTC und Asia/Shanghai umgerechnet. Der Hersteller nennt keinen Wissensstand (docs/03 A.4); die Katalogangabe ist Stichtag nach K-M2-2.",
+  "verification": "Stichtag liegt vor der Veröffentlichung (obere Schranke); Intake-Destillat Abschnitt 8 nennt „Wissensstand 31.03.2025“; die Endpunktdatei qwen_qwen3-32b.json nennt created 1745875945 ebenso."
+}

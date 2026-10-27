@@ -1,0 +1,48 @@
+{
+  "id": "ANK-63",
+  "title": "ClinVar submission_summary (Stand 19.10.2026): Spaltenbelegung für Einreicher, Einstufung, Datum, Bewertungsstatus",
+  "criteria": ["K-M2-2", "K-M1d-3"],
+  "value": {
+    "columns": {
+      "VariationID": 1,
+      "ClinicalSignificance": 2,
+      "DateLastEvaluated": 3,
+      "ReviewStatus": 7,
+      "Submitter": 10,
+      "SCV": 11
+    },
+    "roles": {
+      "variant": "VariationID",
+      "classification": "ClinicalSignificance",
+      "date": "DateLastEvaluated",
+      "review_status": "ReviewStatus",
+      "submitter": "Submitter"
+    },
+    "n_columns_file": 16,
+    "header_line_prefix": "#VariationID\t",
+    "date_format": "%b %d, %Y",
+    "date_missing": "-",
+    "expert_panel_review_status": "reviewed by expert panel"
+  },
+  "unit": "Spaltennummern (1-basiert) und Spaltennamen der Kopfzeile; date_format als strptime-Muster (englische Monatsabkürzungen)",
+  "tolerance": 0,
+  "tolerance_note": "exakt",
+  "source_url": "https://ftp.ncbi.nlm.nih.gov/pub/clinvar/tab_delimited/README",
+  "source": "quellen/daten/clinvar_2026-10-22/README (SHA-256 9d6808a11d4fff31a73a4aae066dc60b455f0a0923923c2a6aec275ae6b3fbdb laut quellen/MANIFEST.tsv) und Kopfzeilen von submission_summary.txt.gz (ANK-41), lokal außerhalb des Repos",
+  "quote": "1.  VariationID: […] 2.  ClinicalSignificance:         germline classification for the variant and condition in the submission 3.  DateLastEvaluated:            the last date the variation-condition relationship was evaluated by this submitter […] 7.  ReviewStatus:                 the level of review for this submission […] 10. Submitter:                    the submitter of this record",
+  "quote_location": "README, Abschnitt „8. submission_summary.txt“ (Zeilen 427–437 der Datei; Zeilenumbrüche als Leerzeichen, Auslassungen […])",
+  "further_quotes": [
+    {"quote": "#VariationID\tClinicalSignificance\tDateLastEvaluated\tDescription\tSubmittedPhenotypeInfo\tReportedPhenotypeInfo\tReviewStatus\tCollectionMethod\tOriginCounts\tSubmitter\tSCV\tSubmittedGeneSymbol\tExplanationOfInterpretation\tSomaticClinicalImpact\tOncogenicity\tContributesToAggregateClassification", "location": "submission_summary.txt.gz, Kopfzeile (18. Zeile); die Datei hat 16 Spalten, der README beschreibt 15 (ContributesToAggregateClassification nur im Dateikopf)"},
+    {"quote": "2\tPathogenic\tJun 29, 2010\t-\tSPASTIC PARAPLEGIA 48, AUTOSOMAL RECESSIVE", "location": "submission_summary.txt.gz, erste Datenzeile (Datumsformat)"}
+  ],
+  "observations": {
+    "rows_of_erepo_pool_variants": 5510,
+    "rows_with_missing_date": 408,
+    "classification_values": ["Pathogenic", "Uncertain significance", "Likely pathogenic", "Likely benign", "Benign", "not provided", "-", "other", "Likely risk allele", "Established risk allele", "risk factor"],
+    "review_status_values": ["criteria provided, single submitter", "flagged submission", "no assertion criteria provided", "no classification provided", "reviewed by expert panel"],
+    "note": "Beobachtet in den Zeilen der 1.082 ClinVar-Varianten des ERepo-Pools nach K-M2-1 (ANK-51); Grundlage der Auslegungen zu K-M2-2 in orchestrator/handoff/M2/CRITERIA.json"
+  },
+  "retrieved": "2026-10-26",
+  "method": "README und Dateikopf mit Rscript gelesen; Datei gzip-gestreamt, Zeilen der Pool-Varianten über die erste Spalte gefiltert.",
+  "verification": "Spaltenreihenfolge im Dateikopf gleich der README-Liste (Spalten 1–15); Datumswerte aller Zeilen mit as.Date(x, \"%b %d, %Y\") in C-Locale lesbar, sonst „-“."
+}

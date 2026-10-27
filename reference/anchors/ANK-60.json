@@ -1,0 +1,44 @@
+{
+  "id": "ANK-60",
+  "title": "OpenRouter: Routing-Felder im Request, Antwort ohne Anbieter- und Quantisierungsfeld, Feld provider_name von GET /api/v1/generation",
+  "criteria": ["K-M2-4"],
+  "value": {
+    "request_provider_object": "provider",
+    "request_provider_fields": ["order", "allow_fallbacks", "quantizations"],
+    "allow_fallbacks_default": true,
+    "response_fields_documented": ["id", "choices", "created", "model", "object", "system_fingerprint", "usage"],
+    "generation_endpoint": "/api/v1/generation",
+    "generation_query_parameter": "id",
+    "generation_provider_field": "provider_name",
+    "recordings_provider_field": "provider",
+    "recordings_quantization_field": null
+  },
+  "unit": "Feldnamen (Zeichenketten)",
+  "tolerance": 0,
+  "tolerance_note": "Feldnamen exakt",
+  "source_url": "https://openrouter.ai/docs/features/provider-routing",
+  "source": "OpenRouter Provider Routing Doku, Schnappschuss 22.10.2026 (quellen/literatur/D_regulatorik_kontext/OpenRouter_Provider_Routing_Doku.html, SHA-256 cb5c428d715ba7c5d13a4332c7fe5d0205b82a6e88d346adbcd52085772700de); OpenRouter-API-Referenz, Schnappschüsse 25.10.2026: Überblick (https://openrouter.ai/docs/api/reference/overview.md, SHA-256 ec662db8fd2c37854ef928bf66312317d19715178be8171c7b7f6d717538312b) und Get a generation (https://openrouter.ai/docs/api/api-reference/generations/get-generation.md, SHA-256 960dd905be65286c83681a10b92e9c4d71034c89e6f29f3f5799edbbb5014256); Aufzeichnungen tests/fixtures/api/ (ANK-94)",
+  "quote": "order string[] - List of provider slugs to try in order […] allow_fallbacks boolean true Whether to allow backup providers when the primary is unavailable. […] quantizations string[] - List of quantization levels to filter by",
+  "quote_location": "Provider Routing Doku, Feldtabelle des provider-Objekts (Textspiegel Zeilen 448–456)",
+  "further_quotes": [
+    {
+      "quote": "type Response = { id: string; […] choices: (NonStreamingChoice | StreamingChoice | NonChatChoice)[]; created: number; // Unix timestamp model: string; object: 'chat.completion' | 'chat.completion.chunk'; system_fingerprint?: string; // Only present if the provider supports it […] usage?: ResponseUsage; };",
+      "location": "API-Referenz Überblick, Abschnitt Responses, „CompletionsResponse format“ (Textspiegel Zeilen 279–297): kein Feld für Anbieter oder Quantisierung"
+    },
+    {
+      "quote": "You can also use the returned `id` to query for the generation stats (including token counts and cost) after the request is complete via the `/api/v1/generation` endpoint.",
+      "location": "API-Referenz Überblick, Abschnitt „Querying cost and stats“ (Textspiegel Zeile 433)"
+    },
+    {
+      "quote": "provider_name: description: Name of the provider that served the request",
+      "location": "API-Referenz „Get a generation“, Antwortschema (Textspiegel Zeilen 541–542)"
+    },
+    {
+      "quote": "\"provider\":\"CoreWeave\"",
+      "location": "tests/fixtures/api/llama.json (Aufzeichnung 26.10.2026); ebenso \"provider\":\"DeepInfra\" in qwen.json; ein Feld zur Quantisierung fehlt in beiden"
+    }
+  ],
+  "retrieved": "2026-10-26",
+  "method": "Textspiegel und Aufzeichnungen gelesen; Feldnamen übernommen.",
+  "verification": "Die Aufzeichnungen tragen entgegen der dokumentierten Antwort ein Feld provider (BL-26, ANK-94); K-M2-4 liest es, „falls die Aufzeichnung es zeigt“."
+}

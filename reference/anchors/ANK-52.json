@@ -1,0 +1,51 @@
+{
+  "id": "ANK-52",
+  "title": "INSAID-TSV (Van Gijn et al. 2018, Stand März 2017): SHA-256, Varianten, Status Validated, Minimum je Klasse, Lizenz",
+  "criteria": ["K-M2-1", "docs/01 §7"],
+  "value": {
+    "file": "insaid_klassifikation_858_varianten.tsv",
+    "sha256": "0b18de6bb2f3b51d98e60bbcf8889a83e664ecc8badb14aca483263f248cefce",
+    "bytes": 42155,
+    "columns": ["gene", "cdna", "protein", "classification", "status"],
+    "comment_lines": 8,
+    "variants_total": 858,
+    "per_gene": {
+      "MEFV": 316,
+      "MVK": 201,
+      "NLRP3": 194,
+      "TNFRSF1A": 147
+    },
+    "per_status": {
+      "Provisional": 171,
+      "Unsolved": 55,
+      "Validated": 632
+    },
+    "validated": 632,
+    "validated_per_class": {
+      "Benign": 30,
+      "Likely benign": 185,
+      "Likely pathogenic": 191,
+      "Pathogenic": 119,
+      "VOUS": 107
+    },
+    "validated_min_per_class": 30,
+    "gene_cdna_unique": true,
+    "license": "Article authors 2018, all rights reserved, no commercial use (BMJ); bleibt lokal, nicht ins öffentliche Repo"
+  },
+  "unit": "SHA-256 hexadezimal; Bytes; Anzahlen; Klassen wie in der TSV (VOUS = Uncertain significance nach den Aliasen in ANK-69)",
+  "tolerance": 0,
+  "tolerance_note": "Datenstand, exakt",
+  "source_url": "https://jmg.bmj.com/content/jmedgenet/55/8/530/DC1/embed/inline-supplementary-material-1.pdf",
+  "source": "quellen/daten/insaid-vangijn2018_2026-10-23/insaid_klassifikation_858_varianten.tsv und QUELLE.txt (lokal, geschützt; aus Supplementary File 1 von Van Gijn et al. 2018 geparst, doi 10.1136/jmedgenet-2017-105216)",
+  "quote": "Inhalt: 858 Varianten in MEFV (316), MVK (201), NLRP3 (194), TNFRSF1A (147): Gen, cDNA, Protein, Fuenf-Klassen-Einstufung, Konsensusstatus",
+  "quote_location": "quellen/daten/insaid-vangijn2018_2026-10-23/QUELLE.txt, Zeile Inhalt (Fortsetzung: „(validiert 632, provisorisch 171, unsolved 55)“)",
+  "further_quotes": [
+    {
+      "quote": "Lizenz: Article authors 2018, all rights reserved, no commercial use (BMJ). Bleibt lokal, nicht ins oeffentliche Repo.",
+      "location": "QUELLE.txt, Zeile Lizenz"
+    }
+  ],
+  "retrieved": "2026-10-27",
+  "method": "Mit Rscript: read.delim(quote = \"\", comment.char = \"#\", colClasses = \"character\"); Zählungen mit table().",
+  "verification": "Summen gleich QUELLE.txt und Intake-Destillat Abschnitt 6 (632 Validated, je Klasse mindestens 30); quellen/MANIFEST.tsv nennt dieselbe SHA-256."
+}

@@ -1,0 +1,23 @@
+{
+  "id": "ANK-53",
+  "title": "GPT-6.1 Sol: API-Modellkennung, Reasoning-Stufen und Planstufe, Preise Eingabe/Ausgabe (Standard)",
+  "criteria": ["K-M2-4", "K-M2-5", "docs/03 A.4"],
+  "value": {
+    "model_id": "gpt-6.1-sol",
+    "reasoning_levels": ["low", "medium", "high", "xhigh", "max"],
+    "reasoning_plan": "medium",
+    "price_in_usd_per_mtok": 2.00,
+    "price_out_usd_per_mtok": 10.00
+  },
+  "unit": "model_id und Stufen: Zeichenketten; Preise: US-Dollar je 1 Million Tokens (Standard-Tarif, kurzer Kontext)",
+  "tolerance": 0.005,
+  "tolerance_note": "Preise: halbe Einheit der letzten publizierten Stelle ($2.00, $10.00 in Pricing.html); Zeichenketten exakt",
+  "source_url": "https://developers.openai.com/api/docs/models",
+  "source": "OpenAI-Modellseite und Preisseite, Schnappschüsse 22.10.2026 (quellen/anbieter_2026-10-22/openai/Models.html und Pricing.html; Pricing.html SHA-256 3d18e4ae5e57f10858a5b37e727300d55b676de024938b7b15e252357bbae942, https://developers.openai.com/api/docs/pricing); Textspiegel unter reference/quellen/text/anbieter_2026-10-22/openai/",
+  "quote": "Model ID gpt-6.1-sol Reasoning lowmediumhighxhighmax Input price $2 / Input MTok Output price $10 / Output MTok",
+  "quote_location": "Models.html, Karte „GPT-6.1 Sol“ (Textspiegel Zeilen 1214–1226, Zeilenumbrüche als Leerzeichen); Bestätigung der Preise: Pricing.html, Tabelle „Flagship models“, Standard, Zeile gpt-6.1-sol: $2.00 (Input), $10.00 (Output) (Textspiegel Zeilen 1208–1212)",
+  "plan_level_source": "Reasoning-Stufe des Plans „medium“: docs/03 A.4 („Reasoning `medium`“) und Intake-Destillat Abschnitt 8 („Reasoning fest auf `medium`“); Betreiberfestlegung, siehe auch ANK-61",
+  "retrieved": "2026-10-26",
+  "method": "Textspiegel gelesen; Reasoning-Zeile der Karte („lowmediumhighxhighmax“, im Original fünf Schaltflächen) in die Stufen zerlegt; die Karte von GPT-6 Luna nennt zusätzlich „none“, die von Sol nicht.",
+  "verification": "Preise in Models.html und Pricing.html gleich; Modellkennung gleich dem Feld model der Aufzeichnung tests/fixtures/api/sol.json (ANK-94). Vor AP1 live prüfen (BL-43, docs/03 A.8 Schritt 2)."
+}

@@ -1,0 +1,31 @@
+{
+  "id": "ANK-58",
+  "title": "Akzeptanzkriterien AP1 je Modell: %GRR, Kappa, gefährliche Fehlklassifikation, Robustheit; Gesamtverdikt",
+  "criteria": ["K-M2-5", "K-M2-6", "K-M2-7", "docs/03 A.1"],
+  "value": {
+    "grr_pct_study_var": {"acceptable_below": 10, "marginal_below": 30, "scale": "latente Skala; Rückfall numerisch nach ANK-68", "boundary_convention": "genau 10,0 und 30,0 sind bedingt (docs/01 §5, AIAG)"},
+    "kappa_linear_modal": {"acceptable_min": 0.8, "marginal_min": 0.6, "at": "Punktschätzer; 95-%-Bootstrap-Intervall nach ANK-68 nur berichtet"},
+    "dangerous_errors": {"acceptable_max": 0, "marginal_max": 1, "unacceptable_min": 2, "definition": "P/LP gegen B/LB in den Modalantworten", "items": "die 75 ERepo-Items"},
+    "robustness": {"delta_p_limit": 0.05, "sme_alpha": 0.05, "rule": "akzeptabel, wenn kein Faktor |Δp| über 5 Prozentpunkten hat; nicht akzeptabel, wenn mindestens ein Faktor |Δp| über 5 Prozentpunkten hat und zugleich die SME nach Lenth (α = 0,05) überschreitet; bedingt, wenn Faktoren über 5 Prozentpunkten liegen, aber keiner davon die SME überschreitet"},
+    "bands_in_order": ["akzeptabel", "bedingt", "nicht akzeptabel"],
+    "overall": "schlechtestes Band der vier Kriterien je Modell; nur, wenn alle vier bewertet sind; der gemeinsame Fit über die drei Modelle trägt kein Verdikt"
+  },
+  "unit": "%GRR in Prozent der Studienvariation; Kappa dimensionslos; Fehler als Anzahl Items; Δp als Anteil (0,05 = 5 Prozentpunkte); α dimensionslos",
+  "tolerance": 0,
+  "tolerance_note": "Betreiberfestlegung, Schwellen exakt",
+  "source_url": "docs/03-anwendungspipeline.md, Anhang A.1; docs/decisions/ADR-004-freigabe-validierungsplan-ap1.md",
+  "source": "Betreiberentscheidung aus Context of Use und Risikostufe (Validierungsplan, Freigabe ADR-004 vom 25.10.2026, BL-27). Keine Literaturevidenz für die Grenzen; Dreierregel (Hanley & Lippman-Hand 1983, JAMA 249:1743–1745, S. 1744) begründet die Bänder der gefährlichen Fehler",
+  "quote": "%GRR auf der latenten Skala unter 30 % der Studienvariation (bedingt akzeptabel für diese Risikostufe; unter 10 % akzeptabel).",
+  "quote_location": "docs/03 A.1, Akzeptanzkriterien je Modell, erster Punkt",
+  "further_quotes": [
+    {"quote": "Linear gewichtetes Kappa der Modalantwort gegen die Referenz mindestens 0,8 für „akzeptabel“, 0,6 bis 0,8 „bedingt“, darunter „nicht akzeptabel“", "location": "docs/03 A.1, zweiter Punkt"},
+    {"quote": "Das Verdikt gilt am Punktschätzer; berichtet wird das 95-%-Bootstrap-Intervall über Items (`ANK-68`).", "location": "docs/03 A.1, zweiter Punkt"},
+    {"quote": "Gefährliche Fehler (P/LP ↔ B/LB) in den Modalantworten der 75 ERepo-Items: 0 „akzeptabel“, 1 „bedingt“, ab 2 „nicht akzeptabel“.", "location": "docs/03 A.1, dritter Punkt"},
+    {"quote": "Drei disjunkte Bänder: „akzeptabel“, wenn kein Faktor |Δp| über 5 Prozentpunkten hat; „nicht akzeptabel“, wenn mindestens ein Faktor |Δp| über 5 Prozentpunkten hat und zugleich die SME nach Lenth (α = 0,05) überschreitet; „bedingt“, wenn Faktoren über 5 Prozentpunkten liegen, aber keiner davon die SME überschreitet.", "location": "docs/03 A.1, vierter Punkt"},
+    {"quote": "Δp = plogis(m + e/2) − plogis(m − e/2)", "location": "docs/03 A.1, vierter Punkt (e: Effekt auf der Logit-Skala, m: Achsenabschnitt der zwölf Läufe)"},
+    {"quote": "Das Gesamtverdikt eines Modells ist das schlechteste Band seiner vier Kriterien.", "location": "docs/03 A.1, Akzeptanzkriterien je Modell, Einleitung"}
+  ],
+  "retrieved": "2026-10-26",
+  "method": "Wortlaut der freigegebenen Spec übernommen; Grenzwerte als Zahlen kodiert.",
+  "verification": "ANKER-TODO ANK-58 und ADR-004 Punkt 8 nennen dieselben Grenzen; docs/01 §5 legt fest, dass genau 10,0 % und 30,0 % „bedingt“ sind."
+}

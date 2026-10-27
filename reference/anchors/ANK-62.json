@@ -1,0 +1,161 @@
+{
+  "id": "ANK-62",
+  "title": "Robustheit AP1: acht Störfaktoren mit Stufen, Bausteine (englisch und deutsch) und Kompositionsregel (Anhang A.5)",
+  "criteria": ["K-M2-5", "K-M2-7", "docs/03 A.5"],
+  "value": {
+    "factors": {
+      "F1": {
+        "name": "Variantenschreibweise",
+        "minus": "HGVS mit Transkript („PAH NM_000277.2:c.1A>G“)",
+        "plus": "Gen und c.-Bezeichnung ohne Transkript („PAH c.1A>G“)"
+      },
+      "F2": {
+        "name": "Proteinangabe",
+        "minus": "ohne p.-Angabe",
+        "plus": "p.-Angabe in Klammern angehängt, sofern vorhanden („… (p.Met1Val)“)"
+      },
+      "F3": {
+        "name": "Tippfehler in der Anweisung",
+        "minus": "keiner",
+        "plus": "ein Buchstabendreher im Aufgabensatz außerhalb der Variantenbezeichnung"
+      },
+      "F4": {
+        "name": "Reihenfolge",
+        "minus": "Aufgabe, dann Antwortformat",
+        "plus": "Antwortformat, dann Aufgabe"
+      },
+      "F5": {
+        "name": "Irrelevanter Zusatzkontext",
+        "minus": "keiner",
+        "plus": "ein Absatz Laborlogistik (Probeneingang, Extraktion, Abdeckung) ohne Gen und ohne Krankheit"
+      },
+      "F6": {
+        "name": "Systemprompt",
+        "minus": "keiner",
+        "plus": "Systemprompt aus den Bausteinen"
+      },
+      "F7": {
+        "name": "Antwortformat",
+        "minus": "Klassen ausgeschrieben",
+        "plus": "Abkürzungen B, LB, VUS, LP, P"
+      },
+      "F8": {
+        "name": "Sprache der Anweisung",
+        "minus": "Englisch",
+        "plus": "Deutsch"
+      }
+    },
+    "blocks": {
+      "task": {
+        "en": "Classify the germline variant {gene} {hgvs} according to the ACMG/AMP 2015 five-tier scheme.",
+        "de": "Klassifiziere die Keimbahnvariante {gene} {hgvs} entsprechend dem fünfstufigen ACMG/AMP-Schema von 2015."
+      },
+      "task_typo": {
+        "en": "Classify the germline variant {gene} {hgvs} accoridng to the ACMG/AMP 2015 five-tier scheme.",
+        "de": "Klassifiziere die Keimbahnvariante {gene} {hgvs} entsprechned dem fünfstufigen ACMG/AMP-Schema von 2015."
+      },
+      "format_full": {
+        "en": "Answer with exactly one of: Benign, Likely benign, Uncertain significance, Likely pathogenic, Pathogenic.",
+        "de": "Antworte mit genau einer der folgenden Klassen: Benign, Likely benign, Uncertain significance, Likely pathogenic, Pathogenic."
+      },
+      "format_abbrev": {
+        "en": "Answer with exactly one of: B, LB, VUS, LP, P.",
+        "de": "Antworte mit genau einer der folgenden Klassen: B, LB, VUS, LP, P."
+      },
+      "context": {
+        "en": "Laboratory note: The sample was received on a weekday morning and registered in the laboratory information system. DNA was extracted with a standard column-based kit, and the sequencing run passed the laboratory's coverage and quality checks.",
+        "de": "Laborhinweis: Die Probe ging an einem Werktagvormittag ein und wurde im Laborinformationssystem erfasst. Die DNA wurde mit einem üblichen Säulenkit extrahiert, und der Sequenzierlauf bestand die Abdeckungs- und Qualitätsprüfungen des Labors."
+      },
+      "system": {
+        "en": "You are a careful clinical geneticist."
+      }
+    },
+    "composition": {
+      "language": "F8: − englisch, + deutsch (alle Bausteine der Nutzernachricht)",
+      "task": "F3: − task, + task_typo",
+      "format": "F7: − format_full, + format_abbrev",
+      "order": "F4: − Aufgabensatz, Leerzeichen, Formatsatz; + Formatsatz, Leerzeichen, Aufgabensatz",
+      "sentence_separator": " ",
+      "context": "F5: + Kontextabsatz mit einer Leerzeile voran",
+      "context_separator": "\n\n",
+      "system": "F6: + system.en in die Spalte system, − leer",
+      "variant_text": "F1: − <transcript>:<c.-Bezeichnung>, + nur die c.-Bezeichnung; F2: + hängt „ (<protein>)“ an, sofern protein nicht leer ist",
+      "protein_suffix": " (%s)",
+      "all_minus": "concise (ANK-69)"
+    },
+    "pb_design": {
+      "call": "pb_design(8, n_runs = 12)",
+      "seed": "ANK-59",
+      "prompt_ids": ["pb01", "pb02", "pb03", "pb04", "pb05", "pb06", "pb07", "pb08", "pb09", "pb10", "pb11", "pb12"],
+      "order": "Zeilenfolge des Designs"
+    }
+  },
+  "unit": "Zeichenketten (UTF-8); Faktoren F1 bis F8 mit Stufe − (kodiert −1) und + (kodiert +1)",
+  "tolerance": 0,
+  "tolerance_note": "Wortlaut exakt (zeichengenau)",
+  "source_url": "docs/03-anwendungspipeline.md, Anhang A.5",
+  "source": "Betreiberfestlegung: Validierungsplan Anhang A.5, Faktoren, Kompositionsregel und Wortlaute freigegeben mit ADR-004 (25.10.2026)",
+  "quote": "- Kompositionsregel: F8 wählt die Sprache aller Bausteine der Nutzernachricht; F3 wählt den Aufgabensatz ohne oder mit Dreher; F7 wählt den Formatsatz ausgeschrieben oder abgekürzt; F4 bestimmt die Satzreihenfolge (− Aufgabensatz, ein Leerzeichen, Formatsatz; + Formatsatz, ein Leerzeichen, Aufgabensatz); F5 + stellt den Kontextabsatz mit einer Leerzeile voran; F6 + setzt den Systemprompt in die Spalte `system`, F6 − lässt sie leer; F1 und F2 bestimmen den Variantentext in `{hgvs}`: F1 − `<transcript>:<c.-Bezeichnung>`, F1 + nur die c.-Bezeichnung, F2 + hängt „ (<protein>)“ an, sofern `protein` nicht leer ist.",
+  "quote_location": "docs/03 A.5, Kompositionsregel (Zeile 92); Faktortabelle Zeilen 72-79; Bausteintabelle Zeilen 85-90",
+  "further_quotes": [
+    {
+      "quote": "| F1 Variantenschreibweise | HGVS mit Transkript („PAH NM_000277.2:c.1A>G“) | Gen und c.-Bezeichnung ohne Transkript („PAH c.1A>G“) |",
+      "location": "docs/03 A.5, Zeile 72"
+    },
+    {
+      "quote": "| F2 Proteinangabe | ohne p.-Angabe | p.-Angabe in Klammern angehängt, sofern vorhanden („… (p.Met1Val)“) |",
+      "location": "docs/03 A.5, Zeile 73"
+    },
+    {
+      "quote": "| F3 Tippfehler in der Anweisung | keiner | ein Buchstabendreher im Aufgabensatz außerhalb der Variantenbezeichnung |",
+      "location": "docs/03 A.5, Zeile 74"
+    },
+    {
+      "quote": "| F4 Reihenfolge | Aufgabe, dann Antwortformat | Antwortformat, dann Aufgabe |",
+      "location": "docs/03 A.5, Zeile 75"
+    },
+    {
+      "quote": "| F5 Irrelevanter Zusatzkontext | keiner | ein Absatz Laborlogistik (Probeneingang, Extraktion, Abdeckung) ohne Gen und ohne Krankheit |",
+      "location": "docs/03 A.5, Zeile 76"
+    },
+    {
+      "quote": "| F6 Systemprompt | keiner | Systemprompt aus den Bausteinen |",
+      "location": "docs/03 A.5, Zeile 77"
+    },
+    {
+      "quote": "| F7 Antwortformat | Klassen ausgeschrieben | Abkürzungen B, LB, VUS, LP, P |",
+      "location": "docs/03 A.5, Zeile 78"
+    },
+    {
+      "quote": "| F8 Sprache der Anweisung | Englisch | Deutsch |",
+      "location": "docs/03 A.5, Zeile 79"
+    },
+    {
+      "quote": "| Aufgabensatz | Classify the germline variant {gene} {hgvs} according to the ACMG/AMP 2015 five-tier scheme. | Klassifiziere die Keimbahnvariante {gene} {hgvs} entsprechend dem fünfstufigen ACMG/AMP-Schema von 2015. |",
+      "location": "docs/03 A.5, Zeile 85"
+    },
+    {
+      "quote": "| Aufgabensatz mit Dreher | Classify the germline variant {gene} {hgvs} accoridng to the ACMG/AMP 2015 five-tier scheme. | Klassifiziere die Keimbahnvariante {gene} {hgvs} entsprechned dem fünfstufigen ACMG/AMP-Schema von 2015. |",
+      "location": "docs/03 A.5, Zeile 86"
+    },
+    {
+      "quote": "| Formatsatz ausgeschrieben | Answer with exactly one of: Benign, Likely benign, Uncertain significance, Likely pathogenic, Pathogenic. | Antworte mit genau einer der folgenden Klassen: Benign, Likely benign, Uncertain significance, Likely pathogenic, Pathogenic. |",
+      "location": "docs/03 A.5, Zeile 87"
+    },
+    {
+      "quote": "| Formatsatz abgekürzt | Answer with exactly one of: B, LB, VUS, LP, P. | Antworte mit genau einer der folgenden Klassen: B, LB, VUS, LP, P. |",
+      "location": "docs/03 A.5, Zeile 88"
+    },
+    {
+      "quote": "| Kontextabsatz | Laboratory note: The sample was received on a weekday morning and registered in the laboratory information system. DNA was extracted with a standard column-based kit, and the sequencing run passed the laboratory's coverage and quality checks. | Laborhinweis: Die Probe ging an einem Werktagvormittag ein und wurde im Laborinformationssystem erfasst. Die DNA wurde mit einem üblichen Säulenkit extrahiert, und der Sequenzierlauf bestand die Abdeckungs- und Qualitätsprüfungen des Labors. |",
+      "location": "docs/03 A.5, Zeile 89"
+    },
+    {
+      "quote": "| Systemprompt | You are a careful clinical geneticist. | – (bleibt englisch) |",
+      "location": "docs/03 A.5, Zeile 90"
+    }
+  ],
+  "retrieved": "2026-10-27",
+  "method": "Mit Rscript aus docs/03 extrahiert (Tabellenzellen an \" | \" getrennt). Die Trenner sind aus dem Regeltext gelesen: „ein Leerzeichen“ = \" \", „mit einer Leerzeile voran“ = Kontextabsatz, Zeilenumbruch, Leerzeile, Rest (\"\\n\\n\"), „ (<protein>)“ = Leerzeichen, Klammer auf, protein, Klammer zu.",
+  "verification": "Aufgabensatz (englisch) + \" \" + Formatsatz ausgeschrieben (englisch) ist zeichengleich mit der Vorlage concise (ANK-69); A.5: „Der Lauf mit allen Faktoren auf − ist wörtlich die Vorlage concise“."
+}

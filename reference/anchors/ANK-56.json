@@ -1,0 +1,25 @@
+{
+  "id": "ANK-56",
+  "title": "Aufrufe je Modell (Hauptplan, Plackett-Burman) und Token-Annahmen der Kostenrechnung AP1",
+  "criteria": ["K-M2-5", "docs/03 A.6"],
+  "value": {
+    "calls_per_model_main": 1800,
+    "calls_per_model_plackett_burman": 1200,
+    "calls_per_model_total": 3000,
+    "main_breakdown": {"items": 100, "prompts": 3, "replicates": 3, "blocks": 2},
+    "plackett_burman_breakdown": {"runs": 12, "items": 100},
+    "tokens_in_per_call": 1000,
+    "tokens_out_per_call_max": 2000
+  },
+  "unit": "Aufrufe je Modell; Tokens je Aufruf (Ausgabe einschließlich Reasoning)",
+  "tolerance": 0,
+  "tolerance_note": "Betreiberfestlegung, exakt",
+  "source_url": "docs/03-anwendungspipeline.md, Anhang A.6",
+  "source": "Betreiberfestlegung: Intake-Destillat (Betreiberunterlage außerhalb des Repos), Abschnitt 8, „Rechnung AP1“; übernommen in docs/03 A.5 und A.6 (freigegeben mit ADR-004)",
+  "quote": "Rechnung AP1: 3.000 Aufrufe je Modell (1.800 im Hauptplan 100 Items × 3 Prompts × 3 Replikate × 2 Tage, 1.200 für Plackett-Burman mit 12 Läufen × 100 Items), 1.000 Tokens Eingabe und, als Annahme, höchstens 2.000 Tokens Ausgabe samt Reasoning",
+  "quote_location": "Intake-Destillat, Abschnitt 8 „Rollen und Budget“, Punkt „Budget in Euro“",
+  "second_source": "docs/03 A.6: „3.000 Aufrufe je Modell, 1.000 Tokens Eingabe, höchstens 2.000 Tokens Ausgabe samt Reasoning (`ANK-56`)“; A.5: „Hauptplan je Modell: 100 Items × 3 Prompts × 3 Replikate × 2 Blöcke (Tage) = 1.800 Aufrufe“ und „je Lauf alle 100 Items einmal je Modell = 1.200 Aufrufe je Modell“",
+  "retrieved": "2026-10-26",
+  "method": "Wortlaut übernommen; Produkte nachgerechnet: 100 · 3 · 3 · 2 = 1.800; 12 · 100 = 1.200; 1.800 + 1.200 = 3.000.",
+  "verification": "Intake und Spec stimmen überein. Mit den Preisankern (ANK-53 bis ANK-55): Sol 3.000 · (1.000 · 2 + 2.000 · 10)/10⁶ = 66,00 $, Llama 3.000 · (1.000 + 2.000) · 0,71/10⁶ = 6,39 $, Qwen 3.000 · (1.000 · 0,08 + 2.000 · 0,28)/10⁶ = 1,92 $, zusammen 74,31 $ (Intake nennt dieselben Beträge)."
+}

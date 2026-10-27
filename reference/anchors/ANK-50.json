@@ -1,0 +1,17 @@
+{
+  "id": "ANK-50",
+  "title": "Stichtag Wissensstand GPT-6.1 Sol (Kennzeichen _sol, Stichtag der ERepo-Auswahl)",
+  "criteria": ["K-M2-1", "K-M2-2", "K-M2-5", "docs/03 A.1, A.2, A.4"],
+  "value": "2026-04-30",
+  "unit": "Datum (ISO 8601); Wissensstand (knowledge cutoff) von GPT-6.1 Sol",
+  "tolerance": 0,
+  "tolerance_note": "Datum, exakte Gleichheit. Lesart „nach dem Stichtag“ (K-M2-1) = Datum > 2026-04-30; sie gibt die 1.242 Einstufungen des Intake-Destillats wieder (siehe ANK-51)",
+  "source_url": "https://developers.openai.com/api/docs/models",
+  "source": "OpenAI-Modellseite, Schnappschuss 22.10.2026 (quellen/anbieter_2026-10-22/openai/Models.html, SHA-256 fdd103aa502c4aaddb048542351587e545ab6be2f05750801e6d37568e455219 laut quellen/MANIFEST.tsv); Textspiegel reference/quellen/text/anbieter_2026-10-22/openai/Models.html.txt",
+  "quote": "GPT-6.1 Sol […] Model ID gpt-6.1-sol […] Knowledge cutoff Apr 30, 2026",
+  "quote_location": "Models.html, Abschnitt „Flagship models“, Karte „Sol / GPT-6.1 Sol“, Feld „Knowledge cutoff“ (Textspiegel Zeilen 1206–1238, Zeilenumbrüche als Leerzeichen, Auslassungen […])",
+  "second_source": "Intake-Destillat (Betreiberunterlage außerhalb des Repos), Abschnitt 6: „Freigabe und Veröffentlichung nach dem 30.04.2026 (Wissensstand von GPT-6.1 Sol laut OpenAI-Schnappschuss)“; docs/03 A.4, Tabelle, Spalte Wissensstand: „30.04.2026 (OpenAI-Modellseite, Schnappschuss 22.10.2026; ANK-50)“",
+  "retrieved": "2026-10-26",
+  "method": "Textspiegel gelesen; Datum „Apr 30, 2026“ nach ISO 8601 übertragen.",
+  "verification": "Zwei Belege stimmen überein (Modellseite und Intake Abschnitt 6, Belegprüfung 25.10.2026 laut ANKER-TODO)."
+}

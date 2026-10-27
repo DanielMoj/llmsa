@@ -1,0 +1,77 @@
+{
+  "id": "ANK-94",
+  "title": "API-Aufzeichnungen je Modell (unveränderte JSON-Antwortkörper, 26.10.2026): Prüfsummen, Request-URL und -Modell, Antwortfelder",
+  "criteria": ["K-M2-4", "K-M3d-3"],
+  "value": {
+    "recorded": "2026-10-26",
+    "folder": "tests/fixtures/api",
+    "files": {
+      "sol.json": {
+        "request_url": "https://api.openai.com/v1/chat/completions",
+        "request_model": "gpt-6.1-sol",
+        "recorded_utc": "2026-10-26T20:36:46Z",
+        "sha256": "4eaa06e2eeeb9ef9a62040575306687648f809ed98ae10c27afc6a70b4534a9f",
+        "bytes": 813,
+        "http_status": 200,
+        "response_id": "chatcmpl-EdLiy0e2r6NenmHTwGPPPq8v5LnCr",
+        "response_model": "gpt-6.1-sol",
+        "response_provider": null,
+        "response_has_provider_field": false,
+        "system_fingerprint": null,
+        "content": "Uncertain significance"
+      },
+      "llama.json": {
+        "request_url": "https://openrouter.ai/api/v1/chat/completions",
+        "request_model": "meta-llama/llama-3.3-70b-instruct",
+        "recorded_utc": "2026-10-26T20:36:57Z",
+        "sha256": "78fbe485d7461dcb5b8868fa230bdfa3d1391719a7238cd45b20afc77d22e968",
+        "bytes": 843,
+        "http_status": 200,
+        "response_id": "gen-1793047017-4f5udMslyqHDKY4Dh5oI",
+        "response_model": "meta-llama/llama-3.3-70b-instruct",
+        "response_provider": "CoreWeave",
+        "response_has_provider_field": true,
+        "system_fingerprint": null,
+        "content": "Uncertain significance"
+      },
+      "qwen.json": {
+        "request_url": "https://openrouter.ai/api/v1/chat/completions",
+        "request_model": "qwen/qwen3-32b",
+        "recorded_utc": "2026-10-26T21:08:26Z",
+        "sha256": "e1e6415184373776b670944087e5f1db6faabf50aea143c577bdf2904abd0361",
+        "bytes": 2529,
+        "http_status": 200,
+        "response_id": "gen-1793048907-K4AerrvpXD14PyK7BjO0",
+        "response_model": "qwen/qwen3-32b",
+        "response_provider": "DeepInfra",
+        "response_has_provider_field": true,
+        "system_fingerprint": null,
+        "content": "Uncertain significance"
+      }
+    }
+  },
+  "unit": "SHA-256 hexadezimal; Bytes; Zeichenketten; HTTP-Status",
+  "tolerance": 0,
+  "tolerance_note": "exakt; eine geänderte Aufzeichnung ändert die SHA-256",
+  "source_url": "tests/fixtures/api/README.md",
+  "source": "Betreiber-Aufzeichnungen unter tests/fixtures/api/ (record.R, README.md), BL-26",
+  "quote": "| `sol.json` | `POST https://api.openai.com/v1/chat/completions` | `gpt-6.1-sol` |",
+  "quote_location": "tests/fixtures/api/README.md, Tabelle der Aufzeichnungen; je Datei Abschnitt „Recordings of 2026-10-26“ (Zeit, HTTP-Status, Modell, id, Provider, system_fingerprint)",
+  "further_quotes": [
+    {
+      "quote": "| `llama.json` | `POST https://openrouter.ai/api/v1/chat/completions` | `meta-llama/llama-3.3-70b-instruct` |",
+      "location": "README.md, Tabelle"
+    },
+    {
+      "quote": "| `qwen.json` | `POST https://openrouter.ai/api/v1/chat/completions` | `qwen/qwen3-32b` |",
+      "location": "README.md, Tabelle"
+    },
+    {
+      "quote": "Both OpenRouter responses carry a field `provider`, so no response of `GET /api/v1/generation` was recorded.",
+      "location": "README.md, Einleitung"
+    }
+  ],
+  "retrieved": "2026-10-27",
+  "method": "SHA-256 und Bytes mit Rscript; Antwortfelder mit jsonlite::fromJSON(simplifyVector = FALSE) aus den Dateien; Request-URL, Request-Modell und Zeit aus README.md (Tabelle und Abschnitte) und gegen die Dateien geprüft.",
+  "verification": "Antwortfelder model, id und provider gleich den Angaben im README; sol.json ohne Feld provider; system_fingerprint in allen drei null."
+}

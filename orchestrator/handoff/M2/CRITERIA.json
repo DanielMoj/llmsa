@@ -1,0 +1,241 @@
+{
+  "criteria": [
+    {
+      "id": "K-M2-1",
+      "quote": "**K-M2-1:** Itemsatz: `inst/extdata/items_ap1_2026-10-24/items.csv` hat genau 100 Zeilen mit den Spalten `item_id`, `source` (`erepo`/`insaid`), `gene`, `transcript`, `hgvs` (`<transcript>:<c.-Bezeichnung>`, ohne Gen und ohne p.-Angabe), `protein` (p.-Angabe ohne Klammern; leer, wo keine vorliegt, bei `insaid` immer leer), `reference` (fünf Klassen; bei `insaid` leer), `panel` (ERepo: Expertenpanel) und die Memorisierungs-Kennzeichen `prior_clinvar_class`, `prior_date`, `prior_differs` je mit den Suffixen `_sol`, `_llama`, `_qwen` (K-M2-2); ERepo-Items kommen nur aus Einstufungen, deren Spalte `#Variation` die Form `<NM-Transkript>(<Gen>):c.<…>` mit optionaler p.-Angabe in Klammern oder `<NM-Transkript>:c.<…>` hat, und `transcript`, `hgvs` und `protein` werden daraus zerlegt (aus `NM_000277.2(PAH):c.1A>G (p.Met1Val)` werden `NM_000277.2`, `NM_000277.2:c.1A>G` und `p.Met1Val`); INSAID-Items erhalten das Transkript ihres Gens aus der Publikation, nicht aus der TSV (`ankerRef: ANK-64`), und `hgvs` = `<transcript>:<cDNA der TSV>`; 75 Zeilen `erepo`, je 15 pro Klasse, nicht zurückgezogen, Freigabe- und Veröffentlichungsdatum nach dem Stichtag `ankerRef: ANK-50`, Panels im Umlauf nach absteigender Einstufungszahl, dann Zufall mit Seed `ankerRef: ANK-59`; 25 Zeilen `insaid`, je 5 pro Klasse, nur Status `Validated`, Gene MEFV, MVK, NLRP3, TNFRSF1A im Umlauf, gleicher Seed; `pilot.csv` im selben Ordner hat dieselben Spalten und 10 ERepo-Zeilen, je Klasse die nächsten zwei desselben Umlaufs, keine davon in `items.csv` (`ankerRef: ANK-67`); `QUELLE.txt` nennt ERepo-Stand `ankerRef: ANK-51`, die SHA-256 der INSAID-TSV `ankerRef: ANK-52` und die Herkunft der INSAID-Transkripte (Methoden der Publikation, Widerspruch zu deren Tab. 1 vermerkt, `ANK-64`); `data-raw/make_items_ap1.R` erzeugt beide Dateien aus `../quellen/daten/` byte-identisch; `acmg_items()` liest `items.csv`, mit `pilot = TRUE` `pilot.csv`, und ergänzt mit `insaid_path` aus der lokalen TSV `reference` und `protein` der INSAID-Items, ohne sie zu speichern. (Prüfweg: Test)",
+      "source": "docs/03-anwendungspipeline.md"
+    },
+    {
+      "id": "K-M2-2",
+      "quote": "**K-M2-2:** Memorisierungs-Kennzeichen je Stichtag der drei Modelle, Suffix `_sol` mit dem Stichtag `ANK-50`, `_llama` und `_qwen` mit der Katalogangabe `knowledge_cutoff` aus `ankerRef: ANK-65` beziehungsweise `ankerRef: ANK-66`: `prior_clinvar_class_<Suffix>` ist für jedes ERepo-Item die vor diesem Stichtag zuletzt eingereichte Einstufung eines anderen Einreichers als des Expertenpanels aus ClinVar `submission_summary` (Stand `ANK-41`, Spaltenbelegung `ankerRef: ANK-63`), bei mehreren gleichzeitigen Einreichungen die Mehrheit, bei Gleichstand `conflicting`, ohne frühere Einreichung `none`; `prior_date_<Suffix>` ist das Datum dieser Einreichung (Datumsspalte nach `ANK-63`), ohne frühere Einreichung leer; `prior_differs_<Suffix>` ist `TRUE` genau dann, wenn `prior_clinvar_class_<Suffix>` weder `none` noch gleich `reference` ist; die Hauptauswertung nutzt die Spalten `_sol`, die Auswertung je Modell für Llama und Qwen deren eigene Spalten (K-M2-6); für INSAID-Items bleiben alle neun Spalten leer; die Regeln gelten auch für `pilot.csv`. (Prüfweg: Test)",
+      "source": "docs/03-anwendungspipeline.md"
+    },
+    {
+      "id": "K-M2-3",
+      "quote": "**K-M2-3:** Prompt-Vorlagen und Parser: `acmg_prompts()` liefert genau drei Vorlagen mit den IDs `concise`, `role`, `json` (Wortlaut Anhang A.3), jede mit genau den Platzhaltern `{gene}` und `{hgvs}` und ohne Referenzklasse; `render_prompt` füllt sie für jedes Item ohne verbleibende Platzhalter `{gene}`, `{hgvs}`; `parse_choice()` erhält ein neues letztes Argument `whole_word` mit Vorgabe `FALSE`, das das Verhalten von v0.1.0 unverändert lässt (nach `01-fachspezifikation.md` §4 ohne ADR zulässig); mit `whole_word = TRUE` zerlegt der Parser die Antwort an Leerraum und Satzzeichen in Wörter, erkennt Klassen und Aliase nur als ganze Wörter oder Wortfolgen ohne Rücksicht auf Groß- und Kleinschreibung, prüft längere Wortfolgen zuerst und verbraucht deren Wörter, sodass „Likely pathogenic“ eine Klasse ist, und gibt `NA`, wenn zwei verschiedene Klassen oder keine vorkommen; die Pipeline nutzt `parse_choice(…, whole_word = TRUE)` mit den Aliasen aus Anhang A.3 für `concise` und `role` und `parse_json_field(\"classification\")` gefolgt von diesem Parser für `json`; Prüffälle mindestens: „Likely pathogenic“ → Likely pathogenic, „Pathogenic (P)“ → Pathogenic, „Unable to classify“ → `NA`, „Pathogenicity cannot be assessed“ → `NA`, „Benign or likely benign“ → `NA`, jede der Abkürzungen B, LB, VUS, LP, P als ganzes Wort → ihre Klasse. (Prüfweg: Test)",
+      "source": "docs/03-anwendungspipeline.md"
+    },
+    {
+      "id": "K-M2-4",
+      "quote": "**K-M2-4:** Backends mit festem Routing: `backend_openai_compatible(...)` reicht zusätzliche Body-Felder (`provider` mit `order`, `allow_fallbacks = FALSE`, `quantizations`; `reasoning_effort`; `seed`) unverändert in den JSON-Body durch; `temperature = NULL` lässt das Feld `temperature` im JSON-Body weg (httr2 schriebe `NULL` sonst als JSON `null`; GPT-6.1 Sol unterstützt `temperature` nicht, `ankerRef: ANK-61`); das ist eine Fehlerbehebung, keine Bedeutungsänderung nach `01-fachspezifikation.md` §4, weil `formals()` und Vorgabe gleich bleiben und das JSON-`null` bei `NULL` nie dokumentiert war; der BUILD von M2 ergänzt dazu einen Eintrag in `NEWS.md`; `meta` enthält die gemeldete Modellkennung (`model`), `usage`, `system_fingerprint`, die Kennung der Antwort (`id`, Schlüssel für `GET /api/v1/generation`), die Quantisierung aus der Anfrage (Endpunkt-Tag in `provider.order`, `coreweave/fp16` bzw. `deepinfra/fp8` nach `ANK-54`, `ANK-55`; `quantizations`; `allow_fallbacks = FALSE`) und, falls die Aufzeichnung es zeigt, den bedienenden Anbieter aus dem Feld `provider` der Antwort; zeigt sie es nicht, wird der Anbieter stichprobenweise über `GET /api/v1/generation` (Feld `provider_name`) erhoben, denn laut OpenRouter-API-Referenz enthält die Antwort weder Anbieter noch Quantisierung (Feldnamen `ankerRef: ANK-60`); `msa_run()` schreibt `meta` als JSON in den Speicher; geprüft gegen Aufzeichnungen je Modell des Plans unter `tests/fixtures/api/` (`ankerRef: ANK-53`, `ANK-54`, `ANK-55`; unveränderte JSON-Antwortkörper, dazu Aufnahmeskript `record.R` und `README.md`) und gegen einen konstruierten Fehlerfall, eine Mock-Antwort mit HTTP 4xx (→ `error`-Eintrag, kein Abbruch); der Test spielt beide mit `httr2::local_mocked_responses()` ein, und die Mock-Funktion ordnet die Aufzeichnungen über die URL und das Feld `model` des JSON-Bodys zu, sodass Feldreihenfolge und übrige Body-Felder die Zuordnung nicht ändern; findet sie keine Aufzeichnung, bricht sie mit Fehler ab, statt `NULL` zu liefern (httr2 schickte die Anfrage sonst ab). (Prüfweg: Test)",
+      "source": "docs/03-anwendungspipeline.md"
+    },
+    {
+      "id": "K-M2-5",
+      "quote": "**K-M2-5:** Validierungsplan als Datei: `inst/validation/ap1/plan.yaml` enthält die Felder `cou`, `risk`, `acceptance` (mit Schwellen und Bändern `ankerRef: ANK-58`), `models` (drei Einträge mit `id`, `key` (`sol`, `llama`, `qwen`; Suffix der Kennzeichen aus K-M2-2), `endpoint`, `provider_order`, `quantizations`, `reasoning`, `temperature`, `seed`, `knowledge_cutoff`, `price_in`, `price_out` nach `ANK-50`, `ANK-53`–`ANK-55`, `ANK-61`, `ANK-65`, `ANK-66`), `design` (100 Items, 3 Prompts, 3 Modelle, 3 Replikate, 2 Blöcke, Reihenfolge nach K-M2-6, Seed `ANK-59`), `pilot` (Umfang, Bestehensregeln und Auslöser des Wiederholungstags nach `ankerRef: ANK-67`), `robustness` (acht Faktoren mit zwei Stufen, Bausteine und Kompositionsregel nach `ankerRef: ANK-62`, zwölf Läufe, Antwortgröße nach `ankerRef: ANK-68`), `evaluation` (Modalantwort, NA-Regel, Kappa-Bootstrap, Rückfall-Fit nach `ANK-68`), `budget` (`ANK-57`) und `cutoff_date` (`ANK-50`); `acmg_plan()` liest sie, und `msa_design()` mit den Planwerten ergibt im Hauptplan 5.400 Zeilen über die drei Modelle, also 1.800 Aufrufe je Modell, dazu 1.200 je Modell im Plackett-Burman-Teil (`ankerRef: ANK-56`) und 30 je Modell im Pilot (`ANK-67`); die daraus mit den Preisankern und den Token-Annahmen aus `ANK-56` berechnete Kostenschätzung liegt unter `ANK-57`. (Prüfweg: Test)",
+      "source": "docs/03-anwendungspipeline.md"
+    },
+    {
+      "id": "K-M2-6",
+      "quote": "**K-M2-6:** Auswertung des Hauptplans je Modell: Für einen mit `backend_mock()` und `acmg_items()` erzeugten Lauf (`inst/validation/ap1/run.R --part main --backend mock --store <tmp>`; ohne `--store` schreibt das Skript nach `../llmsa-runs/ap1_runs.sqlite`, nie in den Arbeitsbaum) ist in jedem Block das Replikat die äußere Schleife (alle Aufrufe von Replikat r liegen vor denen von Replikat r + 1), und innerhalb des Replikats ist die Reihenfolge zufällig mit dem Seed aus `ANK-59`; `acmg_evaluate(runs, plan)` liefert je Modell: den ordinalen Fit (Probit, Klassen in Skalenordnung) mit `msa_grr()` auf der latenten Skala oder, wenn dieser Fit mit Fehler oder Konvergenzwarnung endet, den numerischen Fit auf den Klassenscores als gekennzeichneten Rückfall (`ankerRef: ANK-68`); die Modalantwort je Item über alle Hauptplanaufrufe des Modells nach `ANK-68` (NA ist ein eigener Wert; bei Gleichstand hat das Item keine Modalantwort, die Zahl solcher Items wird berichtet, und sie fallen aus Kappa und Trefferquote heraus); linear gewichtetes Kappa der Modalantwort gegen `reference` mit 95-%-Bootstrap-Intervall über Items (`ANK-68`) und `msa_agreement()` (Modalantwort und alle Antworten, Krippendorffs Alpha); die Trefferquote getrennt nach `source` und nach `prior_differs_sol`, für Llama und Qwen zusätzlich nach `prior_differs_llama` beziehungsweise `prior_differs_qwen`; den NA-Anteil aller Antworten, wobei NA in Trefferquote und Kappa als Fehlklassifikation zählt (Übereinstimmungsgewicht 0 zu jeder Klasse) und im Fit als fehlender Wert; die Zahl gefährlicher Fehlklassifikationen (P/LP ↔ B/LB) der Modalantwort unter den ERepo-Items; das Verdikt je Kriterium gegen `acceptance` (`ANK-58`; Kappa am Punktschätzer; Robustheit aus K-M2-7, ohne Robustheitsläufe „nicht bewertet“) und das Gesamtverdikt je Modell als schlechtestes Band, das nur entsteht, wenn alle vier Kriterien bewertet sind; dazu den gemeinsamen Fit über die drei Modelle mit Modellkomponente als Forschungsergebnis ohne Verdikt und je Modell einen gerenderten `msa_report()`; INSAID-Referenzen werden nur über `acmg_items(insaid_path = …)` aus der lokalen TSV gelesen, bleiben ohne Datei `NA` und führen zu keiner Fehlermeldung. (Prüfweg: Test)",
+      "source": "docs/03-anwendungspipeline.md"
+    },
+    {
+      "id": "K-M2-7",
+      "quote": "**K-M2-7:** Pilot- und Robustheitsläufe: `acmg_prompts(robustness = TRUE)` liefert die zwölf Läufe von `pb_design(8, n_runs = 12)` mit dem Seed aus `ANK-59`, den Faktoren F1 bis F8 aus Anhang A.5 und den Prompt-IDs `pb01` bis `pb12` in Zeilenfolge des Designs, je Lauf die nach der Kompositionsregel aus den Bausteinen zusammengesetzte Nutzernachricht, den Systemprompt (bei F6 +, sonst leer) und die Regel für den Variantentext in `{hgvs}` (F1, F2) (`ankerRef: ANK-62`); der Test prüft für jeden Lauf jede der acht Stufen am erzeugten Text (Transkript, p.-Angabe, Dreher, Satzreihenfolge, Kontextabsatz, Systemprompt, Formatsatz, Sprache), und der Lauf mit allen Faktoren auf − ist wörtlich die Vorlage `concise`; `inst/validation/ap1/run.R --part pilot|main|robustness` führt den Pilot (`pilot.csv`, drei Vorlagen, ein Replikat, `ankerRef: ANK-67`), den Hauptplan (`--block` wählt den Block) oder die Robustheitsläufe aus (zwölf Teildesigns, je Lauf alle 100 Items einmal je Modell), und weil sich die `run_key` der Teile in Item- oder Prompt-ID unterscheiden, überspringt `resume = TRUE` keinen Aufruf eines anderen Teils als erledigt; F6 erreicht das Backend über die Spalte `system` der Designzeile; `backend_openai_compatible()` nutzt sie nur, wenn sie vorhanden und nicht leer ist, und sendet sie dann als Systemnachricht vor der Nutzernachricht, sonst gilt das Argument `system`; das ist eine additive Erweiterung, keine Bedeutungsänderung nach `01-fachspezifikation.md` §4 (Backend-Test ohne Netz am Request-Body); `--part pilot` gibt je Modell jede Bestehensregel aus `ANK-67` mit bestanden oder nicht bestanden aus; `acmg_evaluate()` wertet vorhandene Robustheitsläufe je Modell aus: Antwortgröße als empirischer Logit mit Korrektur ½ (`ankerRef: ANK-68`), Effekte mit `msa_robustness()`, Δp je Effekt am Achsenabschnitt der zwölf Läufe und das Band nach `ANK-58`; geprüft mit `backend_mock()`. (Prüfweg: Test)",
+      "source": "docs/03-anwendungspipeline.md"
+    }
+  ],
+  "open": [
+    {
+      "id": "ACC-1",
+      "ref": "K-M2-1 („`reference` (fünf Klassen; bei `insaid` leer)“); docs/03 A.3; ANK-69",
+      "kind": "Spec schweigt zur Schreibweise; Auslegung des Reviewers, ADR ausstehend",
+      "owner": "Reviewer, 30-plan-review (ADR unter docs/decisions/)",
+      "blocking_builder": false,
+      "note": "`reference` trägt die Klassenbezeichnungen von A.3 (Benign, Likely benign, Uncertain significance, Likely pathogenic, Pathogenic; ANK-69), nicht die ERepo-Schreibweise („Likely Pathogenic“, „Uncertain Significance“). Grund: Trefferquote und Kappa vergleichen `reference` mit der Parser-Ausgabe. Der Test bildet ERepo- und INSAID-Klassen (VOUS) über die Aliase von A.3 auf diese Bezeichnungen ab."
+    },
+    {
+      "id": "ACC-2",
+      "ref": "K-M2-1 („hat genau 100 Zeilen mit den Spalten …“); docs/01 §7",
+      "kind": "Auslegung des Reviewers, ADR ausstehend",
+      "owner": "Reviewer, 30-plan-review (ADR unter docs/decisions/)",
+      "blocking_builder": false,
+      "note": "„mit den Spalten“ = genau diese 17 Spalten (item_id, source, gene, transcript, hgvs, protein, reference, panel, prior_clinvar_class_*, prior_date_*, prior_differs_* mit _sol, _llama, _qwen), Reihenfolge frei; pilot.csv hat dieselben Namen in derselben Reihenfolge wie items.csv. Grund: docs/01 §7 lässt von INSAID nur Gen, cDNA-Bezeichnung und SHA-256 ins Repo."
+    },
+    {
+      "id": "ACC-3",
+      "ref": "K-M2-1, K-M2-2 („leer“, „TRUE genau dann“, „Datum dieser Einreichung“)",
+      "kind": "Auslegung des Reviewers, ADR ausstehend",
+      "owner": "Reviewer, 30-plan-review (ADR unter docs/decisions/)",
+      "blocking_builder": false,
+      "note": "„leer“ = leeres CSV-Feld (Länge 0); ein geschriebenes „NA“ ist nicht leer (write.csv(na = \"\")). prior_differs_* als TRUE/FALSE (Groß-/Kleinschreibung egal); prior_date_* als ISO-Datum (JJJJ-MM-TT) oder in der ClinVar-Form „Mon TT, JJJJ“. acmg_items() darf Typen umwandeln (logical, Date, NA statt \"\"); verglichen wird nach Normalisierung."
+    },
+    {
+      "id": "ACC-4",
+      "ref": "K-M2-1 („Panels im Umlauf nach absteigender Einstufungszahl, dann Zufall mit Seed ankerRef: ANK-59“); ANK-59",
+      "kind": "Spec mehrdeutig (Bezugsmenge der Einstufungszahl); der Test lässt drei Lesarten zu",
+      "owner": "Builder nennt die Lesart im PLAN; Reviewer hält sie in 30-plan-review per ADR fest",
+      "blocking_builder": false,
+      "note": "Akzeptiert wird jede Auswahl, die für alle fünf Klassen mit einer Lesart verträglich ist: Einstufungen des Panels (a) in der Klasse innerhalb des Pools nach K-M2-1, (b) im ganzen Pool, (c) im ganzen ERepo-Export. Geprüft werden die Rundenstruktur (je Runde höchstens eine Einstufung je Panel, kein Panel mit Kandidaten übersprungen), die absteigende Reihenfolge mit beliebiger Auflösung von Gleichständen und dass die zwei Pilotzeilen je Klasse die Picks 16 und 17 desselben Umlaufs sind (acc_m2_round_robin_violations() mit Selbsttest). Die Ziehung innerhalb eines Panels ist frei („dann Zufall“)."
+    },
+    {
+      "id": "ACC-5",
+      "ref": "K-M2-1 („Gene MEFV, MVK, NLRP3, TNFRSF1A im Umlauf, gleicher Seed“)",
+      "kind": "Spec nennt keine Reihenfolge der Gene",
+      "owner": "Reviewer, 30-plan-review (ADR unter docs/decisions/)",
+      "blocking_builder": false,
+      "note": "Für INSAID prüft der Test nur die Rundenstruktur je Klasse über die vier Gene (keine Reihenfolge), Status Validated, 5 je Klasse, Transkript nach ANK-64 und hgvs = <Transkript>:<cDNA der TSV>."
+    },
+    {
+      "id": "ACC-6",
+      "ref": "K-M2-2; ANK-63",
+      "kind": "Spec schweigt zu Einzelheiten; der Test lässt alle Kombinationen der offenen Lesarten zu",
+      "owner": "Reviewer, 30-plan-review (ADR unter docs/decisions/)",
+      "blocking_builder": false,
+      "note": "Datum = DateLastEvaluated (ANK-63); Einreichungen ohne Datum („-“) zählen nie; „gleichzeitig“ = gleiches Datum. Zugelassen sind alle 16 Kombinationen aus: „vor dem Stichtag“ als < oder ≤; als Einstufung zählen nur die fünf Klassen oder jeder Wert außer „not provided“ und „-“; Status „flagged submission“ zählt oder nicht; ausgeschlossen werden alle Einreichungen mit Status „reviewed by expert panel“ oder nur die des eigenen Panels (Namensabgleich ohne „VCEP“, ohne Treffer alle). Betroffen sind im Pool u. a. 408 undatierte Zeilen, Werte wie „not provided“/„other“, Einreichungen genau am Stichtag und zwei Varianten mit zwei Expertenpanels (ANK-63, observations). prior_differs = TRUE genau dann, wenn die Klasse weder „none“ noch (ohne Rücksicht auf Groß-/Kleinschreibung) gleich `reference` ist."
+    },
+    {
+      "id": "ACC-7",
+      "ref": "K-M2-5 („… berechnete Kostenschätzung liegt unter ANK-57“); ANK-57",
+      "kind": "Auslegung des Reviewers nach Betreiberregel",
+      "owner": "Reviewer, 30-plan-review (ADR unter docs/decisions/)",
+      "blocking_builder": false,
+      "note": "Kostenschätzung in US-Dollar (ANK-53–55, ANK-56), Budget in Euro (ANK-57). Verglichen wird ohne Wechselkurs nach der Regel des Betreibers (Intake 8: Limits in Dollar unter den Euro-Beträgen; ANK-57 currency_rule): 74,31 $ < 150; ebenso mit den Preisen aus plan.yaml."
+    },
+    {
+      "id": "ACC-8",
+      "ref": "K-M2-3 („liefert genau drei Vorlagen mit den IDs …“), K-M2-7 („liefert die zwölf Läufe …“)",
+      "kind": "Spec nennt keine Datenstruktur; Vertrag des Tests",
+      "owner": "Builder bestätigt im PLAN",
+      "blocking_builder": false,
+      "note": "acmg_prompts() liefert einen benannten Zeichenvektor (Namen = Vorlagen-IDs) oder einen data.frame mit prompt_id und template. acmg_prompts(robustness = TRUE) liefert einen data.frame mit 12 Zeilen in Designfolge und den Spalten prompt_id (pb01–pb12), F1–F8 (−1/+1 wie attr(pb_design(8, n_runs = 12, seed = 20261024), \"coded\")), template (Nutzernachricht mit {gene} und {hgvs}) und system (Systemprompt oder \"\"); die Regel für den Variantentext folgt aus F1 und F2."
+    },
+    {
+      "id": "ACC-9",
+      "ref": "K-M2-7 („der Test prüft für jeden Lauf jede der acht Stufen am erzeugten Text“)",
+      "kind": "Auslegung des Reviewers",
+      "owner": "Reviewer, 30-plan-review (ADR unter docs/decisions/)",
+      "blocking_builder": false,
+      "note": "Der erzeugte Text wird zweifach geprüft: an den Vorlagen aus acmg_prompts(robustness = TRUE), gefüllt mit einem ERepo-Item mit p.-Angabe, je Faktorstufe und gegen die Komposition aus ANK-62; und Ende-zu-Ende über prompt_hash im Store von run.R (llmsa:::hash_text des erwarteten Textes, also einschließlich der F1/F2-Regel des Builders; bei Abweichung meldet der Test, welche umgekehrte Stufe passen würde). Hauptplan und Pilot ebenso gegen die gefüllten Vorlagen von A.3."
+    },
+    {
+      "id": "ACC-10",
+      "ref": "K-M2-4; docs/03 Einleitung („`backend_openai_compatible()` erhält nur zusätzliche Verarbeitung in `meta`“)",
+      "kind": "Spec nennt keine Feldnamen; Vertrag des Tests",
+      "owner": "Builder bestätigt im PLAN",
+      "blocking_builder": false,
+      "note": "meta behält model_snapshot (gemeldete Modellkennung, v0.1.0) und enthält zusätzlich id, usage, system_fingerprint (Schlüssel vorhanden, in allen Aufzeichnungen null), bei Antworten mit Feld provider dieses als provider (bedienender Anbieter) sowie aus der Anfrage provider_order, quantizations und allow_fallbacks; bei Sol (kein provider-Objekt) fehlen provider und Routingfelder. formals() von backend_openai_compatible() bleiben exakt wie ANK-02. Die Wiedergabe der Aufzeichnungen ist die Mock-Funktion des Tests (tests/fixtures/api/README.md), Body über httr2::req_dry_run(); die Aufzeichnungen sind über ihre SHA-256 (ANK-94) gesichert."
+    },
+    {
+      "id": "ACC-11",
+      "ref": "K-M2-6, K-M2-7 (run.R)",
+      "kind": "Spec nennt Optionen, nicht Aufrufkonvention und Ausgabeformat; Vertrag des Tests",
+      "owner": "Builder bestätigt im PLAN",
+      "blocking_builder": false,
+      "note": "Aufruf: Rscript <Paketwurzel>/inst/validation/ap1/run.R --part pilot|main|robustness [--block n] --backend mock [--store pfad], Arbeitsverzeichnis Paketwurzel; run.R lädt das Paket aus dem Quellbaum, in dem es liegt (z. B. pkgload::load_all()), nicht eine installierte Fassung, auch in der Paketkopie des Mutationslaufs. Ohne --block laufen beide Blöcke. model_id im Store = Planschlüssel sol, llama, qwen; prompt_id = concise, role, json bzw. pb01–pb12; Pilotzeilen = Items aus pilot.csv. Die Ausgabe von --part pilot nennt je Modell und Regel eine Zeile mit Modellschlüssel, Regelstichwort (4xx, provider, parser, cost) und Ergebnis (passed/failed oder bestanden/nicht bestanden); mit dem Mock-Backend meldet die Regel 4xx „passed“. Den Vorgabe-Store prüft der Test in einer Paketkopie unter tempdir() mit vorhandenem ../llmsa-runs/; der echte Store des Betreibers wird nie berührt. Nach allen Läufen darf im Paketbaum keine neue Datei liegen (ohne .git, orchestrator, reference/quellen, reference/privat)."
+    },
+    {
+      "id": "ACC-12",
+      "ref": "K-M2-6, K-M2-7 (acmg_evaluate)",
+      "kind": "Spec nennt Inhalte, nicht die Rückgabestruktur; Vertrag des Tests",
+      "owner": "Builder bestätigt im PLAN",
+      "blocking_builder": false,
+      "note": "acmg_evaluate(runs, plan): runs = msa_runs mit den Store-Spalten und den Item-Spalten aus acmg_items() (wie msa_run() sie mitführt), plan = acmg_plan(). Hauptplanzeilen: prompt_id concise/role/json und Items aus items.csv; Robustheitszeilen pb01–pb12 dürfen die Hauptplankennzahlen nicht ändern. Rückgabe: Liste mit models (benannt sol, llama, qwen) und joint (msa_fit über alle drei Modelle mit Komponente model, kein msa_grr, kein Verdikt). Je Modell: grr (msa_grr), fallback (TRUE beim Rückfall), modal (data.frame item_id, modal, has_modal; NA-Modalwert = modal NA mit has_modal TRUE, Gleichstand = has_modal FALSE), n_no_modal, kappa (estimate, lower, upper), agreement (msa_agreement über die Hauptplanantworten des Modells mit levels = Klassen von A.3 und reference), hit_rate (data.frame by, group, n, hits, rate; by = all, source, prior_differs_sol und bei llama/qwen zusätzlich prior_differs_llama bzw. prior_differs_qwen; group = all, erepo, insaid, TRUE, FALSE; rate NA bei n = 0), na_share, dangerous, robustness (NULL oder Liste response = data.frame prompt_id, x, n, y; effects = msa_robustness; delta_p benannt F1–F8; band), verdicts (benannt grr, kappa, dangerous, robustness; Werte acceptable, marginal, unacceptable, not assessed), verdict (schlechtestes Band; NA oder „not assessed“ ohne Robustheit), report (Pfad des gerenderten msa_report(), außerhalb des Repos; der Test ruft acmg_evaluate() in einem temporären Arbeitsverzeichnis auf)."
+    },
+    {
+      "id": "ACC-13",
+      "ref": "K-M2-5 (plan.yaml)",
+      "kind": "Spec nennt Abschnitte, innerhalb von design keine Feldnamen; Vertrag des Tests",
+      "owner": "Builder bestätigt im PLAN",
+      "blocking_builder": false,
+      "note": "models: drei Einträge mit den Feldern aus K-M2-5; Sol mit temperature null, reasoning medium, provider_order und quantizations leer; Llama und Qwen mit reasoning null (kein Feld reasoning im Request), temperature 0, Routing nach ANK-54/ANK-55; endpoint = Basis-URL oder Chat-Completions-URL der Aufzeichnungen (ANK-94); Preise in US-Dollar je 1 Mio. Tokens oder einheitlich je Token. design: Felder items, prompts, models, replicates, blocks, order, seed. acceptance, pilot, evaluation und budget werden über ihre Zahlenwerte geprüft (Schwellen ANK-58, Pilot ANK-67, Auswertung ANK-68, Budget ANK-57), robustness über F1–F8 (als Name oder Wert), die Bausteine von ANK-62 wörtlich, 12 Läufe und die Korrektur 0,5. cutoff_date = ANK-50. acmg_plan(path) muss die angegebene Datei lesen."
+    },
+    {
+      "id": "ACC-14",
+      "ref": "docs/01 §7; OFFENE-PUNKTE §2 („der Reviewer erntet die Datei in ACCEPTANCE von M0“)",
+      "kind": "Nachernte eines fälligen Ankers",
+      "owner": "Reviewer; Betreiber zur Kenntnis",
+      "blocking_builder": false,
+      "note": "reference/anchors/ANK-TOL.json lag nach M0 nicht vor und ist in ACCEPTANCE M2 vollständig geerntet (17 Einträge, Werte wörtlich aus ANKER-TODO, bestätigt 24.10.2026, 22:20, OFFENE-PUNKTE §5c). M2 nutzt data_size (K-M2-1), parser_cases (K-M2-3), arithmetic, engine_ordinal und mc_factor (K-M2-6, K-M2-7). Spätere Meilensteine prüfen ihre Einträge beim Ernten ihrer Anker; Änderungen nur mit ADR."
+    },
+    {
+      "id": "ACC-15",
+      "ref": "K-M2-3, K-M2-7; ANKER-TODO („Nicht vergeben … frei für Nachträge des Reviewers“)",
+      "kind": "Nachtrag des Reviewers",
+      "owner": "Betreiber trägt ANK-69 in ANKER-TODO nach",
+      "blocking_builder": false,
+      "note": "ANK-69 (Prompt-Vorlagen A.3, Parser-Aliase, Klassen in Skalenordnung) ist ein Nachtrag auf einer freien Nummer, damit die Tests den Wortlaut aus einem Anker lesen; er ändert kein Kriterium. Alle Zitate der M2-Anker sind maschinell gegen ihre Quellen geprüft (Spec, ANKER-TODO, ADR-004, Textspiegel, Rohdateien unter ../quellen/, Betreiberunterlagen)."
+    },
+    {
+      "id": "ACC-16",
+      "ref": "docs/01 §7; ANK-TOL.data_size; K-M2-1",
+      "kind": "Querschnittsregel, im Abnahmetest von K-M2-1 geprüft",
+      "owner": "Reviewer, 30-plan-review (ADR unter docs/decisions/)",
+      "blocking_builder": false,
+      "note": "Für inst/extdata/items_ap1_2026-10-24/ prüft der Test zusätzlich: SHA256SUMS mit je einer Zeile je Datei (mindestens items.csv und pilot.csv, Hashes stimmen), Größengrenzen (MB als 10^6 Byte), QUELLE.txt mit ERepo-URL, CC0 und Skriptpfad data-raw/make_items_ap1.R, keine p.-Angabe der gewählten INSAID-Varianten im Ordner; ohne ../quellen/daten/ bricht das Skript mit einer Meldung ab, die „quellen“ nennt, und ändert die Ausgabedateien nicht."
+    },
+    {
+      "id": "ACC-17",
+      "ref": "K-M2-1 („`data-raw/make_items_ap1.R` erzeugt beide Dateien aus `../quellen/daten/` byte-identisch“); ANK-59",
+      "kind": "Auslegung des Reviewers",
+      "owner": "Reviewer, 30-plan-review (ADR unter docs/decisions/)",
+      "blocking_builder": false,
+      "note": "Der Test startet das Skript in einer Kopie des Pakets unter tempdir() (../quellen als symbolischer Link, reference/anchors mitkopiert) aus dem Testlauf heraus; testthat setzt LC_COLLATE=C, das an Kindprozesse geht. Das Skript muss deshalb vom Gebietsschema unabhängig sein (etwa order(…, method = \"radix\") oder feste Kollation im Skript), sonst weichen Sortierung („c.-1“ gegen „c.*1“) und Auswahl ab. Der Seed steht im Skript als Literal 20261024 oder mit Verweis „ANK-59“."
+    },
+    {
+      "id": "ACC-18",
+      "ref": "K-M2-3 („… und `parse_json_field(\"classification\")` gefolgt von diesem Parser für `json`“); K-M2-6 (Reihenfolge)",
+      "kind": "Hinweis an den Builder",
+      "owner": "Builder löst im PLAN",
+      "blocking_builder": false,
+      "note": "msa_run() übergibt dem Parser in v0.1.0 nur den Text; json-Antworten brauchen aber einen anderen Parser als concise und role, und die Reihenfolge von K-M2-6 (Replikat außen, zufällig innen) verbietet getrennte Läufe je Vorlage. Der Test prüft jede Store-Zeile gegen den Parser ihrer prompt_id (json: ohne JSON-Objekt NA, kein Rückfall auf den Volltext). Ein Weg ist ein neues letztes Argument von msa_run() mit Vorgabe (docs/01 §4, ohne ADR)."
+    },
+    {
+      "id": "ACC-19",
+      "ref": "K-M2-6; ANK-68; ANK-TOL.mc_factor, arithmetic, engine_ordinal",
+      "kind": "Toleranzwahl des Reviewers aus Ankern",
+      "owner": "Reviewer, 30-plan-review (ADR unter docs/decisions/)",
+      "blocking_builder": false,
+      "note": "Bootstrap-Intervall: Vergleich mit eigener Perzentil-Bootstrap-Rechnung (2.000 Wiederholungen über Items, Seed 20261024, quantile Typ 7); zulässig je Grenze mc_factor.pass · √2 · MCSE (MCSE aus den eigenen Wiederholungen), damit eine gleichwertige andere Ziehungsreihenfolge besteht. Punktschätzer, Trefferquoten, NA-Anteil, Stabilität, Effekte und Δp mit arithmetic; Fits gegen eigene msa_fit()/msa_grr()-Aufrufe mit engine_ordinal."
+    },
+    {
+      "id": "ACC-20",
+      "ref": "K-M2-6 („… oder, wenn dieser Fit mit Fehler oder Konvergenzwarnung endet, den numerischen Fit …“)",
+      "kind": "Prüfweg des Reviewers",
+      "owner": "Reviewer, 30-plan-review (ADR unter docs/decisions/)",
+      "blocking_builder": false,
+      "note": "Mit den Mock-Daten endet der ordinale Fit ohne Warnung; den Rückfall erzwingt der Test mit testthat::local_mocked_bindings() auf msa_fit (Fehler bzw. Warnung „… Model failed to converge (forced)“ beim ordinalen Fit). acmg_evaluate() muss den Fit deshalb über msa_fit() rechnen und eine solche Warnung als Konvergenzwarnung werten. Erwartet: fallback TRUE, numerischer Fit auf den Scores 1–5 (ANK-68), GRR-Verdikt aus diesem Fit."
+    },
+    {
+      "id": "ACC-21",
+      "ref": "K-M2-7 („`backend_openai_compatible()` nutzt sie nur, wenn sie vorhanden und nicht leer ist …“)",
+      "kind": "Auslegung des Reviewers",
+      "owner": "Reviewer, 30-plan-review (ADR unter docs/decisions/)",
+      "blocking_builder": false,
+      "note": "NA in der Spalte system gilt als leer (dann gilt das Argument system); fehlt row ganz (NULL), gilt ebenfalls das Argument."
+    },
+    {
+      "id": "ACC-22",
+      "ref": "K-M2-6 („… ist in jedem Block das Replikat die äußere Schleife …, und innerhalb des Replikats ist die Reihenfolge zufällig mit dem Seed aus ANK-59“)",
+      "kind": "Prüfweg des Reviewers",
+      "owner": "Reviewer, 30-plan-review (ADR unter docs/decisions/)",
+      "blocking_builder": false,
+      "note": "Replikat außen: alle position-Werte von Replikat r kleiner als die von r + 1 je Block. „Zufällig“: Anteil aufeinanderfolgender Aufrufe eines Replikats, die sich nur in einem der Faktoren Item, Prompt, Modell unterscheiden, unter 0,5 (gekreuzte Ordnung ≈ 1, zufällige ≈ 0,11). „Mit dem Seed“: blockweiser und vollständiger Lauf ergeben dieselbe Folge; der Seed steht im Plan (K-M2-5)."
+    },
+    {
+      "id": "ACC-23",
+      "ref": "ANK-68 (Haldane 1956, Anscombe 1956)",
+      "kind": "Beleg nur eingeschränkt prüfbar",
+      "owner": "Betreiber (Seitenbild bereits am 25.10.2026 geprüft)",
+      "blocking_builder": false,
+      "note": "Die OCR-Stellen beider Aufsätze sind im Textspiegel verstümmelt (½ als „i“ bzw. „b“); der Reviewer konnte die Seitenbilder nicht einsehen. In den Tests trägt der Klartext der Spec (A.5: log((x + ½)/(n − x + ½))); kein Wert wird aus der OCR gelesen."
+    },
+    {
+      "id": "ACC-24",
+      "ref": "AGENTS.md (Daten aus ../quellen/daten/; Abnahmetests schlagen fehl, wenn lokale Dateien fehlen); MUT_TEST_DIRS",
+      "kind": "Hinweis Infrastruktur",
+      "owner": "Betreiber zur Kenntnis",
+      "blocking_builder": false,
+      "note": "Die Datenanker ANK-41, 51, 52, 54, 55, 63, 65, 66 sind mit Rscript aus ../quellen/ gelesen (Lesezugriff außerhalb des Arbeitsbaums nur über Rscript möglich); ANK-56, 57, 59 zusätzlich am Intake-Destillat und an OFFENE-PUNKTE belegt (nur unverfängliche Kurzzitate). Die Abnahmetests lesen ERepo-Export, INSAID-TSV und ClinVar submission_summary aus ../quellen/daten/ und prüfen sie gegen SHA-256/md5 der Anker; fehlt eine Datei, scheitern sie (kein skip). Laufzeit grün etwa 5–6 Minuten (ClinVar-Lesen ~65 s, Neuerzeugung des Itemsatzes ~65 s, etwa 14.500 Mock-Aufrufe). Ändert der Builder R/fit.R oder R/grr.R, laufen diese Tests je Mutant mit; das ClinVar-Extrakt wird je R-Sitzung in tempdir() zwischengespeichert."
+    },
+    {
+      "id": "ACC-25",
+      "ref": "Prüfstandard docs/01 §2 Nr. 1",
+      "kind": "Nachweis des Reviewers",
+      "owner": "–",
+      "blocking_builder": false,
+      "note": "Die Abnahmetests wurden gegen einen verworfenen Wegwerf-Prototyp außerhalb des Repos (/tmp) ausgeführt: alle 62 M2-Tests grün; mit eingebauten Fehlern (NA-Modalwert verworfen, Gleichstand mit Modalwert, Korrektur 1 statt ½, VUS als gefährlicher Fehler) rot; gegen v0.1.0 rot. Der Prototyp liegt nicht im Repo und bindet den Builder nicht; er zeigte die Punkte ACC-17 und ACC-18."
+    }
+  ]
+}

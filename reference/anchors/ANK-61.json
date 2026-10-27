@@ -1,0 +1,26 @@
+{
+  "id": "ANK-61",
+  "title": "Temperatur-, Seed- und Reasoning-Policy je Modell (AP1)",
+  "criteria": ["K-M2-4", "K-M2-5", "docs/03 A.4"],
+  "value": {
+    "sol": {"temperature": null, "temperature_field": false, "reasoning_effort": "medium", "seed": 20261024},
+    "llama": {"temperature": 0, "temperature_field": true, "reasoning_field": false, "seed": 20261024},
+    "qwen": {"temperature": 0, "temperature_field": true, "reasoning_field": false, "seed": 20261024}
+  },
+  "unit": "temperature: Zahl oder null (Feld fehlt im JSON-Body); seed: Ganzzahl; reasoning_effort: Zeichenkette; *_field: ob das Feld im JSON-Body steht",
+  "tolerance": 0,
+  "tolerance_note": "exakt",
+  "source_url": "docs/03-anwendungspipeline.md, Anhang A.4; docs/decisions/ADR-004-freigabe-validierungsplan-ap1.md",
+  "source": "Betreiberfestlegung: Validierungsplan Anhang A.4 (freigegeben mit ADR-004 vom 25.10.2026; Qwen-Reasoning geändert mit ADR-004, Nachtrag 2 vom 26.10.2026). Zweitbeleg zu Sol: LiteLLM, „Day 0 Support: GPT-6.1 Sol“, Abschnitt Notes, Schnappschuss 25.10.2026 (https://docs.litellm.ai/blog/gpt_6_1_sol)",
+  "quote": "Temperatur und Seed (`ANK-61`): Sol läuft ohne Temperaturparameter mit der Vorgabe des Anbieters, Llama und Qwen mit Temperatur 0. […] Der Seed 20261024 ist in allen Aufrufen aller Modelle gleich",
+  "quote_location": "docs/03-anwendungspipeline.md, Anhang A.4, Absatz „Temperatur und Seed“",
+  "further_quotes": [
+    {"quote": "Reasoning `medium`; Temperatur nicht gesetzt (`temperature = NULL`, Feld fehlt im Body), weil Sol `temperature` nicht unterstützt (keine Reasoning-Stufe `none`; `ANK-61`); `seed` gesetzt", "location": "docs/03 A.4, Tabelle, Zeile GPT-6.1 Sol"},
+    {"quote": "`provider.order = [\"deepinfra/fp8\"]`, `allow_fallbacks = false`, `quantizations = [\"fp8\"]`; kein Feld `reasoning`: Qwen läuft mit dem Reasoning, das der Endpunkt ausliefert", "location": "docs/03 A.4, Tabelle, Zeile Qwen3-32B"},
+    {"quote": "Reasoning effort runs low to max, defaulting to medium. Unlike GPT-6 Sol, none is not supported, so temperature is not available on this model.", "location": "LiteLLM-Blog GPT-6.1 Sol, Abschnitt Notes (Textspiegel reference/quellen/text/anbieter_2026-10-25/litellm/Blog_GPT-6.1_Sol.html.txt, Zeile 150)"},
+    {"quote": "Entscheidung (Betreiber, 26.10.2026): Qwen läuft mit dem Reasoning, das der Endpunkt ausliefert; die Anfrage trägt kein Feld `reasoning` und kein `/no_think`", "location": "ADR-004, Nachtrag 26.10.2026 (2)"}
+  ],
+  "retrieved": "2026-10-26",
+  "method": "Wortlaut der freigegebenen Spec und des ADR übernommen.",
+  "verification": "Aufzeichnungen tests/fixtures/api/README.md (ANK-94) zeigen dieselben Request-Bodies: Sol mit reasoning_effort medium und seed 20261024 ohne temperature; Llama und Qwen mit temperature 0, seed 20261024 und provider-Objekt, Qwen ohne reasoning."
+}

@@ -1,0 +1,27 @@
+{
+  "id": "ANK-57",
+  "title": "Budget AP1 in Euro und Limits der Zugänge",
+  "criteria": ["K-M2-5", "docs/03 A.6, A.8"],
+  "value": {
+    "budget_eur": 150,
+    "openai_project_budget_usd": 100,
+    "openai_warning_usd": 60,
+    "openrouter_key_limit": "eigener Schlüssel mit eigenem Limit; Betrag nicht festgelegt",
+    "currency_rule": "Preise und Limits in US-Dollar; Kostenschätzung und Limits müssen als Dollarbetrag unter dem Eurobetrag des Budgets bleiben"
+  },
+  "unit": "budget_eur in Euro; Limits in US-Dollar",
+  "tolerance": 0,
+  "tolerance_note": "Betreiberfestlegung, exakt. Vergleich Kostenschätzung (Dollar) gegen Budget (Euro) nach der Regel des Betreibers: Dollarbetrag unter dem Eurobetrag (kein Wechselkurs)",
+  "source_url": "docs/03-anwendungspipeline.md, Anhang A.6 und A.8; docs/decisions/ADR-004-freigabe-validierungsplan-ap1.md",
+  "source": "Betreiberfestlegung: Intake-Destillat Abschnitt 8 (Budget 24.10.2026); Limits: ADR-004 (25.10.2026), docs/03 A.8",
+  "quote": "Budget 150 € (`ANK-57`), Rest für Pilotlauf und einen wiederholten Tag.",
+  "quote_location": "docs/03 A.6, erster Absatz",
+  "further_quotes": [
+    {"quote": "ein OpenAI-Projekt nur für AP1 mit eigenem Schlüssel, Budget etwa 100 $ und Warnung bei 60 $; ein eigener OpenRouter-Schlüssel mit eigenem Limit, Training und Logging aus.", "location": "docs/03 A.8, Schritt 1"},
+    {"quote": "**Budget in Euro (Entscheidung 24.10.2026):** AP1 150 €", "location": "Intake-Destillat, Abschnitt 8"},
+    {"quote": "Alle Preise in Dollar; die Ausgabelimits bei OpenAI, OpenRouter und Google so setzen, dass sie unter den Euro-Beträgen bleiben.", "location": "Intake-Destillat, Abschnitt 8 (Regel für den Vergleich Dollar gegen Euro)"}
+  ],
+  "retrieved": "2026-10-26",
+  "method": "Wortlaut übernommen.",
+  "verification": "AGENTS.md, Projektblock: „Geld: AP1 150 €“; docs/03 A.4: „Ausgabelimits bei OpenAI und OpenRouter unter den Euro-Beträgen des Budgets (A.8)“."
+}

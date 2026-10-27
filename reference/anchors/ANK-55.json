@@ -1,0 +1,25 @@
+{
+  "id": "ANK-55",
+  "title": "Qwen3-32B auf OpenRouter: Modell-Slug, Endpunkt-Tag deepinfra/fp8, Quantisierung, Seed-Unterstützung, Preise",
+  "criteria": ["K-M2-4", "K-M2-5", "docs/03 A.4"],
+  "value": {
+    "model_slug": "qwen/qwen3-32b",
+    "endpoint_tag": "deepinfra/fp8",
+    "provider_name": "DeepInfra",
+    "quantization": "fp8",
+    "context_length": 40960,
+    "price_in_usd_per_mtok": 0.08,
+    "price_out_usd_per_mtok": 0.28,
+    "seed_supported": true
+  },
+  "unit": "Zeichenketten; context_length in Tokens; Preise in US-Dollar je 1 Million Tokens (Katalog: US-Dollar je Token)",
+  "tolerance": 0.005,
+  "tolerance_note": "Preise: halbe Einheit der letzten publizierten Stelle (0.00000008 und 0.00000028 $ je Token); Zeichenketten und Ganzzahlen exakt",
+  "source_url": "https://openrouter.ai/api/v1/models/qwen/qwen3-32b/endpoints",
+  "source": "OpenRouter-Endpunktliste, Schnappschuss 22.10.2026 (quellen/anbieter_2026-10-22/openrouter/endpoints/qwen_qwen3-32b.json, SHA-256 a37dd2bca7e599440efcbcf88ba5dddeb61defff146c2c7b84689471459da043)",
+  "quote": "\"name\":\"DeepInfra | qwen/qwen3-32b-04-28\",\"model_id\":\"qwen/qwen3-32b\",\"model_name\":\"Qwen: Qwen3 32B\",\"context_length\":40960,\"pricing\":{\"prompt\":\"0.00000008\",\"completion\":\"0.00000028\",\"discount\":0},\"provider_name\":\"DeepInfra\",\"tag\":\"deepinfra/fp8\",\"service_tier\":null,\"quantization\":\"fp8\"",
+  "quote_location": "endpoints/qwen_qwen3-32b.json, data.endpoints, Eintrag mit tag deepinfra/fp8 (wörtlicher Ausschnitt der minimierten JSON-Datei); supported_parameters dieses Eintrags enthält seed, temperature und reasoning",
+  "retrieved": "2026-10-26",
+  "method": "JSON mit jsonlite gelesen; Eintrag über tag ausgewählt. Drei fp8-Endpunkte: deepinfra/fp8 (0,08/0,28 $, seed), tenstorrent/fp8 (0,14/0,40 $, seed), siliconflow/fp8 (0,14/0,57 $, ohne seed).",
+  "verification": "Zweitbeleg: Intake-Destillat Abschnitt 8 („Qwen3-32B über OpenRouter bei DeepInfra, fp8 … 0,08 $/0,28 $; günstigster fp8-Endpunkt mit Seed“); Aufzeichnung tests/fixtures/api/qwen.json meldet provider DeepInfra (ANK-94). Vor AP1 live prüfen (BL-43)."
+}

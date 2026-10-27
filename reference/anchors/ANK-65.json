@@ -1,0 +1,17 @@
+{
+  "id": "ANK-65",
+  "title": "Wissensstand Llama 3.3 70B Instruct: Katalogangabe knowledge_cutoff als Stichtag der Kennzeichen _llama",
+  "criteria": ["K-M2-2", "K-M2-5", "docs/03 A.1, A.4"],
+  "value": "2023-12-31",
+  "unit": "Datum (ISO 8601), Stichtag der Kennzeichen prior_*_llama",
+  "tolerance": 0,
+  "tolerance_note": "Datum, exakte Gleichheit",
+  "source_url": "https://openrouter.ai/api/v1/models",
+  "source": "OpenRouter-Modellkatalog, Schnappschuss 22.10.2026 (quellen/anbieter_2026-10-22/openrouter/models.json, SHA-256 19818773f49dda7abf5032132290121eaab3de2232cc0d3a2d31e8a0cb6c31e6), Eintrag meta-llama/llama-3.3-70b-instruct",
+  "quote": "\"knowledge_cutoff\":\"2023-12-31\"",
+  "quote_location": "models.json, data[id = meta-llama/llama-3.3-70b-instruct], Feld knowledge_cutoff",
+  "second_source": "Meta-Modellkarte Llama 3.3 70B Instruct, Schnappschuss 25.10.2026 (https://huggingface.co/meta-llama/Llama-3.3-70B-Instruct; quellen/anbieter_2026-10-25/meta/Llama-3.3-70B-Instruct_Model_Card.html, SHA-256 5acd6068db3f2af014276a9b4885fe2acec2d8683b86121643047dee214d7b17): Tabelle „Model Information“, Spalte Knowledge cutoff „December 2023“ und Abschnitt Training Data: „Data Freshness: The pretraining data has a cutoff of December 2023.“ (Textspiegel Zeilen 356 und 505)",
+  "retrieved": "2026-10-26",
+  "method": "models.json mit jsonlite gelesen, Eintrag über id ausgewählt, Feld knowledge_cutoff übernommen. Die Modellkarte nennt nur den Monat; der Katalog nennt den Tag, der als Stichtag gilt (docs/03 K-M2-2: „mit der Katalogangabe knowledge_cutoff aus ankerRef: ANK-65“).",
+  "verification": "Katalogtag liegt im Monat der Modellkarte (Dezember 2023); Intake-Destillat Abschnitt 8 nennt „Wissensstand 31.12.2023“."
+}

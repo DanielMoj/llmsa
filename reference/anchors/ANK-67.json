@@ -1,0 +1,40 @@
+{
+  "id": "ANK-67",
+  "title": "Pilot AP1: Umfang, Bestehensregeln je Modell, Berichtsgrößen, Auslöser des Wiederholungstags",
+  "criteria": ["K-M2-1", "K-M2-5", "K-M2-7", "docs/03 A.6"],
+  "value": {
+    "pilot_items": 10,
+    "pilot_items_source": "erepo",
+    "pilot_per_class": 2,
+    "templates": 3,
+    "replicates": 1,
+    "calls_per_model": 30,
+    "pass_rules": {
+      "parameters_accepted": "keine 4xx-Antwort",
+      "provider": "Anbieter gleich dem angeforderten (K-M2-4)",
+      "parser": "Parser-Trefferquote mindestens 27 von 30",
+      "cost": "Kostenprojektion für Hauptplan und Robustheit aus dem 90-%-Quantil der Ausgabetokens (usage.completion_tokens, schließt Reasoning ein) unter ANK-57"
+    },
+    "parser_hits_min": 27,
+    "parser_hits_of": 30,
+    "cost_quantile": 0.9,
+    "reported": ["Median der Latenz", "Reasoning-Tokens je Modell (Median und 90-%-Quantil)"],
+    "repeat_day_triggers": ["Anbieterwechsel in der Antwort", "wechselnde Modellkennung innerhalb eines Blocks", "mehr als 5 % Fehler eines Modells in einem Block"],
+    "error_share_trigger": 0.05
+  },
+  "unit": "Anzahlen; Quantil und Fehleranteil als Anteil",
+  "tolerance": 0,
+  "tolerance_note": "Betreiberfestlegung, exakt",
+  "source_url": "docs/03-anwendungspipeline.md, Anhang A.6; docs/decisions/ADR-004-freigabe-validierungsplan-ap1.md",
+  "source": "Betreiberfestlegung ADR-004 (25.10.2026); Reasoning-Tokens: ADR-004, Nachtrag 2 (26.10.2026)",
+  "quote": "Pilot (`ANK-67`): die 10 Pilotitems aus `pilot.csv` × 3 Vorlagen × 1 Replikat je Modell = 30 Aufrufe je Modell, vor dem Hauptplan und nicht in der Hauptauswertung.",
+  "quote_location": "docs/03 A.6, zweiter Absatz",
+  "further_quotes": [
+    {"quote": "Bestehensregeln je Modell: Parameter angenommen (keine 4xx-Antwort); Anbieter gleich dem angeforderten (K-M2-4); Parser-Trefferquote mindestens 27 von 30; Kostenprojektion für Hauptplan und Robustheit aus dem 90-%-Quantil der Ausgabetokens (`usage.completion_tokens`, schließt Reasoning ein) unter `ANK-57`.", "location": "docs/03 A.6"},
+    {"quote": "Auslöser für einen Wiederholungstag, vorab festgelegt: Anbieterwechsel in der Antwort, wechselnde Modellkennung innerhalb eines Blocks, mehr als 5 % Fehler eines Modells in einem Block.", "location": "docs/03 A.6"},
+    {"quote": "`pilot.csv` im selben Ordner hat dieselben Spalten und 10 ERepo-Zeilen, je Klasse die nächsten zwei desselben Umlaufs, keine davon in `items.csv` (`ankerRef: ANK-67`)", "location": "docs/03 K-M2-1"}
+  ],
+  "retrieved": "2026-10-26",
+  "method": "Wortlaut übernommen; 10 · 3 · 1 = 30.",
+  "verification": "ANKER-TODO ANK-67 und ADR-004 Punkt 10 (mit Nachtrag 2) stimmen überein."
+}

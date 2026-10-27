@@ -1,0 +1,40 @@
+{
+  "id": "ANK-41",
+  "title": "ClinVar-Stand der Rohdateien: Last-Modified 19.10.2026, md5 (NCBI) und SHA-256",
+  "criteria": ["K-M2-2", "K-M1d-3"],
+  "value": {
+    "stand": "2026-10-19",
+    "files": {
+      "submission_summary.txt.gz": {
+        "last_modified": "Mon, 19 Oct 2026 04:49:39 GMT",
+        "md5": "8b5a0370cc97ba0c077f8d1d182a4122",
+        "md5_ncbi": "8b5a0370cc97ba0c077f8d1d182a4122",
+        "sha256": "43cc0145b65f5e06b94d7e788df6358a6b71860bcef8aa7063307a9c0539606e",
+        "bytes": 404817924
+      },
+      "variant_summary.txt.gz": {
+        "last_modified": "Mon, 19 Oct 2026 08:45:10 GMT",
+        "md5": "3707f637f77f3d99895387354f0711cc",
+        "md5_ncbi": "3707f637f77f3d99895387354f0711cc",
+        "sha256": "b235cd5742ac615d55703672751fa3ea71c8222d5ff0547cd1e9b107fd8a647f",
+        "bytes": 456505123
+      }
+    }
+  },
+  "unit": "Datenstand (Datum); Prüfsummen hexadezimal; Bytes",
+  "tolerance": 0,
+  "tolerance_note": "Prüfsummen exakt",
+  "source_url": "https://ftp.ncbi.nlm.nih.gov/pub/clinvar/tab_delimited/",
+  "source": "quellen/daten/clinvar_2026-10-22/QUELLE.txt und *.md5 (Prüfsummen von NCBI), lokal außerhalb des Repos; quellen/MANIFEST.tsv nennt dieselben SHA-256",
+  "quote": "submission_summary.txt.gz: Last-Modified: Mon, 19 Oct 2026 04:49:39 GMT",
+  "quote_location": "quellen/daten/clinvar_2026-10-22/QUELLE.txt, Abschnitt „Stand der Dateien laut Server (Last-Modified)“",
+  "further_quotes": [
+    {
+      "quote": "variant_summary.txt.gz: Last-Modified: Mon, 19 Oct 2026 08:45:10 GMT",
+      "location": "QUELLE.txt"
+    }
+  ],
+  "retrieved": "2026-10-27",
+  "method": "md5 und SHA-256 mit tools::md5sum und tools::sha256sum über die lokalen Dateien; md5 gegen die NCBI-Datei *.md5 geprüft.",
+  "verification": "md5 beider Dateien gleich den NCBI-Prüfsummen; SHA-256 gleich quellen/MANIFEST.tsv."
+}

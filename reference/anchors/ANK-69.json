@@ -1,0 +1,54 @@
+{
+  "id": "ANK-69",
+  "title": "Prompt-Vorlagen AP1 (concise, role, json), Parser-Aliase und Klassenbezeichnungen in Skalenordnung (Anhang A.3)",
+  "criteria": ["K-M2-3", "K-M2-6", "K-M2-7", "docs/03 A.3"],
+  "value": {
+    "templates": {
+      "concise": "Classify the germline variant {gene} {hgvs} according to the ACMG/AMP 2015 five-tier scheme. Answer with exactly one of: Benign, Likely benign, Uncertain significance, Likely pathogenic, Pathogenic.",
+      "role": "You are a clinical geneticist on a variant curation expert panel. Using the ACMG/AMP 2015 standards and guidelines, assign the five-tier classification for the germline variant {gene} {hgvs}. Reply with the classification only, as one of: Benign; Likely benign; Uncertain significance; Likely pathogenic; Pathogenic.",
+      "json": "Return a JSON object of the form {\"classification\": \"<tier>\"} for the germline variant {gene} {hgvs}, where <tier> is the ACMG/AMP 2015 five-tier classification: one of \"Benign\", \"Likely benign\", \"Uncertain significance\", \"Likely pathogenic\", \"Pathogenic\". Output the JSON object only."
+    },
+    "placeholders": ["{gene}", "{hgvs}"],
+    "main_plan_variant_text": {
+      "rule": "{gene} {hgvs} = Gen, Transkript und c.-Bezeichnung ohne p.-Angabe",
+      "example": "PAH NM_000277.2:c.1A>G"
+    },
+    "classes": ["Benign", "Likely benign", "Uncertain significance", "Likely pathogenic", "Pathogenic"],
+    "aliases": {
+      "Benign": ["B", "benign"],
+      "Likely benign": ["LB", "likely benign"],
+      "Uncertain significance": ["VUS", "VOUS", "uncertain significance", "uncertain"],
+      "Likely pathogenic": ["LP", "likely pathogenic"],
+      "Pathogenic": ["P", "pathogenic"]
+    },
+    "parser": "parse_choice(levels = classes, aliases = aliases, whole_word = TRUE) für concise und role; parse_json_field(\"classification\") gefolgt von diesem Parser für json"
+  },
+  "unit": "Zeichenketten (UTF-8); classes in Skalenordnung Benign < Likely benign < Uncertain significance < Likely pathogenic < Pathogenic",
+  "tolerance": 0,
+  "tolerance_note": "Wortlaut exakt (zeichengenau)",
+  "source_url": "docs/03-anwendungspipeline.md, Anhang A.3",
+  "source": "Betreiberfestlegung: Validierungsplan Anhang A.3, freigegeben mit ADR-004 vom 25.10.2026 einschließlich der Wortlaute der Prompt-Vorlagen; Nachtrag des Reviewers (ANKER-TODO: freie Nummer), weil K-M2-3 und K-M2-7 den Wortlaut prüfen",
+  "quote": "- `concise`: „Classify the germline variant {gene} {hgvs} according to the ACMG/AMP 2015 five-tier scheme. Answer with exactly one of: Benign, Likely benign, Uncertain significance, Likely pathogenic, Pathogenic.“",
+  "quote_location": "docs/03 A.3, erster Punkt (Zeile 46); role und json in Zeilen 47 und 48, Aliase in Zeile 50, Beispiel des Variantentexts in Zeile 49",
+  "further_quotes": [
+    {
+      "quote": "- `role`: „You are a clinical geneticist on a variant curation expert panel. Using the ACMG/AMP 2015 standards and guidelines, assign the five-tier classification for the germline variant {gene} {hgvs}. Reply with the classification only, as one of: Benign; Likely benign; Uncertain significance; Likely pathogenic; Pathogenic.“",
+      "location": "docs/03 A.3, Zeile 47"
+    },
+    {
+      "quote": "- `json`: „Return a JSON object of the form {\"classification\": \"<tier>\"} for the germline variant {gene} {hgvs}, where <tier> is the ACMG/AMP 2015 five-tier classification: one of \"Benign\", \"Likely benign\", \"Uncertain significance\", \"Likely pathogenic\", \"Pathogenic\". Output the JSON object only.“",
+      "location": "docs/03 A.3, Zeile 48"
+    },
+    {
+      "quote": "- Im Hauptplan steht für `{gene} {hgvs}` Gen, Transkript und c.-Bezeichnung ohne p.-Angabe, etwa „PAH NM_000277.2:c.1A>G“.",
+      "location": "docs/03 A.3, Zeile 49"
+    },
+    {
+      "quote": "- Parser-Aliase (Groß-/Kleinschreibung unerheblich): `B`, `benign` → Benign; `LB`, `likely benign` → Likely benign; `VUS`, `VOUS`, `uncertain significance`, `uncertain` → Uncertain significance; `LP`, `likely pathogenic` → Likely pathogenic; `P`, `pathogenic` → Pathogenic. Treffer zählen nur als ganzes Wort beziehungsweise ganze Wortfolge (`parse_choice(…, whole_word = TRUE)`, Satzzeichen abgetrennt); „Likely pathogenic“ und die anderen Klassen aus zwei Wörtern zählen als eine Klasse; Antworten mit zwei verschiedenen Klassen oder ohne Klasse → `NA`.",
+      "location": "docs/03 A.3, Zeile 50"
+    }
+  ],
+  "retrieved": "2026-10-27",
+  "method": "Mit Rscript aus docs/03 extrahiert: Text zwischen den typografischen Anführungszeichen „ und “ je Vorlage; innere Anführungszeichen der json-Vorlage sind ASCII. Aliase als Liste kodiert und gegen den Wortlaut von Zeile 50 geprüft (Rekonstruktion ist Teilzeichenkette).",
+  "verification": "Die Klassen stehen in der concise-Vorlage in Skalenordnung; ANK-68 ordnet ihnen die Scores 1 bis 5 zu. Die Vorlage concise ist gleich Aufgabensatz + Leerzeichen + Formatsatz ausgeschrieben (englisch) aus ANK-62."
+}

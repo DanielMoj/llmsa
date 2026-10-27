@@ -1,0 +1,113 @@
+{
+  "id": "ANK-TOL",
+  "title": "Toleranzen und Betreiberfestlegungen ohne Messwertcharakter (17 benannte Einträge)",
+  "criteria": ["docs/01 §2, §7, §8", "K-M1a-1", "K-M1a-3", "K-M1a-4", "K-M1a-6", "K-M1b-1", "K-M1b-2", "K-M1b-3", "K-M1b-5", "K-M1c-1", "K-M1c-3", "K-M1c-4", "K-M1d-5", "K-M1d-6", "K-M1d-7", "K-M2-1", "K-M2-3", "K-M2-6", "K-M2-7", "K-M3a-1", "K-M3a-2", "K-M3a-3", "K-M3a-5", "K-M3a-7", "K-M3b-2", "K-M3b-3", "K-M3b-5", "K-M3c-3", "K-M3c-4", "K-M3c-5", "K-M3c-6", "K-M3d-1", "K-M3d-2"],
+  "value": {
+    "reml_anova": {
+      "component_tol_fraction_of_total_variance": 1e-4,
+      "derived_rel_tol": 1e-4,
+      "ndc": "gleich",
+      "ndc_min_distance_to_integer": 0.01,
+      "optimizer": "Standard-lmerControl",
+      "quote": "1e-4 · σ²_TV je Komponente mit Standard-`lmerControl`; abgeleitete Kennzahlen 1e-4 relativ; ndc gleich, Testfälle nicht näher als 0,01 an einer ganzen Zahl"
+    },
+    "oracle": {
+      "variance_component_tol_fraction_of_total_variance": 1e-4,
+      "derived_rel_tol": 1e-4,
+      "closed_form_rel_tol": 1e-8,
+      "quote": "Varianzkomponenten (`remlVCA`, `anovaVCA`, `ss.rr`, `lmer`): 1e-4 · σ²_TV je Komponente, abgeleitete Kennzahlen 1e-4 relativ; geschlossene Formeln (qcc-Grenzen, Mittelquadrate): 1e-8 relativ"
+    },
+    "package_compare": {
+      "abs_tol": 1e-8,
+      "quote": "1e-8"
+    },
+    "engine_ordinal": {
+      "rel_tol": 1e-8,
+      "quote": "1e-8"
+    },
+    "engine_boot": {
+      "tol": 1e-10,
+      "quote": "1e-10"
+    },
+    "rptr": {
+      "live_tol": 1e-6,
+      "vignette_tol": 5e-4,
+      "quote": "1e-6 gegen den Live-Aufruf, 5e-4 gegen den gerundeten Vignettenwert 0,188 (ANK-25)"
+    },
+    "nist_digits": {
+      "low_difficulty_rel_tol": 1e-8,
+      "low_difficulty_datasets": ["SiRstv", "SmLs01", "SmLs02", "SmLs03", "AtmWtAg"],
+      "medium_difficulty_rule": "LRE(msa_fit) >= LRE(stats::aov) - 1 auf denselben Daten; beide LRE in der Vignette",
+      "medium_difficulty_datasets": ["SmLs04", "SmLs05", "SmLs06"],
+      "quote": "niedrige Schwierigkeit (`SiRstv`, `SmLs01`–`SmLs03`, `AtmWtAg`): 1e-8 relativ; mittlere Schwierigkeit (`SmLs04`–`SmLs06`): LRE von `msa_fit` mindestens LRE von `stats::aov` auf denselben Daten minus 1, beide LRE in der Vignette"
+    },
+    "invariance": {
+      "component_tol_fraction_of_total_variance": 1e-6,
+      "derived_rel_tol": 1e-6,
+      "ndc_min_distance_to_integer": 0.01,
+      "grr_min_distance_to_threshold_points": 0.1,
+      "quote": "1e-6 · σ²_TV je Komponente, abgeleitete Kennzahlen 1e-6 relativ; ndc und Verdikt gleich; Testfälle mit ndc nicht näher als 0,01 an einer ganzen Zahl und %GRR nicht näher als 0,1 Punkte an 10 oder 30"
+    },
+    "arithmetic": {
+      "abs_tol": 1e-10,
+      "quote": "1e-10"
+    },
+    "mc_factor": {
+      "pass": 4,
+      "report": 3,
+      "quote": "Bestehenskriterium 4; Berichtsschwelle (K-M1d-7) 3"
+    },
+    "bias_report": {
+      "rel_bias": 0.10,
+      "mcse_multiple": 3,
+      "rule": "der größere der beiden Werte",
+      "quote": "10 % oder 3 MCSE, was größer ist"
+    },
+    "sim_runtime": {
+      "minutes": 20,
+      "cores": 14,
+      "quote": "20 Minuten; nach M1a an der Messung prüfen"
+    },
+    "n_check": {
+      "n_sim": 20,
+      "quote": "20"
+    },
+    "data_size": {
+      "file_max_bytes": 1000000,
+      "gzip_above_bytes": 100000,
+      "folder_max_bytes": 3000000,
+      "extdata_total_max_bytes": 5000000,
+      "byte_reading": "MB und KB als 10^6 bzw. 10^3 Byte gelesen (die strengere Lesart; die Quelle nennt nur „MB“ und „KB“)",
+      "quote": "1 MB je Datei (Dateien über 100 KB gzip-komprimiert als `.csv.gz`, SHA-256 über die gespeicherte Datei), 3 MB je Ordner, 5 MB `inst/extdata/` gesamt"
+    },
+    "frf2_unrepx": {
+      "matrices": "exakt bis auf Permutation und Vorzeichen",
+      "pse_me_tol": 1e-8,
+      "quote": "Matrizen exakt bis auf Permutation und Vorzeichen; PSE, ME 1e-8"
+    },
+    "resume_cutpoints": {
+      "n": 50,
+      "seeds": "1 bis 50",
+      "quote": "50, Seeds 1 bis 50"
+    },
+    "parser_cases": {
+      "n": 10000,
+      "seed": 20261024,
+      "quote": "10.000, Seed 20261024"
+    }
+  },
+  "unit": "je Eintrag benannt: relative oder absolute Toleranzen (dimensionslos bzw. in Einheiten der verglichenen Größe), Anteile der Gesamtvarianz σ²_TV, Faktoren von Monte-Carlo-Standardfehlern, Minuten, Byte, Anzahlen, Seeds",
+  "tolerance": 0,
+  "tolerance_note": "Betreiberfestlegungen, exakt",
+  "source_url": "ANKER-TODO.md, Abschnitt „ANK-TOL — Toleranzen und Betreiberfestlegungen“",
+  "source": "Betreiberfestlegung: Vorschläge der Projektierung, am 24.10.2026, 22:20 vom Betreiber mit den neun Änderungen der Toleranzrevision bestätigt (OFFENE-PUNKTE §5c, Betreiberunterlage außerhalb des Repos); Spalte „Vorschlag“ der Tabelle in ANKER-TODO.md",
+  "quote": "Vorschläge der Projektierung, am 24.10.2026, 22:20 vom Betreiber mit den Änderungen der Toleranzrevision bestätigt (OFFENE-PUNKTE §5c).",
+  "quote_location": "ANKER-TODO.md, Abschnitt ANK-TOL, erster Absatz; die Werte stehen je Eintrag in der Spalte „Vorschlag“ (Feld quote je Eintrag, wörtlich)",
+  "further_quotes": [
+    {"quote": "Auf die Frage, ob `ANK-TOL` und ANK-47 sinnvoll gewählt sind: neun Änderungen, von dir freigegeben („Ok!“); damit sind beide bestätigt.", "location": "projektierung_llmsa/OFFENE-PUNKTE.md, §5c"},
+    {"quote": "Anker-Vorschläge: `ANK-TOL` (17 Einträge) und ANK-47 am 24.10., 22:20 bestätigt, mit den neun Änderungen der Toleranzrevision (§5c). Erledigt; der Reviewer erntet die Datei in ACCEPTANCE von M0 aus ANKER-TODO.", "location": "projektierung_llmsa/OFFENE-PUNKTE.md, §2"}
+  ],
+  "retrieved": "2026-10-27",
+  "method": "Spalte „Vorschlag“ je Eintrag wörtlich übernommen (Feld quote) und als Zahlen kodiert. Die Datei war für ACCEPTANCE M0 vorgesehen, lag aber nicht vor; geerntet in ACCEPTANCE M2, weil docs/01 §7 die Größengrenze data_size für den neuen Ordner inst/extdata/items_ap1_2026-10-24/ verlangt, K-M2-3 parser_cases und K-M2-6 und K-M2-7 arithmetic, engine_ordinal und mc_factor verwenden.",
+  "verification": "OFFENE-PUNKTE §5c nennt dieselben Werte (reml_anova 1e-4 · σ²_TV; oracle 1e-4 · σ²_TV und 1e-8 relativ; invariance 1e-6 · σ²_TV; nist_digits 1e-8 und LRE-Regel; mc_factor 4 und 3; rptr 5e-4; engine_ordinal und package_compare 1e-8; parser_cases 10.000; data_size 1 MB, 100 KB, 3 MB, 5 MB; unverändert engine_boot, arithmetic, bias_report, frf2_unrepx, resume_cutpoints, n_check, sim_runtime)."
+}

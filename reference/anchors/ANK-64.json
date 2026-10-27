@@ -1,0 +1,25 @@
+{
+  "id": "ANK-64",
+  "title": "INSAID-Transkripte je Gen nach den Methoden von Van Gijn et al. 2018; Widerspruch zu Tab. 1 für MEFV",
+  "criteria": ["K-M2-1", "docs/03 A.2"],
+  "value": {
+    "MEFV": "NM_000243.2",
+    "MVK": "NM_000431.3",
+    "NLRP3": "NM_001243133.1",
+    "TNFRSF1A": "NM_001065.3"
+  },
+  "table1_contradiction": {"MEFV": "NM_000243.3"},
+  "unit": "RefSeq-Transkript mit Version",
+  "tolerance": 0,
+  "tolerance_note": "exakt",
+  "source_url": "https://doi.org/10.1136/jmedgenet-2017-105216",
+  "source": "Van Gijn et al. 2018, J Med Genet 55(8):530–537, PMID 29599418 (Katalog VanGijn2018; Verlags-PDF lokal, geschützt); Textspiegel reference/quellen/text/literatur/E_anwendungsfall_acmg/VanGijn_etal_2018_INSAID_Variant_Classification_Workflow_JMedGenet55_530.pdf.layout.txt",
+  "quote": "four best known HRF-associated genes (MEFV: NM_000243.2; TNFRSF1A: NM_001065.3; NLRP3: NM_001243133.1; MVK: NM_000431.3).",
+  "quote_location": "PDF 2, Abschnitt „Classification methods and platform“ (Textspiegel ohne Layout, …JMedGenet55_530.pdf.txt, Zeilen 326–328, Zeilenumbrüche als Leerzeichen; in der Layout-Fassung zweispaltig in den Zeilen 125–127)",
+  "further_quotes": [
+    {"quote": "MEFV                     NM_000243.3              c.330G>A", "location": "PDF 2, Tab. 1 „Representative examples of equivocal variant interpretation for HRF genes“ (Textspiegel Zeile 101); Widerspruch zu den Methoden, die gelten (docs/03 A.2, Belegprüfung 25.10.2026)"}
+  ],
+  "retrieved": "2026-10-26",
+  "method": "Textspiegel (pdftotext -layout) gelesen; Transkripte übernommen.",
+  "verification": "docs/03 A.2 nennt dieselben vier Transkripte und den Widerspruch für MEFV; Tab. 1 nennt für TNFRSF1A, MVK und NLRP3 dieselben Transkripte wie die Methoden."
+}

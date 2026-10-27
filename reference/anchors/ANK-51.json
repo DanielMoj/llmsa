@@ -1,0 +1,59 @@
+{
+  "id": "ANK-51",
+  "title": "ClinGen ERepo Stand 22.10.2026: Gesamtzahl Einstufungen und Pool nach K-M2-1 (Einstufungen, Varianten, Gene, Panels, je Klasse)",
+  "criteria": ["K-M2-1", "docs/03 A.2"],
+  "value": {
+    "stand": "2026-10-22",
+    "file": "erepo_classifications_all.tsv",
+    "file_sha256": "c45a033277698a8f4082b32033b4fdb8499b84a3aae1f8d2ad2a70768f8807ae",
+    "file_bytes": 32422295,
+    "classifications_total": 13534,
+    "assertion_total": {
+      "Benign": 1342,
+      "Likely Benign": 1612,
+      "Likely Pathogenic": 2893,
+      "Pathogenic": 3632,
+      "Uncertain Significance": 4055
+    },
+    "after_cutoff_not_retracted": 1242,
+    "pool": {
+      "classifications": 1180,
+      "variants_clinvar_variation_id": 1082,
+      "variation_strings": 1180,
+      "genes": 71,
+      "panels": 35,
+      "per_class": {
+        "Benign": 73,
+        "Likely Benign": 139,
+        "Likely Pathogenic": 375,
+        "Pathogenic": 315,
+        "Uncertain Significance": 278
+      },
+      "min_per_class": 73,
+      "form_with_gene": 1004,
+      "form_without_gene": 176
+    },
+    "pool_rule": "Spalte #Variation der Form <NM-Transkript>(<Gen>):c.<...> mit optionaler p.-Angabe in Klammern oder <NM-Transkript>:c.<...>; Retracted = false; Approval Date und Published Date nach 2026-04-30 (ANK-50)",
+    "license": "CC0 1.0 mit Bitte um Namensnennung"
+  },
+  "unit": "Anzahlen; SHA-256 hexadezimal; Bytes; Stand als Datum (ISO 8601)",
+  "tolerance": 0,
+  "tolerance_note": "Datenstand, exakt",
+  "source_url": "https://erepo.clinicalgenome.org/evrepo/api/classifications/all?format=tabbed",
+  "source": "quellen/daten/clingen-erepo_2026-10-22/erepo_classifications_all.tsv und QUELLE.txt (lokal, außerhalb des Repos; quellen/MANIFEST.tsv nennt dieselbe SHA-256)",
+  "quote": "Umfang: 13.534 Einstufungen, 20 Spalten",
+  "quote_location": "quellen/daten/clingen-erepo_2026-10-22/QUELLE.txt, Zeile Umfang; Stand: „Geladen am 2026-10-22“",
+  "further_quotes": [
+    {
+      "quote": "Lizenz: ClinGen veroeffentlicht kuratierte Inhalte unter CC0 1.0 und bittet um Namensnennung",
+      "location": "QUELLE.txt, Zeile Lizenz"
+    },
+    {
+      "quote": "dieser Pool umfasst 1.242 Einstufungen zu 1.104 Varianten in 73 Genen, je Klasse mindestens 82",
+      "location": "Intake-Destillat Abschnitt 6 (Pool vor der Einschränkung auf c.-Bezeichnungen auf NM-Transkripten, ADR-004 Punkt 1)"
+    }
+  ],
+  "retrieved": "2026-10-27",
+  "method": "Mit Rscript: read.delim(quote = \"\", comment.char = \"\", colClasses = \"character\"); Pool wie pool_rule; Datumsvergleich strikt nach dem Stichtag. Ohne die Formregel ergeben sich 1.242 Einstufungen nach dem Stichtag (gleich dem Intake); mit Formregel bleiben 1.180.",
+  "verification": "after_cutoff_not_retracted = 1.242 gleich dem Intake-Destillat (zweiter Beleg für die Lesart „nach dem Stichtag“ als >); innerhalb des Pools ist #Variation und der daraus zerlegte hgvs-Wert eindeutig (1.180 verschiedene)."
+}

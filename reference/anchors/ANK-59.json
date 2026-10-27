@@ -1,0 +1,30 @@
+{
+  "id": "ANK-59",
+  "title": "Itemsatz-Festlegung AP1: 100 Items (75 ERepo, 25 INSAID), je Klasse 15 bzw. 5, Panels bzw. Gene im Umlauf, Seed",
+  "criteria": ["K-M2-1", "K-M2-5", "K-M2-6", "K-M2-7", "docs/03 A.2, A.5"],
+  "value": {
+    "items_total": 100,
+    "erepo_items": 75,
+    "insaid_items": 25,
+    "erepo_per_class": 15,
+    "insaid_per_class": 5,
+    "insaid_status": "Validated",
+    "insaid_genes": ["MEFV", "MVK", "NLRP3", "TNFRSF1A"],
+    "selection": "Panels bzw. Gene im Umlauf nach absteigender Anzahl, dann Zufall",
+    "seed": 20261024
+  },
+  "unit": "Anzahlen; Seed als Ganzzahl für set.seed()",
+  "tolerance": 0,
+  "tolerance_note": "Betreiberfestlegung, exakt",
+  "source_url": "docs/03-anwendungspipeline.md, K-M2-1 und Anhang A.2",
+  "source": "Betreiberfestlegung: Intake-Destillat Abschnitt 6 (Entscheidung 24.10.2026); Projektdokument „Offene Punkte“; Seed und Umlauf: Projektierung, OFFENE-PUNKTE Nr. 14 (vom Betreiber freigegeben)",
+  "quote": "Itemauswahl: Panels bzw. Gene im Umlauf nach absteigender Anzahl, dann Zufall mit Seed 20261024",
+  "quote_location": "projektierung_llmsa/OFFENE-PUNKTE.md (Betreiberunterlage außerhalb des Repos), Abschnitt 1, Nr. 14",
+  "further_quotes": [
+    {"quote": "**Itemsatz für AP1 (Entscheidung 24.10.2026):** 100 Items. 75 aus dem ClinGen-ERepo […] 15 je Klasse, über die Expertenpanels verteilt […] 25 aus der INSAID-Liste […] nur Status „Validated“ (632 Varianten, je Klasse mindestens 30), 5 je Klasse, verteilt über MEFV, MVK, NLRP3 und TNFRSF1A", "location": "Intake-Destillat, Abschnitt 6"},
+    {"quote": "75 Zeilen `erepo`, je 15 pro Klasse, nicht zurückgezogen, Freigabe- und Veröffentlichungsdatum nach dem Stichtag `ankerRef: ANK-50`, Panels im Umlauf nach absteigender Einstufungszahl, dann Zufall mit Seed `ankerRef: ANK-59`; 25 Zeilen `insaid`, je 5 pro Klasse, nur Status `Validated`, Gene MEFV, MVK, NLRP3, TNFRSF1A im Umlauf, gleicher Seed", "location": "docs/03, K-M2-1"}
+  ],
+  "retrieved": "2026-10-26",
+  "method": "Wortlaut übernommen.",
+  "verification": "Intake, OFFENE-PUNKTE und Spec stimmen überein; die Bezugsgröße von „Anzahl“ bzw. „Einstufungszahl“ nennt keine Quelle (orchestrator/handoff/M2/CRITERIA.json, open)."
+}
