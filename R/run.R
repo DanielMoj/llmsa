@@ -6,6 +6,7 @@
 #' error. Rows are appended to `store` as they arrive, so that an
 #' interrupted study can be resumed with `resume = TRUE` and no response is
 #' ever lost.
+#' Numeric metadata retain their precision when serialized as JSON.
 #'
 #' @param design An `msa_design` (see [msa_design()]).
 #' @param backend A backend function, see [backends].
@@ -18,6 +19,10 @@
 #'   store (same block, item, prompt, model and rep) are skipped.
 #' @param delay Seconds to wait between calls (rate limits).
 #' @param verbose Print progress.
+#' @param parse_by_prompt Optional named list of functions `function(text)`.
+#'   An entry replaces `parse` for its `prompt_id`; other rows use `parse`.
+#'   Names must be unique and non-empty. Unused names are allowed. `NULL`
+#'   retains the single-parser behaviour. Parser failures produce `NA`.
 #'
 #' @return A data.frame of class `msa_runs` with one row per call. Columns
 #'   of `items` other than `text` (for example `reference`) are carried
@@ -33,10 +38,19 @@
 #' head(r[, c("item_id", "prompt_id", "model_id", "rep", "value")])
 #' @export
 msa_run <- function(design, backend, parse = parse_identity, block = NULL,
-                    store = NULL, resume = FALSE, delay = 0, verbose = TRUE) {
+                    store = NULL, resume = FALSE, delay = 0, verbose = TRUE,
+                    parse_by_prompt = NULL) {
   if (!inherits(design, "msa_design")) stop("`design` must come from msa_design().", call. = FALSE)
   if (!is.function(backend)) stop("`backend` must be a function(prompt, model, row).", call. = FALSE)
   if (!is.function(parse)) stop("`parse` must be a function(text).", call. = FALSE)
+  if (!is.null(parse_by_prompt)) {
+    nm <- names(parse_by_prompt)
+    if (!is.list(parse_by_prompt) || is.null(nm) || anyNA(nm) ||
+        any(!nzchar(nm)) || anyDuplicated(nm) ||
+        !all(vapply(parse_by_prompt, is.function, logical(1)))) {
+      stop("`parse_by_prompt` must be a list of functions with unique, non-empty names.", call. = FALSE)
+    }
+  }
   todo <- as.data.frame(design)
   if (!is.null(block)) todo <- todo[todo$block %in% block, , drop = FALSE]
   todo <- todo[order(todo$block, todo$position), , drop = FALSE]
@@ -63,7 +77,8 @@ msa_run <- function(design, backend, parse = parse_identity, block = NULL,
     } else {
       txt <- as.character(res)[1]; meta <- NULL; err <- NA_character_
     }
-    val <- tryCatch(parse(txt), error = function(e) NA)
+    parser <- parse_by_prompt[[row$prompt_id]] %||% parse
+    val <- tryCatch(parser(txt), error = function(e) NA)
     if (length(val) != 1) val <- NA
     rec <- data.frame(
       run_id = paste0(row$block, "-", row$position),
@@ -105,7 +120,7 @@ empty_runs <- function() {
 meta_to_json <- function(meta) {
   # minimal serialisation; uses jsonlite if available for fidelity
   if (requireNamespace("jsonlite", quietly = TRUE)) {
-    return(as.character(jsonlite::toJSON(meta, auto_unbox = TRUE, null = "null")))
+    return(as.character(jsonlite::toJSON(meta, auto_unbox = TRUE, null = "null", digits = 17)))
   }
   paste(names(meta), vapply(meta, function(v) paste(format(unlist(v)), collapse = ","), ""),
         sep = "=", collapse = ";")

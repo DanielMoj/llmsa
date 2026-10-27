@@ -19,7 +19,8 @@ msa_report(
   author = "",
   output_file = "validation_report.html",
   output_format = "html_document",
-  quiet = TRUE
+  quiet = TRUE,
+  assessment = NULL
 )
 }
 \arguments{
@@ -50,6 +51,13 @@ study variation, ndc >= 5, accuracy >= 90 \%").}
 (default) or \code{"pdf_document"} (needs LaTeX).}
 
 \item{quiet}{Suppress rendering output.}
+
+\item{assessment}{Optional list with \code{criteria} (a data.frame containing
+\code{criterion} and \code{band}, optionally \code{value} and \code{note}), \code{verdict} (one
+string), and \code{sections} (a named list of entries with character \code{text}
+and optional data.frame \code{table}). Validated before rendering. The supplied
+verdict is used in the conclusion; GRR remains in the precision section.
+\code{NULL} retains the original report. Application rules belong to the caller.}
 }
 \value{
 The path of the rendered report, invisibly.

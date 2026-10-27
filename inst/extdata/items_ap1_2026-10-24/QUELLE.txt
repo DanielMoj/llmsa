@@ -1,0 +1,23 @@
+AP1 item set frozen under ADR-005 and the M2 Golden ADR.
+ERepo snapshot: 2026-10-22
+ERepo URL: https://erepo.clinicalgenome.org/evrepo/api/classifications/all?format=tabbed
+ERepo license: CC0 1.0; attribution: ClinGen Variant Curation Expert Panels.
+ERepo SHA-256: c45a033277698a8f4082b32033b4fdb8499b84a3aae1f8d2ad2a70768f8807ae
+ClinVar snapshot: 2026-10-19
+ClinVar URL: https://ftp.ncbi.nlm.nih.gov/pub/clinvar/tab_delimited/
+ClinVar submission_summary SHA-256: 43cc0145b65f5e06b94d7e788df6358a6b71860bcef8aa7063307a9c0539606e
+ClinVar: public NCBI submission metadata; dates use DateLastEvaluated (ANK-63).
+INSAID SHA-256: 0b18de6bb2f3b51d98e60bbcf8889a83e664ecc8badb14aca483263f248cefce
+INSAID source: https://jmg.bmj.com/content/jmedgenet/55/8/530/DC1/embed/inline-supplementary-material-1.pdf
+INSAID: Van Gijn et al. (2018), doi:10.1136/jmedgenet-2017-105216; March 2017 list.
+INSAID references and protein notation remain local (all rights reserved, no commercial use).
+INSAID transcript source: publication Methods, PDF page 2 (ANK-64):
+MEFV NM_000243.2; MVK NM_000431.3; NLRP3 NM_001243133.1; TNFRSF1A NM_001065.3
+The Methods MEFV transcript takes precedence; Table 1 contradicts it with NM_000243.3 .
+Selection: non-retracted ERepo NM c. classifications approved and published strictly after ANK-50;
+panels ranked by candidate count within class, seeded ties and candidates, round-robin without replacement.
+Pilot continues the same selection. INSAID uses Validated variants and the analogous gene round-robin.
+Seed: 20261024 (ANK-59); RNG: Mersenne-Twister / Inversion / Rejection; radix sorting; UTF-8/LF.
+Prior flags: strictly earlier five-class submissions; flagged submissions retained; own expert panel excluded,
+or all expert panels if the normalised name has no match; latest date then majority, ties conflicting (ADR-005).
+Script: data-raw/make_items_ap1.R; inputs: ../quellen/daten/; no downloads.

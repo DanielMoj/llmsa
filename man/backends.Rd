@@ -60,7 +60,15 @@ list of Chat objects keyed by model id.}
 \code{backend_openai_compatible()}: server URL (without the trailing
 \verb{/chat/completions}), API key (may be empty for local servers),
 sampling temperature, optional system message, token limit, request
-timeout in seconds, and further fields merged into the JSON body.}
+timeout in seconds, and further fields merged into the JSON body.
+\code{temperature = NULL} omits the temperature field. A non-empty, non-NA
+\code{row$system} overrides \code{system} and precedes the user message. The reply's
+\code{id}, \code{model} (as \code{model_snapshot}), \code{usage}, \code{system_fingerprint} (including
+null) and optional \code{provider} are recorded in \code{meta}. Requested routing
+is recorded as \code{provider_order}, \code{quantizations} and \code{allow_fallbacks}.
+Requested \code{seed}, \code{temperature} and \code{reasoning_effort}, when present, are
+retained as metadata for comparison with the study plan.
+Only \code{message.content} is parsed; credentials and headers are not stored.}
 }
 \value{
 A backend function.

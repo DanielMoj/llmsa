@@ -12,7 +12,8 @@ msa_run(
   store = NULL,
   resume = FALSE,
   delay = 0,
-  verbose = TRUE
+  verbose = TRUE,
+  parse_by_prompt = NULL
 )
 }
 \arguments{
@@ -34,6 +35,11 @@ store (same block, item, prompt, model and rep) are skipped.}
 \item{delay}{Seconds to wait between calls (rate limits).}
 
 \item{verbose}{Print progress.}
+
+\item{parse_by_prompt}{Optional named list of functions \verb{function(text)}.
+An entry replaces \code{parse} for its \code{prompt_id}; other rows use \code{parse}.
+Names must be unique and non-empty. Unused names are allowed. \code{NULL}
+retains the single-parser behaviour. Parser failures produce \code{NA}.}
 }
 \value{
 A data.frame of class \code{msa_runs} with one row per call. Columns
@@ -47,6 +53,7 @@ hash of the exact prompt, raw response, parsed value, latency and any
 error. Rows are appended to \code{store} as they arrive, so that an
 interrupted study can be resumed with \code{resume = TRUE} and no response is
 ever lost.
+Numeric metadata retain their precision when serialized as JSON.
 }
 \examples{
 truth <- c(v1 = 1.2, v2 = -0.4, v3 = 0.1)

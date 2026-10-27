@@ -18,6 +18,7 @@ params:
   question: ""
   risk: "medium"
   acceptance: ""
+  assessment: NULL
   title: ""
   author: ""
   data_hash: NA
@@ -109,6 +110,7 @@ if (!is.null(params$boot)) {
 ```{r agreement, results='asis'}
 ag <- params$agreement
 if (!is.null(ag)) {
+  if (!is.null(params$assessment)) cat("Complete-case agreement diagnostics from msa_agreement(); application decision metrics and their missing-value rules are reported separately below.\n\n")
   cat(sprintf("Categories: %s (weights: %s). %d items, %d responses, %d missing.\n\n",
               paste(ag$levels, collapse = " < "), ag$weights, ag$n[["items"]], ag$n[["responses"]], ag$n[["missing"]]))
   cat(sprintf("* Repeatability: %.1f %% of item-prompt-model cells have identical replicates\n", ag$repeatability_overall))
@@ -159,12 +161,33 @@ if (!is.null(ro)) {
 } else cat(na_text)
 ```
 
+```{r robustness-plot, echo=FALSE, fig.cap="Half-normal plot of robustness effects"}
+if (!is.null(params$assessment) && !is.null(params$robustness)) plot(params$robustness)
+```
+
 ## 7. Conclusion
 
 ```{r conclusion, results='asis'}
+if (is.null(params$assessment)) {
 cat(sprintf("Measured against the acceptance criteria (%s), the precision study classifies the pipeline as **%s** for the stated context of use at model risk tier *%s*. ",
             if (nzchar(params$acceptance)) params$acceptance else "not stated", toupper(grr$verdict), params$risk))
+} else {
+  cat(sprintf("Measured against all stated acceptance criteria, the overall verdict is **%s** for the stated context of use at model risk tier *%s*. ",
+              toupper(params$assessment$verdict), params$risk))
+}
 cat("The verdict applies to the model snapshots, prompts and parsing used in this study; a change to any of them requires re-validation, and a system-suitability control set should be run before every productive batch (see `msa_control_chart()`).\n")
+```
+
+```{r assessment, results='asis'}
+if (!is.null(params$assessment)) {
+  cat("\n### Assessment by criterion\n\n")
+  print(knitr::kable(params$assessment$criteria, row.names = FALSE))
+  for (nm in names(params$assessment$sections)) {
+    s <- params$assessment$sections[[nm]]
+    cat("\n\n### ", nm, "\n\n", paste(s$text, collapse = "\n\n"), "\n\n", sep = "")
+    if (!is.null(s$table)) print(knitr::kable(s$table, row.names = FALSE))
+  }
+}
 ```
 
 ## 8. Traceability

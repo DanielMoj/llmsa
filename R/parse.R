@@ -14,6 +14,10 @@
 #'   pathogenic" is not matched as "pathogenic".
 #' @param aliases Optional named list mapping additional strings to labels,
 #'   e.g. `list("LP" = "Likely pathogenic")`.
+#' @param whole_word If `TRUE`, split at non-alphanumeric characters and
+#'   match complete word sequences, longest first. Matched words are consumed;
+#'   different labels in one response give `NA`. Repeated matches of the same
+#'   label are allowed. The default retains the substring parser.
 #' @param decimal Decimal mark for `parse_number()`.
 #' @param text The raw response text (argument of the returned parser and of
 #'   `parse_identity()`).
@@ -54,11 +58,43 @@ parse_number <- function(decimal = ".") {
 
 #' @rdname parsers
 #' @export
-parse_choice <- function(levels, aliases = NULL) {
+parse_choice <- function(levels, aliases = NULL, whole_word = FALSE) {
   levels <- as.character(levels)
   lookup <- stats::setNames(levels, tolower(levels))
   if (!is.null(aliases)) {
     lookup <- c(lookup, stats::setNames(unlist(aliases), tolower(names(aliases))))
+  }
+  if (!is.logical(whole_word) || length(whole_word) != 1L || is.na(whole_word)) {
+    stop("`whole_word` must be TRUE or FALSE.", call. = FALSE)
+  }
+  if (whole_word) {
+    words <- function(x) {
+      out <- strsplit(tolower(x), "[^[:alnum:]]+")[[1L]]
+      out[nzchar(out)]
+    }
+    phrases <- lapply(names(lookup), words)
+    priority <- order(-lengths(phrases))
+    return(function(text) {
+      if (is.null(text) || length(text) != 1L || is.na(text)) return(NA_character_)
+      tokens <- words(as.character(text))
+      labels <- character()
+      position <- 1L
+      while (position <= length(tokens)) {
+        used <- 1L
+        for (i in priority) {
+          size <- length(phrases[[i]])
+          if (size && position + size - 1L <= length(tokens) &&
+              identical(tokens[seq.int(position, length.out = size)], phrases[[i]])) {
+            labels <- c(labels, unname(lookup[i]))
+            used <- size
+            break
+          }
+        }
+        position <- position + used
+      }
+      labels <- unique(labels)
+      if (length(labels) == 1L) labels else NA_character_
+    })
   }
   # longest keys first so "likely pathogenic" beats "pathogenic"
   keys <- names(lookup)[order(-nchar(names(lookup)))]

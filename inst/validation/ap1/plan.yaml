@@ -1,0 +1,360 @@
+cou: Preclassification of germline sequence variants in c. notation on an NM transcript,
+  in genes with a ClinGen expert panel and in MEFV, MVK, NLRP3 and TNFRSF1A, on the
+  five-tier ACMG/AMP scale to prepare expert review. Input is gene and variant notation
+  without evidence. No pipeline output enters a clinical report without approval by
+  a clinical geneticist.
+risk:
+  tier: medium
+  influence: 'medium: preclassification directs expert review'
+  consequence: 'medium: expert approval intercepts errors, but they consume time and
+    can shift priorities'
+  source: docs/03 A.1; FDA draft guidance January 2025 and Credibility Guidance 2023
+acceptance:
+  grr_pct_study_var:
+    acceptable_below: 10
+    marginal_below: 30
+    scale: Latent scale; numeric fallback on class scores under ANK-68.
+    boundary_convention: Exactly 10 and 30 percent are marginal (docs/01 section 5).
+  kappa_linear_modal:
+    acceptable_min: 0.8
+    marginal_min: 0.6
+    at: Point estimate; the item bootstrap interval is reported, not used for the
+      band.
+  dangerous_errors:
+    acceptable_max: 0
+    marginal_max: 1
+    unacceptable_min: 2
+    definition: Modal P/LP versus B/LB, in either direction; VUS is not a dangerous
+      error.
+    items: ERepo items only.
+  robustness:
+    delta_p_limit: 0.05
+    sme_alpha: 0.05
+    rule: Acceptable if no absolute delta_p exceeds the limit; unacceptable if a factor
+      exceeds both the practical limit and SME; otherwise marginal.
+  bands_in_order:
+  - acceptable
+  - marginal
+  - unacceptable
+  overall: Worst of the four bands, only if all criteria are assessed. The joint fit
+    has no verdict.
+  anchor: ANK-58; docs/03 A.1; ADR-004, ADR-006
+models:
+- key: sol
+  id: gpt-6.1-sol
+  endpoint: https://api.openai.com/v1
+  provider_order: []
+  quantizations: []
+  provider_name: ~
+  reasoning: medium
+  temperature: ~
+  seed: 20261024
+  knowledge_cutoff: '2026-04-30'
+  price_in: 2.0
+  price_out: 10.0
+  anchor: ANK-53
+- key: llama
+  id: meta-llama/llama-3.3-70b-instruct
+  endpoint: https://openrouter.ai/api/v1
+  provider_order:
+  - coreweave/fp16
+  quantizations:
+  - fp16
+  provider_name: CoreWeave
+  reasoning: ~
+  temperature: 0
+  seed: 20261024
+  knowledge_cutoff: '2023-12-31'
+  price_in: 0.71
+  price_out: 0.71
+  anchor: ANK-54
+- key: qwen
+  id: qwen/qwen3-32b
+  endpoint: https://openrouter.ai/api/v1
+  provider_order:
+  - deepinfra/fp8
+  quantizations:
+  - fp8
+  provider_name: DeepInfra
+  reasoning: ~
+  temperature: 0
+  seed: 20261024
+  knowledge_cutoff: '2025-03-31'
+  price_in: 0.08
+  price_out: 0.28
+  anchor: ANK-55
+design:
+  items: 100
+  prompts: 3
+  replicates: 3
+  blocks: 2
+  models: 3
+  order: replicate_random
+  seed: 20261024
+  anchor: ANK-56, ANK-59; docs/03 A.5; ADR-006 section 6
+pilot:
+  pilot_items: 10
+  pilot_items_source: erepo
+  pilot_per_class: 2
+  templates: 3
+  replicates: 1
+  calls_per_model: 30
+  pass_rules:
+    parameters_accepted: No HTTP 4xx backend error.
+    provider: Every successful API response identifies the requested provider; Sol
+      uses the direct endpoint.
+    parser: All planned keys present exactly once; recognized classes at least parser_hits_min
+      of parser_hits_of, irrespective of correctness.
+    cost: Sum of projected costs over all models below budget_eur, using completion_tokens
+      (including reasoning) of every successful pilot call.
+  parser_hits_min: 27
+  parser_hits_of: 30
+  cost_quantile: 0.9
+  reported:
+  - Median latency
+  - Median and 90th percentile reasoning tokens; individual reasoning counts remain
+    available in the store.
+  repeat_day_triggers:
+  - Serving provider differs from the requested provider or changes within the block.
+  - Reported model snapshot changes within the block.
+  - Backend error share exceeds error_share_trigger; parsing failures do not count
+    as backend errors.
+  error_share_trigger: 0.05
+  anchor: ANK-67; docs/03 A.6; ADR-006 section 7
+robustness:
+  factors:
+    F1:
+      name: Variant notation
+      minus: Transcript and c. notation
+      plus: c. notation without transcript
+    F2:
+      name: Protein notation
+      minus: Absent
+      plus: Append available protein notation in parentheses
+    F3:
+      name: Instruction typo
+      minus: Absent
+      plus: Transposed letters in the task, outside the variant
+    F4:
+      name: Sentence order
+      minus: Task then format
+      plus: Format then task
+    F5:
+      name: Irrelevant context
+      minus: Absent
+      plus: Laboratory logistics without gene or disease
+    F6:
+      name: System prompt
+      minus: Absent
+      plus: English system building block
+    F7:
+      name: Answer format
+      minus: Full English class labels
+      plus: B, LB, VUS, LP, P
+    F8:
+      name: Instruction language
+      minus: English
+      plus: German
+  blocks:
+    task:
+      en: Classify the germline variant {gene} {hgvs} according to the ACMG/AMP 2015
+        five-tier scheme.
+      de: Klassifiziere die Keimbahnvariante {gene} {hgvs} entsprechend dem fünfstufigen
+        ACMG/AMP-Schema von 2015.
+    task_typo:
+      en: Classify the germline variant {gene} {hgvs} accoridng to the ACMG/AMP 2015
+        five-tier scheme.
+      de: Klassifiziere die Keimbahnvariante {gene} {hgvs} entsprechned dem fünfstufigen
+        ACMG/AMP-Schema von 2015.
+    format_full:
+      en: 'Answer with exactly one of: Benign, Likely benign, Uncertain significance,
+        Likely pathogenic, Pathogenic.'
+      de: 'Antworte mit genau einer der folgenden Klassen: Benign, Likely benign,
+        Uncertain significance, Likely pathogenic, Pathogenic.'
+    format_abbrev:
+      en: 'Answer with exactly one of: B, LB, VUS, LP, P.'
+      de: 'Antworte mit genau einer der folgenden Klassen: B, LB, VUS, LP, P.'
+    context:
+      en: 'Laboratory note: The sample was received on a weekday morning and registered
+        in the laboratory information system. DNA was extracted with a standard column-based
+        kit, and the sequencing run passed the laboratory''s coverage and quality
+        checks.'
+      de: 'Laborhinweis: Die Probe ging an einem Werktagvormittag ein und wurde im
+        Laborinformationssystem erfasst. Die DNA wurde mit einem üblichen Säulenkit
+        extrahiert, und der Sequenzierlauf bestand die Abdeckungs- und Qualitätsprüfungen
+        des Labors.'
+    system:
+      en: You are a careful clinical geneticist.
+  composition:
+    language: F8 selects en (-) or de (+).
+    task: F3 selects task (-) or task_typo (+).
+    format: F7 selects format_full (-) or format_abbrev (+).
+    order: F4 selects task then format (-) or format then task (+).
+    sentence_separator: ' '
+    context: F5 + prepends context and a blank line.
+    context_separator: |2+
+
+
+    system: F6 + sends system.en before the user message; otherwise no system message.
+    variant_text: F1 + removes the transcript; F2 + appends available protein notation.
+    protein_suffix: ' (%s)'
+    all_minus: concise (ANK-69)
+  pb_design:
+    call: pb_design(8, n_runs = 12)
+    seed: ANK-59
+    prompt_ids:
+    - pb01
+    - pb02
+    - pb03
+    - pb04
+    - pb05
+    - pb06
+    - pb07
+    - pb08
+    - pb09
+    - pb10
+    - pb11
+    - pb12
+    order: Design row order
+  runs: 12
+  replicates: 1
+  response:
+    measure: Stability against the main-plan modal response; missing values, backend
+      errors and ties never agree.
+    transform: log((x + correction)/(n - x + correction))
+    correction: 0.5
+  anchor: ANK-62, ANK-68; docs/03 A.5
+evaluation:
+  modal_calls_per_item_and_model: 18
+  modal_rule: NA is a category. A tie has no modal response and is excluded from reference
+    metrics and unstable in robustness.
+  na_rule: Report the share of all missing responses. NA modal responses are errors
+    with agreement weight zero against every reference class. Fits omit missing responses.
+  kappa_weights: linear
+  kappa_bootstrap:
+    unit: Items with a modal response and a reference, including NA modal responses
+    replicates: 2000
+    interval: Percentile
+    level: 0.95
+    seed: 20261024
+    quantile_type: 7
+  fallback_fit:
+    type: numeric
+    trigger: Ordinal fit error or convergence warning; retain all warnings and diagnostics.
+      Numeric fit with package defaults including interactions.
+    scores:
+      Benign: 1
+      Likely benign: 2
+      Uncertain significance: 3
+      Likely pathogenic: 4
+      Pathogenic: 5
+  robustness_response:
+    measure: Stability against the main-plan modal response; missing values, backend
+      errors and ties never agree.
+    transform: log((x + correction)/(n - x + correction))
+    correction: 0.5
+  anchor: ANK-68; docs/03 A.1, A.5; ADR-006
+budget:
+  budget_eur: 150
+  openai_project_budget_usd: 100
+  openai_warning_usd: 60
+  openrouter_key_limit: Separate key and spending limit; the amount is not specified
+    by the plan.
+  currency_rule: Compare the USD cost numerically with budget_eur without an exchange
+    rate (ADR-006 section 1).
+  anchor: ANK-57
+cutoff_date: '2026-04-30'
+tokens:
+  input: 1000
+  output_max: 2000
+  anchor: ANK-56; assumptions for cost only, not request limits
+classes:
+- Benign
+- Likely benign
+- Uncertain significance
+- Likely pathogenic
+- Pathogenic
+aliases:
+  Benign:
+  - B
+  - benign
+  Likely benign:
+  - LB
+  - likely benign
+  Uncertain significance:
+  - VUS
+  - VOUS
+  - uncertain significance
+  - uncertain
+  Likely pathogenic:
+  - LP
+  - likely pathogenic
+  Pathogenic:
+  - P
+  - pathogenic
+templates:
+  concise: 'Classify the germline variant {gene} {hgvs} according to the ACMG/AMP
+    2015 five-tier scheme. Answer with exactly one of: Benign, Likely benign, Uncertain
+    significance, Likely pathogenic, Pathogenic.'
+  role: 'You are a clinical geneticist on a variant curation expert panel. Using the
+    ACMG/AMP 2015 standards and guidelines, assign the five-tier classification for
+    the germline variant {gene} {hgvs}. Reply with the classification only, as one
+    of: Benign; Likely benign; Uncertain significance; Likely pathogenic; Pathogenic.'
+  json: 'Return a JSON object of the form {"classification": "<tier>"} for the germline
+    variant {gene} {hgvs}, where <tier> is the ACMG/AMP 2015 five-tier classification:
+    one of "Benign", "Likely benign", "Uncertain significance", "Likely pathogenic",
+    "Pathogenic". Output the JSON object only.'
+reporting:
+  provisional: Statistics are provisional until M1 is accepted. Re-evaluate the same
+    store after M1 (BL-52).
+  policies:
+  - provider: CoreWeave and DeepInfra via OpenRouter
+    summary: The frozen Provider_Logging page describes provider-specific training
+      and retention policies. Opting out of training restricts routing; retention
+      requirements must be checked against provider terms. This snapshot contains
+      no CoreWeave or DeepInfra row, including in its HTML. Their individual retention
+      periods are therefore not evidenced here. The operator must supply a dated provider-specific
+      record before claiming a retention period. AP1 uses a separate OpenRouter key
+      with training and logging disabled (docs/03 A.8).
+    quote: Providers also have their own data retention policies
+    snapshot_date: '2026-10-22'
+    url: https://openrouter.ai/docs/guides/privacy/logging
+    location: Provider_Logging.html, Provider Policies / Data Retention & Logging;
+      text mirror lines 406-424
+  - provider: OpenAI
+    summary: API data are not used for training unless the customer opts in. By default
+      abuse-monitoring logs may include prompts, responses and derived metadata and
+      are retained for up to 30 days, with stated legal and service-protection exceptions.
+      Modified Abuse Monitoring and Zero Data Retention require approval; this study
+      does not claim that approval.
+    quote: data sent to the OpenAI API is not used to train
+    snapshot_date: '2026-10-22'
+    url: https://developers.openai.com/api/docs/guides/your-data
+    location: Your_data.html, Types of data stored / Data retention controls; text
+      mirror lines 1192-1210
+  limitations:
+  - Percent GRR is comparable only for models on the same item set; the class-balanced
+    design defines process variation.
+  - Repeatability of Sol (provider temperature default) and the open models (temperature
+    zero) is not comparable.
+  - Missing fingerprints and unchanged model identifiers cannot rule out silent model
+    changes.
+  - INSAID (2017) has a full memorisation caveat. Prior ClinVar flags describe prior
+    information, not submission quality.
+  - API prices and endpoints are frozen snapshots; the operator checks prices live
+    before AP1 (docs/03 A.8).
+provenance:
+  approved: '2026-10-25'
+  plan: docs/03 A.1-A.8; ADR-004 including both 2026-10-26 amendments
+  classes_templates: ANK-69
+  rng: Mersenne-Twister / Inversion / Rejection
+  selection: ADR-005; ANK-59
+  cutoffs:
+  - ANK-50
+  - ANK-65
+  - ANK-66
+validation_tolerances:
+  arithmetic: 1.0e-10
+  engine: 1.0e-08
+  invariance: 9.9999999999999995e-07
+  anchor: ANK-TOL.arithmetic, engine_ordinal, invariance

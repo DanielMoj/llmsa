@@ -41,6 +41,14 @@
 #'   `/chat/completions`), API key (may be empty for local servers),
 #'   sampling temperature, optional system message, token limit, request
 #'   timeout in seconds, and further fields merged into the JSON body.
+#'   `temperature = NULL` omits the temperature field. A non-empty, non-NA
+#'   `row$system` overrides `system` and precedes the user message. The reply's
+#'   `id`, `model` (as `model_snapshot`), `usage`, `system_fingerprint` (including
+#'   null) and optional `provider` are recorded in `meta`. Requested routing
+#'   is recorded as `provider_order`, `quantizations` and `allow_fallbacks`.
+#'   Requested `seed`, `temperature` and `reasoning_effort`, when present, are
+#'   retained as metadata for comparison with the study plan.
+#'   Only `message.content` is parsed; credentials and headers are not stored.
 #'
 #' @return A backend function.
 #' @name backends
@@ -145,9 +153,13 @@ backend_openai_compatible <- function(base_url = "https://api.openai.com/v1",
   base_url <- sub("/+$", "", base_url)
   function(prompt, model, row = NULL) {
     messages <- list()
-    if (!is.null(system)) messages[[length(messages) + 1]] <- list(role = "system", content = system)
+    sys <- system
+    if (length(row$system) == 1L && !is.na(row$system) && nzchar(row$system)) sys <- row$system
+    if (!is.null(sys)) messages[[length(messages) + 1]] <- list(role = "system", content = sys)
     messages[[length(messages) + 1]] <- list(role = "user", content = prompt)
-    body <- c(list(model = model, messages = messages, temperature = temperature), extra)
+    body <- list(model = model, messages = messages)
+    if (!is.null(temperature)) body$temperature <- temperature
+    body <- c(body, extra)
     if (!is.null(max_tokens)) body$max_tokens <- max_tokens
     req <- httr2::request(paste0(base_url, "/chat/completions"))
     req <- httr2::req_headers(req, "Content-Type" = "application/json")
@@ -158,8 +170,17 @@ backend_openai_compatible <- function(base_url = "https://api.openai.com/v1",
     resp <- httr2::req_perform(req)
     js <- httr2::resp_body_json(resp)
     txt <- js$choices[[1]]$message$content
-    list(text = as.character(txt %||% NA_character_),
-         meta = list(model_snapshot = js$model, usage = js$usage,
-                     system_fingerprint = js$system_fingerprint))
+    meta <- list(model_snapshot = js$model, id = js$id, usage = js$usage,
+                 system_fingerprint = js$system_fingerprint)
+    if ("provider" %in% names(js)) meta["provider"] <- list(js$provider)
+    if (!is.null(body$provider)) {
+      meta$provider_order <- body$provider$order
+      meta$quantizations <- body$provider$quantizations
+      meta$allow_fallbacks <- body$provider$allow_fallbacks
+    }
+    for (field in intersect(c("seed", "temperature", "reasoning_effort"), names(body))) {
+      meta[field] <- body[field]
+    }
+    list(text = as.character(txt %||% NA_character_), meta = meta)
   }
 }

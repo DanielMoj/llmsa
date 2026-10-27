@@ -12,7 +12,7 @@ parse_identity(text)
 
 parse_number(decimal = ".")
 
-parse_choice(levels, aliases = NULL)
+parse_choice(levels, aliases = NULL, whole_word = FALSE)
 
 parse_json_field(field)
 }
@@ -29,6 +29,11 @@ pathogenic" is not matched as "pathogenic".}
 
 \item{aliases}{Optional named list mapping additional strings to labels,
 e.g. \code{list("LP" = "Likely pathogenic")}.}
+
+\item{whole_word}{If \code{TRUE}, split at non-alphanumeric characters and
+match complete word sequences, longest first. Matched words are consumed;
+different labels in one response give \code{NA}. Repeated matches of the same
+label are allowed. The default retains the substring parser.}
 
 \item{field}{For \code{parse_json_field()}: the name of the field to extract
 from a JSON object in the response (the first \code{{...}} block is used).}

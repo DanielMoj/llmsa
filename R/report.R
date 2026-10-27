@@ -29,6 +29,12 @@
 #' @param output_format Any rmarkdown output format, e.g. `"html_document"`
 #'   (default) or `"pdf_document"` (needs LaTeX).
 #' @param quiet Suppress rendering output.
+#' @param assessment Optional list with `criteria` (a data.frame containing
+#'   `criterion` and `band`, optionally `value` and `note`), `verdict` (one
+#'   string), and `sections` (a named list of entries with character `text`
+#'   and optional data.frame `table`). Validated before rendering. The supplied
+#'   verdict is used in the conclusion; GRR remains in the precision section.
+#'   `NULL` retains the original report. Application rules belong to the caller.
 #' @return The path of the rendered report, invisibly.
 #' @examples
 #' \donttest{
@@ -49,8 +55,10 @@ msa_report <- function(grr, runs = NULL, boot = NULL, agreement = NULL, bias = N
                        risk = c("medium", "low", "high"), acceptance = "",
                        title = "Validation report: LLM pipeline as a measurement system",
                        author = "", output_file = "validation_report.html",
-                       output_format = "html_document", quiet = TRUE) {
+                       output_format = "html_document", quiet = TRUE,
+                       assessment = NULL) {
   if (!inherits(grr, "msa_grr")) stop("`grr` must come from msa_grr().", call. = FALSE)
+  if (!is.null(assessment)) validate_assessment(assessment)
   risk <- match.arg(risk)
   if (!requireNamespace("rmarkdown", quietly = TRUE) || !requireNamespace("knitr", quietly = TRUE)) {
     stop("Rendering needs packages `rmarkdown` and `knitr`.", call. = FALSE)
@@ -61,7 +69,7 @@ msa_report <- function(grr, runs = NULL, boot = NULL, agreement = NULL, bias = N
   params <- list(
     grr = grr, runs = runs, boot = boot, agreement = agreement, bias = bias,
     robustness = robustness, cou = cou, question = question, risk = risk,
-    acceptance = acceptance, title = title, author = author,
+    acceptance = acceptance, title = title, author = author, assessment = assessment,
     data_hash = if (is.null(runs)) NA_character_ else hash_object(as.data.frame(runs)),
     package_version = as.character(utils::packageVersion("llmsa")),
     rendered_at = format(Sys.time(), "%Y-%m-%d %H:%M:%S %Z"))
@@ -72,4 +80,19 @@ msa_report <- function(grr, runs = NULL, boot = NULL, agreement = NULL, bias = N
                            output_file = basename(output_file), output_dir = dirname(normalizePath(output_file, mustWork = FALSE)),
                            params = params, envir = new.env(parent = globalenv()), quiet = quiet)
   invisible(out)
+}
+
+validate_assessment <- function(x) {
+  fail <- function() stop("`assessment` requires criteria (criterion, band), a verdict string and named sections with text and optional data.frame table.", call. = FALSE)
+  if (!is.list(x) || !all(c("criteria", "verdict", "sections") %in% names(x))) fail()
+  if (!is.data.frame(x$criteria) || !all(c("criterion", "band") %in% names(x$criteria))) fail()
+  if (!is.character(x$verdict) || length(x$verdict) != 1L || is.na(x$verdict) || !nzchar(x$verdict)) fail()
+  if (!is.list(x$sections)) fail()
+  if (length(x$sections) && (is.null(names(x$sections)) || anyNA(names(x$sections)) ||
+                            any(!nzchar(names(x$sections))) || anyDuplicated(names(x$sections)))) fail()
+  for (s in x$sections) {
+    if (!is.list(s) || !is.character(s$text) || anyNA(s$text) ||
+        (!is.null(s$table) && !is.data.frame(s$table))) fail()
+  }
+  invisible(x)
 }
