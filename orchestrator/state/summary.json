@@ -1,24 +1,24 @@
 {
   "contract": 1,
   "project": "llmsa",
-  "ts": "2026-10-27T02:00:13+01:00",
+  "ts": "2026-10-27T02:16:14+01:00",
   "milestone": {
     "id": "M2",
     "index": 2,
     "total": 10
   },
-  "phase": "20-plan",
+  "phase": "30-plan-review",
   "round": 1,
   "needs_human": false,
   "reason": "",
   "gates": {},
   "parked": [],
   "last_events": [
-    "[20261027-010548] QA-Routenprobe bestanden (gemini-4-argon); Ausgabe: orchestrator/logs/qa-probe-20261027-010528-1.log",
     "[20261027-010548] === M2 start ===",
     "[20261027-010601] RUN builder 20-plan (M2 r1, Versuch 1) -> /mnt/c/Users/Danie/dev/Llmsa/llmsa/orchestrator/logs/M2-20-plan-r1-a1-20261027-010601.log",
     "[20261027-012057] RUN reviewer 30-plan-review (M2 r1, Versuch 1) -> /mnt/c/Users/Danie/dev/Llmsa/llmsa/orchestrator/logs/M2-30-plan-review-r1-a1-20261027-012057.log",
-    "[20261027-015141] RUN builder 20-plan (M2 r2, Versuch 1) -> /mnt/c/Users/Danie/dev/Llmsa/llmsa/orchestrator/logs/M2-20-plan-r2-a1-20261027-015141.log"
+    "[20261027-015141] RUN builder 20-plan (M2 r2, Versuch 1) -> /mnt/c/Users/Danie/dev/Llmsa/llmsa/orchestrator/logs/M2-20-plan-r2-a1-20261027-015141.log",
+    "[20261027-020027] RUN reviewer 30-plan-review (M2 r2, Versuch 1) -> /mnt/c/Users/Danie/dev/Llmsa/llmsa/orchestrator/logs/M2-30-plan-review-r2-a1-20261027-020027.log"
   ],
   "exit": null,
   "role_guards": "on"
