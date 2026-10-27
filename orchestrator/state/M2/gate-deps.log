@@ -1,0 +1,24 @@
+# stdout
+r-deps: R              4.6.1        (verlangt: >= 4.1)
+r-deps: graphics       4.6.1        (verlangt: beliebig)
+r-deps: lme4           2.0.6        (verlangt: beliebig)
+r-deps: ordinal        2026.7.26    (verlangt: beliebig)
+r-deps: stats          4.6.1        (verlangt: beliebig)
+r-deps: tools          4.6.1        (verlangt: beliebig)
+r-deps: utils          4.6.1        (verlangt: beliebig)
+r-deps: DBI            1.3.0        (verlangt: beliebig)
+r-deps: digest         0.6.39       (verlangt: beliebig)
+r-deps: ellmer         0.5.0        (verlangt: beliebig)
+r-deps: httr2          1.3.0        (verlangt: beliebig)
+r-deps: jsonlite       2.0.0        (verlangt: beliebig)
+r-deps: knitr          1.52         (verlangt: beliebig)
+r-deps: pkgload        1.5.3        (verlangt: beliebig)
+r-deps: rmarkdown      2.32         (verlangt: beliebig)
+r-deps: RSQLite        3.53.3       (verlangt: beliebig)
+r-deps: testthat       3.3.2        (verlangt: >= 3.0.0)
+r-deps: yaml           2.3.12       (verlangt: beliebig)
+r-deps: pass — 18 Anforderungen erfüllt (R 4.6.1)
+deps: Kommando erfolgreich
+
+# runner
+exit=0 status=pass script=10-deps.sh

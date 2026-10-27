@@ -1,17 +1,26 @@
 {
   "contract": 1,
   "project": "llmsa",
-  "ts": "2026-10-27T03:05:46+01:00",
+  "ts": "2026-10-27T03:22:50+01:00",
   "milestone": {
     "id": "M2",
     "index": 2,
     "total": 10
   },
-  "phase": "40-build",
+  "phase": "gates",
   "round": 1,
   "needs_human": false,
   "reason": "",
-  "gates": {},
+  "gates": {
+    "deps": "pass",
+    "lint": "pass",
+    "tests": "pass",
+    "trace": "pass",
+    "territory": "pass",
+    "mutgate": "pass",
+    "golden-adr": "pass",
+    "mutfull": "pass"
+  },
   "parked": [],
   "last_events": [
     "[20261027-010601] RUN builder 20-plan (M2 r1, Versuch 1) -> /mnt/c/Users/Danie/dev/Llmsa/llmsa/orchestrator/logs/M2-20-plan-r1-a1-20261027-010601.log",
