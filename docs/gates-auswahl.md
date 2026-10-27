@@ -9,7 +9,7 @@ Typ-Grundsatz Software/R-Paket nach `PROJEKTIERUNG.md` und Preset `r-paket`. Sie
 | --- | --- | --- | --- | --- |
 | deps | `10-deps.sh` (`DEPS_CMD='Rscript orchestrator/lib/r-deps.R'`) | Depends, Imports und Suggests aus `DESCRIPTION` müssen installiert sein, auch die Validierungssuite (VCA, irr, …); im Codex-Sandbox-Modus hat der Builder kein Netz, also installiert das Gate vorab | Exit 1 bei unerfüllter Anforderung, Versionen im Log | K-M0-1 (und Voraussetzung aller Tests) |
 | lint | `20-lint.sh` (`LINT_CMD='bash orchestrator/lib/r-check.sh'`) | `R CMD build` + `R CMD check --as-cran --no-manual` außerhalb des Repos; ERROR oder WARNING ist `fail`; baut die Vignetten (validation, llm-stability, clinvar-raters) | Exit 1 bei ERROR/WARNING | K-M0-3, K-M1a-7, K-M1b-7, K-M1c-5, K-M1d-2, K-M1d-4, K-M1d-5 (Bauanteil) |
-| tests | `30-tests.sh` (`TEST_CMD='Rscript orchestrator/lib/r-tests.R tests/testthat tests/acceptance tests/simulation tests/e2e tests/fuzz'`) | ein testthat-Lauf über alle Rollenordner plus `tests/simulation/` (Klasse A), Paket aus den Quellen geladen; jeder Abnahmetest trägt eine Kriteriums-ID | Exit 1 bei Fehlschlag oder Fehler; leere Ordner übersprungen | K-M0-2, K-M0-4, K-M0-5, K-M0-7 und alle Kriterien mit Prüfweg Test in 02–04 |
+| tests | `30-tests.sh` (`TEST_CMD='Rscript orchestrator/lib/r-tests.R tests/testthat tests/acceptance tests/simulation tests/e2e tests/fuzz'`) | ein testthat-Lauf über alle Rollenordner plus `tests/simulation/` (Klasse A), Paket aus den Quellen geladen; `r-tests.R` setzt `NOT_CRAN=true`, damit auch Tests mit `skip_on_cran()` im Gate laufen (BL-56, ADR-011); jeder Abnahmetest trägt eine Kriteriums-ID | Exit 1 bei Fehlschlag oder Fehler; leere Ordner übersprungen | K-M0-2, K-M0-4, K-M0-5, K-M0-7 und alle Kriterien mit Prüfweg Test in 02–04 |
 | trace | `70-trace.sh` (ohne `TRACE_CMD`) | `CRITERIA.json` muss jede Manifest-ID mit wörtlichem Spec-Zitat und Quelldatei führen, jede ID muss unter `tests/acceptance/` referenziert sein, jede dort gefundene ID bekannt sein | Exit 1 bei Waisen oder falschem Zitat | K-M0-6; Traceability aller Meilensteine (SPEC-KONTRAKT §3) |
 | territory | `82-territory.sh` | der letzte Territoriums-Audit muss zu Runde und Basis passen; schützt `tests/acceptance/`, `reference/anchors/`, `orchestrator/**` vor dem Builder | Exit 1 bei Verstoß | K-M0-6; Gewaltenteilung aller Meilensteine |
 | mutgate | `86-mutgate.sh` (`MUT_CMD='Rscript orchestrator/lib/r-mutation.R'`) | Mutation-Score der seit `plan/<MS>` geänderten Dateien im Scope; Scope in M0, M2 und M1a–M1d `R/fit.R` und `R/grr.R`, ab M3a alle `R/*.R`; Schwelle 80 % (`ANK-32`), Floor 80, Ratchet-Toleranz 2 | Exit 1 unter Schwelle; `pass` ohne geänderten Scope | K-M0-6 (leer), Prüfstandard Nr. 7 in M1a–M3d |
@@ -42,7 +42,7 @@ MAX_ROUNDS_PLAN=2
 MAX_ROUNDS_REWORK=5
 REBUILD_ROUND=4
 ARBITER_EXTRA_ROUNDS=2
-PHASE_TIMEOUT=3600
+PHASE_TIMEOUT=28800        # seit M2 (27.10.2026); bis Template 1.2.0 zählt ein Timeout als Transportfehler (BL-70)
 WATCHDOG_STALE_SECONDS=4200
 QA_ENABLED=0                # M0; ab M2: 1
 QA_REQUIRED_FROM=M2
@@ -84,7 +84,7 @@ Wechsel je Phase (Betreiber-Commits zwischen Meilensteinen):
 | --- | --- |
 | Gate deps | K-M0-1 |
 | Gate lint | K-M0-3; Bauanteil von K-M1a-7, K-M1b-7, K-M1c-5, K-M1d-2, K-M1d-4, K-M1d-5 |
-| Gate tests (Abnahmetests, Klasse-A-Simulationen, Kurzläufe der Klasse B) | K-M0-2, K-M0-4, K-M0-5, K-M0-7; K-M1a-1 bis K-M1a-7; K-M1b-1 bis K-M1b-7; K-M1c-1 bis K-M1c-5; K-M1d-1 bis K-M1d-7; K-M2-1 bis K-M2-6; K-M3a-1 bis K-M3a-7; K-M3b-1 bis K-M3b-6; K-M3c-1 bis K-M3c-6; K-M3d-1 bis K-M3d-6 |
+| Gate tests (Abnahmetests, Klasse-A-Simulationen, Kurzläufe der Klasse B) | K-M0-2, K-M0-4, K-M0-5, K-M0-7; K-M1a-1 bis K-M1a-7; K-M1b-1 bis K-M1b-7; K-M1c-1 bis K-M1c-5; K-M1d-1 bis K-M1d-7; K-M2-1 bis K-M2-7; K-M3a-1 bis K-M3a-7; K-M3b-1 bis K-M3b-6; K-M3c-1 bis K-M3c-6; K-M3d-1 bis K-M3d-6 |
 | Gate trace, territory, golden-adr, mutgate | K-M0-6 (Aggregat); Querschnitt aller Meilensteine |
 | Gate mutfull | K-M1c-6 |
 | Judge | keines; alle Kriterien sind maschinell entscheidbar |

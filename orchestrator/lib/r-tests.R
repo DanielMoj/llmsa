@@ -15,6 +15,9 @@ for (pkg in c("testthat", "pkgload")) {
   if (!requireNamespace(pkg, quietly = TRUE)) infra("R-Paket fehlt: ", pkg)
 }
 
+# BL-56, ADR-011: run skip_on_cran() tests in the gate
+Sys.setenv(NOT_CRAN = "true")
+
 dirs <- commandArgs(trailingOnly = TRUE)
 if (!length(dirs)) dirs <- c("tests/testthat", "tests/acceptance", "tests/e2e", "tests/fuzz")
 

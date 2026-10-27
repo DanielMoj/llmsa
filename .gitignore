@@ -41,6 +41,7 @@ test-results/
 !orchestrator/.lock/**
 orchestrator/logs/*.log
 orchestrator/logs/*-prompt.md
+orchestrator/logs/qa-probe-*.md
 orchestrator/mcp/*.log
 orchestrator/mcp/connector.url
 reference/quellen/
