@@ -116,9 +116,9 @@ fit_ord <- msa_fit(acmg_demo, type = "ordinal",
                    levels = c("B", "LB", "VUS", "LP", "P"))
 fit_ord$vc
 #>     source   variance
-#> 1     item 9.25608623
-#> 2   prompt 0.03887272
-#> 3    model 0.27811710
+#> 1     item 9.25613159
+#> 2   prompt 0.03887289
+#> 3    model 0.27811984
 #> 4 Residual 1.00000000
 # }
 ```

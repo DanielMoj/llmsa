@@ -34,6 +34,18 @@
     </div>
 
     <div class="section level2">
+<h2 class="pkg-version" data-toc-text="development version" id="llmsa-development-version">llmsa (development version)<a class="anchor" aria-label="anchor" href="#llmsa-development-version"></a></h2>
+<ul><li>
+<code><a href="../reference/backends.html">backend_openai_compatible()</a></code> now omits <code>temperature</code> from the request when <code>temperature = NULL</code>. It supports a per-row system message and records response IDs, model snapshots, usage, fingerprints and requested/reported provider routing.</li>
+<li>
+<code>parse_choice(whole_word = TRUE)</code> matches whole phrases, preferring longer phrases and rejecting ambiguous classifications. The default remains unchanged.</li>
+<li>
+<code>msa_run(parse_by_prompt = ...)</code> can select a parser for each prompt while retaining the raw response and the existing resumable store format. Numeric JSON metadata are now stored without rounding; small recorded API costs previously could be rounded to zero.</li>
+<li>
+<code>msa_report(assessment = ...)</code> accepts validated application criteria, an overall decision and additional report sections, including a robustness half-normal plot.</li>
+<li>The internal AP1 pipeline adds frozen study inputs, a YAML plan, an explicit mock/API runner, pilot checks and per-model assessment. Its functions are not exported. AP1 results are provisional until the M1 statistical validation.</li>
+</ul></div>
+    <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0" id="llmsa-010">llmsa 0.1.0<a class="anchor" aria-label="anchor" href="#llmsa-010"></a></h2>
 <p>First public release.</p>
 <ul><li>Crossed study design (<code><a href="../reference/msa_design.html">msa_design()</a></code>), execution with an audit trail and resumable store (<code><a href="../reference/msa_run.html">msa_run()</a></code>), import of external results (<code><a href="../reference/as_msa_runs.html">as_msa_runs()</a></code>).</li>
@@ -47,7 +59,8 @@
 <li>Simulated demonstration data <code>acmg_demo</code> and <code>ic50_demo</code>.</li>
 </ul><p>Known limitations: no bootstrap for ordinal fits; batched multi-item prompts (position and carry-over effects) and free-text outcomes judged by a second model are planned for a later release.</p>
 </div>
-  </main></div>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
+    </nav></aside></div>
 
 
     <footer><div class="pkgdown-footer-left">

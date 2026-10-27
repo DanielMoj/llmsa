@@ -121,6 +121,7 @@ verglichen, ndc und Verdikt müssen gleich sein.
 | ANK-66 | Wissensstand Qwen3-32B: keine Herstellerangabe; die Katalogangabe ist der Stichtag der Kennzeichen `_qwen` (K-M2-2); Veröffentlichungsdatum als obere Schranke | K-M2-2, K-M2-5, A.1, A.4 | `quellen/anbieter_2026-10-22/openrouter/models.json` (Schnappschuss 22.10.2026, Eintrag `qwen/qwen3-32b`): Wissensstand im Feld `knowledge_cutoff`, Obergrenze im Feld `created` (Unix-Zeit; 28.04.2025 UTC, 29.04.2025 in China) | Anbieterdokumentation | vorhanden |
 | ANK-67 | Pilot AP1: 10 Pilotitems in `pilot.csv` (ERepo, je Klasse die nächsten zwei im Umlauf nach den 75 Hauptitems), 3 Vorlagen, 1 Replikat, 30 Aufrufe je Modell; Bestehensregeln je Modell: keine 4xx-Antwort, Anbieter gleich dem angeforderten, Parser-Trefferquote mindestens 27 von 30, Kostenprojektion aus dem 90-%-Quantil der Ausgabetokens (`usage.completion_tokens`, schließt Reasoning ein) unter `ANK-57`; berichtet: Median der Latenz, je Modell die Reasoning-Tokens (Median und 90-%-Quantil); Auslöser des Wiederholungstags: Anbieterwechsel in der Antwort, wechselnde Modellkennung innerhalb eines Blocks, mehr als 5 % Fehler eines Modells in einem Block | K-M2-1, K-M2-5, K-M2-7, A.6 | ADR-004 (Betreiberfestlegung 25.10.2026); Reasoning: ADR-004, Nachtrag 2 (Betreiberentscheidung 26.10.2026) | Betreiberfestlegung | Betreiber bestätigt 25.10.2026 (ADR-004); geändert 26.10.2026 (ADR-004, Nachtrag 2) |
 | ANK-68 | Auswertungsregeln AP1: Modalantwort je Item und Modell über die 18 Hauptplanaufrufe (NA als eigener Wert, bei Gleichstand keine Modalantwort); NA-Regel (NA-Anteil als Kennzahl, in Trefferquote und Kappa Fehlklassifikation mit Übereinstimmungsgewicht 0, im Fit fehlender Wert); Kappa-Bootstrap über Items mit 2.000 Wiederholungen, Perzentilintervall 95 %, Seed 20261024; Rückfall-Fit numerisch auf den Klassenscores 1 bis 5 (Benign = 1 bis Pathogenic = 5) bei Fehler oder Konvergenzwarnung des ordinalen Fits; Antwortgröße der Robustheit als empirischer Logit mit Korrektur ½ | K-M2-5, K-M2-6, K-M2-7, A.1, A.5 | ADR-004 (Betreiberfestlegung 25.10.2026); Korrektur ½: Haldane1956 (Katalog A: Haldane 1956, Ann Hum Genet 20(4):309–311, S. 310, PDF 2: t = ½) und Anscombe1956 (Katalog A: Anscombe 1956, Biometrika 43(3/4):461–464, S. 462, PDF 2, Gl. (9)); beide Scans mit OCR, Stellen am Seitenbild geprüft (25.10.2026) | Betreiberfestlegung | Betreiber bestätigt 25.10.2026 (ADR-004) |
+| ANK-69 | Prompt-Vorlagen AP1 (`concise`, `role`, `json`), Parser-Aliase und Klassenbezeichnungen in Skalenordnung; Nachtrag des Reviewers in ACCEPTANCE M2 (ACC-15), ändert kein Kriterium | K-M2-3, K-M2-6, K-M2-7, A.3 | Validierungsplan Anhang A.3; Wortlaute der Vorlagen, Aliase und Klassen freigegeben mit ADR-004 (25.10.2026) | Betreiberfestlegung | Betreiber bestätigt 25.10.2026 (ADR-004); nachgetragen 27.10.2026 (ADR-011) |
 
 ## M3a — Übereinstimmung, Bias, Linearität
 
@@ -159,7 +160,7 @@ verglichen, ndc und Verdikt müssen gleich sein.
 ## Nicht vergeben
 
 ANK-04, 05, 07–09, 11, 12, 15, 17–20, 22–24, 26, 27, 29–31, 33–39, 48,
-49, 69, 71, 77–79, 83–85, 88, 90–92 sind frei für Nachträge des
-Reviewers (jeder Nachtrag mit ADR, wenn er ein Kriterium ändert); die am
-24.10. gestrichenen Nummern (Toleranzen, jetzt in ANK-TOL; Orakel ohne
-Anker) werden nicht neu belegt, damit alte Verweise eindeutig bleiben.
+49, 71, 77–79, 83–85, 88, 90–92 sind frei für Nachträge des Reviewers
+(jeder Nachtrag mit ADR, wenn er ein Kriterium ändert); die am 24.10.
+gestrichenen Nummern (Toleranzen, jetzt in ANK-TOL; Orakel ohne Anker)
+werden nicht neu belegt, damit alte Verweise eindeutig bleiben.

@@ -4,12 +4,14 @@ responses and records a full audit trail: timestamp, model identifier,
 hash of the exact prompt, raw response, parsed value, latency and any
 error. Rows are appended to store as they arrive, so that an
 interrupted study can be resumed with resume = TRUE and no response is
-ever lost."><meta property="og:description" content="Runs every planned call of a design (or of one block of it), parses the
+ever lost.
+Numeric metadata retain their precision when serialized as JSON."><meta property="og:description" content="Runs every planned call of a design (or of one block of it), parses the
 responses and records a full audit trail: timestamp, model identifier,
 hash of the exact prompt, raw response, parsed value, latency and any
 error. Rows are appended to store as they arrive, so that an
 interrupted study can be resumed with resume = TRUE and no response is
-ever lost."></head><body>
+ever lost.
+Numeric metadata retain their precision when serialized as JSON."></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -50,7 +52,8 @@ responses and records a full audit trail: timestamp, model identifier,
 hash of the exact prompt, raw response, parsed value, latency and any
 error. Rows are appended to <code>store</code> as they arrive, so that an
 interrupted study can be resumed with <code>resume = TRUE</code> and no response is
-ever lost.</p>
+ever lost.
+Numeric metadata retain their precision when serialized as JSON.</p>
     </div>
 
     <div class="section level2">
@@ -63,7 +66,8 @@ ever lost.</p>
 <span>  store <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  resume <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  delay <span class="op">=</span> <span class="fl">0</span>,</span>
-<span>  verbose <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  parse_by_prompt <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -104,6 +108,13 @@ store (same block, item, prompt, model and rep) are skipped.</p></dd>
 
 <dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
 <dd><p>Print progress.</p></dd>
+
+
+<dt id="arg-parse-by-prompt">parse_by_prompt<a class="anchor" aria-label="anchor" href="#arg-parse-by-prompt"></a></dt>
+<dd><p>Optional named list of functions <code>function(text)</code>.
+An entry replaces <code>parse</code> for its <code>prompt_id</code>; other rows use <code>parse</code>.
+Names must be unique and non-empty. Unused names are allowed. <code>NULL</code>
+retains the single-parser behaviour. Parser failures produce <code>NA</code>.</p></dd>
 
 </dl></div>
     <div class="section level2">

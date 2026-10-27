@@ -56,7 +56,7 @@ failed measurement).</p>
 <span></span>
 <span><span class="fu">parse_number</span><span class="op">(</span>decimal <span class="op">=</span> <span class="st">"."</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">parse_choice</span><span class="op">(</span><span class="va">levels</span>, aliases <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
+<span><span class="fu">parse_choice</span><span class="op">(</span><span class="va">levels</span>, aliases <span class="op">=</span> <span class="cn">NULL</span>, whole_word <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">parse_json_field</span><span class="op">(</span><span class="va">field</span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -84,6 +84,13 @@ pathogenic" is not matched as "pathogenic".</p></dd>
 <dt id="arg-aliases">aliases<a class="anchor" aria-label="anchor" href="#arg-aliases"></a></dt>
 <dd><p>Optional named list mapping additional strings to labels,
 e.g. <code>list("LP" = "Likely pathogenic")</code>.</p></dd>
+
+
+<dt id="arg-whole-word">whole_word<a class="anchor" aria-label="anchor" href="#arg-whole-word"></a></dt>
+<dd><p>If <code>TRUE</code>, split at non-alphanumeric characters and
+match complete word sequences, longest first. Matched words are consumed;
+different labels in one response give <code>NA</code>. Repeated matches of the same
+label are allowed. The default retains the substring parser.</p></dd>
 
 
 <dt id="arg-field">field<a class="anchor" aria-label="anchor" href="#arg-field"></a></dt>

@@ -25,7 +25,8 @@ msa_report(
   author = "",
   output_file = "validation_report.html",
   output_format = "html_document",
-  quiet = TRUE
+  quiet = TRUE,
+  assessment = NULL
 )
 ```
 
@@ -85,6 +86,16 @@ msa_report(
 
   Suppress rendering output.
 
+- assessment:
+
+  Optional list with `criteria` (a data.frame containing `criterion` and
+  `band`, optionally `value` and `note`), `verdict` (one string), and
+  `sections` (a named list of entries with character `text` and optional
+  data.frame `table`). Validated before rendering. The supplied verdict
+  is used in the conclusion; GRR remains in the precision section.
+  `NULL` retains the original report. Application rules belong to the
+  caller.
+
 ## Value
 
 The path of the rendered report, invisibly.
@@ -110,6 +121,6 @@ if (requireNamespace("rmarkdown", quietly = TRUE) && rmarkdown::pandoc_available
                     output_file = tempfile(fileext = ".html"))
   out
 }
-#> [1] "/tmp/RtmpaI7H5T/file1aef75390241.html"
+#> [1] "/tmp/RtmpIMbj8r/file1a847734af4d.html"
 # }
 ```

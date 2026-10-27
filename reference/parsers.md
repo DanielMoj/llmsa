@@ -13,7 +13,7 @@ parse_identity(text)
 
 parse_number(decimal = ".")
 
-parse_choice(levels, aliases = NULL)
+parse_choice(levels, aliases = NULL, whole_word = FALSE)
 
 parse_json_field(field)
 ```
@@ -40,6 +40,13 @@ parse_json_field(field)
 
   Optional named list mapping additional strings to labels, e.g.
   `list("LP" = "Likely pathogenic")`.
+
+- whole_word:
+
+  If `TRUE`, split at non-alphanumeric characters and match complete
+  word sequences, longest first. Matched words are consumed; different
+  labels in one response give `NA`. Repeated matches of the same label
+  are allowed. The default retains the substring parser.
 
 - field:
 

@@ -5,7 +5,8 @@ responses and records a full audit trail: timestamp, model identifier,
 hash of the exact prompt, raw response, parsed value, latency and any
 error. Rows are appended to `store` as they arrive, so that an
 interrupted study can be resumed with `resume = TRUE` and no response is
-ever lost.
+ever lost. Numeric metadata retain their precision when serialized as
+JSON.
 
 ## Usage
 
@@ -18,7 +19,8 @@ msa_run(
   store = NULL,
   resume = FALSE,
   delay = 0,
-  verbose = TRUE
+  verbose = TRUE,
+  parse_by_prompt = NULL
 )
 ```
 
@@ -62,6 +64,13 @@ msa_run(
 - verbose:
 
   Print progress.
+
+- parse_by_prompt:
+
+  Optional named list of functions `function(text)`. An entry replaces
+  `parse` for its `prompt_id`; other rows use `parse`. Names must be
+  unique and non-empty. Unused names are allowed. `NULL` retains the
+  single-parser behaviour. Parser failures produce `NA`.
 
 ## Value
 

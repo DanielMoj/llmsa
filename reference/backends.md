@@ -83,6 +83,15 @@ backend_openai_compatible(
   `/chat/completions`), API key (may be empty for local servers),
   sampling temperature, optional system message, token limit, request
   timeout in seconds, and further fields merged into the JSON body.
+  `temperature = NULL` omits the temperature field. A non-empty, non-NA
+  `row$system` overrides `system` and precedes the user message. The
+  reply's `id`, `model` (as `model_snapshot`), `usage`,
+  `system_fingerprint` (including null) and optional `provider` are
+  recorded in `meta`. Requested routing is recorded as `provider_order`,
+  `quantizations` and `allow_fallbacks`. Requested `seed`, `temperature`
+  and `reasoning_effort`, when present, are retained as metadata for
+  comparison with the study plan. Only `message.content` is parsed;
+  credentials and headers are not stored.
 
 ## Value
 
