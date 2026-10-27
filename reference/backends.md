@@ -87,7 +87,10 @@ backend_openai_compatible(
   `row$system` overrides `system` and precedes the user message. The
   reply's `id`, `model` (as `model_snapshot`), `usage`,
   `system_fingerprint` (including null) and optional `provider` are
-  recorded in `meta`. Requested routing is recorded as `provider_order`,
+  recorded in `meta`. A reasoning text in `message.reasoning` (as some
+  OpenRouter endpoints return it) is recorded as `reasoning` when it is
+  a non-empty string; otherwise the key is absent. `reasoning_details`
+  is not stored. Requested routing is recorded as `provider_order`,
   `quantizations` and `allow_fallbacks`. Requested `seed`, `temperature`
   and `reasoning_effort`, when present, are retained as metadata for
   comparison with the study plan. Only `message.content` is parsed;

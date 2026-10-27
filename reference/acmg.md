@@ -50,6 +50,6 @@ acmg_evaluate(runs, plan)
 data.frame. `acmg_prompts()` returns named templates, or a PB
 data.frame. `acmg_evaluate()` returns `models` keyed by model and a
 joint `msa_fit`. Each model includes GRR, fit diagnostics, modal
-responses, item-bootstrap kappa, agreement, stratified rates,
-completeness, provenance, criteria bands and an external rendered
-report. Incomplete results are not assessed.
+responses, item-bootstrap kappa, agreement, stratified rates, robustness
+with backend errors per PB run, completeness, provenance, criteria bands
+and an external rendered report. Incomplete results are not assessed.

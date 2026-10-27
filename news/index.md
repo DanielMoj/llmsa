@@ -7,6 +7,11 @@
   supports a per-row system message and records response IDs, model
   snapshots, usage, fingerprints and requested/reported provider
   routing.
+- [`backend_openai_compatible()`](https://danielmoj.github.io/llmsa/reference/backends.md)
+  records a non-empty `message.reasoning` of the reply as
+  `meta$reasoning` (Qwen3-32B via OpenRouter returns its reasoning
+  there). `reasoning_details` is not stored, and only `message.content`
+  is parsed.
 - `parse_choice(whole_word = TRUE)` matches whole phrases, preferring
   longer phrases and rejecting ambiguous classifications. The default
   remains unchanged.

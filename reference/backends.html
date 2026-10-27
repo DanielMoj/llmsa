@@ -136,7 +136,10 @@ timeout in seconds, and further fields merged into the JSON body.
 <code>temperature = NULL</code> omits the temperature field. A non-empty, non-NA
 <code>row$system</code> overrides <code>system</code> and precedes the user message. The reply's
 <code>id</code>, <code>model</code> (as <code>model_snapshot</code>), <code>usage</code>, <code>system_fingerprint</code> (including
-null) and optional <code>provider</code> are recorded in <code>meta</code>. Requested routing
+null) and optional <code>provider</code> are recorded in <code>meta</code>. A reasoning text in
+<code>message.reasoning</code> (as some OpenRouter endpoints return it) is recorded
+as <code>reasoning</code> when it is a non-empty string; otherwise the key is absent.
+<code>reasoning_details</code> is not stored. Requested routing
 is recorded as <code>provider_order</code>, <code>quantizations</code> and <code>allow_fallbacks</code>.
 Requested <code>seed</code>, <code>temperature</code> and <code>reasoning_effort</code>, when present, are
 retained as metadata for comparison with the study plan.

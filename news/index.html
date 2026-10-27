@@ -38,6 +38,8 @@
 <ul><li>
 <code><a href="../reference/backends.html">backend_openai_compatible()</a></code> now omits <code>temperature</code> from the request when <code>temperature = NULL</code>. It supports a per-row system message and records response IDs, model snapshots, usage, fingerprints and requested/reported provider routing.</li>
 <li>
+<code><a href="../reference/backends.html">backend_openai_compatible()</a></code> records a non-empty <code>message.reasoning</code> of the reply as <code>meta$reasoning</code> (Qwen3-32B via OpenRouter returns its reasoning there). <code>reasoning_details</code> is not stored, and only <code>message.content</code> is parsed.</li>
+<li>
 <code>parse_choice(whole_word = TRUE)</code> matches whole phrases, preferring longer phrases and rejecting ambiguous classifications. The default remains unchanged.</li>
 <li>
 <code>msa_run(parse_by_prompt = ...)</code> can select a parser for each prompt while retaining the raw response and the existing resumable store format. Numeric JSON metadata are now stored without rounding; small recorded API costs previously could be rounded to zero.</li>
