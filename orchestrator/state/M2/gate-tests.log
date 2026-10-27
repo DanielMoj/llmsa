@@ -1,15 +1,15 @@
 # stdout
-r-tests: tests/testthat: 11 Testdatei(en)
+r-tests: tests/testthat: 12 Testdatei(en)
 ✔ | F W  S  OK | Context
 
 ⠏ |          0 | acmg-api                                                       
 ⠋ |          1 | acmg-api                                                       
-⠙ |         42 | acmg-api                                                       
+⠹ |         43 | acmg-api                                                       
 ⠋ |         81 | acmg-api                                                       
-⠇ |        109 | acmg-api                                                       
+⠋ |        111 | acmg-api                                                       
 ⠼ |        155 | acmg-api                                                       
 ⠧ |        158 | acmg-api                                                       
-⠋ |        171 | acmg-api                                                       
+⠏ |        170 | acmg-api                                                       
 ✔ |        173 | acmg-api [2.1s]
 
 ⠏ |          0 | acmg-data                                                      
@@ -21,7 +21,7 @@ r-tests: tests/testthat: 11 Testdatei(en)
 ⠋ |         21 | acmg-evaluate                                                  
 ⠇ |         39 | acmg-evaluate                                                  
 ⠼ |         55 | acmg-evaluate                                                  
-⠸ |         64 | acmg-evaluate                                                  
+⠋ |         61 | acmg-evaluate                                                  
 ⠇ |         69 | acmg-evaluate                                                  
 ⠋ |         91 | acmg-evaluate                                                  
 ⠧ |         98 | acmg-evaluate                                                  
@@ -29,29 +29,44 @@ r-tests: tests/testthat: 11 Testdatei(en)
 ⠸ |        104 | acmg-evaluate                                                  
 ⠧ |        108 | acmg-evaluate                                                  
 ⠙ |        112 | acmg-evaluate                                                  
-⠴ |        136 | acmg-evaluate                                                  
-✔ |        137 | acmg-evaluate [3.6s]
+✔ |        137 | acmg-evaluate [3.7s]
 
 ⠏ |          0 | acmg-pipeline                                                  
 ⠙ |          2 | acmg-pipeline                                                  
-⠴ |          6 | acmg-pipeline                                                  
-⠇ |          9 | acmg-pipeline                                                  
-⠸ |         14 | acmg-pipeline                                                  
-⠦ |         17 | acmg-pipeline                                                  
-⠋ |         21 | acmg-pipeline                                                  
-⠹ |         23 | acmg-pipeline                                                  
+⠼ |          5 | acmg-pipeline                                                  
+⠦ |          7 | acmg-pipeline                                                  
+⠙ |         12 | acmg-pipeline                                                  
+⠴ |         16 | acmg-pipeline                                                  
+⠏ |         20 | acmg-pipeline                                                  
+⠙ |         22 | acmg-pipeline                                                  
 ⠴ |         26 | acmg-pipeline                                                  
 ⠏ |         30 | acmg-pipeline                                                  
 ⠸ |         34 | acmg-pipeline                                                  
-⠹ |         43 | acmg-pipeline                                                  
 ⠸ |         44 | acmg-pipeline                                                  
 ⠦ |         47 | acmg-pipeline                                                  
 ⠧ |         48 | acmg-pipeline                                                  
 ⠏ |         50 | acmg-pipeline                                                  
 ⠇ |         59 | acmg-pipeline                                                  
 ⠹ |         63 | acmg-pipeline                                                  
-⠙ |         72 | acmg-pipeline                                                  
+⠹ |         73 | acmg-pipeline                                                  
 ✔ |         75 | acmg-pipeline [3.0s]
+
+⠏ |          0 | acmg-rework                                                    
+⠋ |          1 | acmg-rework                                                    
+⠸ |         34 | acmg-rework                                                    
+⠴ |         66 | acmg-rework                                                    
+⠦ |         97 | acmg-rework                                                    
+⠋ |        101 | acmg-rework                                                    
+⠇ |        119 | acmg-rework                                                    
+⠏ |        120 | acmg-rework                                                    
+⠙ |        122 | acmg-rework                                                    
+⠸ |        124 | acmg-rework                                                    
+⠼ |        125 | acmg-rework                                                    
+⠦ |        127 | acmg-rework                                                    
+⠸ |        134 | acmg-rework                                                    
+⠸ |        174 | acmg-rework                                                    
+⠙ |        192 | acmg-rework                                                    
+✔ |        194 | acmg-rework [7.5s]
 
 ⠏ |          0 | agreement                                                      
 ✔ |         13 | agreement
@@ -60,7 +75,7 @@ r-tests: tests/testthat: 11 Testdatei(en)
 ✔ |      1  10 | backends
 
 ⠏ |          0 | design-run                                                     
-⠹ |         23 | design-run                                                     
+⠸ |         14 | design-run                                                     
 ✔ |         37 | design-run
 
 ⠏ |          0 | fit-grr                                                        
@@ -70,11 +85,11 @@ r-tests: tests/testthat: 11 Testdatei(en)
 ⠦ |         17 | fit-grr                                                        
 ⠙ |         22 | fit-grr                                                        
 ⠸ |         24 | fit-grr                                                        
-✔ |         27 | fit-grr [7.0s]
+✔ |         27 | fit-grr [7.1s]
 
 ⠏ |          0 | parsers                                                        
-⠏ |         20 | parsers                                                        
-⠹ |         73 | parsers                                                        
+⠧ |         28 | parsers                                                        
+⠴ |         76 | parsers                                                        
 ✔ |         85 | parsers
 
 ⠏ |          0 | report                                                         
@@ -86,28 +101,27 @@ r-tests: tests/testthat: 11 Testdatei(en)
 ✔ |         49 | robustness-plan-spc
 
 ══ Results ═════════════════════════════════════════════════════════════════════
-Duration: 18.6 s
+Duration: 26.5 s
 
 ── Skipped tests (2) ───────────────────────────────────────────────────────────
 • On CRAN (1): 'test-report.R:5:3'
 • requireNamespace("ellmer", quietly = TRUE) is TRUE (1):
   'test-backends.R:32:3'
 
-[ FAIL 0 | WARN 0 | SKIP 2 | PASS 676 ]
+[ FAIL 0 | WARN 0 | SKIP 2 | PASS 870 ]
 r-tests: tests/acceptance: 13 Testdatei(en)
 ✔ | F W  S  OK | Context
 
 ⠏ |          0 | m0-api-snapshot                                                
-⠸ |         44 | m0-api-snapshot                                                
-⠧ |         98 | m0-api-snapshot                                                
-⠼ |        155 | m0-api-snapshot                                                
-⠇ |        209 | m0-api-snapshot                                                
-⠼ |        235 | m0-api-snapshot                                                
+⠏ |         50 | m0-api-snapshot                                                
+⠙ |        102 | m0-api-snapshot                                                
+⠧ |        158 | m0-api-snapshot                                                
+⠴ |        216 | m0-api-snapshot                                                
+⠸ |        244 | m0-api-snapshot                                                
 ⠧ |        258 | m0-api-snapshot                                                
 ✔ |        259 | m0-api-snapshot
 
 ⠏ |          0 | m0-deps                                                        
-⠦ |         37 | m0-deps                                                        
 ✔ |         37 | m0-deps
 
 ⠏ |          0 | m0-gates                                                       
@@ -123,7 +137,7 @@ r-tests: tests/acceptance: 13 Testdatei(en)
 
 ⠏ |          0 | m0-testthat-count                                              
 ⠙ |          2 | m0-testthat-count                                              
-✔ |          2 | m0-testthat-count [19.6s]
+✔ |          2 | m0-testthat-count [28.4s]
 
 ⠏ |          0 | m2-1-items                                                     
 ⠇ |          9 | m2-1-items                                                     
@@ -131,46 +145,51 @@ r-tests: tests/acceptance: 13 Testdatei(en)
 ⠴ |         36 | m2-1-items                                                     
 ⠹ |         43 | m2-1-items                                                     
 ⠇ |         59 | m2-1-items                                                     
-⠸ |         74 | m2-1-items                                                     
+⠦ |         77 | m2-1-items                                                     
 ⠦ |         87 | m2-1-items                                                     
 ⠹ |        103 | m2-1-items                                                     
 ⠧ |        108 | m2-1-items                                                     
-⠴ |        136 | m2-1-items                                                     
+⠼ |        135 | m2-1-items                                                     
 ⠸ |        144 | m2-1-items                                                     
-✔ |        149 | m2-1-items [136.0s]
+✔ |        149 | m2-1-items [136.5s]
 
 ⠏ |          0 | m2-2-memorisation                                              
 ⠙ |          2 | m2-2-memorisation                                              
 ⠹ |          3 | m2-2-memorisation                                              
-⠇ |         19 | m2-2-memorisation                                              
-⠙ |         32 | m2-2-memorisation                                              
-✔ |         34 | m2-2-memorisation [86.4s]
+⠼ |          5 | m2-2-memorisation                                              
+⠇ |         29 | m2-2-memorisation                                              
+⠸ |         34 | m2-2-memorisation                                              
+✔ |         34 | m2-2-memorisation [86.5s]
 
 ⠏ |          0 | m2-3-prompts-parser                                            
-⠦ |          7 | m2-3-prompts-parser                                            
-⠴ |         26 | m2-3-prompts-parser                                            
-⠧ |         68 | m2-3-prompts-parser                                            
-⠴ |        116 | m2-3-prompts-parser                                            
+⠴ |          6 | m2-3-prompts-parser                                            
+⠼ |         15 | m2-3-prompts-parser                                            
+⠹ |         63 | m2-3-prompts-parser                                            
+⠧ |         88 | m2-3-prompts-parser                                            
+⠧ |        138 | m2-3-prompts-parser                                            
 ⠹ |        163 | m2-3-prompts-parser                                            
-⠏ |        210 | m2-3-prompts-parser                                            
-⠸ |        264 | m2-3-prompts-parser                                            
-⠧ |        318 | m2-3-prompts-parser                                            
-⠇ |        369 | m2-3-prompts-parser                                            
-⠸ |        424 | m2-3-prompts-parser                                            
+⠦ |        207 | m2-3-prompts-parser                                            
+⠼ |        255 | m2-3-prompts-parser                                            
+⠋ |        281 | m2-3-prompts-parser                                            
+⠋ |        331 | m2-3-prompts-parser                                            
+⠦ |        357 | m2-3-prompts-parser                                            
+⠇ |        399 | m2-3-prompts-parser                                            
+⠙ |        452 | m2-3-prompts-parser                                            
 ⠋ |        481 | m2-3-prompts-parser                                            
-⠙ |        532 | m2-3-prompts-parser                                            
-⠧ |        588 | m2-3-prompts-parser                                            
-⠹ |        643 | m2-3-prompts-parser                                            
-⠼ |        675 | m2-3-prompts-parser                                            
-⠇ |        729 | m2-3-prompts-parser                                            
-⠏ |        740 | m2-3-prompts-parser                                            
-⠏ |        750 | m2-3-prompts-parser                                            
-⠹ |        783 | m2-3-prompts-parser                                            
-⠏ |        830 | m2-3-prompts-parser                                            
+⠴ |        526 | m2-3-prompts-parser                                            
+⠴ |        576 | m2-3-prompts-parser                                            
+⠴ |        626 | m2-3-prompts-parser                                            
+⠏ |        670 | m2-3-prompts-parser                                            
+⠋ |        701 | m2-3-prompts-parser                                            
+⠸ |        734 | m2-3-prompts-parser                                            
+⠸ |        744 | m2-3-prompts-parser                                            
+⠹ |        753 | m2-3-prompts-parser                                            
+⠏ |        790 | m2-3-prompts-parser                                            
+⠸ |        834 | m2-3-prompts-parser                                            
 ⠼ |        835 | m2-3-prompts-parser                                            
 ⠴ |        836 | m2-3-prompts-parser                                            
 ⠦ |        837 | m2-3-prompts-parser                                            
-✔ |        837 | m2-3-prompts-parser [492.3s]
+✔ |        837 | m2-3-prompts-parser [493.6s]
 
 ⠏ |          0 | m2-4-backends                                                  
 ⠦ |          7 | m2-4-backends                                                  
@@ -187,12 +206,11 @@ r-tests: tests/acceptance: 13 Testdatei(en)
 ⠏ |          0 | m2-5-plan                                                      
 ⠏ |         10 | m2-5-plan                                                      
 ⠴ |         16 | m2-5-plan                                                      
-⠏ |         50 | m2-5-plan                                                      
-⠇ |         69 | m2-5-plan                                                      
-⠧ |         98 | m2-5-plan                                                      
+⠋ |         51 | m2-5-plan                                                      
+⠦ |         77 | m2-5-plan                                                      
 ⠇ |         99 | m2-5-plan                                                      
 ⠋ |        101 | m2-5-plan                                                      
-⠼ |        105 | m2-5-plan                                                      
+⠸ |        104 | m2-5-plan                                                      
 ✔ |        106 | m2-5-plan [1.9s]
 
 ⠏ |          0 | m2-6-evaluate                                                  
@@ -205,12 +223,13 @@ r-tests: tests/acceptance: 13 Testdatei(en)
 ⠧ |         68 | m2-6-evaluate                                                  
 ⠦ |         97 | m2-6-evaluate                                                  
 ⠹ |        103 | m2-6-evaluate                                                  
-⠴ |        116 | m2-6-evaluate                                                  
+⠏ |        120 | m2-6-evaluate                                                  
 ⠼ |        145 | m2-6-evaluate                                                  
 ⠋ |        151 | m2-6-evaluate                                                  
 ⠧ |        168 | m2-6-evaluate                                                  
 ⠏ |        170 | m2-6-evaluate                                                  
 ⠴ |        176 | m2-6-evaluate                                                  
+⠏ |        180 | m2-6-evaluate                                                  
 ⠙ |        182 | m2-6-evaluate                                                  
 ⠧ |        188 | m2-6-evaluate                                                  
 ⠏ |        200 | m2-6-evaluate                                                  
@@ -224,22 +243,24 @@ r-tests: tests/acceptance: 13 Testdatei(en)
 ⠧ |        308 | m2-6-evaluate                                                  
 ⠦ |        337 | m2-6-evaluate                                                  
 ⠹ |        343 | m2-6-evaluate                                                  
-⠴ |        366 | m2-6-evaluate                                                  
-✔ |        374 | m2-6-evaluate [96.4s]
+⠼ |        365 | m2-6-evaluate                                                  
+⠹ |        373 | m2-6-evaluate                                                  
+✔ |        374 | m2-6-evaluate [96.3s]
 
 ⠏ |          0 | m2-7-robustness-pilot                                          
 ⠇ |          9 | m2-7-robustness-pilot                                          
-⠇ |         19 | m2-7-robustness-pilot                                          
-⠇ |         29 | m2-7-robustness-pilot                                          
-⠼ |         45 | m2-7-robustness-pilot                                          
-⠼ |         85 | m2-7-robustness-pilot                                          
-⠼ |        135 | m2-7-robustness-pilot                                          
-⠙ |        162 | m2-7-robustness-pilot                                          
+⠧ |         18 | m2-7-robustness-pilot                                          
+⠦ |         27 | m2-7-robustness-pilot                                          
+⠼ |         35 | m2-7-robustness-pilot                                          
+⠴ |         76 | m2-7-robustness-pilot                                          
+⠼ |        125 | m2-7-robustness-pilot                                          
+⠋ |        161 | m2-7-robustness-pilot                                          
+⠏ |        170 | m2-7-robustness-pilot                                          
 ⠹ |        173 | m2-7-robustness-pilot                                          
 ⠇ |        189 | m2-7-robustness-pilot                                          
 ⠏ |        200 | m2-7-robustness-pilot                                          
-⠧ |        208 | m2-7-robustness-pilot                                          
-⠴ |        216 | m2-7-robustness-pilot                                          
+⠋ |        211 | m2-7-robustness-pilot                                          
+⠏ |        240 | m2-7-robustness-pilot                                          
 ⠹ |        243 | m2-7-robustness-pilot                                          
 ⠇ |        249 | m2-7-robustness-pilot                                          
 ⠙ |        262 | m2-7-robustness-pilot                                          
@@ -248,10 +269,10 @@ r-tests: tests/acceptance: 13 Testdatei(en)
 ⠇ |        319 | m2-7-robustness-pilot                                          
 ⠦ |        357 | m2-7-robustness-pilot                                          
 ⠹ |        363 | m2-7-robustness-pilot                                          
-✔ |        375 | m2-7-robustness-pilot [94.5s]
+✔ |        375 | m2-7-robustness-pilot [94.3s]
 
 ══ Results ═════════════════════════════════════════════════════════════════════
-Duration: 930.5 s
+Duration: 941.0 s
 
 [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2340 ]
 r-tests: tests/simulation: keine Testdateien, übersprungen
@@ -260,205 +281,24 @@ r-tests: tests/e2e: 1 Testdatei(en)
 
 ⠏ |          0 | m2-qa-e2e                                                      
 ⠋ |          1 | m2-qa-e2e                                                      
-⠴ | 5        1 | m2-qa-e2e                                                      
-⠧ | 6        2 | m2-qa-e2e                                                      
-✖ | 8        2 | m2-qa-e2e [2.5s]
-────────────────────────────────────────────────────────────────────────────────
-Failure ('test-m2-qa-e2e.R:93:3'): QA-M2-001: per-model assessment Repeat-day diagnostics must not report false FALSE/NA rows for other models (seed = 20261027)
-Expected `anyNA(sol_tab$backend_error_share)` to be FALSE.
-Differences:
-`actual`:   TRUE 
-`expected`: FALSE
-
-
-Failure ('test-m2-qa-e2e.R:96:5'): QA-M2-001: per-model assessment Repeat-day diagnostics must not report false FALSE/NA rows for other models (seed = 20261027)
-Expected `... && isTRUE(row_b1$error_trigger)` to be TRUE.
-Differences:
-`actual`:   FALSE
-`expected`: TRUE 
-
-
-Failure ('test-m2-qa-e2e.R:135:3'): QA-M2-002: acmg_repeat_day flags missing or partially missing provider fields on OpenRouter API responses (seed = 20261027)
-Expected `isTRUE(llama_row$provider_change)` to be TRUE.
-Differences:
-`actual`:   FALSE
-`expected`: TRUE 
-
-
-Failure ('test-m2-qa-e2e.R:136:3'): QA-M2-002: acmg_repeat_day flags missing or partially missing provider fields on OpenRouter API responses (seed = 20261027)
-Expected `isTRUE(qwen_row$provider_change)` to be TRUE.
-Differences:
-`actual`:   FALSE
-`expected`: TRUE 
-
-
-Failure ('test-m2-qa-e2e.R:166:3'): QA-M2-003: acmg_provenance and acmg_store_read never certify non-error rows without meta as api or strip synthetic from mock runs (seed = 20261027)
-Expected `identical(res_api, "api")` to be FALSE.
-Differences:
-`actual`:   TRUE 
-`expected`: FALSE
-
-
-Failure ('test-m2-qa-e2e.R:175:3'): QA-M2-003: acmg_provenance and acmg_store_read never certify non-error rows without meta as api or strip synthetic from mock runs (seed = 20261027)
-Expected `res_mock %in% c("synthetic", "rejected")` to be TRUE.
-Differences:
-`actual`:   FALSE
-`expected`: TRUE 
-
-
-Failure ('test-m2-qa-e2e.R:212:3'): QA-M2-004: incomplete main-plan runs with 0 calls for an item retain all 100 items in modal, reference_basis and PB reference_n (seed = 20261027)
-Expected `... && as.integer(basis_total) == nrow(items)` to be TRUE.
-Differences:
-`actual`:   FALSE
-`expected`: TRUE 
-
-
-Failure ('test-m2-qa-e2e.R:219:3'): QA-M2-004: incomplete main-plan runs with 0 calls for an item retain all 100 items in modal, reference_basis and PB reference_n (seed = 20261027)
-Expected `all(...)` to be TRUE.
-Differences:
-`actual`:   FALSE
-`expected`: TRUE 
-
-────────────────────────────────────────────────────────────────────────────────
+⠦ |          7 | m2-qa-e2e                                                      
+✔ |          9 | m2-qa-e2e [2.5s]
 
 ══ Results ═════════════════════════════════════════════════════════════════════
 Duration: 2.5 s
 
-── Failed tests ────────────────────────────────────────────────────────────────
-Failure ('test-m2-qa-e2e.R:93:3'): QA-M2-001: per-model assessment Repeat-day diagnostics must not report false FALSE/NA rows for other models (seed = 20261027)
-Expected `anyNA(sol_tab$backend_error_share)` to be FALSE.
-Differences:
-`actual`:   TRUE 
-`expected`: FALSE
-
-
-Failure ('test-m2-qa-e2e.R:96:5'): QA-M2-001: per-model assessment Repeat-day diagnostics must not report false FALSE/NA rows for other models (seed = 20261027)
-Expected `... && isTRUE(row_b1$error_trigger)` to be TRUE.
-Differences:
-`actual`:   FALSE
-`expected`: TRUE 
-
-
-Failure ('test-m2-qa-e2e.R:135:3'): QA-M2-002: acmg_repeat_day flags missing or partially missing provider fields on OpenRouter API responses (seed = 20261027)
-Expected `isTRUE(llama_row$provider_change)` to be TRUE.
-Differences:
-`actual`:   FALSE
-`expected`: TRUE 
-
-
-Failure ('test-m2-qa-e2e.R:136:3'): QA-M2-002: acmg_repeat_day flags missing or partially missing provider fields on OpenRouter API responses (seed = 20261027)
-Expected `isTRUE(qwen_row$provider_change)` to be TRUE.
-Differences:
-`actual`:   FALSE
-`expected`: TRUE 
-
-
-Failure ('test-m2-qa-e2e.R:166:3'): QA-M2-003: acmg_provenance and acmg_store_read never certify non-error rows without meta as api or strip synthetic from mock runs (seed = 20261027)
-Expected `identical(res_api, "api")` to be FALSE.
-Differences:
-`actual`:   TRUE 
-`expected`: FALSE
-
-
-Failure ('test-m2-qa-e2e.R:175:3'): QA-M2-003: acmg_provenance and acmg_store_read never certify non-error rows without meta as api or strip synthetic from mock runs (seed = 20261027)
-Expected `res_mock %in% c("synthetic", "rejected")` to be TRUE.
-Differences:
-`actual`:   FALSE
-`expected`: TRUE 
-
-
-Failure ('test-m2-qa-e2e.R:212:3'): QA-M2-004: incomplete main-plan runs with 0 calls for an item retain all 100 items in modal, reference_basis and PB reference_n (seed = 20261027)
-Expected `... && as.integer(basis_total) == nrow(items)` to be TRUE.
-Differences:
-`actual`:   FALSE
-`expected`: TRUE 
-
-
-Failure ('test-m2-qa-e2e.R:219:3'): QA-M2-004: incomplete main-plan runs with 0 calls for an item retain all 100 items in modal, reference_basis and PB reference_n (seed = 20261027)
-Expected `all(...)` to be TRUE.
-Differences:
-`actual`:   FALSE
-`expected`: TRUE 
-
-
-[ FAIL 8 | WARN 0 | SKIP 0 | PASS 2 ]
+[ FAIL 0 | WARN 0 | SKIP 0 | PASS 9 ]
 r-tests: tests/fuzz: 1 Testdatei(en)
 ✔ | F W  S  OK | Context
 
 ⠏ |          0 | m2-qa-fuzz                                                     
-⠋ | 1        0 | m2-qa-fuzz                                                     
-✖ | 5        0 | m2-qa-fuzz [1.4s]
-────────────────────────────────────────────────────────────────────────────────
-Failure ('test-m2-qa-fuzz.R:76:3'): QA-M2-005: acmg_evaluate and acmg_robustness reject unknown response classes and out-of-range rep/block in PB runs (seed = 20261027)
-Expected `llmsa:::acmg_evaluate(combined_bad_class, plan)` to throw a error.
-
-Failure ('test-m2-qa-fuzz.R:92:3'): QA-M2-005: acmg_evaluate and acmg_robustness reject unknown response classes and out-of-range rep/block in PB runs (seed = 20261027)
-Expected `isTRUE(rob_rep$complete)` to be FALSE.
-Differences:
-`actual`:   TRUE 
-`expected`: FALSE
-
-
-Failure ('test-m2-qa-fuzz.R:93:3'): QA-M2-005: acmg_evaluate and acmg_robustness reject unknown response classes and out-of-range rep/block in PB runs (seed = 20261027)
-Expected `rob_rep$band` to be identical to "not assessed".
-Differences:
-`actual`:   "acceptable"  
-`expected`: "not assessed"
-
-
-Failure ('test-m2-qa-fuzz.R:98:3'): QA-M2-005: acmg_evaluate and acmg_robustness reject unknown response classes and out-of-range rep/block in PB runs (seed = 20261027)
-Expected `isTRUE(rob_block$complete)` to be FALSE.
-Differences:
-`actual`:   TRUE 
-`expected`: FALSE
-
-
-Failure ('test-m2-qa-fuzz.R:99:3'): QA-M2-005: acmg_evaluate and acmg_robustness reject unknown response classes and out-of-range rep/block in PB runs (seed = 20261027)
-Expected `rob_block$band` to be identical to "not assessed".
-Differences:
-`actual`:   "acceptable"  
-`expected`: "not assessed"
-
-────────────────────────────────────────────────────────────────────────────────
+⠋ |          1 | m2-qa-fuzz                                                     
+✔ |          5 | m2-qa-fuzz
 
 ══ Results ═════════════════════════════════════════════════════════════════════
-Duration: 1.4 s
-
-── Failed tests ────────────────────────────────────────────────────────────────
-Failure ('test-m2-qa-fuzz.R:76:3'): QA-M2-005: acmg_evaluate and acmg_robustness reject unknown response classes and out-of-range rep/block in PB runs (seed = 20261027)
-Expected `llmsa:::acmg_evaluate(combined_bad_class, plan)` to throw a error.
-
-Failure ('test-m2-qa-fuzz.R:92:3'): QA-M2-005: acmg_evaluate and acmg_robustness reject unknown response classes and out-of-range rep/block in PB runs (seed = 20261027)
-Expected `isTRUE(rob_rep$complete)` to be FALSE.
-Differences:
-`actual`:   TRUE 
-`expected`: FALSE
-
-
-Failure ('test-m2-qa-fuzz.R:93:3'): QA-M2-005: acmg_evaluate and acmg_robustness reject unknown response classes and out-of-range rep/block in PB runs (seed = 20261027)
-Expected `rob_rep$band` to be identical to "not assessed".
-Differences:
-`actual`:   "acceptable"  
-`expected`: "not assessed"
-
-
-Failure ('test-m2-qa-fuzz.R:98:3'): QA-M2-005: acmg_evaluate and acmg_robustness reject unknown response classes and out-of-range rep/block in PB runs (seed = 20261027)
-Expected `isTRUE(rob_block$complete)` to be FALSE.
-Differences:
-`actual`:   TRUE 
-`expected`: FALSE
-
-
-Failure ('test-m2-qa-fuzz.R:99:3'): QA-M2-005: acmg_evaluate and acmg_robustness reject unknown response classes and out-of-range rep/block in PB runs (seed = 20261027)
-Expected `rob_block$band` to be identical to "not assessed".
-Differences:
-`actual`:   "acceptable"  
-`expected`: "not assessed"
-
-
-[ FAIL 5 | WARN 0 | SKIP 0 | PASS 0 ]
-r-tests: fail — 141 Tests in tests/testthat, tests/acceptance, tests/e2e, tests/fuzz; 5 fehlgeschlagen, 0 Fehler, 2 übersprungen
-tests: Kommando meldet fachlichen Fehlschlag rc=1
+[ FAIL 0 | WARN 0 | SKIP 0 | PASS 5 ]
+r-tests: pass — 150 Tests in tests/testthat, tests/acceptance, tests/e2e, tests/fuzz; 0 fehlgeschlagen, 0 Fehler, 2 übersprungen
+tests: Kommando erfolgreich
 
 # stderr
 boundary (singular) fit: see help('isSingular')
@@ -485,4 +325,4 @@ boundary (singular) fit: see help('isSingular')
 boundary (singular) fit: see help('isSingular')
 
 # runner
-exit=1 status=fail script=30-tests.sh
+exit=0 status=pass script=30-tests.sh
