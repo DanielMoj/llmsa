@@ -1,35 +1,29 @@
 {
   "milestone": "M2",
   "phase": "code",
-  "round": 2,
-  "verdict": "REWORK",
-  "blocking": [
-    {
-      "id": "E31",
-      "ref": "K-M2-7 („`--part pilot` gibt je Modell jede Bestehensregel aus `ANK-67` mit bestanden oder nicht bestanden aus“); K-M2-4 („zeigt sie es nicht, wird der Anbieter stichprobenweise über `GET /api/v1/generation` (Feld `provider_name`) erhoben“); ADR-006 Nr. 7.2 („Fehlt das Feld in der Antwort, ist die Regel nicht bestanden; die Ausgabe weist darauf hin, den Anbieter nach K-M2-4 stichprobenweise über GET /api/v1/generation zu erheben“), Nr. 7.6 („… endet mit Exit 0, auch wenn Regeln scheitern“), Nr. 7.7 („… mit einem benannten Fehler …, der die gescheiterten Regeln nennt“); docs/01 §2 Nr. 4 („klare Fehlermeldung“); PLAN-REVIEW E18",
-      "note": "acmg_pilot() liest den Anbieter mit x$provider %||% \"\" (R/acmg.R:509); `$` matcht auf Listen partiell. Für Llama/Qwen schreibt backend_openai_compatible() immer provider_order ins meta (R/backends.R:176–179), provider nur, wenn die Antwort es trägt (:175). Fehlt provider (dokumentierte OpenRouter-Antwort, ANK-60), liefert x$provider list(\"coreweave/fp16\"), und vapply bricht mit „values must be type 'character', but FUN(X[[1]]) result is type 'list'“ ab (Reviewer-Nachprüfung 7 mit llama.json ohne provider über httr2::local_mocked_responses()). Folgen: run.R --part pilot --backend api speichert 90 Aufrufe und endet ohne Regelzeile, ohne Hinweis auf GET /api/v1/generation, Exit ≠ 0 (:744); --part main|robustness enden mit demselben unbenannten Fehler statt „AP1 pilot has not passed: …“ (:715); acmg_evaluate()/--evaluate-only stürzen ab, sobald eine Llama/Qwen-Pilotzeile ohne provider im Store liegt (:1057). Widerspricht inst/validation/ap1/README.md:69–71. Behebung: exakter Zugriff (etwa acmg_meta_text(responses, \"provider\"), fehlend/leer/Leerraum → Hinweis mit meta$id; [[ auch für id), Regeln und Sperre unverändert; Unit-Tests ohne Netz mit meta aus dem echten Backend (Fixture ohne provider nur im Speicher): acmg_pilot() mit zwölf Regelzeilen und Hinweis, acmg_evaluate() läuft, acmg_run_cli --part pilot in-process ohne Fehler mit Regelzeilen, --part main danach mit benanntem Fehler ohne Aufruf."
-    }
-  ],
+  "round": 3,
+  "verdict": "PASS",
+  "blocking": [],
   "nonblocking": [
     {
-      "id": "E32",
-      "ref": "ADR-010 Nr. 6 („Die Ausgabe nennt den Grund.“); ADR-006 Nr. 7.2",
-      "note": "Eine fehlerfreie, nicht API-belegte Pilotantwort von Llama/Qwen (etwa ohne id) lässt provider zu Recht scheitern, die Begründung lautet aber „requested CoreWeave ; reported CoreWeave“ (R/acmg.R:510, :516); ein provider nur aus Leerraum scheitert ohne Hinweis auf GET /api/v1/generation. Builder gedeckt (ADR-010 Nr. 6 hielt den Code von Runde 1 für ausreichend). Im selben Zug wie E31 den fehlenden API-Beleg nennen. BL-66."
+      "id": "E34",
+      "ref": "docs/01 §2 Nr. 4 („klare Fehlermeldung“); ADR-010 Nr. 3.4",
+      "note": "Die neue Herkunftsmeldung endet immer mit „store unchanged.“ (R/acmg.R:647). Bei Folgeaufrufen stimmt das. Im ersten CLI-Pilot mit unbelegten Antworten liest acmg_run_cli() den Store aber erst nach msa_run() (R/acmg.R:743–745); dann sind die 90 Aufrufe gerade gespeichert und bezahlt (Reviewer-Nachprüfung 6). Wendung aus der bisherigen Meldung übernommen, Builder gedeckt. Wortlaut je Lage, Verhalten unverändert. BL-68."
     },
     {
-      "id": "E33",
-      "ref": "ADR-010 Nr. 3.4; ADR-006 Nr. 7.6; docs/01 §2 Nr. 4",
-      "note": "Ein api-Store mit fehlerfreien, nicht belegten Zeilen endet nach Nr. 3.4 zu Recht benannt und ohne Storeänderung, aber mit „AP1 store backend/provenance does not match --backend; store unchanged.“ (R/acmg.R:641–643), obwohl --backend stimmt; im CLI-Pilot nach dem Speichern aller 90 Aufrufe und ohne Regelzeilen (Reviewer-Nachprüfung 8). Eigene Meldung mit Zahl der Zeilen, Hinweis auf meta id/model_snapshot und neuen Store; Verhalten unverändert; Pilotbericht in diesem Fall bei Bedarf per ADR. BL-67."
+      "id": "E35",
+      "ref": "docs/03 A.6 („usage.completion_tokens, schließt Reasoning ein“); ADR-006 Nr. 7.4; ANK-94",
+      "note": "qwen.json meldet reasoning_tokens 197 bei completion_tokens 157; abgerechnet sind 157 (upstream_inference_completions_cost 4,396e-05 USD = 157 · 0,28 / 10^6). Die Kostenregel trifft die Abrechnung, der Berichtssatz „Reasoning is already included in completion_tokens.“ (R/acmg.R:993) gilt für diese Antwort aber nicht. Code folgt dem Wortlaut von A.6; für den Builder nichts zu tun. Betreiber prüft im Pilot; Änderung von Bericht oder Spec nur per ADR. BL-69."
     },
     {
       "id": "E26",
       "ref": "ADR-006 Nr. 7.4; ADR-010 Nr. 6",
-      "note": "Unverändert; die strengere Sperre ist durch test-acmg-rework.R:215 für alle drei Modelle belegt. Das Pilot-Quantil liest weiter evaluation.kappa_bootstrap.quantile_type (R/acmg.R:529); bei Gelegenheit entkoppeln. BL-64."
+      "note": "Unverändert; die strengere Sperre ist durch test-acmg-rework.R:215 und test-acmg-pilot-metadata.R:89 belegt, die Begründung nennt jetzt den fehlenden API-Beleg (E32). Das Pilot-Quantil liest weiter evaluation.kappa_bootstrap.quantile_type (R/acmg.R:531); bei Gelegenheit entkoppeln. BL-64."
     },
     {
       "id": "E28",
       "ref": "[INFRA] docs/03 A.7 (Logging-Regeln CoreWeave und DeepInfra aus quellen/anbieter_2026-10-22/openrouter/Provider_Logging.html)",
-      "note": "Unverändert: der Schnappschuss belegt keine anbieterspezifische Regel (Builder-Nachprüfung REWORK-NOTES E28: je 0 Treffer). Betreiber liefert datierte Belege vor dem AP1-Bericht, Übernahme per Anker/ADR. Für den Builder nichts zu tun. BL-63."
+      "note": "Unverändert: Der Textspiegel Provider_Logging.html.txt enthält je 0 Treffer für CoreWeave und DeepInfra. Betreiber liefert datierte Belege vor dem AP1-Bericht, Übernahme per Anker/ADR. Für den Builder nichts zu tun. BL-63."
     },
     {
       "id": "E29",
