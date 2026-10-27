@@ -1,271 +1,268 @@
-# REWORK-NOTES — M2, Runde 2
+# REWORK-NOTES — M2, Runde 3
 
 Rolle: Builder · Phase: REWORK · Stand: 27.10.2026.
-Grundlage: REVIEW und verdict-code der Runde 1, CRITERIA K-M2-1 bis
-K-M2-7/ACC-1 bis ACC-25 sowie die angenommene ADR-010. AGENTS,
-IMPLEMENTATION-RULES, PROTOCOLS, Handoff-Schema, PROGRESS,
-Fachspezifikationen, betroffene Abnahmetests, QA und das rote
-`orchestrator/state/M2/gate-tests.log` wurden gelesen.
-`ARBITER.md` liegt für M2 nicht vor; LESSONS enthält noch keine Lehre.
+Grundlage: REVIEW und verdict-code der Runde 2, K-M2-1 bis K-M2-7,
+CRITERIA ACC-1 bis ACC-25, ADR-006 und ADR-010. Gelesen wurden AGENTS,
+IMPLEMENTATION-RULES, PROTOCOLS, Handoff-Schema, PROGRESS, die
+Fachspezifikationen, die betroffenen Abnahmetests und Gate-Logs.
+ARBITER liegt nicht vor; LESSONS enthält keine zusätzliche Lehre.
 
-Die Produktkorrekturen betreffen ausschließlich `R/acmg.R`.
-`tests/testthat/test-acmg-rework.R` ergänzt neun Unit-Blöcke.
-Bestehende Tests, QA-/Abnahmetests, Fixtures, Anker, Schwellen,
-Plan-YAML und Gates werden nicht geändert. Der gelesene Gate-Stand
-bleibt Runde 1: `result: fail`, nur `tests: fail`, alle übrigen Gates
-`pass`. Kein Gate hat Status `error`. Die nachstehenden Ausführungen
-sind Builder-Prüfungen; neue Gate-Fakten erzeugt nur der Orchestrator.
+Der gelesene Gate-Stand ist Runde 2: alle acht Gates und `result` sind
+`pass`. Kein Gate ist fachlich rot oder hat Status `error`. REVIEW
+verlangt trotzdem REWORK wegen E31. Diese Notizen dokumentieren
+Builder-Prüfungen; neue Gate-Fakten und die Abnahme stehen aus.
+
+Produktänderungen: ausschließlich `R/acmg.R`. Neu sind sieben
+Unit-Blöcke in `tests/testthat/test-acmg-pilot-metadata.R`; ergänzt
+werden PROGRESS und dieser zugewiesene Handoff. Bestehende Tests,
+Aufzeichnungen, Anker, Schwellen und der freigegebene Plan bleiben
+unverändert. Ein neuer ADR ist für diese Umsetzung der bestehenden
+Verträge nicht erforderlich.
 
 ## Antworten auf die Befunde
 
-### E21 / QA-M2-001 — behoben im Produktcode
+### E31 — behoben im Produktcode
 
-Ref: Gate tests; ADR-006 Nr. 7.8; ADR-010 Nr. 1.
-`R/acmg.R:570` (`acmg_repeat_day()`) gibt nur tatsächlich beobachtete
-Modell-/Blockkombinationen aus. Ein Einzelmodellbericht enthält damit
-ausschließlich dessen eigene Diagnosen; auch bei einem fehlenden Block
-entsteht keine erfundene FALSE-/NA-Zeile. Die Aufruf- und Fehlerzählung
-stammt weiter aus den übergebenen Hauptplanzeilen.
+Ref: K-M2-4, K-M2-7; ADR-006 Nr. 7.2, 7.6, 7.7; docs/01 §2 Nr. 4;
+PLAN-REVIEW E18.
 
-Belege: unverändertes QA-M2-001 grün; neuer Unit-Block
-`tests/testthat/test-acmg-rework.R:3` prüft alle drei Berichte mit
-gezielt unterschiedlichen Anbieter-/Modellwechseln und Fehleranteilen
-sowie eine nur teilweise vorhandene Blockmenge. Output des gemeinsamen
-Unit-/QA-Laufs siehe unten.
+`acmg_pilot()` (`R/acmg.R:483`) liest den bedienenden Anbieter über
+`acmg_meta_text(responses, "provider")`. Das Anfragerouting
+`provider_order` kann damit kein fehlendes Antwortfeld ersetzen.
+Fehlende, JSON-null-, leere und reine Leerraumwerte ergeben eine
+nicht bestandene Anbieterregel, einen Hinweis auf
+`GET /api/v1/generation` und die betroffene Antwort-ID. Eine fehlende
+ID wird als `unavailable` ausgewiesen. Die Regel liefert stets einen
+logischen Wert, auch bei fehlenden Anbietern.
 
-### E22 / QA-M2-002 — behoben im Produktcode
+Alle übrigen Metadatenzugriffe im Pilot und in `acmg_meta_kind()`
+(`R/acmg.R:445`) verwenden ebenfalls exakte Feldnamen. Zusätze wie
+`id_requested`, `model_snapshot_requested`, `mock_description` oder
+`usage_estimate` ersetzen keine API-Belege oder gemessenen Tokens.
+Die bisherigen Regeln und Schwellen bleiben bestehen: Fehlender
+Anbieter beeinflusst weder 4xx noch Parser oder Kosten; fehlender
+API-Beleg sperrt weiterhin Anbieter und die globalen Kostenregeln.
 
-Ref: Gate tests; ADR-006 Nr. 7.2/7.8; ADR-010 Nr. 2.
-`acmg_meta_text()` (`R/acmg.R:449`) erhält fehlende Textfelder als NA,
-statt sie mit `unlist()` zu verlieren. `acmg_repeat_day()` zählt bei
-angefordertem Anbieter auch fehlende, leere und reine Leerraumwerte
-einer fehlerfreien Antwort als Abweichung. Ein fehlender Anbieter einer
-Backendfehlerzeile löst diesen zusätzlichen Alarm nicht aus; bei Sol
-ohne angeforderten Anbieter ebenfalls nicht.
+Belege in `test-acmg-pilot-metadata.R`:
 
-Belege: unverändertes QA-M2-002 grün; Unit-Block
-`tests/testthat/test-acmg-rework.R:44` prüft alle Planmodelle mit
-teilweise und vollständig fehlenden Angaben, einschließlich NULL,
-Leerstring, Leerraum und JSON-null sowie des Backendfehlerfalls.
+- Zeile 46: Llama und Qwen über `acmg_api_backends()` und den echten
+  HTTP-Backendpfad, mit allen vier Arten fehlender Anbieter. Zwölf
+  Regelzeilen, fehlgeschlagene Anbieterregel, Generation-Hinweis und
+  Antwort-ID; Gegenprobe mit wieder eingesetztem Anbieter.
+- Zeilen 89 und 129: exakte API-/Mock-/Tokenfelder und fehlende IDs.
+- Zeile 161: API-Pilot über den CLI-Treiber mit 90 gemockten Antworten,
+  zwölf Regelzeilen und unverändertem Resume. Danach scheitern sowohl
+  `main` als auch `robustness` benannt mit `AP1 pilot has not passed: …;
+  no API calls made.`; Aufrufzahl und Store-Hash bleiben gleich. Die
+  Robustheitsprüfung durchläuft zuvor die gültige synthetische
+  INSAID-Vorprüfung.
+- Zeile 209: vollständige synthetische Hauptplanzeilen mit
+  API-artigen Metadaten und Pilotantworten ohne Anbieter; direkte
+  Auswertung und `--evaluate-only` liefern identische Ergebnisse und
+  Pilotregeln für alle drei Modelle. Fit und Renderer sind hier
+  ausdrücklich Unit-Stubs; die an den Renderer übergebenen
+  Pilot-Tabellen werden geprüft. Echte Fits und Berichte werden im
+  unveränderten Abnahmelauf geprüft.
 
-### E23 / QA-M2-003 — behoben im Produktcode
+Die zusätzlichen Aufzeichnungsfälle verwenden `llama.json`,
+`qwen.json` und `sol.json` aus dem Betreiberbestand; die Antworten
+werden ausschließlich im Speicher verändert und über
+`httr2::local_mocked_responses()` eingespielt. Der Test-Matcher prüft
+URL und Modell und bricht bei unbekannten Anfragen ab. Er nutzt den
+vorhandenen Unit-Serializer ohne Socket, keine Abnahme-Helfer.
+Schlüssel sind ausschließlich synthetisch.
 
-Ref: Gate tests; ADR-006 Nr. 9; PLAN-UPDATE E3; ADR-010 Nr. 3.
-`R/acmg.R:454` (`acmg_provenance()`) leitet Herkunft aus fehlerfreien
-Zeilen ab. Ein API-Marker ersetzt keinen fehlenden Zeilenbeleg.
-Mock-Belege bzw. ein Mock-Marker erhalten `synthetic` auch neben
-unbelegten Zeilen. `api` verlangt vollständige Belege der fehlerfreien
-Zeilen; ein markierter Store nur mit Fehlerzeilen bleibt möglich.
-Ohne Marker begründen Fehlerzeilen allein keine Herkunft.
-Explizite Metadaten, die einem persistierten Modus widersprechen,
-bleiben ein benannter Fehler, auch im bestehenden Unit-Fall einer
-Fehlerzeile mit API-Metadaten im Mock-Store. Die bisherigen
-Store-Konfliktprüfungen bleiben damit wirksam.
+Die sieben Blöcke laufen im Paket immer mit synthetischen Antworten.
+Die explizite Testoption `llmsa.test.ap1_recordings` fügt dieselben
+Fälle mit den Betreiber-Aufzeichnungen hinzu; ein fehlender dort
+angeforderter Datensatz führt zum Fehler. So bleibt der installierte
+Pakettest gemäß PLAN-UPDATE E9 unabhängig von nicht ausgelieferten
+Fixtures. Die Testoption wird vom Produktcode nicht gelesen.
 
-`acmg_store_read()` bleibt unverändert: Es liest SQLite schreibgeschützt
-und verwirft die nun korrekt erkannte unbelegte API-Herkunft mit
-`AP1 store backend/provenance does not match --backend; store unchanged.`
+### E32 — zusätzlich behoben im Produktcode
 
-Belege: unverändertes QA-M2-003 und alle bisherigen Store-Unit-Tests
-grün. Neue Blöcke `tests/testthat/test-acmg-rework.R:63` und `:96`
-prüfen die Kombinationen aus Marker, belegter/unbelegter Zeile und
-Backendfehler sowie identische SHA-256 vor/nach abgelehntem Lesen.
+Ref: ADR-010 Nr. 6; ADR-006 Nr. 7.2; BL-66.
 
-### E24 / QA-M2-004 — behoben im Produktcode
+Die Anbieterbegründung nennt bei fehlendem API-Beleg nun ausdrücklich
+`missing API evidence` sowie die Pflichtfelder `meta$id` und
+`meta$model_snapshot` (`R/acmg.R:522`). Das gilt auch bei korrekt
+angegebenem Anbieter. Leerraum im Anbieterfeld erhält den
+Generation-Hinweis aus E31. Die strengere Sperre aus ADR-010 bleibt
+unverändert.
 
-Ref: Gate tests; K-M2-6; ADR-006 Nr. 8.1/11; ADR-010 Nr. 4.
-`acmg_evaluate()` übergibt `acmg_modal_table()` alle eingefrorenen
-Item-IDs (`R/acmg.R:799`, `:1025`). Jedes Modell erhält genau eine
-Modalzeile je Planitem. Ohne Hauptplanaufrufe gilt `modal = NA`,
-`has_modal = FALSE`; das Item zählt in `n_no_modal` und
-`excluded_no_modal`. Itemmerkmale stammen aus den übrigen Zeilen von
-`runs`, einschließlich PB-Zeilen. Fehlt das Item dort ganz, bleiben
-die Merkmale NA. Widersprüche über die Zeilen eines Items führen zum
-benannten Fehler; die IDs werden nicht zum Nachladen von Referenzen
-aus der Paketdatei verwendet.
+Beleg: neuer Unit-Block ab Zeile 89 für alle drei Modelle, jeweils
+fehlende ID oder Modellkennung, auch neben ähnlich benannten Feldern.
+Anbieter und alle Kostenregeln scheitern; Parser und 4xx bleiben
+bestanden. Der bisherige E26-Test bleibt ebenfalls grün. BL-66 kann
+anhand dieser Belege vom Reviewer geschlossen werden.
 
-Die sekundäre PB-Trefferquote in `acmg_robustness()` (`R/acmg.R:870`)
-nutzt die Referenzspalte der PB-Zeilen. Vorhandene NA-Referenzen werden
-nicht durch Modalreferenzen ersetzt. Der Stabilitätsvergleich bleibt
-gegen die Modalantwort des Hauptplans. Ein unvollständiger Hauptplan
-erhält weiter ausschließlich Kriterienbänder `not assessed` und kein
-Gesamtverdikt.
+### E33 — zusätzlich behoben im Produktcode
 
-Belege: unverändertes QA-M2-004 grün. Der neue Unit-Block
-`tests/testthat/test-acmg-rework.R:119` prüft fehlende Items je Modell,
-ein nur in PB-Zeilen vorhandenes Item, vollständig fehlende Merkmale,
-die Bilanz über alle Planitems, unveränderte Referenznenner, Konflikte
-und Unabhängigkeit von der Reihenfolge der Metadatenzeilen.
+Ref: ADR-010 Nr. 3.4; ADR-006 Nr. 7.6; docs/01 §2 Nr. 4; BL-67.
 
-### E25 / QA-M2-005 — behoben im Produktcode
+`acmg_store_read()` (`R/acmg.R:622`) meldet für unbelegte Herkunft
+nun `AP1 store backend/provenance is unverified`, die Anzahl der
+betroffenen fehlerfreien Antworten, die fehlenden API-Belegfelder
+`meta$id`/`meta$model_snapshot` und den nötigen neuen Store. Die
+Zählung schließt Backendfehler und vollständig belegte Antworten aus.
+Ein tatsächlicher Moduskonflikt behält seine bisherige Meldung.
 
-Ref: Gate tests; ADR-005 Nr. 1; ADR-006 Nr. 8.2; ADR-010 Nr. 5.
-`R/acmg.R:1000` (`acmg_evaluate()`) prüft Antwort- und Referenzklassen
-über Hauptplan- und PB-Zeilen vor dem ersten Fit. Nicht normalisierte
-oder unbekannte Klassen lösen denselben benannten Fehler aus:
-`AP1 runs contain unknown response or reference classes.`
+Der Store wird weiterhin schreibgeschützt gelesen. Eine API-Kennung
+heilt keine unbelegten Zeilen. Nach erstmaliger Erhebung mit fehlender
+ID bleiben die bereits gespeicherten 90 Aufrufe erhalten; die
+anschließende Herkunftsprüfung bricht weiterhin ab, bevor ein
+Pilotbericht entsteht. Dieses Verhalten wird gemäß REVIEW E33 nicht
+geändert; ein anderer Ablauf bedürfte einer gesonderten Entscheidung.
 
-`acmg_robustness()` verlangt zusätzlich zu den bisherigen Zählungen
-geplante Replikate, Block 1 und eindeutige `run_key`. Ein falscher,
-gebrochener oder fehlender Schlüsselwert verhindert die Bewertung;
-`complete = FALSE`, `effects = NULL`, `band = "not assessed"` und eine
-Begründung werden zurückgegeben. Die vollständigen Laufspalten sind
-am Eingang von `acmg_evaluate()` Pflicht. Der interne Rechenhelfer
-unterstützt weiterhin reduzierte Item-/Prompttabellen ohne konstante
-Designspalten, wie in den bestehenden Unit-Tests und im QA-Wortlaut
-„sofern die Spalten … vorhanden sind“. Bei einer solchen internen
-Tabelle darf die Referenz weiterhin aus `modal` kommen, wenn überhaupt
-keine Referenzspalte übergeben wurde. Im Auswertungspfad sind die
-Spalten vorhanden und die Prüfungen verbindlich; NA-Werte werden
-nicht ergänzt. Kein Bestandstest wurde dafür verändert.
+Belege: neue Unit-Blöcke ab Zeilen 255 und 284 zählen zwei unbelegte
+Antworten neben einem Backendfehler sowie 30 unbelegte Llama-Antworten
+unter 90 gespeicherten Aufrufen. Mock-Stores, echte Moduskonflikte,
+identische SHA-256 nach abgelehntem Lesen und null weitere Aufrufe
+beim erneuten CLI-Aufruf sind geprüft. BL-67 zur Prüfung an den
+Reviewer.
 
-Belege: unverändertes QA-M2-005 grün; neue Blöcke
-`tests/testthat/test-acmg-rework.R:166` und `:180` prüfen sämtliche
-unzulässigen Klassen getrennt für Antwort/Referenz sowie falsche,
-NA- und doppelte Designschlüssel und fremde Item-/Prompt-IDs.
+### E26 — bestätigte Sperre; Quantil-Entkopplung bleibt offen
 
-### E26 — bestätigte Regel; keine Produktänderung
+Ref: ADR-006 Nr. 7.4; ADR-010 Nr. 6; BL-64.
 
-Ref: ADR-010 Nr. 6; BL-64. Die strengere Sperre bei einer
-fehlerfreien Pilotantwort ohne API-ID bleibt wie vom Reviewer
-bestätigt: Anbieterregel des Modells und Kostenregeln aller Modelle
-scheitern. Der neue Unit-Block `tests/testthat/test-acmg-rework.R:215`
-belegt dies für alle drei Modelle, bei weiterhin bestandenen Parser-
-und 4xx-Regeln. Die Kopplung des Pilot-Quantiltyps an das
-Bootstrap-Feld bleibt unverändert und als Restpunkt BL-64 offen.
-Kein Schwellenwert und keine Pilotregel wurde umgedeutet.
-
-### E27 — zusätzlich behoben im Produktcode
-
-Ref: `docs/03` A.7; BL-65. `acmg_assessment()` (`R/acmg.R:923`)
-nennt unter „Model and routing“ die Anzahl fehlerfreier Antworten
-ohne Anbieter und ohne `system_fingerprint`, jeweils mit Nenner.
-Vorhandene Werte bleiben sichtbar; Backendfehler zählen nicht in
-diese Fehlstellenzählung.
-
-Der neue Unit-Block `tests/testthat/test-acmg-rework.R:232` rendert
-echte HTML-Berichte und vergleicht die ausgegebenen Zählungen.
-Der erste Lauf dieses neuen Tests scheiterte allein am HTML-Zeilenumbruch
-der geprüften Wortfolge. Der Test normalisiert nun HTML-Leerraum;
-der erwartete Text und sämtliche Zahlen bleiben identisch.
-Im abschließenden Unit-Lauf bestehen alle 194 Erwartungen der neun
-neuen Blöcke. BL-65 kann der Reviewer anhand dieses Nachweises schließen.
+Die Sperre bei fehlendem API-Beleg bleibt erhalten und ist durch den
+Bestandstest `test-acmg-rework.R:215` sowie die neuen E32-Fälle belegt.
+Ihre Begründung ist mit E32 verbessert. Der Pilot-Quantiltyp wird
+weiterhin aus `evaluation.kappa_bootstrap.quantile_type` gelesen.
+Die Entkopplung wird in dieser Fehlerkorrektur vertagt: Der
+freigegebene unveränderte Plan trägt Typ 7; Rechenverfahren, Planfelder
+und Schwellen werden hier nicht geändert. BL-64 bleibt beim Reviewer
+zur Fortschreibung.
 
 ### E28 — OUT-OF-TERRITORY [INFRA]
 
-Ref: `docs/03` A.7; M2-BUILD-INFRA-02; BL-63.
-Der eingefrorene `Provider_Logging.html` belegt keine spezifischen
-Logging-Regeln von CoreWeave oder DeepInfra. Die erneute reine
-Textprüfung ergibt in `/tmp/llmsa-m2-r2/infra-evidence.log`:
+Ref: docs/03 A.7; M2-BUILD-INFRA-02; BL-63.
+
+Der Textspiegel des eingefrorenen Provider-Logging-Dokuments belegt
+weiterhin keine anbieterspezifischen Regeln. Tatsächlicher Output
+in `/tmp/llmsa-m2-r3/infra-evidence.log`:
 
 ```text
-E28: Provider_Logging snapshot: CoreWeave matches = 0; DeepInfra matches = 0
+E28: reference/quellen/text/anbieter_2026-10-22/openrouter/Provider_Logging.html.txt: CoreWeave matches = 0; DeepInfra matches = 0
 ```
 
-Das bestätigt REVIEW, Nachprüfung 8. Betreiber: datierte spezifische
-Belege liefern; Reviewer: Übernahme per Anker/ADR. Plan und Berichte
-benennen weiterhin die Quellenlücke. Keine erfundene Policy und keine
-Änderung an Quellen, Ankern oder BACKLOG.
+Betreiber: datierte spezifische Belege liefern. Reviewer: Übernahme
+per Anker/ADR. Keine erfundene Policy und kein Builder-Eingriff in
+Quellen, Anker oder BACKLOG.
 
 ### E29 — OUT-OF-TERRITORY [INFRA]
 
-Ref: BL-56; PLAN-REVIEW E14. Log-Beleg:
+Ref: BL-56; PLAN-REVIEW E14. Aktueller Log-Beleg:
 
 ```text
-orchestrator/state/M2/gate-tests.log:92:
-• On CRAN (1): 'test-report.R:5:3'
-orchestrator/lib/r-tests.R: NOT_CRAN references = 0
+E29: orchestrator/lib/r-tests.R: NOT_CRAN references = 0
+E29: orchestrator/state/M2/gate-tests.log:107: • On CRAN (1): 'test-report.R:5:3'
 ```
 
-Der direkte Builder-Unit-Lauf setzt `NOT_CRAN=true` und führt damit
-auch den generischen Bestandsbericht tatsächlich aus. Der unveränderte
-Paketcheck behält seinen CRAN-Skip; die neuen AP1-Renderingtests laufen
-dort ebenfalls. Eine dauerhafte Gate-Konfiguration bleibt Betreiberarbeit.
+Der direkte Builder-Lauf führt den Bestandsbericht mit `NOT_CRAN=true`
+aus. Im installierten Paketcheck bleibt dessen bisheriger CRAN-Skip
+bestehen. Die dauerhafte Gate-Konfiguration ist Betreiberaufgabe.
 
 ### E30 — OUT-OF-TERRITORY [INFRA]
 
-Ref: BL-48; PLAN-REVIEW E15; `docs/gates-auswahl.md:87`.
-Die Zuordnung enthält weiterhin `K-M2-1 bis K-M2-6`; K-M2-7 fehlt.
-Der exakte Zeilenauszug steht in
-`/tmp/llmsa-m2-r2/infra-evidence.log`; REVIEW E30 bestätigt denselben
-Stand. Die Gate-Auswahl/-Zuordnung wird vom Builder nicht geändert.
-Betreiber: K-M2-7 ergänzen. Das trace-Gate war bereits grün.
+Ref: BL-48; docs/gates-auswahl.md:87.
+
+Die Zuordnungszeile nennt weiterhin `K-M2-1 bis K-M2-6`; K-M2-7 fehlt.
+Die vollständige Zeile ist in `infra-evidence.log` protokolliert.
+Betreiber: Zuordnung ergänzen. Das trace-Gate der Runde 2 ist grün;
+Gate-Auswahl und Zuordnungsdokument werden vom Builder nicht geändert.
+
+### Bereits angenommene Befunde aus Runde 1
+
+| ID | Antwort in Runde 3 |
+| --- | --- |
+| E21 / QA-M2-001 | Erledigt laut REVIEW Runde 2; unveränderter QA-Test und Bestandsregression grün. Nur beobachtete Modell-/Blockkombinationen bleiben im Bericht. |
+| E22 / QA-M2-002 | Erledigt; unveränderter QA-Test grün. Fehlende Anbieter lösen weiter die Wiederholungstagsdiagnose aus. E31 behebt separat den Pilotpfad. |
+| E23 / QA-M2-003 | Erledigt; unveränderte Store-/QA-Tests grün. E33 verbessert ausschließlich die Diagnose des unveränderten Abbruchs; exakte Belegfelder nach E31. |
+| E24 / QA-M2-004 | Erledigt; unveränderte QA-/Unit-Tests grün, einschließlich fehlender Hauptplanitems und PB-Referenzen. |
+| E25 / QA-M2-005 | Erledigt; unveränderter Fuzz-Test grün. Klassen- und PB-Schlüsselprüfung bleiben erhalten. |
+| E27 | Erledigt; unveränderter Unit-Test rendert die Anbieter-/Fingerprint-Zählungen im echten HTML-Bericht. |
 
 ## Ausgeführte Prüfungen
 
-Alle Befehle liefen in dieser REWORK-Phase ohne Git, Installation,
-API-Zugriff oder reale Schlüssel. Testdaten sind ausdrücklich
-synthetisch oder unveränderte vorhandene Ressourcen.
-
-### Ausgangsfehler: unveränderte QA-Tests (Exit 1)
-
-```bash
-Rscript --vanilla orchestrator/lib/r-tests.R tests/e2e tests/fuzz
-```
-
-Vor der Produktänderung, Log `/tmp/llmsa-m2-r2/qa-before.log`:
+Logs und temporäre Paketkopien liegen unter `/tmp/llmsa-m2-r3/`.
+Kein Lauf schreibt Gate-Fakten. Keine Git-Kommandos, Installation,
+realen API-Aufrufe oder realen Schlüssel. Die vorhandenen Aufzeichnungen
+stimmen weiterhin mit ANK-94 überein:
 
 ```text
-[ FAIL 8 | WARN 0 | SKIP 0 | PASS 2 ]
-[ FAIL 5 | WARN 0 | SKIP 0 | PASS 0 ]
-r-tests: fail — 5 Tests in tests/e2e, tests/fuzz; 5 fehlgeschlagen, 0 Fehler, 0 übersprungen
+Operator recordings: 3/3 match ANK-94 SHA-256.
 ```
 
-Dies reproduziert alle fünf Ursachen des roten Tests-Gates aus Runde 1.
+### Endgültige Regressionstests gegen den alten Produktstand (erwartet Exit 1)
 
-### Abschließender Unit-/QA-Lauf (Exit 0)
+Die temporäre Paketkopie `regression-before` enthält die endgültigen
+neuen Tests und die vor dieser Phase gesicherte `R/acmg.R`. Der
+Arbeitsbaum wird nicht zurückgesetzt. In der Kopie ausgeführt:
+
+```bash
+Rscript --vanilla -e 'options(llmsa.test.ap1_recordings = "/mnt/c/Users/Danie/dev/Llmsa/llmsa/tests/fixtures/api"); x <- testthat::test_dir("tests/testthat", filter = "acmg-pilot-metadata", load_package = "source", reporter = "silent", stop_on_failure = FALSE); d <- as.data.frame(x); print(d[, c("test", "passed", "failed", "error", "skipped")], row.names = FALSE); cat(sprintf("Regression blocks: %d; failed blocks: %d; error blocks: %d; skips: %d\n", nrow(d), sum(d$failed > 0), sum(d$error), sum(d$skipped))); for (block in x) for (result in block$results) if (inherits(result, "expectation_error")) cat("Error: ", result$message, "\n", sep = ""); quit(status = as.integer(any(d$failed > 0 | d$error)))'
+```
+
+Tatsächlicher Auszug aus `regression-final-before.log`:
+
+```text
+Regression blocks: 7; failed blocks: 4; error blocks: 5; skips: 0
+Error: Error in `vapply(responses, function(x) x$provider %||% "", "")`: values must be type 'character',
+ but FUN(X[[1]]) result is type 'list'
+Error: Error: AP1 mixed mock/API provenance is not permitted.
+Error: Error: AP1 store backend/provenance does not match --backend; store unchanged.
+```
+
+Fehlschlag und Fehler können denselben Block betreffen; insgesamt
+sind alle sieben Blöcke rot. Das belegt die Regressionserkennung,
+keinen Mutationsscore und keinen Äquivalenz-Claim.
+
+### Gezielte Unit-Prüfung einschließlich Aufzeichnungsvarianten (Exit 0)
+
+```bash
+Rscript --vanilla -e 'options(llmsa.test.ap1_recordings = normalizePath("tests/fixtures/api")); testthat::test_dir("tests/testthat", filter = "acmg-pilot-metadata", load_package = "source", reporter = testthat::ProgressReporter$new(show_praise = FALSE), stop_on_failure = TRUE)'
+```
+
+Tatsächlicher Schluss aus `targeted-after.log`:
+
+```text
+✔ |        370 | acmg-pilot-metadata [14.2s]
+Duration: 14.2 s
+[ FAIL 0 | WARN 0 | SKIP 0 | PASS 370 ]
+```
+
+### Vollständiger Unit-/QA-Lauf (Exit 0)
 
 ```bash
 NOT_CRAN=true /usr/bin/time -f 'Unit and QA elapsed seconds: %e; exit: %x' \
   Rscript --vanilla orchestrator/lib/r-tests.R tests/testthat tests/e2e tests/fuzz
 ```
 
-Log `/tmp/llmsa-m2-r2/unit-qa.log`, tatsächliche Schlusszeilen je Ordner:
+Tatsächliche Schlusszeilen aus `unit-qa.log`:
 
 ```text
-✔ |        194 | acmg-rework [7.5s]
-[ FAIL 0 | WARN 0 | SKIP 1 | PASS 874 ]
+✔ |        222 | acmg-pilot-metadata [6.8s]
+✔ |        194 | acmg-rework [7.8s]
+[ FAIL 0 | WARN 0 | SKIP 1 | PASS 1096 ]
 [ FAIL 0 | WARN 0 | SKIP 0 | PASS 9 ]
 [ FAIL 0 | WARN 0 | SKIP 0 | PASS 5 ]
-r-tests: pass — 73 Tests in tests/testthat, tests/e2e, tests/fuzz; 0 fehlgeschlagen, 0 Fehler, 1 übersprungen
-Unit and QA elapsed seconds: 33.90; exit: 0
+r-tests: pass — 80 Tests in tests/testthat, tests/e2e, tests/fuzz; 0 fehlgeschlagen, 0 Fehler, 1 übersprungen
+Unit and QA elapsed seconds: 41.65; exit: 0
 ```
 
-Der einzige Skip ist der unveränderte ellmer-Fehlerpfad
-`test-backends.R:32:3`, weil ellmer installiert ist. Die neun statt
-zehn QA-E2E-Erwartungen ergeben sich aus der vorhandenen Bedingung in
-QA-M2-001: Im Sol-Bericht gibt es jetzt keine fremde Llama-Zeile, daher
-entfällt die bedingte Prüfung ihrer Auslöser. Der QA-Test ist byte-identisch.
+Der einzige Skip ist der unveränderte ellmer-Fehlerpfad, weil ellmer
+installiert ist. Alle fünf QA-Befunde bleiben behoben. Die neuen
+Blöcke laufen hier vollständig mit synthetischen HTTP-Antworten;
+die zusätzlichen Aufzeichnungsfälle stehen im gezielten Lauf oben.
 
-### Neue Regressionstests gegen den alten Produktstand (erwartet Exit 1)
+### Paketbau und installierter Paketcheck (je Exit 0)
 
-Eine separate Paketkopie unter `/tmp/llmsa-m2-r2/regression-before`
-enthält dieselben neuen Unit-Tests, aber die vor REWORK gesicherte
-`R/acmg.R`. Ausgeführt in dieser Kopie:
-
-```bash
-NOT_CRAN=true Rscript --vanilla -e 'x <- testthat::test_dir("tests/testthat", filter = "acmg-rework", load_package = "source", reporter = "silent", stop_on_failure = FALSE); d <- as.data.frame(x); print(d[, c("test", "passed", "failed", "error", "skipped")], row.names = FALSE); cat(sprintf("Baseline regression blocks: %d; failed: %d; errors: %d; skipped: %d\n", nrow(d), sum(d$failed > 0), sum(d$error), sum(d$skipped))); quit(status = as.integer(any(d$failed > 0 | d$error)))'
-```
-
-Log `/tmp/llmsa-m2-r2/regression-before.log`:
-
-```text
-Baseline regression blocks: 9; failed: 7; errors: 4; skipped: 0
-```
-
-Fehlschlag und Fehler können denselben Block betreffen: Insgesamt sind
-acht Blöcke rot. Der neunte (E26) besteht mit 18 Erwartungen auch im
-alten Stand, weil er die bestätigte bestehende Pilotregel festhält.
-Der aktuelle Quellbaum wurde hierfür nicht zurückgesetzt. Das ist ein
-Nachweis der Regressionserkennung, kein Mutationsscore und kein Claim.
-
-### Paketbau und installierter Paketcheck (Exit 0)
-
-Explizite Kopierliste nach `/tmp/llmsa-m2-r2/package-check/src`:
-DESCRIPTION, NAMESPACE, LICENSE, NEWS, README, .Rbuildignore, R, man,
-data, inst, vignettes, tests/testthat.R und tests/testthat. Keine
-Schlüssel-, Harness- oder geschützten Quelldateien. Ausgeführt im
-übergeordneten temporären Verzeichnis:
+Positivliste nach `package-check/src`: DESCRIPTION, NAMESPACE,
+LICENSE, NEWS, README, .Rbuildignore, R, man, data, inst, vignettes,
+tests/testthat.R und tests/testthat. Keine Schlüssel, geschützten
+Quellen, Betreiber-Fixtures oder Harness-Dateien. Im übergeordneten
+Verzeichnis ausgeführt:
 
 ```bash
 R CMD build --no-manual src
@@ -274,23 +271,22 @@ _R_CHECK_CRAN_INCOMING_REMOTE_=false \
   R CMD check --as-cran --no-manual llmsa_0.1.0.tar.gz
 ```
 
-Die Incoming-Einstellung entspricht dem gelesenen
-`orchestrator/lib/r-check.sh`. Das Skript selbst wurde wegen seiner
-Git-Kommandos nicht ausgeführt. Logs: `package-check/build.log`,
-`package-check/check.log` und `llmsa.Rcheck/tests/testthat.Rout`
-unter `/tmp/llmsa-m2-r2/`.
+Incoming-Remote entspricht dem unveränderten Betreiber-Prüfskript
+`orchestrator/lib/r-check.sh`. Das Skript selbst wird wegen seiner
+Git-Kommandos nicht ausgeführt. Tatsächlicher Output aus `build.log`,
+`check.log` und `llmsa.Rcheck/tests/testthat.Rout`:
 
 ```text
 * building ‘llmsa_0.1.0.tar.gz’
 * checking R code for possible problems ... OK
 * DONE
 Status: 1 NOTE
-Package check elapsed seconds: 66.19; exit: 0
-[ FAIL 0 | WARN 0 | SKIP 2 | PASS 870 ]
+Package check elapsed seconds: 71.84; exit: 0
+[ FAIL 0 | WARN 0 | SKIP 2 | PASS 1092 ]
 ```
 
-Die unveränderten installierten Skips sind `On CRAN` im generischen
-Berichtstest und der ellmer-Fehlerpfad. Die einzige NOTE lautet:
+**M2-R3-INFRA-CLOCK — OUT-OF-TERRITORY [INFRA].** Die einzige NOTE
+ist in `package-check/check.log:29–31` belegt:
 
 ```text
 * checking for future file timestamps ... NOTE
@@ -298,36 +294,38 @@ Unable to verify current time.  To disable remote verification,
 set environment variable _R_CHECK_SYSTEM_CLOCK_ to a false value.
 ```
 
-**OUT-OF-TERRITORY [INFRA], M2-R2-INFRA-CLOCK:** Das Sandbox-Umfeld
-kann die Uhrzeit nicht extern verifizieren; keine Produktursache,
-kein ERROR/WARNING. Die Uhrzeitprüfung wurde nicht abgeschaltet.
+Die Uhrzeitprüfung bleibt aktiv. Keine ERRORs oder WARNINGs. Die
+beiden installierten Skips sind unverändert der generische Bericht
+(On CRAN) und der ellmer-Fehlerpfad. Die neuen Regressionstests laufen
+auch im installierten Paket.
 
-### Betroffene unveränderte Abnahmetests K-M2-6/K-M2-7 (Exit 1: Sandbox-Infrastruktur)
+### Betroffene unveränderte Abnahme K-M2-4, K-M2-6, K-M2-7 (Exit 1: Infrastruktur)
 
 ```bash
-/usr/bin/time -f 'M2 targeted acceptance elapsed seconds: %e; exit: %x' \
-  Rscript --vanilla -e 'grDevices::pdf(tempfile(fileext = ".pdf")); testthat::test_dir("tests/acceptance", filter = "m2-[67]-", load_package = "source", reporter = testthat::ProgressReporter$new(show_praise = FALSE), stop_on_failure = TRUE)'
+/usr/bin/time -f 'Targeted acceptance elapsed seconds: %e; exit: %x' \
+  Rscript --vanilla -e 'grDevices::pdf(tempfile(fileext = ".pdf")); testthat::test_dir("tests/acceptance", filter = "m2-[467]-", load_package = "source", reporter = testthat::ProgressReporter$new(show_praise = FALSE), stop_on_failure = TRUE)'
 ```
 
-Log `/tmp/llmsa-m2-r2/acceptance.log`, tatsächlicher Output:
+Tatsächlicher Output aus `acceptance.log`:
 
 ```text
-✔ |        374 | m2-6-evaluate [216.3s]
-✖ | 1      353 | m2-7-robustness-pilot [94.1s]
-Duration: 310.4 s
-[ FAIL 1 | WARN 0 | SKIP 0 | PASS 727 ]
+✖ | 6       14 | m2-4-backends [1.1s]
+✔ |        374 | m2-6-evaluate [219.5s]
+✖ | 1      353 | m2-7-robustness-pilot [93.7s]
+Duration: 314.6 s
+[ FAIL 7 | WARN 0 | SKIP 0 | PASS 741 ]
 Error:
 ! Test failures.
 Execution halted
 Command exited with non-zero status 1
-M2 targeted acceptance elapsed seconds: 312.17; exit: 1
+Targeted acceptance elapsed seconds: 316.37; exit: 1
 ```
 
-**M2-R2-INFRA-SOCKET — OUT-OF-TERRITORY [INFRA].**
-Ref: K-M2-7 Systemspalte;
-`tests/acceptance/test-m2-7-robustness-pilot.R:175` und
-`tests/acceptance/setup-m2.R:771`. Der einzige Fehler entsteht im
-unveränderten Reviewer-Replay-Helfer:
+**M2-R3-INFRA-SOCKET — OUT-OF-TERRITORY [INFRA].** Ref:
+K-M2-4; K-M2-7 Systemspalte; `tests/acceptance/setup-m2.R:771`.
+Der unveränderte HTTP-Replay-Helfer öffnet einen lokalen Socket,
+den die Builder-Sandbox verweigert. Log-Belege in `acceptance.log`
+ab Zeilen 11 und 140, mit demselben Stacktrace:
 
 ```text
 Error: System failure for: socket() (Operation not permitted)
@@ -336,57 +334,62 @@ curl::curl_echo(handle, progress = FALSE)
 httpuv::startServer("0.0.0.0", port, list(call = echo_handler))
 ```
 
-Dies ist die bereits aus BUILD bekannte Beschränkung der Builder-
-Sandbox. Im regulären Gate von Runde 1 war derselbe Pfad grün
-(`gate-tests.log`: K-M2-7, 375 Erwartungen; REVIEW erklärt
-M2-BUILD-INFRA-01 dort für erledigt). Der neue lokale Befund erklärt
-keine Produktabweichung und ändert diesen historischen Gate-Nachweis
-nicht. Der Orchestrator muss den unveränderten Test im Gate-Umfeld
-erneut ausführen. Weder der Replay-Helfer noch Berechtigungen oder
-Produktcode wurden zur Umgehung geändert.
+Die sieben negativen Erwartungen betreffen sechs Testblöcke: fünf
+in K-M2-4 und die Systemspalte in K-M2-7. Der JSON-Parsefehler bei
+`stored$meta` und die beiden Erwartungen an die zweite Antwort nach
+HTTP 4xx sind Folgefehler des fehlgeschlagenen Replays. Die
+fachliche PB-Auswertung besteht; K-M2-6 ist vollständig grün,
+einschließlich echter Fits, Rückfall, INSAID-Join und HTML-Berichte.
+Die beim Rendering ausgegebene System-Bus-Meldung verhindert den
+Berichtsbau nicht und erzeugt keine testthat-Warnung.
 
-K-M2-6 besteht vollständig, einschließlich Gegenrechnung, Bootstrap,
-INSAID-Join, erzwungenem Rückfall, tatsächlichen CLI-Läufen und Berichten.
-Die fachlichen PB-Auswertungen von K-M2-7 bestehen ebenfalls. Die übrigen
-M2-Abnahmedateien wurden in dieser gezielten REWORK-Prüfung nicht erneut
-gestartet; ihr grüner Stand stammt aus dem gelesenen Gate der Runde 1.
-Der vollständige M0/M2-Gatelauf bleibt dem Orchestrator vorbehalten,
-auch weil M0-Prüfwege Git-Kommandos aufrufen.
+Die gleiche Sandbox-Beschränkung ist aus BUILD und REWORK Runde 2
+bekannt. Im regulären Gate der Runde 2 bestanden K-M2-4 und K-M2-7
+mit 89 beziehungsweise 375 Erwartungen. Dieser historische Beleg
+ersetzt keinen neuen Gate-Lauf: Der Orchestrator muss die unveränderte
+Abnahme erneut im Gate-Umfeld ausführen. Keine Änderung an Replay,
+Berechtigungen, Tests oder Produktcode zur Umgehung der Infrastruktur.
+
+Die übrigen M2-Abnahmedateien wurden in dieser gezielten REWORK-Prüfung
+nicht erneut gestartet. Ihr letzter Gate-Beleg stammt aus Runde 2.
+M0-Prüfwege mit Git-Kommandos bleiben dem Orchestrator vorbehalten.
 
 ## Integrität und Übergabe
 
-Nach dem PROGRESS-Nachtrag wurde ausgeführt (Exit 0):
+Nach den Produkt-/Teständerungen und den Handoff-/PROGRESS-Einträgen
+wurde ausgeführt (Exit 0):
 
 ```bash
-python3 /tmp/llmsa-m2-r2/integrity.py
+python3 /tmp/llmsa-m2-r3/integrity.py
 ```
 
-Tatsächlicher Output, `/tmp/llmsa-m2-r2/integrity.log`:
+Tatsächlicher Output, `integrity.log`:
 
 ```text
-Inventory: 2 changed baseline files, 2 new files; all assigned Builder paths; no removed files
-Preserved baseline: 154/154 files byte-identical
-Existing tests and fixtures: 38/38 byte-identical
-R source and new test comments: ASCII
-Workspace artifacts: no Rplots.pdf, package archive, Rcheck directory or SQLite store
-Gate facts: still round 1, result fail; no Builder verdict or state write
+Inventory: 3 changed baseline files, 1 new file; all assigned Builder paths; no removed files
+Changed: PROGRESS.md, R/acmg.R, orchestrator/handoff/M2/REWORK-NOTES.md
+New: tests/testthat/test-acmg-pilot-metadata.R
+Protected baseline: 201/201 files byte-identical
+Existing tests and fixtures: 39/39 files byte-identical
+R source and new test: ASCII
+Checked package copy: final R/acmg.R and new test byte-identical
+Workspace artifacts: no Rplots.pdf, package archive, Rcheck directory or SQLite store at the root
+Gate facts: still round 2, result pass; no Builder verdict or state write
 ```
 
-Die Inventur vergleicht die vor REWORK erfassten 156 Dateien per
-SHA-256, ohne Git-Metadaten oder Schlüsseldateien zu lesen. Geändert
-sind ausschließlich `R/acmg.R` und `PROGRESS.md`; neu sind die
-Unit-Datei und diese zugewiesene Handoff-Datei. Sie ersetzt nicht die
-Territoriumsprüfung des Orchestrators.
+Die SHA-256-Inventur umfasst 204 vor der Phase erfasste Dateien und
+neue Dateien in den erfassten Pfaden. Sie ersetzt nicht das
+Territoriums-Gate. Git-Metadaten und Schlüsseldateien werden nicht
+gelesen. R/fit.R, R/grr.R, NAMESPACE, Plan, Golden-Dateien,
+Abnahmetests, QA-Tests, Betreiber-Fixtures, Reviewer-Handoffs und
+Gate-Fakten sind byte-identisch. Die geprüfte Paketkopie enthält den
+endgültigen Produkt- und Teststand.
 
-Es gibt keine MUT-EQUIV-Claims: `R/fit.R` und `R/grr.R`
-sind unverändert, und der gelesene mutgate-Befund ist
-`pass (kein geänderter Mutations-Scope)`. Kein eigener Claim wurde
-approvt, kein Gate-Verdikt geschrieben. Im aktuellen Review gibt es
-keinen offenen `[QA-PENDING]`-Befund; die vorhandenen QA-Tests liefen
-unverändert grün.
-
-Der Builder übergibt E21 bis E25 sowie E27 mit ausgeführten Belegen
-zur Prüfung. E26 bleibt gemäß ADR-010, E28 bis E30 sowie die beiden
-lokalen Infrastrukturbeobachtungen bleiben in der Zuständigkeit des
-Betreibers/Reviewers. Phasen-Commit und vollständige Gates folgen
-erst durch den Orchestrator; diese Datei erteilt keine Abnahme.
+Keine MUT-EQUIV-Claims und keine Approvals. Kein offener
+`[QA-PENDING]`-Befund im aktuellen Review; vorhandene QA-Tests grün.
+E31, E32 und E33 werden mit ausgeführten Nachweisen zur Prüfung
+übergeben. E26/BL-64 bleibt vertagt; E28 bis E30 und die lokalen
+Socket-/Uhrzeitbeobachtungen bleiben OUT-OF-TERRITORY [INFRA].
+BACKLOG-Pflege liegt beim Reviewer, Infrastruktur beim Betreiber.
+Territoriumsprüfung, Phasen-Commit und neue Gates folgen ausschließlich
+durch den Orchestrator. Diese Datei erteilt keine Abnahme.

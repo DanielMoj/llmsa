@@ -1,14 +1,14 @@
 {
   "contract": 1,
   "project": "llmsa",
-  "ts": "2026-10-27T05:28:06+01:00",
+  "ts": "2026-10-27T05:42:27+01:00",
   "milestone": {
     "id": "M2",
     "index": 2,
     "total": 10
   },
-  "phase": "50-code-review",
-  "round": 2,
+  "phase": "60-rework",
+  "round": 3,
   "needs_human": false,
   "reason": "",
   "gates": {
@@ -23,11 +23,11 @@
   },
   "parked": [],
   "last_events": [
-    "[20261027-021629] RUN builder 40-build (M2 r1, Versuch 1) -> /mnt/c/Users/Danie/dev/Llmsa/llmsa/orchestrator/logs/M2-40-build-r1-a1-20261027-021629.log",
     "[20261027-032304] RUN qa 45-qa (M2 r1, Versuch 1) -> /mnt/c/Users/Danie/dev/Llmsa/llmsa/orchestrator/logs/M2-45-qa-r1-a1-20261027-032304.log",
     "[20261027-040747] RUN reviewer 50-code-review (M2 r1, Versuch 1) -> /mnt/c/Users/Danie/dev/Llmsa/llmsa/orchestrator/logs/M2-50-code-review-r1-a1-20261027-040747.log",
     "[20261027-043905] RUN builder 60-rework (M2 r2, Versuch 1) -> /mnt/c/Users/Danie/dev/Llmsa/llmsa/orchestrator/logs/M2-60-rework-r2-a1-20261027-043905.log",
-    "[20261027-050919] RUN reviewer 50-code-review (M2 r2, Versuch 1) -> /mnt/c/Users/Danie/dev/Llmsa/llmsa/orchestrator/logs/M2-50-code-review-r2-a1-20261027-050919.log"
+    "[20261027-050919] RUN reviewer 50-code-review (M2 r2, Versuch 1) -> /mnt/c/Users/Danie/dev/Llmsa/llmsa/orchestrator/logs/M2-50-code-review-r2-a1-20261027-050919.log",
+    "[20261027-052820] RUN builder 60-rework (M2 r3, Versuch 1) -> /mnt/c/Users/Danie/dev/Llmsa/llmsa/orchestrator/logs/M2-60-rework-r3-a1-20261027-052820.log"
   ],
   "exit": null,
   "role_guards": "on"

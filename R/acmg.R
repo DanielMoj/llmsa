@@ -443,7 +443,7 @@ acmg_meta <- function(runs) {
 }
 
 acmg_meta_kind <- function(meta) vapply(meta, function(m) {
-  if (isTRUE(m$mock)) "mock" else if (acmg_scalar(m$id) && acmg_scalar(m$model_snapshot)) "api" else "unknown"
+  if (isTRUE(m[["mock"]])) "mock" else if (acmg_scalar(m[["id"]]) && acmg_scalar(m[["model_snapshot"]])) "api" else "unknown"
 }, "")
 
 acmg_meta_text <- function(meta, field) vapply(meta, function(m) {
@@ -506,11 +506,12 @@ acmg_pilot <- function(runs, plan, items = acmg_items(pilot = TRUE)) {
     responses <- m[success]
     from_api <- length(responses) > 0L && all(k[success] == "api")
     if (length(unlist(model$provider_order))) {
-      providers <- vapply(responses, function(x) x$provider %||% "", "")
-      provider_ok <- from_api && all(providers == model$provider_name)
-      missing <- which(!nzchar(providers))
+      providers <- acmg_meta_text(responses, "provider")
+      provider_ok <- from_api && !anyNA(providers) && all(providers == model$provider_name)
+      missing <- which(is.na(providers))
       reason <- if (length(missing)) {
-        ids <- vapply(responses[missing], function(x) x$id %||% "unavailable", "")
+        ids <- acmg_meta_text(responses[missing], "id")
+        ids[is.na(ids)] <- "unavailable"
         paste("missing provider; operator sample GET /api/v1/generation using meta$id:",
               paste(ids, collapse = ", "), "; plan changes require an ADR")
       } else paste("requested", model$provider_name, "; reported", paste(unique(providers), collapse = ", "))
@@ -518,9 +519,10 @@ acmg_pilot <- function(runs, plan, items = acmg_items(pilot = TRUE)) {
       provider_ok <- from_api
       reason <- "direct endpoint; requires API id and model_snapshot on every successful response"
     }
+    if (!from_api) reason <- paste(reason, "; missing API evidence: requires non-mock successful responses with meta$id and meta$model_snapshot")
     hits <- sum(success & !is.na(r$value) & r$value %in% acmg_classes(plan))
     numeric_token <- function(m, reasoning = FALSE) {
-      value <- if (reasoning) m$usage$completion_tokens_details$reasoning_tokens else m$usage$completion_tokens
+      value <- if (reasoning) m[["usage"]][["completion_tokens_details"]][["reasoning_tokens"]] else m[["usage"]][["completion_tokens"]]
       if (acmg_scalar(value, "numeric") && value >= 0) as.numeric(value) else NA_real_
     }
     completion <- vapply(responses, numeric_token, 0)
@@ -537,7 +539,7 @@ acmg_pilot <- function(runs, plan, items = acmg_items(pilot = TRUE)) {
                                   completion_q90 = q90, latency_median = q(lat, 0.5),
                                   reasoning_median = q(reasoning, 0.5), reasoning_q90 = q(reasoning, plan$pilot$cost_quantile))
     tokens[[key]] <- data.frame(model = rep(key, sum(success)),
-                                id = vapply(responses, function(x) x$id %||% NA_character_, ""),
+                                id = acmg_meta_text(responses, "id"),
                                 completion_tokens = completion, reasoning_tokens = reasoning)
     result[[key]] <- data.frame(model = key, rule = c("4xx", "provider", "parser", "cost"),
                                 passed = c(parameter_ok, provider_ok, complete[key] && hits >= plan$pilot$parser_hits_min, FALSE),
@@ -639,6 +641,13 @@ acmg_store_read <- function(path, mode) {
     attr(rows, "ap1_mode") <- marker
   }
   provenance <- acmg_provenance(rows)
+  if (provenance == "unverified") {
+    unverified <- sum(!acmg_errors(rows) & acmg_meta_kind(acmg_meta(rows)) == "unknown")
+    if (unverified > 0L) {
+      stop(sprintf("AP1 store backend/provenance is unverified: %d successful responses lack valid meta$id or meta$model_snapshot; use a new store; store unchanged.",
+                   unverified), call. = FALSE)
+    }
+  }
   actual <- switch(provenance, synthetic = "mock", api = "api", "unknown")
   if (!identical(actual, mode)) stop("AP1 store backend/provenance does not match --backend; store unchanged.", call. = FALSE)
   attr(rows, "ap1_mode") <- actual
