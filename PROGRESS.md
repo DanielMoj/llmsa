@@ -665,3 +665,164 @@ bleiben unverändert. Der Orchestrator führt Territoriumsprüfung,
 Phasen-Commit und die vollständigen M0/M2-/QA-Gates aus. Insbesondere
 werden hier weder `gates.json` geschrieben noch K-M2 pauschal als
 abgenommen erklärt.
+
+## M2 — REWORK, Runde 2 (27.10.2026)
+
+Die fünf blocking-Befunde E21 bis E25 aus REVIEW Runde 1 sind im
+Produktcode `R/acmg.R` nach ADR-010 behoben; E27 ist zusätzlich
+umgesetzt. Der aktuelle Builder-Lauf belegt die unveränderten fünf
+QA-Tests grün. Die vollständige Gate-Abnahme steht weiterhin aus.
+Maßgeblich bleiben die gelesenen Gate-Fakten von Runde 1:
+`tests: fail`, `result: fail`, alle anderen Gates `pass`, kein
+Status `error`. Deren Ursache waren ausschließlich QA-M2-001 bis
+QA-M2-005; die Abnahme war dort mit 2.340 Erwartungen grün.
+
+Die vollständigen Antworten mit Referenzen, Dateistellen, Kommandos
+und tatsächlichem Output stehen in
+`orchestrator/handoff/M2/REWORK-NOTES.md`. ARBITER liegt nicht vor;
+LESSONS enthält keine zusätzliche Lehre. Kein neuer Builder-ADR ist
+nötig, da die Änderungen die angenommene ADR-010 umsetzen.
+
+| Befund | Antwort und Stand |
+| --- | --- |
+| E21 / QA-M2-001 | Behoben: Wiederholungstagsdiagnosen enthalten nur beobachtete Modell-/Blockkombinationen. Jeder Einzelmodellbericht enthält seine eigenen korrekten Diagnosen. |
+| E22 / QA-M2-002 | Behoben: Fehlende oder leere Anbieterwerte fehlerfreier OpenRouter-Antworten lösen den Wiederholungstagshinweis aus; Sol und fehlende Angaben bei Backendfehlern erzeugen diesen zusätzlichen Auslöser nicht. |
+| E23 / QA-M2-003 | Behoben: Ein API-Marker ersetzt keine fehlenden Zeilenbelege. Mock-Herkunft bleibt synthetisch. API-Stores mit unbelegten fehlerfreien Zeilen werden schreibgeschützt abgewiesen; reine Fehlerstores mit Marker und bisherige Konfliktprüfungen bleiben unterstützt. |
+| E24 / QA-M2-004 | Behoben: Modal- und Ausschlusszählungen umfassen jedes Planitem, auch ohne Hauptplanzeile. Merkmale stammen nur aus runs; vollständig fehlende Merkmale bleiben NA. PB-Referenzquoten verwenden die PB-Referenzspalte. Unvollständige Hauptpläne bleiben not assessed. |
+| E25 / QA-M2-005 | Behoben: Klassenprüfung auch über PB-Zeilen vor dem Fit. Ungültige Replikat-/Blockwerte oder doppelte Schlüssel verhindern eine vollständige Robustheitsbewertung. |
+| E26 | ADR-010 Nr. 6 bestätigt die strengere Pilotsperre ohne API-ID. Keine Produktänderung; für alle drei Modelle unit-getestet. Die Entkopplung des Pilot-Quantiltyps bleibt BL-64. |
+| E27 | Behoben: Bericht nennt fehlende provider- und system_fingerprint-Felder unter fehlerfreien Antworten mit Nenner; echtes HTML-Rendering geprüft. BL-65 zur Schließung an den Reviewer. |
+| E28 / BL-63 | OUT-OF-TERRITORY [INFRA]: Provider_Logging-Snapshot erneut geprüft, jeweils 0 Treffer für CoreWeave/DeepInfra. Datierte spezifische Belege fehlen; Betreiber/Reviewer müssen sie liefern und verankern. |
+| E29 / BL-56 | OUT-OF-TERRITORY [INFRA]: gate-tests.log:92 enthält weiter den On-CRAN-Skip von test-report.R:5. Der direkte Builder-Lauf führt ihn mit NOT_CRAN=true aus; Gate-Konfiguration bleibt Betreiberarbeit. |
+| E30 / BL-48 | OUT-OF-TERRITORY [INFRA]: docs/gates-auswahl.md:87 nennt weiterhin K-M2-1 bis K-M2-6. Ergänzung von K-M2-7 bleibt Betreiberarbeit. |
+
+### Echte Prüfbelege dieser Runde
+
+**Unveränderte QA vor der Änderung (Exit 1):**
+
+```bash
+Rscript --vanilla orchestrator/lib/r-tests.R tests/e2e tests/fuzz
+```
+
+```text
+[ FAIL 8 | WARN 0 | SKIP 0 | PASS 2 ]
+[ FAIL 5 | WARN 0 | SKIP 0 | PASS 0 ]
+r-tests: fail — 5 Tests in tests/e2e, tests/fuzz; 5 fehlgeschlagen, 0 Fehler, 0 übersprungen
+```
+
+**Unit- und unveränderte QA-Tests nach der Korrektur (Exit 0):**
+
+```bash
+NOT_CRAN=true /usr/bin/time -f 'Unit and QA elapsed seconds: %e; exit: %x' \
+  Rscript --vanilla orchestrator/lib/r-tests.R tests/testthat tests/e2e tests/fuzz
+```
+
+```text
+✔ |        194 | acmg-rework [7.5s]
+[ FAIL 0 | WARN 0 | SKIP 1 | PASS 874 ]
+[ FAIL 0 | WARN 0 | SKIP 0 | PASS 9 ]
+[ FAIL 0 | WARN 0 | SKIP 0 | PASS 5 ]
+r-tests: pass — 73 Tests in tests/testthat, tests/e2e, tests/fuzz; 0 fehlgeschlagen, 0 Fehler, 1 übersprungen
+Unit and QA elapsed seconds: 33.90; exit: 0
+```
+
+Neun neue Unit-Blöcke unter `tests/testthat/test-acmg-rework.R`
+decken E21 bis E27 ab. Alle bestehenden Tests bleiben byte-identisch.
+Der einzige direkte Skip ist der vorhandene ellmer-Fehlerpfad, weil
+ellmer installiert ist. Der generische Berichtstest wird tatsächlich
+ausgeführt. Die neue HTML-Prüfung normalisiert nur Render-Leerraum;
+erwarteter Text und Zahlen bleiben exakt.
+
+In einer temporären Paketkopie mit denselben neuen Tests, aber der
+gesicherten alten `acmg.R`, scheitern acht der neun neuen Blöcke;
+E26 besteht auch vorher. Echter Schluss des in REWORK-NOTES vollständig
+angegebenen Kommandos (erwartet Exit 1):
+
+```text
+Baseline regression blocks: 9; failed: 7; errors: 4; skipped: 0
+```
+
+Fehler und Fehlschläge überlappen in den Blockzählungen. Der aktuelle
+Quellbaum wurde für diese Gegenprobe nicht zurückgesetzt.
+
+**Betroffene unveränderte Abnahme (Exit 1, lokale Infrastruktur):**
+
+```bash
+/usr/bin/time -f 'M2 targeted acceptance elapsed seconds: %e; exit: %x' \
+  Rscript --vanilla -e 'grDevices::pdf(tempfile(fileext = ".pdf")); testthat::test_dir("tests/acceptance", filter = "m2-[67]-", load_package = "source", reporter = testthat::ProgressReporter$new(show_praise = FALSE), stop_on_failure = TRUE)'
+```
+
+```text
+✔ |        374 | m2-6-evaluate [216.3s]
+✖ | 1      353 | m2-7-robustness-pilot [94.1s]
+Duration: 310.4 s
+[ FAIL 1 | WARN 0 | SKIP 0 | PASS 727 ]
+Error: System failure for: socket() (Operation not permitted)
+httr2::req_dry_run(req, quiet = TRUE) at ./setup-m2.R:771:5
+M2 targeted acceptance elapsed seconds: 312.17; exit: 1
+```
+
+**M2-R2-INFRA-SOCKET — OUT-OF-TERRITORY [INFRA].** Der einzige
+negative Test ist die Systemspalten-Wiedergabe in K-M2-7: Der
+unveränderte Reviewer-Helfer öffnet über curl/httpuv einen lokalen
+Socket, den die Builder-Sandbox verweigert. Vollständiger Stacktrace
+in REWORK-NOTES und `/tmp/llmsa-m2-r2/acceptance.log`. Kein Testhelfer,
+keine Berechtigung und kein Produktcode wurden zur Umgehung geändert.
+K-M2-6 und die fachliche Robustheitsauswertung bestehen. Im regulären
+Gate der Runde 1 bestand auch dieser Socket-Pfad; der historische
+M2-BUILD-INFRA-01 ist dort laut REVIEW erledigt. Der Orchestrator
+führt den aktuellen vollständigen M0/M2-Lauf im Gate-Umfeld aus.
+Die übrigen M2-Abnahmedateien wurden hier nicht erneut gestartet;
+M0-Prüfwege mit Git-Kommandos wurden nicht ausgeführt.
+
+**Paketbau und installierter Check (je Exit 0):**
+
+Mit einer Positivliste der Paketdateien wurde eine Kopie ohne
+Schlüssel, geschützte Quellen und Harness-Dateien unter
+`/tmp/llmsa-m2-r2/package-check/src` angelegt. Darin ausgeführt:
+
+```bash
+R CMD build --no-manual src
+_R_CHECK_CRAN_INCOMING_REMOTE_=false \
+  /usr/bin/time -f 'Package check elapsed seconds: %e; exit: %x' \
+  R CMD check --as-cran --no-manual llmsa_0.1.0.tar.gz
+```
+
+```text
+* checking R code for possible problems ... OK
+* DONE
+Status: 1 NOTE
+Package check elapsed seconds: 66.19; exit: 0
+[ FAIL 0 | WARN 0 | SKIP 2 | PASS 870 ]
+```
+
+Incoming-Remote entspricht dem Betreiber-Prüfskript; keine andere
+Prüfregel wurde abgeschaltet. **M2-R2-INFRA-CLOCK — OUT-OF-TERRITORY
+[INFRA]:** Die einzige NOTE lautet `Unable to verify current time.`
+Die Uhrzeitprüfung bleibt aktiv. Die beiden installierten Skips sind
+unverändert On-CRAN im generischen Bericht und ellmer. Neue AP1-
+Berichts- und Regressionsprüfungen laufen auch im installierten Paket.
+
+### Integrität und Übergabe
+
+`python3 /tmp/llmsa-m2-r2/integrity.py` endete mit Exit 0:
+
+```text
+Inventory: 2 changed baseline files, 2 new files; all assigned Builder paths; no removed files
+Preserved baseline: 154/154 files byte-identical
+Existing tests and fixtures: 38/38 byte-identical
+R source and new test comments: ASCII
+Workspace artifacts: no Rplots.pdf, package archive, Rcheck directory or SQLite store
+Gate facts: still round 1, result fail; no Builder verdict or state write
+```
+
+Geändert sind `R/acmg.R` und dieser Nachtrag; neu sind die Unit-Datei
+und die zugewiesene `orchestrator/handoff/M2/REWORK-NOTES.md`.
+Die SHA-256-Inventur ersetzt nicht das Territoriums-Gate.
+R/fit.R und R/grr.R bleiben unverändert; keine MUT-EQUIV-Claims und
+keine Approvals. Es gibt keinen offenen QA-PENDING-Befund aus dem
+aktuellen Review. Keine Git-Kommandos, keine Abhängigkeitsinstallation,
+keine realen API-Schlüssel oder API-Aufrufe, keine Golden- oder
+Schwellenänderung, kein eigener Gate- oder Verdict-Schreibzugriff.
+Territoriumsprüfung, Phasen-Commit und Abnahme folgen durch den
+Orchestrator und Reviewer.

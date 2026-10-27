@@ -446,18 +446,26 @@ acmg_meta_kind <- function(meta) vapply(meta, function(m) {
   if (isTRUE(m$mock)) "mock" else if (acmg_scalar(m$id) && acmg_scalar(m$model_snapshot)) "api" else "unknown"
 }, "")
 
+acmg_meta_text <- function(meta, field) vapply(meta, function(m) {
+  value <- m[[field]]
+  if (acmg_scalar(value) && nzchar(trimws(value))) value else NA_character_
+}, "")
+
 acmg_provenance <- function(runs) {
   row_kind <- acmg_meta_kind(acmg_meta(runs))
-  kinds <- unique(row_kind)
-  known <- intersect(kinds, c("mock", "api"))
+  successful <- row_kind[!acmg_errors(runs)]
+  known <- intersect(unique(successful), c("mock", "api"))
   marker <- attr(runs, "ap1_mode", exact = TRUE)
-  if (!is.null(marker) && !marker %in% c("mock", "api")) stop("Invalid AP1 store provenance.", call. = FALSE)
-  if (length(known) > 1L || (!is.null(marker) && any(known != marker))) {
+  if (!is.null(marker) && (!acmg_scalar(marker) || !marker %in% c("mock", "api"))) stop("Invalid AP1 store provenance.", call. = FALSE)
+  # Explicit metadata may not contradict a persisted mode, even on a failed
+  # row. Only successful rows establish an otherwise unknown provenance.
+  recorded <- intersect(unique(row_kind), c("mock", "api"))
+  if (length(known) > 1L || (!is.null(marker) && any(recorded != marker))) {
     stop("AP1 mixed mock/API provenance is not permitted.", call. = FALSE)
   }
-  if (!is.null(marker)) known <- marker
-  if (is.null(marker) && any(row_kind == "unknown" & !acmg_errors(runs))) return("unverified")
-  if (!length(known)) "unverified" else if (known == "mock") "synthetic" else "api"
+  if ("mock" %in% known || identical(marker, "mock")) return("synthetic")
+  if (!any(successful == "unknown") && ("api" %in% known || identical(marker, "api"))) return("api")
+  "unverified"
 }
 
 acmg_errors <- function(runs) {
@@ -563,13 +571,16 @@ acmg_repeat_day <- function(runs, plan) {
   out <- list()
   for (block in sort(unique(runs$block))) for (key in names(acmg_models(plan))) {
     r <- runs[runs$block == block & runs$model_id == key, , drop = FALSE]
+    if (!nrow(r)) next
     m <- acmg_meta(r)
     model <- acmg_models(plan)[[key]]
-    providers <- unique(unlist(lapply(m, `[[`, "provider"), use.names = FALSE))
+    provider <- acmg_meta_text(m, "provider")
+    providers <- unique(provider[!is.na(provider)])
     snapshots <- unique(unlist(lapply(m, `[[`, "model_snapshot"), use.names = FALSE))
     provider_change <- length(providers) > 1L ||
-      (length(model$provider_name) > 0L && any(providers != model$provider_name))
-    share <- if (nrow(r)) mean(acmg_errors(r)) else NA_real_
+      (length(model$provider_name) > 0L &&
+         (any(providers != model$provider_name) || any(is.na(provider) & !acmg_errors(r))))
+    share <- mean(acmg_errors(r))
     out[[length(out) + 1L]] <- data.frame(block = block, model = key, provider_change = provider_change,
                                         model_change = length(snapshots) > 1L, backend_error_share = share,
                                         error_trigger = is.finite(share) && share > plan$pilot$error_share_trigger)
@@ -785,17 +796,18 @@ acmg_modal <- function(values) {
        has_modal = length(winner) == 1L)
 }
 
-acmg_modal_table <- function(runs) {
-  ids <- sort(unique(runs$item_id), method = "radix")
+acmg_modal_table <- function(runs, item_ids = runs$item_id, item_runs = runs) {
+  ids <- sort(unique(as.character(item_ids)), method = "radix")
   modes <- lapply(ids, function(id) acmg_modal(runs$value[runs$item_id == id]))
   out <- data.frame(item_id = ids, modal = vapply(modes, `[[`, "", "modal"),
                     has_modal = vapply(modes, `[[`, logical(1), "has_modal"), stringsAsFactors = FALSE)
+  item_runs <- item_runs[item_runs$item_id %in% ids, , drop = FALSE]
   columns <- c("reference", "source", paste0("prior_differs_", c("sol", "llama", "qwen")))
   for (col in columns) {
     # Conflicting item metadata are invalid input, not a choice of join order.
-    by_item <- split(runs[[col]], runs$item_id)
+    by_item <- split(item_runs[[col]], as.character(item_runs$item_id))
     if (any(lengths(lapply(by_item, unique)) != 1L)) stop("AP1 inconsistent item column: ", col, call. = FALSE)
-    out[[col]] <- runs[[col]][match(ids, runs$item_id)]
+    out[[col]] <- item_runs[[col]][match(ids, item_runs$item_id)]
   }
   out$reference <- as.character(out$reference)
   out$reference[!is.na(out$reference) & !nzchar(out$reference)] <- NA_character_
@@ -859,16 +871,24 @@ acmg_robustness <- function(runs, modal, item_ids, plan) {
   if (!nrow(runs)) return(NULL)
   ids <- unlist(plan$robustness$pb_design$prompt_ids, use.names = FALSE)
   counts <- table(factor(runs$item_id, levels = item_ids), factor(runs$prompt_id, levels = ids))
-  complete <- nrow(runs) == length(item_ids) * length(ids) && all(counts == 1L)
+  # The evaluator requires all design columns. Compact internal count tables
+  # may omit constant design columns; any supplied keys must match the plan.
+  design_complete <- all(runs$rep %in% seq_len(plan$robustness$replicates)) &&
+    all(runs$block %in% 1L) && !anyDuplicated(run_key(runs))
+  complete <- nrow(runs) == length(item_ids) * length(ids) && all(counts == 1L) && design_complete
   if (!complete) return(list(complete = FALSE, counts = counts, effects = NULL, band = "not assessed",
-                             reason = "Robustness requires exactly one row per item and PB prompt."))
+                             reason = paste("Robustness requires exactly one row per item and PB prompt,",
+                                            "planned replicate keys, block 1 and no duplicate run_key.")))
   response <- do.call(rbind, lapply(ids, function(id) {
     r <- runs[runs$prompt_id == id, , drop = FALSE]
     reference <- modal[match(r$item_id, modal$item_id), , drop = FALSE]
     agrees <- !acmg_errors(r) & !is.na(r$value) & reference$has_modal &
       !is.na(reference$modal) & r$value == reference$modal
-    eligible <- !is.na(reference$reference)
-    hits <- sum((!acmg_errors(r) & !is.na(r$value) & eligible & r$value == reference$reference) %in% TRUE)
+    # Evaluated PB runs always carry their own references. Retain support for
+    # compact internal tables whose only reference column is supplied in modal.
+    truth <- if ("reference" %in% names(r)) as.character(r$reference) else reference$reference
+    eligible <- !is.na(truth) & nzchar(truth)
+    hits <- sum((!acmg_errors(r) & !is.na(r$value) & eligible & r$value == truth) %in% TRUE)
     data.frame(prompt_id = id, x = sum(agrees %in% TRUE), n = nrow(r),
                 reference_n = sum(eligible), reference_hits = hits,
                 reference_rate = if (sum(eligible)) hits / sum(eligible) else NA_real_)
@@ -903,6 +923,8 @@ acmg_worst <- function(bands, plan) {
 acmg_assessment <- function(result, key, runs, joint, plan) {
   model <- acmg_models(plan)[[key]]
   meta <- acmg_meta(runs)
+  successful <- !acmg_errors(runs)
+  missing <- function(field) sum(successful & is.na(acmg_meta_text(meta, field)))
   reported <- function(field) {
     v <- unique(unlist(lapply(meta, `[[`, field), use.names = FALSE))
     if (!length(v)) "not reported" else paste(v, collapse = ", ")
@@ -933,6 +955,8 @@ acmg_assessment <- function(result, key, runs, joint, plan) {
         paste("Configured temperature:", model$temperature %||% "omitted (provider default)", "; reasoning effort:", model$reasoning %||% "omitted"),
         paste("Recorded request seed:", reported("seed"), "; temperature:", reported("temperature"), "; reasoning effort:", reported("reasoning_effort")),
         paste("Knowledge cutoff:", model$knowledge_cutoff, "; system fingerprint:", reported("system_fingerprint")),
+        sprintf("Successful responses without provider: %d of %d; without system_fingerprint: %d of %d.",
+                missing("provider"), sum(successful), missing("system_fingerprint"), sum(successful)),
         paste("API seed:", model$seed, "; design seed:", plan$design$seed, "; RNG:", plan$provenance$rng))),
     "Joint research fit" = list(text = c(paste("Joint fit type:", joint$type, "; numeric fallback:", joint$fallback, "; no verdict."),
          paste("Joint fit warnings:", paste(unlist(joint$warnings), collapse = "; "))), table = joint$vc),
@@ -982,8 +1006,10 @@ acmg_evaluate <- function(runs, plan) {
   ids <- acmg_items()$item_id
   main <- runs[runs$item_id %in% ids & runs$prompt_id %in% names(plan$templates), , drop = FALSE]
   if (!nrow(main)) stop("AP1 main-plan responses are missing.", call. = FALSE)
-  if (any(!is.na(main$value) & !as.character(main$value) %in% acmg_classes(plan)) ||
-      any(!is.na(main$reference) & nzchar(as.character(main$reference)) & !as.character(main$reference) %in% acmg_classes(plan))) {
+  pb <- runs[grepl("^pb", runs$prompt_id), , drop = FALSE]
+  evaluated <- rbind(main, pb)
+  if (any(!is.na(evaluated$value) & !as.character(evaluated$value) %in% acmg_classes(plan)) ||
+      any(!is.na(evaluated$reference) & nzchar(as.character(evaluated$reference)) & !as.character(evaluated$reference) %in% acmg_classes(plan))) {
     stop("AP1 runs contain unknown response or reference classes.", call. = FALSE)
   }
   keys <- names(acmg_models(plan))
@@ -996,7 +1022,7 @@ acmg_evaluate <- function(runs, plan) {
     data <- main[main$model_id == key, , drop = FALSE]
     fit_result <- acmg_fit(data, plan)
     grr <- msa_grr(fit_result$fit)
-    modal <- acmg_modal_table(data)
+    modal <- acmg_modal_table(data, item_ids = ids, item_runs = runs)
     kappa <- acmg_kappa_interval(modal, plan)
     metrics <- acmg_reference_metrics(modal, key, plan)
     low <- utils::head(acmg_classes(plan), 2L); high <- utils::tail(acmg_classes(plan), 2L)
@@ -1010,7 +1036,7 @@ acmg_evaluate <- function(runs, plan) {
     design_complete <- all(data$rep %in% seq_len(plan$design$replicates)) &&
       all(data$block %in% seq_len(plan$design$blocks)) && !anyDuplicated(run_key(data))
     complete <- all(completeness$complete) && design_complete
-    rb <- runs[runs$model_id == key & grepl("^pb", runs$prompt_id), , drop = FALSE]
+    rb <- pb[pb$model_id == key, , drop = FALSE]
     robustness <- acmg_robustness(rb, modal, ids, plan)
     verdicts <- acmg_bands(grr$summary[["grr_pct_study_var"]], kappa$estimate, dangerous, robustness$band, plan)
     if (!complete) verdicts[] <- "not assessed"
