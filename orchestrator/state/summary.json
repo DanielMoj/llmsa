@@ -1,13 +1,13 @@
 {
   "contract": 1,
   "project": "llmsa",
-  "ts": "2026-10-27T02:16:14+01:00",
+  "ts": "2026-10-27T02:16:15+01:00",
   "milestone": {
     "id": "M2",
     "index": 2,
     "total": 10
   },
-  "phase": "30-plan-review",
+  "phase": "30-plan-approved",
   "round": 1,
   "needs_human": false,
   "reason": "",
