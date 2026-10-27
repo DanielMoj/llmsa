@@ -3,7 +3,7 @@ pkgdown: 2.2.1
 pkgdown_sha: ~
 articles:
   llmsa: llmsa.html
-last_built: 2026-10-27T09:24Z
+last_built: 2026-10-27T10:10Z
 urls:
   reference: https://danielmoj.github.io/llmsa/reference
   article: https://danielmoj.github.io/llmsa/articles
