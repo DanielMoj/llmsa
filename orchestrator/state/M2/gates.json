@@ -4,8 +4,8 @@
   "base": "f4b81117beed7f6ef4e75a9e37ac39f64edbedc4",
   "baseRef": "plan/M2",
   "env": {
-    "ts": "2026-10-27T03:22:50+01:00",
-    "sha": "4187c518d4557f027004c8dc09593c80924f0923",
+    "ts": "2026-10-27T04:07:33+01:00",
+    "sha": "a818d5bfa478dfd48f0fa81853ee3c8238850b31",
     "bash": "5.3.9(1)-release",
     "git": "2.53.0",
     "toolchain": {
@@ -16,7 +16,7 @@
   "gates": {
     "deps": "pass",
     "lint": "pass",
-    "tests": "pass",
+    "tests": "fail",
     "trace": "pass",
     "territory": "pass",
     "mutgate": "pass",
@@ -26,12 +26,12 @@
   "summaries": {
     "deps": "deps: Kommando erfolgreich",
     "lint": "lint: Kommando erfolgreich",
-    "tests": "tests: Kommando erfolgreich",
+    "tests": "tests: Kommando meldet fachlichen Fehlschlag rc=1",
     "trace": "trace: alle Kriterien sind wörtlich und beidseitig verknüpft",
-    "territory": "territory: letzter Diff sauber (builder/40-build, Runde 1, Basis f4b81117beed7f6ef4e75a9e37ac39f64edbedc4, 2026-10-27T03:05:46+01:00)",
+    "territory": "territory: letzter Diff sauber (qa/45-qa, Runde 1, Basis b63539522af25b98dd154b48e5f1952deb3de058, 2026-10-27T03:50:22+01:00)",
     "mutgate": "mutgate: pass (kein geänderter Mutations-Scope)",
     "golden-adr": "golden-adr: Änderung und ADR liegen im selben Meilenstein",
     "mutfull": "mutfull: pass (nicht fällig in M2)"
   },
-  "result": "pass"
+  "result": "fail"
 }
