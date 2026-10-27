@@ -58,14 +58,16 @@ test_that("numeric fallback equals a direct fit with default interactions and re
   expect_false("interactions" %in% names(calls[[2]]$extra))
   expect_equal(calls[[2]]$data$value, numeric$value, tolerance = 0)
   expect_identical(calls[[2]]$data$item_id, r$item_id)
-  expect_equal(got$fit$vc, expected$vc, tolerance = p$validation_tolerances$engine_ordinal)
-  expect_equal(msa_grr(got$fit)$summary, msa_grr(expected)$summary, tolerance = p$validation_tolerances$engine_ordinal)
+  expect_equal(got$fit$vc, expected$vc, tolerance = p$validation_tolerances$engine)
+  expect_equal(msa_grr(got$fit)$summary, msa_grr(expected)$summary, tolerance = p$validation_tolerances$engine)
   permuted <- acmg_fit(r[rev(seq_len(nrow(r))), ], p)
   variance <- stats::setNames(permuted$fit$vc$variance, permuted$fit$vc$source)[expected$vc$source]
   # A component difference is scaled by total reference variance, including
   # components near zero, as required by the validation tolerance convention.
   relative_to_total <- abs(unname(variance) - expected$vc$variance) / sum(expected$vc$variance)
-  expect_lte(max(relative_to_total), p$validation_tolerances$invariance)
+  # REML with default lmerControl reaches the optimum only to optimizer
+  # precision, so the row-order check uses the reml_anova class (BL-49, ADR-012).
+  expect_lte(max(relative_to_total), p$validation_tolerances$reml_anova)
   local_mocked_bindings(msa_fit = function(...) stop("Synthetic total failure"))
   expect_error(acmg_fit(r, p), "AP1 numeric fallback failed: Synthetic total failure")
 })

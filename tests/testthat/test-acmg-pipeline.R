@@ -187,9 +187,16 @@ test_that("external paths reject descendants and symlinks while permitting sibli
   expect_error(acmg_external_path(file.path(root, "runs", "ap1.sqlite"), root), "outside")
   expect_error(acmg_external_path(file.path(root, "missing", "..", "inside.sqlite"), root), "outside")
   sibling <- paste0(root, "-runs")
-  expect_identical(acmg_external_path(file.path(sibling, "ap1.sqlite"), root), file.path(sibling, "ap1.sqlite"))
+  # Paths are compared normalized (ADR-012): the existing parent is normalized
+  # independently of acmg_resolve_path() and the rest is appended.
+  parent <- normalizePath(dirname(sibling), winslash = "/", mustWork = TRUE)
+  expect_identical(acmg_external_path(file.path(sibling, "ap1.sqlite"), root),
+                   file.path(parent, basename(sibling), "ap1.sqlite"))
+  # Windows links the directory with a junction: unlink() removes junctions, but
+  # warns on directory symlinks, and symlinks may need a privilege (ADR-012).
   link <- tempfile("synthetic-link-")
-  if (file.symlink(root, link)) {
+  linked <- if (.Platform$OS.type == "windows") Sys.junction(root, link) else file.symlink(root, link)
+  if (isTRUE(linked)) {
     expect_error(acmg_external_path(file.path(link, "runs", "ap1.sqlite"), root), "outside")
     unlink(link)
   }
