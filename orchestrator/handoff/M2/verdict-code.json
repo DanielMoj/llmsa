@@ -1,0 +1,60 @@
+{
+  "milestone": "M2",
+  "phase": "code",
+  "round": 1,
+  "verdict": "REWORK",
+  "blocking": [
+    {
+      "id": "E21",
+      "ref": "Gate tests (gate-tests.log: tests/e2e/test-m2-qa-e2e.R:93, :96; QA-M2-001); docs/01-fachspezifikation.md §2 Nr. 4 („nie stillschweigend eine falsche Zahl“); ADR-006 Nr. 7.8; ADR-010 Nr. 1",
+      "note": "acmg_assessment() übergibt acmg_repeat_day() nur die Hauptplanzeilen des berichteten Modells (R/acmg.R:962 mit :1033–1037), acmg_repeat_day() iteriert aber über alle drei Planmodelle (:564). Jeder Bericht weist deshalb für die anderen Modelle provider_change/model_change/error_trigger FALSE und backend_error_share NA aus, auch wenn sie Auslöser haben. Behebung nach ADR-010 Nr. 1: je Bericht nur das eigene Modell oder alle Modelle aus allen Hauptplanzeilen."
+    },
+    {
+      "id": "E22",
+      "ref": "Gate tests (tests/e2e/test-m2-qa-e2e.R:135, :136; QA-M2-002); ADR-006 Nr. 7.8 („ein provider, der vom angeforderten abweicht“) mit Nr. 7.2 („Fehlt das Feld in der Antwort, ist die Regel nicht bestanden“); docs/03 A.6; ADR-010 Nr. 2",
+      "note": "unique(unlist(lapply(m, `[[`, \"provider\"))) (R/acmg.R:568) verwirft fehlende Felder. Eine fehlerfreie OpenRouter-Zeile ohne provider ergibt provider_change FALSE, mit oder ohne weitere CoreWeave-Zeilen (Reviewer-Nachprüfung). Behebung nach ADR-010 Nr. 2: Für Modelle mit provider_name zählt eine fehlerfreie Zeile mit fehlendem oder leerem provider als Abweichung; Sol bleibt unberührt."
+    },
+    {
+      "id": "E23",
+      "ref": "Gate tests (tests/e2e/test-m2-qa-e2e.R:166, :175; QA-M2-003); ADR-006 Nr. 9 („Ergebnisse und Berichte aus Mock-Zeilen kennzeichnet es sichtbar als synthetisch“); PLAN-UPDATE E3, akzeptiert („… nicht belegbare Herkunft führt zum benannten Abbruch; sie wird nicht als API-Herkunft geraten“); PLAN-REVIEW E16; ADR-010 Nr. 3",
+      "note": "acmg_provenance() übernimmt eine gesetzte Store-Kennung und prüft fehlerfreie Zeilen ohne Beleg nicht mehr (R/acmg.R:458–459). Ein API-Store mit einer fehlerfreien Zeile ohne meta wird gelesen und als api zertifiziert. Ohne Kennung wird aus Mock-Daten mit einer Zeile ohne meta unverified statt synthetic. Widerspricht auch inst/validation/ap1/README.md:113. Behebung nach ADR-010 Nr. 3.1–3.4; die Unit-Fälle in test-acmg-pipeline.R:86–113 bleiben gültig."
+    },
+    {
+      "id": "E24",
+      "ref": "Gate tests (tests/e2e/test-m2-qa-e2e.R:212, :219; QA-M2-004); K-M2-6 („die Modalantwort je Item … die Zahl solcher Items wird berichtet“); docs/03 A.7 („Zahl der Items ohne Modalantwort“); ADR-006 Nr. 8.1 und Nr. 11; docs/01 §2 Nr. 4; ADR-010 Nr. 4",
+      "note": "acmg_modal_table() bildet die Itemliste aus den vorhandenen Zeilen des Modells (R/acmg.R:789). Fehlt ein Item im Hauptplan eines Modells ganz, fehlt es in modal; n_no_modal ist 0, reference_basis summiert sich auf 99. acmg_robustness() liest die PB-Referenz aus modal (:867–870), daher reference_n 74 statt 75 (Reviewer-Nachprüfung). Behebung nach ADR-010 Nr. 4: modal über alle Items aus items.csv, Merkmale aus runs, PB-Referenz aus den PB-Zeilen. Verdikte bleiben not assessed."
+    },
+    {
+      "id": "E25",
+      "ref": "Gate tests (tests/fuzz/test-m2-qa-fuzz.R:76, :92, :93, :98, :99; QA-M2-005); ADR-005 Nr. 1; docs/01 §2 Nr. 4; ADR-006 Nr. 8.2 mit PLAN-UPDATE E7, akzeptiert („Fehlende/zusätzliche oder doppelte Zeilen verhindern eine vollständige Bewertung“); ADR-010 Nr. 5",
+      "note": "Die Klassenprüfung (R/acmg.R:985–988) erfasst nur Hauptplanzeilen. Eine PB-Zeile mit ‚Likely Pathogenic‘ zählt still als Nichtübereinstimmung (x = 99 von 100) und verschiebt Logit, Effekte, Δp und Band. acmg_robustness() prüft nur die Zählung je Item und Prompt (:861–864); eine PB-Zeile mit rep = 2 oder block = 2 ergibt complete TRUE und ein Band. Behebung nach ADR-010 Nr. 5: Klassenprüfung über alle ausgewerteten Zeilen mit derselben Meldung; Robustheit nur mit rep in seq_len(plan$robustness$replicates), block = 1 und ohne doppelten run_key."
+    }
+  ],
+  "nonblocking": [
+    {
+      "id": "E26",
+      "ref": "ADR-006 Nr. 7.2 und 7.4; PLAN-UPDATE E2 (Kostenregel); ADR-010 Nr. 6",
+      "note": "Die unabhängige Nachrechnung der Pilotregeln auf 15 konstruierten Stores ergibt 14 identische Fälle, darunter S = 20,60239 USD. Einzige Abweichung: Bei einer fehlerfreien Zeile ohne id scheitern im Code provider und cost aller Modelle (R/acmg.R:499, :502, :523); der Wortlaut von Nr. 7.4 verlangt das nicht. Strenger, die Sperre nach Nr. 7.7 wirkt gleich; ADR-010 Nr. 6 bestätigt das ohne Codeänderung. Das Pilot-Quantil liest type aus evaluation.kappa_bootstrap.quantile_type (:521) statt fest 7; bei Gelegenheit entkoppeln. BL-64."
+    },
+    {
+      "id": "E27",
+      "ref": "docs/03 A.7 („Modellkennungen, Anbieter, Quantisierung und Wissensstand je Modell“); R/acmg.R:906–909, :930–935",
+      "note": "reported() im Abschnitt ‚Model and routing‘ verwirft fehlende Felder wie in E22. Fehlen provider oder system_fingerprint in einem Teil der Zeilen, nennt der Bericht nur die vorhandenen Werte. Vorschlag: Zahl der fehlerfreien Zeilen ohne diese Felder nennen, im selben Zug wie E22. BL-65."
+    },
+    {
+      "id": "E28",
+      "ref": "[INFRA] docs/03 A.7 (Logging-Regeln CoreWeave und DeepInfra aus quellen/anbieter_2026-10-22/openrouter/Provider_Logging.html); PROGRESS.md M2-BUILD-INFRA-02",
+      "note": "Der Schnappschuss enthält keine Zeile zu CoreWeave oder DeepInfra (Reviewer: 0 Treffer in 4.659 Zeichen Text). plan.yaml und Berichte nennen die Lücke, statt eine Aufbewahrung zu erfinden. Betreiber liefert vor dem AP1-Bericht datierte anbieterspezifische Belege; Übernahme per Anker/ADR. Für den Builder jetzt nichts zu tun. BL-63."
+    },
+    {
+      "id": "E29",
+      "ref": "[INFRA] BL-56; PLAN-REVIEW E14",
+      "note": "NOT_CRAN ist weiter ungesetzt; test-report.R:5 bleibt im Gate übersprungen. Neu rendert test-report.R:36 im Gate drei AP1-Berichte über msa_report(assessment = …), den generischen Bericht ohne assessment aber nicht. Betreiberentscheidung offen."
+    },
+    {
+      "id": "E30",
+      "ref": "[INFRA] BL-48; PLAN-REVIEW E15; docs/gates-auswahl.md:87",
+      "note": "Die Zuordnung nennt weiter ‚K-M2-1 bis K-M2-6‘; trace ist nicht betroffen. Der Betreiber ergänzt K-M2-7."
+    }
+  ]
+}
