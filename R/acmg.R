@@ -16,8 +16,9 @@
 #'   data.frame. `acmg_prompts()` returns named templates, or a PB data.frame.
 #'   `acmg_evaluate()` returns `models` keyed by model and a joint `msa_fit`.
 #'   Each model includes GRR, fit diagnostics, modal responses, item-bootstrap
-#'   kappa, agreement, stratified rates, completeness, provenance, criteria
-#'   bands and an external rendered report. Incomplete results are not assessed.
+#'   kappa, agreement, stratified rates, robustness with backend errors per PB
+#'   run, completeness, provenance, criteria bands and an external rendered
+#'   report. Incomplete results are not assessed.
 #' @name acmg
 #' @keywords internal
 NULL
@@ -527,6 +528,17 @@ acmg_pilot <- function(runs, plan, items = acmg_items(pilot = TRUE)) {
     }
     completion <- vapply(responses, numeric_token, 0)
     reasoning <- vapply(responses, numeric_token, 0, reasoning = TRUE)
+    usage_value <- function(m, field) {
+      value <- if (is.list(m[["usage"]])) m[["usage"]][[field]]
+      if (acmg_scalar(value, "numeric") && value >= 0) as.numeric(value) else NA_real_
+    }
+    prompt_tokens <- vapply(responses, usage_value, 0, field = "prompt_tokens")
+    billed <- vapply(responses, usage_value, 0, field = "cost")
+    # Second evidence of the cost calculation for routed models (ADR-011 no. 5):
+    # billed usage.cost against the tokens at the plan prices. Both sums need the
+    # field on every successful response; the direct OpenAI endpoint reports no cost.
+    routed <- length(unlist(model$provider_order)) > 0L
+    sum_all <- function(x) if (routed && length(x) && !anyNA(x)) sum(x) else NA_real_
     q <- function(x, prob) if (!length(x) || all(is.na(x))) NA_real_ else
       unname(stats::quantile(x, prob, na.rm = TRUE, type = plan$evaluation$kappa_bootstrap$quantile_type))
     q90 <- q(completion, plan$pilot$cost_quantile)
@@ -537,7 +549,10 @@ acmg_pilot <- function(runs, plan, items = acmg_items(pilot = TRUE)) {
     summary[[key]] <- data.frame(model = key, complete = unname(complete[key]), planned = nrow(expected),
                                   stored = nrow(r), recognized = hits, projected_usd = unname(costs[key]),
                                   completion_q90 = q90, latency_median = q(lat, 0.5),
-                                  reasoning_median = q(reasoning, 0.5), reasoning_q90 = q(reasoning, plan$pilot$cost_quantile))
+                                  reasoning_median = q(reasoning, 0.5), reasoning_q90 = q(reasoning, plan$pilot$cost_quantile),
+                                  reasoning_exceeds_completion = sum(reasoning > completion, na.rm = TRUE),
+                                  usage_cost_usd = sum_all(billed),
+                                  recomputed_cost_usd = sum_all((prompt_tokens * model$price_in + completion * model$price_out) / 1e6))
     tokens[[key]] <- data.frame(model = rep(key, sum(success)),
                                 id = acmg_meta_text(responses, "id"),
                                 completion_tokens = completion, reasoning_tokens = reasoning)
@@ -586,6 +601,28 @@ acmg_repeat_day <- function(runs, plan) {
     out[[length(out) + 1L]] <- data.frame(block = block, model = key, provider_change = provider_change,
                                         model_change = length(snapshots) > 1L, backend_error_share = share,
                                         error_trigger = is.finite(share) && share > plan$pilot$error_share_trigger)
+  }
+  do.call(rbind, out)
+}
+
+# Backend errors per model and PB run (ADR-011 no. 6; docs/03 A.8 no. 4). Only
+# rows with a recorded error count; unreadable answers are not backend errors.
+# Above error_share_trigger the operator repeats the robustness part on the
+# store copy taken before the robustness runs; nothing is enforced here.
+acmg_robustness_errors <- function(runs, plan) {
+  ids <- unlist(plan$robustness$pb_design$prompt_ids, use.names = FALSE)
+  out <- list()
+  for (key in names(acmg_models(plan))) for (id in ids) {
+    r <- runs[which(runs$model_id == key & runs$prompt_id == id), , drop = FALSE]
+    if (!nrow(r)) next
+    errors <- sum(acmg_errors(r))
+    out[[length(out) + 1L]] <- data.frame(model = key, prompt_id = id, rows = nrow(r), error_rows = errors,
+                                          backend_error_share = errors / nrow(r),
+                                          error_trigger = errors / nrow(r) > plan$pilot$error_share_trigger)
+  }
+  if (!length(out)) {
+    return(data.frame(model = character(), prompt_id = character(), rows = integer(), error_rows = integer(),
+                      backend_error_share = numeric(), error_trigger = logical()))
   }
   do.call(rbind, out)
 }
@@ -751,6 +788,11 @@ acmg_run_cli <- function(args) {
   }
   cat(sprintf("AP1 %s backend=%s; stored calls=%d; store=%s\n", part, mode, nrow(rows), store))
   if (part == "pilot") acmg_print_pilot(acmg_pilot(rows, plan, pilot_items))
+  if (part == "robustness") {
+    cat(sprintf("AP1 robustness backend errors per PB run; error_trigger marks shares above %s (operator decision on the store copy taken before the robustness runs; no automatic repeat):\n",
+                format(plan$pilot$error_share_trigger)))
+    print(acmg_robustness_errors(rows, plan), row.names = FALSE)
+  }
   invisible(rows)
 }
 
@@ -979,6 +1021,11 @@ acmg_assessment <- function(result, key, runs, joint, plan) {
     sections[["Robustness reference accuracy"]] <- list(text = "Secondary rates against available reference classes, not the stability response.",
                                                          table = rb$response[, c("prompt_id", "reference_n", "reference_hits", "reference_rate")])
   } else sections[["Robustness decision"]] <- list(text = result$robustness$reason %||% "Robustness not assessed: PB runs absent.")
+  if (!is.null(result$robustness$errors)) {
+    sections[["Robustness backend errors"]] <- list(text = sprintf(
+      "Backend errors per PB run (rows with a recorded error; unreadable answers do not count). error_trigger marks shares above %s; the operator then repeats the robustness part on the store copy taken before the robustness runs (docs/03 A.8 no. 4). Nothing is enforced.",
+      format(plan$pilot$error_share_trigger)), table = result$robustness$errors)
+  }
   for (policy in plan$reporting$policies) {
     sections[[paste("Data policy:", policy$provider)]] <- list(text = paste(policy$summary, "Snapshot:", policy$snapshot_date,
          ";", policy$location, ";", policy$url, "Quoted evidence:", policy$quote))
@@ -990,7 +1037,7 @@ acmg_assessment <- function(result, key, runs, joint, plan) {
        paste("Backend error trigger:", plan$pilot$error_share_trigger, "; repeat days are operator decisions on pre-block store copies.")))
   if (!is.null(result$pilot)) {
     sections[["Pilot result"]] <- list(text = "Pilot facts from the supplied runs; absent calls remain missing. Provider and cost rules cannot pass on mock metadata.", table = result$pilot$rules)
-    sections[["Pilot measurements"]] <- list(text = "Latency and token summaries use available recorded values. Reasoning is already included in completion_tokens.", table = result$pilot$summary)
+    sections[["Pilot measurements"]] <- list(text = "Latency and token summaries use available recorded values. Costs use usage.completion_tokens, which includes reasoning. Reasoning token counts are shown as reported by the API; for Qwen3-32B via DeepInfra they can exceed completion_tokens and are then not on the model's token scale.", table = result$pilot$summary)
   }
   sections[["Repeat-day diagnostics"]] <- list(text = "Backend errors, provider changes and model-snapshot changes are reported per block. The operator decides on a repeat day.", table = acmg_repeat_day(runs, plan))
   a <- plan$acceptance
@@ -1047,6 +1094,7 @@ acmg_evaluate <- function(runs, plan) {
     complete <- all(completeness$complete) && design_complete
     rb <- pb[pb$model_id == key, , drop = FALSE]
     robustness <- acmg_robustness(rb, modal, ids, plan)
+    if (!is.null(robustness)) robustness$errors <- acmg_robustness_errors(rb, plan)
     verdicts <- acmg_bands(grr$summary[["grr_pct_study_var"]], kappa$estimate, dangerous, robustness$band, plan)
     if (!complete) verdicts[] <- "not assessed"
     basis <- data.frame(kappa_items = kappa$n, excluded_no_modal = sum(!modal$has_modal),

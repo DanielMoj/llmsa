@@ -36,8 +36,9 @@ columns \code{reference}, \code{source} and \code{prior_differs_sol/llama/qwen}.
 data.frame. \code{acmg_prompts()} returns named templates, or a PB data.frame.
 \code{acmg_evaluate()} returns \code{models} keyed by model and a joint \code{msa_fit}.
 Each model includes GRR, fit diagnostics, modal responses, item-bootstrap
-kappa, agreement, stratified rates, completeness, provenance, criteria
-bands and an external rendered report. Incomplete results are not assessed.
+kappa, agreement, stratified rates, robustness with backend errors per PB
+run, completeness, provenance, criteria bands and an external rendered
+report. Incomplete results are not assessed.
 }
 \description{
 Frozen configuration, local item import, prompt construction and evaluation

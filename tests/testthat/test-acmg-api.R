@@ -96,7 +96,9 @@ test_that("HTTP metadata separates response identity from request routing and pr
     expect_identical(got$meta$seed, settings$seed)
     expect_false("temperature" %in% names(got$meta))
     stored <- meta_to_json(got$meta)
-    expect_false(grepl("synthetic-key|Authorization|Synthetic prompt|Pathogenic", stored))
+    expect_false(grepl("synthetic-key|Authorization|Synthetic prompt|Benign", stored))
+    # ADR-011 no. 7: the reasoning text is stored as metadata; the parsed text stays message.content.
+    expect_identical(got$meta$reasoning, "Pathogenic")
     expect_true(grepl('"system_fingerprint":null', stored, fixed = TRUE))
   }
 })

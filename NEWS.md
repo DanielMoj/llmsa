@@ -3,6 +3,9 @@
 * `backend_openai_compatible()` now omits `temperature` from the request when
   `temperature = NULL`. It supports a per-row system message and records response
   IDs, model snapshots, usage, fingerprints and requested/reported provider routing.
+* `backend_openai_compatible()` records a non-empty `message.reasoning` of the
+  reply as `meta$reasoning` (Qwen3-32B via OpenRouter returns its reasoning
+  there). `reasoning_details` is not stored, and only `message.content` is parsed.
 * `parse_choice(whole_word = TRUE)` matches whole phrases, preferring longer
   phrases and rejecting ambiguous classifications. The default remains unchanged.
 * `msa_run(parse_by_prompt = ...)` can select a parser for each prompt while

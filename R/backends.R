@@ -44,7 +44,10 @@
 #'   `temperature = NULL` omits the temperature field. A non-empty, non-NA
 #'   `row$system` overrides `system` and precedes the user message. The reply's
 #'   `id`, `model` (as `model_snapshot`), `usage`, `system_fingerprint` (including
-#'   null) and optional `provider` are recorded in `meta`. Requested routing
+#'   null) and optional `provider` are recorded in `meta`. A reasoning text in
+#'   `message.reasoning` (as some OpenRouter endpoints return it) is recorded
+#'   as `reasoning` when it is a non-empty string; otherwise the key is absent.
+#'   `reasoning_details` is not stored. Requested routing
 #'   is recorded as `provider_order`, `quantizations` and `allow_fallbacks`.
 #'   Requested `seed`, `temperature` and `reasoning_effort`, when present, are
 #'   retained as metadata for comparison with the study plan.
@@ -173,6 +176,11 @@ backend_openai_compatible <- function(base_url = "https://api.openai.com/v1",
     meta <- list(model_snapshot = js$model, id = js$id, usage = js$usage,
                  system_fingerprint = js$system_fingerprint)
     if ("provider" %in% names(js)) meta["provider"] <- list(js$provider)
+    # Exact match: `$` would also accept `reasoning_details`, which is not stored.
+    reasoning <- js$choices[[1]]$message[["reasoning"]]
+    if (is.character(reasoning) && length(reasoning) == 1L && !is.na(reasoning) && nzchar(reasoning)) {
+      meta$reasoning <- reasoning
+    }
     if (!is.null(body$provider)) {
       meta$provider_order <- body$provider$order
       meta$quantizations <- body$provider$quantizations

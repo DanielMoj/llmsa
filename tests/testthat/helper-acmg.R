@@ -4,6 +4,16 @@ ap1_test_plan <- function() {
   acmg_plan()
 }
 
+# A tolerance of plan.yaml validation_tolerances; a missing key stops instead of
+# turning into an exact comparison (ADR-012, BL-72).
+ap1_test_tolerance <- function(plan, name) {
+  value <- plan[["validation_tolerances"]][[name]]
+  if (!is.numeric(value) || length(value) != 1L || !is.finite(value)) {
+    stop("plan.yaml validation_tolerances lacks a finite value for ", name, call. = FALSE)
+  }
+  value
+}
+
 ap1_test_keys <- function() {
   # Never inspect real credentials in a test process.
   Sys.setenv(OPENAI_API_KEY = "synthetic-openai-key", OPENROUTER_API_KEY = "synthetic-router-key")
@@ -20,6 +30,42 @@ ap1_test_response <- function(body) {
   httr2::new_response(method = "POST", url = "https://synthetic.invalid", status_code = 200L,
                       headers = list(`Content-Type` = "application/json"),
                       body = charToRaw(jsonlite::toJSON(body, auto_unbox = TRUE, null = "null")))
+}
+
+# Operator recordings (tests/fixtures/api/, ANK-94) are not part of the built
+# package (.Rbuildignore). In the source tree, or with the option
+# llmsa.test.ap1_recordings, they are required; elsewhere, as in R CMD check,
+# tests that replay them are skipped.
+ap1_test_recording <- function(key) {
+  directory <- getOption("llmsa.test.ap1_recordings")
+  path <- file.path(directory %||% testthat::test_path("..", "fixtures", "api"), paste0(key, ".json"))
+  if (file.exists(path)) return(path)
+  if (!is.null(directory) || file.exists(testthat::test_path("..", "..", "DESCRIPTION"))) {
+    stop("AP1 test recording missing: ", path, call. = FALSE)
+  }
+  testthat::skip("AP1 recordings under tests/fixtures/api are not part of the built package")
+}
+
+# Replays the recordings by URL and request model (tests/fixtures/api/README.md);
+# an unmatched request stops instead of reaching the network.
+ap1_test_replay <- function(plan) {
+  models <- acmg_models(plan)
+  paths <- vapply(names(models), ap1_test_recording, "")
+  function(req) {
+    body <- ap1_test_request_body(req)
+    url <- httr2::req_get_url(req)
+    key <- names(models)[vapply(models, function(m) {
+      identical(body[["model"]], m$id) && identical(url, paste0(m$endpoint, "/chat/completions"))
+    }, logical(1))]
+    if (length(key) != 1L) stop("no recording for ", url, " ", body[["model"]], call. = FALSE)
+    httr2::response(status_code = 200L, url = url, method = "POST",
+                    headers = list(`Content-Type` = "application/json"),
+                    body = readBin(paths[[key]], "raw", file.size(paths[[key]])))
+  }
+}
+
+ap1_test_recorded_message <- function(key) {
+  jsonlite::fromJSON(ap1_test_recording(key), simplifyVector = FALSE)$choices[[1]]$message
 }
 
 ap1_test_meta <- function(key, plan, completion = 100, reasoning = 40) {
