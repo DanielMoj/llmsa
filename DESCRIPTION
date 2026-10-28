@@ -32,6 +32,7 @@ Imports:
     tools,
     utils
 Suggests:
+    curl,
     DBI,
     digest,
     ellmer,

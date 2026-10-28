@@ -54,7 +54,7 @@ acmg_scalar <- function(x, type = "character", empty = FALSE) {
 acmg_validate_plan <- function(p) {
   fail <- function(field) stop("Invalid AP1 plan field: ", field, call. = FALSE)
   need <- c("cou", "risk", "acceptance", "models", "design", "pilot", "robustness",
-            "evaluation", "budget", "cutoff_date", "classes", "aliases", "templates", "tokens", "reporting")
+            "evaluation", "budget", "cutoff_date", "classes", "aliases", "templates", "tokens", "reporting", "network")
   if (!is.list(p) || !all(need %in% names(p))) fail(paste(setdiff(need, names(p)), collapse = ", "))
   if (!acmg_scalar(p$cou)) fail("cou")
   if (!p$risk$tier %in% c("low", "medium", "high")) fail("risk.tier")
@@ -96,6 +96,10 @@ acmg_validate_plan <- function(p) {
   }
   if (p$design$seed > .Machine$integer.max || !identical(p$design$order, "replicate_random")) fail("design seed/order")
   if (p$design$models != length(keys) || p$design$prompts != length(tpl)) fail("design model/prompt counts")
+  if (!is.list(p$network)) fail("network")
+  for (nm in c("first_pause_s", "max_pause_s", "total_pause_s")) {
+    if (!acmg_scalar(p$network[[nm]], "numeric") || p$network[[nm]] <= 0) fail(paste0("network.", nm))
+  }
   for (nm in c("pilot_items", "replicates", "templates", "calls_per_model", "parser_hits_min", "parser_hits_of")) {
     v <- p$pilot[[nm]]
     if (!acmg_scalar(v, "numeric") || v < 1 || v != floor(v)) fail(paste0("pilot.", nm))
@@ -724,6 +728,105 @@ acmg_join_items <- function(runs, items) {
   result
 }
 
+# Network watch and progress log of the runner (ADR-015). A call that fails
+# before its request was sent is repeated after a pause instead of being
+# stored. Every other failure stays a backend error row, because that request
+# may have reached the provider and been billed (ADR-014 E6).
+acmg_network_classes <- c("curl_error_couldnt_resolve_host", "curl_error_couldnt_resolve_proxy",
+                          "curl_error_couldnt_connect", "curl_error_ssl_connect_error",
+                          "curl_error_peer_failed_verification")
+
+# httr2 1.3.0 signals an httr2_failure whose parent is the curl 8.1.0 condition
+# ("<libcurl error> [<host>]:\n<error buffer>"); libcurl 8.18 names the phase of
+# a timeout only in the error buffer. In doubt a failure is a backend error.
+acmg_network_failure <- function(cnd) {
+  while (inherits(cnd, "condition")) {
+    if (inherits(cnd, acmg_network_classes)) return(TRUE)
+    if (inherits(cnd, "curl_error_operation_timedout")) {
+      return(grepl("(^|\n)(Resolving timed out after [0-9]+ milliseconds|Connection timed out after [0-9]+ milliseconds|Connection timeout after [0-9]+ ms)",
+                   conditionMessage(cnd)))
+    }
+    if (inherits(cnd, "curl_error")) return(FALSE)
+    cnd <- cnd[["parent"]]
+  }
+  FALSE
+}
+
+# The innermost message names the libcurl error and the host, never a key.
+acmg_network_cause <- function(cnd) {
+  while (inherits(cnd[["parent"]], "condition")) cnd <- cnd[["parent"]]
+  gsub("[[:space:]]+", " ", trimws(conditionMessage(cnd)))
+}
+
+# Replaced in tests, so that no test waits.
+acmg_wait <- function(seconds) Sys.sleep(seconds)
+
+acmg_log <- function(text) message(format(Sys.time(), "[%Y-%m-%d %H:%M:%S %Z] AP1 "), text)
+
+# Wraps the backend given to msa_run(). Without a network failure, requests,
+# replies and errors pass unchanged; the log never shows replies or keys.
+acmg_watch <- function(backend, plan, part) {
+  net <- plan$network
+  state <- new.env(parent = emptyenv())
+  state$errors <- stats::setNames(integer(length(plan$models)), names(acmg_models(plan)))
+  state$block <- NA
+  state$open <- 0L
+  state$done <- 0L
+  at <- function() sprintf("%s block %s", part, state$block)
+  progress <- function(event = "") {
+    acmg_log(sprintf("%s: %s%d done, %d open; backend errors since start: %s", at(), event, state$done,
+                     state$open - state$done, paste(names(state$errors), state$errors, collapse = ", ")))
+  }
+  start <- function(block, open) {
+    state$block <- block
+    state$open <- open
+    state$done <- 0L
+    acmg_log(sprintf("%s: start, %d open", at(), open))
+  }
+  call <- function(prompt, model, row) {
+    label <- sprintf("%s %s %s rep %s", row$model_id, row$prompt_id, row$item_id, row$rep)
+    retries <- 0L
+    waited <- 0
+    repeat {
+      result <- tryCatch(backend(prompt, model, row), error = function(e) e)
+      if (!inherits(result, "error") || !acmg_network_failure(result)) break
+      cause <- acmg_network_cause(result)
+      pause <- min(net$first_pause_s * 2^retries, net$max_pause_s, net$total_pause_s - waited)
+      if (pause <= 0) {
+        acmg_log(sprintf("%s: network limit of %s s reached for %s; stopping without a row for this call",
+                         at(), format(net$total_pause_s), label))
+        text <- sprintf(paste("AP1 network unavailable: %s (block %s, position %s) still failed before sending after",
+                              "%d network retries and %s s of pauses (limit %s s): %s. No row was stored for this call;",
+                              "continue with the same command."),
+                        label, row$block, row$position, retries, format(waited), format(net$total_pause_s), cause)
+        # Not an error: msa_run() would store an error as a row.
+        stop(structure(class = c("acmg_network_abort", "condition"), list(message = text, call = NULL)))
+      }
+      acmg_log(sprintf("%s: network pause %s s before retry %d of %s (%s s paused before): %s",
+                       at(), format(pause), retries + 1L, label, format(waited), cause))
+      acmg_wait(pause)
+      waited <- waited + pause
+      retries <- retries + 1L
+    }
+    state$done <- state$done + 1L
+    if (inherits(result, "error")) {
+      key <- as.character(row$model_id)
+      state$errors[key] <- sum(state$errors[key], 1L, na.rm = TRUE)
+      progress(sprintf("backend error (%s); ", key))
+      if (!retries) stop(result)
+      stop(paste0(conditionMessage(result), sprintf(" [after %d network retries, %s s]", retries, format(waited))), call. = FALSE)
+    }
+    if (state$done %% 100L == 0L) progress()
+    if (retries) {
+      if (!is.list(result)) result <- list(text = result, meta = list())
+      result$meta$network_retries <- retries
+      result$meta$network_wait_s <- waited
+    }
+    result
+  }
+  list(start = start, backend = call)
+}
+
 acmg_run_cli <- function(args) {
   allowed <- c("--part", "--block", "--backend", "--store", "--insaid-path", "--report-dir", "--evaluate-only")
   opt <- list(); i <- 1L
@@ -781,14 +884,19 @@ acmg_run_cli <- function(args) {
   backend <- if (mode == "mock") acmg_mock_backend(selected, plan) else function(prompt, model, row) {
     backends[[row$model_id]](prompt, model, row)
   }
+  watch <- acmg_watch(backend, plan, part)
   parser <- acmg_parser(plan)
   extract <- parse_json_field("classification")
   parse_json <- function(text) parser(extract(text))
   acmg_store_init(store, mode)
   blocks <- block %||% unique(design$block)
   for (b in blocks) {
-    msa_run(design, backend, parse = parser, parse_by_prompt = list(json = parse_json),
-             block = b, store = store, resume = TRUE, verbose = FALSE)
+    keys <- run_key(as.data.frame(design)[design$block == b, , drop = FALSE])
+    watch$start(b, sum(!keys %in% run_key(rows)))
+    run <- tryCatch(msa_run(design, watch$backend, parse = parser, parse_by_prompt = list(json = parse_json),
+                            block = b, store = store, resume = TRUE, verbose = FALSE),
+                    acmg_network_abort = function(cnd) cnd)
+    if (inherits(run, "acmg_network_abort")) stop(conditionMessage(run), call. = FALSE)
     rows <- acmg_store_read(store, mode)
     if (part == "main") {
       main <- rows[rows$item_id %in% items$item_id & rows$prompt_id %in% names(plan$templates) & rows$block == b, ]

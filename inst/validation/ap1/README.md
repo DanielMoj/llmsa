@@ -85,12 +85,36 @@ hash; repeatedly invoking the same command does not replace failed calls.
 
 After a passing pilot, archive its store. Collect the two main blocks on
 separate days; the complete seeded order is generated before block filtering.
+Run the main plan and the robustness part from a separate clone of the
+repository at the commit of ADR-015 (for AP1 `llmsa-ap1` next to the development
+tree), so that work in the development tree cannot change the code of a later
+block. Use the same absolute `--store` as for the pilot.
 
 ```sh
 Rscript --vanilla inst/validation/ap1/run.R --part main --block 1 --backend api --store /absolute/studies/ap1-api.sqlite
 Rscript --vanilla inst/validation/ap1/run.R --part main --block 2 --backend api --store /absolute/studies/ap1-api.sqlite
 Rscript --vanilla inst/validation/ap1/run.R --part robustness --backend api --store /absolute/studies/ap1-api.sqlite --insaid-path /absolute/local/insaid_vangijn2018.tsv
 ```
+
+The runner writes timestamped progress lines to stderr: at the start of each
+part and block the number of open calls, then after every 100 calls and after
+each backend error the calls done and open and the backend errors per model
+since the process started. Replies and keys never appear in the log. Keep it,
+for example with `2>> /absolute/studies/ap1-api.log`.
+
+Network watch (ADR-015): a call that fails before its request is sent (host
+name not resolved, no connection, failed TLS handshake, also as a timeout in
+these phases) is not stored. The runner logs the pause with time, cause and
+duration, waits 30 s, doubles the pause up to 600 s and repeats the same call;
+the plan field `network` sets these limits. After 12 h of pauses for one call,
+the run stops with a non-zero exit status, names the call and stores no row for
+it. Run the same command again to continue with exactly that call. Every other
+failure (an HTTP status, a timeout during the transfer, a broken send or
+receive) is stored at once as a backend error, because the request may have
+reached the provider and been billed. A call that succeeds after pauses records
+`network_retries` and `network_wait_s` in its metadata; a backend error after
+pauses ends with ` [after N network retries, W s]`. In both cases `timestamp`
+is the start of the first attempt and `latency_s` includes the pauses.
 
 After each block, diagnostics identify changed serving providers, changed model
 snapshots and backend error shares strictly above the approved threshold.

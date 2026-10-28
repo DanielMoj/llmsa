@@ -26,6 +26,12 @@
   AP1 pilot has a fifth pass rule, `backend_errors`: a backend error share of at
   most `error_share_trigger` per model, unreadable answers not counted. The pilot
   summary reports the maximum latency.
+* The internal AP1 runner repeats a call that failed before its request was sent
+  (name resolution, connection, TLS handshake, or a timeout in these phases)
+  after pauses of 30 s, doubling up to 600 s and at most 12 h per call (plan
+  field `network`), instead of storing it as a backend error; then it stops
+  without a row for that call. Such calls record `network_retries` and
+  `network_wait_s`. The runner logs its progress with timestamps to stderr.
 
 # llmsa 0.1.0
 

@@ -95,6 +95,17 @@ design:
   order: replicate_random
   seed: 20261024
   anchor: ANK-56, ANK-59; docs/03 A.5; ADR-006 section 6
+network:
+  first_pause_s: 30
+  max_pause_s: 600
+  total_pause_s: 43200
+  rule: 'A call that fails before its request is sent (name resolution, connection
+    or TLS handshake, also as a timeout in these phases) is not stored: the runner
+    pauses and repeats the same call, doubling the pause up to max_pause_s and shortening
+    the last pause to the rest of total_pause_s. If the call still fails this way,
+    the run stops without a row for it. Every other failure is stored as a backend
+    error.'
+  source: ADR-015 (E1, E2); docs/03 A.8 no. 4
 pilot:
   pilot_items: 10
   pilot_items_source: erepo
@@ -409,7 +420,8 @@ provenance:
   approved: '2026-10-25'
   plan: docs/03 A.1-A.8; ADR-004 including both 2026-10-26 amendments; ADR-011 (reporting
     policies), ADR-012 (validation tolerances), ADR-013 (format sentences after pilot
-    1), ADR-014 (client timeout and backend-error pilot rule after pilot 2)
+    1), ADR-014 (client timeout and backend-error pilot rule after pilot 2), ADR-015
+    (network watch and progress log of the runner)
   classes_templates: ANK-69
   rng: Mersenne-Twister / Inversion / Rejection
   selection: ADR-005; ANK-59
