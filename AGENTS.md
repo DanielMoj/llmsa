@@ -167,10 +167,10 @@ Abnahmekriterien werden erfüllt, niemals passend gemacht:
   ADEMP-Simulation mit Seed, `n_sim` ≥ ANK-06 und MCSE, wo keine
   geschlossene Lösung existiert; Randfälle und Invarianzen Pflicht;
   Toleranzen nur aus Ankern.
-- **AIAG-Konventionen:** ndc mit 1,41 und Abrundung; Verdikt nach %
-  Studienvariation mit Schwellen 10 und 30, Grenzwerte „bedingt“;
-  %Contribution-Schwellen 1 und 9 als Konvention. Latente Skala:
-  Restvarianz 1 (Probit), π²/3 (Logit).
+- **AIAG-Konventionen:** ndc mit 1,41, Abrundung und mindestens 1;
+  Verdikt nach % Studienvariation mit Schwellen 10 und 30, Grenzwerte
+  „bedingt“; %Contribution-Schwellen 1 und 9 als Konvention. Latente
+  Skala: Restvarianz 1 (Probit), π²/3 (Logit).
 - **Formelsammlung:** bindend mit den Festlegungen zu §12 in
   `docs/01-fachspezifikation.md` §3; nur die DIN-32645-Formeln tragen
   (!) und sind nicht im Scope.

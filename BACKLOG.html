@@ -298,7 +298,7 @@
 <td>R</td>
 <td>REML-Schätzer sind numerische Optima: Mit Standard-<code>lmerControl</code> stimmen Varianzkomponenten nur auf etwa 1e-4 bis 1e-5 relativ mit den ANOVA-Schätzern überein; die Intake-Toleranz 1e-6 würde korrekten Code rot färben</td>
 <td>
-<code>ANK-TOL.reml_anova</code>: 1e-4 · σ²_TV je Komponente mit Standardeinstellungen (bestätigt 24.10., 22:20); Bezug auf σ²_TV statt auf die einzelne Komponente, weil Komponenten nahe null jede relative Toleranz sprengen</td>
+<code>ANK-TOL.reml_anova</code>: 1e-4 · σ²_TV je Komponente mit Standardeinstellungen (bestätigt 24.10., 22:20); Bezug auf σ²_TV statt auf die einzelne Komponente, weil Komponenten nahe null jede relative Toleranz sprengen; Nachtrag 28.10.2026 (Betreiber, ADR-016, E3): Optimierer <code>lmerControl(optimizer = "bobyqa")</code> statt Standardeinstellungen, Toleranz 1e-4 · σ²_TV unverändert; mit Standardeinstellungen wichen in der Acceptance M1a 4 von 20 balancierten simulierten Plänen um 1.0e-4 bis 4.7e-4 · σ²_TV vom ANOVA-Schätzer ab (ACC-5)</td>
 <td>02 K-M1a-1</td>
 </tr><tr><td>BL-50</td>
 <td>R</td>

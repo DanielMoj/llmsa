@@ -47,7 +47,7 @@
 </tr></thead><tbody><tr><td>reml_anova</td>
 <td>Toleranz REML = ANOVA bei balancierten Plänen, je Komponente als Anteil der Gesamtvarianz σ²_TV des ANOVA-Schätzers, und die dafür verwendeten Optimierer-Einstellungen</td>
 <td>K-M1a-1</td>
-<td>1e-4 · σ²_TV je Komponente mit Standard-<code>lmerControl</code>; abgeleitete Kennzahlen 1e-4 relativ; ndc gleich, Testfälle nicht näher als 0,01 an einer ganzen Zahl</td>
+<td>1e-4 · σ²_TV je Komponente mit <code>lmerControl(optimizer = "bobyqa")</code>; abgeleitete Kennzahlen 1e-4 relativ; ndc gleich, Testfälle nicht näher als 0,01 an einer ganzen Zahl</td>
 <td>Intake Feld 5 nennt 1e-6 relativ; lme4 liefert numerische Optima (Bates et al. 2015, <code>?lmerControl</code>), Komponenten nahe null vertragen keine relative Toleranz (Revision 22:20); Exaktheit nach Searle 1992 §3.8; BL-49</td>
 </tr><tr><td>oracle</td>
 <td>Toleranz für Gegenrechnungen mit Paketen zur Testlaufzeit (zwei Werte)</td>
@@ -182,12 +182,12 @@
 <td>Datei anlegen (Betreiber), Reviewer prüft</td>
 </tr><tr><td>ANK-13</td>
 <td>
-<code>Penicillin</code>: publizierte REML-Schätzer (Standardabweichungen plate, sample, residual)</td>
+<code>Penicillin</code>: publizierte REML-Schätzer (Varianzen und Standardabweichungen plate, sample, residual)</td>
 <td>K-M1a-1, K-M1a-3</td>
-<td>Bates2015 (JSS 67(1)), Abschnitt zum Penicillin-Beispiel; <code><a href="https://rdrr.io/pkg/lme4/man/Penicillin.html" class="external-link">lme4::Penicillin</a></code>
+<td>Bates2010 (lme4: Mixed-effects modeling with R, Buchentwurf, Kap. 2, Abschnitt 2.1.2, Druckseite 30; quellen/literatur/A_statistikkern/Bates_2010_lme4_Mixed-effects_Modeling_with_R_Entwurf_Kap2.pdf, SHA-256 cd89032d…1c41); <code><a href="https://rdrr.io/pkg/lme4/man/Penicillin.html" class="external-link">lme4::Penicillin</a></code>. Toleranz (ADR-016, E1): <code>ANK-TOL.reml_anova</code> · σ²_TV auf der Varianzskala (gedruckte Standardabweichungen quadriert, σ²_TV als Summe der gedruckten Varianzen), nicht die halbe Einheit der letzten Stelle. Begründung: <code>Penicillin</code> ist balanciert (24 plates × 6 samples, eine Beobachtung je Zelle), alle ANOVA-Schätzer sind nichtnegativ, also ist REML gleich ANOVA; die gedruckten Werte stammen aus lme4 von 2010 und weichen von den exakten Schätzern um bis zu 5,2·10⁻⁵ in der Varianz ab (sample; 1,1·10⁻⁵ · σ²_TV), bei plate und sample um mehr als die halbe Einheit der letzten gedruckten Stelle; mit der halben Einheit fiele korrekter Code durch. Zweitbeleg des Reviewers: ANOVA-Schätzer aus <code><a href="https://rdrr.io/pkg/lme4/man/Penicillin.html" class="external-link">lme4::Penicillin</a></code>
 </td>
-<td>Literatur (frei)</td>
-<td>vorhanden</td>
+<td>Literatur (Buchentwurf, bleibt lokal)</td>
+<td>geändert 28.10.2026 (ADR-016), Reviewer erntet</td>
 </tr><tr><td>ANK-14</td>
 <td>NIST-StRD-ANOVA zertifizierte Werte (Between/Within SS, df, MS, F, R², Residual-SD) für SiRstv, SmLs01–06, AtmWtAg</td>
 <td>K-M1a-4</td>
