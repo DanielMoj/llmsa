@@ -4,7 +4,7 @@
   "criteria": ["K-M2-3", "K-M2-6", "K-M2-7", "docs/03 A.3"],
   "value": {
     "templates": {
-      "concise": "Classify the germline variant {gene} {hgvs} according to the ACMG/AMP 2015 five-tier scheme. Answer with exactly one of: Benign, Likely benign, Uncertain significance, Likely pathogenic, Pathogenic.",
+      "concise": "Classify the germline variant {gene} {hgvs} according to the ACMG/AMP 2015 five-tier scheme. Answer with exactly one of the following and nothing else: Benign, Likely benign, Uncertain significance, Likely pathogenic, Pathogenic.",
       "role": "You are a clinical geneticist on a variant curation expert panel. Using the ACMG/AMP 2015 standards and guidelines, assign the five-tier classification for the germline variant {gene} {hgvs}. Reply with the classification only, as one of: Benign; Likely benign; Uncertain significance; Likely pathogenic; Pathogenic.",
       "json": "Return a JSON object of the form {\"classification\": \"<tier>\"} for the germline variant {gene} {hgvs}, where <tier> is the ACMG/AMP 2015 five-tier classification: one of \"Benign\", \"Likely benign\", \"Uncertain significance\", \"Likely pathogenic\", \"Pathogenic\". Output the JSON object only."
     },
@@ -27,8 +27,8 @@
   "tolerance": 0,
   "tolerance_note": "Wortlaut exakt (zeichengenau)",
   "source_url": "docs/03-anwendungspipeline.md, Anhang A.3",
-  "source": "Betreiberfestlegung: Validierungsplan Anhang A.3, freigegeben mit ADR-004 vom 25.10.2026 einschließlich der Wortlaute der Prompt-Vorlagen; Nachtrag des Reviewers (ANKER-TODO: freie Nummer), weil K-M2-3 und K-M2-7 den Wortlaut prüfen",
-  "quote": "- `concise`: „Classify the germline variant {gene} {hgvs} according to the ACMG/AMP 2015 five-tier scheme. Answer with exactly one of: Benign, Likely benign, Uncertain significance, Likely pathogenic, Pathogenic.“",
+  "source": "Betreiberfestlegung: Validierungsplan Anhang A.3, freigegeben mit ADR-004 vom 25.10.2026 einschließlich der Wortlaute der Prompt-Vorlagen; Nachtrag des Reviewers (ANKER-TODO: freie Nummer), weil K-M2-3 und K-M2-7 den Wortlaut prüfen; Formatsätze: ADR-013 (27.10.2026)",
+  "quote": "- `concise`: „Classify the germline variant {gene} {hgvs} according to the ACMG/AMP 2015 five-tier scheme. Answer with exactly one of the following and nothing else: Benign, Likely benign, Uncertain significance, Likely pathogenic, Pathogenic.“ (Formatsatz nach Pilot 1 geändert, ADR-013)",
   "quote_location": "docs/03 A.3, erster Punkt (Zeile 46); role und json in Zeilen 47 und 48, Aliase in Zeile 50, Beispiel des Variantentexts in Zeile 49",
   "further_quotes": [
     {
@@ -49,6 +49,6 @@
     }
   ],
   "retrieved": "2026-10-27",
-  "method": "Mit Rscript aus docs/03 extrahiert: Text zwischen den typografischen Anführungszeichen „ und “ je Vorlage; innere Anführungszeichen der json-Vorlage sind ASCII. Aliase als Liste kodiert und gegen den Wortlaut von Zeile 50 geprüft (Rekonstruktion ist Teilzeichenkette).",
-  "verification": "Die Klassen stehen in der concise-Vorlage in Skalenordnung; ANK-68 ordnet ihnen die Scores 1 bis 5 zu. Die Vorlage concise ist gleich Aufgabensatz + Leerzeichen + Formatsatz ausgeschrieben (englisch) aus ANK-62."
+  "method": "Mit Rscript aus docs/03 extrahiert: Text zwischen den typografischen Anführungszeichen „ und “ je Vorlage; innere Anführungszeichen der json-Vorlage sind ASCII. Aliase als Liste kodiert und gegen den Wortlaut von Zeile 50 geprüft (Rekonstruktion ist Teilzeichenkette). concise ist nach ADR-013 auf dieselbe Weise aus der geänderten Zeile 46 neu extrahiert; role, json, Aliase und Klassen sind unverändert.",
+  "verification": "Die Klassen stehen in der concise-Vorlage in Skalenordnung; ANK-68 ordnet ihnen die Scores 1 bis 5 zu. Die Vorlage concise ist gleich Aufgabensatz + Leerzeichen + Formatsatz ausgeschrieben (englisch) aus ANK-62. Nach ADR-013 erneut mit Rscript geprüft: concise ist zeichengleich mit templates.concise in inst/validation/ap1/plan.yaml und mit Aufgabensatz + Leerzeichen + Formatsatz ausgeschrieben (englisch) aus ANK-62; die Klassen stehen weiter in Skalenordnung."
 }

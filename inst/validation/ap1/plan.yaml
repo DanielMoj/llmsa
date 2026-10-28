@@ -167,13 +167,15 @@ robustness:
       de: Klassifiziere die Keimbahnvariante {gene} {hgvs} entsprechned dem fünfstufigen
         ACMG/AMP-Schema von 2015.
     format_full:
-      en: 'Answer with exactly one of: Benign, Likely benign, Uncertain significance,
-        Likely pathogenic, Pathogenic.'
-      de: 'Antworte mit genau einer der folgenden Klassen: Benign, Likely benign,
-        Uncertain significance, Likely pathogenic, Pathogenic.'
+      en: 'Answer with exactly one of the following and nothing else: Benign, Likely
+        benign, Uncertain significance, Likely pathogenic, Pathogenic.'
+      de: 'Antworte mit genau einer der folgenden Klassen und sonst nichts: Benign,
+        Likely benign, Uncertain significance, Likely pathogenic, Pathogenic.'
     format_abbrev:
-      en: 'Answer with exactly one of: B, LB, VUS, LP, P.'
-      de: 'Antworte mit genau einer der folgenden Klassen: B, LB, VUS, LP, P.'
+      en: 'Answer with exactly one of the following and nothing else: B, LB, VUS,
+        LP, P.'
+      de: 'Antworte mit genau einer der folgenden Klassen und sonst nichts: B, LB,
+        VUS, LP, P.'
     context:
       en: 'Laboratory note: The sample was received on a weekday morning and registered
         in the laboratory information system. DNA was extracted with a standard column-based
@@ -294,8 +296,8 @@ aliases:
   - pathogenic
 templates:
   concise: 'Classify the germline variant {gene} {hgvs} according to the ACMG/AMP
-    2015 five-tier scheme. Answer with exactly one of: Benign, Likely benign, Uncertain
-    significance, Likely pathogenic, Pathogenic.'
+    2015 five-tier scheme. Answer with exactly one of the following and nothing else:
+    Benign, Likely benign, Uncertain significance, Likely pathogenic, Pathogenic.'
   role: 'You are a clinical geneticist on a variant curation expert panel. Using the
     ACMG/AMP 2015 standards and guidelines, assign the five-tier classification for
     the germline variant {gene} {hgvs}. Reply with the classification only, as one
@@ -388,9 +390,16 @@ reporting:
     information, not submission quality.
   - API prices and endpoints are frozen snapshots; the operator checks prices live
     before AP1 (docs/03 A.8).
+  - 'Pilot 1 (2026-10-27) did not pass: Llama 3.3 70B answered the concise template
+    with explanations that named several classes (9 of 10 unparseable). The format
+    sentence was changed for all models to require the classification only (ADR-013);
+    pilot 2, the main plan and the robustness runs use the new wording in a new store.
+    Pilot 1 is kept as evidence and is not evaluated.'
 provenance:
   approved: '2026-10-25'
-  plan: docs/03 A.1-A.8; ADR-004 including both 2026-10-26 amendments
+  plan: docs/03 A.1-A.8; ADR-004 including both 2026-10-26 amendments; ADR-011 (reporting
+    policies), ADR-012 (validation tolerances), ADR-013 (format sentences after pilot
+    1)
   classes_templates: ANK-69
   rng: Mersenne-Twister / Inversion / Rejection
   selection: ADR-005; ANK-59

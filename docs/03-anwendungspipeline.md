@@ -43,7 +43,7 @@ Wie K-M2-1 und K-M2-2. Herkunft: ClinGen ERepo (CC0, Stand 22.10.2026, `ANK-51`)
 
 ### A.3 Prompt-Vorlagen (englisch, drei Varianten gleicher Bedeutung)
 
-- `concise`: „Classify the germline variant {gene} {hgvs} according to the ACMG/AMP 2015 five-tier scheme. Answer with exactly one of: Benign, Likely benign, Uncertain significance, Likely pathogenic, Pathogenic.“
+- `concise`: „Classify the germline variant {gene} {hgvs} according to the ACMG/AMP 2015 five-tier scheme. Answer with exactly one of the following and nothing else: Benign, Likely benign, Uncertain significance, Likely pathogenic, Pathogenic.“ (Formatsatz nach Pilot 1 geändert, ADR-013)
 - `role`: „You are a clinical geneticist on a variant curation expert panel. Using the ACMG/AMP 2015 standards and guidelines, assign the five-tier classification for the germline variant {gene} {hgvs}. Reply with the classification only, as one of: Benign; Likely benign; Uncertain significance; Likely pathogenic; Pathogenic.“
 - `json`: „Return a JSON object of the form {"classification": "<tier>"} for the germline variant {gene} {hgvs}, where <tier> is the ACMG/AMP 2015 five-tier classification: one of "Benign", "Likely benign", "Uncertain significance", "Likely pathogenic", "Pathogenic". Output the JSON object only.“
 - Im Hauptplan steht für `{gene} {hgvs}` Gen, Transkript und c.-Bezeichnung ohne p.-Angabe, etwa „PAH NM_000277.2:c.1A>G“.
@@ -78,14 +78,14 @@ Temperatur und Seed (`ANK-61`): Sol läuft ohne Temperaturparameter mit der Vorg
 | F7 Antwortformat | Klassen ausgeschrieben | Abkürzungen B, LB, VUS, LP, P |
 | F8 Sprache der Anweisung | Englisch | Deutsch |
 
-- Bausteine (Klassenbezeichnungen bleiben in jeder Variante englisch, sonst bricht der Parser):
+- Bausteine (Klassenbezeichnungen bleiben in jeder Variante englisch, sonst bricht der Parser; Formatsätze nach Pilot 1 geändert, ADR-013):
 
 | Baustein | Englisch | Deutsch |
 | --- | --- | --- |
 | Aufgabensatz | Classify the germline variant {gene} {hgvs} according to the ACMG/AMP 2015 five-tier scheme. | Klassifiziere die Keimbahnvariante {gene} {hgvs} entsprechend dem fünfstufigen ACMG/AMP-Schema von 2015. |
 | Aufgabensatz mit Dreher | Classify the germline variant {gene} {hgvs} accoridng to the ACMG/AMP 2015 five-tier scheme. | Klassifiziere die Keimbahnvariante {gene} {hgvs} entsprechned dem fünfstufigen ACMG/AMP-Schema von 2015. |
-| Formatsatz ausgeschrieben | Answer with exactly one of: Benign, Likely benign, Uncertain significance, Likely pathogenic, Pathogenic. | Antworte mit genau einer der folgenden Klassen: Benign, Likely benign, Uncertain significance, Likely pathogenic, Pathogenic. |
-| Formatsatz abgekürzt | Answer with exactly one of: B, LB, VUS, LP, P. | Antworte mit genau einer der folgenden Klassen: B, LB, VUS, LP, P. |
+| Formatsatz ausgeschrieben | Answer with exactly one of the following and nothing else: Benign, Likely benign, Uncertain significance, Likely pathogenic, Pathogenic. | Antworte mit genau einer der folgenden Klassen und sonst nichts: Benign, Likely benign, Uncertain significance, Likely pathogenic, Pathogenic. |
+| Formatsatz abgekürzt | Answer with exactly one of the following and nothing else: B, LB, VUS, LP, P. | Antworte mit genau einer der folgenden Klassen und sonst nichts: B, LB, VUS, LP, P. |
 | Kontextabsatz | Laboratory note: The sample was received on a weekday morning and registered in the laboratory information system. DNA was extracted with a standard column-based kit, and the sequencing run passed the laboratory's coverage and quality checks. | Laborhinweis: Die Probe ging an einem Werktagvormittag ein und wurde im Laborinformationssystem erfasst. Die DNA wurde mit einem üblichen Säulenkit extrahiert, und der Sequenzierlauf bestand die Abdeckungs- und Qualitätsprüfungen des Labors. |
 | Systemprompt | You are a careful clinical geneticist. | – (bleibt englisch) |
 

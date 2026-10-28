@@ -55,12 +55,12 @@
         "de": "Klassifiziere die Keimbahnvariante {gene} {hgvs} entsprechned dem fünfstufigen ACMG/AMP-Schema von 2015."
       },
       "format_full": {
-        "en": "Answer with exactly one of: Benign, Likely benign, Uncertain significance, Likely pathogenic, Pathogenic.",
-        "de": "Antworte mit genau einer der folgenden Klassen: Benign, Likely benign, Uncertain significance, Likely pathogenic, Pathogenic."
+        "en": "Answer with exactly one of the following and nothing else: Benign, Likely benign, Uncertain significance, Likely pathogenic, Pathogenic.",
+        "de": "Antworte mit genau einer der folgenden Klassen und sonst nichts: Benign, Likely benign, Uncertain significance, Likely pathogenic, Pathogenic."
       },
       "format_abbrev": {
-        "en": "Answer with exactly one of: B, LB, VUS, LP, P.",
-        "de": "Antworte mit genau einer der folgenden Klassen: B, LB, VUS, LP, P."
+        "en": "Answer with exactly one of the following and nothing else: B, LB, VUS, LP, P.",
+        "de": "Antworte mit genau einer der folgenden Klassen und sonst nichts: B, LB, VUS, LP, P."
       },
       "context": {
         "en": "Laboratory note: The sample was received on a weekday morning and registered in the laboratory information system. DNA was extracted with a standard column-based kit, and the sequencing run passed the laboratory's coverage and quality checks.",
@@ -94,7 +94,7 @@
   "tolerance": 0,
   "tolerance_note": "Wortlaut exakt (zeichengenau)",
   "source_url": "docs/03-anwendungspipeline.md, Anhang A.5",
-  "source": "Betreiberfestlegung: Validierungsplan Anhang A.5, Faktoren, Kompositionsregel und Wortlaute freigegeben mit ADR-004 (25.10.2026)",
+  "source": "Betreiberfestlegung: Validierungsplan Anhang A.5, Faktoren, Kompositionsregel und Wortlaute freigegeben mit ADR-004 (25.10.2026); Formatsätze: ADR-013 (27.10.2026)",
   "quote": "- Kompositionsregel: F8 wählt die Sprache aller Bausteine der Nutzernachricht; F3 wählt den Aufgabensatz ohne oder mit Dreher; F7 wählt den Formatsatz ausgeschrieben oder abgekürzt; F4 bestimmt die Satzreihenfolge (− Aufgabensatz, ein Leerzeichen, Formatsatz; + Formatsatz, ein Leerzeichen, Aufgabensatz); F5 + stellt den Kontextabsatz mit einer Leerzeile voran; F6 + setzt den Systemprompt in die Spalte `system`, F6 − lässt sie leer; F1 und F2 bestimmen den Variantentext in `{hgvs}`: F1 − `<transcript>:<c.-Bezeichnung>`, F1 + nur die c.-Bezeichnung, F2 + hängt „ (<protein>)“ an, sofern `protein` nicht leer ist.",
   "quote_location": "docs/03 A.5, Kompositionsregel (Zeile 92); Faktortabelle Zeilen 72-79; Bausteintabelle Zeilen 85-90",
   "further_quotes": [
@@ -139,11 +139,11 @@
       "location": "docs/03 A.5, Zeile 86"
     },
     {
-      "quote": "| Formatsatz ausgeschrieben | Answer with exactly one of: Benign, Likely benign, Uncertain significance, Likely pathogenic, Pathogenic. | Antworte mit genau einer der folgenden Klassen: Benign, Likely benign, Uncertain significance, Likely pathogenic, Pathogenic. |",
+      "quote": "| Formatsatz ausgeschrieben | Answer with exactly one of the following and nothing else: Benign, Likely benign, Uncertain significance, Likely pathogenic, Pathogenic. | Antworte mit genau einer der folgenden Klassen und sonst nichts: Benign, Likely benign, Uncertain significance, Likely pathogenic, Pathogenic. |",
       "location": "docs/03 A.5, Zeile 87"
     },
     {
-      "quote": "| Formatsatz abgekürzt | Answer with exactly one of: B, LB, VUS, LP, P. | Antworte mit genau einer der folgenden Klassen: B, LB, VUS, LP, P. |",
+      "quote": "| Formatsatz abgekürzt | Answer with exactly one of the following and nothing else: B, LB, VUS, LP, P. | Antworte mit genau einer der folgenden Klassen und sonst nichts: B, LB, VUS, LP, P. |",
       "location": "docs/03 A.5, Zeile 88"
     },
     {
@@ -156,6 +156,6 @@
     }
   ],
   "retrieved": "2026-10-27",
-  "method": "Mit Rscript aus docs/03 extrahiert (Tabellenzellen an \" | \" getrennt). Die Trenner sind aus dem Regeltext gelesen: „ein Leerzeichen“ = \" \", „mit einer Leerzeile voran“ = Kontextabsatz, Zeilenumbruch, Leerzeile, Rest (\"\\n\\n\"), „ (<protein>)“ = Leerzeichen, Klammer auf, protein, Klammer zu.",
-  "verification": "Aufgabensatz (englisch) + \" \" + Formatsatz ausgeschrieben (englisch) ist zeichengleich mit der Vorlage concise (ANK-69); A.5: „Der Lauf mit allen Faktoren auf − ist wörtlich die Vorlage concise“."
+  "method": "Mit Rscript aus docs/03 extrahiert (Tabellenzellen an \" | \" getrennt). Die Trenner sind aus dem Regeltext gelesen: „ein Leerzeichen“ = \" \", „mit einer Leerzeile voran“ = Kontextabsatz, Zeilenumbruch, Leerzeile, Rest (\"\\n\\n\"), „ (<protein>)“ = Leerzeichen, Klammer auf, protein, Klammer zu. Die Formatsätze format_full und format_abbrev (en, de) sind nach ADR-013 auf dieselbe Weise aus den geänderten Zeilen 87 und 88 neu extrahiert; die übrigen Bausteine, die Faktoren und die Kompositionsregel sind unverändert.",
+  "verification": "Aufgabensatz (englisch) + \" \" + Formatsatz ausgeschrieben (englisch) ist zeichengleich mit der Vorlage concise (ANK-69); A.5: „Der Lauf mit allen Faktoren auf − ist wörtlich die Vorlage concise“. Nach ADR-013 erneut mit Rscript geprüft: Die vier Formatsätze sind zeichengleich mit den Zellen der Zeilen 87 und 88 und mit robustness.blocks in inst/validation/ap1/plan.yaml; format_abbrev.de ist der bisherige Satz mit „ und sonst nichts“ vor dem Doppelpunkt; Aufgabensatz (englisch) + \" \" + Formatsatz ausgeschrieben (englisch) ist zeichengleich mit concise (ANK-69, plan.yaml)."
 }
