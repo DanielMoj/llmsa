@@ -1,335 +1,306 @@
-# PLAN-REVIEW — M1a, Runde 1
+# PLAN-REVIEW — M1a, Runde 2
 
-Rolle: Reviewer · Phase: `30-plan-review` · Runde: 1 · Stand: 28.10.2026 · Gegenstand: `orchestrator/handoff/M1a/PLAN.md` (Runde 1). Es gibt weder `PLAN-UPDATE.md` noch `ARBITER.md`. Neu in dieser Phase ist `docs/decisions/ADR-017-m1a-reviewer-auslegungen.md`. Es enthält die geschuldeten Auslegungen zu ACC-3, ACC-4, ACC-9, ACC-10 und ACC-18 sowie die Entscheidungen zu zwei Punkten, die der Plan vorlegt: Nullfall σ²_TV = 0 und Bau der Vignette außerhalb des Repos.
+Rolle: Reviewer · Phase: `30-plan-review` · Runde: 2 (letzte Planrunde, `MAX_ROUNDS_PLAN=2`) · Stand: 28.10.2026 · Gegenstand: `orchestrator/handoff/M1a/PLAN.md` (Runde 1) mit `PLAN-UPDATE.md` (Runde 2). Eine `ARBITER.md` gibt es nicht.
+
+Neu in dieser Phase ist `docs/decisions/ADR-018-m1a-vorgabepfad-numerischer-fit.md`. Es legt zwei Dinge fest:
+- die Auslegung von Formelsammlung §2 („REML mit `lme4::lmer`“) für den neuen Vorgabepfad;
+- die Punkte, die nach dem Ende der Planrunden für BUILD und Code-Review binden.
 
 ## Gelesen
 
 - **Rollen und Protokoll:** `AGENTS.md`, `CLAUDE.md`, `IMPLEMENTATION-RULES.md`, `contracts/PROTOCOLS.md`, `orchestrator/handoff/SCHEMA.md`, `orchestrator/LESSONS.md` (keine Lehren).
 - **Spezifikation:**
-  - `docs/02-statistikkern.md`, Abschnitt M1a (K-M1a-1 bis K-M1a-7);
-  - Folgekriterien, soweit `validation.Rmd` und `msa_boot()` betroffen sind (K-M1b-7, K-M1c-1, K-M1c-5, K-M1d-7);
+  - `docs/02-statistikkern.md`: M1a (K-M1a-1 bis K-M1a-7) sowie die Folgestellen in M1c (Szenarien S-boot, K-M1c-1, K-M1c-2) und M1d (Abbildungen, Hinweis zu `R/fit.R`);
   - `docs/01-fachspezifikation.md` §1 bis §9;
-  - Formelsammlung §2 und §3 (`reference/privat/07_Formelsammlung_llmsa.md`);
-  - ADR-012 und ADR-016.
-- **Handoff:** `CRITERIA.json` (K-M1a-1 bis K-M1a-7, ACC-1 bis ACC-18), `PLAN.md`.
-- **Abnahmetests:** `setup-acceptance.R`, `setup-m1a.R`, `test-m1a-1` bis `test-m1a-7`, alle vollständig.
-- **Anker:** ANK-10, ANK-13, ANK-14, ANK-16, ANK-TOL.
-- **Produktcode:**
+  - Formelsammlung: Kopf mit den Statusbegriffen, §1 bis §3, §12;
+  - ADR-012, ADR-016, ADR-017.
+- **Handoff:** `CRITERIA.json`, `PLAN.md`, `PLAN-REVIEW.md` und `verdict-plan.json` der Runde 1, `PLAN-UPDATE.md`.
+- **Abnahmetests:**
+  - `setup-m1a.R` (Pläne, Mini-Referenzen, Helfer), `test-m1a-3`, `test-m1a-6`;
+  - `test-m2-6-evaluate.R` (numerischer Rückfall), `test-m0-deps.R`;
+  - die übrigen M1a-Tests wie in Runde 1.
+  - Seit dem PLAN-REVIEW der Runde 1 hat sich keine Datei unter `tests/acceptance/`, `reference/anchors/`, `R/`, `docs/` und `DESCRIPTION` geändert (Zeitstempelvergleich; neuer als `PLAN.md` ist nur ADR-017).
+- **Produktcode und Aufrufer:**
   - `R/fit.R` und `R/grr.R` vollständig;
-  - `R/acmg.R` (`acmg_capture_fit()`, `acmg_fit()`) und `R/plan.R` (`msa_plan()`);
-  - `DESCRIPTION`, `.Rbuildignore`, Kopf von `vignettes/llmsa.Rmd`.
+  - `R/plan.R` (`msa_simulate()`, `msa_plan()`);
+  - `R/acmg.R` (`acmg_mock_backend()`, `acmg_fit()`);
+  - `DESCRIPTION`, `.github/workflows/R-CMD-check.yaml`.
 - **Harness:**
-  - `orchestrator/verifier.sh` (Export von `REPO_ROOT`) und `orchestrate.sh` (`path_allowed`);
-  - `gates.d/20-lint.sh`, `30-tests.sh`, `86-mutgate.sh`, `87-golden-adr.sh`;
-  - `lib/r-check.sh`, `lib/r-mutation.R`, `lib/r-tests.R`;
-  - `config.env`: Territorien, `TEST_CMD`, `LINT_CMD`, `MUT_*`, `GOLDEN_PATH_REGEX`.
-- **Weitere:** `BACKLOG.md` (75 IDs, 57 offen), `PROGRESS.md` (Ende: M2, Runde 3).
+  - `orchestrate.sh` (Planschleife, Arbiter, `path_allowed`);
+  - `gates.d/86-mutgate.sh`, `lib/r-deps.R`, `toolchain.json`, `orchestrator/prompts/30-plan-review.md`.
+- **Anker:** ANK-10 (Aufbau), ANK-TOL.
+- **Quelle:** Bates et al. (2015), Verlagsfassung im Textspiegel, Abschnitt 3.4.
 
 ## Eigene Nachprüfung
 
-Die Prüfungen liefen ohne Git-Kommando, nur mit lesenden Aufrufen `Rscript --vanilla` aus der Repo-Wurzel (R 4.6.1, lme4 2.0.6). Danach waren im Arbeitsbaum nur die vom Orchestrator geschriebenen Dateien neuer als `PLAN.md` (`STATUS.md`, `orchestrator/state/…`). Geschrieben habe ich ausschließlich die drei Dateien dieser Phase.
+Alle Prüfungen liefen ohne Git-Kommando, mit lesenden Aufrufen von `Rscript --vanilla` aus der Repo-Wurzel (R 4.6.1, lme4 2.0.6, VCA 1.5.2). Geschrieben habe ich nur die drei Dateien dieser Phase.
 
-1. **Invarianz bei konditioniertem Fit (Planpunkte 1 und 3, ACC-6).**
-
-   Aufbau der Messung:
-   - **Modell:** wie `msa_fit()`, also `y ~ 1 + (1|item) + (1|prompt) + (1|model) + (1|block) + (1|item:prompt) + (1|item:model) + (1|prompt:model)`.
-   - **Konditionierung:** Antwort mit Mittelwert und Standardabweichung standardisiert, Komponenten zurücktransformiert.
-   - **Messgröße:** größte Abweichung einer Komponente vom Fit der unveränderten Daten, als Anteil von σ²_TV. Bei Skalierung zuerst durch c² geteilt.
-   - **bobyqa:** `rhoend = 1e-12`, `maxfun = 1e5`.
-   - **nloptwrap:** `xtol_abs = 1e-12`, `ftol_abs = 1e-14`, `xtol_rel = 1e-12`, `maxeval = 1e5`.
-   - **Daten:**
-     - `ic50_demo` ohne fehlende Werte (2152 Zeilen);
-     - der simulierte Plan aus `test-m1a-6`: `msa_simulate(20, 4, 3, 3, 3, …, seed = 1)` mit den Komponenten aus `acc_m1a_designs()`, Variante „interactions, 3 blocks“, RNG Mersenne-Twister/Inversion/Rejection.
-   - **Permutation:** Seed 20261024 bzw. Seeds 1 bis 6.
+1. **Orakel `remlVCA` gegen das exakte REML-Optimum (K-M1a-3 (a)).**
+   - Frage: Verschlechtert ein exakter Vorgabepfad den Orakelvergleich?
+   - `VCA::remlVCA` ruft intern `lmer(form, Data, control = lmerControl(optimizer = "bobyqa"))` auf (Deparse, Zeilen 86–87).
+   - Nahezu exaktes Optimum auf `ic50_demo` (2152 Zeilen), Antwort standardisiert:
+     - enges nloptwrap: REML-Kriterium −2507.077334107915;
+     - enges bobyqa: −2507.077334106804;
+     - die beiden liegen höchstens 5,6e-6 · σ²_TV auseinander.
+   - Vergleich mit `remlVCA` und mit dem Vorgabe-Fit von v0.1.0, als Anteil von σ²_TV des Orakels:
 
    ```text
-   bobyqa_tight (conditioned): shift100=4.75e-06 scale7.5=1.85e-06 scale0.02=8.74e-06 permute=8.49e-06 [3 s]
-   nlopt_tight (conditioned): shift100=4.18e-08 scale7.5=6.58e-07 scale0.02=2.08e-07 permute=5.95e-07 [2 s]
-   ic50_demo nloptwrap tight, conditioned: shift100=4.18e-08 shift1e4=1.72e-06 scale7.5=6.58e-07 scale0.02=2.08e-07 perm_max6=1.92e-06
-   sim nloptwrap tight, conditioned: shift100=2.12e-06 shift1e4=3.32e-06 scale7.5=1.01e-06 scale0.02=1.15e-06 perm_max6=2.58e-06
+   max |exact - remlVCA| / total = 1.12e-06 ; max |default - remlVCA| / total = 6.69e-05 ; proxy pair 5.6e-06 ; tol 1e-4
    ```
 
-   `ANK-TOL.invariance` = 1e-6 · σ²_TV. Nach der Konditionierung gleichen verschobene und skalierte Daten den Originaldaten nur bis auf Rundung. Den Endpunkt bestimmt dann die Rauschgrenze des ableitungsfreien Optimierers auf der flachen REML-Fläche. Das ist eine Messung des Reviewers, keine Abnahme (→ E1).
+   Der exakte Vorgabepfad vergrößert also die Reserve von K-M1a-3 (a). v0.1.0 liegt bei 6,7e-5; das ist derselbe Wert wie in ADR-016 (Kontext ACC-2).
 
-2. **Geschlossene Einweglösung und konsistentes `merMod` (Planpunkt 4, K-M1a-4).**
-   - **Mittelquadrate:** aus Daten, die um den ersten Wert verschoben sind.
-   - **Modell:** `merMod` über `lFormula()`, `mkLmerDevfun()` und `mkMerMod()`, ausgewertet am θ der geschlossenen Lösung auf den Originaldaten.
-   - **Messgröße:** relative Abweichung vom zertifizierten Wert aus ANK-14, je Zeile Rest und Item.
+2. **Kriterium und Score aus PLAN-UPDATE (numerisches Verfahren, Punkt 3).**
+   - Daten: kleiner unbalancierter Plan, 8 Items × 3 Prompts × 2 Replikate, vier Werte entfernt.
+   - Terme: item, prompt, item:prompt; dichte Rechnung.
 
    ```text
-   AtmWtAg : closed form rel.err 1.2e-11 6.2e-11 | merMod(original scale) rel.err 2.5e-11 5e-11
-   SiRstv : closed form rel.err 7.6e-14 4.8e-13 | merMod(original scale) rel.err 1.4e-13 4.2e-13
-   SmLs03 : closed form rel.err 5.2e-16 5.2e-16 | merMod(original scale) rel.err 1.3e-13 1.3e-13
-   SmLs06 : closed form rel.err 5.2e-11 1.2e-10 | merMod(original scale) rel.err 5.1e-11 1.2e-10
+   analytic score: -8.14001 -8.550702 -4.590551
+   finite diff.:   -8.14001 -8.550702 -4.590551
+   max rel diff: 1.77e-09
+   lme4 term order: ip item prompt
+   F(l1)-F(l2) = -7.10703 ; REMLcrit(l1)-REMLcrit(l2) = -7.10703
    ```
 
-   Der Weg trägt K-M1a-4 mit großem Abstand: 1e-8 relativ bei niedriger Schwierigkeit, die LRE-Regel bei mittlerer. `vc` und Modell kommen dabei aus einer Quelle (→ E3).
-3. **`refit()` übernimmt die Steuerung des Modells.** In `lme4:::refit.merMod`:
-   - deparse-Zeilen 29–33: `obj.control <- object@optinfo$control` wird zu `ctrl.arg$optCtrl`;
-   - deparse-Zeilen 125–130: `optimizer <- object@optinfo$optimizer`, danach `optwrap(optimizer, …)`.
+   - F ist das REML-Kriterium von lme4 bis auf eine Konstante, und der Score stimmt.
+   - Analytisch: d log|H| = tr(H⁻¹K_j), d log|X′H⁻¹X| = −tr((X′H⁻¹X)⁻¹X′H⁻¹K_jH⁻¹X), dP = −P K_j P. Daraus folgt dF/dλ_j wie im PLAN-UPDATE.
+   - lme4 sortiert die Terme nach ihrer Stufenzahl. Der Plan berücksichtigt das („Termreihenfolge von lme4“).
+   - Die Quellenangabe stimmt: Bates et al. 2015, Abschnitt 3.4 „Evaluating and profiling the deviance and the REML criterion“, Gl. (39) bis (41) (Textspiegel der Verlagsfassung, Zeilen 1440–1644).
 
-   Exportiert sind `lFormula`, `mkLmerDevfun`, `optimizeLmer`, `mkMerMod`, `checkConv`, `refit` und `isSingular` (→ E3, E8).
-4. **Bau der Vignette.** In `tools:::.build_packages` (R 4.6.1) läuft der Bau in drei Schritten:
-   - `R CMD build` kopiert den Quellbaum vollständig (`cp -LR`, Zeile 842);
-   - es baut die Vignetten in `prepare_pkg()` (Zeile 857);
-   - erst danach entfernt es die `.Rbuildignore`-Pfade (Zeilen 863–884).
+3. **Refit und Abhängigkeiten.**
+   - `lme4::bootMer` (2.0.6) setzt `control` aus `eval.parent(x@call$control)` und ruft `refit(x, ss[[i]], control = control)` auf. Das bestätigt die Antwort auf E8.
+   - Versionsvorgaben der Pakete:
+     - Matrix 1.7.4: `Depends: R (>= 4.4), methods`;
+     - lme4 2.0.6: `Depends: R (>= 3.6), Matrix, methods, stats` und `LinkingTo: Matrix (>= 1.5-0), …`;
+     - llmsa: `DESCRIPTION` verlangt `R (>= 4.1)`.
+   - Die CI prüft nur `release` (`.github/workflows/R-CMD-check.yaml`, Zeilen 19–21) (→ E15).
+   - Das deps-Gate (`r-deps.R`) und K-M0-1 prüfen nur, ob Abhängigkeiten installiert sind. Matrix ist installiert.
 
-   `R CMD check` baut aus dem Tarball neu, dort ohne `reference/`. `orchestrator/verifier.sh:31` exportiert `REPO_ROOT` an jedes Gate (→ ADR-017 Nr. 7, E10).
-5. **Konvertierung in `msa_fit()`** (`R/fit.R:70`). `x - as.numeric(as.character(x))` für 1/3, 0.1 + 0.2 und e:
+4. **Aufrufer des Vorgabepfads.**
+   - **`msa_plan()`:** Die Schleife `R/plan.R:82–87` ruft `msa_fit()` in Zeile 84 ohne Fehlerbehandlung auf. Ein Fehler beendet die ganze Planung (→ E13).
+   - **`acmg_fit()`:** bricht in `R/acmg.R:950–951` mit „AP1 numeric fallback failed: …“ ab.
+   - **Rückfalltest K-M2-6** (`test-m2-6-evaluate.R:110–135`):
+     - Er fittet `msa_fit(type = "numeric")` auf die Klassen-Scores 1 bis 5 des Mock-Laufs.
+     - Das Mock-Backend streut die Replikate (`sd_rep = 0.3`, `R/acmg.R:311`), die Restvarianz ist also positiv.
+     - Die Werte haben aber viele Gleichstände (→ E14).
+   - **`msa_simulate()`:** Blöcke sind vollständig gekreuzt (`R/plan.R:25–26`, `expand.grid` über rep, model, prompt, item, block). Die geschlossene Lösung greift deshalb für die simulierten Blockpläne von K-M1a-1 und K-M1a-6.
 
-   ```text
-   [1]  3.330669e-16  5.551115e-17 -4.884981e-15
-   ```
+5. **Formelsammlung §2, Zeile 50:** „**Schätzung (Code).** REML mit `lme4::lmer`. …“ Der Status „Code“ heißt „so in v0.1.0 implementiert“ (Zeile 5) (→ ADR-018 Nr. 1).
 
-   (→ E6)
-6. **Mutanten heute.** `muttest::muttest_plan()` mit den neun Mutatoren aus `r-mutation.R`: `R/fit.R` 240, `R/grr.R` 211 (→ E12).
-7. **Territorium.** Die Zielpfade des Plans liegen bis auf eine Ausnahme im Builder-Territorium. Geprüft wurden `orchestrate.sh:492–499` und `BUILDER_EXTRA_PATHS_REGEX` (`config.env:138`):
-   - erlaubt: `R/`, `man/`, `tests/testthat/`, `vignettes/`, `inst/`, `data-raw/`, `DESCRIPTION`, `NAMESPACE`, `NEWS.md`, `PROGRESS.md`, `docs/decisions/`, die zugewiesenen Handoffs;
-   - Ausnahme: `README.md` (→ E2).
+6. **ANK-10 enthält keine Rohwerte.**
+   - Schlüssel: `design`, `mapping`, `data_file` (Pfad, SHA-256, Spalten, Zeilenzahl), `anova_table`, `model`, `variance`, `sd`, `pct_study_var`, `pct_contribution`, `ndc`, `decimals`, `not_used`.
+   - Die byte-identische Kopie unter `inst/validation/numeric/anchors/` liefert also nur Kennzahlen aus (ADR-017 Nr. 7.4 bleibt gewahrt).
+
+7. **Zählung im mutgate.**
+   - Das Gate mutiert ganze geänderte Dateien des Scopes (`86-mutgate.sh:15`).
+   - Survived und NoCoverage zählen als unerkannt. Äquivalenz zählt nur mit `MUT-EQUIV-APPROVED.json` (Zeilen 22–37) (→ E16).
 
 ## Bewertung
 
 ### Spec-Treue
 
 **Trägt:**
-- **Schnittstellen:** Argumente, Positionen und Vorgaben bleiben (ANK-02, docs/01 §4). Das Feld `numerics` ist additiv und ohne ADR zulässig.
-- **Abhängigkeiten:** Die Imports bleiben unverändert. VCA und SixSigma kommen unter Suggests (docs/01 §5, ACC-15).
-- **Toleranzen:** Sie kommen nur aus Ankern, werden nicht verändert und mit `[[ ]]` und Abbruch eingelesen (BL-72).
-- **Keine Ergebnisrundung:** Der Plan rundet nicht auf Ankerwerte.
-- **Geschlossene Einweglösung:**
-  - Sie ist ein allgemeines Verfahren für eine Klasse von Plänen, kein Erkennen von Testwerten (AGENTS.md, Integrität Nr. 2).
-  - Formelsammlung §2: Bei balancierten Plänen mit nichtnegativen ANOVA-Schätzern ist REML = ANOVA; im Randfall gilt σ̂²_e = SST/(N − 1).
-  - Bedingung: Die Voraussetzungen werden strukturell geprüft, wie der Plan zusagt.
-- **K-M1a-1:** Die explizite Steuerung bleibt wirksam. Damit prüft K-M1a-1 weiter das REML von lme4 (siehe E4).
-- **K-M1a-6:** Ein benannter Fehler bei identischen Werten ist zulässig („führen zu einer Fehlermeldung oder zu `verdict = "undetermined"`“).
+- **E1, Mechanismus:**
+  - Für balancierte Pläne mit nichtnegativen ANOVA-Schätzern gilt die geschlossene Lösung. Nach Formelsammlung §2 ist REML dort gleich ANOVA (Searle, Casella & McCulloch 1992).
+  - Alle übrigen Pläne erhalten einen analytischen REML-Abschluss mit aktiver Menge.
+  - Die Formeln sind richtig (Messung 2).
+  - Der Abbruch verlangt zugleich einen kleinen Score und einen kleinen Korrekturschritt. Das trifft die flache Item-Richtung von `ic50_demo` (ACC-6).
+- **Kriterien im Vorgabepfad:**
+  - K-M1a-2 (AIAG, `interactions = FALSE`), K-M1a-3 (c) (Penicillin) und K-M1a-4 (NIST) treffen über die geschlossene Lösung die exakten ANOVA-Schätzer. Runde 1, Messung 2: NIST bis 1,2e-10 relativ.
+  - K-M1a-3 (a) gewinnt Reserve (Messung 1).
+  - K-M1a-3 (b): REML mit Wechselwirkung an der Grenze 0 gleicht auf balancierten Daten dem gepoolten ANOVA-Schätzer von `ss.rr`, solange die übrigen Schätzer ≥ 0 sind (Formelsammlung §2).
+  - K-M1a-6:
+    - Der simulierte Blockplan läuft über die geschlossene Lösung; mit Seed 1 sind alle ANOVA-Schätzer ≥ 0 (ACC-5).
+    - `ic50_demo` ist unbalanciert und läuft über den Abschluss.
+    - Für die Randfälle gilt E7.
+- **Kriterien mit expliziter Steuerung:** K-M1a-1 und der Nichtkonvergenztest von K-M1a-6 bleiben reine lme4-Prüfungen (E4).
+- **K-M1a-5:** ADR-017 Nr. 6 ist übernommen (E11).
+- **K-M1a-7:** Gewählt ist der öffentliche Rechenmodus nach ADR-017 Nr. 7.1 bis 7.6 (E10). `README.md` an der Wurzel ist gestrichen (E2).
+- **Schnittstellen:**
+  - Signaturen, Vorgaben und Klassen bleiben; `numerics` ist additiv (docs/01 §4).
+  - Den neuen Fehler bei konstanten Werten und das geänderte Vorgabeverfahren nennen `NEWS.md` und `?msa_fit`.
+- **Imports:** Matrix kommt mit einem Builder-ADR hinzu. Das ist zulässig (docs/01 §5); zur Version siehe E15.
 
-**Offen:**
-- Nullfall σ²_TV = 0 (K-M1a-5): entschieden durch ADR-017 Nr. 6 (E11).
-- Bau der Vignette ohne `reference/` (K-M1a-7): entschieden durch ADR-017 Nr. 7 (E10).
+**Auslegung:**
+- Formelsammlung §2 nennt „REML mit `lme4::lmer`“ mit dem Status Code. ADR-018 Nr. 1 legt fest, was die Stelle für den zusammengesetzten Vorgabepfad verlangt: Kriterium und Modell kommen von lme4, `vc` aus dem zurückgegebenen Modell.
+- Ein wörtlicher Widerspruch liegt nicht vor, weil diese Lesart beide Stellen trägt, Formelsammlung §2 und K-M1a-6.
 
 ### Architektur und Verträge
 
-- Der Plan verlangt zu Recht ein konsistentes `merMod`: `msa_boot()` liest `fit$model`, und K-M1c-1 prüft gegen `bootMer(fit$model)`. Den Bauweg nennt er nicht. Messung 2 und 3 zeigen einen genauen und tragfähigen Weg (E3).
-- Offen bleiben zwei Punkte:
-  - wie sich explizite Steuerung und Konditionierung zueinander verhalten (E4);
-  - ob die Ergebnisfelder ihre Bedeutung behalten (E5).
-- Die Vignette rechnet beobachtete Werte im geladenen Namespace, auch in der Mutationskopie, und lädt keinen anderen Paketstand. Caches gelten nur für einen Knit-Lauf. Das trägt den Abnahmetest und den Mutationslauf.
+- **Eine Quelle für Modell und `vc`** (E3): Originalbeschriftungen, Originalskala und Eingabereihenfolge (E5); `numerics` ist additiv. Das trägt `msa_boot()` und K-M1c-1.
+- **Durchreichweg** (E4): Mit irgendeinem Argument in `...` läuft genau `lme4::lmer`.
+- **Refit** (E8):
+  - Der Refit-Haken ist `nloptwrap` mit leerem `optCtrl`, und der Modellaufruf trägt einen auswertbaren `control`-Ausdruck (Messung 3).
+  - Bootstrap-Refits sind damit gewöhnliche lme4-Fits. Ihre Genauigkeit liegt bei bis zu 4,7e-4 · σ²_TV (ADR-016, Kontext ACC-5, balancierte Pläne mit Standard-`lmerControl`); gegen die Streuung der Bootstrap-Verteilung ist das unerheblich.
+  - K-M1c-1 vergleicht mit `bootMer(fit$model)`, also mit denselben Refits.
+- **Offen:** Welche Warnungen der Vorgabepfad an den Aufrufer gibt, ist noch nicht festgelegt (E17).
+- **Bindung:** ADR-018 Nr. 1 bis 6 bindet diese Punkte für BUILD und Code-Review.
 
 ### Vollständigkeit, Risiken, Reihenfolge
 
 **Trägt:**
-- Der kritische Pfad K-M1a-4/-6 ist richtig erkannt.
-- Die Reihenfolge ist sinnvoll: erst die Numerik, dann Ressourcen und Vignette.
-- Die frühe Messung mit Zusatzfällen und der Eskalationsweg nach ADR-016 E6 sind vorgesehen.
+- **Go/No-Go vor der Ressourcenarbeit:**
+  - Grenzen aus `ANK-TOL.invariance` und `ANK-TOL.nist_digits`;
+  - zusätzliche Verschiebungen, Skalierungen (auch negative) und Seeds 1 bis 6 der vier Pläne;
+  - Modellkonsistenz;
+  - Eskalation nach ADR-016 E6.
+- **Laufzeitvergleich mit v0.1.0** (E8): Erstfit und Refits getrennt.
+- **Backlog:** alle offenen Einträge zugeordnet.
+- **Toleranzen:** Keine wird gelockert, und keine Testdatei des Reviewers wird angefasst.
 
-**Offen:**
-- **Numerik:** Der gewählte Mechanismus ist für Verschiebung und Skalierung durch Messung 1 widerlegt (E1, blocking).
-- **Datei außerhalb des Territoriums:** `README.md` würde den BUILD-Versuch verwerfen (E2, blocking).
-- **Randfälle jenseits „alle Werte gleich“:** E7.
-- **Laufzeit von Fit, Plan, Bootstrap und Klasse B:** E8.
-- **Unit-Tests über drei Plattformen und je Mutant:** E9.
-- **Laufzeit des ersten echten Mutationslaufs:** E12 [INFRA].
+**Offen (minor):**
+- E13: Robustheit des Vorgabepfads auf Plänen mit vielen Komponenten an der Grenze und Folgen für die Aufrufer;
+- E14: Maßstab der Konditionierung bei vielen Gleichständen;
+- E15: Matrix-Version und R ≥ 4.1;
+- E16: Mutationsscore des neuen Numerikcodes;
+- E17: Warnungen im Vorgabepfad.
+- E12 bleibt [INFRA] beim Betreiber.
 
 ### Gate-Abdeckung
 
-- **tests:** Alle sieben Kriterien haben Abnahmetests. Der Plan führt die M1a-Abnahme, `m2-6`, die Unit-Tests sowie e2e und fuzz aus.
-- **lint (Bau von K-M1a-7):** Das Gate baut im Vollmodus, weil `REPO_ROOT` exportiert ist. Der öffentliche Modus wird nur im eigenen Paketcheck des Builders ohne `REPO_ROOT` geprüft, den der Plan vorsieht, und in GitHub Actions.
-- **golden-adr:** Die NIST-Daten unter `inst/extdata/` brauchen ein Builder-ADR im selben Meilenstein. ADR-017 ersetzt es nicht.
-- **trace und territory:** Die Kriteriums-IDs stehen in den Tests. Das Territorium ist bis auf E2 eingehalten.
-- **mutgate:** Der Scope `R/fit.R`, `R/grr.R` ändert sich, deshalb gibt es den ersten echten Lauf. Der Plan verzichtet auf Auslagerung und auf Selbstgenehmigung (E12).
-- **deps:** VCA 1.5.2 und SixSigma 0.11.1 sind installiert (Lesediagnose des Plans).
+- **tests:**
+  - Alle sieben Kriterien haben Abnahmetests.
+  - Der kumulative Lauf enthält den Rückfalltest von K-M2-6 (numerischer Fit auf Scores).
+  - Der Plan führt die M1a- und `m2-6`-Abnahme, die Unit-Tests sowie e2e und fuzz aus.
+- **lint:** Das Gate baut im Vollmodus (`REPO_ROOT`). Den öffentlichen Modus prüfen nur der eigene Paketcheck des Builders und GitHub Actions (ADR-017, Konsequenzen).
+- **deps:** Matrix 1.7.4 ist installiert. Das Gate und K-M0-1 bestehen.
+- **golden-adr:** Für `inst/extdata/nist-strd-anova_2026-10-22/` ist das Ressourcen-ADR des Builders vorgesehen. ADR-017 und ADR-018 ersetzen es nicht.
+- **territory:** Alle Zielpfade des BUILD liegen im Builder-Territorium. Das gilt auch für `inst/validation/numeric/README.md`.
+- **trace:** Die Kriteriums-IDs stehen in den Tests.
+- **mutgate:** siehe E12 [INFRA] und E16.
 
-### Antworten auf die Acceptance-Verträge
+### Antworten auf die Einwände der Runde 1
 
-| ACC | Festlegung im Plan | Bewertung |
+Alle zwölf Antworten haben die Form „akzeptiert: <Änderung>“ (SCHEMA).
+
+| ID | Antwort im PLAN-UPDATE | Bewertung |
 | --- | --- | --- |
-| ACC-1 | ADR-016 E1, ANK-13 übernommen | erledigt |
-| ACC-2 | ADR-016 E2 übernommen | erledigt |
-| ACC-3 | Reviewer-Lesart übernommen | erledigt; Auslegung in ADR-017 Nr. 1 |
-| ACC-4 | Modellzuordnung bestätigt | erledigt; ADR-017 Nr. 2 |
-| ACC-5 | ADR-016 E3 übernommen | erledigt |
-| ACC-6 | konditionierter, enger Standardfit | offen: E1 (blocking) |
-| ACC-7 | Untergrenze 1 auch für PV = 0 | erledigt; Nullfall nach ADR-017 Nr. 6 (E11) |
-| ACC-8 | Vignette nennt die NIST-Einstufung | erledigt |
-| ACC-9 | Hashes, Abbildung, LRE, Marge, vier LRE je Datensatz | erledigt; ADR-017 Nr. 3 |
-| ACC-10 | Tabellenvertrag und Toleranzen bestätigt | erledigt; ADR-017 Nr. 4 |
-| ACC-11 | Pläne, Vorbedingungen, beide Steuerungsaufrufe bestätigt | erledigt; Hinweis E4 |
-| ACC-12 | konstruierte Komponenten, Grenzfälle bestätigt | erledigt; E11 |
-| ACC-13 | Randfälle bestätigt | erledigt; Hinweise E4, E7 |
-| ACC-14 | Vertrag bestätigt; öffentlicher Bau zur Prüfung vorgelegt | entschieden in ADR-017 Nr. 7; E10 |
-| ACC-15 | Suggests, Laufzeit messen | erledigt; E8, E12 |
-| ACC-16 | gelesen | zur Kenntnis |
-| ACC-17 | historischer Ausgangsstand | zur Kenntnis |
-| ACC-18 | Paketvorgaben für Penicillin | erledigt; ADR-017 Nr. 5 |
+| E1 | geschlossene Lösung, analytischer Abschluss mit aktiver Menge, Go/No-Go, Matrix mit ADR; bobyqa-Festlegung entfällt | erledigt; Formeln nachgeprüft (Messung 2); Auslegung von Formelsammlung §2 in ADR-018 Nr. 1; Ergänzungen E13, E15 |
+| E2 | `README.md` gestrichen, Anleitung unter `inst/validation/numeric/README.md` | erledigt |
+| E3 | Modell am endgültigen θ auf Originaldaten, `vc` aus `VarCorr`, geschlossener Wert ist Endwert | erledigt; ADR-018 Nr. 1 und 3 |
+| E4 | direkter `lme4::lmer`-Pfad bei jedem Argument in `...` | erledigt; ADR-018 Nr. 2 |
+| E5 | `fit$data` und Stufennamen wie bisher, Zuordnung in `numerics` | erledigt |
+| E6 | numerische Werte ohne Zeichenkettenumweg | erledigt |
+| E7 | getrennte Regeln für konstante Werte, Restvarianz 0 und kleine Streuung | erledigt; Präzisierung E14 und ADR-018 Nr. 4 |
+| E8 | Laufzeitvergleich, Refit-Haken `nloptwrap` | erledigt; ADR-018 Nr. 3; Ergänzung E13 |
+| E9 | kleine Unit-Tests, kein Knitten, Toleranzen strikt | erledigt |
+| E10 | öffentlicher Rechenmodus nach ADR-017 Nr. 7.1–7.6 | erledigt; Driftwache entspricht Nr. 7.3; ANK-10 ohne Rohwerte (Messung 6) |
+| E11 | ADR-017 Nr. 6 einschließlich Druckmethoden | erledigt |
+| E12 | [INFRA] an den Betreiber | Builder-Teil erledigt; offen beim Betreiber. Den BACKLOG-Eintrag schreibt der Reviewer im Code-Review: in `30-plan-review` ist `BACKLOG.md` kein freigegebener Pfad (`orchestrate.sh`, `path_allowed`). |
+
+### Acceptance-Verträge
+
+- Die Bewertung aus Runde 1 gilt für ACC-1 bis ACC-18 weiter, mit drei Ausnahmen:
+  - ACC-6 ist jetzt erledigt (E1, ADR-018);
+  - für ACC-14 ist der öffentliche Rechenmodus gewählt (E10);
+  - ACC-15 bekommt zu den Suggests den Import von Matrix (E15).
+- Abnahmetests und Anker bleiben unverändert.
 
 ### Backlog
 
-Der Plan ordnet alle 57 offenen IDs einzeln zu, und die 18 erledigten führt er als erledigt. Die Zuordnungen sind schlüssig. Querbezüge:
-
-- BL-49 und BL-72 gehen in E1 auf, BL-13 in E8 und E12.
-- BL-46 wird durch E9 und E10 eingegrenzt.
-- BL-23 deckt der Plan.
+Das PLAN-UPDATE ordnet alle 57 offenen IDs einzeln zu, und die 18 erledigten bleiben geschlossen. Querbezüge:
+- BL-49 und BL-72 gehen in E1 und ADR-018 Nr. 1 bis 3 auf;
+- BL-12 und BL-13 in E8 und E13;
+- BL-46 in E9 und E10;
+- BL-23 deckt die geschlossene Lösung.
 
 Keine Zuordnung verlangt einen Einwand.
 
-## Einwände
+## Einwände (Runde 2)
 
-- [E1] (blocking) K-M1a-6 („Permutation der Zeilen, Umbenennen der Stufen aller Faktoren und Verschieben aller Werte um eine Konstante lassen Varianzkomponenten (Toleranz `ankerRef: ANK-TOL.invariance` als Anteil von σ²_TV) … unverändert; Skalieren mit c multipliziert alle Varianzen mit c² …“, `docs/02-statistikkern.md:15`); ANK-TOL.invariance (1e-6 · σ²_TV); ADR-016 E6; ACC-6; PLAN.md, „Numerische Entscheidung“, Punkte 1 bis 4
-
-  **Befund:**
-  - Planpunkt 2 macht Permutation und Umbenennung bitgleich. Verschiebung und Skalierung gleichen nach Planpunkt 1 nur bis auf Rundung. Den Endpunkt bestimmt dann die Rauschgrenze des ableitungsfreien Optimierers auf der flachen REML-Fläche.
-  - Messung 1 zeigt das in drei Fällen:
-    - Mit Konditionierung und „enger bobyqa-Steuerung“ (`rhoend` 1e-12) weicht `ic50_demo` um 4,75e-6 (Verschiebung um 100), 1,85e-6 (Skalierung mit 7,5) und 8,74e-6 (Skalierung mit 0,02) ab.
-    - Auch enges nloptwrap verfehlt den simulierten Plan aus `test-m1a-6`: 2,12e-6, 1,01e-6 und 1,15e-6.
-    - Ebenso `ic50_demo` bei Verschiebung um 1e4: 1,72e-6.
-  - Der Plan enthält keinen Schritt, der das Optimum unter diese Grenze legt. Die geschlossene Lösung (Punkt 4) deckt nur den balancierten Einfaktorfall. Die Risikotabelle behandelt das Problem als Frage der Optimierersteuerung. So geschrieben führt der Plan absehbar in die Eskalation nach E6 statt zur Erfüllung.
-
-  **Vorschlag:**
-  - **Mechanismus:** PLAN-UPDATE ersetzt Punkt 3 durch einen Mechanismus, den der Builder nach E6 wählt. Er bestimmt im Vorgabepfad das REML-Optimum unabhängig von Rundungsunterschieden der Eingabe, und zwar für alle Pläne, nicht nur für die Testdaten. Tragfähig wären etwa:
-    - (a) für balancierte Pläne, deren ANOVA-Schätzer alle ≥ 0 sind: die exakte Lösung über die erwarteten Mittelquadrate (Formelsammlung §2: dort ist REML = ANOVA), also die geplante Einweglösung, verallgemeinert auf das Modell von `msa_fit()`;
-    - (b) für alle übrigen Pläne (`ic50_demo` ist unbalanciert): ein abschließender Schritt mit analytischen Ableitungen des REML-Kriteriums auf dem konditionierten Problem, mit Score und Information, Abbruch über die Score-Norm und Komponenten an der Grenze 0 als aktiver Menge; oder ein gleichwertiges, dokumentiertes Verfahren.
-  - **Optimierer:** Ihn bestimmt die Messung; die Festlegung auf bobyqa entfällt.
-  - **Go/No-Go vor Reihenfolge-Schritt 4:** Gemessen werden `ic50_demo` und der simulierte Plan mit den vier Transformationen des Abnahmetests. Dazu kommen mindestens Verschiebung um 1e4, Skalierungen über mehrere Größenordnungen, negative Skalierung und weitere Seeds. Kriterium ist `ANK-TOL.invariance`; die Messwerte stehen in PROGRESS und im numerischen ADR.
-  - **Explizite Steuerung:** Sie bleibt der lme4-Pfad (E4). So prüft K-M1a-1 weiter das REML von lme4.
-  - **Imports:** Neue Imports, etwa Matrix, nur mit ADR (AGENTS.md, Projektspezifika).
-  - **Eskalation:** Bleibt die Invarianz nach belegtem Versuch unerreichbar, gilt der Weg aus ADR-016 E6.
-
-- [E2] (blocking) Gate territory; `orchestrator/orchestrate.sh:492–499` (`path_allowed`, Builder in `40-build`, `60-rework`, `62-rebuild`); `orchestrator/config.env:138` (`BUILDER_EXTRA_PATHS_REGEX` ohne `README.md`); AGENTS.md, Betreiber („Der Orchestrator erzwingt die Territorien nach jeder Modellphase per Git-Diff und verwirft einen verletzenden Versuch“)
-
-  **Befund:** Die Dateitabelle von PLAN.md plant Änderungen an `README.md`. Der Pfad steht weder in den Grundpfaden des Builders noch in `BUILDER_EXTRA_PATHS_REGEX`. Ein BUILD, der ihn ändert, wird in der Territoriumsprüfung verworfen; ein zweiter Verstoß endet FATAL.
-
-  **Vorschlag:**
-  - `README.md` aus dem Plan streichen.
-  - Die Ausführung der Validierung dokumentieren in `man/`, `NEWS.md`, der Vignette oder einer `README.md` unter `inst/validation/numeric/`. Alles das ist Builder-Territorium.
-  - Eine Erweiterung der Regex wäre eine Betreiberentscheidung, kein Teil des BUILD.
-
-- [E3] (minor) PLAN.md, „Öffentliche API und Ergebnisobjekte“ („Der zurückgegebene `model` muss ein konsistentes lme4-`merMod` bleiben …“); K-M1a-4; K-M1c-1 (`msa_boot()` gegen `bootMer(fit$model)`); `refit.merMod` in lme4 2.0.6 (Messung 3)
+- [E13] (minor) docs/01 §2 Nr. 4 („Randfälle sind Pflicht: … Komponenten an der Grenze null, … nicht konvergierende Fits. Ergebnis ist eine richtige Zahl oder eine klare Fehlermeldung“); `R/plan.R:82–87`; docs/02 M1c (Szenarien S-boot-1 bis S-boot-6); BL-12; ADR-018 Nr. 3 und 5 — Robustheit des Vorgabepfads und Folgen für die Aufrufer
 
   **Befund:**
-  - Die Konsistenz ist richtig gefordert, aber nicht konstruiert.
-  - Offen bleibt, ob die Einweglösung der Endwert oder nur ein Startwert ist („Initialisierung beziehungsweise Nachpolitur“). Ein Optimierer, der am exakten Optimum startet, kann es wieder verlassen (Messung 1).
-  - `refit()` und damit `bootMer()` und `msa_boot()` übernehmen Optimierer und `optCtrl` aus `fit$model@optinfo`.
+  - Scheitert der analytische Abschluss, endet `msa_fit()` nach dem PLAN-UPDATE mit Fehler. Das ist zulässig.
+  - Folgen für die Aufrufer:
+    - `msa_plan()` fängt keinen Fehler ab (Messung 4); ein einziger gescheiterter Fit beendet die ganze Planung.
+    - Der volle Lauf von `boot_coverage` nach M1c dauert Stunden bis Tage (BL-12). Er fittet jede Wiederholung über diesen Pfad.
+  - Der Go/No-Go deckt das nicht ab:
+    - Er misst die Pläne von K-M1a mit großen Prompt- und Modellkomponenten (0,1 und 0,08).
+    - Die S-boot-Szenarien haben dagegen viele Komponenten nahe 0: Block 0,01, Prompt×Modell 0,005, zwei Blöcke.
+    - Gerade die aktive Menge des Abschlusses wird dort ständig gebraucht.
 
-  **Vorschlag:** PLAN-UPDATE legt fest:
-  - **Bau des Modells:** Das zurückgegebene `merMod` entsteht auf den Originaldaten am endgültigen θ. Originaldaten heißt Originalskala, Originalbeschriftungen und Eingabereihenfolge nach Entfernen fehlender Werte. Der Bau läuft über die exportierten modularen Funktionen von lme4: `lFormula`, `mkLmerDevfun`, `mkMerMod`, für Meldungen `checkConv`.
-  - **Eine Quelle:** `vc` wird aus diesem Modell gelesen (`VarCorr`), nicht getrennt gerechnet. Messung 2 belegt den Weg für NIST: höchstens 1,2e-10 relativ, bei einer Grenze von 1e-8 bzw. der LRE-Regel.
-  - **Endwert:** Im geschlossenen Fall ist das endgültige θ die geschlossene Lösung.
-  - **optinfo:** Es nennt einen Optimierer, den lme4 kennt, samt `optCtrl`, damit `refit()` arbeitet.
-  - **Konvergenz:** Konvergenzcode und lme4-Meldungen stammen aus dem Lauf, der θ tatsächlich bestimmt hat.
+  **Vorschlag:**
+  - Robustheitsnachweis nach ADR-018 Nr. 5 vor Reihenfolge-Schritt 4:
+    - S-boot-1 bis S-boot-6 und die vier Szenarien von `?msa_plan`, je Seeds 1 bis 20;
+    - je Szenario Zahl der Fits über `closed_form` und `analytic_reml`, Fehler, singuläre Fits, Laufzeiten.
+  - Ein Fehler auf diesen nicht degenerierten Daten wird behoben oder nach ADR-016 E6 vorgelegt.
+  - `?msa_plan` oder `NEWS.md` nennt, dass ein gescheiterter Fit die Planung beendet.
 
-- [E4] (minor) K-M1a-1 („über `...` an `msa_fit` durchgereicht“); K-M1a-6 („ein nicht konvergierender Fit gibt die lme4-Warnung weiter“); PLAN.md, Punkt 5; ACC-17 (beide auf v0.1.0 grün)
+- [E14] (minor) K-M1a-6 („identische Werte in allen Zeilen führen zu einer Fehlermeldung oder zu `verdict = "undetermined"`“); docs/01 §2 Nr. 4; `test-m2-6-evaluate.R:110–135` (K-M2-6, numerischer Rückfall auf Klassen-Scores); `R/acmg.R:946–951`; PLAN-UPDATE, numerisches Verfahren Punkt 1 („robust berechneten positiven Maßstab“); ADR-018 Nr. 4 — Maßstab der Konditionierung bei vielen Gleichständen
 
   **Befund:**
-  - Punkt 5 sagt „unverändert wirksam“. Offen bleibt, ob Konditionierung, Umordnung und Nachpolitur bei expliziter Steuerung trotzdem greifen.
-  - Der Plan will zeilenbezogene Argumente (`weights`, `offset`, `subset`) durch interne Umordnungen tragen. Das ist eine zusätzliche Fehlerfläche ohne Kriterium.
+  - Robuste Streuungsmaße werden 0, obwohl die Werte variieren:
+    - der Median der absoluten Abweichungen, sobald mehr als die Hälfte der Werte gleich ist;
+    - der Interquartilsabstand schon früher.
+  - Das ist typisch für Klassen-Scores 1 bis 5 mit einer häufigen Klasse, also für den numerischen Rückfall von AP1 (K-M2-6, `acmg_fit()`).
+  - Ein Fehler „keine Variation“ träfe dann Daten mit Variation.
 
   **Vorschlag:**
-  - Ist `control` oder ein anderes lme4-Argument in `...` gesetzt, fittet `msa_fit()` genau `lme4::lmer(form, data, REML = TRUE, ...)` auf den Originaldaten, ohne Konditionierung, Umordnung oder Nachpolitur. Das steht in `?msa_fit`.
-  - So behalten der Durchreichtest (K-M1a-1) und der Nichtkonvergenztest (K-M1a-6) ihr Verhalten von v0.1.0, und zeilenbezogene Argumente müssen nicht mitgeführt werden.
-  - Eine Abweichung davon begründet der Plan mit Tests.
+  - Der Maßstab ist positiv, sobald nicht alle gültigen Werte gleich sind, etwa ein robustes Maß mit Rückfall auf die Standardabweichung oder die größte absolute Abweichung.
+  - Unit-Test mit stark gebundenen Scores, etwa 70 % eines Werts, und mit genau zwei verschiedenen Werten.
 
-- [E5] (minor) docs/01 §4 („Ohne ADR erlaubt: … zusätzliche Felder in Rückgabeobjekten …“; „Nur mit ADR und Übergangsfrist: … Entfernen oder Umbenennen von Rückgabefeldern …“); PLAN.md („`data` erhält die analysierten Werte und ihre Zuordnung zu den Eingabezeilen“)
-
-  **Befund:** Die interne kanonische Darstellung darf nicht ins Ergebnis durchschlagen. Der Plan lässt offen, ob `fit$data`, der Modellrahmen und die Namen in `ranef()` und `coef()` die Originalbeschriftungen und die Eingabereihenfolge tragen.
-
-  **Vorschlag:** PLAN-UPDATE sagt zu:
-  - `fit$data` behält die Spalten `item`, `prompt`, `model`, `block` und `y` mit Originalbeschriftungen, Originalskala und Eingabereihenfolge nach Entfernen fehlender Werte.
-  - Die Zuordnung zu den Eingabezeilen steht nur in einer zusätzlichen Spalte oder in `numerics`.
-  - `formula`, `levels`, `n`, `interactions` und `derived` behalten ihre Bedeutung.
-  - Die Stufennamen von `fit$model` sind die Originalbeschriftungen; kanonische Codes bleiben intern.
-
-- [E6] (minor) `R/fit.R:70`; docs/01 §2 Nr. 4 („nie stillschweigend eine falsche Zahl“); Messung 5
-
-  **Befund:** `msa_fit()` wandelt numerische Werte über `as.numeric(as.character(…))` um. R 4.6.1 behält dabei 15 signifikante Stellen; der gemessene Verlust beträgt bis zu 4,9e-15 relativ. Der Plan behandelt die Konditionierung, nicht aber diese Umwandlung.
-
-  **Vorschlag:**
-  - Numerische oder ganzzahlige `value` direkt übernehmen.
-  - Nur Zeichen- oder Faktoreingaben parsen.
-  - Die Warnung für nicht lesbare Werte bleibt.
-  - Unit-Test mit Doubles in voller Genauigkeit.
-
-- [E7] (minor) docs/01 §2 Nr. 4 („Randfälle sind Pflicht: … identische Antworten … Ergebnis ist eine richtige Zahl oder eine klare Fehlermeldung“); K-M1a-6; `R/acmg.R:950–951` (numerischer Rückfall); `R/plan.R:84`
-
-  **Befund:** Der Plan deckt „alle Werte gleich“ mit einem frühen Fehler. Offen sind drei Fälle:
-  - identische Replikate bei unterschiedlichen Zellen: Rest 0, typisch bei Temperatur 0;
-  - nahezu konstante Daten: Maßstab der Konditionierung nahe 0;
-  - die Wirkung des neuen Fehlers auf Aufrufer: `acmg_fit()` bricht mit „AP1 numeric fallback failed: …“ ab, `msa_plan()` ist ebenfalls betroffen.
-
-  **Vorschlag:** PLAN-UPDATE legt das Verhalten fest:
-  - jeweils ein benannter englischer Fehler oder ein richtiges Ergebnis, nie `NaN` oder eine stille falsche Zahl, belegt durch Unit-Tests;
-  - der Maßstab der Konditionierung wird robust gewählt; bei 0 folgt ein benannter Fehler;
-  - `NEWS.md` nennt die Verhaltensänderung bei konstanten Werten;
-  - ein Regressionstest zu M2 deckt den numerischen Rückfall mit konstanten Scores.
-
-- [E8] (minor) BL-12; BL-13; PLAN.md, „Risiken“ (Laufzeit); Messung 3 (`refit()` übernimmt `optCtrl`)
-
-  **Befund:** Engere Vorgaben, Nachpolitur und Neuaufbau des Modells verteuern jeden numerischen Fit. Das vervielfachen:
-  - `msa_plan()` mit `nsim` Fits je Szenario;
-  - `msa_boot()`, dessen Refits die Steuerung aus `fit$model` übernehmen;
-  - die Klasse-B-Studien in M1b und M1c; `boot_coverage` ist schon jetzt der längste Lauf (BL-12).
-
-  **Vorschlag:**
-  - Die Fitdauer messen, v0.1.0 gegen neu, für `ic50_demo`, einen NIST-Satz mit 18.009 Zeilen und je ein kleines Beispiel für `msa_plan()` und `msa_boot()`.
-  - Die Werte im numerischen ADR und in PROGRESS nennen.
-  - Festlegen, welche Steuerung `fit$model` für Bootstrap-Refits trägt, und warum.
-
-- [E9] (minor) docs/01 §2 Nr. 8; ADR-012 Nr. 1; BL-72; `orchestrator/config.env:170` (`MUT_TEST_DIRS` mit `tests/testthat`)
+- [E15] (minor) `DESCRIPTION` (`Depends: R (>= 4.1)`); AGENTS.md, Projektspezifika („R ab 4.1“); docs/01 §5 („neue Imports nur mit ADR“); Messung 3; ADR-018 Nr. 6 — Matrix-Import und Mindestversion von R
 
   **Befund:**
-  - Die geplanten Unit-Tests (`test-fit-numeric.R`, `test-validation-numeric.R` mit „die beiden Vignettenkontexte prüfen“) laufen in `R CMD check`, auf drei CI-Plattformen und in jedem Mutanten.
-  - Ein vollständiges Knitten oder `remlVCA` auf `ic50_demo` (rund 13 s, ACC-15) verlängern dort Check und Mutationslauf.
-  - Invarianztests mit 1e-6 sind plattformempfindlich (BL-72). Messung 1 zeigt Abstände unter Faktor 2.
+  - Matrix ab 1.7 verlangt R ≥ 4.4; lme4 2.0.6 verlangt Matrix ≥ 1.5-0.
+  - Gates und CI laufen nur mit R 4.6.1 bzw. `release`.
+  - Zwei Fehler blieben dort unbemerkt und machten das Paket vor R 4.4 unbrauchbar oder nicht installierbar:
+    - eine Matrix-Funktion, die es erst ab 1.7 gibt;
+    - eine Versionsangabe `Matrix (>= 1.7…)` unter `Imports`.
 
   **Vorschlag:**
-  - `tests/testthat/` prüft die Hilfsfunktionen der Vignette an kleinen Eingaben, ohne vollständiges Knitten und ohne VCA-Aufruf auf `ic50_demo`.
-  - REML-Vergleiche folgen dort ADR-012 Nr. 1: `invariance` nur, wo die Steuerung es messbar erreicht, sonst `reml_anova`.
-  - Toleranzen kommen aus installierten Ressourcen, gelesen über `[[ ]]` mit Prüfung auf `NULL` (BL-72).
+  - Das numerische ADR nennt die Mindestversion von Matrix für die genutzten Funktionen; die Funktionen bleiben bei der lange bestehenden Schnittstelle (`sparseMatrix`, `Cholesky`, `solve`, `crossprod`, `determinant`).
+  - Die Angabe unter `Imports` steht ohne Version oder mit einer Version, die unter R 4.1 erfüllbar ist.
 
-- [E10] (minor) K-M1a-7; ACC-14; ADR-017 Nr. 7; AGENTS.md, Integrität Nr. 7
-
-  **Befund:** Der Entwurf mit zwei Kontexten ist zulässig (ADR-017 Nr. 7). Im Plan fehlen drei Punkte:
-  - die Driftwache im Test-Gate (Nr. 7.3);
-  - der ausdrückliche Ausschluss von AIAG-Rohwerten in allen Modi (Nr. 7.4);
-  - die Literalregel für Dateien, die die Vignette einliest oder ausführt, etwa `inst/validation/numeric/reference_checks.R` (Nr. 7.6).
-
-  **Vorschlag:**
-  - PLAN-UPDATE bestätigt ADR-017 Nr. 7.1 bis 7.6 oder erklärt den reduzierten öffentlichen Modus (Nr. 7.7).
-  - Hinweis: Das lint-Gate baut im Vollmodus (`verifier.sh:31` exportiert `REPO_ROOT`). Den öffentlichen Modus prüfen nur der eigene Paketcheck ohne `REPO_ROOT` und GitHub Actions.
-
-- [E11] (minor) K-M1a-5 („der Fall σ²_GRR = 0 liefert `ndc = Inf` und `verdict = "acceptable"`, der Fall σ²_TV = 0 liefert `verdict = "undetermined"` ohne Fehler“); K-M1a-6 („nie zu `NaN` in `summary`“); ADR-017 Nr. 6; `R/fit.R:188`; `R/grr.R:105–106`
-
-  **Befund:** Der GRR-Vertrag des Plans entspricht ADR-017 Nr. 6. Zwei Druckstellen fehlen:
-  - `print.msa_fit` rechnet die Spalte `pct` als `variance / sum(variance)`; bei einem konstruierten Fit mit allen Komponenten 0 ergibt das `NaN`.
-  - `print.msa_grr` druckt für jedes nicht endliche ndc „Inf“, also auch für `NA`.
-
-  **Vorschlag:**
-  - Nach ADR-017 Nr. 6 umsetzen, beide Druckmethoden eingeschlossen.
-  - Unit-Tests für drei Fälle, jeweils mit Druckausgabe:
-    - GRR = 0 bei PV > 0;
-    - PV = 0 bei GRR > 0, ndc 1;
-    - TV = 0: `NA`, kein `NaN`, `undetermined`.
-  - `msa_boot()` zählt Wiederholungen mit `NA` weiter in `n_failed`.
-
-- [E12] (minor) [INFRA] Gate mutgate (`orchestrator/gates.d/86-mutgate.sh`; `orchestrator/lib/r-mutation.R:93–103`); `orchestrator/config.env:165–170` (`MUT_SCOPE_REGEX`, `MUT_WORKERS`, `MUT_TEST_DIRS`); BL-13; Messung 6
+- [E16] (minor) Gate mutgate (`orchestrator/gates.d/86-mutgate.sh:15` und 22–37; Schwelle 80); docs/01 §2 Nr. 7 („Ein verfälschter Kern muss einen Test rot machen.“); Messung 7 — Mutationsscore des neuen Numerikcodes
 
   **Befund:**
-  - M1a ändert `R/fit.R` und `R/grr.R`, deshalb läuft mutgate erstmals wirklich. Schon heute sind es 451 Mutanten; mit dem Plan werden es mehr.
-  - Jeder Mutant führt alle vier Testordner aus. Darin stecken alle Abnahmetests, M2 allein rund 930 bis 946 s je Lauf (BL-13), und das Knitten von `validation.Rmd`.
-  - Das ergibt rund 16 bis 17 min je Mutant. Bei 14 Workern dauern 451 Mutanten etwa 9 h, dazu kommt bei Unterschreitung ein Flake-Rerun.
-  - Das liegt außerhalb des Builder-Territoriums.
+  - Der neue Abschluss liegt in `R/fit.R`, und das Gate mutiert die ganze Datei. Das betrifft auch Newton-Schritt, Dämpfung, aktive Menge und Binärskalierung.
+  - Unerkannt bleiben dort:
+    - Mutanten in Schutzzweigen, die kein Test erreicht (NoCoverage);
+    - Mutanten, die nur die Konvergenzgeschwindigkeit ändern (Survived).
+  - Beide senken den Score unter die Schwelle. Eine Äquivalenz zählt nur nach Approval des Reviewers.
 
   **Vorschlag:**
-  - Der Betreiber entscheidet vor den Gates von M1a, etwa über eine Testauswahl je Meilenstein oder Zeitgrenzen.
-  - Für den Builder nonblocking: den Kern schlank halten, nichts aus dem Mutationsumfang auslagern (wie geplant), keine Äquivalenz-Claims ohne Reviewer-Approval.
-  - Der Reviewer trägt den Punkt im nächsten Code-Review in `BACKLOG.md` ein.
+  - Wenige, erreichbare Zweige.
+  - Für jeden Zweig ein Unit-Test, der ihn erzwingt: Schritthalbierung, Eintritt in die aktive Menge und Austritt daraus, Binärskalierung bei großen Werten, degenerierter Fall.
+  - Wo sinnvoll, prüfen die Tests die Diagnostik in `numerics`: Verfahren, aktive Menge, Abschlussnormen.
+  - Keine Schutzzweige ohne Test.
+  - Behauptete Äquivalenz nur über `MUT-EQUIV.json` zur Prüfung durch den Reviewer.
+
+- [E17] (minor) K-M1a-6 („ein nicht konvergierender Fit gibt die lme4-Warnung weiter“); IMPLEMENTATION-RULES („Fehler werden nicht stumm geschluckt“); PLAN-UPDATE, numerisches Verfahren Punkt 4 („lme4-Warnungen werden nicht still unterdrückt“); `R/acmg.R:950–956`; ADR-018 Nr. 3 — Warnungen im Vorgabepfad
+
+  **Befund:**
+  - Offen ist, ob eine Warnung des lme4-Startfits beim Aufrufer ankommt, wenn der Abschluss danach konvergiert.
+  - Beides ist mit der Spec vereinbar. Eine Konvergenzwarnung zu einem überholten Startwert führt aber Nutzer in die Irre, ebenso den AP1-Bericht: `acmg_fit()` speichert die Warnungen des numerischen Fits.
+
+  **Vorschlag:**
+  - Das Verhalten im numerischen ADR und in `?msa_fit` festlegen und mit einem Unit-Test prüfen (ADR-018 Nr. 3: Warnungen gehen nicht verloren).
+  - Empfohlen: Warnungen des Startfits mit ihrer Herkunft in `numerics` festhalten und nur weitergeben, wenn der Vorgabepfad scheitert. Der Durchreichweg gibt die lme4-Warnungen unverändert weiter.
+
+- E12 bleibt [INFRA] beim Betreiber, unverändert seit Runde 1:
+  - erster echter Mutationslauf über `R/fit.R` und `R/grr.R`;
+  - je Mutant laufen alle Abnahmetests und das Knitten der Vignette.
+  - Für den Builder nonblocking.
 
 ## Verdict
 
-**REWORK.**
+**PASS.**
 
-- Blocking sind E1 (Mechanismus der Invarianz, K-M1a-6) und E2 (`README.md` außerhalb des Builder-Territoriums). E3 bis E12 sind minor; E12 ist [INFRA] und an den Betreiber gerichtet.
-- ADR-017 hält die Auslegungen zu ACC-3, ACC-4, ACC-9, ACC-10 und ACC-18 fest und entscheidet den Nullfall (Nr. 6) und den Bau der Vignette außerhalb des Repos (Nr. 7).
-- Ein wörtlicher Spec-Widerspruch liegt nicht vor.
-  - Die Überschneidung der Nullfälle in K-M1a-5 löst die speziellere Regel (ADR-017 Nr. 6).
-  - Die Invarianz ist nach Messung nicht unerreichbar, nur mit dem geplanten Mechanismus nicht erreicht.
-- PLAN-UPDATE beantwortet E1 bis E12 einzeln mit `akzeptiert: <Änderung>` oder `abgelehnt: <wörtliches Spec-Zitat mit Fundstelle>` (SCHEMA). Runde 2 ist die letzte Planrunde (`MAX_ROUNDS_PLAN=2`).
+- Kein blocking-Befund:
+  - E1 (Mechanismus der Invarianz) ist erledigt;
+  - E2 (`README.md` außerhalb des Territoriums) ist erledigt;
+  - alle zwölf Einwände der Runde 1 sind akzeptiert und schlüssig umgesetzt.
+- Neu sind E13 bis E17, alle minor. E12 bleibt [INFRA] beim Betreiber.
+- ADR-018 bindet nach dem Ende der Planrunden:
+  - die Auslegung von Formelsammlung §2;
+  - den Durchreichweg;
+  - Endwert, Fehler, Warnungen und Refit des Vorgabepfads;
+  - den Maßstab der Konditionierung;
+  - den Robustheitsnachweis;
+  - die Bedingungen für den Matrix-Import.
+- Kein wörtlicher Spec-Widerspruch:
+  - Formelsammlung §2 und K-M1a-6 trägt die Lesart aus ADR-018 Nr. 1.
+  - Die Nullfälle von K-M1a-5 entscheidet weiter ADR-017 Nr. 6.
+- BUILD liest PLAN.md, PLAN-UPDATE.md, dieses Review, ADR-017 und ADR-018.
