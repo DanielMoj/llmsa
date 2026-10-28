@@ -13,12 +13,13 @@
       "parameters_accepted": "keine 4xx-Antwort",
       "provider": "Anbieter gleich dem angeforderten (K-M2-4)",
       "parser": "Parser-Trefferquote mindestens 27 von 30",
-      "cost": "Kostenprojektion für Hauptplan und Robustheit aus dem 90-%-Quantil der Ausgabetokens (usage.completion_tokens, schließt Reasoning ein) unter ANK-57"
+      "cost": "Kostenprojektion für Hauptplan und Robustheit aus dem 90-%-Quantil der Ausgabetokens (usage.completion_tokens, schließt Reasoning ein) unter ANK-57",
+      "backend_errors": "Anteil der Backendfehler je Modell höchstens error_share_trigger (5 %, also höchstens 1 von 30); nicht lesbare Antworten zählen nicht"
     },
     "parser_hits_min": 27,
     "parser_hits_of": 30,
     "cost_quantile": 0.9,
-    "reported": ["Median der Latenz", "Reasoning-Tokens je Modell (Median und 90-%-Quantil)"],
+    "reported": ["Median der Latenz", "Reasoning-Tokens je Modell (Median und 90-%-Quantil)", "maximale Latenz je Modell"],
     "repeat_day_triggers": ["Anbieterwechsel in der Antwort", "wechselnde Modellkennung innerhalb eines Blocks", "mehr als 5 % Fehler eines Modells in einem Block"],
     "error_share_trigger": 0.05
   },
@@ -26,15 +27,17 @@
   "tolerance": 0,
   "tolerance_note": "Betreiberfestlegung, exakt",
   "source_url": "docs/03-anwendungspipeline.md, Anhang A.6; docs/decisions/ADR-004-freigabe-validierungsplan-ap1.md",
-  "source": "Betreiberfestlegung ADR-004 (25.10.2026); Reasoning-Tokens: ADR-004, Nachtrag 2 (26.10.2026)",
+  "source": "Betreiberfestlegung ADR-004 (25.10.2026); Reasoning-Tokens: ADR-004, Nachtrag 2 (26.10.2026); fünfte Regel und maximale Latenz: ADR-014 (28.10.2026)",
   "quote": "Pilot (`ANK-67`): die 10 Pilotitems aus `pilot.csv` × 3 Vorlagen × 1 Replikat je Modell = 30 Aufrufe je Modell, vor dem Hauptplan und nicht in der Hauptauswertung.",
   "quote_location": "docs/03 A.6, zweiter Absatz",
   "further_quotes": [
     {"quote": "Bestehensregeln je Modell: Parameter angenommen (keine 4xx-Antwort); Anbieter gleich dem angeforderten (K-M2-4); Parser-Trefferquote mindestens 27 von 30; Kostenprojektion für Hauptplan und Robustheit aus dem 90-%-Quantil der Ausgabetokens (`usage.completion_tokens`, schließt Reasoning ein) unter `ANK-57`.", "location": "docs/03 A.6"},
     {"quote": "Auslöser für einen Wiederholungstag, vorab festgelegt: Anbieterwechsel in der Antwort, wechselnde Modellkennung innerhalb eines Blocks, mehr als 5 % Fehler eines Modells in einem Block.", "location": "docs/03 A.6"},
-    {"quote": "`pilot.csv` im selben Ordner hat dieselben Spalten und 10 ERepo-Zeilen, je Klasse die nächsten zwei desselben Umlaufs, keine davon in `items.csv` (`ankerRef: ANK-67`)", "location": "docs/03 K-M2-1"}
+    {"quote": "`pilot.csv` im selben Ordner hat dieselben Spalten und 10 ERepo-Zeilen, je Klasse die nächsten zwei desselben Umlaufs, keine davon in `items.csv` (`ankerRef: ANK-67`)", "location": "docs/03 K-M2-1"},
+    {"quote": "Fünfte Bestehensregel (ADR-014): Anteil der Backendfehler je Modell höchstens `error_share_trigger` (5 %, also höchstens 1 von 30); nicht lesbare Antworten zählen nicht. Sie spiegelt den Auslöser des Wiederholungstags: Ein Pilot, der im Hauptplan einen Wiederholungstag auslösen würde, besteht nicht.", "location": "docs/03 A.6"},
+    {"quote": "Die Pilotzusammenfassung nennt zusätzlich die maximale Latenz je Modell (ADR-014).", "location": "docs/03 A.6"}
   ],
   "retrieved": "2026-10-26",
   "method": "Wortlaut übernommen; 10 · 3 · 1 = 30.",
-  "verification": "ANKER-TODO ANK-67 und ADR-004 Punkt 10 (mit Nachtrag 2) stimmen überein."
+  "verification": "ANKER-TODO ANK-67, ADR-004 Punkt 10 (mit Nachtrag 2) und ADR-014 Nr. 3 und 4 stimmen überein."
 }

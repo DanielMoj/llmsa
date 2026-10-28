@@ -1,0 +1,31 @@
+{
+  "id": "ANK-71",
+  "title": "Client-Timeout je Modell (AP1): timeout_s in plan.yaml und seine Herleitung",
+  "criteria": ["docs/03 A.4"],
+  "value": {
+    "timeout_s": {"sol": 1800, "llama": 1800, "qwen": 1800},
+    "derivation": {
+      "endpoint_tag": "deepinfra/fp8",
+      "max_completion_tokens": 16384,
+      "slowest_tokens_per_s_pilot_2": 11.8,
+      "seconds_for_max_completion_at_slowest": 1388,
+      "slowest_tokens_per_s_within_timeout": 9.1
+    }
+  },
+  "unit": "timeout_s in Sekunden je Versuch (httr2::req_timeout); max_completion_tokens in Tokens; Durchsatz in Tokens je Sekunde (usage.completion_tokens / latency_s der fehlerfreien Qwen-Aufrufe)",
+  "tolerance": 0,
+  "tolerance_note": "Betreiberfestlegung, exakt; die Herleitungsgrößen sind gerundet (Durchsatz auf 0,1 Tokens/s, Zeit auf 1 s)",
+  "source_url": "docs/03-anwendungspipeline.md, Anhang A.4; docs/decisions/ADR-014-client-timeout-nach-pilot-2.md",
+  "source": "Betreiberfestlegung ADR-014 (28.10.2026), E1; max_completion_tokens: OpenRouter-Endpunktlisten zu qwen/qwen3-32b, Schnappschüsse 27.10.2026 (quellen/anbieter_2026-10-27/openrouter/openrouter_api_v1_endpoints_qwen3-32b.json, SHA-256 118c672ea76509e676d832964e4a208df1aa78e13b26684ee492bbe339775c18) und 28.10.2026 (quellen/anbieter_2026-10-28_preise/openrouter/openrouter_api_v1_endpoints_qwen3-32b.json, SHA-256 50d639d3d4c69b0e063780baf25654a5b9bfa97c5aa09d7380c1b9132facd2c6); Durchsatz: Store von Pilot 2 (llmsa-runs/ap1_runs_2_nach_pilot.sqlite, SHA-256 0b5b2a1c81a83dab585b76b894f1b96d780324abfd50b55af55c4665584f7514)",
+  "quote": "Client-Timeout (`ANK-71`, ADR-014): `plan.yaml` setzt je Modell das Pflichtfeld `timeout_s`, für alle drei Modelle 1800 s, und `acmg_api_backends()` übergibt es als `timeout` an `backend_openai_compatible()`; der Anfragekörper bleibt unverändert.",
+  "quote_location": "docs/03 A.4, Absatz „Temperatur und Seed“",
+  "further_quotes": [
+    {"quote": "Bei 11,8 Tokens/s, dem langsamsten Durchsatz der fehlerfreien Qwen-Aufrufe in Pilot 2, brauchen die 16384 Tokens, die der Endpunkt `deepinfra/fp8` höchstens ausgibt (`max_completion_tokens`), 1388 s; 1800 s reichen bis 9,1 Tokens/s, der Timeout bricht also nur hängende Verbindungen ab.", "location": "docs/03 A.4, Absatz „Temperatur und Seed“"},
+    {"quote": "`meta` enthält zusätzlich `timeout_s` sowie `finish_reason` und `native_finish_reason` der ersten Antwortauswahl, jeweils nur als nicht leere Zeichenkette, damit eine an der Tokengrenze abgeschnittene Antwort von einer unlesbaren unterscheidbar ist.", "location": "docs/03 A.4, Absatz „Temperatur und Seed“"},
+    {"quote": "Herleitung: Beim langsamsten beobachteten Durchsatz von 11,8 Tokens/s brauchen die 16384 Tokens von `max_completion_tokens` 1388 s; 1800 s reichen bis 9,1 Tokens/s. Der Timeout schützt damit nur vor hängenden Verbindungen und schneidet keine Antwort ab, die der Anbieter im beobachteten Tempo liefert.", "location": "ADR-014, Entscheidung Nr. 1 (E1)"},
+    {"quote": "\"provider_name\":\"DeepInfra\",\"tag\":\"deepinfra/fp8\",\"service_tier\":null,\"quantization\":\"fp8\",\"max_completion_tokens\":16384", "location": "openrouter_api_v1_endpoints_qwen3-32b.json vom 27.10. und vom 28.10.2026, data.endpoints, Eintrag mit tag deepinfra/fp8 (wörtlicher Ausschnitt der minimierten JSON-Dateien, in beiden gleich)"}
+  ],
+  "retrieved": "2026-10-28",
+  "method": "Betreiberfestlegung übernommen (ADR-014, E1). Herleitung nachgerechnet (28.10.2026, Rscript an Kopien unter tempdir()): max_completion_tokens mit jsonlite aus beiden Endpunktlisten gelesen, Eintrag über tag deepinfra/fp8 ausgewählt (je 16384, je drei Endpunkte); Durchsatz usage.completion_tokens / latency_s der 27 fehlerfreien Qwen-Zeilen von Pilot 2: Minimum 11,838, Median 17,789 Tokens/s; 16384 / 11,8 = 1388,5 s; 16384 / 1800 = 9,10 Tokens/s.",
+  "verification": "Zweitbeleg zum Durchsatz: Pilot 1 auf demselben Endpunkt (llmsa-runs/ap1_runs_nach_pilot.sqlite, SHA-256 ad45ee49f537f331d6bca7778f583a42cda87a3908658a8b47a2865293c8fe77), 30 fehlerfreie Qwen-Zeilen: Minimum 20,1, Median 32,2 Tokens/s. In Pilot 2 kam die längste fehlerfreie Qwen-Antwort nach 118,9 s; drei Aufrufe brachen beim Vorgabewert 120 s ab. tests/testthat/test-acmg-timeout.R prüft timeout_ms = timeout_s · 1000 am erfassten Request."
+}

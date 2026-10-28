@@ -47,10 +47,14 @@
 #'   null) and optional `provider` are recorded in `meta`. A reasoning text in
 #'   `message.reasoning` (as some OpenRouter endpoints return it) is recorded
 #'   as `reasoning` when it is a non-empty string; otherwise the key is absent.
-#'   `reasoning_details` is not stored. Requested routing
+#'   `reasoning_details` is not stored. `finish_reason` and
+#'   `native_finish_reason` of the first choice are recorded under these names
+#'   when they are non-empty strings, so that a reply cut at the token limit can
+#'   be told apart from an unreadable one. Requested routing
 #'   is recorded as `provider_order`, `quantizations` and `allow_fallbacks`.
 #'   Requested `seed`, `temperature` and `reasoning_effort`, when present, are
-#'   retained as metadata for comparison with the study plan.
+#'   retained as metadata for comparison with the study plan, and the request
+#'   timeout as `timeout_s`.
 #'   Only `message.content` is parsed; credentials and headers are not stored.
 #'
 #' @return A backend function.
@@ -181,6 +185,11 @@ backend_openai_compatible <- function(base_url = "https://api.openai.com/v1",
     if (is.character(reasoning) && length(reasoning) == 1L && !is.na(reasoning) && nzchar(reasoning)) {
       meta$reasoning <- reasoning
     }
+    # Exact match, as for reasoning; only non-empty strings are recorded.
+    for (field in c("finish_reason", "native_finish_reason")) {
+      value <- js[["choices"]][[1]][[field]]
+      if (is.character(value) && length(value) == 1L && !is.na(value) && nzchar(value)) meta[[field]] <- value
+    }
     if (!is.null(body$provider)) {
       meta$provider_order <- body$provider$order
       meta$quantizations <- body$provider$quantizations
@@ -189,6 +198,7 @@ backend_openai_compatible <- function(base_url = "https://api.openai.com/v1",
     for (field in intersect(c("seed", "temperature", "reasoning_effort"), names(body))) {
       meta[field] <- body[field]
     }
+    meta$timeout_s <- timeout
     list(text = as.character(txt %||% NA_character_), meta = meta)
   }
 }

@@ -69,7 +69,7 @@ acmg_validate_plan <- function(p) {
   }
   if (!is.list(p$aliases) || !setequal(names(p$aliases), classes)) fail("aliases")
   model_fields <- c("key", "id", "endpoint", "provider_order", "quantizations", "reasoning",
-                    "temperature", "seed", "knowledge_cutoff", "price_in", "price_out")
+                    "temperature", "seed", "timeout_s", "knowledge_cutoff", "price_in", "price_out")
   if (!is.list(p$models) || !length(p$models)) fail("models")
   for (m in p$models) {
     if (!is.list(m) || !all(model_fields %in% names(m))) fail("models: required fields")
@@ -78,6 +78,7 @@ acmg_validate_plan <- function(p) {
       if (!acmg_scalar(m[[nm]], "numeric") || m[[nm]] < 0) fail(paste("models", nm))
     }
     if (m$seed != floor(m$seed) || m$seed > .Machine$integer.max) fail("models.seed")
+    if (!acmg_scalar(m$timeout_s, "numeric") || m$timeout_s <= 0) fail("models.timeout_s")
     if (!is.null(m$temperature) && !acmg_scalar(m$temperature, "numeric")) fail("models.temperature")
     if (!is.null(m$reasoning) && !acmg_scalar(m$reasoning)) fail("models.reasoning")
     route <- unlist(m$provider_order, use.names = FALSE)
@@ -337,7 +338,7 @@ acmg_api_backends <- function(plan) {
     key <- Sys.getenv(variable, unset = "")
     if (!nzchar(trimws(key))) stop("AP1 requires environment variable ", variable, ".", call. = FALSE)
     args <- list(base_url = sub("/chat/completions$", "", sub("/+$", "", m$endpoint)),
-                 api_key = key, temperature = m$temperature, seed = m$seed)
+                 api_key = key, temperature = m$temperature, timeout = m$timeout_s, seed = m$seed)
     if (!is.null(m$reasoning)) args$reasoning_effort <- m$reasoning
     if (length(route)) args$provider <- list(order = as.list(route), allow_fallbacks = FALSE, quantizations = as.list(quant))
     args
@@ -545,10 +546,19 @@ acmg_pilot <- function(runs, plan, items = acmg_items(pilot = TRUE)) {
     if (from_api && length(completion) && !anyNA(completion)) {
       costs[key] <- projected_calls * (plan$tokens$input * model$price_in + q90 * model$price_out) / 1e6
     }
+    # Backend errors as in the repeat-day trigger (ADR-014): rows with a recorded
+    # error among the stored pilot rows; unreadable answers do not count.
+    error_rows <- sum(!success)
+    error_share <- if (nrow(r)) error_rows / nrow(r) else NA_real_
+    errors_ok <- is.finite(error_share) && error_share <= plan$pilot$error_share_trigger
+    errors_reason <- if (!nrow(r)) "no stored pilot calls" else
+      sprintf("%d of %d backend errors (share %s %s %s)", error_rows, nrow(r), format(error_share),
+              if (errors_ok) "<=" else ">", format(plan$pilot$error_share_trigger))
     lat <- if ("latency_s" %in% names(r)) r$latency_s else numeric()
+    latency_max <- if (any(!is.na(lat))) max(lat, na.rm = TRUE) else NA_real_
     summary[[key]] <- data.frame(model = key, complete = unname(complete[key]), planned = nrow(expected),
                                   stored = nrow(r), recognized = hits, projected_usd = unname(costs[key]),
-                                  completion_q90 = q90, latency_median = q(lat, 0.5),
+                                  completion_q90 = q90, latency_median = q(lat, 0.5), latency_max = latency_max,
                                   reasoning_median = q(reasoning, 0.5), reasoning_q90 = q(reasoning, plan$pilot$cost_quantile),
                                   reasoning_exceeds_completion = sum(reasoning > completion, na.rm = TRUE),
                                   usage_cost_usd = sum_all(billed),
@@ -556,11 +566,11 @@ acmg_pilot <- function(runs, plan, items = acmg_items(pilot = TRUE)) {
     tokens[[key]] <- data.frame(model = rep(key, sum(success)),
                                 id = acmg_meta_text(responses, "id"),
                                 completion_tokens = completion, reasoning_tokens = reasoning)
-    result[[key]] <- data.frame(model = key, rule = c("4xx", "provider", "parser", "cost"),
-                                passed = c(parameter_ok, provider_ok, complete[key] && hits >= plan$pilot$parser_hits_min, FALSE),
+    result[[key]] <- data.frame(model = key, rule = c("4xx", "provider", "parser", "cost", "backend_errors"),
+                                passed = c(parameter_ok, provider_ok, complete[key] && hits >= plan$pilot$parser_hits_min, FALSE, errors_ok),
                                 reason = c(if (parameter_ok) "no HTTP 4xx backend error" else "HTTP 4xx backend error recorded",
                                            reason, sprintf("%d recognized of %d planned; complete=%s", hits, nrow(expected), complete[key]),
-                                           "cost pending"), stringsAsFactors = FALSE)
+                                           "cost pending", errors_reason), stringsAsFactors = FALSE)
   }
   total <- if (anyNA(costs)) NA_real_ else sum(costs)
   cost_ok <- is.finite(total) && total < plan$budget$budget_eur

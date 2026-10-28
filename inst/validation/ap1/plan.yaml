@@ -49,10 +49,11 @@ models:
   reasoning: medium
   temperature: ~
   seed: 20261024
+  timeout_s: 1800
   knowledge_cutoff: '2026-04-30'
   price_in: 2.0
   price_out: 10.0
-  anchor: ANK-53
+  anchor: ANK-53, ANK-71
 - key: llama
   id: meta-llama/llama-3.3-70b-instruct
   endpoint: https://openrouter.ai/api/v1
@@ -64,10 +65,11 @@ models:
   reasoning: ~
   temperature: 0
   seed: 20261024
+  timeout_s: 1800
   knowledge_cutoff: '2023-12-31'
   price_in: 0.71
   price_out: 0.71
-  anchor: ANK-54
+  anchor: ANK-54, ANK-71
 - key: qwen
   id: qwen/qwen3-32b
   endpoint: https://openrouter.ai/api/v1
@@ -79,10 +81,11 @@ models:
   reasoning: ~
   temperature: 0
   seed: 20261024
+  timeout_s: 1800
   knowledge_cutoff: '2025-03-31'
   price_in: 0.08
   price_out: 0.28
-  anchor: ANK-55
+  anchor: ANK-55, ANK-71
 design:
   items: 100
   prompts: 3
@@ -107,6 +110,8 @@ pilot:
       of parser_hits_of, irrespective of correctness.
     cost: Sum of projected costs over all models below budget_eur, using completion_tokens
       (including reasoning) of every successful pilot call.
+    backend_errors: Backend error share per model at most error_share_trigger; unreadable
+      responses do not count.
   parser_hits_min: 27
   parser_hits_of: 30
   cost_quantile: 0.9
@@ -114,6 +119,7 @@ pilot:
   - Median latency
   - Median and 90th percentile reasoning tokens; individual reasoning counts remain
     available in the store.
+  - Maximum latency
   repeat_day_triggers:
   - Serving provider differs from the requested provider or changes within the block.
   - Reported model snapshot changes within the block.
@@ -395,11 +401,15 @@ reporting:
     sentence was changed for all models to require the classification only (ADR-013);
     pilot 2, the main plan and the robustness runs use the new wording in a new store.
     Pilot 1 is kept as evidence and is not evaluated.'
+  - Pilot 2 (2026-10-28) passed the four rules then in force, but three Qwen calls
+    hit the client timeout of 120 s, the default of backend_openai_compatible(). ADR-014
+    set timeout_s to 1800 s and added the backend-error rule; the main plan uses the
+    store of pilot 3.
 provenance:
   approved: '2026-10-25'
   plan: docs/03 A.1-A.8; ADR-004 including both 2026-10-26 amendments; ADR-011 (reporting
     policies), ADR-012 (validation tolerances), ADR-013 (format sentences after pilot
-    1)
+    1), ADR-014 (client timeout and backend-error pilot rule after pilot 2)
   classes_templates: ANK-69
   rng: Mersenne-Twister / Inversion / Rejection
   selection: ADR-005; ANK-59

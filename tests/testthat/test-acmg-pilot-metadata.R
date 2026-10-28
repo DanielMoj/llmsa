@@ -66,7 +66,7 @@ test_that("E31: missing serving providers from the real backend produce failed p
       at <- which(r$model_id == key)[1L]
       r$meta[at] <- meta_to_json(response$meta)
       result <- acmg_pilot(r, p)
-      expect_identical(nrow(result$rules), 4L * length(p$models))
+      expect_identical(nrow(result$rules), 5L * length(p$models))
       rule <- result$rules[result$rules$model == key & result$rules$rule == "provider", ]
       expect_identical(rule$passed, FALSE)
       expect_match(rule$reason, "missing provider", fixed = TRUE)
@@ -184,8 +184,8 @@ test_that("E31: the API pilot and resume report all rules and block collection b
     rows <- acmg_store_read(store, "api")
     expect_identical(nrow(rows), sink$calls)
     expect_true(all(is.na(rows$error)))
-    lines <- output[grepl("^(sol|llama|qwen) (4xx|provider|parser|cost) (passed|failed):", output)]
-    expect_length(lines, 4L * length(p$models))
+    lines <- output[grepl("^(sol|llama|qwen) (4xx|provider|parser|cost|backend_errors) (passed|failed):", output)]
+    expect_length(lines, 5L * length(p$models))
     for (key in c("llama", "qwen")) {
       line <- lines[startsWith(lines, paste(key, "provider failed:"))]
       expect_length(line, 1L)

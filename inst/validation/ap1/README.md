@@ -48,20 +48,28 @@ logging/training settings against `docs/03` A.8. Use the dedicated AP1 accounts
 and keys. The plan fixes model IDs, endpoints, provider order, quantizations,
 seeds and reasoning effort. Routed requests disallow fallback. Sol omits the
 temperature field; Qwen receives no reasoning override. Token assumptions in
-the cost plan are not request limits. Plan changes require an ADR.
+the cost plan are not request limits. Each request uses the client timeout
+`timeout_s` of its model from the plan (1800 s). It is meant to stop hung
+connections; at the slowest Qwen throughput seen in pilot 2 it still allows the
+longest answer the Qwen endpoint can return (ADR-014). Plan changes require an
+ADR.
 
 ```sh
 Rscript --vanilla inst/validation/ap1/run.R --part pilot --backend api --store /absolute/studies/ap1-api.sqlite
 ```
 
 The pilot makes 30 calls per model on the ten disjoint pilot items. It reports
-four rules per model, latency, completion tokens, reasoning tokens and projected
-costs. Recognized classes, including incorrect classifications, count toward
-the required 27 parser hits. Missing or duplicated keys prevent a pass. Costs
-use the completion-token 90th percentile, including reasoning, for all planned
-main and PB calls. The sum must be strictly below the budget using the approved
-numeric USD/EUR comparison; no exchange rate is introduced. Missing provider
-or usage metadata cannot establish a pass.
+five rules per model, median and maximum latency, completion tokens, reasoning
+tokens and projected costs. Recognized classes, including incorrect
+classifications, count toward the required 27 parser hits. Missing or duplicated
+keys prevent a pass. Costs use the completion-token 90th percentile, including
+reasoning, for all planned main and PB calls. The sum must be strictly below the
+budget using the approved numeric USD/EUR comparison; no exchange rate is
+introduced. Missing provider or usage metadata cannot establish a pass. Backend
+errors, stored calls with an error such as a client timeout, may make up at most
+`error_share_trigger` of a model's pilot calls, that is 1 of 30; unreadable
+answers are parser failures, not backend errors. A pilot that would trigger a
+repeat day in the main plan therefore does not pass (ADR-014).
 
 The pilot command exits successfully even when a rule fails: inspect its
 `passed`/`failed` output. Both API main and API robustness commands refuse to

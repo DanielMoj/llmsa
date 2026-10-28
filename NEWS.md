@@ -6,6 +6,10 @@
 * `backend_openai_compatible()` records a non-empty `message.reasoning` of the
   reply as `meta$reasoning` (Qwen3-32B via OpenRouter returns its reasoning
   there). `reasoning_details` is not stored, and only `message.content` is parsed.
+* `backend_openai_compatible()` records `finish_reason` and `native_finish_reason`
+  of the first choice as `meta$finish_reason` and `meta$native_finish_reason` when
+  they are non-empty strings, and the request timeout as `meta$timeout_s`. The
+  default `timeout = 120` is unchanged.
 * `parse_choice(whole_word = TRUE)` matches whole phrases, preferring longer
   phrases and rejecting ambiguous classifications. The default remains unchanged.
 * `msa_run(parse_by_prompt = ...)` can select a parser for each prompt while
@@ -17,6 +21,11 @@
 * The internal AP1 pipeline adds frozen study inputs, a YAML plan, an explicit
   mock/API runner, pilot checks and per-model assessment. Its functions are not
   exported. AP1 results are provisional until the M1 statistical validation.
+* The AP1 plan requires a client timeout per model (`timeout_s`, 1800 s for all
+  three models), which the runner passes to `backend_openai_compatible()`. The
+  AP1 pilot has a fifth pass rule, `backend_errors`: a backend error share of at
+  most `error_share_trigger` per model, unreadable answers not counted. The pilot
+  summary reports the maximum latency.
 
 # llmsa 0.1.0
 

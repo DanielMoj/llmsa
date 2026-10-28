@@ -1,7 +1,7 @@
 # ADR-011 no. 5 (E35): the pilot summary counts successful rows whose reported
 # reasoning tokens exceed completion_tokens and, for the routed OpenRouter
 # models, sums the billed usage.cost and the tokens at the plan prices (second
-# evidence of the cost calculation). The four pilot pass rules stay unchanged.
+# evidence of the cost calculation). The pilot pass rules stay unchanged.
 
 ap1_test_pilot_meta <- function(r, key, meta) {
   r$meta[r$model_id == key] <- meta_to_json(meta)
