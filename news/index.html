@@ -49,6 +49,7 @@
 <code>msa_report(assessment = ...)</code> accepts validated application criteria, an overall decision and additional report sections, including a robustness half-normal plot.</li>
 <li>The internal AP1 pipeline adds frozen study inputs, a YAML plan, an explicit mock/API runner, pilot checks and per-model assessment. Its functions are not exported. AP1 results are provisional until the M1 statistical validation.</li>
 <li>The AP1 plan requires a client timeout per model (<code>timeout_s</code>, 1800 s for all three models), which the runner passes to <code><a href="../reference/backends.html">backend_openai_compatible()</a></code>. The AP1 pilot has a fifth pass rule, <code>backend_errors</code>: a backend error share of at most <code>error_share_trigger</code> per model, unreadable answers not counted. The pilot summary reports the maximum latency.</li>
+<li>The internal AP1 runner repeats a call that failed before its request was sent (name resolution, connection, TLS handshake, or a timeout in these phases) after pauses of 30 s, doubling up to 600 s and at most 12 h per call (plan field <code>network</code>), instead of storing it as a backend error; then it stops without a row for that call. Such calls record <code>network_retries</code> and <code>network_wait_s</code>. The runner logs its progress with timestamps to stderr.</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0" id="llmsa-010">llmsa 0.1.0<a class="anchor" aria-label="anchor" href="#llmsa-010"></a></h2>
