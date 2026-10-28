@@ -8,8 +8,8 @@
       "derived_rel_tol": 1e-4,
       "ndc": "gleich",
       "ndc_min_distance_to_integer": 0.01,
-      "optimizer": "Standard-lmerControl",
-      "quote": "1e-4 · σ²_TV je Komponente mit Standard-`lmerControl`; abgeleitete Kennzahlen 1e-4 relativ; ndc gleich, Testfälle nicht näher als 0,01 an einer ganzen Zahl"
+      "optimizer": "lmerControl(optimizer = \"bobyqa\")",
+      "quote": "1e-4 · σ²_TV je Komponente mit `lmerControl(optimizer = \"bobyqa\")`; abgeleitete Kennzahlen 1e-4 relativ; ndc gleich, Testfälle nicht näher als 0,01 an einer ganzen Zahl"
     },
     "oracle": {
       "variance_component_tol_fraction_of_total_variance": 1e-4,
@@ -100,7 +100,7 @@
   "tolerance": 0,
   "tolerance_note": "Betreiberfestlegungen, exakt",
   "source_url": "ANKER-TODO.md, Abschnitt „ANK-TOL — Toleranzen und Betreiberfestlegungen“",
-  "source": "Betreiberfestlegung: Vorschläge der Projektierung, am 24.10.2026, 22:20 vom Betreiber mit den neun Änderungen der Toleranzrevision bestätigt (OFFENE-PUNKTE §5c, Betreiberunterlage außerhalb des Repos); Spalte „Vorschlag“ der Tabelle in ANKER-TODO.md",
+  "source": "Betreiberfestlegung: Vorschläge der Projektierung, am 24.10.2026, 22:20 vom Betreiber mit den neun Änderungen der Toleranzrevision bestätigt (OFFENE-PUNKTE §5c, Betreiberunterlage außerhalb des Repos); Spalte „Vorschlag“ der Tabelle in ANKER-TODO.md; reml_anova.optimizer und reml_anova.quote geändert am 28.10.2026 mit Betreiberentscheidung E3 (docs/decisions/ADR-016-betreiberentscheidungen-acceptance-m1a.md)",
   "quote": "Vorschläge der Projektierung, am 24.10.2026, 22:20 vom Betreiber mit den Änderungen der Toleranzrevision bestätigt (OFFENE-PUNKTE §5c).",
   "quote_location": "ANKER-TODO.md, Abschnitt ANK-TOL, erster Absatz; die Werte stehen je Eintrag in der Spalte „Vorschlag“ (Feld quote je Eintrag, wörtlich)",
   "further_quotes": [
@@ -109,5 +109,5 @@
   ],
   "retrieved": "2026-10-27",
   "method": "Spalte „Vorschlag“ je Eintrag wörtlich übernommen (Feld quote) und als Zahlen kodiert. Die Datei war für ACCEPTANCE M0 vorgesehen, lag aber nicht vor; geerntet in ACCEPTANCE M2, weil docs/01 §7 die Größengrenze data_size für den neuen Ordner inst/extdata/items_ap1_2026-10-24/ verlangt, K-M2-3 parser_cases und K-M2-6 und K-M2-7 arithmetic, engine_ordinal und mc_factor verwenden.",
-  "verification": "OFFENE-PUNKTE §5c nennt dieselben Werte (reml_anova 1e-4 · σ²_TV; oracle 1e-4 · σ²_TV und 1e-8 relativ; invariance 1e-6 · σ²_TV; nist_digits 1e-8 und LRE-Regel; mc_factor 4 und 3; rptr 5e-4; engine_ordinal und package_compare 1e-8; parser_cases 10.000; data_size 1 MB, 100 KB, 3 MB, 5 MB; unverändert engine_boot, arithmetic, bias_report, frf2_unrepx, resume_cutpoints, n_check, sim_runtime)."
+  "verification": "OFFENE-PUNKTE §5c nennt dieselben Werte (reml_anova 1e-4 · σ²_TV; oracle 1e-4 · σ²_TV und 1e-8 relativ; invariance 1e-6 · σ²_TV; nist_digits 1e-8 und LRE-Regel; mc_factor 4 und 3; rptr 5e-4; engine_ordinal und package_compare 1e-8; parser_cases 10.000; data_size 1 MB, 100 KB, 3 MB, 5 MB; unverändert engine_boot, arithmetic, bias_report, frf2_unrepx, resume_cutpoints, n_check, sim_runtime). Nachtrag 28.10.2026 (ADR-016, E3): reml_anova gilt mit lmerControl(optimizer = \"bobyqa\") statt Standard-lmerControl, die Toleranz 1e-4 · σ²_TV bleibt; Messbefund der Acceptance M1a (ACC-5): mit Standard-lmerControl in 4 von 20 balancierten simulierten Plänen Abweichungen von 1.0e-4 bis 4.7e-4 · σ²_TV vom exakten ANOVA-Schätzer, mit bobyqa höchstens 2.0e-6 · σ²_TV. Die Spalte „Vorschlag“ von reml_anova in ANKER-TODO.md trägt denselben Wortlaut wie reml_anova.quote."
 }

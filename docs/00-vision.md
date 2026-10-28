@@ -63,7 +63,7 @@ Messbare Maßstäbe je Kernfeature (Kriterien in `docs/02` bis `docs/04`):
 | Kernfeature | Maßstab | Kriterien |
 | --- | --- | --- |
 | Varianzkomponenten, numerisch | gleich den ANOVA-Schätzern bei balancierten Plänen (Toleranz `ANK-TOL.reml_anova`); Literaturbeispiele auf die publizierte Stelle; Gegenrechnung VCA, SixSigma, lme4; Invarianzen und Randfälle | K-M1a-1 bis K-M1a-3, K-M1a-6 |
-| %GRR, %Contribution, ndc, Verdikt | AIAG-Formeln; ndc mit 1,41 und Abrundung; Verdikt nach % Studienvariation mit Schwellen 10 und 30, Grenzwerte „bedingt“ (`ANK-16`) | K-M1a-5 |
+| %GRR, %Contribution, ndc, Verdikt | AIAG-Formeln; ndc mit 1,41, Abrundung und mindestens 1; Verdikt nach % Studienvariation mit Schwellen 10 und 30, Grenzwerte „bedingt“ (`ANK-16`) | K-M1a-5 |
 | Numerische Genauigkeit | NIST StRD, Sätze niedriger und mittlerer Schwierigkeit, zertifizierte Stellen (`ANK-TOL.nist_digits`) | K-M1a-4 |
 | Ordinal (latente Skala), binär (Logit) | Engine-Gleichheit mit `ordinal`/`lme4`, Wiederholbarkeit wie rptR, Wiederfinden simulierter Komponenten und β²/2 beziffert (Skripte M1b, Vollläufe und Befunde M1d) | K-M1b-1 bis K-M1b-7, K-M1d-6, K-M1d-7 |
 | Bootstrap | Quantile wie `lme4::bootMer`; Überdeckung je Szenario gemessen und berichtet (Skript M1c, Volllauf und Befunde M1d) | K-M1c-1 bis K-M1c-5, K-M1d-6, K-M1d-7 |
