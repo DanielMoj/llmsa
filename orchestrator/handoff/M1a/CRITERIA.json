@@ -1,0 +1,177 @@
+{
+  "criteria": [
+    {
+      "id": "K-M1a-1",
+      "quote": "**K-M1a-1:** Für balancierte Pläne, deren ANOVA-Schätzer nach der Regel der erwarteten Mittelquadrate (Formelsammlung §2, Cornfield–Tukey) alle nichtnegativ sind, stimmen die REML-Varianzkomponenten aus `msa_fit(type = \"numeric\")` mit den im Abnahmetest unabhängig aus `stats::aov`-Mittelquadraten berechneten ANOVA-Schätzern überein; der Fit läuft mit den in `ankerRef: ANK-TOL.reml_anova` festgelegten Optimierer-Einstellungen (`lmerControl`, über `...` an `msa_fit` durchgereicht), die Abweichung jeder Komponente bleibt unter der dort festgelegten Toleranz als Anteil der Gesamtvarianz σ²_TV des ANOVA-Schätzers, abgeleitete Kennzahlen (%GRR, %Contribution, ICC) relativ, ndc gleich; geprüft für Pläne mit und ohne Zweifach-Wechselwirkungen (`interactions = TRUE/FALSE`), mit Block und ohne Block, auf simulierten Daten aus `msa_simulate()` und auf `lme4::Penicillin` (Item = `sample`, Prompt = `plate`, `interactions = FALSE`). (Prüfweg: Test)",
+      "source": "docs/02-statistikkern.md"
+    },
+    {
+      "id": "K-M1a-2",
+      "quote": "**K-M1a-2:** Das ANOVA-Beispiel des AIAG-Handbuchs (Datenblatt 10 Teile × 3 Prüfer × 3 Wiederholungen aus `reference/quellen/data/aiag/anova_example.csv`; Item = Teil, Prompt = Prüfer, Replikat = Wiederholung) wird mit `msa_fit(..., interactions = FALSE)` und `msa_grr()` auf die publizierten Stellen reproduziert: EV, AV, GRR, PV, TV, % Studienvariation und % Contribution je Quelle sowie ndc (`ankerRef: ANK-10`); mit `interactions = TRUE` wird die Abweichung zum Handbuch (Wechselwirkung gepoolt) berichtet, nicht als Fehler gewertet. Fehlt die Datei, schlägt der Test fehl. (Prüfweg: Test)",
+      "source": "docs/02-statistikkern.md"
+    },
+    {
+      "id": "K-M1a-3",
+      "quote": "**K-M1a-3:** Gegenrechnung mit etablierten Paketen, die der Abnahmetest zur Laufzeit auf denselben Daten aufruft (Orakel, kein eingefrorener Wert): (a) `VCA::remlVCA` und `VCA::anovaVCA` auf `ic50_demo` und auf den AIAG-Daten liefern dieselben Komponenten wie `msa_fit` (Toleranz `ankerRef: ANK-TOL.oracle`, Wert für Varianzkomponenten als Anteil von σ²_TV); (b) `SixSigma::ss.rr` auf `ss.data.rr` (Teil → Item, Prüfer → Prompt, Lauf → Replikat, Wechselwirkung im Modell) liefert dieselben Varianzkomponenten und % Studienvariation (`ANK-TOL.oracle`, Komponentenwert) und denselben ndc wie `msa_grr`; (c) `msa_fit` auf `Penicillin` reproduziert die in Bates et al. (2015) publizierten REML-Schätzer (`ankerRef: ANK-13`). (Prüfweg: Test)",
+      "source": "docs/02-statistikkern.md"
+    },
+    {
+      "id": "K-M1a-4",
+      "quote": "**K-M1a-4:** Numerische Genauigkeit an den NIST-StRD-ANOVA-Datensätzen (Item = Behandlungsstufe, Replikat = Beobachtung; zertifizierte Werte `ankerRef: ANK-14`): Bei niedriger Schwierigkeit (`SiRstv`, `SmLs01`–`SmLs03`, `AtmWtAg`) gleichen die REML-Restvarianz dem zertifizierten Within-Mittelquadrat und die Item-Komponente dem aus den zertifizierten Mittelquadraten abgeleiteten ANOVA-Schätzer auf die in `ankerRef: ANK-TOL.nist_digits` festgelegte relative Toleranz. Bei mittlerer Schwierigkeit (`SmLs04`–`SmLs06`, Werte um 10¹²) berechnet der Abnahmetest für beide Größen den LRE (−log₁₀ der relativen Abweichung vom zertifizierten Wert) von `msa_fit` und von `stats::aov` auf denselben Daten; der LRE von `msa_fit` liegt höchstens um die in `ANK-TOL.nist_digits` festgelegte Differenz unter dem von `aov`, und `vignettes/validation.Rmd` berichtet beide LRE je Datensatz. Die Sätze höherer Schwierigkeit (`SmLs07`–`SmLs09`) werden ebenso berichtet, sind aber kein Kriterium. (Prüfweg: Test)",
+      "source": "docs/02-statistikkern.md"
+    },
+    {
+      "id": "K-M1a-5",
+      "quote": "**K-M1a-5:** AIAG-Kennzahlen und Verdikt: `msa_grr()` berechnet % Contribution als 100·σ²_X/σ²_TV, % Studienvariation als 100·σ_X/σ_TV, ndc = ⌊1,41·σ_PV/σ_GRR⌋, ICC_items = σ²_PV/σ²_TV (Formelsammlung §3), und klassifiziert auf konstruierten Komponenten mit %GRR genau 10,0 % und genau 30,0 % als `marginal`, knapp darunter als `acceptable` beziehungsweise `marginal`, knapp darüber als `marginal` beziehungsweise `unacceptable` (Schwellen und Konstante `ankerRef: ANK-16`); der Fall σ²_GRR = 0 liefert `ndc = Inf` und `verdict = \"acceptable\"`, der Fall σ²_TV = 0 liefert `verdict = \"undetermined\"` ohne Fehler. (Prüfweg: Test)",
+      "source": "docs/02-statistikkern.md"
+    },
+    {
+      "id": "K-M1a-6",
+      "quote": "**K-M1a-6:** Invarianzen und Randfälle numerisch: Permutation der Zeilen, Umbenennen der Stufen aller Faktoren und Verschieben aller Werte um eine Konstante lassen Varianzkomponenten (Toleranz `ankerRef: ANK-TOL.invariance` als Anteil von σ²_TV), %GRR (relativ) sowie ndc und Verdikt (gleich) unverändert; Skalieren mit c multipliziert alle Varianzen mit c² und lässt %GRR, % Contribution, ndc, ICC und Verdikt unverändert; die Testdaten halten den in `ANK-TOL.invariance` festgelegten Abstand zu Rundungs- und Schwellengrenzen (ndc, 10 % und 30 %), damit kein Rundungssprung als Verletzung zählt; eine wahre Komponente nahe null wird mit `singular = TRUE` gemeldet und nie negativ ausgegeben; ein unbalancierter Plan (zufällig entfernte Zellen und Replikate) wird angepasst, `n$reps_per_cell` nennt den Bereich und `n$observations` die verbliebene Zahl; identische Werte in allen Zeilen führen zu einer Fehlermeldung oder zu `verdict = \"undetermined\"`, nie zu `NaN` in `summary`; ein nicht konvergierender Fit gibt die lme4-Warnung weiter. (Prüfweg: Test)",
+      "source": "docs/02-statistikkern.md"
+    },
+    {
+      "id": "K-M1a-7",
+      "quote": "**K-M1a-7:** Die Vignette `vignettes/validation.Rmd` existiert, enthält den Abschnitt „Variance components and gauge R&R (numeric)“ mit einer Tabelle je Referenzprüfung aus K-M1a-1 bis K-M1a-5 (Anker-ID, Quelle, erwarteter Wert, beobachteter Wert, Toleranz, Ergebnis), die Werte werden im Code der Vignette berechnet und aus `reference/anchors/` gelesen, nicht abgetippt, und `R CMD check` baut die Vignette ohne ERROR und WARNING. (Prüfweg: Test für Struktur und Einlesen; Gate lint für den Bau)",
+      "source": "docs/02-statistikkern.md"
+    }
+  ],
+  "open": [
+    {
+      "id": "ACC-1",
+      "ref": "K-M1a-3 („(c) `msa_fit` auf `Penicillin` reproduziert die in Bates et al. (2015) publizierten REML-Schätzer (`ankerRef: ANK-13`)“); ANKER-TODO Zeile ANK-13 („Bates2015 (JSS 67(1)), Abschnitt zum Penicillin-Beispiel“, Status „vorhanden“); docs/01 §6 („Nicht verifizierbare Anker bleiben blocking offen; nichts wird geschätzt.“)",
+      "kind": "Anker nicht belegbar",
+      "owner": "Betreiber (Quelle liefern und Spec-Fundstelle korrigieren); danach Reviewer (ANK-13 ernten, ADR)",
+      "blocking_builder": true,
+      "note": "Bates, Mächler, Bolker & Walker (2015), JSS 67(1), enthält kein Penicillin-Beispiel: Die Suche nach „Penicillin“ in allen drei Fassungen des Textspiegels (Verlagsfassung, arXiv 1406.5823, lme4-Vignette lmer) findet nichts; Beispiel des Artikels ist sleepstudy. Die Hilfeseite lme4::Penicillin (lme4 2.0.6) nennt nur den Aufruf lmer(diameter ~ (1|plate) + (1|sample), Penicillin) und Davies & Goldsmith (1972), aber keine Schätzwerte. Ein Wert aus dem Gedächtnis ist verboten; ANK-13 ist deshalb nicht angelegt. Folgen: test-m1a-3 („msa_fit on Penicillin reproduces …“) und test-m1a-7 („… published estimates of ANK-13“) scheitern benannt am fehlenden Anker; K-M1a-7 verlangt ANK-13 auch in der Vignettentabelle. Erwartetes Schema für den Nachtrag: value.sd.{plate, sample, residual} (publizierte Standardabweichungen) und value.decimals.sd.{plate, sample, residual} (gedruckte Nachkommastellen); Toleranz halbe Einheit der letzten gedruckten Stelle (docs/01 §2 Nr. 6). K-M1a-1 (Penicillin gegen ANOVA aus stats::aov) braucht keinen Anker und läuft."
+    },
+    {
+      "id": "ACC-2",
+      "ref": "K-M1a-3 („(a) `VCA::remlVCA` und `VCA::anovaVCA` auf `ic50_demo` und auf den AIAG-Daten liefern dieselben Komponenten wie `msa_fit` (Toleranz `ankerRef: ANK-TOL.oracle`, …)“); Formelsammlung §2 („Bei balancierten Daten und ANOVA-Schätzern, die alle nichtnegativ sind, stimmen REML- und ANOVA-Schätzer überein“); ANK-TOL.oracle",
+      "kind": "Kriterium für korrekten Code nicht erfüllbar (Spec-Widerspruch)",
+      "owner": "Betreiber (Spec-Entscheidung vor dem PLAN); danach Reviewer (Test anpassen mit ADR)",
+      "blocking_builder": true,
+      "note": "ic50_demo ist unbalanciert: 8 fehlende Werte, 2152 von 2160 Beobachtungen. Für unbalancierte Pläne sind ANOVA-Schätzer (VCA::anovaVCA, Momentenmethode Typ I) und REML verschieden; die Gleichheit gilt nach Formelsammlung §2 nur bei balancierten Plänen. Gemessen (VCA 1.5.2, lme4 2.0.6): Item-Komponente anovaVCA 0.969968, remlVCA 0.967221, msa_fit v0.1.0 0.967153; Abweichung anovaVCA − msa_fit 2.79e-3 · σ²_TV (Toleranz 1e-4 · σ²_TV), remlVCA − msa_fit 6.7e-5 · σ²_TV. Kein REML-Code kann den Test „VCA::anovaVCA on ic50_demo …“ bestehen; er ist trotzdem wörtlich geschrieben, weil der Reviewer das Kriterium nicht abschwächen darf. Mögliche Betreiberentscheidungen: anovaVCA nur auf balancierten Daten (AIAG) als Kriterium, auf ic50_demo nur berichten; oder ic50_demo für anovaVCA ohne Kriterium."
+    },
+    {
+      "id": "ACC-3",
+      "ref": "K-M1a-3 („(b) `SixSigma::ss.rr` auf `ss.data.rr` (Teil → Item, Prüfer → Prompt, Lauf → Replikat, Wechselwirkung im Modell) …“); Formelsammlung §2 („Liegt ein ANOVA-Schätzer unter 0, setzt REML die Komponente auf 0 und schätzt die übrigen Komponenten neu … das ist der dokumentierte Unterschied, kein Fehler“)",
+      "kind": "Spec schweigt zu Zielgröße und alphaLim; Auslegung des Reviewers, ADR ausstehend",
+      "owner": "Reviewer, 30-plan-review (ADR unter docs/decisions/)",
+      "blocking_builder": false,
+      "note": "Der Test ruft ss.rr wie das Beispiel der SixSigma-Hilfe auf: var = time1, part = prototype, appr = operator, sonst Vorgaben (errorTerm = \"interaction\", alphaLim = 0.05). ss.rr passt das vollständige Modell mit Wechselwirkung an, testet sie (p = 0.446) und poolt sie; msa_fit läuft mit interactions = TRUE, REML legt die Wechselwirkung auf den Rand (singulär) und liefert dieselben Schätzer. Ergebnis v0.1.0: größte Abweichung 4.5e-5 · σ²_TV (Part), ndc 2 = 2. % Studienvariation des Orakels aus der ungerundeten Spalte StdDev (ss.rr rundet %StudyVar auf zwei Stellen); fehlt die Zeile prototype:operator, gilt deren Komponente als 0. Die wörtlichere Lesart (Wechselwirkung im Endmodell erzwungen, alphaLim = 1) ist für REML unerfüllbar: bei time1 ist der ANOVA-Schätzer der Wechselwirkung negativ, bei time2 der des Prüfers; ss.rr setzt ihn auf 0 ohne Neuschätzung (Abweichungen 5.9e-4 bzw. 5.0e-3 · σ²_TV)."
+    },
+    {
+      "id": "ACC-4",
+      "ref": "K-M1a-3 (a) („… auf den AIAG-Daten …“); K-M1a-2 („mit `msa_fit(..., interactions = FALSE)`“); BL-22",
+      "kind": "Spec nennt kein Modell; Auslegung des Reviewers, ADR ausstehend",
+      "owner": "Reviewer, 30-plan-review (ADR unter docs/decisions/)",
+      "blocking_builder": false,
+      "note": "Auf den AIAG-Daten vergleicht der Test remlVCA und anovaVCA im Modell des Handbuchs (Wechselwirkung gepoolt, interactions = FALSE) und remlVCA zusätzlich mit Wechselwirkung (REML gegen REML). anovaVCA mit Wechselwirkung weicht von REML ab, weil der ANOVA-Schätzer der Wechselwirkung negativ ist (Formelsammlung §2: dokumentierter Unterschied). ic50_demo: Vorgabemodell von msa_fit (interactions = TRUE, mit Block). v0.1.0: AIAG ≤ 3.4e-6 · σ²_TV."
+    },
+    {
+      "id": "ACC-5",
+      "ref": "K-M1a-1; ANK-TOL.reml_anova („1e-4 · σ²_TV je Komponente mit Standard-`lmerControl`“); BL-49",
+      "kind": "Messbefund zur Toleranz; Betreiber zur Entscheidung vor dem PLAN",
+      "owner": "Betreiber (ANK-TOL ist Betreiberfestlegung; Änderung nur mit ADR)",
+      "blocking_builder": false,
+      "note": "Mit Standard-lmerControl (nloptwrap, xtol_abs = ftol_abs = 1e-8) bricht der Optimierer in flachen Richtungen früh ab. In 4 von 20 balancierten simulierten Plänen mit nichtnegativen ANOVA-Schätzern (vier Pläne von K-M1a-1, Seeds 1–6) wich msa_fit v0.1.0 um 1.0e-4 bis 4.7e-4 · σ²_TV vom exakten ANOVA-Schätzer ab (Beispiel: ohne Wechselwirkung, ohne Block, Seed 3: 2.9e-4 auf item, ebenso direkt mit lme4::lmer); mit optimizer = \"bobyqa\" höchstens 2.0e-6. Der Test nutzt für jeden Plan Seed 1 (vorab festgelegt wie im Beispiel von msa_simulate) und Penicillin; v0.1.0 besteht mit 2.4e-5, 6.3e-5, 3.1e-6, 2.6e-5 und 4.5e-5 · σ²_TV. Die Reserve ist klein: Schon eine andere interne Datenreihenfolge in msa_fit kann einen Fall über 1e-4 schieben, ohne dass der Code falsch ist. Empfehlung: vor dem PLAN entscheiden, ob ANK-TOL.reml_anova bei Standard-lmerControl bleibt."
+    },
+    {
+      "id": "ACC-6",
+      "ref": "K-M1a-6 („… lassen Varianzkomponenten (Toleranz `ankerRef: ANK-TOL.invariance` als Anteil von σ²_TV) …“); ADR-012 Nr. 1 („invariance gilt … für Fits mit enger Optimierersteuerung“); BL-72 („Entscheidung im PLAN von M1a“)",
+      "kind": "Prüfweg des Reviewers und Hinweis an den Builder",
+      "owner": "Builder entscheidet im PLAN (BL-72); Reviewer hält die Auslegung in 30-plan-review per ADR fest",
+      "blocking_builder": false,
+      "note": "Die Invarianztests rufen msa_fit mit den Vorgaben des Pakets auf (ohne control), so wie Anwender es tun, und prüfen gegen ANK-TOL.invariance. Nach ADR-012 Nr. 1 verlangt das, dass der Vorgabe-Fit eng genug gesteuert ist. Gemessen auf ic50_demo mit v0.1.0 (Vorgaben): Permutation 6.4e-5, Umbenennung 1.0e-4, Verschiebung 1.1e-4, Skalierung 1.2e-4 · σ²_TV. Engere lme4-Einstellungen allein reichen nicht: nloptwrap mit xtol_abs 1e-12, ftol_abs 1e-14, xtol_rel 1e-12: Permutation 1.9e-6, Umbenennung 1.1e-6; bobyqa (rhoend 1e-12): Permutation 3.6e-6, Skalierung 1.2e-5; nlminbwrap: Permutation 3.2e-6, Skalierung 7.8e-6; Nelder_Mead eng: Permutation 1.8e-6. Die REML-Funktion ist um die große Item-Komponente sehr flach. Wie der Vorgabe-Fit invariant wird, entscheidet der Builder. Testdaten: ic50_demo (%GRR 20.5, 1.41·σ_PV/σ_GRR = 6.73) und der simulierte Plan mit Wechselwirkungen und 3 Blöcken, Seed 1 (%GRR 60.2, 1.87); der Test prüft die Abstände aus ANK-TOL.invariance. Transformationen: Permutation mit Seed 20261024; Umbenennung aller Stufen von item_id, prompt_id, model_id, block in umgekehrter Reihenfolge; Verschiebung um 100; Skalierung mit 7.5 und 0.02. Skalierung prüft grr_pct_study_var, grr_pct_contribution, icc_items relativ, ndc und Verdikt gleich."
+    },
+    {
+      "id": "ACC-7",
+      "ref": "K-M1a-5 („ndc = ⌊1,41·σ_PV/σ_GRR⌋ … (Formelsammlung §3)“); docs/01 §1 („weicht die Formelsammlung von ihrer Quelle ab, gilt die Quelle, und der Reviewer dokumentiert den Befund als ADR“); AIAG 2010, Druckseite 123 („For analysis, the ndc is the maximum of one or the calculated value truncated to the integer.“); ANK-16",
+      "kind": "Spec und Quelle weichen unterhalb von 1 ab",
+      "owner": "Reviewer, 30-plan-review (ADR); bei Widerspruch der Spec-Stellen ESCALATE an den Betreiber",
+      "blocking_builder": false,
+      "note": "Für 1,41·σ_PV/σ_GRR unter 1 ergibt die Formel der Spec 0, das Handbuch (und SixSigma::ss.rr) 1; die QUELLE.txt der AIAG-Daten nennt als Projektkonvention „trunkieren, mindestens 1“. Ab 1 sind beide gleich. Die Abnahmetests prüfen ndc nur für Werte ab 1 und entscheiden die Lesart nicht."
+    },
+    {
+      "id": "ACC-8",
+      "ref": "K-M1a-4 („Bei niedriger Schwierigkeit (`SiRstv`, `SmLs01`–`SmLs03`, `AtmWtAg`) …“); ANK-TOL.nist_digits; ANK-14 (AtmWtAg.dat: „Average Level of Difficulty“)",
+      "kind": "Hinweis: Einordnung weicht von der Quelle ab",
+      "owner": "Betreiber zur Kenntnis",
+      "blocking_builder": false,
+      "note": "NIST führt AtmWtAg als Average Level of Difficulty (7 konstante führende Stellen, 2 Behandlungen zu je 24 Werten). Die Tests folgen der Spec und ANK-TOL.nist_digits: AtmWtAg mit 1e-8 relativ. v0.1.0 erreicht dort 5.7e-7 (Rest) und 2.8e-5 (Item)."
+    },
+    {
+      "id": "ACC-9",
+      "ref": "K-M1a-4; ANK-14; ANK-TOL.nist_digits",
+      "kind": "Prüfweg des Reviewers",
+      "owner": "Reviewer, 30-plan-review (ADR unter docs/decisions/)",
+      "blocking_builder": false,
+      "note": "Daten aus ../quellen/daten/nist-strd-anova_2026-10-22/<Name>.dat (SHA-256 aus ANK-14, sonst Abbruch; fehlt die Datei, scheitert der Test). Abbildung: item_id = Behandlung, rep = laufende Nummer innerhalb der Behandlung, ein Prompt, ein Modell, ein Block; msa_fit mit Vorgaben. Item-Referenz (MS_between − MS_within)/Replikate je Zelle aus den zertifizierten Werten. LRE = −log10(|x − c|/|c|), Inf bei x = c. Die Marge der mittleren Schwierigkeit liest der Test aus ANK-TOL.nist_digits (Regeltext „LRE(stats::aov) - 1“ und Zitat „minus 1“ müssen übereinstimmen). SmLs07–SmLs09 nur berichtet (message), ein Fehler von msa_fit dort ist kein Fehlschlag. Vignette: eine Tabelle mit einer Spalte, deren Kopf „LRE“ enthält, je Datensatz SmLs04–SmLs09 mindestens vier LRE-Einträge (Zahl, Inf oder NA) in LRE-Spalten der Zeilen mit dem Datensatznamen, Köpfe oder Zellen nennen msa_fit und aov."
+    },
+    {
+      "id": "ACC-10",
+      "ref": "K-M1a-2; ANK-10 (Feld tolerance)",
+      "kind": "Vertrag des Tests und Toleranzauslegung",
+      "owner": "Builder bestätigt im PLAN; Reviewer hält die Toleranzauslegung in 30-plan-review per ADR fest",
+      "blocking_builder": false,
+      "note": "msa_fit mit Vorgaben außer interactions = FALSE (kein control). Zeilen von msa_grr()$table nach getrimmtem, klein geschriebenem source: „total gauge r&r“ (GRR), „repeatability“ (EV), „reproducibility“ (AV), beginnt mit „part-to-part“ (PV), „total variation“ (TV); Spalten variance, sd, pct_study_var, pct_contribution; ndc aus summary. Toleranzen nach ANK-10: Varianzen und die sechsstelligen Standardabweichungen (auf der Varianzskala) mit ANK-TOL.reml_anova · σ²_TV (σ²_TV = gedrucktes σ²_GRR + σ²_PV); TV (drei Stellen) und Prozentwerte (eine Stelle) mit halber Einheit der letzten Stelle zuzüglich der REML-Toleranz der Kennzahl; ndc gleich. Der Vorlauf prüft die CSV gegen Tab. III-B 7 (df exakt, SS und MS auf die halbe Einheit). interactions = TRUE: Abweichungen per message berichtet; geprüft wird nur, dass Fit und msa_grr laufen, alle Größen endlich und keine Komponente negativ ist. Die CSV fehlt oder weicht ab (SHA-256 aus ANK-10): Test scheitert."
+    },
+    {
+      "id": "ACC-11",
+      "ref": "K-M1a-1",
+      "kind": "Vertrag des Tests",
+      "owner": "Builder bestätigt im PLAN",
+      "blocking_builder": false,
+      "note": "Pläne: msa_simulate(20, 4, 3, 3, blocks) mit Seed 1 für (i) Wechselwirkungen, ohne Block, (ii) Wechselwirkungen, 3 Blöcke, (iii) ohne Wechselwirkungen, ohne Block, (iv) ohne Wechselwirkungen, 3 Blöcke (Komponenten in setup-m1a.R, acc_m1a_designs()); dazu lme4::Penicillin mit sample → item, plate → prompt, ein Replikat. ANOVA-Referenz: Mini-Referenz acc_m1a_anova_estimates() aus stats::aov mit genau den Termen des msa_fit-Modells (Haupteffekte mit mehr als einer Stufe, bei Wechselwirkungen item:prompt, item:model, prompt:model); Vorbedingungen im Test: balanciert, alle ANOVA-Schätzer ≥ 0, 1,41·σ_PV/σ_GRR mindestens ANK-TOL.reml_anova.ndc_min_distance_to_integer von einer ganzen Zahl. Aufruf msa_fit(runs, type = \"numeric\", interactions = …, control = lme4::lmerControl()). Geprüft: jede Komponente (gleiche Quellen) gegen 1e-4 · σ²_TV(ANOVA), summary grr_pct_study_var, grr_pct_contribution, icc_items relativ 1e-4, ndc gleich; Durchreichen: mit lmerControl(optimizer = \"bobyqa\") meldet fit$model@optinfo$optimizer \"bobyqa\"."
+    },
+    {
+      "id": "ACC-12",
+      "ref": "K-M1a-5 („… auf konstruierten Komponenten …“); ANK-16; ANK-TOL.arithmetic",
+      "kind": "Vertrag des Tests",
+      "owner": "Builder bestätigt im PLAN",
+      "blocking_builder": false,
+      "note": "Konstruierte Komponenten: Der Test fittet eine kleine simulierte Studie mit allen acht Quellen (item, prompt, model, block, item:prompt, item:model, prompt:model, Residual) und ersetzt fit$vc$variance; alle übrigen Felder bleiben. msa_grr() mit Vorgaben. Nachrechnung mit ANK-TOL.arithmetic (1e-10 absolut) für variance, sd, pct_contribution, pct_study_var je Zeile (GRR, EV, AV, PV, TV und die sechs Teile von AV; Zeile block beginnt mit „block“), summary grr_pct_study_var, grr_pct_contribution, repeatability_pct_study_var, reproducibility_pct_study_var, icc_items, ndc. Genau 10,0 % und 30,0 % mit exakt darstellbaren Komponenten (GRR 1 / PV 99, 0,25 / 24,75, 9 / 91, 0,5625 / 5,6875); „knapp“ = ±0,01 Prozentpunkte. ndc-Fälle mit Verhältnis 3,54 trennen 1,41 von √2. σ²_GRR = 0: ndc Inf, acceptable; σ²_TV = 0: alle Komponenten 0, undetermined ohne Fehler."
+    },
+    {
+      "id": "ACC-13",
+      "ref": "K-M1a-6 (Randfälle)",
+      "kind": "Vertrag des Tests",
+      "owner": "Builder bestätigt im PLAN",
+      "blocking_builder": false,
+      "note": "Komponente nahe null: simulierter Plan (Wechselwirkungen, ohne Block, Prompt-Komponente 0, Seed 1), Prompt-Mittelwerte angeglichen (ANOVA-Schätzer der Prompt-Komponente negativ, im Test geprüft); verlangt fit$singular TRUE, keine negative Varianz in fit$vc und msa_grr()$table. Unbalanciert: simulierter Plan mit 3 Blöcken, 10 % der Zellen gelöscht, in 20 % der übrigen Zellen ein Replikat mit value NA (Seeds 20261024–20261026); n$observations = Zahl der gültigen Werte, n$reps_per_cell = Spanne der gültigen Werte je beobachteter Zelle (leere Zellen zählen nicht). Identische Werte (1.5 in allen Zeilen, Pläne von ic50_demo und des simulierten Plans): Fehler mit Meldung in msa_fit oder msa_grr, sonst verdict \"undetermined\" und kein NaN in summary. Nichtkonvergenz: control = lmerControl(optCtrl = list(maxeval = 5)); Vorbedingung: lme4::lmer mit demselben Modell warnt; jede Meldung in fit$model@optinfo$conv$lme4$messages muss (Ziffern normalisiert) als Warnung beim Aufrufer ankommen, bei Optimierercode ≠ 0 auch die Warnung „convergence code“."
+    },
+    {
+      "id": "ACC-14",
+      "ref": "K-M1a-7 („(Prüfweg: Test für Struktur und Einlesen; Gate lint für den Bau)“); .Rbuildignore (^reference$)",
+      "kind": "Vertrag des Tests",
+      "owner": "Builder bestätigt im PLAN",
+      "blocking_builder": false,
+      "note": "Der Test knittet vignettes/validation.Rmd mit knitr::knit() nach tempdir(): R-Code läuft in <Repo>/vignettes (root.dir), REPO_ROOT zeigt auf das Repo, Abbildungen nach tempdir(), error = FALSE; in vignettes/ darf keine neue Datei entstehen. Verlangt: Überschrift beliebiger Ebene mit genau dem Titel „Variance components and gauge R&R (numeric)“ (Rmd und Ausgabe); im Abschnitt mindestens 5 Tabellen (Markdown-Pipe-Tabellen, etwa knitr::kable() ohne festes Format, oder HTML-Tabellen) mit je genau einer Spalte, deren Kopf (klein geschrieben) mit anchor, source, expected, observed, tolerance, result beginnt, ohne leere Zellen; die Spalte anchor nennt zusammen ANK-TOL.reml_anova, ANK-10, ANK-TOL.oracle, ANK-13, ANK-14, ANK-TOL.nist_digits, ANK-16, und jede genannte ID existiert; in den Zeilen von ANK-10 zeigt expected die Werte EV, AV, GRR, PV, TV (sd), % Studienvariation und % Contribution von EV, AV, GRR, PV und ndc, in den Zeilen von ANK-14 die zertifizierten Within-Mittelquadrate der niedrigen Schwierigkeit, in denen von ANK-13 dessen Werte (je bis auf die halbe Einheit der gezeigten letzten Stelle). Das Rmd nennt ANK-10, ANK-13, ANK-14, ANK-16, ANK-TOL und enthält (Code und Text, ohne YAML-Kopf) kein Literal mit Dezimalpunkt oder Exponent, das einem Wert von ANK-10/13/14/16 mit mindestens drei signifikanten Stellen gleicht (auch gerundet), keine Toleranz der Einträge reml_anova, oracle, nist_digits, invariance und keinen ihrer Abstände in wissenschaftlicher Schreibweise; Konstanten im Text über Inline-Code. Hinweis: Im lint-Gate fehlt reference/ im Tarball (.Rbuildignore), ebenso die lokalen Daten; die Vignette muss dort ohne ERROR und WARNING bauen. Wie sie das löst, entscheidet der Builder."
+    },
+    {
+      "id": "ACC-15",
+      "ref": "docs/01 §5 („Suggests dürfen ergänzt werden; die Validierungssuite nutzt `VCA`, `SixSigma`, …“); AGENTS.md (lokale Daten, kein skip); MUT_TEST_DIRS",
+      "kind": "Hinweis Infrastruktur",
+      "owner": "Builder (DESCRIPTION), Betreiber zur Kenntnis",
+      "blocking_builder": false,
+      "note": "DESCRIPTION nennt VCA und SixSigma nicht unter Suggests; die Abnahmetests rufen beide auf (installiert: VCA 1.5.2, SixSigma 0.11.1). Die Tests lesen reference/quellen/data/aiag/anova_example.csv und ../quellen/daten/nist-strd-anova_2026-10-22/ und scheitern, wenn eine Datei fehlt oder ihre SHA-256 abweicht. Laufzeit ohne Vignette rund 25 s (remlVCA auf ic50_demo allein rund 13 s); das Knitten der Vignette kommt hinzu und läuft im Mutationslauf je Mutant (die Paketkopie des Mutationslaufs hat kein vignettes/; der Test liest die Vignette aus REPO_ROOT)."
+    },
+    {
+      "id": "ACC-16",
+      "ref": "docs/01 §2 Nr. 1; BL-42; docs/01 §6 („der Reviewer gleicht sie am Original ab“)",
+      "kind": "Nachweis des Reviewers",
+      "owner": "–",
+      "blocking_builder": false,
+      "note": "(1) AIAG-CSV: maschineller Abgleich mit der Textschicht von Tab. III-B 6a (PDF 114) und Fig. III-B 15 (PDF 127): alle 90 Werte gleich, die 30 gedruckten Spannweiten passen; aov trifft Tab. III-B 7 (BL-42, Reviewerteil erledigt; Seitenbilder hat der Betreiber am 27.10.2026 geprüft). (2) Gegenprobe der auf v0.1.0 grünen Tests mit Mutanten im Speicher (nichts im Repo): Konstante √2 statt 1,41; < statt ≤ an 30; ≤ statt < an 10; Block nicht in der Vergleichspräzision; %Contribution mit Wurzel; falsche ICC; ML statt REML; `...` nicht durchgereicht; Wechselwirkungen immer an; reps_per_cell ab 1; observations mit NA-Zeilen: jeder Mutant färbt mindestens einen zusätzlichen Test rot. (3) Stand v0.1.0 gegen die M1a-Abnahmetests: siehe ACC-17."
+    },
+    {
+      "id": "ACC-17",
+      "ref": "AGENTS.md („Rot ist erwartet“, Phasenvertrag 10-acceptance)",
+      "kind": "Stand vor der Implementierung",
+      "owner": "–",
+      "blocking_builder": false,
+      "note": "Lauf der M1a-Abnahmetests auf dem Stand vor M1a (Statistikkern v0.1.0, ohne vignettes/validation.Rmd, ohne ANK-13) am 28.10.2026: 53 Tests, 28 rot (21 mit Fehlschlag, 7 mit Fehler), 0 übersprungen, 23 s. Grün: K-M1a-1 (6), K-M1a-2 (3), K-M1a-5 (6); K-M1a-3 remlVCA auf ic50_demo, VCA auf den AIAG-Daten, ss.rr (3); K-M1a-4 Datenlisten und Bericht SmLs07–SmLs09 (2); K-M1a-6 Abstände (2), Komponente nahe null, unbalancierter Plan, Nichtkonvergenz. Rot: K-M1a-3 anovaVCA auf ic50_demo (ACC-2) und Penicillin gegen ANK-13 (ACC-1); K-M1a-4 alle acht Datensätze niedriger und mittlerer Schwierigkeit (v0.1.0 bei niedriger Schwierigkeit 3.1e-10 bis 2.8e-5 relativ; bei mittlerer LRE msa_fit Rest 6.9–8.7 und Item 3.7–6.4 gegen aov 10.3 und 9.9–10.0) sowie der Vignettentest; K-M1a-6 alle acht Invarianztests und beide Tests mit identischen Werten (v0.1.0 liefert dort Varianzen um 1e-26 und das Verdikt unacceptable statt eines Fehlers oder undetermined); K-M1a-7 alle sieben Tests (Vignette fehlt)."
+    }
+  ]
+}

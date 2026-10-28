@@ -1,0 +1,46 @@
+{
+  "id": "ANK-16",
+  "title": "AIAG-Verdiktschwellen 10 % / 30 % der Studienvariation mit Wortlaut, ndc-Konstante 1,41, Mindest-ndc; %Contribution-Schwellen 1 / 9 als Konvention",
+  "criteria": ["K-M1a-5", "K-M1a-7", "docs/01 §5"],
+  "value": {
+    "study_var": {
+      "acceptable_below": 10,
+      "unacceptable_above": 30,
+      "boundary": "genau 10,0 % und genau 30,0 % sind bedingt (marginal); bedingt heißt 10 ≤ %GRR ≤ 30",
+      "basis": "% Studienvariation der gesamten Gage R&R (100 · σ_GRR / σ_TV)"
+    },
+    "ndc": {
+      "constant": 1.41,
+      "formula": "1.41 · σ_PV / σ_GRR, abgerundet auf eine ganze Zahl",
+      "source_rule_below_one": "maximum of one or the calculated value truncated to the integer",
+      "adequate_min": 5
+    },
+    "contribution": {
+      "acceptable_below": 1,
+      "unacceptable_above": 9,
+      "status": "Konvention (Quadrat der StudyVar-Schwellen), nicht im AIAG-Handbuch"
+    }
+  },
+  "unit": "Schwellen in Prozent (Studienvariation bzw. Contribution); Konstante dimensionslos; ndc ganzzahlig",
+  "tolerance": 0,
+  "tolerance_note": "Schwellen und Konstante exakt",
+  "source_url": "AIAG2010 (reference/privat/QUELLENKATALOG.md): AIAG (2010), Measurement Systems Analysis Reference Manual, 4. Aufl., ISBN 978-1-60534-211-5; Tab. II-D 1 „GRR Criteria“ Druckseite 78 (PDF 87); ndc Druckseite 123 (PDF 132), Druckseite 128 (PDF 137) und Glossar Druckseite 214 (PDF 223); %Contribution-Schwellen: reference/privat/07_Formelsammlung_llmsa.md §3 und docs/01-fachspezifikation.md §3 Nr. 13, §5",
+  "source": "Literatur, geschützt (lokal); Textspiegel reference/quellen/text/literatur/A_statistikkern/AIAG_2010_MSA_Reference_Manual_4th_Edition.pdf.txt (Lesereihenfolge) und .layout.txt; Konvention 1/9 und Grenzfallregel: Formelsammlung §3 (bindend nach docs/01 §1, §3)",
+  "quote": "Under 10 percent Generally considered to be an acceptable measurement system.",
+  "quote_location": "Tab. II-D 1 „GRR Criteria“, Druckseite 78 (PDF 87), Zeile 1, Spalten GRR und Decision (Textspiegel .pdf.txt Zeilen 4789–4793; Tabellenzellen in Lesereihenfolge, Zeilenumbrüche als Leerzeichen)",
+  "further_quotes": [
+    {"quote": "10 percent to 30 percent May be acceptable for some applications", "location": "Tab. II-D 1, Druckseite 78 (PDF 87), Zeile 2 (.pdf.txt Zeilen 4799–4803)"},
+    {"quote": "Over 30 percent Considered to be unacceptable", "location": "Tab. II-D 1, Druckseite 78 (PDF 87), Zeile 3 (.pdf.txt Zeilen 4812–4815)"},
+    {"quote": "This value should be greater than or equal to 5.", "location": "Druckseite 78 (PDF 87), Abschnitt „Additional Width Error Metric“ unter Tab. II-D 1 (.pdf.txt Zeilen 4829–4830)"},
+    {"quote": "For analysis, the ndc is the maximum of one or the calculated value truncated to the integer. This result should be greater than or equal to 5.", "location": "Druckseite 123 (PDF 132), Abschnitt Average and Range Method, Schlussschritt (.pdf.txt Zeilen 8470–8471)"},
+    {"quote": "For the effective resolution, a standard estimate of this ndc (at the 97% confidence level) is 1.41[PV/GRR].", "location": "Glossar, Eintrag Effective Resolution, Druckseite 214 (PDF 223) (.layout.txt Zeilen 10048–10049, Zeilenumbruch als Leerzeichen)"},
+    {"quote": "ndc = 1.41 1.04233", "location": "Druckseite 128 (PDF 137), ANOVA-Beispiel (.layout.txt Zeile 6403); Fortsetzung in Zeile 6404 „.30237 … = 4.861 … 5“ mit Zeichen der Symbolschrift (U+F029, U+F040)"},
+    {"quote": "oder nach %Contribution mit t₁ = 1 und t₂ = 9 (Konvention, Quadrat der StudyVar-Schwellen; nicht im Handbuch)", "location": "reference/privat/07_Formelsammlung_llmsa.md §3, Absatz Verdikt"},
+    {"quote": "Grenzfälle: genau 10,0 % und genau 30,0 % sind „bedingt\"; das entspricht dem Wortlaut der Tabelle.", "location": "reference/privat/07_Formelsammlung_llmsa.md §3, Absatz Verdikt (im Original schließt das Zitatzeichen mit einem geraden Anführungszeichen)"},
+    {"quote": "AIAG: ndc = ⌊1,41 · σ_PV/σ_GRR⌋; Verdikt nach % Studienvariation mit Schwellen 10 und 30, genau 10,0 % und 30,0 % sind „bedingt“ (`marginal`); Basis `contribution` mit 1 und 9 als Konvention.", "location": "docs/01-fachspezifikation.md §5, erster Punkt"}
+  ],
+  "observations": "Unterhalb von 1 weichen Spec und Quelle voneinander ab: docs/02 K-M1a-5 und Formelsammlung §3 schreiben ndc = ⌊1,41 · σ_PV/σ_GRR⌋ (ergibt 0 für Werte unter 1), das Handbuch (Druckseite 123) setzt mindestens 1. Für Werte ab 1 sind beide gleich. Die Abnahmetests prüfen ndc nur ab 1; die Lesart unter 1 ist an den Betreiber gemeldet (orchestrator/handoff/M1a/CRITERIA.json, open).",
+  "retrieved": "2026-10-28",
+  "method": "Textspiegel gelesen (Lesereihenfolge .pdf.txt für die Tabellenzellen, .layout.txt für Formeln); Formelsammlung §3 und docs/01 §5 für die Konvention und die Grenzfallregel.",
+  "verification": "Die Schwellen 10 und 30, die Konstante 1,41 und die Grenzfallregel stehen gleichlautend in docs/01 §3 Nr. 7, 8 und 13, §5 und in AGENTS.md (Projektblock, AIAG-Konventionen); das Handbuchbeispiel ANK-10 (ndc 4.861 → 4 in Tab. III-B 10) folgt der Konstante 1,41, nicht √2."
+}

@@ -1,0 +1,76 @@
+{
+  "id": "ANK-10",
+  "title": "AIAG-ANOVA-Beispiel (10 Teile × 3 Prüfer × 3 Wiederholungen): Datenblatt, ANOVA-Tabelle, EV, AV, GRR, PV, TV, % Studienvariation, % Contribution je Quelle, ndc",
+  "criteria": ["K-M1a-2", "K-M1a-5", "K-M1a-7"],
+  "value": {
+    "design": {"parts": 10, "appraisers": 3, "trials": 3, "observations": 90},
+    "mapping": "Item = Teil (part), Prompt = Prüfer (appraiser), Replikat = Wiederholung (trial); Modell und Block je eine Stufe (docs/02 K-M1a-2)",
+    "data_file": {
+      "path": "reference/quellen/data/aiag/anova_example.csv",
+      "sha256": "3161a373027b7e61d4818659d3897f8d516ba2776ae145ab5544d26e4acbff16",
+      "columns": ["part", "appraiser", "trial", "value"],
+      "rows": 90
+    },
+    "anova_table": {
+      "appraiser": {"df": 2, "ss": 3.1673, "ms": 1.58363, "f": 34.44},
+      "parts": {"df": 9, "ss": 88.3619, "ms": 9.81799, "f": 213.52},
+      "appraiser_by_part": {"df": 18, "ss": 0.3590, "ms": 0.01994, "f": 0.434},
+      "equipment": {"df": 60, "ss": 2.7589, "ms": 0.04598},
+      "total": {"df": 89, "ss": 94.6471},
+      "decimals": {"ss": 4, "ms": 5},
+      "f_denominator": "Alle F-Werte der Tab. III-B 7 haben MS Equipment (0.04598) im Nenner, auch die Haupteffekte; kein Anker für F-Tests des Zufallsmodells"
+    },
+    "model": "Wechselwirkung Prüfer × Teil gepoolt (Tab. III-B 8: model without interaction); im Paket interactions = FALSE (BL-22)",
+    "variance": {"EV": 0.039973, "AV": 0.051455, "INT": 0, "GRR": 0.09143, "PV": 1.086446},
+    "sd": {"EV": 0.199933, "AV": 0.226838, "INT": 0, "GRR": 0.302373, "PV": 1.042327, "TV": 1.085},
+    "pct_study_var": {"EV": 18.4, "AV": 20.9, "INT": 0, "GRR": 27.9, "PV": 96.0, "TV": 100.0},
+    "pct_contribution": {"EV": 3.4, "AV": 4.4, "INT": 0, "GRR": 7.8, "PV": 92.2},
+    "ndc": 4,
+    "decimals": {
+      "variance": {"EV": 6, "AV": 6, "INT": 0, "GRR": 5, "PV": 6},
+      "sd": {"EV": 6, "AV": 6, "INT": 0, "GRR": 6, "PV": 6, "TV": 3},
+      "pct_study_var": {"EV": 1, "AV": 1, "INT": 0, "GRR": 1, "PV": 1, "TV": 1},
+      "pct_contribution": {"EV": 1, "AV": 1, "INT": 0, "GRR": 1, "PV": 1}
+    },
+    "not_used": {
+      "pct_contribution_GRR_table_III_B_10": 7.9,
+      "ndc_text_p128_unrounded": 4.861,
+      "ndc_text_p128_rounded": 5,
+      "reason": "Tab. III-B 10 rundet % Contribution GRR auf 7.9, Tab. III-B 8 druckt 7.8 (Nachrechnung 7.76); der Anker folgt Tab. III-B 8. Der Text auf Druckseite 128 schreibt ndc = 4.861 ≈ 5; Tab. III-B 10 und die Projektkonvention (ANK-16, Abrundung) ergeben 4."
+    }
+  },
+  "unit": "Varianzen in Einheiten der Messgröße zum Quadrat, Standardabweichungen (EV, AV, GRR, PV, TV) in Einheiten der Messgröße (AIAG ohne Einheit), Prozentwerte in Prozent, ndc ganzzahlig; decimals = Zahl der gedruckten Nachkommastellen",
+  "tolerance": {
+    "variance": "ANK-TOL.reml_anova.component_tol_fraction_of_total_variance · σ²_TV, σ²_TV = σ²_GRR + σ²_PV der Tab. III-B 8",
+    "sd": "wie variance, verglichen auf der Varianzskala (gedruckte Standardabweichung quadriert); gilt für EV, AV, GRR, PV",
+    "sd_TV": "halbe Einheit der letzten gedruckten Stelle (0.0005) plus ANK-TOL.reml_anova.component_tol_fraction_of_total_variance · σ²_TV / (2 · TV)",
+    "percent": "halbe Einheit der letzten gedruckten Stelle (0.05) plus ANK-TOL.reml_anova.derived_rel_tol · |Wert|",
+    "ndc": 0,
+    "anova_table": "halbe Einheit der letzten gedruckten Stelle (Abgleich der CSV mit Tab. III-B 7, kein Kriterium)"
+  },
+  "tolerance_note": "ANKER-TODO, Zeile ANK-10 (Prüfung 25.10.2026, Abgleich am Original 27.10.2026): Das Handbuch rundet Zwischenergebnisse (GRR gedruckt 0.302373, nachgerechnet 0.302372; σ²_PV gedruckt 1.086446, nachgerechnet 1.086447; Abweichung unter 2·10⁻⁶); für die gedruckten Varianzkomponenten gilt deshalb ANK-TOL.reml_anova, nicht die halbe Einheit der letzten Stelle. TV (drei Nachkommastellen) und die Prozentwerte (eine Nachkommastelle) sind gröber gedruckt als diese Toleranz; für sie gilt die halbe Einheit der letzten Stelle (Prüfstandard docs/01 §2 Nr. 6) zuzüglich der REML-Toleranz der Kennzahl. ndc gleich.",
+  "source_url": "AIAG2010 (reference/privat/QUELLENKATALOG.md): AIAG (2010), Measurement Systems Analysis Reference Manual, 4. Aufl., ISBN 978-1-60534-211-5; Tab. III-B 7 und III-B 8 Druckseite 127 (PDF 136), Text Druckseite 128 (PDF 137), Tab. III-B 9 und III-B 10 Druckseite 129 (PDF 138); Datenblatt Tab. III-B 6a Druckseite 105 (PDF 114) und Fig. III-B 15 Druckseite 118 (PDF 127)",
+  "source": "Literatur, geschützt (lokal); Textspiegel reference/quellen/text/literatur/A_statistikkern/AIAG_2010_MSA_Reference_Manual_4th_Edition.pdf.layout.txt; Datenblatt als CSV reference/quellen/data/aiag/anova_example.csv (Betreiber, git-ignoriert)",
+  "quote": "EV = 0.199933 18.4 3.4",
+  "quote_location": "Tab. III-B 8 „ANOVA Analysis % Variation & Contribution“, PDF 136, Zeile Repeatability (Textspiegel .layout.txt Zeile 6372; Leerraum zusammengefasst, das Symbol σ² der ersten Spalte fehlt in der Textschicht)",
+  "further_quotes": [
+    {"quote": "Appraiser 2 3.1673 1.58363 34.44*", "location": "Tab. III-B 7 „ANOVA Table“, PDF 136 (Textspiegel Zeile 6352, Leerraum zusammengefasst)"},
+    {"quote": "Parts 9 88.3619 9.81799 213.52*", "location": "Tab. III-B 7, PDF 136 (Zeile 6353)"},
+    {"quote": "Appraiser by Part 18 0.3590 0.01994 0.434", "location": "Tab. III-B 7, PDF 136 (Zeile 6354)"},
+    {"quote": "Equipment 60 2.7589 0.04598", "location": "Tab. III-B 7, PDF 136 (Zeile 6355)"},
+    {"quote": "Total 89 94.6471", "location": "Tab. III-B 7, PDF 136 (Zeile 6356)"},
+    {"quote": "2 = 0.039973", "location": "Tab. III-B 8, PDF 136, Spalte Estimate of Variance, Repeatability (Zeile 6372; vor „2“ fehlt das Symbol σ)"},
+    {"quote": "2 = 0.051455 AV = 0.226838 20.9 4.4", "location": "Tab. III-B 8, PDF 136, Zeile Appraiser (Zeile 6375)"},
+    {"quote": "System = GRR = 0.302373 27.9 7.8", "location": "Tab. III-B 8, PDF 136 (Zeile 6380); Varianz „0.09143“ in Zeile 6381"},
+    {"quote": "σ 2 = 1.086446 PV = 1.042327 96.0 92.2", "location": "Tab. III-B 8, PDF 136, Zeile Part (Zeile 6386)"},
+    {"quote": "Total Variation TV =1.085 100.0", "location": "Tab. III-B 8, PDF 136 (Zeile 6389)"},
+    {"quote": "(Estimate of variance is based on model without interaction)", "location": "Tab. III-B 8, Unterschrift, PDF 136 (Zeile 6392)"},
+    {"quote": "ndc = 1.41 1.04233", "location": "Text Druckseite 128, PDF 137 (Textspiegel Zeile 6403); Fortsetzung in Zeile 6404 „.30237 … = 4.861 … 5“, Klammern, Bruchstrich und ≈ als Zeichen der Symbolschrift (U+F029, U+F040), nicht wörtlich zitierbar"},
+    {"quote": "GRR 0.302 27.9 7.9", "location": "Tab. III-B 10 „GRR ANOVA Method Report“, PDF 138 (Zeile 6477)"},
+    {"quote": "Number of distinct data categories (ndc) = 4", "location": "Tab. III-B 10, PDF 138 (Zeile 6482)"},
+    {"quote": "Table III-B 7 shows the ANOVA calculations for the example data from Figure III-B 15 assuming a balanced two-factor factorial design. Both factors are considered to be random.", "location": "Text unter Tab. III-B 7, PDF 136 (Zeilen 6362–6364, Zeilenumbrüche als Leerzeichen)"}
+  ],
+  "retrieved": "2026-10-28",
+  "method": "Tab. III-B 7, III-B 8 und III-B 10 im Textspiegel (pdftotext -layout) gelesen; Werte wie gedruckt übernommen, Zahl der Nachkommastellen in decimals. Datenblatt: die CSV des Betreibers maschinell gegen beide Vorkommen im Textspiegel abgeglichen (Rscript, Reviewer, 28.10.2026).",
+  "verification": "Reviewer 28.10.2026 (M1a ACCEPTANCE, BL-42): Die 90 Werte der CSV (SHA-256 wie oben) gleichen der Textschicht von Tab. III-B 6a (PDF 114) und Fig. III-B 15 (PDF 127) exakt; die 30 gedruckten Spannweiten von Fig. III-B 15 stimmen mit den Daten. Zweifaktorielle ANOVA mit stats::aov aus der CSV: SS 88.361934 / 3.167262 / 0.358982 / 2.758933, MS 9.8179927 / 1.5836311 / 0.0199435 / 0.0459822 (Tab. III-B 7 in allen gedruckten Stellen). Gepoolte Schätzer nach Formelsammlung §2: σ²_EV 0.03997328, σ²_AV 0.05145526, σ²_GRR 0.09142854, σ²_PV 1.08644660, TV 1.08529956; % Studienvariation 18.42 / 20.90 / 27.86 / 96.04; % Contribution 3.39 / 4.37 / 7.76 / 92.24; ndc = ⌊1.41 · 3.4472⌋ = ⌊4.8605⌋ = 4. Seitenbild und Textschicht hat der Betreiber am 27.10.2026 geprüft (ANKER-TODO, Zeile ANK-10)."
+}

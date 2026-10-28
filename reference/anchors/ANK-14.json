@@ -1,0 +1,383 @@
+{
+  "id": "ANK-14",
+  "title": "NIST StRD ANOVA: zertifizierte Werte (Between/Within df, SS, MS, F; R²; Residual-SD) und Datenstand der elf Datensätze SiRstv, SmLs01–SmLs09, AtmWtAg",
+  "criteria": ["K-M1a-4", "K-M1a-7"],
+  "value": {
+    "design": "One-Way Balanced (anova.html); Modell y_ij = mu + tau_i + epsilon_ij",
+    "datasets": {
+      "SiRstv": {
+        "file": "SiRstv.dat",
+        "url": "https://www.itl.nist.gov/div898/strd/anova/SiRstv.dat",
+        "sha256": "5a4f02d7f256e18c30dcad1b81e0260bb810b5ac113f6107e06dee168d07663e",
+        "bytes": 2032,
+        "level_of_difficulty": "Lower",
+        "treatments": 5,
+        "replicates_per_cell": 5,
+        "observations": 25,
+        "constant_leading_digits": 3,
+        "data_lines": [61, 85],
+        "between": {
+          "df": 4,
+          "ss": 0.0511462616,
+          "ms": 0.0127865654,
+          "f": 1.18046237440255
+        },
+        "within": {
+          "df": 20,
+          "ss": 0.21663656,
+          "ms": 0.010831828
+        },
+        "r_squared": 0.190999039051129,
+        "residual_sd": 0.104076068334656,
+        "quote": {
+          "between": "Between Instrument  4 5.11462616000000E-02 1.27865654000000E-02 1.18046237440255E+00",
+          "within": "Within Instrument  20 2.16636560000000E-01 1.08318280000000E-02",
+          "r_squared": "Certified R-Squared 1.90999039051129E-01",
+          "residual_sd": "Standard Deviation  1.04076068334656E-01"
+        },
+        "quote_lines": [41, 42, 44, 47]
+      },
+      "SmLs01": {
+        "file": "SmLs01.dat",
+        "url": "https://www.itl.nist.gov/div898/strd/anova/SmLs01.dat",
+        "sha256": "ad28cac0d4fb79ffea2522b55349083bdea10f12a6f8c46cfbabcccdb4d6b896",
+        "bytes": 6304,
+        "level_of_difficulty": "Lower",
+        "treatments": 9,
+        "replicates_per_cell": 21,
+        "observations": 189,
+        "constant_leading_digits": 1,
+        "data_lines": [61, 249],
+        "between": {
+          "df": 8,
+          "ss": 1.68,
+          "ms": 0.21,
+          "f": 21
+        },
+        "within": {
+          "df": 180,
+          "ss": 1.8,
+          "ms": 0.01
+        },
+        "r_squared": 0.482758620689655,
+        "residual_sd": 0.1,
+        "quote": {
+          "between": "Between Treatment   8 1.68000000000000E+00 2.10000000000000E-01 2.10000000000000E+01",
+          "within": "Within Treatment  180 1.80000000000000E+00 1.00000000000000E-02",
+          "r_squared": "Certified R-Squared 4.82758620689655E-01",
+          "residual_sd": "Standard Deviation  1.00000000000000E-01"
+        },
+        "quote_lines": [41, 42, 44, 47]
+      },
+      "SmLs02": {
+        "file": "SmLs02.dat",
+        "url": "https://www.itl.nist.gov/div898/strd/anova/SmLs02.dat",
+        "sha256": "708e32eaf36769abe7533e7dcd1b6dc67091b60df938dd37c4f0e65660ef7b0b",
+        "bytes": 48430,
+        "level_of_difficulty": "Lower",
+        "treatments": 9,
+        "replicates_per_cell": 201,
+        "observations": 1809,
+        "constant_leading_digits": 1,
+        "data_lines": [61, 1869],
+        "between": {
+          "df": 8,
+          "ss": 16.08,
+          "ms": 2.01,
+          "f": 201
+        },
+        "within": {
+          "df": 1800,
+          "ss": 18,
+          "ms": 0.01
+        },
+        "r_squared": 0.471830985915493,
+        "residual_sd": 0.1,
+        "quote": {
+          "between": "Between Treatment    8 1.60800000000000E+01 2.01000000000000E+00 2.01000000000000E+02",
+          "within": "Within Treatment  1800 1.80000000000000E+01 1.00000000000000E-02",
+          "r_squared": "Certified R-Squared 4.71830985915493E-01",
+          "residual_sd": "Standard Deviation  1.00000000000000E-01"
+        },
+        "quote_lines": [41, 42, 44, 47]
+      },
+      "SmLs03": {
+        "file": "SmLs03.dat",
+        "url": "https://www.itl.nist.gov/div898/strd/anova/SmLs03.dat",
+        "sha256": "e18404d0628b78670580b230a3a3b6cd997d959d00f92a2883a4da942b19377a",
+        "bytes": 469635,
+        "level_of_difficulty": "Lower",
+        "treatments": 9,
+        "replicates_per_cell": 2001,
+        "observations": 18009,
+        "constant_leading_digits": 1,
+        "data_lines": [61, 18069],
+        "between": {
+          "df": 8,
+          "ss": 160.08,
+          "ms": 20.01,
+          "f": 2001
+        },
+        "within": {
+          "df": 18000,
+          "ss": 180,
+          "ms": 0.01
+        },
+        "r_squared": 0.470712773465067,
+        "residual_sd": 0.1,
+        "quote": {
+          "between": "Between Treatment     8 1.60080000000000E+02 2.00100000000000E+01 2.00100000000000E+03",
+          "within": "Within Treatment  18000 1.80000000000000E+02 1.00000000000000E-02",
+          "r_squared": "Certified R-Squared 4.70712773465067E-01",
+          "residual_sd": "Standard Deviation  1.00000000000000E-01"
+        },
+        "quote_lines": [41, 42, 44, 47]
+      },
+      "AtmWtAg": {
+        "file": "AtmWtAg.dat",
+        "url": "https://www.itl.nist.gov/div898/strd/anova/AtmWtAg.dat",
+        "sha256": "5a1083c9062d3966f244bffa376fc9b033244abf86a0d0dd016af39cd71fb8a7",
+        "bytes": 3171,
+        "level_of_difficulty": "Average",
+        "treatments": 2,
+        "replicates_per_cell": 24,
+        "observations": 48,
+        "constant_leading_digits": 7,
+        "data_lines": [61, 108],
+        "between": {
+          "df": 1,
+          "ss": 3.638341875e-09,
+          "ms": 3.638341875e-09,
+          "f": 15.946733567793
+        },
+        "within": {
+          "df": 46,
+          "ss": 1.04951729166667e-08,
+          "ms": 2.28155932971014e-10
+        },
+        "r_squared": 0.257426544538321,
+        "residual_sd": 1.5104831444641e-05,
+        "quote": {
+          "between": "Between Instrument  1 3.63834187500000E-09 3.63834187500000E-09 1.59467335677930E+01",
+          "within": "Within Instrument  46 1.04951729166667E-08 2.28155932971014E-10",
+          "r_squared": "Certified R-Squared 2.57426544538321E-01",
+          "residual_sd": "Standard Deviation  1.51048314446410E-05"
+        },
+        "quote_lines": [42, 43, 45, 48]
+      },
+      "SmLs04": {
+        "file": "SmLs04.dat",
+        "url": "https://www.itl.nist.gov/div898/strd/anova/SmLs04.dat",
+        "sha256": "1308eb1581f28ce6c9de4ca9520fcc729f916c34f1f9dee10fb6e6581e5b4ce7",
+        "bytes": 7064,
+        "level_of_difficulty": "Average",
+        "treatments": 9,
+        "replicates_per_cell": 21,
+        "observations": 189,
+        "constant_leading_digits": 7,
+        "data_lines": [61, 249],
+        "between": {
+          "df": 8,
+          "ss": 1.68,
+          "ms": 0.21,
+          "f": 21
+        },
+        "within": {
+          "df": 180,
+          "ss": 1.8,
+          "ms": 0.01
+        },
+        "r_squared": 0.482758620689655,
+        "residual_sd": 0.1,
+        "quote": {
+          "between": "Between Treatment   8 1.68000000000000E+00 2.10000000000000E-01 2.10000000000000E+01",
+          "within": "Within Treatment  180 1.80000000000000E+00 1.00000000000000E-02",
+          "r_squared": "Certified R-Squared 4.82758620689655E-01",
+          "residual_sd": "Standard Deviation  1.00000000000000E-01"
+        },
+        "quote_lines": [41, 42, 44, 47]
+      },
+      "SmLs05": {
+        "file": "SmLs05.dat",
+        "url": "https://www.itl.nist.gov/div898/strd/anova/SmLs05.dat",
+        "sha256": "7b1333e6e56ced74145096df774cfb1f6305213cb28f9a8222c418ca85d0c296",
+        "bytes": 55668,
+        "level_of_difficulty": "Average",
+        "treatments": 9,
+        "replicates_per_cell": 201,
+        "observations": 1809,
+        "constant_leading_digits": 7,
+        "data_lines": [61, 1869],
+        "between": {
+          "df": 8,
+          "ss": 16.08,
+          "ms": 2.01,
+          "f": 201
+        },
+        "within": {
+          "df": 1800,
+          "ss": 18,
+          "ms": 0.01
+        },
+        "r_squared": 0.471830985915493,
+        "residual_sd": 0.1,
+        "quote": {
+          "between": "Between Treatment    8 1.60800000000000E+01 2.01000000000000E+00 2.01000000000000E+02",
+          "within": "Within Treatment  1800 1.80000000000000E+01 1.00000000000000E-02",
+          "r_squared": "Certified R-Squared 4.71830985915493E-01",
+          "residual_sd": "Standard Deviation  1.00000000000000E-01"
+        },
+        "quote_lines": [41, 42, 44, 47]
+      },
+      "SmLs06": {
+        "file": "SmLs06.dat",
+        "url": "https://www.itl.nist.gov/div898/strd/anova/SmLs06.dat",
+        "sha256": "0c0f09a2df05f2e9db5324a6aaeed85647651e874e9f5c3892b8f29fc4a200f7",
+        "bytes": 541674,
+        "level_of_difficulty": "Average",
+        "treatments": 9,
+        "replicates_per_cell": 2001,
+        "observations": 18009,
+        "constant_leading_digits": 7,
+        "data_lines": [61, 18069],
+        "between": {
+          "df": 8,
+          "ss": 160.08,
+          "ms": 20.01,
+          "f": 2001
+        },
+        "within": {
+          "df": 18000,
+          "ss": 180,
+          "ms": 0.01
+        },
+        "r_squared": 0.470712773465067,
+        "residual_sd": 0.1,
+        "quote": {
+          "between": "Between Treatment     8 1.60080000000000E+02 2.00100000000000E+01 2.00100000000000E+03",
+          "within": "Within Treatment  18000 1.80000000000000E+02 1.00000000000000E-02",
+          "r_squared": "Certified R-Squared 4.70712773465067E-01",
+          "residual_sd": "Standard Deviation  1.00000000000000E-01"
+        },
+        "quote_lines": [41, 42, 44, 47]
+      },
+      "SmLs07": {
+        "file": "SmLs07.dat",
+        "url": "https://www.itl.nist.gov/div898/strd/anova/SmLs07.dat",
+        "sha256": "fd95c510aa8b3ce7f67ddd32846ccead7d9abae441790336c6fb0fcb0ae3558f",
+        "bytes": 7630,
+        "level_of_difficulty": "Higher",
+        "treatments": 9,
+        "replicates_per_cell": 21,
+        "observations": 189,
+        "constant_leading_digits": 13,
+        "data_lines": [61, 249],
+        "between": {
+          "df": 8,
+          "ss": 1.68,
+          "ms": 0.21,
+          "f": 21
+        },
+        "within": {
+          "df": 180,
+          "ss": 1.8,
+          "ms": 0.01
+        },
+        "r_squared": 0.482758620689655,
+        "residual_sd": 0.1,
+        "quote": {
+          "between": "Between Treatment   8 1.68000000000000E+00 2.10000000000000E-01 2.10000000000000E+01",
+          "within": "Within Treatment  180 1.80000000000000E+00 1.00000000000000E-02",
+          "r_squared": "Certified R-Squared 4.82758620689655E-01",
+          "residual_sd": "Standard Deviation  1.00000000000000E-01"
+        },
+        "quote_lines": [41, 42, 44, 47]
+      },
+      "SmLs08": {
+        "file": "SmLs08.dat",
+        "url": "https://www.itl.nist.gov/div898/strd/anova/SmLs08.dat",
+        "sha256": "87dd38dfffeb65d39dbe3e8ba73bd16644fc396c1aad03fc0295225f3ba6aef9",
+        "bytes": 61097,
+        "level_of_difficulty": "Higher",
+        "treatments": 9,
+        "replicates_per_cell": 201,
+        "observations": 1809,
+        "constant_leading_digits": 13,
+        "data_lines": [61, 1869],
+        "between": {
+          "df": 8,
+          "ss": 16.08,
+          "ms": 2.01,
+          "f": 201
+        },
+        "within": {
+          "df": 1800,
+          "ss": 18,
+          "ms": 0.01
+        },
+        "r_squared": 0.471830985915493,
+        "residual_sd": 0.1,
+        "quote": {
+          "between": "Between Treatment    8 1.60800000000000E+01 2.01000000000000E+00 2.01000000000000E+02",
+          "within": "Within Treatment  1800 1.80000000000000E+01 1.00000000000000E-02",
+          "r_squared": "Certified R-Squared 4.71830985915493E-01",
+          "residual_sd": "Standard Deviation  1.00000000000000E-01"
+        },
+        "quote_lines": [41, 42, 44, 47]
+      },
+      "SmLs09": {
+        "file": "SmLs09.dat",
+        "url": "https://www.itl.nist.gov/div898/strd/anova/SmLs09.dat",
+        "sha256": "f4688c5a0d5690fc86fa27e0c5a265eef0b24641e74af27aa72d9615084dd13f",
+        "bytes": 595702,
+        "level_of_difficulty": "Higher",
+        "treatments": 9,
+        "replicates_per_cell": 2001,
+        "observations": 18009,
+        "constant_leading_digits": 13,
+        "data_lines": [61, 18069],
+        "between": {
+          "df": 8,
+          "ss": 160.08,
+          "ms": 20.01,
+          "f": 2001
+        },
+        "within": {
+          "df": 18000,
+          "ss": 180,
+          "ms": 0.01
+        },
+        "r_squared": 0.470712773465067,
+        "residual_sd": 0.1,
+        "quote": {
+          "between": "Between Treatment     8 1.60080000000000E+02 2.00100000000000E+01 2.00100000000000E+03",
+          "within": "Within Treatment  18000 1.80000000000000E+02 1.00000000000000E-02",
+          "r_squared": "Certified R-Squared 4.70712773465067E-01",
+          "residual_sd": "Standard Deviation  1.00000000000000E-01"
+        },
+        "quote_lines": [41, 42, 44, 47]
+      }
+    }
+  },
+  "unit": "Quadratsummen und Mittelquadrate in Einheiten der Zielgröße zum Quadrat; F, R² dimensionslos; Residual-SD in Einheiten der Zielgröße; df, Anzahlen ganzzahlig; Prüfsummen hexadezimal; Bytes",
+  "tolerance": 0,
+  "tolerance_note": "Zertifizierte Werte und Prüfsummen exakt. Vergleichstoleranzen für msa_fit stehen in ANK-TOL.nist_digits (niedrige Schwierigkeit 1e-8 relativ; mittlere Schwierigkeit LRE-Regel gegen stats::aov).",
+  "source_url": "https://www.itl.nist.gov/div898/strd/anova/anova.html",
+  "source": "NIST/ITL Statistical Reference Datasets (StRD), Analysis of Variance; je Datensatz die Datei <Name>.dat (gemeinfrei), heruntergeladen am 2026-10-22 nach quellen/daten/nist-strd-anova_2026-10-22/ (außerhalb des Repos); URL und SHA-256 je Datei in quellen/MANIFEST.tsv",
+  "quote": "Between Instrument  4 5.11462616000000E-02 1.27865654000000E-02 1.18046237440255E+00",
+  "quote_location": "SiRstv.dat, Zeile 41 (Abschnitt „Certified Values“, laut Dateikopf Zeilen 41 bis 47); die übrigen Zitate je Datensatz unter value.datasets.<Name>.quote mit Zeilennummern in quote_lines",
+  "further_quotes": [
+    {
+      "quote": "Design:  One-Way Balanced",
+      "location": "anova.html (Übersichtstabelle, Kopf); im HTML mit &nbsp; statt Leerzeichen"
+    },
+    {
+      "quote": "Average Level of Difficulty",
+      "location": "AtmWtAg.dat, Dateikopf (Abschnitt Data); ebenso anova.html, Zeile AtmWtAg, Spalte Level of Difficulty: Average"
+    }
+  ],
+  "observations": "docs/02 K-M1a-4 und ANK-TOL.nist_digits ordnen AtmWtAg der niedrigen Schwierigkeit zu (Toleranz 1e-8 relativ); NIST führt AtmWtAg als Average Level of Difficulty (7 konstante führende Stellen, 2 Behandlungen). Die Abnahmetests folgen der Spec; Hinweis an den Betreiber in orchestrator/handoff/M1a/CRITERIA.json (open).",
+  "retrieved": "2026-10-28",
+  "method": "Maschinell aus den lokalen .dat-Dateien gelesen (Rscript): Zeilen Between/Within, Certified R-Squared und Standard Deviation des Abschnitts Certified Values, Dateikopf (Level of Difficulty, Treatments, Replicates/Cell, Observations, Constant Leading Digits, Data-Zeilen); Zahlen mit as.numeric() aus dem gedruckten Text; SHA-256 mit tools::sha256sum().",
+  "verification": "SHA-256 aller elf Dateien gleich quellen/MANIFEST.tsv (Download 2026-10-22, HTTP 200); Anzahl der Datenzeilen je Datei gleich Observations; Stufen- und Replikatzahl aus den Daten gleich dem Dateikopf; R² = SS_between/(SS_between + SS_within) und Residual-SD = sqrt(MS_within) aus den zertifizierten Werten auf 1e-13 relativ nachgerechnet."
+}
