@@ -1,0 +1,70 @@
+{
+  "milestone": "M1a",
+  "phase": "plan",
+  "round": 1,
+  "verdict": "REWORK",
+  "blocking": [
+    {
+      "id": "E1",
+      "ref": "K-M1a-6 (docs/02-statistikkern.md:15: „Permutation der Zeilen, Umbenennen der Stufen aller Faktoren und Verschieben aller Werte um eine Konstante lassen Varianzkomponenten (Toleranz ankerRef: ANK-TOL.invariance als Anteil von σ²_TV) … unverändert; Skalieren mit c multipliziert alle Varianzen mit c² …“); ANK-TOL.invariance (1e-6 · σ²_TV); ADR-016 E6; ACC-6; PLAN.md, Numerische Entscheidung, Punkte 1–4",
+      "note": "Konditionierung macht Verschiebung und Skalierung nur bis auf Rundung gleich, danach bestimmt die Rauschgrenze des ableitungsfreien Optimierers den Endpunkt. Reviewer-Messung (PLAN-REVIEW, Messung 1): konditioniert mit enger bobyqa-Steuerung ic50_demo 4.75e-6 (Verschiebung 100), 1.85e-6 (Skalierung 7.5), 8.74e-6 (0.02); selbst enges nloptwrap verfehlt den simulierten Plan aus test-m1a-6 (2.12e-6, 1.01e-6, 1.15e-6) und ic50_demo bei Verschiebung 1e4 (1.72e-6). PLAN-UPDATE nennt einen Mechanismus (Wahl des Builders nach E6), der das REML-Optimum im Vorgabepfad unabhängig von Rundungsunterschieden bestimmt, für alle Pläne: etwa exakte EMS-Lösung für balancierte Pläne mit ANOVA-Schätzern ≥ 0 (Formelsammlung §2) und für die übrigen einen Abschlussschritt mit analytischen Ableitungen des REML-Kriteriums (Score/Information, Abbruch über die Score-Norm, aktive Menge an der Grenze 0). Die Festlegung auf bobyqa entfällt. Go/No-Go-Messung vor Schritt 4 auf ic50_demo und dem simulierten Plan mit den vier Testtransformationen und zusätzlichen Verschiebungen, Skalierungen und Seeds gegen ANK-TOL.invariance; neue Imports nur mit ADR; sonst Weg nach ADR-016 E6."
+    },
+    {
+      "id": "E2",
+      "ref": "Gate territory; orchestrator/orchestrate.sh:492–499 (path_allowed, Builder in 40-build/60-rework/62-rebuild); orchestrator/config.env:138 (BUILDER_EXTRA_PATHS_REGEX ohne README.md); AGENTS.md, Betreiber („… verwirft einen verletzenden Versuch“)",
+      "note": "PLAN.md plant Änderungen an README.md; der Pfad liegt nicht im Builder-Territorium. Ein BUILD damit wird verworfen, ein zweiter Verstoß ist FATAL. README.md aus dem Plan streichen; Dokumentation in man/, NEWS.md, Vignette oder inst/validation/numeric/README.md."
+    }
+  ],
+  "nonblocking": [
+    {
+      "id": "E3",
+      "ref": "PLAN.md, Öffentliche API und Ergebnisobjekte; K-M1a-4; K-M1c-1; lme4 2.0.6 refit.merMod (PLAN-REVIEW, Messung 3)",
+      "note": "Konsistenz konstruieren: Das zurückgegebene merMod entsteht auf den Originaldaten am endgültigen θ (lFormula, mkLmerDevfun, mkMerMod; checkConv). vc wird aus diesem Modell gelesen (VarCorr). Im geschlossenen Fall ist θ der geschlossene Wert, kein Startwert. optinfo nennt einen lme4-Optimierer samt optCtrl, weil refit()/bootMer() beide übernehmen. Messung 2: NIST bis 1.2e-10 relativ."
+    },
+    {
+      "id": "E4",
+      "ref": "K-M1a-1 („über ... an msa_fit durchgereicht“); K-M1a-6 („ein nicht konvergierender Fit gibt die lme4-Warnung weiter“); PLAN.md Punkt 5; ACC-17",
+      "note": "Mit control oder einem anderen lme4-Argument in ... fittet msa_fit() genau lme4::lmer(form, data, REML = TRUE, ...) auf den Originaldaten, ohne Konditionierung, Umordnung oder Nachpolitur; dokumentiert in ?msa_fit. So behalten K-M1a-1 und der Nichtkonvergenztest ihr Verhalten von v0.1.0, und weights, offset und subset müssen nicht durch Umordnungen getragen werden."
+    },
+    {
+      "id": "E5",
+      "ref": "docs/01 §4 (zusätzliche Felder ohne ADR; Entfernen/Umbenennen von Rückgabefeldern nur mit ADR); PLAN.md („data erhält die analysierten Werte und ihre Zuordnung zu den Eingabezeilen“)",
+      "note": "fit$data behält item, prompt, model, block, y mit Originalbeschriftungen, Originalskala und Eingabereihenfolge nach Entfernen fehlender Werte; die Zuordnung zu Eingabezeilen nur additiv. formula, levels, n, interactions und derived behalten ihre Bedeutung; die Stufennamen in fit$model sind die Originalbeschriftungen; kanonische Codes bleiben intern."
+    },
+    {
+      "id": "E6",
+      "ref": "R/fit.R:70; docs/01 §2 Nr. 4; PLAN-REVIEW, Messung 5",
+      "note": "as.numeric(as.character(x)) verliert bis 4.9e-15 relativ (15 signifikante Stellen). Numerische value direkt übernehmen, nur Zeichen- oder Faktoreingaben parsen; Unit-Test mit Doubles in voller Genauigkeit."
+    },
+    {
+      "id": "E7",
+      "ref": "docs/01 §2 Nr. 4 („identische Antworten … richtige Zahl oder klare Fehlermeldung“); K-M1a-6; R/acmg.R:950–951; R/plan.R:84",
+      "note": "Verhalten festlegen und testen für identische Replikate bei unterschiedlichen Zellen (Rest 0), nahezu konstante Daten (Maßstab der Konditionierung nahe 0) und die Aufrufer des neuen Fehlers bei konstanten Werten (acmg_fit-Rückfall, msa_plan); NEWS.md nennt die Verhaltensänderung."
+    },
+    {
+      "id": "E8",
+      "ref": "BL-12; BL-13; PLAN.md, Risiken (Laufzeit)",
+      "note": "Fitdauer v0.1.0 gegen neu messen (ic50_demo, ein NIST-Satz mit 18009 Zeilen, kleines msa_plan- und msa_boot-Beispiel) und in ADR und PROGRESS nennen; festlegen, welche Steuerung fit$model für Bootstrap-Refits trägt."
+    },
+    {
+      "id": "E9",
+      "ref": "docs/01 §2 Nr. 8; ADR-012 Nr. 1; BL-72; orchestrator/config.env:170",
+      "note": "Unit-Tests ohne vollständiges Knitten und ohne VCA-Aufruf auf ic50_demo (sie laufen in R CMD check, auf drei Plattformen und je Mutant). REML-Vergleiche dort nach ADR-012 Nr. 1; Toleranzen über [[ ]] mit Prüfung auf NULL."
+    },
+    {
+      "id": "E10",
+      "ref": "K-M1a-7; ACC-14; ADR-017 Nr. 7; AGENTS.md Integrität Nr. 7",
+      "note": "Zwei Kontexte zulässig. PLAN-UPDATE bestätigt ADR-017 Nr. 7.1–7.6: Driftwache der Ankerkopien im Test-Gate, keine AIAG-Rohwerte in keinem Modus, Literalregel auch für eingelesene oder ausgeführte Hilfsdateien. Alternativ erklärt es den reduzierten öffentlichen Modus (Nr. 7.7). Das lint-Gate baut im Vollmodus (REPO_ROOT exportiert)."
+    },
+    {
+      "id": "E11",
+      "ref": "K-M1a-5; K-M1a-6 („nie zu NaN in summary“); ADR-017 Nr. 6; R/fit.R:188; R/grr.R:105–106",
+      "note": "Nullfall nach ADR-017 Nr. 6. σ²_TV = 0: Prozentwerte, ICC und ndc NA, verdict undetermined. σ²_GRR = 0 bei PV > 0: ndc Inf. PV = 0 bei GRR > 0: ndc 1. Beide print-Methoden ohne NaN und mit Unterscheidung von NA und Inf; Unit-Tests einschließlich Druckausgabe."
+    },
+    {
+      "id": "E12",
+      "ref": "[INFRA] Gate mutgate; orchestrator/lib/r-mutation.R:93–103; orchestrator/config.env:165–170; BL-13",
+      "note": "Erster echter Mutationslauf: heute 451 Mutanten (fit 240, grr 211). Je Mutant laufen alle Abnahmetests (M2 allein ≈ 930–946 s) und das Knitten der Vignette, rund 16–17 min; bei 14 Workern etwa 9 h, dazu ein möglicher Flake-Rerun. Betreiberentscheidung vor den Gates; für den Builder nonblocking. BACKLOG-Eintrag im Code-Review."
+    }
+  ]
+}
