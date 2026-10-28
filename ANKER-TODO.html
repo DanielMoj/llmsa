@@ -425,11 +425,11 @@
 <td>Anbieterdokumentation</td>
 <td>vorhanden</td>
 </tr><tr><td>ANK-67</td>
-<td>Pilot AP1: 10 Pilotitems in <code>pilot.csv</code> (ERepo, je Klasse die nächsten zwei im Umlauf nach den 75 Hauptitems), 3 Vorlagen, 1 Replikat, 30 Aufrufe je Modell; Bestehensregeln je Modell: keine 4xx-Antwort, Anbieter gleich dem angeforderten, Parser-Trefferquote mindestens 27 von 30, Kostenprojektion aus dem 90-%-Quantil der Ausgabetokens (<code>usage.completion_tokens</code>, schließt Reasoning ein) unter <code>ANK-57</code>; berichtet: Median der Latenz, je Modell die Reasoning-Tokens (Median und 90-%-Quantil); Auslöser des Wiederholungstags: Anbieterwechsel in der Antwort, wechselnde Modellkennung innerhalb eines Blocks, mehr als 5 % Fehler eines Modells in einem Block</td>
+<td>Pilot AP1: 10 Pilotitems in <code>pilot.csv</code> (ERepo, je Klasse die nächsten zwei im Umlauf nach den 75 Hauptitems), 3 Vorlagen, 1 Replikat, 30 Aufrufe je Modell; Bestehensregeln je Modell: keine 4xx-Antwort, Anbieter gleich dem angeforderten, Parser-Trefferquote mindestens 27 von 30, Kostenprojektion aus dem 90-%-Quantil der Ausgabetokens (<code>usage.completion_tokens</code>, schließt Reasoning ein) unter <code>ANK-57</code>; berichtet: Median der Latenz, je Modell die Reasoning-Tokens (Median und 90-%-Quantil); Auslöser des Wiederholungstags: Anbieterwechsel in der Antwort, wechselnde Modellkennung innerhalb eines Blocks, mehr als 5 % Fehler eines Modells in einem Block; fünfte Bestehensregel <code>backend_errors</code>: Anteil der Backendfehler je Modell höchstens <code>error_share_trigger</code>, nicht lesbare Antworten zählen nicht; berichtet zusätzlich die maximale Latenz</td>
 <td>K-M2-1, K-M2-5, K-M2-7, A.6</td>
-<td>ADR-004 (Betreiberfestlegung 25.10.2026); Reasoning: ADR-004, Nachtrag 2 (Betreiberentscheidung 26.10.2026)</td>
+<td>ADR-004 (Betreiberfestlegung 25.10.2026); Reasoning: ADR-004, Nachtrag 2 (Betreiberentscheidung 26.10.2026); fünfte Regel und maximale Latenz: ADR-014 (28.10.2026)</td>
 <td>Betreiberfestlegung</td>
-<td>Betreiber bestätigt 25.10.2026 (ADR-004); geändert 26.10.2026 (ADR-004, Nachtrag 2)</td>
+<td>Betreiber bestätigt 25.10.2026 (ADR-004); geändert 26.10.2026 (ADR-004, Nachtrag 2); geändert 28.10.2026 (ADR-014)</td>
 </tr><tr><td>ANK-68</td>
 <td>Auswertungsregeln AP1: Modalantwort je Item und Modell über die 18 Hauptplanaufrufe (NA als eigener Wert, bei Gleichstand keine Modalantwort); NA-Regel (NA-Anteil als Kennzahl, in Trefferquote und Kappa Fehlklassifikation mit Übereinstimmungsgewicht 0, im Fit fehlender Wert); Kappa-Bootstrap über Items mit 2.000 Wiederholungen, Perzentilintervall 95 %, Seed 20261024; Rückfall-Fit numerisch auf den Klassenscores 1 bis 5 (Benign = 1 bis Pathogenic = 5) bei Fehler oder Konvergenzwarnung des ordinalen Fits; Antwortgröße der Robustheit als empirischer Logit mit Korrektur ½</td>
 <td>K-M2-5, K-M2-6, K-M2-7, A.1, A.5</td>
@@ -442,6 +442,12 @@
 <td>Validierungsplan Anhang A.3; Wortlaute der Vorlagen, Aliase und Klassen freigegeben mit ADR-004 (25.10.2026); Formatsätze geändert mit ADR-013 (27.10.2026)</td>
 <td>Betreiberfestlegung</td>
 <td>Betreiber bestätigt 25.10.2026 (ADR-004); nachgetragen 27.10.2026 (ADR-011); geändert 27.10.2026 (ADR-013)</td>
+</tr><tr><td>ANK-71</td>
+<td>Client-Timeout AP1: Pflichtfeld <code>timeout_s</code> je Modell in <code>plan.yaml</code>, für alle drei Modelle 1800 s; Herleitung: <code>max_completion_tokens</code> 16384 des Endpunkts <code>deepinfra/fp8</code> brauchen bei 11,8 Tokens/s (langsamster Durchsatz der fehlerfreien Qwen-Aufrufe in Pilot 2) 1388 s, 1800 s reichen bis 9,1 Tokens/s; Nachtrag nach Pilot 2, ändert kein Kriterium</td>
+<td>A.4</td>
+<td>ADR-014 (Betreiberfestlegung 28.10.2026); OpenRouter-Endpunktlisten <code>qwen/qwen3-32b</code>, Schnappschüsse 27.10.2026 (<code>quellen/anbieter_2026-10-27/openrouter/openrouter_api_v1_endpoints_qwen3-32b.json</code>) und 28.10.2026 (<code>quellen/anbieter_2026-10-28_preise/openrouter/openrouter_api_v1_endpoints_qwen3-32b.json</code>), Eintrag <code>deepinfra/fp8</code>, Feld <code>max_completion_tokens</code>; Durchsatz aus dem Store von Pilot 2 (<code>llmsa-runs/ap1_runs_2_nach_pilot.sqlite</code>)</td>
+<td>Betreiberfestlegung</td>
+<td>Betreiber bestätigt 28.10.2026 (ADR-014)</td>
 </tr></tbody></table></div>
 <div class="section level2">
 <h2 id="m3a--übereinstimmung-bias-linearität">M3a — Übereinstimmung, Bias, Linearität<a class="anchor" aria-label="anchor" href="#m3a--%C3%BCbereinstimmung-bias-linearit%C3%A4t"></a></h2>
@@ -572,7 +578,7 @@
 </tr></tbody></table></div>
 <div class="section level2">
 <h2 id="nicht-vergeben">Nicht vergeben<a class="anchor" aria-label="anchor" href="#nicht-vergeben"></a></h2>
-<p>ANK-04, 05, 07–09, 11, 12, 15, 17–20, 22–24, 26, 27, 29–31, 33–39, 48, 49, 71, 77–79, 83–85, 88, 90–92 sind frei für Nachträge des Reviewers (jeder Nachtrag mit ADR, wenn er ein Kriterium ändert); die am 24.10. gestrichenen Nummern (Toleranzen, jetzt in ANK-TOL; Orakel ohne Anker) werden nicht neu belegt, damit alte Verweise eindeutig bleiben.</p>
+<p>ANK-04, 05, 07–09, 11, 12, 15, 17–20, 22–24, 26, 27, 29–31, 33–39, 48, 49, 77–79, 83–85, 88, 90–92 sind frei für Nachträge des Reviewers (jeder Nachtrag mit ADR, wenn er ein Kriterium ändert); die am 24.10. gestrichenen Nummern (Toleranzen, jetzt in ANK-TOL; Orakel ohne Anker) werden nicht neu belegt, damit alte Verweise eindeutig bleiben.</p>
 </div>
 </div>
 

@@ -442,8 +442,8 @@
 </tr><tr><td>BL-74</td>
 <td>R</td>
 <td>Laufzeit: Pilot 1 war rein latenzgebunden (Mittel je Aufruf Sol 31 s, Qwen 44 s, Llama 2 s; 90 Aufrufe in 39 min, nacheinander). Hochgerechnet etwa 19 h je Hauptplan-Block und 26 h für die Robustheitsläufe.</td>
-<td>Blöcke so legen, dass jeder Block in sich geschlossen läuft; Parallelisierung je Modell bei Bedarf per ADR.</td>
-<td>03 A.5, A.8 Nr. 4; ADR-013</td>
+<td>Blöcke so legen, dass jeder Block in sich geschlossen läuft; Parallelisierung je Modell bei Bedarf per ADR. Stand 28.10. nach Pilot 2 (ADR-014): Mittel je Aufruf Sol 27,9 s, Qwen 68,2 s mit drei Abbrüchen bei 120 s, Llama 0,4 s; hochgerechnet etwa 24 h je Block und 32 h für die Robustheitsläufe, nacheinander; mit <code>timeout_s</code> 1800 eher mehr.</td>
+<td>03 A.5, A.8 Nr. 4; ADR-013; ADR-014</td>
 </tr></tbody></table></div>
 
   </main></div>

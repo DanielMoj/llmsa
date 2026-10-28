@@ -139,10 +139,14 @@ timeout in seconds, and further fields merged into the JSON body.
 null) and optional <code>provider</code> are recorded in <code>meta</code>. A reasoning text in
 <code>message.reasoning</code> (as some OpenRouter endpoints return it) is recorded
 as <code>reasoning</code> when it is a non-empty string; otherwise the key is absent.
-<code>reasoning_details</code> is not stored. Requested routing
+<code>reasoning_details</code> is not stored. <code>finish_reason</code> and
+<code>native_finish_reason</code> of the first choice are recorded under these names
+when they are non-empty strings, so that a reply cut at the token limit can
+be told apart from an unreadable one. Requested routing
 is recorded as <code>provider_order</code>, <code>quantizations</code> and <code>allow_fallbacks</code>.
 Requested <code>seed</code>, <code>temperature</code> and <code>reasoning_effort</code>, when present, are
-retained as metadata for comparison with the study plan.
+retained as metadata for comparison with the study plan, and the request
+timeout as <code>timeout_s</code>.
 Only <code>message.content</code> is parsed; credentials and headers are not stored.</p></dd>
 
 </dl></div>

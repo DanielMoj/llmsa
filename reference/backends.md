@@ -90,11 +90,15 @@ backend_openai_compatible(
   recorded in `meta`. A reasoning text in `message.reasoning` (as some
   OpenRouter endpoints return it) is recorded as `reasoning` when it is
   a non-empty string; otherwise the key is absent. `reasoning_details`
-  is not stored. Requested routing is recorded as `provider_order`,
+  is not stored. `finish_reason` and `native_finish_reason` of the first
+  choice are recorded under these names when they are non-empty strings,
+  so that a reply cut at the token limit can be told apart from an
+  unreadable one. Requested routing is recorded as `provider_order`,
   `quantizations` and `allow_fallbacks`. Requested `seed`, `temperature`
   and `reasoning_effort`, when present, are retained as metadata for
-  comparison with the study plan. Only `message.content` is parsed;
-  credentials and headers are not stored.
+  comparison with the study plan, and the request timeout as
+  `timeout_s`. Only `message.content` is parsed; credentials and headers
+  are not stored.
 
 ## Value
 

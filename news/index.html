@@ -40,12 +40,15 @@
 <li>
 <code><a href="../reference/backends.html">backend_openai_compatible()</a></code> records a non-empty <code>message.reasoning</code> of the reply as <code>meta$reasoning</code> (Qwen3-32B via OpenRouter returns its reasoning there). <code>reasoning_details</code> is not stored, and only <code>message.content</code> is parsed.</li>
 <li>
+<code><a href="../reference/backends.html">backend_openai_compatible()</a></code> records <code>finish_reason</code> and <code>native_finish_reason</code> of the first choice as <code>meta$finish_reason</code> and <code>meta$native_finish_reason</code> when they are non-empty strings, and the request timeout as <code>meta$timeout_s</code>. The default <code>timeout = 120</code> is unchanged.</li>
+<li>
 <code>parse_choice(whole_word = TRUE)</code> matches whole phrases, preferring longer phrases and rejecting ambiguous classifications. The default remains unchanged.</li>
 <li>
 <code>msa_run(parse_by_prompt = ...)</code> can select a parser for each prompt while retaining the raw response and the existing resumable store format. Numeric JSON metadata are now stored without rounding; small recorded API costs previously could be rounded to zero.</li>
 <li>
 <code>msa_report(assessment = ...)</code> accepts validated application criteria, an overall decision and additional report sections, including a robustness half-normal plot.</li>
 <li>The internal AP1 pipeline adds frozen study inputs, a YAML plan, an explicit mock/API runner, pilot checks and per-model assessment. Its functions are not exported. AP1 results are provisional until the M1 statistical validation.</li>
+<li>The AP1 plan requires a client timeout per model (<code>timeout_s</code>, 1800 s for all three models), which the runner passes to <code><a href="../reference/backends.html">backend_openai_compatible()</a></code>. The AP1 pilot has a fifth pass rule, <code>backend_errors</code>: a backend error share of at most <code>error_share_trigger</code> per model, unreadable answers not counted. The pilot summary reports the maximum latency.</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0" id="llmsa-010">llmsa 0.1.0<a class="anchor" aria-label="anchor" href="#llmsa-010"></a></h2>
