@@ -73,6 +73,7 @@ Wechsel je Phase (Betreiber-Commits zwischen Meilensteinen):
 | --- | --- |
 | vor M2 (zweiter Meilenstein, direkt nach M0) | `QA_ENABLED=1`; Validierungsplan Anhang A freigegeben; API-Aufzeichnungen unter `tests/fixtures/api/` (BL-26); Zugänge und Ausgabelimits angelegt; `--store`-Pfad außerhalb des Repos |
 | vor M1a | Formelsammlung gegen Quellen geprüft (erledigt 24.10.) |
+| M1a bis M1d, je Meilenstein | Start mit `AUTONOMY_LEVEL=0`: Halt nach der Acceptance; der Betreiber prüft `CRITERIA.json` und die Abnahmetests gegen Formelsammlung und Anker; danach `AUTONOMY_LEVEL=1` bis DONE; vor dem nächsten Meilenstein wieder 0 (ADR-011, Nachtrag 28.10.2026) |
 | nach M1b | Vollläufe `ordinal_recovery`, `binary_recovery`, `two_level` mit den Builder-Skripten rechnen und `*_results.csv`, `*_replicates.csv`, `*_session.txt` committen (01 §8) |
 | nach M1c, vor M1d | Volllauf `boot_coverage` rechnen (Nachtlauf, BL-12) und committen; erst dann M1d starten |
 | vor M3a | `MUT_SCOPE_REGEX='^R/.*\.R$'`; `orchestrator/state/mut-baseline` entfernen oder zurücksetzen (BL-24) |

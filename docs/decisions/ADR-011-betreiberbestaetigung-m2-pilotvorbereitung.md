@@ -45,3 +45,14 @@ Angenommen (Betreiber, 27.10.2026). Bindend ab dem AP1-Pilot.
   - `bash orchestrator/lib/r-check.sh` endet mit „pass — Status: OK“.
   - `git diff --stat done/M2 -- tests/acceptance tests/e2e tests/fuzz tests/fixtures reference/anchors inst/extdata` ist leer.
 - BL-63 und BL-69 sind erledigt.
+
+## Nachtrag 28.10.2026 — AUTONOMY_LEVEL in M1a bis M1d
+
+- Betreiberentscheidung vom 28.10.2026, umgesetzt als Betreiberänderung nach BL-01 außerhalb des Harness (Orchestrator angehalten, kein `orchestrator/.lock`; Umsetzung mit Claude Code).
+- Entscheidung 5 zur Prüfung vom 27.10.2026 bleibt stehen: `AUTONOMY_LEVEL=0` vor M1a, wie `docs/gates-auswahl.md` §2 vorsieht. Dieser Nachtrag legt fest, wie sie angewandt wird, weil `AUTONOMY_LEVEL=0` nach jeder einzelnen Phase hält (`PHASES_PER_RUN=1` in `orchestrator/orchestrate.sh`). Die Entscheidung stand bisher nicht in diesem ADR; Nr. 5 oben betrifft die Tokenzählung.
+- Je Meilenstein M1a bis M1d:
+  - Start mit `AUTONOMY_LEVEL=0`. Die erste Phase eines Meilensteins ist `10-acceptance`; der Orchestrator hält also nach der Acceptance.
+  - Der Betreiber prüft `CRITERIA.json` und die Abnahmetests gegen Formelsammlung und Anker.
+  - Danach `AUTONOMY_LEVEL=1` bis DONE.
+  - Vor dem nächsten Meilenstein wieder 0.
+- `docs/gates-auswahl.md` §2 nennt das Vorgehen in der Tabelle „Wechsel je Phase“ als eigene Zeile nach „vor M1a“.
