@@ -371,8 +371,9 @@
 <td>03 K-M2-4, A.4, A.6; ANK-61, ANK-67</td>
 </tr><tr><td>BL-62</td>
 <td>O</td>
-<td>Reasoning und Modellidentität bei Sol nur begrenzt prüfbar: Sol meldet bei <code>reasoning_effort</code> <code>medium</code> auf die Testfrage 0 Reasoning-Tokens (<code>sol.json</code>, 26.10.2026); <code>system_fingerprint</code> ist in allen drei Aufzeichnungen <code>null</code>, und Sol meldet nur <code>gpt-6.1-sol</code>, ein Modellwechsel hinter der Kennung ist also nicht erkennbar</td>
-<td>Offen bis Pilot und Bericht: im Pilot die Reasoning-Tokens von Sol je Aufruf berichten; bleibt es bei 0, die Wirkung von <code>reasoning_effort</code> über Chat Completions klären; im Bericht (A.7) die fehlende Erkennbarkeit eines Modellwechsels als Grenze nennen. Stand 27.10. (M2 REVIEW r1): <code>plan.yaml</code> (<code>reporting.limitations</code>) und die Berichte nennen die Grenze („Missing fingerprints and unchanged model identifiers cannot rule out silent model changes“); der Pilot berichtet Median und 90-%-Quantil der Reasoning-Tokens je Modell; offen bis zum Pilot</td>
+<td><del>Reasoning und Modellidentität bei Sol nur begrenzt prüfbar: Sol meldet bei <code>reasoning_effort</code> <code>medium</code> auf die Testfrage 0 Reasoning-Tokens (<code>sol.json</code>, 26.10.2026); <code>system_fingerprint</code> ist in allen drei Aufzeichnungen <code>null</code>, und Sol meldet nur <code>gpt-6.1-sol</code>, ein Modellwechsel hinter der Kennung ist also nicht erkennbar</del></td>
+<td>
+<del>Offen bis Pilot und Bericht: im Pilot die Reasoning-Tokens von Sol je Aufruf berichten; bleibt es bei 0, die Wirkung von <code>reasoning_effort</code> über Chat Completions klären; im Bericht (A.7) die fehlende Erkennbarkeit eines Modellwechsels als Grenze nennen. Stand 27.10. (M2 REVIEW r1): <code>plan.yaml</code> (<code>reporting.limitations</code>) und die Berichte nennen die Grenze („Missing fingerprints and unchanged model identifiers cannot rule out silent model changes“); der Pilot berichtet Median und 90-%-Quantil der Reasoning-Tokens je Modell; offen bis zum Pilot</del> Stand 27.10. (Betreiber, Pilot 1, ADR-013): Sol meldet bei <code>reasoning_effort</code> <code>medium</code> in allen 30 Pilotantworten Reasoning-Tokens (342 bis 1.339, Median 821); die Klärung über Chat Completions entfällt. <code>system_fingerprint</code> ist in allen 30 Antworten <code>null</code>, die Modellkennung durchgehend <code>gpt-6.1-sol</code>; die Grenze nennen <code>reporting.limitations</code> und die Berichte. <strong>Erledigt</strong> 27.10.2026</td>
 <td>03 A.4, A.6, A.7; ANK-53, ANK-67</td>
 </tr><tr><td>BL-63</td>
 <td>Q</td>
@@ -438,6 +439,11 @@
 <td>Pilotzusammenfassung (ADR-011 Nr. 5): Der Bericht erklärt die Spalten <code>reasoning_exceeds_completion</code>, <code>usage_cost_usd</code> und <code>recomputed_cost_usd</code> nicht; <code>recomputed_cost_usd</code> steht für Sol auf NA, obwohl sich die Kosten aus Tokens und Planpreisen rechnen ließen (Vergleich mit dem OpenAI-Dashboard).</td>
 <td>Vor dem AP1-Bericht: ein Satz im Abschnitt Pilot measurements; <code>recomputed_cost_usd</code> für alle Modelle, <code>usage_cost_usd</code> nur, wo die API <code>usage.cost</code> liefert.</td>
 <td>ADR-011 Nr. 5; ADR-009</td>
+</tr><tr><td>BL-74</td>
+<td>R</td>
+<td>Laufzeit: Pilot 1 war rein latenzgebunden (Mittel je Aufruf Sol 31 s, Qwen 44 s, Llama 2 s; 90 Aufrufe in 39 min, nacheinander). Hochgerechnet etwa 19 h je Hauptplan-Block und 26 h für die Robustheitsläufe.</td>
+<td>Blöcke so legen, dass jeder Block in sich geschlossen läuft; Parallelisierung je Modell bei Bedarf per ADR.</td>
+<td>03 A.5, A.8 Nr. 4; ADR-013</td>
 </tr></tbody></table></div>
 
   </main></div>
