@@ -11,7 +11,8 @@
     },
     "ndc": {
       "constant": 1.41,
-      "formula": "1.41 · σ_PV / σ_GRR, abgerundet auf eine ganze Zahl",
+      "minimum": 1,
+      "formula": "max(1, ⌊1.41 · σ_PV / σ_GRR⌋): 1.41 · σ_PV / σ_GRR, abgerundet auf eine ganze Zahl, mindestens 1",
       "source_rule_below_one": "maximum of one or the calculated value truncated to the integer",
       "adequate_min": 5
     },
@@ -37,10 +38,11 @@
     {"quote": "ndc = 1.41 1.04233", "location": "Druckseite 128 (PDF 137), ANOVA-Beispiel (.layout.txt Zeile 6403); Fortsetzung in Zeile 6404 „.30237 … = 4.861 … 5“ mit Zeichen der Symbolschrift (U+F029, U+F040)"},
     {"quote": "oder nach %Contribution mit t₁ = 1 und t₂ = 9 (Konvention, Quadrat der StudyVar-Schwellen; nicht im Handbuch)", "location": "reference/privat/07_Formelsammlung_llmsa.md §3, Absatz Verdikt"},
     {"quote": "Grenzfälle: genau 10,0 % und genau 30,0 % sind „bedingt\"; das entspricht dem Wortlaut der Tabelle.", "location": "reference/privat/07_Formelsammlung_llmsa.md §3, Absatz Verdikt (im Original schließt das Zitatzeichen mit einem geraden Anführungszeichen)"},
-    {"quote": "AIAG: ndc = ⌊1,41 · σ_PV/σ_GRR⌋; Verdikt nach % Studienvariation mit Schwellen 10 und 30, genau 10,0 % und 30,0 % sind „bedingt“ (`marginal`); Basis `contribution` mit 1 und 9 als Konvention.", "location": "docs/01-fachspezifikation.md §5, erster Punkt"}
+    {"quote": "Abgerundet auf eine ganze Zahl und mindestens 1 (AIAG 2010, S. 123: „For analysis, the ndc is the maximum of one or the calculated value truncated to the integer.“; Nachtrag 28.10.2026)", "location": "reference/privat/07_Formelsammlung_llmsa.md §3, Absatz „Anzahl unterscheidbarer Kategorien“ (Nachtrag 28.10.2026 nach ADR-016, E4)"},
+    {"quote": "AIAG: ndc = max(1, ⌊1,41 · σ_PV/σ_GRR⌋) (AIAG 2010, Druckseite 123); Verdikt nach % Studienvariation mit Schwellen 10 und 30, genau 10,0 % und 30,0 % sind „bedingt“ (`marginal`); Basis `contribution` mit 1 und 9 als Konvention.", "location": "docs/01-fachspezifikation.md §5, erster Punkt (Fassung nach ADR-016, E4)"}
   ],
-  "observations": "Unterhalb von 1 weichen Spec und Quelle voneinander ab: docs/02 K-M1a-5 und Formelsammlung §3 schreiben ndc = ⌊1,41 · σ_PV/σ_GRR⌋ (ergibt 0 für Werte unter 1), das Handbuch (Druckseite 123) setzt mindestens 1. Für Werte ab 1 sind beide gleich. Die Abnahmetests prüfen ndc nur ab 1; die Lesart unter 1 ist an den Betreiber gemeldet (orchestrator/handoff/M1a/CRITERIA.json, open).",
+  "observations": "Bis zur Acceptance von M1a wichen Spec und Quelle unterhalb von 1 voneinander ab: docs/02 K-M1a-5, docs/01 §5 und Formelsammlung §3 schrieben ndc = ⌊1,41 · σ_PV/σ_GRR⌋ (ergibt 0 für Werte unter 1), das Handbuch (Druckseite 123) setzt mindestens 1. Der Betreiber hat mit ADR-016 (E4) nach der Quelle entschieden: ndc = max(1, ⌊1,41 · σ_PV/σ_GRR⌋); so steht die Formel jetzt in docs/01 §5, docs/02 K-M1a-5, AGENTS.md (Projektblock) und Formelsammlung §3. value.ndc.minimum hält die Untergrenze; die Abnahmetests lesen Konstante und Untergrenze aus diesem Anker und prüfen ndc auch für 1,41 · σ_PV/σ_GRR unter 1.",
   "retrieved": "2026-10-28",
   "method": "Textspiegel gelesen (Lesereihenfolge .pdf.txt für die Tabellenzellen, .layout.txt für Formeln); Formelsammlung §3 und docs/01 §5 für die Konvention und die Grenzfallregel.",
-  "verification": "Die Schwellen 10 und 30, die Konstante 1,41 und die Grenzfallregel stehen gleichlautend in docs/01 §3 Nr. 7, 8 und 13, §5 und in AGENTS.md (Projektblock, AIAG-Konventionen); das Handbuchbeispiel ANK-10 (ndc 4.861 → 4 in Tab. III-B 10) folgt der Konstante 1,41, nicht √2."
+  "verification": "Die Schwellen 10 und 30, die Konstante 1,41 und die Grenzfallregel stehen gleichlautend in docs/01 §3 Nr. 7, 8 und 13, §5 und in AGENTS.md (Projektblock, AIAG-Konventionen); das Handbuchbeispiel ANK-10 (ndc 4.861 → 4 in Tab. III-B 10) folgt der Konstante 1,41, nicht √2. Nachtrag 28.10.2026 (Wiederholung der Acceptance M1a, ADR-016 E4): Die Untergrenze 1 steht wörtlich auf Druckseite 123 (further_quotes) und gleichlautend in docs/01 §5, docs/02 K-M1a-5, AGENTS.md (Projektblock: „ndc mit 1,41, Abrundung und mindestens 1“), docs/00-vision.md (Tabelle) und Formelsammlung §3; SixSigma::ss.rr liefert für Werte unter 1 ebenfalls 1 (ADR-016, Kontext ACC-7)."
 }

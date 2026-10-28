@@ -1,13 +1,14 @@
 # K-M1a-5: AIAG statistics and verdict of msa_grr() on constructed components:
 # % contribution 100 sigma2_X / sigma2_TV, % study variation 100 sigma_X /
-# sigma_TV, ndc = floor(1.41 sigma_PV / sigma_GRR), ICC_items = sigma2_PV /
-# sigma2_TV (Formelsammlung §3); verdict marginal at exactly 10.0 % and 30.0 %,
-# acceptable just below 10, marginal just below 30, marginal just above 10,
-# unacceptable just above 30 (thresholds and constant ankerRef: ANK-16);
-# sigma2_GRR = 0 gives ndc = Inf and "acceptable", sigma2_TV = 0 gives
-# "undetermined" without error. Constructed components replace the variances of
-# a real msa_fit; recomputation with ANK-TOL.arithmetic (ACC-12). ndc is only
-# checked from 1 upwards (ACC-7).
+# sigma_TV, ndc = max(1, floor(1.41 sigma_PV / sigma_GRR)), ICC_items =
+# sigma2_PV / sigma2_TV (Formelsammlung §3); verdict marginal at exactly 10.0 %
+# and 30.0 %, acceptable just below 10, marginal just below 30, marginal just
+# above 10, unacceptable just above 30 (thresholds, constant and lower bound of
+# ndc ankerRef: ANK-16); sigma2_GRR = 0 gives ndc = Inf and "acceptable",
+# sigma2_TV = 0 gives "undetermined" without error. Constructed components
+# replace the variances of a real msa_fit; recomputation with
+# ANK-TOL.arithmetic (ACC-12). Lower bound of ndc for 1.41 sigma_PV / sigma_GRR
+# below 1: ADR-016 E4.
 
 acc_m1a_5_sources <- c("item", "prompt", "model", "block", "item:prompt", "item:model", "prompt:model", "Residual")
 
@@ -64,18 +65,34 @@ test_that("K-M1a-5: msa_grr() computes % contribution, % study variation, ndc an
   expect_true(isTRUE(acc_m1a_summary(g, "ndc") == r$ndc))
 })
 
-test_that("K-M1a-5: ndc = floor(1.41 sigma_PV / sigma_GRR) with the constant of ANK-16, not sqrt(2) (ankerRef: ANK-16)", {
+test_that("K-M1a-5: ndc = max(1, floor(1.41 sigma_PV / sigma_GRR)) with the constant of ANK-16, not sqrt(2) (ankerRef: ANK-16)", {
   k <- acc_m1a_ndc_constant()
   # ratio sigma_PV / sigma_GRR; 3.54 separates 1.41 (4.99 -> 4) from sqrt(2) (5.006 -> 5)
+  m <- acc_m1a_ndc_minimum()
   for (ratio in c(3.54, 1.2, 2.5, 3.4472, 7.3, 12.9)) {
     g <- msa_grr(acc_m1a_5_construct(item = ratio^2, Residual = 0.6, prompt = 0.4))
-    expected <- floor(k * ratio)
-    expect_true(expected >= 1)
+    expected <- max(m, floor(k * ratio))
+    expect_true(floor(k * ratio) >= 1)
     expect_true(isTRUE(acc_m1a_summary(g, "ndc") == expected),
-                label = sprintf("ratio %.4f: ndc %s, expected floor(%.4f) = %d", ratio,
-                                format(acc_m1a_summary(g, "ndc")), k * ratio, expected))
+                label = sprintf("ratio %.4f: ndc %s, expected max(%g, floor(%.4f)) = %g", ratio,
+                                format(acc_m1a_summary(g, "ndc")), m, k * ratio, expected))
   }
   expect_false(floor(k * 3.54) == floor(sqrt(2) * 3.54))
+})
+
+test_that("K-M1a-5: ndc is the lower bound 1 of ANK-16 when 1.41 sigma_PV / sigma_GRR is below 1 (ankerRef: ANK-16; ADR-016 E4)", {
+  k <- acc_m1a_ndc_constant()
+  m <- acc_m1a_ndc_minimum()
+  # ratio sigma_PV / sigma_GRR with 1.41 * ratio below 1 (0.987, 0.705, 0.0705,
+  # 0): truncation alone gives 0, the lower bound gives 1
+  for (ratio in c(0.7, 0.5, 0.05, 0)) {
+    expect_lt(k * ratio, 1)
+    expect_identical(floor(k * ratio), 0)
+    g <- msa_grr(acc_m1a_5_construct(item = ratio^2, Residual = 0.6, prompt = 0.4))
+    expect_true(isTRUE(acc_m1a_summary(g, "ndc") == m),
+                label = sprintf("ratio %.4f: ndc %s, expected max(%g, floor(%.4f)) = %g", ratio,
+                                format(acc_m1a_summary(g, "ndc")), m, k * ratio, m))
+  }
 })
 
 test_that("K-M1a-5: %GRR exactly 10.0 % and exactly 30.0 % are marginal (ankerRef: ANK-16)", {

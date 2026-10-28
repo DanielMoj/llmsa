@@ -97,11 +97,14 @@ test_that("K-M1a-7: the expected values of the NIST checks are the certified val
   }
 })
 
-test_that("K-M1a-7: the expected values of the Penicillin check are the published estimates of ANK-13 (ankerRef: ANK-13; open ACC-1)", {
-  pub <- acc_m1a_value("ANK-13", "sd")
+test_that("K-M1a-7: the expected values of the Penicillin check are the published estimates of ANK-13 (ankerRef: ANK-13)", {
   cells <- acc_m1a_7_expected(acc_m1a_7_tables(), "ANK-13")
   expect_true(length(cells) > 0L)
-  for (k in names(pub)) acc_m1a_7_expect_shown(cells, as.numeric(pub[[k]]), paste("ANK-13 sd", k))
+  # variances and standard deviations: the check compares both (ADR-016 E1)
+  for (what in c("variance", "sd")) {
+    pub <- acc_m1a_value("ANK-13", what)
+    for (k in names(pub)) acc_m1a_7_expect_shown(cells, as.numeric(pub[[k]]), paste("ANK-13", what, k))
+  }
 })
 
 test_that("K-M1a-7: no value of the M1a anchors is typed into validation.Rmd (read from reference/anchors/)", {
@@ -114,8 +117,7 @@ test_that("K-M1a-7: no value of the M1a anchors is typed into validation.Rmd (re
     expect_match(text, id, fixed = TRUE, label = paste("validation.Rmd names", id))
   }
   lit <- acc_m1a_rmd_literals(src)
-  ids <- c("ANK-10", "ANK-14", "ANK-16",
-           if (file.exists(file.path(acc_repo_root(), "reference", "anchors", "ANK-13.json"))) "ANK-13")
+  ids <- c("ANK-10", "ANK-13", "ANK-14", "ANK-16")
   values <- unique(unlist(lapply(ids, function(id) acc_m1a_leaves(acc_anchor(id)$value))))
   values <- values[is.finite(values) & values != round(values)]
   tol <- acc_anchor("ANK-TOL")$value[c("reml_anova", "oracle", "nist_digits", "invariance")]

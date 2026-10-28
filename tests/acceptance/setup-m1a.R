@@ -11,7 +11,8 @@
 # The mini-references below are written independently of the package code from
 # Formelsammlung §2 (expected mean squares) and §3 (gauge R&R statistics).
 # Interpretations of points on which the spec is silent are listed in
-# orchestrator/handoff/M1a/CRITERIA.json under "open" (ACC-n).
+# orchestrator/handoff/M1a/CRITERIA.json under "open" (ACC-n); the operator
+# decisions after the first acceptance are ADR-016 (E1 to E4).
 
 acc_m1a <- new.env(parent = emptyenv())   # cache for one test run
 
@@ -41,10 +42,32 @@ acc_m1a_value <- function(id, ...) {
 }
 
 acc_m1a_ndc_constant <- function() as.numeric(acc_m1a_value("ANK-16", "ndc", "constant"))
+# Lower bound of ndc (AIAG 2010, p. 123; ADR-016 E4).
+acc_m1a_ndc_minimum <- function() as.numeric(acc_m1a_value("ANK-16", "ndc", "minimum"))
 acc_m1a_thresholds <- function() {
   c(as.numeric(acc_m1a_value("ANK-16", "study_var", "acceptable_below")),
     as.numeric(acc_m1a_value("ANK-16", "study_var", "unacceptable_above")))
 }
+
+# Optimizer of ANK-TOL.reml_anova (ADR-016 E3): the entry must read exactly
+# lmerControl(optimizer = "<name>") and appear in the quote of the entry; any
+# other form stops the test instead of being ignored.
+acc_m1a_reml_optimizer <- function() {
+  spec <- acc_m1a_tol("reml_anova", "optimizer")
+  m <- regmatches(spec, regexec("^lmerControl\\(optimizer = \"([A-Za-z_]+)\"\\)$", spec))[[1]]
+  if (length(m) != 2L) {
+    stop("acceptance: ANK-TOL.reml_anova.optimizer is not of the form lmerControl(optimizer = \"<name>\"): ", spec,
+         call. = FALSE)
+  }
+  if (!grepl(spec, acc_m1a_tol("reml_anova", "quote"), fixed = TRUE)) {
+    stop("acceptance: ANK-TOL.reml_anova.optimizer does not appear in ANK-TOL.reml_anova.quote", call. = FALSE)
+  }
+  m[2]
+}
+
+# lmerControl with the optimizer of ANK-TOL.reml_anova, otherwise the lme4
+# defaults (ADR-016 E3).
+acc_m1a_reml_control <- function() lme4::lmerControl(optimizer = acc_m1a_reml_optimizer())
 
 # Data ---------------------------------------------------------------------------
 
@@ -107,6 +130,19 @@ acc_m1a_simulate <- function(design, seed = 1L) {
   acc_m1a_with_seed(seed, msa_simulate(20, 4, 3, 3, design$blocks, vc = design$vc, seed = seed))
 }
 
+# lme4::Penicillin with item = sample, prompt = plate, one model, one block,
+# one replicate (docs/02 K-M1a-1, K-M1a-3; ANK-13).
+acc_m1a_penicillin <- function() {
+  e <- new.env(parent = emptyenv())
+  utils::data("Penicillin", package = "lme4", envir = e)
+  e$Penicillin
+}
+
+acc_m1a_penicillin_runs <- function() {
+  p <- acc_m1a_penicillin()
+  acc_m1a_runs(item = p$sample, prompt = p$plate, model = "M1", rep = 1L, value = p$diameter)
+}
+
 # Random terms of the numeric model (Formelsammlung §2) for a factor frame:
 # main effects of factors with more than one level and, with interactions, the
 # two-way interactions among item, prompt and model.
@@ -161,7 +197,7 @@ acc_m1a_anova_estimates <- function(d, terms) {
 #
 # Formelsammlung §3: GRR = every source except the items (repeatability plus all
 # reproducibility parts), PV = items, TV = GRR + PV; ndc with the constant of
-# ANK-16, rounded down (ACC-7 for values below 1).
+# ANK-16, rounded down and at least the minimum of ANK-16 (ADR-016 E4).
 acc_m1a_grr_reference <- function(v) {
   if (!"item" %in% names(v)) stop("acceptance: no item component", call. = FALSE)
   item <- v[["item"]]
@@ -173,7 +209,7 @@ acc_m1a_grr_reference <- function(v) {
        grr_pct_contribution = 100 * grr / total,
        icc_items = item / total,
        ndc_raw = k * sqrt(item) / sqrt(grr),
-       ndc = floor(k * sqrt(item) / sqrt(grr)))
+       ndc = max(acc_m1a_ndc_minimum(), floor(k * sqrt(item) / sqrt(grr))))
 }
 
 # Verdict by percent study variation of GRR (ANK-16, Formelsammlung §3): below

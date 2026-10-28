@@ -1,0 +1,41 @@
+{
+  "id": "ANK-13",
+  "title": "Penicillin: publizierte REML-Schätzer des Modells fm2 (Varianzen und Standardabweichungen von plate, sample und Residual)",
+  "criteria": ["K-M1a-1", "K-M1a-3", "K-M1a-7"],
+  "value": {
+    "model": "fm2 <- lmer(diameter ~ 1 + (1|plate) + (1|sample), Penicillin), REML",
+    "mapping": "Item = sample, Prompt = plate, ein Modell, ein Block, ein Replikat; interactions = FALSE (docs/02 K-M1a-1, K-M1a-3)",
+    "design": {"observations": 144, "plate": 24, "sample": 6},
+    "variance": {"plate": 0.71691, "sample": 3.73097, "residual": 0.30241},
+    "sd": {"plate": 0.84671, "sample": 1.93157, "residual": 0.54992},
+    "decimals": {
+      "variance": {"plate": 5, "sample": 5, "residual": 5},
+      "sd": {"plate": 5, "sample": 5, "residual": 5}
+    }
+  },
+  "unit": "Varianzen in mm², Standardabweichungen in mm (Zielgröße diameter: Durchmesser der Hemmzone in mm, Hilfeseite lme4::Penicillin); design als Anzahlen; decimals = Zahl der gedruckten Nachkommastellen",
+  "tolerance": {
+    "variance": "ANK-TOL.reml_anova.component_tol_fraction_of_total_variance · σ²_TV, σ²_TV = Summe der gedruckten Varianzen von plate, sample und Residual",
+    "sd": "wie variance, verglichen auf der Varianzskala (gedruckte Standardabweichung quadriert)"
+  },
+  "tolerance_note": "ADR-016, Entscheidung E1: Toleranz ANK-TOL.reml_anova · σ²_TV auf der Varianzskala, nicht die halbe Einheit der letzten gedruckten Stelle. Die gedruckten Werte stammen aus lme4 von 2010 und weichen von den exakten Schätzern ab; mit der halben Einheit (5e-6) fielen schon die exakten Schätzer durch: Varianz sample 3.73097 gegen 3.7309179, Varianz Residual 0.30241 gegen 0.3024155, Standardabweichung plate 0.84671 gegen 0.8467043, Standardabweichung sample 1.93157 gegen 1.9315584 (Nachrechnung unter verification).",
+  "source_url": "Bates2010 (reference/privat/QUELLENKATALOG.md): Bates, D. M. (2010), lme4: Mixed-effects modeling with R, Buchentwurf (lMMwR, Stand 17.02.2010), Kap. 2 „Models With Multiple Random-effects Terms“, Abschnitt 2.1.2 „A Model For the Penicillin Data“, Druckseite 30 (PDF-Seite 4); Original http://lme4.r-forge.r-project.org/book/Ch2.pdf (am 28.10.2026 HTTP 503, ADR-016); lokale Kopie aus dem Wayback-Schnappschuss vom 10.04.2016: quellen/literatur/A_statistikkern/Bates_2010_lme4_Mixed-effects_Modeling_with_R_Entwurf_Kap2.pdf (1069704 Byte, SHA-256 cd89032df95a7bc81954ebf5577cbd3dc0df722e873c37dcbee021342fa51c41)",
+  "source": "Literatur (Buchentwurf, geschützt, bleibt lokal); Textspiegel reference/quellen/text/literatur/A_statistikkern/Bates_2010_lme4_Mixed-effects_Modeling_with_R_Entwurf_Kap2.pdf.layout.txt (Tabelle) und .pdf.txt; Daten lme4::Penicillin (Davies & Goldsmith 1972, Tab. 6.6), Orakeldaten nach AGENTS.md",
+  "quote": "plate (Intercept) 0.71691 0.84671",
+  "quote_location": "Druckseite 30 (PDF-Seite 4), Ausgabe von fm2, Abschnitt „Random effects“, Zeile plate; Spalten Groups, Name, Variance, Std.Dev. (Textspiegel .layout.txt Zeile 246, Leerraum zusammengefasst)",
+  "further_quotes": [
+    {"quote": "sample (Intercept) 3.73097 1.93157", "location": "Druckseite 30 (PDF-Seite 4), Zeile sample (.layout.txt Zeile 247, Leerraum zusammengefasst)"},
+    {"quote": "Residual 0.30241 0.54992", "location": "Druckseite 30 (PDF-Seite 4), Zeile Residual (.layout.txt Zeile 248, Leerraum zusammengefasst)"},
+    {"quote": "Groups Name Variance Std.Dev.", "location": "Druckseite 30 (PDF-Seite 4), Tabellenkopf der Zufallseffekte (.layout.txt Zeile 245, Leerraum zusammengefasst)"},
+    {"quote": "> (fm2 <- lmer(diameter ~ 1 + (1|plate) + (1|sample), Penicillin))", "location": "Druckseite 30 (PDF-Seite 4), Abschnitt 2.1.2 (.layout.txt Zeile 237)"},
+    {"quote": "Linear mixed model fit by REML", "location": "Druckseite 30 (PDF-Seite 4), Kopf der Ausgabe (.layout.txt Zeile 239)"},
+    {"quote": "Number of obs: 144, groups: plate, 24; sample, 6", "location": "Druckseite 30 (PDF-Seite 4), unter den Zufallseffekten (.layout.txt Zeile 249)"},
+    {"quote": "2.1.2 A Model For the Penicillin Data", "location": "Abschnittstitel, Druckseite 30 (PDF-Seite 4) (.layout.txt Zeile 232)"},
+    {"quote": "Page: 30 job: lMMwR macro: svmono.cls date/time: 17-Feb-2010/14:23", "location": "Fußzeile von PDF-Seite 4 (.layout.txt Zeile 266, Leerraum zusammengefasst)"},
+    {"quote": "$ diameter: num 27 23 26 23 23 21 27 23 26 23 ...", "location": "Druckseite 28 (PDF-Seite 2), Ausgabe von str(Penicillin) (.layout.txt Zeile 69)"}
+  ],
+  "observations": "K-M1a-3 (c) prüft msa_fit auf lme4::Penicillin gegen diesen Anker; K-M1a-7 nennt ihn in der Vignettentabelle. K-M1a-1 prüft dieselben Daten gegen die ANOVA-Schätzer aus stats::aov und braucht keinen Ankerwert; diese Nachrechnung ist zugleich der Zweitbeleg des Reviewers nach ADR-016 E1. Die Varianzen und Standardabweichungen sind gedruckte Rundungen derselben Schätzung und untereinander nur bis 1.6e-6 · σ²_TV konsistent (0.84671² = 0.7169178 gegen 0.71691); deshalb werden beide auf der Varianzskala mit derselben Toleranz verglichen.",
+  "retrieved": "2026-10-28",
+  "method": "Textspiegel (pdftotext -layout) gelesen und am Original gegengeprüft: Die lokale PDF hat die SHA-256 aus source_url (von R aus berechnet; gleich dem Wert in ADR-016 und den ersten 16 Zeichen im Kopf des Textspiegels); pdftotext -f 4 -l 4 -layout auf diese Datei liefert dieselben Tabellenzeilen. Die PDF ist mit pdfTeX 1.40.3 erzeugt (pdfinfo: Creator TeX, CreationDate 17.02.2010, 28 Seiten), die Textschicht stammt nicht aus OCR. Werte wie gedruckt übernommen, Zahl der Nachkommastellen in decimals.",
+  "verification": "Zweitbeleg nach ADR-016 E1 (Reviewer 28.10.2026, R 4.6.1, lme4 2.0.6): lme4::Penicillin ist balanciert (144 Beobachtungen, 24 plates × 6 samples, eine Beobachtung je Zelle) und gleicht der gedruckten Beschreibung auf Druckseite 28 (erste zehn Werte 27 23 26 23 23 21 27 23 26 23; Min. 18, Median 23, Mittel 22.97, Max. 27; je sample 24). ANOVA-Schätzer nach Formelsammlung §2 aus stats::aov(diameter ~ plate + sample), MS plate 4.6038647, MS sample 89.8444444, MS Residual 0.30241546: plate 0.71690821 (SD 0.84670432), sample 3.73091787 (SD 1.93155841), Residual 0.30241546 (SD 0.54992314), alle nichtnegativ, σ²_TV 4.7502415. lme4::lmer mit lmerControl(optimizer = \"bobyqa\") trifft sie auf 6e-8 · σ²_TV; REML-Kriterium 330.86 (gedruckt 330.9), Intercept 22.97222 (gedruckt 22.9722), Standardfehler 0.80857 (gedruckt 0.8086). Abweichung gedruckt − exakt als Anteil des gedruckten σ²_TV 4.75029: Varianzen plate 3.8e-7, sample 1.1e-5, Residual 1.1e-6; quadrierte Standardabweichungen plate 2.0e-6, sample 9.4e-6, Residual 7.3e-7; Toleranz 1e-4 (ANK-TOL.reml_anova). msa_fit v0.1.0 mit Paketvorgaben (interactions = FALSE) weicht vom gedruckten Wert höchstens 3.6e-5 · σ²_TV ab (sample), mit lmerControl(optimizer = \"bobyqa\") höchstens 1.1e-5."
+}
