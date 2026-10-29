@@ -1,5 +1,414 @@
 # PROGRESS — Langzeitgedächtnis des Builders
 
+## M2 — Abschlussnachtrag im M1a-BUILD (29.10.2026)
+
+`orchestrator/state/M2/gates.json` nennt Runde 3, `result: pass` und
+acht Gates mit `pass`; `orchestrator/handoff/M2/verdict-code.json`
+bestätigt `PASS` ohne blocking-Einwand. Das sind gelesene Fakten des
+Orchestrators/Reviewers, kein neuer Builder-Gate-Lauf.
+
+## M1a — BUILD, Runde 1 (29.10.2026)
+
+Grundlage: freigegebener PLAN samt PLAN-UPDATE und PLAN-REVIEW Runde 2,
+CRITERIA K-M1a-1 bis K-M1a-7, unveränderte Abnahmetests einschließlich
+Setup-Dateien, Rollen-/Implementierungsregeln, PROTOCOLS, Fachspezifikation
+§2–§8, Statistikkern M1a und die numerischen S-boot-Szenarien,
+Formelsammlung §1–§3 sowie ADR-016 bis ADR-019. ARBITER liegt nicht vor;
+LESSONS enthält keine Lehren. ADR-019 bestätigt ADR-018 und regelt die
+Mutationsinfrastruktur ausschließlich beim Betreiber.
+
+### Numerischer Vorversuch vor der Ressourcenarbeit
+
+Der Ausgangskern wurde ohne Git nach `/tmp/llmsa-m1a-build/baseline/`
+kopiert. Die Inventur erfasst 198 Produkt-, Test-, Anker-, Vertrags-,
+Dokumentations- und Handoff-Dateien. Schlüssel und Git-Metadaten wurden
+nicht gelesen. Gesicherte SHA-256:
+
+```text
+R/fit.R 761faa4c4519cea2770f4c746fe002f72b91979bb625cb3a598f2af7655c93e1
+R/grr.R 6c0d8b57e54f4a72a5667ad89f3b0119acd9ca020bb669a060e3ec2ed9224fed
+```
+
+Der unveränderte Ausgangslauf wurde mit `testthat::test_dir()` aus den
+Quellen ausgeführt (`filter = "^m1a-"`, `set_max_fails(Inf)`,
+`stop_on_failure = FALSE`, PDF-Gerät `pdf(NULL)`). Echter Output,
+Exit 1, `/tmp/llmsa-m1a-build/baseline-acceptance.log`:
+
+```text
+[ FAIL 88 | WARN 5 | SKIP 0 | PASS 486 ]
+M1a baseline: 54 tests; 21 failed blocks; 6 error blocks; 0 skipped; elapsed 22.56 s
+```
+
+Nach dem ersten Numerikentwurf lief derselbe Prüfweg mit
+`filter = "^m1a-[12346]-"`. Echter Output, Exit 1:
+
+```text
+Duration: 18.5 s
+[ FAIL 1 | WARN 0 | SKIP 0 | PASS 465 ]
+Numeric first: 40 tests; 0 failed blocks; 1 error blocks; 0 skipped
+Error: acceptance: vignette missing: /mnt/c/Users/Danie/dev/Llmsa/llmsa/vignettes/validation.Rmd
+```
+
+Alle numerischen Abnahmefälle dieses Laufs bestehen. Der eine Fehler
+ist die zu diesem Zeitpunkt bewusst noch nicht erzeugte Vignette in
+`test-m1a-4-nist.R:94`; der Test wurde weder geändert noch übersprungen.
+
+Anschließend ausgeführt (je Exit 0):
+
+```bash
+Rscript --vanilla /tmp/llmsa-m1a-build/go-no-go.R
+Rscript --vanilla /tmp/llmsa-m1a-build/robustness.R
+Rscript --vanilla /tmp/llmsa-m1a-build/derivatives.R
+Rscript --vanilla /tmp/llmsa-m1a-build/timing.R
+```
+
+Tatsächlicher Output:
+
+```text
+Invariance: 250 transformed fits; max component/TV 1.91366e-09; max relative metric 2.63966e-09; distant discrete cases 250; failures 0
+Methods: analytic_reml 30; closed_form 220
+Model consistency: VarCorr, sigma, response, fitted, residuals and predictions passed for all original and transformed fits
+Robustness: 200/200 fits completed; no errors
+Dense reference: criterion error 1.06581e-14; score error 5.32907e-15; Hessian relative error 1.18928e-10
+Serialization, refit control and same-seed bootMer: passed
+ic50_demo: before median 0.389 [0.389, 0.389] s; after median 0.461 [0.460, 0.478] s; ratio 1.185
+SmLs03: before median 0.043 [0.043, 0.050] s; after median 0.045 [0.045, 0.045] s; ratio 1.047
+msa_plan: before median 0.216 [0.215, 0.230] s; after median 0.544 [0.543, 0.660] s; ratio 2.519
+msa_boot: before median 0.103 [0.102, 0.108] s; after median 0.115 [0.113, 0.118] s; ratio 1.117
+```
+
+Aufbau, Seeds, Transformationen, Tabellen je Robustheitsszenario und
+Laufzeitgrößen stehen vollständig in ADR-020. Die CSVs unter demselben
+temporären Verzeichnis enthalten alle Einzelmessungen. Vier balancierte
+Designs × Seeds 1–6 und ic50_demo tragen je zehn Transformationen.
+Die S-boot-Szenarien 1–6 und die vier `msa_plan`-Beispielpläne tragen
+je Seeds 1–20. Keine ADEMP-/Coverage-Behauptung. Der Bootstrap-Vergleich
+verwendet acht Wiederholungen und Seed 37.
+
+Zwei frühe Fehler betrafen ausschließlich das temporäre Diagnoseskript:
+`refit()` ergänzt in lme4 das normale `print_level = 0` (daher Vergleich
+mit direktem lme4 statt Annahme einer leeren Ergebnisliste); eine lokal
+`eval` genannte Prüffunktion verdeckte `base::eval`. Beide Ursachen
+wurden im Skript korrigiert. Die Modellsteuerung selbst ist leer und
+der gespeicherte `lmerControl`-Ausdruck bleibt auswertbar. Der endgültige
+Nachweis oben lief danach vollständig.
+
+Der Vorversuch trägt die nächste Planstufe. ADR-020 begründet Numerik
+und Matrix-Import; ADR-021 begründet die neuen Validierungsressourcen
+einschließlich Golden-Pfad. Die endgültigen Prüfungen und die
+Territoriumsübergabe werden unten ergänzt; Gates sind noch nicht
+abgenommen.
+
+### Umsetzung und Antworten auf die Planhinweise
+
+`R/fit.R` enthält den gesamten neuen numerischen Pfad im bestehenden
+Mutations-Scope: unveränderte Doubles, stabile Konditionierung, EMS-Lösung,
+analytischer restringierter REML-Abschluss und endgültiger lme4-Modellbau
+auf Originaldaten. `vc` wird ausschließlich aus `VarCorr(model)` gewonnen.
+`numerics` ergänzt Methode, aktive Grenzen, Normen, Startdiagnostik und
+Zuordnung der beim Parsen behaltenen Eingabezeilen. Fehler werden benannt;
+ein gescheiterter Abschluss gibt keinen ungenauen Startfit zurück.
+
+`R/grr.R` setzt die ndc-Untergrenze und den spezielleren Nullfall aus
+ADR-017 um. Bei Gesamtvarianz null bleiben Varianzen/SD null, während
+Prozentwerte, ICC und ndc `NA_real_` sind; das Verdikt ist `undetermined`.
+Die Druckmethoden unterscheiden `NA` und `Inf`. Alle bisherigen
+öffentlichen Argumentpositionen und Vorgaben bleiben erhalten.
+
+| Planhinweis | Antwort und Beleg |
+| --- | --- |
+| E1, E3, E5–E7 | ADR-020; numerischer Vorversuch oben; unabhängige dichte Score-/Hessian-Rechnung, VarCorr-/sigma-/Antwort-/Vorhersageprüfungen, Serialisierung und Invarianz. Kleine positive Streuung und degenerierte Fälle werden getrennt behandelt. |
+| E2 | Wurzel-README unverändert. Anleitung unter `inst/validation/numeric/README.md`. |
+| E4 | Jeder Eintrag in `...` wählt den direkten lme4-Pfad. Unit-Vergleiche für Steuerung einschließlich `NULL`, Gewichte, Offset, Subset und Startwerte; unveränderter Nichtkonvergenz-Abnahmetest. |
+| E8, E13 | Gewöhnliche nloptwrap-Refits; derselbe Seed gegen direktes `bootMer`; getrennte Zeitmessungen und 200 erfolgreiche S-boot-/Planungsfits vor Ressourcenarbeit. Degenerierte Planung und AP1-Fehlerpräfix zusätzlich geprüft. |
+| E9 | Kleine Unit- und metamorphe Prüfungen; kein vollständiges Knitten und kein großes VCA-Orakel im Unit-Pfad. Der vollständige Testlauf steht unten. |
+| E10 | ADR-021; ganze Ankerkopien, Quellenmanifest, zwei strikte Kontexte, Original-/Kopien-Driftwache, rekursive Prüfung der `source`-/`sys.source`-Abhängigkeiten einschließlich Inline-R, Daten-/Hash-/Schema-Negativfälle. |
+| E11 | Nullfälle einschließlich Druckmethoden und `grr_stats()`-Verwendung durch den Bootstrap geprüft. Keine Abnahme vorweggenommen für die spätere Coverage-Studie. |
+| E12 [INFRA], E16 | Numerik bleibt in `R/fit.R`/`R/grr.R`. Testauswahl, Mutation-Scope und Schwellen bleiben unverändert. Der Builder schreibt keine Mutationsfakten und führt keine Git-verwendenden Gates aus; Beurteilung/Score liegen beim Betreiber und Reviewer (ADR-019). |
+| E14 | Positive Skala aus tatsächlichen Differenzen, keine MAD-Nullfalle. Zwei Gleichstandsmuster sowie sehr kleine/große Skalen geprüft; K-M2-6 erhält einen eigenen Regressionslauf. |
+| E15 | Direkter Import `Matrix (>= 1.6-0)`, im numerischen ADR begründet; R >= 4.1 bleibt. Lokale Matrix-NEWS belegen die Einführung von `determinant(..., sqrt=)` in 1.6-0. Der zunächst angesetzte Mindeststand 1.3-0 wurde vor dem abschließenden Paketcheck korrigiert. Keine Paketinstallation oder Aktualisierung. |
+| E17 | Startwarnungen mit Herkunft in `numerics$start`, bei Fehlschlag erneut als Warnung; finale Konvergenzprüfung aktiv. Roxygen-Dokumentation und gezielter Unit-Test belegen beide Fälle. |
+
+Technische Festlegungen sind in ADR-020 und ADR-021 dokumentiert.
+Es wurde keine neue Vertragslücke festgestellt. Spezifikationen,
+Abnahmetests, ursprüngliche Anker und bestehende Testtoleranzen bleiben
+unverändert. Die Hilfsrechnung der Vignette lädt den aktuellen Namespace
+und nie eine unmutierte Paketkopie.
+
+### Ressourcen, Herkunft und Dokumentation
+
+Ausgeführt (Exit 0):
+
+```bash
+Rscript --vanilla data-raw/make_validation_numeric.R
+Rscript --vanilla data-raw/make_validation_numeric.R --out /tmp/llmsa-m1a-build/reproduction-a
+Rscript --vanilla data-raw/make_validation_numeric.R --out /tmp/llmsa-m1a-build/reproduction-b
+Rscript --vanilla /tmp/llmsa-m1a-build/resource-negative-current.R
+```
+
+Der Erzeuger meldete jeweils:
+
+```text
+Numeric validation inputs: 11 NIST tables; 5 byte-identical anchors; 224678 stored data bytes
+```
+
+Eine anschließende unabhängige Python-Prüfung verglich alle Bytes mit
+beiden Ausgaben und dem Checkout sowie die Zahlentokens/Zeilen mit den
+gehashten Originalen. Echter Output (`reproduction-current.log`, Exit 0):
+
+```text
+Reproduction: 19 generated files byte-identical in both independent outputs and the repository
+NIST tokens and row order: 11/11 original datasets reproduced exactly; 3 deterministic gzip headers
+```
+
+Die sechs Negativfälle verändern ausschließlich temporäre Kopien. Auch
+der Fall einer bereits gestagten, aber zu großen Ausgabe veröffentlicht
+nichts. Output aus `resource-negative-current.log`:
+
+```text
+Generator negative missing-anchor: rejected before publication; existing output unchanged
+Generator negative missing-source: rejected before publication; existing output unchanged
+Generator negative source-hash: rejected before publication; existing output unchanged
+Generator negative malformed-source: rejected before publication; existing output unchanged
+Generator negative missing-size-key: rejected before publication; existing output unchanged
+Generator negative size-limit: rejected before publication; existing output unchanged
+Generator negative cases: 6/6 passed; original inputs never edited
+API snapshot ANK-02: 22 exports and 108 ordered arguments retained
+```
+
+`vignettes/validation.Rmd` rechnet K-M1a-1 bis K-M1a-5 mit
+`inst/validation/numeric/reference_checks.R`. Die AIAG-Darstellung nimmt
+nur aggregierte GRR-Tabellen an. Die gepoolte Interaktion wird ausdrücklich
+als nicht separat geschätzt berichtet, nicht mit einem erfundenen Fitwert.
+Im öffentlichen Kontext sind sämtliche AIAG-Beobachtungsfelder
+`not rerun: protected data required`. Keine geschützten Rohdaten werden
+in irgendeinem Kontext ausgegeben.
+
+Die Roxygen-Erzeugung lief ausschließlich in
+`/tmp/llmsa-m1a-build/roxygen-current-h_c1v8g9/` mit
+`roxygen2::roxygenise(..., roclets = c("rd", "namespace"))` (Exit 0).
+Nur `msa_fit.Rd`, `msa_grr.Rd` und `msa_boot.Rd` wurden übernommen.
+`NAMESPACE` blieb byte-identisch. Die zusätzliche automatisch erzeugte
+Autorenformatierung in `llmsa-package.Rd` wurde nicht übernommen.
+`NEWS.md` beschreibt Numerik, Nullfälle und Validierung.
+
+### Ausgeführte Regressionen
+
+Eingefrorene Umgebung, rein prüfender Aufruf:
+
+```bash
+Rscript --vanilla orchestrator/lib/r-deps.R --check-only
+```
+
+Output des endgültigen Laufs (`deps-complete-current.log`, Exit 0):
+
+```text
+r-deps: R              4.6.1        (verlangt: >= 4.1)
+r-deps: lme4           2.0.6        (verlangt: beliebig)
+r-deps: Matrix         1.7.4        (verlangt: >= 1.6-0)
+r-deps: ordinal        2026.7.26    (verlangt: beliebig)
+r-deps: SixSigma       0.11.1       (verlangt: beliebig)
+r-deps: VCA            1.5.2        (verlangt: beliebig)
+r-deps: pass — 22 Anforderungen erfüllt (R 4.6.1)
+```
+
+Der vollständige M1a-Abnahmelauf wurde aus den Quellen mit
+`Sys.setenv(REPO_ROOT = normalizePath("."))`, `pdf(NULL)`,
+`pkgload::load_all(".", quiet = TRUE)`, `testthat::set_max_fails(Inf)`
+und `testthat::test_dir("tests/acceptance", filter = "^m1a-",
+reporter = "progress", stop_on_failure = FALSE,
+stop_on_warning = FALSE)` ausgeführt. Der Prozess beendete sich anhand
+der tatsächlich fehlgeschlagenen/fehlerhaften Testblöcke; Abnahmeinhalte
+wurden nicht verändert. Echter Output des endgültigen Laufs
+(`acceptance-complete-current.log`, Exit 0):
+
+```text
+Duration: 38.7 s
+[ FAIL 0 | WARN 0 | SKIP 0 | PASS 722 ]
+M1a final: 54 tests; 0 failed blocks; 0 error blocks; 0 skipped; elapsed 38.88 s
+```
+
+Vorherige Diagnoseausgänge bleiben sichtbar: Der erste Vignettenlauf
+ohne gesetztes `REPO_ROOT` endete mit sechs Setup-Fehlern (573 erfolgreiche
+Prüfungen), weil der Abnahmehelfer nach dem Wechsel ins temporäre
+Verzeichnis die Repo-Wurzel nicht mehr fand. Der Aufruf wurde dem
+Harness-Kontext angepasst; die Abnahmedatei blieb unverändert. Ein erster
+neuer Darstellungstest meldete vier fehlende INT-Zeilen. Daraufhin wurde
+die Darstellung um die explizit gepoolte Interaktion ergänzt; keine
+Erwartung wurde entfernt. Danach bestand die Teilmenge
+`fit-numeric|grr-numeric|validation-numeric|acmg-evaluate` mit
+`[ FAIL 0 | WARN 0 | SKIP 0 | PASS 382 ]` (29 Blöcke, 8,3 s).
+Eine zusätzliche Inline-Quellverfolgungsprüfung ist im folgenden
+Gesamtlauf enthalten.
+
+Gesamtregression mit dem unveränderten Betreiber-Testtreiber und offenem
+Null-PDF-Gerät (Dateiausgaben außerhalb des Checkouts):
+
+```bash
+Rscript --vanilla -e 'Sys.setenv(REPO_ROOT = normalizePath(".")); grDevices::pdf(NULL); started <- proc.time()[["elapsed"]]; source("orchestrator/lib/r-tests.R"); cat(sprintf("Unit and QA elapsed: %.2f s\n", proc.time()[["elapsed"]] - started))' tests/testthat tests/e2e tests/fuzz
+```
+
+Echter Output (`unit-qa-current.log`, Exit 0):
+
+```text
+[ FAIL 0 | WARN 0 | SKIP 1 | PASS 1998 ]
+[ FAIL 0 | WARN 0 | SKIP 0 | PASS 9 ]
+[ FAIL 0 | WARN 0 | SKIP 0 | PASS 5 ]
+r-tests: pass — 145 Tests in tests/testthat, tests/e2e, tests/fuzz; 0 fehlgeschlagen, 0 Fehler, 1 übersprungen
+Unit and QA elapsed: 70.60 s
+```
+
+Der eine bestehende Skip betrifft `test-backends.R:32`:
+`requireNamespace("ellmer", quietly = TRUE) is TRUE` (Negativfall für
+eine fehlende optionale Abhängigkeit). Die neuen Drift-/Numerikprüfungen
+wurden im Repository nicht übersprungen. Bestehende QA-Dateien blieben
+unverändert. Die System-Bus-Diagnose aus `acmg-policies` ist stderr des
+vorhandenen Prüfwegs; testthat meldet null Warnungen und keinen Fehler.
+
+Die schwierigen NIST-Fälle bleiben ausdrücklich Berichte, wie ADR-017
+und K-M1a-4 verlangen. Gemessene LRE aus dem unveränderten Abnahmetest:
+
+```text
+K-M1a-4 report SmLs07: LRE msa_fit residual 3.81, item 3.71; LRE aov residual 4.16, item 4.02
+K-M1a-4 report SmLs08: LRE msa_fit residual -0.60, item -0.60; LRE aov residual 2.67, item 3.92
+K-M1a-4 report SmLs09: LRE msa_fit residual -4.19, item -4.19; LRE aov residual -0.28, item 3.94
+```
+
+Die Originalskala des lme4-Modells begrenzt hier die Genauigkeit trotz
+präziser Varianzverhältnisse. Es gibt keine nachträgliche Korrektur nur
+der `vc`-Tabelle und keine Datenreparatur. Alle vorgeschriebenen niedrigen
+und mittleren Schwierigkeitsfälle bestehen.
+
+K-M2-6 wurde mit demselben direkten Abnahmeaufruf und
+`filter = "^m2-6-"` ausgeführt (`acceptance-m2-current.log`, Exit 0):
+
+```text
+Duration: 234.7 s
+[ FAIL 0 | WARN 0 | SKIP 0 | PASS 374 ]
+M2 evaluation regression: 10 tests; 0 failed blocks; 0 error blocks; 0 skipped; elapsed 234.76 s
+```
+
+### Paketbau und Check in beiden Kontexten
+
+Zwei Positivlisten-Kopien enthalten nur `DESCRIPTION`, `NAMESPACE`,
+Lizenzen, `NEWS.md`, `README.md`, `.Rbuildignore`, `R/`, `man/`, `data/`,
+`inst/`, `vignettes/`, `tests/testthat.R` und `tests/testthat/`.
+Originalanker, geschützte Daten, API-Aufzeichnungen, Harness,
+Git-Metadaten und Geheimnisse wurden nicht kopiert.
+
+Öffentliches Arbeitsverzeichnis:
+`/tmp/llmsa-m1a-build/public-check-current-1_8k9lha/`.
+Vollmodus-Arbeitsverzeichnis:
+`/tmp/llmsa-m1a-build/full-check-current-lsm9_tb3/`.
+Jeweils ausgeführt, alle vier Prozesse Exit 0:
+
+```bash
+env -u REPO_ROOT R CMD build --no-manual src
+env -u REPO_ROOT _R_CHECK_CRAN_INCOMING_REMOTE_=false R CMD check --as-cran --no-manual llmsa_0.1.0.tar.gz
+
+REPO_ROOT=/mnt/c/Users/Danie/dev/Llmsa/llmsa R CMD build --no-manual src
+REPO_ROOT=/mnt/c/Users/Danie/dev/Llmsa/llmsa _R_CHECK_CRAN_INCOMING_REMOTE_=false R CMD check --as-cran --no-manual llmsa_0.1.0.tar.gz
+```
+
+Die finalen Builds mit dem korrigierten Matrix-Minimum stehen jeweils in
+`build-complete.log`, die Checks in `check.log` und `llmsa.Rcheck/`.
+Echter gemeinsamer Build-Output:
+
+```text
+* creating vignettes ... OK
+* building ‘llmsa_0.1.0.tar.gz’
+```
+
+Check-Auszüge, zuerst öffentlich:
+
+```text
+* checking examples with --run-donttest ... [31s/31s] OK
+* checking tests ...
+  Running ‘testthat.R’ [49s/49s]
+ [49s/49s] OK
+* checking package vignettes ... OK
+* checking re-building of vignette outputs ... [27s/27s] OK
+* DONE
+Status: 1 NOTE
+```
+
+Vollmodus:
+
+```text
+* checking examples with --run-donttest ... [31s/31s] OK
+* checking tests ...
+  Running ‘testthat.R’ [48s/48s]
+ [48s/48s] OK
+* checking package vignettes ... OK
+* checking re-building of vignette outputs ... [28s/29s] OK
+* DONE
+Status: 1 NOTE
+```
+
+Beide Checks haben **keinen ERROR und keine WARNING**. Die einzige NOTE
+lautet `Unable to verify current time` bei `checking for future file
+timestamps`. Die Uhrzeitprüfung wurde nicht deaktiviert. Nur die bereits
+im Betreiberprüfweg vorgesehene CRAN-Incoming-Netzeinstellung ist gesetzt.
+
+Die installierten Tests melden öffentlich
+`[ FAIL 0 | WARN 0 | SKIP 8 | PASS 1923 ]`, im Vollmodus
+`[ FAIL 0 | WARN 0 | SKIP 7 | PASS 1924 ]`.
+Fünf bestehende Skips betreffen nicht ausgelieferte API-Aufzeichnungen,
+einer den bisherigen CRAN-Report-Test, einer die installierte optionale
+ellmer-Abhängigkeit. Nur öffentlich kommt der nach ADR-017 erlaubte
+Originalanker-Vergleich hinzu. Kopien, Schema, Hashes, numerische
+Unit-Tests und Literalherkunft laufen in beiden Paketen; im Vollmodus
+läuft auch die Original-Driftwache.
+
+Die tatsächlich erzeugten HTML-Dateien wurden ohne erneute Rechnung aus
+den Tarballs gelesen und ihre Tabellen geprüft. Output
+(`rendered-vignettes-current.log`, Exit 0):
+
+```text
+public: 9 computed reference tables; results {'PASS': 94, 'NOT RERUN': 23, 'REPORT': 8, 'REPORT (higher difficulty)': 6}; 23 AIAG rows; no raw-data columns or protected input files
+full: 13 computed reference tables; results {'PASS': 123, 'REPORT (pooled interaction)': 4, 'REPORT': 12, 'REPORT (higher difficulty)': 6}; 23 AIAG rows; no raw-data columns or protected input files
+```
+
+Alle erwarteten, beobachteten und Toleranzwerte wurden beim Knitten
+berechnet beziehungsweise aus den autorisierten Eingaben gelesen.
+Die HTML-Prüfung fand weder FAIL- noch WARNING-Ergebniszeilen. Die
+Tarballs enthalten kein geschütztes Eingabeblatt; die HTML-Tabellen
+enthalten keine Rohdaten-Spalten.
+
+### Übergabe und verbleibende Grenzen
+
+Die Builder-Umsetzung und die oben genannten Prüfungen sind abgeschlossen.
+Abnahme, kumulative Gates, Mutation-Score einschließlich E16,
+Territoriumsprüfung und Phasen-Commit bleiben beim Orchestrator/Reviewer.
+E12 bleibt ein nonblocking Infrastrukturhinweis in dessen Zuständigkeit;
+der Builder hat weder BACKLOG noch Gate-/Zustandsdateien geändert.
+Ein Windows-, macOS- oder R-4.1-Lauf wird nicht behauptet. Gemessen wurde
+die eingefrorene Linux-Umgebung mit R 4.6.1 und Matrix 1.7.4.
+
+Keine Git-Kommandos, keine Änderung der Abnahme- oder Gate-Regeln,
+keine Installation/Aktualisierung von Abhängigkeiten. Temporäre
+Paketinstallationen durch R CMD build/check liegen unter `/tmp/`.
+Sämtliche Bauartefakte und Diagnoseprotokolle liegen außerhalb des
+Arbeitsbaums. Abschließend ausgeführte Python-/SHA-256-Inventur
+(`integrity-current.log`, Exit 0):
+
+```text
+Integrity: 198 inventoried files; 9 authorized existing-file changes; 29 authorized new files; 0 removed files
+Protected inventoried files: 95/95 byte-identical
+Existing AP1 evaluation tests: retained byte-for-byte with one added test block
+public checked package source: 103 files byte-identical to the final corresponding repository files
+full checked package source: 103 files byte-identical to the final corresponding repository files
+Workspace artifacts: none; vignettes contains only the two Rmd sources
+```
+
+Die vollständige Pfadliste liegt in
+`/tmp/llmsa-m1a-build/integrity-current.json`. Die neun Änderungen
+bestehender Dateien betreffen `R/fit.R`, `R/grr.R`, die drei genannten
+Rd-Dateien, den zusätzlichen AP1-Unit-Test, `DESCRIPTION`, `NEWS.md` und
+dieses Fortschrittsdokument. Die neuen Dateien liegen ausschließlich in
+den im Plan genannten Builder-Pfaden. Diese Inventur ersetzt nicht die
+Territoriumsprüfung des Orchestrators.
+
 ## M0 — BUILD, Runde 1 (25.10.2026)
 
 Der freigegebene Plan ist im Builder-Territorium umgesetzt: Diese Phase

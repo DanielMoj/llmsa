@@ -27,6 +27,7 @@ Depends:
 Imports:
     graphics,
     lme4,
+    Matrix (>= 1.6-0),
     ordinal,
     stats,
     tools,
@@ -42,7 +43,9 @@ Suggests:
     pkgload,
     rmarkdown,
     RSQLite,
+    SixSigma,
     testthat (>= 3.0.0),
+    VCA,
     yaml
 VignetteBuilder: knitr
 Config/testthat/edition: 3

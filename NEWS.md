@@ -1,5 +1,17 @@
 # llmsa (development version)
 
+* Default numeric `msa_fit()` preserves numeric input precision and completes
+  REML using balanced-design formulas or an analytic constrained solution.
+  The returned lme4 model stays on the original scale; `numerics` reports the
+  method and diagnostics. Explicit fitting arguments retain the direct lme4
+  path, and bootstrap refits use ordinary lme4 optimization.
+* `msa_grr()` applies the minimum ndc convention and reports undefined ratios
+  as `NA` when total variance is zero, with verdict `undetermined`.
+* The numeric validation vignette computes literature, NIST and package-oracle
+  comparisons offline. Public builds include verified free NIST inputs and
+  complete anchor copies; protected AIAG data remain local and their public
+  comparison is marked as not rerun.
+
 * `backend_openai_compatible()` now omits `temperature` from the request when
   `temperature = NULL`. It supports a per-row system message and records response
   IDs, model snapshots, usage, fingerprints and requested/reported provider routing.

@@ -27,7 +27,9 @@ Default \code{TRUE} for numeric, \code{FALSE} otherwise.}
 
 \item{link}{Link for ordinal and binary outcomes.}
 
-\item{...}{Passed on to the model-fitting function.}
+\item{...}{Passed on to the model-fitting function. For numeric outcomes,
+supplying any argument here selects a direct \code{\link[lme4:lmer]{lme4::lmer()}} call on
+the original response, including when an argument is explicitly \code{NULL}.}
 }
 \value{
 An object of class \code{msa_fit}: a list with the fitted \code{model}, the
@@ -35,7 +37,8 @@ variance-component table \code{vc} (source, variance), the model \code{formula},
 the analysed \code{data}, counts \code{n}, the outcome \code{type}, and a \code{singular}
 flag (a variance estimated at zero, common with few prompt or model
 levels; the point estimate is still valid but its uncertainty is large,
-see \code{\link[=msa_boot]{msa_boot()}} and \code{\link[=msa_plan]{msa_plan()}}).
+see \code{\link[=msa_boot]{msa_boot()}} and \code{\link[=msa_plan]{msa_plan()}}), plus numeric fitting diagnostics
+\code{numerics} (\code{NULL} for other outcome types).
 }
 \description{
 Fits a crossed random-effects model to the parsed values of a study.
@@ -47,8 +50,8 @@ conditions).
 }
 \details{
 \itemize{
-\item \code{type = "numeric"}: linear mixed model fitted by REML with
-\code{\link[lme4:lmer]{lme4::lmer()}}.
+\item \code{type = "numeric"}: linear mixed model fitted by REML, returned as
+an \code{\link[lme4:lmer]{lme4::lmer()}} model. See the numeric fitting details below.
 \item \code{type = "ordinal"}: cumulative link mixed model with
 \code{\link[ordinal:clmm]{ordinal::clmm()}}. Variance components live on the latent scale, where
 the residual variance is fixed (1 for the probit link, pi^2/3 for the
@@ -66,6 +69,36 @@ effect and its variance component is derived from the estimated
 difference \code{beta} by the range method (\code{beta^2 / 2}), which is how the
 AIAG X-bar/R procedure treats two appraisers. Ordinal outcomes need at
 least three items.
+
+With no arguments in \code{...}, the numeric fit preserves the input doubles
+and conditions their differences before solving for variance ratios.
+Eligible balanced designs use a closed expected-mean-square solution.
+Unbalanced designs and multi-factor variance boundaries use an analytic
+profiled REML score and Hessian, initialized by \code{lmer}, with nonnegative
+variance constraints. A boundary solution re-estimates the remaining
+components. The resulting lme4 model retains the original response scale,
+row order and factor labels; \code{vc} is extracted from its \code{VarCorr()}.
+
+The \code{numerics} field records the method (\code{"closed_form"},
+\code{"analytic_reml"} or \code{"lmer"}) and, for the default path, conditioning,
+initialization diagnostics, active zero constraints and convergence
+norms. Its \code{input_rows} maps rows retained during missing-value and
+numeric parsing checks to the input. Initialization warnings are retained
+in \code{numerics$start$warnings} after successful analytic completion, and
+emitted if completion fails. Final-model convergence checks remain
+active. Explicit lme4 arguments retain lme4 warnings and errors.
+
+Default numeric models store ordinary \code{nloptwrap} refit control with no
+extra optimizer options. \code{\link[=msa_boot]{msa_boot()}} and \code{\link[lme4:refit]{lme4::refit()}} therefore use
+normal lme4 optimization; they do not repeat the initial analytic
+completion. The actual initial method is also recorded in the model's
+\code{optinfo$completion}.
+
+Constant numeric responses, non-finite values, non-identifiable
+components and a degenerate residual variance produce named errors.
+Small representable variation and tied scores are supported without
+an absolute variance cutoff. Conditioning cannot recover precision
+already lost in the inputs or in original-scale model arithmetic.
 }
 \examples{
 fit <- msa_fit(ic50_demo, type = "numeric")

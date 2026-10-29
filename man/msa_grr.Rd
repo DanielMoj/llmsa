@@ -47,9 +47,14 @@ deviation / total standard deviation). The AIAG rule of thumb classifies
 a system by the percent study variation of total gauge R&R: below 10 \%
 acceptable, 10-30 \% marginal (may be acceptable depending on the
 application, cost and risk), above 30 \% unacceptable. The number of
-distinct categories (ndc) is \code{floor(1.41 * sd_items / sd_grr)}; a system
+distinct categories (ndc) is \code{max(1, floor(1.41 * sd_items / sd_grr))}; a system
 should resolve at least 5. Thresholds should be set from the model risk
 of the context of use, not taken as universal constants.
+
+If total variance is zero, percentages, ICC and ndc are \code{NA} and the
+verdict is \code{"undetermined"}. With positive item variance and zero gauge
+variance, ndc is \code{Inf}. With zero item variance and positive gauge
+variance, ndc is one. These conventions also apply to \code{\link[=msa_boot]{msa_boot()}}.
 }
 \examples{
 g <- msa_grr(msa_fit(ic50_demo, type = "numeric"))

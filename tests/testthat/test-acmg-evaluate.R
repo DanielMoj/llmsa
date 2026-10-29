@@ -1,3 +1,18 @@
+test_that("constant fallback scores report the real numeric failure", {
+  p <- ap1_test_plan()
+  r <- ap1_test_runs(p, 12)
+  r$value <- acmg_classes(p)[1]
+  original <- msa_fit
+  calls <- character()
+  local_mocked_bindings(msa_fit = function(runs, type, ...) {
+    calls <<- c(calls, type)
+    if (type == "ordinal") stop("Synthetic ordinal failure")
+    original(runs, type = type, ...)
+  })
+  expect_error(acmg_fit(r, p), "AP1 numeric fallback failed: Numeric response has zero variation.", fixed = TRUE)
+  expect_identical(calls, c("ordinal", "numeric"))
+})
+
 test_that("fit fallback responds to each convergence family and preserves other diagnostics", {
   p <- ap1_test_plan(); r <- ap1_test_runs(p, 12)
   r <- r[r$model_id == "sol", ]

@@ -1,0 +1,121 @@
+---
+title: "Statistical validation of llmsa"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Statistical validation of llmsa}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>", error = FALSE, cache = FALSE)
+library(llmsa)
+numeric_validation <- new.env(parent = globalenv())
+sys.source(system.file("validation", "numeric", "reference_checks.R",
+                       package = "llmsa", mustWork = TRUE), envir = numeric_validation)
+context <- numeric_validation$validation_context()
+anchors <- numeric_validation$validation_anchors(context)
+checks <- numeric_validation$validation_run(context)
+```
+
+## Variance components and gauge R&R (numeric)
+
+These calculations compare the numeric random-effects model with independent
+ANOVA calculations, published estimates, certified NIST quantities and live
+package oracles. Every observed value is recomputed by the currently loaded
+`llmsa` namespace. No fitted estimates or oracle results are stored as inputs.
+The reference calculations are implemented in the installed
+`validation/numeric/reference_checks.R` script.
+
+The reference authority is `reference/anchors/`: ANK-10 contains the AIAG
+example, ANK-13 the published Penicillin estimates, ANK-14 the NIST certified
+quantities, ANK-16 the GRR conventions, and ANK-TOL the comparison tolerances.
+Variance-component tolerances are fractions of the reference **total**
+variance; derived ratios use relative tolerances. Printed standard deviations
+are compared on the variance scale where the anchor requires it. The tables
+show the resulting absolute bounds.
+
+This run uses the **`r checks$context`** context. A nonempty `REPO_ROOT`
+selects complete local validation: original anchors, the protected AIAG sheet
+and the frozen NIST originals. Missing inputs or mismatching SHA-256 hashes
+stop the calculation. Without `REPO_ROOT`, the public package build uses whole,
+byte-identical anchor copies and free NIST tables. Their provenance is recorded
+in `validation/numeric/SOURCES.json`. In that context, AIAG rows explicitly say
+`not rerun: protected data required` and never claim a successful rerun.
+Neither context displays the protected AIAG measurements.
+
+The balanced synthetic studies use the specification's four crossed designs
+with seed one, with and without block effects and pairwise interactions.
+The independent ANOVA calculation solves the expected-mean-square equations;
+negative moment estimates are outside that comparison. At a variance boundary,
+the numeric default fit re-estimates the remaining components by restricted
+REML. The AIAG comparison pools the interaction as in the handbook; that row
+is marked as not separately estimated. The model with interaction is reported
+separately. On the unbalanced `ic50_demo` data,
+`VCA::remlVCA` is a criterion, while `VCA::anovaVCA` is a reported comparison.
+`SixSigma::ss.rr` uses its default interaction pooling; study variation comes
+from its unrounded standard deviations.
+
+```{r reference-tables, echo=FALSE, results='asis'}
+for (name in names(checks$tables)) {
+  cat("\n### ", name, "\n\n", sep = "")
+  print(knitr::kable(checks$tables[[name]], row.names = FALSE))
+  cat("\n\n")
+}
+```
+
+### NIST precision report
+
+Item denotes the treatment and replicate denotes the observation within the
+treatment. The certified within mean square is the residual variance;
+the item reference is the between-minus-within mean-square difference divided
+by the number of replicates. NIST labels `AtmWtAg` as **Average** difficulty;
+the project nevertheless applies the stricter relative tolerance
+`r numeric_validation$validation_tolerance(anchors, "nist_digits", "low_difficulty_rel_tol")`
+to it, as to the lower-difficulty datasets.
+
+Log relative error (LRE) is the negative base-ten logarithm of the absolute
+relative error. Exact agreement gives `Inf`. For `SmLs04` through `SmLs06`,
+the required LRE is at least the corresponding `stats::aov` LRE minus
+`r numeric_validation$validation_lre_margin(anchors)`. The higher-difficulty
+`SmLs07` through `SmLs09` are reports, with no pass threshold. Low LRE values
+expose precision loss, including loss in the original-scale lme4 model despite
+conditioning the variance-ratio calculation. `NA` denotes a failed fit whose
+reason is reported below; rounded input values are never repaired.
+
+```{r nist-lre, echo=FALSE, results='asis'}
+print(knitr::kable(checks$lre, digits = 6, row.names = FALSE))
+```
+
+```{r fit-diagnostics, echo=FALSE, results='asis'}
+if (nrow(checks$diagnostics)) {
+  cat("\nFit diagnostics:\n\n")
+  print(knitr::kable(checks$diagnostics, row.names = FALSE))
+} else {
+  cat("\nNo fit warnings or errors were recorded in this run.\n")
+}
+```
+
+### Reproduction and interpretation
+
+Run `Rscript data-raw/make_validation_numeric.R` from the repository to
+reproduce the public inputs offline. The script checks original hashes before
+writing; `--out <package-root>` reproduces the files in a separate directory.
+The local NIST collection belongs in the sibling `quellen/daten/` directory,
+and the protected AIAG sheet at the path recorded in ANK-10. The installed
+`validation/numeric/README.md` explains both build contexts and their checks.
+
+The default numeric fit uses a closed EMS solution for eligible balanced
+designs and an analytic REML completion otherwise. Supplying any lme4 argument
+through `...` selects the direct lme4 path; the ANOVA reference check uses the
+optimizer declared by ANK-TOL. The final model retains the original response
+scale, observation order and factor labels. Its components come from
+`VarCorr()`. Bootstrap refits use ordinary lme4 optimization with the stored
+refit control; the initial analytic completion is not repeated per replicate.
+
+Zero total variance makes percentages, ICC and ndc undefined (`NA`), with
+verdict `undetermined`. Zero gauge variance with positive item variance gives
+infinite ndc; zero item variance with positive gauge variance gives the lower
+bound from ANK-16. Constant numeric responses and a degenerate residual
+variance produce named errors. These finite reference checks establish neither
+bootstrap coverage nor the later ordinal and binary simulation results.

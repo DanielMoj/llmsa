@@ -1,0 +1,148 @@
+{
+  "schema": 1,
+  "generator": "data-raw/make_validation_numeric.R",
+  "anchors": {
+    "ANK-10": {
+      "original": "reference/anchors/ANK-10.json",
+      "copied": "inst/validation/numeric/anchors/ANK-10.json",
+      "original_sha256": "952f892e130b4f494ab1963b9d7e77b7826ee403b5228a0fba8abb080c796201",
+      "copied_sha256": "952f892e130b4f494ab1963b9d7e77b7826ee403b5228a0fba8abb080c796201"
+    },
+    "ANK-13": {
+      "original": "reference/anchors/ANK-13.json",
+      "copied": "inst/validation/numeric/anchors/ANK-13.json",
+      "original_sha256": "68c8cc189d28e86de6391785b3c1ae8cfb2e70eb74f0d291f991ca60ecdd5ff4",
+      "copied_sha256": "68c8cc189d28e86de6391785b3c1ae8cfb2e70eb74f0d291f991ca60ecdd5ff4"
+    },
+    "ANK-14": {
+      "original": "reference/anchors/ANK-14.json",
+      "copied": "inst/validation/numeric/anchors/ANK-14.json",
+      "original_sha256": "1a6a29cf76b68fba1d23bf1e9fe87aab424e40281476759d447559bce7a65538",
+      "copied_sha256": "1a6a29cf76b68fba1d23bf1e9fe87aab424e40281476759d447559bce7a65538"
+    },
+    "ANK-16": {
+      "original": "reference/anchors/ANK-16.json",
+      "copied": "inst/validation/numeric/anchors/ANK-16.json",
+      "original_sha256": "4517d6c82780ba10b4f94b6de89696431105dc82467d11a1f4b3b0bf4a8facc0",
+      "copied_sha256": "4517d6c82780ba10b4f94b6de89696431105dc82467d11a1f4b3b0bf4a8facc0"
+    },
+    "ANK-TOL": {
+      "original": "reference/anchors/ANK-TOL.json",
+      "copied": "inst/validation/numeric/anchors/ANK-TOL.json",
+      "original_sha256": "dfa241fe399a817e725091cafa6047e0054e0bd50f4b53813d48459a474451fd",
+      "copied_sha256": "dfa241fe399a817e725091cafa6047e0054e0bd50f4b53813d48459a474451fd"
+    }
+  },
+  "datasets": {
+    "SiRstv": {
+      "original": "../quellen/daten/nist-strd-anova_2026-10-22/SiRstv.dat",
+      "original_sha256": "5a4f02d7f256e18c30dcad1b81e0260bb810b5ac113f6107e06dee168d07663e",
+      "copied": "inst/extdata/nist-strd-anova_2026-10-22/SiRstv.csv",
+      "copied_sha256": "21aa503c2aaca458c4b39a6b2b85e9f90727fb604895529e67370f56fdec7b7e",
+      "url": "https://www.itl.nist.gov/div898/strd/anova/SiRstv.dat",
+      "license": "Public domain (NIST)",
+      "columns": ["treatment", "rep", "value"],
+      "observations": 25
+    },
+    "SmLs01": {
+      "original": "../quellen/daten/nist-strd-anova_2026-10-22/SmLs01.dat",
+      "original_sha256": "ad28cac0d4fb79ffea2522b55349083bdea10f12a6f8c46cfbabcccdb4d6b896",
+      "copied": "inst/extdata/nist-strd-anova_2026-10-22/SmLs01.csv",
+      "copied_sha256": "0bb4ca5c8fa7250775a8f22eb332ebe787752830fa58f6ef999910d2b9d04be4",
+      "url": "https://www.itl.nist.gov/div898/strd/anova/SmLs01.dat",
+      "license": "Public domain (NIST)",
+      "columns": ["treatment", "rep", "value"],
+      "observations": 189
+    },
+    "SmLs02": {
+      "original": "../quellen/daten/nist-strd-anova_2026-10-22/SmLs02.dat",
+      "original_sha256": "708e32eaf36769abe7533e7dcd1b6dc67091b60df938dd37c4f0e65660ef7b0b",
+      "copied": "inst/extdata/nist-strd-anova_2026-10-22/SmLs02.csv",
+      "copied_sha256": "f5a8d1ff6740e1fdfa1f42629731467c32079c5caa75c27e0acd8322570539bb",
+      "url": "https://www.itl.nist.gov/div898/strd/anova/SmLs02.dat",
+      "license": "Public domain (NIST)",
+      "columns": ["treatment", "rep", "value"],
+      "observations": 1809
+    },
+    "SmLs03": {
+      "original": "../quellen/daten/nist-strd-anova_2026-10-22/SmLs03.dat",
+      "original_sha256": "e18404d0628b78670580b230a3a3b6cd997d959d00f92a2883a4da942b19377a",
+      "copied": "inst/extdata/nist-strd-anova_2026-10-22/SmLs03.csv.gz",
+      "copied_sha256": "dd10d6130bddf9c066d7112e65f2115cf14c5c8395ef3f046f50fafcfe41e610",
+      "url": "https://www.itl.nist.gov/div898/strd/anova/SmLs03.dat",
+      "license": "Public domain (NIST)",
+      "columns": ["treatment", "rep", "value"],
+      "observations": 18009
+    },
+    "AtmWtAg": {
+      "original": "../quellen/daten/nist-strd-anova_2026-10-22/AtmWtAg.dat",
+      "original_sha256": "5a1083c9062d3966f244bffa376fc9b033244abf86a0d0dd016af39cd71fb8a7",
+      "copied": "inst/extdata/nist-strd-anova_2026-10-22/AtmWtAg.csv",
+      "copied_sha256": "448664c92537134241c46f818ef1941a7fc60bb5154b09dc001cf13bc72680d2",
+      "url": "https://www.itl.nist.gov/div898/strd/anova/AtmWtAg.dat",
+      "license": "Public domain (NIST)",
+      "columns": ["treatment", "rep", "value"],
+      "observations": 48
+    },
+    "SmLs04": {
+      "original": "../quellen/daten/nist-strd-anova_2026-10-22/SmLs04.dat",
+      "original_sha256": "1308eb1581f28ce6c9de4ca9520fcc729f916c34f1f9dee10fb6e6581e5b4ce7",
+      "copied": "inst/extdata/nist-strd-anova_2026-10-22/SmLs04.csv",
+      "copied_sha256": "be0d66013e024ad97a936d46f1ce65c75433798aaca53ee4cf3e6cddc8418c75",
+      "url": "https://www.itl.nist.gov/div898/strd/anova/SmLs04.dat",
+      "license": "Public domain (NIST)",
+      "columns": ["treatment", "rep", "value"],
+      "observations": 189
+    },
+    "SmLs05": {
+      "original": "../quellen/daten/nist-strd-anova_2026-10-22/SmLs05.dat",
+      "original_sha256": "7b1333e6e56ced74145096df774cfb1f6305213cb28f9a8222c418ca85d0c296",
+      "copied": "inst/extdata/nist-strd-anova_2026-10-22/SmLs05.csv",
+      "copied_sha256": "1b5edeeae8791929a6ec9b3cc33928655abff8e2aa1122b7da06df9c021f5ee4",
+      "url": "https://www.itl.nist.gov/div898/strd/anova/SmLs05.dat",
+      "license": "Public domain (NIST)",
+      "columns": ["treatment", "rep", "value"],
+      "observations": 1809
+    },
+    "SmLs06": {
+      "original": "../quellen/daten/nist-strd-anova_2026-10-22/SmLs06.dat",
+      "original_sha256": "0c0f09a2df05f2e9db5324a6aaeed85647651e874e9f5c3892b8f29fc4a200f7",
+      "copied": "inst/extdata/nist-strd-anova_2026-10-22/SmLs06.csv.gz",
+      "copied_sha256": "0d7a85e3d5e5d70fafa42df07c39363c3b48725db4852304a8999e0942944f9e",
+      "url": "https://www.itl.nist.gov/div898/strd/anova/SmLs06.dat",
+      "license": "Public domain (NIST)",
+      "columns": ["treatment", "rep", "value"],
+      "observations": 18009
+    },
+    "SmLs07": {
+      "original": "../quellen/daten/nist-strd-anova_2026-10-22/SmLs07.dat",
+      "original_sha256": "fd95c510aa8b3ce7f67ddd32846ccead7d9abae441790336c6fb0fcb0ae3558f",
+      "copied": "inst/extdata/nist-strd-anova_2026-10-22/SmLs07.csv",
+      "copied_sha256": "e1d140d22c33acd16d80edc805e52959c5db3df15f764b753b45bb528cb57929",
+      "url": "https://www.itl.nist.gov/div898/strd/anova/SmLs07.dat",
+      "license": "Public domain (NIST)",
+      "columns": ["treatment", "rep", "value"],
+      "observations": 189
+    },
+    "SmLs08": {
+      "original": "../quellen/daten/nist-strd-anova_2026-10-22/SmLs08.dat",
+      "original_sha256": "87dd38dfffeb65d39dbe3e8ba73bd16644fc396c1aad03fc0295225f3ba6aef9",
+      "copied": "inst/extdata/nist-strd-anova_2026-10-22/SmLs08.csv",
+      "copied_sha256": "0bf1465862597da7f5e5f8ec52335e90d0c8f25d82fbf8d0b5c4bec7c659f9a2",
+      "url": "https://www.itl.nist.gov/div898/strd/anova/SmLs08.dat",
+      "license": "Public domain (NIST)",
+      "columns": ["treatment", "rep", "value"],
+      "observations": 1809
+    },
+    "SmLs09": {
+      "original": "../quellen/daten/nist-strd-anova_2026-10-22/SmLs09.dat",
+      "original_sha256": "f4688c5a0d5690fc86fa27e0c5a265eef0b24641e74af27aa72d9615084dd13f",
+      "copied": "inst/extdata/nist-strd-anova_2026-10-22/SmLs09.csv.gz",
+      "copied_sha256": "d7cb10f952e10f4a1d73cd9acd1690bf180401c3d4206d7200e04916a46e08ff",
+      "url": "https://www.itl.nist.gov/div898/strd/anova/SmLs09.dat",
+      "license": "Public domain (NIST)",
+      "columns": ["treatment", "rep", "value"],
+      "observations": 18009
+    }
+  }
+}

@@ -15,7 +15,8 @@ msa_boot(fit, nsim = 200, level = 0.95, seed = NULL, ...)
 
 \item{seed}{Optional seed.}
 
-\item{...}{Passed to \code{\link[lme4:bootMer]{lme4::bootMer()}}, e.g. \code{parallel = "multicore"}.}
+\item{...}{Passed to \code{\link[lme4:bootMer]{lme4::bootMer()}}, e.g. \code{parallel = "snow"} with
+a caller-supplied cluster \code{cl}.}
 }
 \value{
 A data.frame with the point estimate and interval for each
@@ -34,6 +35,11 @@ outcomes fitted with \code{ordinal::clmm} a parametric bootstrap is not yet
 implemented; as a pragmatic alternative, score the categories numerically
 and fit \code{type = "numeric"}, or treat the top category as a binary
 outcome.
+
+Numeric default fits use ordinary lme4 REML refits with \code{nloptwrap} and
+its usual control settings; the analytical completion of the original
+fit is not repeated for each bootstrap sample. An explicit fitting
+control passed to \code{\link[=msa_fit]{msa_fit()}} remains the model's refit control.
 }
 \examples{
 \donttest{

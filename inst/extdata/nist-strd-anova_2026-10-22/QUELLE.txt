@@ -1,0 +1,36 @@
+NIST Statistical Reference Datasets: one-way analysis of variance
+Source: https://www.itl.nist.gov/div898/strd/anova/anova.html
+Frozen source collection: 2026-10-22. License: public domain (NIST).
+Selection: all numeric data rows of the eleven datasets declared in ANK-14.
+Columns: treatment, replicate within treatment, measured value.
+Mapping: treatment -> item; one prompt, model and block.
+Original decimal tokens and row order are preserved; source text is excluded.
+No fitted values, variance estimates or oracle outputs are stored here.
+Generator: Rscript data-raw/make_validation_numeric.R [--out <package-root>]
+Local originals: ../quellen/daten/nist-strd-anova_2026-10-22/
+Authority: reference/anchors/ANK-14.json; sizes: reference/anchors/ANK-TOL.json.
+Source and stored-file hashes are also recorded in inst/validation/numeric/SOURCES.json.
+Stored-file hashes below exclude SHA256SUMS itself.
+
+SiRstv: https://www.itl.nist.gov/div898/strd/anova/SiRstv.dat
+Source SHA-256: 5a4f02d7f256e18c30dcad1b81e0260bb810b5ac113f6107e06dee168d07663e
+SmLs01: https://www.itl.nist.gov/div898/strd/anova/SmLs01.dat
+Source SHA-256: ad28cac0d4fb79ffea2522b55349083bdea10f12a6f8c46cfbabcccdb4d6b896
+SmLs02: https://www.itl.nist.gov/div898/strd/anova/SmLs02.dat
+Source SHA-256: 708e32eaf36769abe7533e7dcd1b6dc67091b60df938dd37c4f0e65660ef7b0b
+SmLs03: https://www.itl.nist.gov/div898/strd/anova/SmLs03.dat
+Source SHA-256: e18404d0628b78670580b230a3a3b6cd997d959d00f92a2883a4da942b19377a
+AtmWtAg: https://www.itl.nist.gov/div898/strd/anova/AtmWtAg.dat
+Source SHA-256: 5a1083c9062d3966f244bffa376fc9b033244abf86a0d0dd016af39cd71fb8a7
+SmLs04: https://www.itl.nist.gov/div898/strd/anova/SmLs04.dat
+Source SHA-256: 1308eb1581f28ce6c9de4ca9520fcc729f916c34f1f9dee10fb6e6581e5b4ce7
+SmLs05: https://www.itl.nist.gov/div898/strd/anova/SmLs05.dat
+Source SHA-256: 7b1333e6e56ced74145096df774cfb1f6305213cb28f9a8222c418ca85d0c296
+SmLs06: https://www.itl.nist.gov/div898/strd/anova/SmLs06.dat
+Source SHA-256: 0c0f09a2df05f2e9db5324a6aaeed85647651e874e9f5c3892b8f29fc4a200f7
+SmLs07: https://www.itl.nist.gov/div898/strd/anova/SmLs07.dat
+Source SHA-256: fd95c510aa8b3ce7f67ddd32846ccead7d9abae441790336c6fb0fcb0ae3558f
+SmLs08: https://www.itl.nist.gov/div898/strd/anova/SmLs08.dat
+Source SHA-256: 87dd38dfffeb65d39dbe3e8ba73bd16644fc396c1aad03fc0295225f3ba6aef9
+SmLs09: https://www.itl.nist.gov/div898/strd/anova/SmLs09.dat
+Source SHA-256: f4688c5a0d5690fc86fa27e0c5a265eef0b24641e74af27aa72d9615084dd13f

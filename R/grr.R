@@ -20,9 +20,14 @@
 #' a system by the percent study variation of total gauge R&R: below 10 %
 #' acceptable, 10-30 % marginal (may be acceptable depending on the
 #' application, cost and risk), above 30 % unacceptable. The number of
-#' distinct categories (ndc) is `floor(1.41 * sd_items / sd_grr)`; a system
+#' distinct categories (ndc) is `max(1, floor(1.41 * sd_items / sd_grr))`; a system
 #' should resolve at least 5. Thresholds should be set from the model risk
 #' of the context of use, not taken as universal constants.
+#'
+#' If total variance is zero, percentages, ICC and ndc are `NA` and the
+#' verdict is `"undetermined"`. With positive item variance and zero gauge
+#' variance, ndc is `Inf`. With zero item variance and positive gauge
+#' variance, ndc is one. These conventions also apply to [msa_boot()].
 #'
 #' @param fit An `msa_fit`.
 #' @param threshold Length-two vector of thresholds (acceptable / marginal)
@@ -68,6 +73,7 @@ grr_stats <- function(vc) {
   repro_v <- sum(repro_parts, na.rm = TRUE)
   grr_v <- repeat_v + repro_v
   total_v <- grr_v + item_v
+  denominator <- if (total_v == 0) NA_real_ else total_v
   rows <- c("Total gauge R&R" = grr_v, "  Repeatability" = repeat_v,
             "  Reproducibility" = repro_v,
             stats::setNames(repro_parts, paste0("    ", c("prompt", "model", "block (time)",
@@ -76,15 +82,15 @@ grr_stats <- function(vc) {
   rows <- rows[!is.na(rows)]
   tab <- data.frame(source = names(rows), variance = unname(rows),
                     sd = sqrt(unname(rows)),
-                    pct_contribution = 100 * unname(rows) / total_v,
-                    pct_study_var = 100 * sqrt(unname(rows)) / sqrt(total_v),
+                    pct_contribution = 100 * unname(rows) / denominator,
+                    pct_study_var = 100 * sqrt(unname(rows)) / sqrt(denominator),
                     stringsAsFactors = FALSE)
-  ndc <- if (grr_v > 0) floor(1.41 * sqrt(item_v) / sqrt(grr_v)) else Inf
-  s <- c(grr_pct_study_var = 100 * sqrt(grr_v / total_v),
-         grr_pct_contribution = 100 * grr_v / total_v,
-         repeatability_pct_study_var = 100 * sqrt(repeat_v / total_v),
-         reproducibility_pct_study_var = 100 * sqrt(repro_v / total_v),
-         ndc = ndc, icc_items = item_v / total_v)
+  ndc <- if (total_v == 0) NA_real_ else if (grr_v > 0) max(1, floor(1.41 * sqrt(item_v) / sqrt(grr_v))) else Inf
+  s <- c(grr_pct_study_var = 100 * sqrt(grr_v / denominator),
+         grr_pct_contribution = 100 * grr_v / denominator,
+         repeatability_pct_study_var = 100 * sqrt(repeat_v / denominator),
+         reproducibility_pct_study_var = 100 * sqrt(repro_v / denominator),
+         ndc = ndc, icc_items = item_v / denominator)
   list(table = tab, summary = s)
 }
 
@@ -103,7 +109,7 @@ print.msa_grr <- function(x, digits = 4, ...) {
   cat(sprintf("\n  total gauge R&R: %.1f %% of study variation (%.1f %% contribution)\n",
               s[["grr_pct_study_var"]], s[["grr_pct_contribution"]]))
   cat(sprintf("  number of distinct categories (ndc): %s\n",
-              if (is.finite(s[["ndc"]])) format(s[["ndc"]]) else "Inf"))
+              format(s[["ndc"]])))
   cat(sprintf("  ICC (items): %.3f\n", s[["icc_items"]]))
   cat(sprintf("  verdict: %s  [basis: %s, thresholds %g / %g]\n", toupper(x$verdict),
               if (x$basis == "study_var") "% study variation" else "% contribution",
@@ -130,7 +136,13 @@ print.msa_grr <- function(x, digits = 4, ...) {
 #' @param nsim Number of bootstrap samples.
 #' @param level Confidence level.
 #' @param seed Optional seed.
-#' @param ... Passed to [lme4::bootMer()], e.g. `parallel = "multicore"`.
+#' @details Numeric default fits use ordinary lme4 REML refits with `nloptwrap` and
+#' its usual control settings; the analytical completion of the original
+#' fit is not repeated for each bootstrap sample. An explicit fitting
+#' control passed to [msa_fit()] remains the model's refit control.
+#'
+#' @param ... Passed to [lme4::bootMer()], e.g. `parallel = "snow"` with
+#'   a caller-supplied cluster `cl`.
 #' @return A data.frame with the point estimate and interval for each
 #'   statistic, plus the bootstrap replicates as attribute `boot`.
 #' @examples
