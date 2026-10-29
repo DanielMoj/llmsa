@@ -12,7 +12,7 @@ Typ-Grundsatz Software/R-Paket nach `PROJEKTIERUNG.md` und Preset `r-paket`. Sie
 | tests | `30-tests.sh` (`TEST_CMD='Rscript orchestrator/lib/r-tests.R tests/testthat tests/acceptance tests/simulation tests/e2e tests/fuzz'`) | ein testthat-Lauf über alle Rollenordner plus `tests/simulation/` (Klasse A), Paket aus den Quellen geladen; `r-tests.R` setzt `NOT_CRAN=true`, damit auch Tests mit `skip_on_cran()` im Gate laufen (BL-56, ADR-011); jeder Abnahmetest trägt eine Kriteriums-ID | Exit 1 bei Fehlschlag oder Fehler; leere Ordner übersprungen | K-M0-2, K-M0-4, K-M0-5, K-M0-7 und alle Kriterien mit Prüfweg Test in 02–04 |
 | trace | `70-trace.sh` (ohne `TRACE_CMD`) | `CRITERIA.json` muss jede Manifest-ID mit wörtlichem Spec-Zitat und Quelldatei führen, jede ID muss unter `tests/acceptance/` referenziert sein, jede dort gefundene ID bekannt sein | Exit 1 bei Waisen oder falschem Zitat | K-M0-6; Traceability aller Meilensteine (SPEC-KONTRAKT §3) |
 | territory | `82-territory.sh` | der letzte Territoriums-Audit muss zu Runde und Basis passen; schützt `tests/acceptance/`, `reference/anchors/`, `orchestrator/**` vor dem Builder | Exit 1 bei Verstoß | K-M0-6; Gewaltenteilung aller Meilensteine |
-| mutgate | `86-mutgate.sh` (`MUT_CMD='Rscript orchestrator/lib/r-mutation.R'`) | Mutation-Score der seit `plan/<MS>` geänderten Dateien im Scope; Scope in M0, M2 und M1a–M1d `R/fit.R` und `R/grr.R`, ab M3a alle `R/*.R`; Schwelle 80 % (`ANK-32`), Floor 80, Ratchet-Toleranz 2 | Exit 1 unter Schwelle; `pass` ohne geänderten Scope | K-M0-6 (leer), Prüfstandard Nr. 7 in M1a–M3d |
+| mutgate | `86-mutgate.sh` (`MUT_CMD='Rscript orchestrator/lib/r-mutation.R'`) | Mutation-Score der seit `plan/<MS>` geänderten Dateien im Scope; Scope in M0, M2 und M1a–M1d `R/fit.R` und `R/grr.R`, ab M3a alle `R/*.R`; Schwelle 80 % (`ANK-32`), Floor 80, Ratchet-Toleranz 2. Je Mutant laufen die Ordner aus `MUT_TEST_DIRS` ohne die M2-Abnahmetests (`MUT_TEST_EXCLUDE='^m2-[0-9]'`) in einem eigenen R-Prozess mit Zeitlimit `MUT_TEST_TIMEOUT`; ein Mutant darüber zählt als `Timeout`, also entdeckt. Seit 29.10.2026, ADR-019; gilt ebenso für mutfull | Exit 1 unter Schwelle; `pass` ohne geänderten Scope | K-M0-6 (leer), Prüfstandard Nr. 7 in M1a–M3d |
 | golden-adr | `87-golden-adr.sh` (`GOLDEN_PATH_REGEX='^inst/extdata/'`) | Änderungen an eingefrorenen Daten (`inst/extdata/`) oder Ankern (`reference/anchors/`) verlangen ein ADR im selben Meilenstein | Exit 1 ohne ADR | K-M0-6; K-M1d-1, K-M1d-3, K-M2-1 (Datenänderungen), Ankerpflege 01 §6 |
 | mutfull (projektspezifisch) | `88-mutfull.sh` (Betreiber, Abschnitt 4) | mutgate mutiert nur Diff-Dateien; der Prüfstandard verlangt einen Lauf über beide Kerndateien unabhängig vom Diff; nur in M1c fällig | Exit 1 unter `MUT_SCORE_MIN`; `pass (nicht fällig)` in anderen Meilensteinen | K-M1c-6 |
 
@@ -58,6 +58,22 @@ MUT_SCORE_FLOOR=80
 MUT_RATCHET_TOL=2
 MUT_WORKERS=14
 MUT_TEST_DIRS='tests/testthat tests/acceptance tests/e2e tests/fuzz'   # ohne tests/simulation
+# Testauswahl und Zeitlimit je Mutant (Betreiber, 29.10.2026; E12 aus PLAN-REVIEW M1a Runde 2; ADR-019).
+# Entscheidung: Die sieben M2-Abnahmetests tests/acceptance/test-m2-1 bis -7 laufen im Mutationslauf
+# nicht mit; test-m2-qa-e2e.R und test-m2-qa-fuzz.R bleiben. Begründung: Weniger Tests senken den Score
+# höchstens; ein Bestehen gilt damit auch für den vollen Testsatz.
+# Messung 29.10.2026 (unmutiert, Stand 485c960, Paketkopie wie r-mutation.R, test_dir je Ordner):
+# voller Satz 1036,6 s, davon test-m2-1 bis -7 918,7 s (test-m2-3 allein 497,7 s); gefiltert 116,9 s
+# (darin test-m0-testthat-count.R 46,4 s; setup-m2.R 0,01 s und die M2-QA-Tests rund 3 s).
+# MUT_TEST_TIMEOUT = max(60, 3 × 116,9 s), aufgerundet; ein Mutant darüber zählt als Timeout (entdeckt).
+# r-mutation.R misst vor jedem Lauf unmutiert nach; die Grenze ist mindestens das Dreifache davon.
+# Probelauf R/grr.R (211 Mutanten, 14 Worker): je Mutant Median 224 s, Maximum 260 s, kein Timeout,
+# 58 min gesamt; Hochrechnung R/fit.R und R/grr.R (451 Mutanten vor M1a) rund 2 h je Lauf.
+# Wirkung auf mutfull (M1c): 88-mutfull nutzt denselben Adapter mit dieser Datei; Auswahl, Grenze und
+# Vorlauf gelten dort ebenso. Der Score über R/fit.R und R/grr.R ist höchstens niedriger als mit allen
+# Testdateien; ein Bestehen von K-M1c-6 gilt auch für den vollen Testsatz.
+MUT_TEST_EXCLUDE='^m2-[0-9]'
+MUT_TEST_TIMEOUT=351
 MUTFULL_MILESTONES='M1c'
 MUTFULL_FILES='R/fit.R,R/grr.R'
 

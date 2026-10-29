@@ -341,6 +341,7 @@ rollback_attempt() {
   local base="$1"
   git reset --hard "$base" -q || fatal "Rollback auf $base fehlgeschlagen."
   git clean -qfd -e config.env -e secrets.env -e toolchain.json -e orchestrator/logs/ -e orchestrator/.lock/ \
+    -e orchestrator/STOP \
     || fatal "Bereinigung nach Modellversuch fehlgeschlagen."
 }
 
@@ -369,7 +370,8 @@ all_untracked_paths() {
 changed_paths() {
   local path
   while IFS= read -r -d '' path; do
-    case "$path" in orchestrator/logs/*) continue ;; esac
+    # orchestrator/STOP setzt der Betreiber, auch während einer Modellphase; keine Modelländerung.
+    case "$path" in orchestrator/logs/*|orchestrator/STOP) continue ;; esac
     artifact_path_allowed "$path" && continue
     printf '%s\0' "$path"
   done < <({ git diff --name-only -z HEAD; all_untracked_paths; } | sort -zu)
@@ -665,7 +667,7 @@ commit_phase() {
   printf '%s\n' "$phase" > "$ORCH/state/$ms/current-phase" \
     || fatal "Phasenstatus kann nicht geschrieben werden: $ms/$phase"
   refresh_status
-  git add -A -- . ':(exclude)orchestrator/.lock' ':(exclude)orchestrator/.lock/**' \
+  git add -A -- . ':(exclude)orchestrator/.lock' ':(exclude)orchestrator/.lock/**' ':(exclude)orchestrator/STOP' \
     || fatal "git add für Phase $ms/$phase fehlgeschlagen."
   if git diff --cached --quiet; then
     :
@@ -782,7 +784,7 @@ park() {
   } > "$ORCH/ESCALATION-$ms.md"
   cp "$ORCH/ESCALATION-$ms.md" "$ORCH/ESCALATION.md"
   refresh_status "$reason" 3 true
-  git add -A -- . ':(exclude)orchestrator/.lock' ':(exclude)orchestrator/.lock/**' \
+  git add -A -- . ':(exclude)orchestrator/.lock' ':(exclude)orchestrator/.lock/**' ':(exclude)orchestrator/STOP' \
     || fatal "git add beim Parken von $ms fehlgeschlagen."
   if git diff --cached --quiet; then
     :
