@@ -31,7 +31,8 @@
 #'
 #' @param fit An `msa_fit`.
 #' @param threshold Length-two vector of thresholds (acceptable / marginal)
-#'   on the chosen basis, in percent.
+#'   on the chosen basis, in percent. Values must be numeric, finite,
+#'   nonnegative and nondecreasing; `NULL` selects the defaults for `basis`.
 #' @param basis `"study_var"` classifies by percent study variation (default,
 #'   thresholds 10 and 30), `"contribution"` by percent contribution
 #'   (typical thresholds 1 and 9).
@@ -50,6 +51,11 @@ msa_grr <- function(fit, threshold = NULL, basis = c("study_var", "contribution"
   if (!inherits(fit, "msa_fit")) stop("`fit` must come from msa_fit().", call. = FALSE)
   basis <- match.arg(basis)
   if (is.null(threshold)) threshold <- if (basis == "study_var") c(10, 30) else c(1, 9)
+  if (!is.numeric(threshold) || is.complex(threshold) || !is.null(dim(threshold)) ||
+      length(threshold) != 2L || any(!is.finite(threshold)) ||
+      threshold[1L] < 0 || threshold[1L] > threshold[2L]) {
+    stop("`threshold` must contain two finite, nonnegative, nondecreasing numbers.", call. = FALSE)
+  }
   res <- grr_stats(fit$vc)
   tab <- res$table
   s <- res$summary
@@ -164,7 +170,7 @@ msa_boot <- function(fit, nsim = 200, level = 0.95, seed = NULL, ...) {
   t <- b$t
   colnames(t) <- names(est)
   a <- (1 - level) / 2
-  ci <- t(apply(t, 2, function(col) stats::quantile(col[is.finite(col)], c(a, 1 - a), na.rm = TRUE)))
+  ci <- t(apply(t, 2, function(col) stats::quantile(col[is.finite(col)], c(a, 1 - a))))
   out <- data.frame(statistic = names(est), estimate = unname(est),
                     lower = ci[, 1], upper = ci[, 2], stringsAsFactors = FALSE)
   rownames(out) <- NULL

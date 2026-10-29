@@ -1,5 +1,90 @@
 # PROGRESS — Langzeitgedächtnis des Builders
 
+## M1a — REWORK, Runde 2 (29.–30.10.2026)
+
+Grundlage: REVIEW/verdict-code und rote Gate-Logs aus Runde 1,
+CRITERIA K-M1a-1 bis K-M1a-7 sowie ADR-022. ARBITER liegt nicht vor;
+LESSONS enthält keine Lehren. Die vollständige Antwort auf **E18–E43**
+mit Dateien, Kommandos und echtem Output steht in
+`orchestrator/handoff/M1a/REWORK-NOTES.md`.
+
+Produktkorrekturen: selbsttragende lme4-Aufrufe auch bei lokalem explizitem
+`control`; Datenmaske für `subset`/`weights`/`offset` und tatsächliche
+Modellzeilen in `data`, `n` und `input_rows`; relative Restvarianzdiagnose;
+benannte Ablehnung von Originalskalen mit unzureichender Genauigkeit;
+einheitliches numerisches NaN-/Gruppierungsverhalten; validierte
+GRR-Schwellen und vollständige Ressourcenprovenienz. ADR-020 begründet
+die Numerikergänzung. NEWS und die Hilfen dokumentieren die Fehler und den
+Abbruch der Planung bei einem gescheiterten Fit.
+
+Neue Unit-Tests unter `tests/testthat/` prüfen die Mutationsbefunde gegen
+ANOVA/EMS, dichte REML-Formeln, lme4/ordinal, Differenzenquotienten,
+ANK-16 und Quantile. Ausgabe-Charakterisierungen sind ausdrücklich markiert.
+Die einzige rein mutationsbezogene Produktvereinfachung entfernt eine
+wirkungslose Restvarianzrechnung nach Festlegung des Quotienten auf null
+und das redundante `na.rm` nach Filterung auf endliche Bootstrapwerte.
+Keine bestehenden Tests, Abnahmetests, QA-Tests, Gates, Schwellen, Anker
+oder Specs wurden geändert. Keine eigenen Git-Kommandos.
+
+Ausgeführte Belege unter `/tmp/llmsa-m1a-r2/`:
+
+```text
+QA vor Korrektur: r-tests: fail — 10 Tests; 5 fehlgeschlagen, 0 Fehler, 0 übersprungen
+QA nach Korrektur: r-tests: pass — 10 Tests; 0 fehlgeschlagen, 0 Fehler, 0 übersprungen
+Unit-/QA-Abschlusslauf: r-tests: pass — 183 Tests; 0 fehlgeschlagen, 0 Fehler, 1 übersprungen
+M1a acceptance: 54 tests; 0 failed blocks; 0 errors; 0 skipped; 65.65 s
+M2 evaluation: 10 tests; 0 failed blocks; 0 errors; 0 skipped; 424.42 s
+Final rework regression: 33 tests; 0 failed blocks; 0 errors; 0 skipped; 14.12 s
+```
+
+M1a-Abnahme: `PASS 722`, M2-Auswertung: `PASS 374`, jeweils `FAIL 0`,
+`WARN 0`, `SKIP 0`. Der Unit-Skip ist der bestehende ellmer-Negativtest.
+Beide Paketchecks (öffentlich/mit Originalankern) liefen mit Exit 0,
+ohne ERROR/WARNING und mit dem Infrastruktur-NOTE „Unable to verify
+current time“. Die Prüfung wurde nicht deaktiviert. Die letzten zwei
+Testergänzungen sind im separaten Abschlusslauf der 33 neuen Tests mit
+`PASS 479`, `FAIL 0`, `WARN 0`, `SKIP 0` belegt.
+
+Zusätzliche lokale Mutationsdiagnose (ausdrücklich kein Gate-Ersatz):
+vollständige `muttest`-Generation über `R/fit.R`, `R/grr.R`, 14 unabhängige
+R-Prozesse, zunächst eine benannte Teilmenge mit 41 Unit-Tests. Output:
+
+```text
+Finished diagnostic mutation run in 1245.6s; {'Killed': 823, 'Survived': 145, 'RuntimeError': 111, 'Timeout': 26}
+```
+
+Das sind 85,41 % nach der Statusformel ohne Äquivalenzabzug; allein Killed
+bei im Nenner belassenen Timeouts ergibt 82,80 %. Dieser eingefrorene Stand
+enthält noch die später entfernte überflüssige Restvarianzrechnung. Der
+frische Plan zum Abschlusscode enthält 1097 Mutanten, deren Quellen mit
+den alten Mutanten nach Entfernung genau dieser Zeile abgeglichen wurden.
+Fünf Überlebende entfielen mit dieser Rechnung; die übrigen 140 wurden
+gegen den finalen Stand mit 45 Tests/575 Erwartungen erneut ausgeführt:
+
+```text
+Finished diagnostic mutation run in 120.7s; {'Survived': 70, 'Killed': 61, 'RuntimeError': 9}
+```
+
+Keine Zusammenrechnung zu einem angeblichen Gate-Lauf. Acht einzeln
+begründete Claims in `orchestrator/handoff/M1a/MUT-EQUIV.json` betreffen
+zehn dieser verbleibenden Mutanten. Exakte Vergleichsrechnungen wurden
+ausgeführt und in REWORK-NOTES protokolliert. Es gibt keine Approval-Datei.
+
+Abschließende Integritätsprüfung: 255 Bestandsdateien verglichen, zehn
+geplante Builder-Dateien geändert, 245 bytegleich, keine Bestandsdatei
+gelöscht und kein vorhandener Test geändert. Neu: fünf Testdateien
+einschließlich Helper und die beiden zugewiesenen Handoffs. NAMESPACE ist
+bytegleich; alle 26 REVIEW-IDs sind beantwortet (`integrity-final.log`).
+
+**Offene Betreiber-/Reviewer-Schritte:** Nur der Orchestrator schreibt die
+Gate-Fakten. `gates.json` ist weiterhin der unveränderte rote Stand aus
+Runde 1. Der lokale `mirai::daemons(1L)`-Probeaufruf endet mit
+`16 | Permission denied` (`mirai-probe.log`); deshalb ersetzt die zusätzliche
+Prozessdiagnose keinen regulären mutgate-Lauf. Die Infrastrukturpunkte
+E40/E41 sowie lokale Dispatcher-/Zeitprüfungsprobleme sind in den
+REWORK-NOTES ausdrücklich OUT-OF-TERRITORY. E39/E42 bleiben beim
+Betreiber, E43 gemäß ADR-022 in M1b. Keine selbst genehmigte Äquivalenz.
+
 ## M2 — Abschlussnachtrag im M1a-BUILD (29.10.2026)
 
 `orchestrator/state/M2/gates.json` nennt Runde 3, `result: pass` und

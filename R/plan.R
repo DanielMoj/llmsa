@@ -44,6 +44,8 @@ msa_simulate <- function(n_items, n_prompts, n_models, n_reps, n_blocks = 1,
 #' function simulates studies of candidate sizes from assumed variance
 #' components, refits each one and summarises the distribution of the
 #' estimated %GRR (percent study variation) around its true value.
+#' A failed model fit stops the planning run and reports its diagnostic;
+#' failed simulations are not replaced or silently omitted.
 #'
 #' @param scenarios A data.frame with columns `n_items`, `n_prompts`,
 #'   `n_models`, `n_reps` (and optionally `n_blocks`), one row per candidate

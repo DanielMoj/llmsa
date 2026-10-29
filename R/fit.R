@@ -37,6 +37,10 @@
 #' @param ... Passed on to the model-fitting function. For numeric outcomes,
 #'   supplying any argument here selects a direct [lme4::lmer()] call on
 #'   the original response, including when an argument is explicitly `NULL`.
+#'   Expressions in `subset`, `weights` and `offset` can use the internal
+#'   columns `item`, `prompt`, `model`, `block` and `y`. Row-based arguments
+#'   refer to the rows remaining after missing or unreadable responses are
+#'   removed. Other arguments are evaluated in the caller's environment.
 #'
 #' @details
 #' With no arguments in `...`, the numeric fit preserves the input doubles
@@ -51,8 +55,9 @@
 #' The `numerics` field records the method (`"closed_form"`,
 #' `"analytic_reml"` or `"lmer"`) and, for the default path, conditioning,
 #' initialization diagnostics, active zero constraints and convergence
-#' norms. Its `input_rows` maps rows retained during missing-value and
-#' numeric parsing checks to the input. Initialization warnings are retained
+#' norms. Its `input_rows` maps the rows actually analysed by the model to
+#' the input, including exclusions by `subset` or `na.action`. The returned
+#' `data` and all counts in `n` describe those same rows. Initialization warnings are retained
 #' in `numerics$start$warnings` after successful analytic completion, and
 #' emitted if completion fails. Final-model convergence checks remain
 #' active. Explicit lme4 arguments retain lme4 warnings and errors.
@@ -66,8 +71,11 @@
 #' Constant numeric responses, non-finite values, non-identifiable
 #' components and a degenerate residual variance produce named errors.
 #' Small representable variation and tied scores are supported without
-#' an absolute variance cutoff. Conditioning cannot recover precision
-#' already lost in the inputs or in original-scale model arithmetic.
+#' an absolute variance cutoff. Numeric `NaN` and the string `"NaN"` are
+#' treated as missing responses, without a parsing warning. Missing numeric
+#' grouping values are rejected on both fitting paths. The default path
+#' rejects variances whose original-scale representation or model arithmetic
+#' loses working precision; conditioning cannot recover digits lost in the inputs.
 #'
 #' @return An object of class `msa_fit`: a list with the fitted `model`, the
 #'   variance-component table `vc` (source, variance), the model `formula`,
@@ -103,7 +111,8 @@ msa_fit <- function(runs, type = c("numeric", "ordinal", "binary"), levels = NUL
 
   if (type == "numeric") {
     y <- if (is.numeric(d$value)) as.numeric(d$value) else suppressWarnings(as.numeric(as.character(d$value)))
-    if (anyNA(y)) warning(sum(is.na(y)), " value(s) could not be interpreted as numbers and were dropped.")
+    unreadable <- is.na(y) & !is.nan(y)
+    if (any(unreadable)) warning(sum(unreadable), " value(s) could not be interpreted as numbers and were dropped.")
     dat$y <- y
   } else if (type == "ordinal") {
     if (is.null(levels)) {
@@ -132,6 +141,7 @@ msa_fit <- function(runs, type = c("numeric", "ordinal", "binary"), levels = NUL
   dat <- droplevels(dat)
   if (type == "numeric") {
     if (!nrow(dat)) stop("No valid numeric values to analyse.", call. = FALSE)
+    if (anyNA(dat)) stop("Numeric grouping factors must not contain missing values.", call. = FALSE)
     if (any(!is.finite(dat$y))) stop("Numeric response must contain only finite values.", call. = FALSE)
     if (all(dat$y == dat$y[1])) stop("Numeric response has zero variation.", call. = FALSE)
   }
@@ -168,12 +178,29 @@ msa_fit <- function(runs, type = c("numeric", "ordinal", "binary"), levels = NUL
     fitted <- msa_numeric_fit(form, dat)
     model <- fitted$model
     numerics <- fitted$numerics
+  } else if (type == "numeric") {
+    # Capture expressions before forcing ... so model-frame arguments retain
+    # their data mask. Store values in the call for refits outside this scope.
+    caller <- parent.frame()
+    dots <- as.list(substitute(list(...)))[-1L]
+    args <- dots
+    for (i in seq_along(dots)) {
+      if (isTRUE(names(dots)[i] %in% c("subset", "weights", "offset"))) {
+        args[i] <- list(eval(dots[[i]], envir = dat, enclos = caller))
+      } else args[i] <- list(...elt(i))
+    }
+    model <- do.call(lme4::lmer, c(list(formula = form, data = dat, REML = TRUE), args))
+    model@call[[1L]] <- quote(lme4::lmer)
+    # dat has generated integer row names. Repeated subset indices acquire
+    # make.unique() suffixes in model.frame(), while keeping the same input row.
+    analysed <- match(sub("\\..*$", "", rownames(stats::model.frame(model))), rownames(dat))
+    input_rows <- input_rows[analysed]
+    dat <- droplevels(dat[analysed, , drop = FALSE])
+    numerics <- list(method = "lmer")
   } else {
     model <- switch(type,
-      numeric = lme4::lmer(form, data = dat, REML = TRUE, ...),
       ordinal = ordinal::clmm(form, data = dat, link = link, ...),
       binary  = lme4::glmer(form, data = dat, family = stats::binomial(link = link), ...))
-    if (type == "numeric") numerics <- list(method = "lmer")
   }
   if (type == "numeric") numerics$input_rows <- input_rows
 
@@ -226,7 +253,13 @@ msa_numeric_balanced <- function(dat, terms) {
   sizes <- vapply(dat[factors], nlevels, integer(1))
   if (prod(sizes) > nrow(dat)) return(NULL)
   counts <- table(interaction(dat[factors], drop = TRUE))
-  if (length(counts) != prod(sizes) || any(counts != counts[1])) return(NULL)
+  if (length(counts) != prod(sizes) || any(counts != counts[1])) {
+    if (length(terms) == 1L) {
+      residual <- dat$y - stats::ave(dat$y, dat[[factors]], FUN = mean)
+      msa_numeric_check_residual(sum(residual^2), sum((dat$y - mean(dat$y))^2))
+    }
+    return(NULL)
+  }
   dfs <- vapply(terms, function(t) prod(sizes[t] - 1), numeric(1))
   residual_df <- nrow(dat) - 1 - sum(dfs)
   if (residual_df <= 0) stop("Numeric model has no residual degrees of freedom.", call. = FALSE)
@@ -246,7 +279,7 @@ msa_numeric_balanced <- function(dat, terms) {
     residual <- dat$y - stats::ave(dat$y, dat[[factors]], FUN = mean)
   }
   residual_v <- sum(residual^2) / residual_df
-  if (residual_v == 0) stop("Degenerate numeric model: residual variance is zero.", call. = FALSE)
+  msa_numeric_check_residual(sum(residual^2), sum((dat$y - grand)^2))
   ems <- vapply(terms, function(t) {
     includes <- vapply(terms, function(s) all(s %in% t), logical(1))
     includes * nrow(dat) / prod(sizes[t])
@@ -254,10 +287,17 @@ msa_numeric_balanced <- function(dat, terms) {
   variance <- as.numeric(solve(ems, ms - residual_v))
   if (length(variance) == 1L && variance < 0) {
     variance <- 0
-    residual_v <- sum((dat$y - grand)^2) / (nrow(dat) - 1)
   }
   if (any(variance < 0)) return(NULL)
   variance / residual_v
+}
+
+# A relative backward-error check on squared residuals; it does not impose
+# an absolute lower bound on response variation (ADR-020, rework addendum).
+msa_numeric_check_residual <- function(square, total) {
+  if (!is.finite(square) || square <= (64 * .Machine$double.eps)^2 * total) {
+    stop("Degenerate numeric model: residual variance is zero at working precision.", call. = FALSE)
+  }
 }
 
 # Profiled REML on the space orthogonal to the intercept. Centering Z'Z is
@@ -278,14 +318,22 @@ msa_numeric_reml <- function(Zt, groups, y) {
     D <- Matrix::Diagonal(x = w)
     C <- D %*% cross
     B <- Matrix::forceSymmetric(Matrix::Diagonal(length(w)) + C %*% D)
-    factor <- Matrix::Cholesky(B, LDL = FALSE, perm = TRUE)
-    solved <- Matrix::solve(factor, cbind(C, w * zy), system = "A")
+    # B is positive definite for finite nonnegative ratios. Failure here
+    # means the residual scale cannot be resolved, often as ratios diverge.
+    decomposition <- tryCatch(withCallingHandlers({
+      factor <- Matrix::Cholesky(B, LDL = FALSE, perm = TRUE)
+      list(factor = factor, solved = Matrix::solve(factor, cbind(C, w * zy), system = "A"))
+    }, warning = function(w) stop(conditionMessage(w), call. = FALSE)), error = function(e) {
+      stop("Numeric model residual variance cannot be resolved at working precision.", call. = FALSE)
+    })
+    factor <- decomposition$factor
+    solved <- decomposition$solved
     A <- as.matrix(cross - Matrix::crossprod(C, solved[, seq_along(w), drop = FALSE]))
     A <- (A + t(A)) / 2
     u <- as.numeric(solved[, length(w) + 1L])
     residual <- y - as.numeric(Matrix::crossprod(Zt, w * u)) + sum(means * w * u)
     Q <- sum(residual^2) + sum(u^2)
-    if (!is.finite(Q) || Q <= 0) stop("Degenerate numeric model: no positive residual variance.", call. = FALSE)
+    msa_numeric_check_residual(Q, sum(y^2))
     r <- as.numeric(Zt %*% residual) - counts * mean(residual)
     trace <- vapply(blocks, function(i) sum(diag(A)[i]), numeric(1))
     square <- vapply(blocks, function(i) sum(r[i]^2), numeric(1))
@@ -387,7 +435,6 @@ msa_numeric_optimize <- function(evaluate, lambda, max_iterations = 100L) {
 }
 
 msa_numeric_fit <- function(form, dat) {
-  if (anyNA(dat)) stop("Numeric grouping factors must not contain missing values.", call. = FALSE)
   conditioning <- msa_numeric_condition(dat$y)
   scaled <- dat
   scaled$y <- conditioning$y
@@ -429,6 +476,18 @@ msa_numeric_fit <- function(form, dat) {
   }
   solution <- finish$solution
   theta <- sqrt(solution$lambda)
+  # Multiply standard deviations before squaring to avoid an unnecessary
+  # overflow/underflow in the squared conditioning scale.
+  residual_sd <- sqrt(solution$state$residual) * conditioning$scale * conditioning$binary_scale
+  expected_sd <- c(theta * residual_sd, residual_sd)
+  expected_variances <- expected_sd^2
+  precision <- sqrt(.Machine$double.eps)
+  spacing <- .Machine$double.xmin * .Machine$double.eps
+  positive <- c(theta > 0, TRUE)
+  if (any(!is.finite(expected_variances)) || any(expected_variances[positive] <= 0) ||
+      any(spacing / expected_variances[positive] > precision)) {
+    stop("Numeric model variance is not representable on the original scale at working precision.", call. = FALSE)
+  }
   derivs <- list(gradient = 2 * theta * solution$state$gradient,
                  Hessian = 4 * outer(theta, theta) * solution$state$Hessian +
                    diag(2 * solution$state$gradient, length(theta)))
@@ -441,13 +500,14 @@ msa_numeric_fit <- function(form, dat) {
   attr(opt, "control") <- list()
   attr(opt, "derivs") <- derivs
   cc <- lme4::checkConv(derivs, theta, ctrl = control$checkConv, lbound = original$reTrms$lower)
-  mc <- call("lmer", formula = form, data = quote(dat), REML = TRUE,
+  mc <- call("lmer", formula = form, data = dat, REML = TRUE,
              control = quote(lme4::lmerControl(optimizer = "nloptwrap")))
   mc[[1]] <- quote(lme4::lmer)
   model <- lme4::mkMerMod(environment(devfun), opt, original$reTrms, fr = original$fr, mc = mc, lme4conv = cc)
   variances <- as.data.frame(lme4::VarCorr(model))$vcov
-  if (!is.finite(value) || any(!is.finite(variances)) || stats::sigma(model) <= 0) {
-    stop("Numeric model variance is not representable on the original scale.", call. = FALSE)
+  if (!is.finite(value) || any(!is.finite(variances)) ||
+      any(abs(variances[positive] / expected_variances[positive] - 1) > precision)) {
+    stop("Numeric model variance is not representable on the original scale at working precision.", call. = FALSE)
   }
   solution$lambda <- stats::setNames(solution$lambda, names)
   solution$active <- names[theta == 0]

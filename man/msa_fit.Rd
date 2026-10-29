@@ -29,7 +29,11 @@ Default \code{TRUE} for numeric, \code{FALSE} otherwise.}
 
 \item{...}{Passed on to the model-fitting function. For numeric outcomes,
 supplying any argument here selects a direct \code{\link[lme4:lmer]{lme4::lmer()}} call on
-the original response, including when an argument is explicitly \code{NULL}.}
+the original response, including when an argument is explicitly \code{NULL}.
+Expressions in \code{subset}, \code{weights} and \code{offset} can use the internal
+columns \code{item}, \code{prompt}, \code{model}, \code{block} and \code{y}. Row-based arguments
+refer to the rows remaining after missing or unreadable responses are
+removed. Other arguments are evaluated in the caller's environment.}
 }
 \value{
 An object of class \code{msa_fit}: a list with the fitted \code{model}, the
@@ -82,8 +86,9 @@ row order and factor labels; \code{vc} is extracted from its \code{VarCorr()}.
 The \code{numerics} field records the method (\code{"closed_form"},
 \code{"analytic_reml"} or \code{"lmer"}) and, for the default path, conditioning,
 initialization diagnostics, active zero constraints and convergence
-norms. Its \code{input_rows} maps rows retained during missing-value and
-numeric parsing checks to the input. Initialization warnings are retained
+norms. Its \code{input_rows} maps the rows actually analysed by the model to
+the input, including exclusions by \code{subset} or \code{na.action}. The returned
+\code{data} and all counts in \code{n} describe those same rows. Initialization warnings are retained
 in \code{numerics$start$warnings} after successful analytic completion, and
 emitted if completion fails. Final-model convergence checks remain
 active. Explicit lme4 arguments retain lme4 warnings and errors.
@@ -97,8 +102,11 @@ completion. The actual initial method is also recorded in the model's
 Constant numeric responses, non-finite values, non-identifiable
 components and a degenerate residual variance produce named errors.
 Small representable variation and tied scores are supported without
-an absolute variance cutoff. Conditioning cannot recover precision
-already lost in the inputs or in original-scale model arithmetic.
+an absolute variance cutoff. Numeric \code{NaN} and the string \code{"NaN"} are
+treated as missing responses, without a parsing warning. Missing numeric
+grouping values are rejected on both fitting paths. The default path
+rejects variances whose original-scale representation or model arithmetic
+loses working precision; conditioning cannot recover digits lost in the inputs.
 }
 \examples{
 fit <- msa_fit(ic50_demo, type = "numeric")

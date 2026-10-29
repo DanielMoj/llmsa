@@ -152,3 +152,88 @@ der Bootstrap behält die gewöhnliche Refit-Steuerung. Die Messung ist
 ein endlicher Robustheits-/Laufzeitversuch, keine ADEMP- oder Coverage-
 Aussage. Der Vorversuch trägt die Ressourcenarbeit. Gates und
 Mutationsabnahme bleiben offen.
+
+## Nachtrag REWORK M1a, Runde 2: ADR-022 umgesetzt
+
+Die Nachprüfungen aus REVIEW Runde 1 zeigen zwei Grenzen, die der erste
+BUILD nicht zuverlässig erkannt hat: Rundungsreste bei verschwindender
+Restvarianz und Stellenverlust im Originalskalenmodell. Dieser Nachtrag
+präzisiert die numerische Fehlerbehandlung, ohne Kriterien, Anker oder
+Testtoleranzen zu ändern.
+
+### Relative Restvarianzprüfung (E20)
+
+Für konditionierte Antworten wird die Restquadratsumme gegen
+`(64 * .Machine$double.eps)^2 * SST` geprüft. Die Größe ist eine relative
+Rückwärtsfehlerschranke: Differenzen der Größenordnung von 64 Maschinen-
+Epsilon der Antwortnorm können durch Mittelwertbildung, Projektion und
+Effektabzug entstehen; ihre Quadratsumme ist kein Beleg für positive
+Reststreuung. Der Faktor ist eine interne Rundungsreserve, keine empirische
+Referenz oder absolute Varianzuntergrenze. Skalieren der Antwort skaliert
+beide Seiten identisch.
+
+Die Prüfung gilt für die balancierten Modellresiduen, für Einwegresiduen
+auch bei ungleicher Besetzung sowie für das profilierte REML-`Q` im
+allgemeinen Abschluss. Identische Zellreplikate allein sind kein Fehler:
+Ist etwa eine nichtadditive Wechselwirkung ausgelassen, kann ihre Streuung
+eine positive Modellrestvarianz tragen. Ein neuer Test belegt diesen
+Gegenfall. Eine fehlgeschlagene sparse Faktorisierung oder Lösung wird
+zusätzlich als benannte, nicht auflösbare Restvarianz gemeldet. Matrix-
+Warnungen werden in diesem engen Rechenschritt in einen Fehler übersetzt;
+es wird kein Startwert oder anderes Ergebnis als Ersatz zurückgegeben.
+Startwarnungen von lme4 folgen weiterhin dem ursprünglichen Vertrag.
+
+### Präzision auf der Originalskala (E21, E23)
+
+Aus dem konditionierten Ergebnis entstehen zunächst die Standardabweichungen
+`sqrt(residual) * scale * binary_scale` und `theta` mal diese Größe, erst
+danach ihre Quadrate. So verursacht ein isoliert quadrierter Maßstab
+keinen unnötigen Zwischenüberlauf oder Unterlauf.
+
+Die interne relative Präzisionsgrenze ist `sqrt(.Machine$double.eps)`.
+Sie wird ausschließlich aus der Rechnerarithmetik hergeleitet. Vor dem
+Originalmodellbau werden nicht endliche oder auf null untergelaufene
+positive Varianzen abgelehnt. Auch die kleinste Double-Schrittweite
+`double.xmin * double.eps`, relativ zu jeder positiven Komponente, muss
+diese Grenze einhalten. Damit kann die Übereinstimmung zweier bereits
+grob quantisierter subnormaler Zahlen keinen erfolgreichen Fit vortäuschen.
+
+Nach `mkMerMod()` werden sämtliche positiven `VarCorr`-Komponenten mit
+der zurückskalierten konditionierten Lösung verglichen. Da dieselben
+Varianzverhältnisse verwendet werden, sichert insbesondere die Prüfung
+der Restvarianz auch die gemeinsame Skalierung. Ein relativer Fehler
+einer Komponente von höchstens `sqrt(eps)` ist als Anteil der Gesamtvarianz
+höchstens ebenso groß. Zusammen mit der zuvor begrenzten Darstellungs-
+auflösung bleibt die Reserve `2 * sqrt(eps)` deutlich unter
+`ANK-TOL.invariance.component_tol_fraction_of_total_variance`. Das ist
+eine zusätzliche Produktprüfung; der Anker bleibt unverändert und wird
+nicht vom Produktcode eingelesen.
+
+Bei Überschreitung lautet der Fehler:
+`Numeric model variance is not representable on the original scale at working precision.`
+Es wird kein getrennt korrigierter `vc`-Wert neben einem ungenauen Modell
+ausgegeben. SmLs07–SmLs09 dürfen deshalb nach ADR-022 als `NA` mit Grund
+berichtet werden. Niedrige und mittlere NIST-Schwierigkeit bleiben
+unveränderte Abnahmekriterien.
+
+### Durchreichweg und Metadaten (E18, E19, E21)
+
+`subset`, `weights` und `offset` werden in den dokumentierten Datenspalten
+mit der Aufruferumgebung als Rahmen ausgewertet. Nicht datenbezogene
+Argumente werden als ursprüngliche Promises erzwungen; ihre Werte stehen
+danach im gespeicherten Aufruf. Auch weitergereichte lokale Steuerungen
+und explizites `NULL` behalten dadurch ihre Bedeutung. Die Rechnung selbst
+bleibt `lme4::lmer` auf der unveränderten Originalantwort. Modellaufrufe
+beider numerischer Wege enthalten den Datenrahmen als Wert; sie funktionieren
+nach Serialisierung und außerhalb des ursprünglichen Gültigkeitsbereichs.
+
+Der Modellrahmen liefert die analysierten Zeilen. `data`, alle Zählungen
+und `input_rows` folgen dieser Auswahl einschließlich `na.action`, Reihenfolge
+und wiederholter Subset-Indizes. Numerisches `NaN` und geparstes `"NaN"`
+werden gleich als fehlend behandelt. Fehlende Gruppierungswerte werden
+vor der numerischen Pfadwahl benannt abgelehnt. Ordinale/binäre
+Gruppierungsfehlstellen bleiben wie in ADR-022 dem Meilenstein M1b zugeordnet.
+
+Die ausgeführten Belege und die Antwort auf jede Befund-ID stehen in
+`orchestrator/handoff/M1a/REWORK-NOTES.md` und `PROGRESS.md`. Nur die Gates
+des Orchestrators entscheiden über die Abnahme.

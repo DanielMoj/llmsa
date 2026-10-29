@@ -5,8 +5,16 @@
   The returned lme4 model stays on the original scale; `numerics` reports the
   method and diagnostics. Explicit fitting arguments retain the direct lme4
   path, and bootstrap refits use ordinary lme4 optimization.
+* Numeric fits diagnose constant or non-finite responses, missing grouping
+  values, degenerate residual variance and original-scale precision loss.
+  Numeric `NaN` and the string `"NaN"` are treated as missing responses.
+  Explicit `subset`, `weights` and `offset` expressions use the fitting data;
+  counts and row mappings describe the observations actually analysed.
+  Stored fitting controls remain usable outside the original caller's scope.
+  A failed fit stops `msa_plan()` with its diagnostic.
 * `msa_grr()` applies the minimum ndc convention and reports undefined ratios
   as `NA` when total variance is zero, with verdict `undetermined`.
+  Custom thresholds must be finite, numeric, nonnegative and nondecreasing.
 * The numeric validation vignette computes literature, NIST and package-oracle
   comparisons offline. Public builds include verified free NIST inputs and
   complete anchor copies; protected AIAG data remain local and their public

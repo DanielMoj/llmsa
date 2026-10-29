@@ -40,6 +40,8 @@ estimated with large uncertainty, and the fit is often singular. This
 function simulates studies of candidate sizes from assumed variance
 components, refits each one and summarises the distribution of the
 estimated \%GRR (percent study variation) around its true value.
+A failed model fit stops the planning run and reports its diagnostic;
+failed simulations are not replaced or silently omitted.
 }
 \examples{
 \donttest{

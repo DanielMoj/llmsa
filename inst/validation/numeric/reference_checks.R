@@ -44,10 +44,14 @@ validation_find_repo <- function(start = getwd(), repo_root = Sys.getenv("REPO_R
   }
 }
 
-validation_verify_resources <- function(resource_dir, repo_root = NULL) {
+validation_verify_resources <- function(resource_dir, repo_root = NULL,
+                                       data_dir = system.file("extdata", "nist-strd-anova_2026-10-22",
+                                                              package = "llmsa", mustWork = TRUE)) {
   manifest <- validation_json(file.path(resource_dir, "SOURCES.json"))
   entries <- validation_get(manifest, "anchors")
-  if (!setequal(names(entries), validation_anchor_ids)) stop("Numeric anchor manifest is incomplete.", call. = FALSE)
+  if (anyDuplicated(names(entries)) || !setequal(names(entries), validation_anchor_ids)) {
+    stop("Numeric anchor manifest is incomplete or contains duplicate entries.", call. = FALSE)
+  }
   for (id in validation_anchor_ids) {
     entry <- entries[[id]]
     original <- file.path("reference", "anchors", paste0(id, ".json"))
@@ -63,6 +67,26 @@ validation_verify_resources <- function(resource_dir, repo_root = NULL) {
     for (key in c("value", "unit", "tolerance", "source_url", "quote", "retrieved")) validation_get(value, key)
     if (!is.null(repo_root)) validation_hash(file.path(repo_root, original), entry[["original_sha256"]])
   }
+  anchor_files <- list.files(file.path(resource_dir, "anchors"), all.files = TRUE,
+                            recursive = TRUE, include.dirs = TRUE, no.. = TRUE)
+  if (!setequal(anchor_files, paste0(names(entries), ".json"))) {
+    stop("Numeric anchor directory differs from the manifest.", call. = FALSE)
+  }
+  datasets <- validation_get(manifest, "datasets")
+  nist <- validation_get(validation_json(file.path(resource_dir, "anchors", "ANK-14.json")), "value", "datasets")
+  if (anyDuplicated(names(datasets)) || !setequal(names(datasets), names(nist))) {
+    stop("Numeric dataset manifest differs from ANK-14.", call. = FALSE)
+  }
+  for (name in names(nist)) {
+    entry <- datasets[[name]]
+    copied <- validation_get(entry, "copied")
+    allowed <- file.path("inst", "extdata", "nist-strd-anova_2026-10-22", paste0(name, c(".csv", ".csv.gz")))
+    if (!is.character(copied) || length(copied) != 1L || !copied %in% allowed ||
+        !identical(entry[["original_sha256"]], nist[[name]][["sha256"]])) {
+      stop("Invalid numeric dataset provenance: ", name, call. = FALSE)
+    }
+    validation_hash(file.path(data_dir, basename(copied)), validation_get(entry, "copied_sha256"))
+  }
   manifest
 }
 
@@ -77,7 +101,7 @@ validation_context <- function(repo_root = Sys.getenv("REPO_ROOT", ""),
          nist = file.path(dirname(root), "quellen", "daten", "nist-strd-anova_2026-10-22"),
          resource_dir = resource_dir)
   } else {
-    manifest <- validation_verify_resources(resource_dir)
+    manifest <- validation_verify_resources(resource_dir, data_dir = data_dir)
     list(mode = "public", root = NULL, anchors = file.path(resource_dir, "anchors"),
          nist = data_dir, resource_dir = resource_dir, manifest = manifest)
   }

@@ -10,7 +10,8 @@ msa_grr(fit, threshold = NULL, basis = c("study_var", "contribution"))
 \item{fit}{An \code{msa_fit}.}
 
 \item{threshold}{Length-two vector of thresholds (acceptable / marginal)
-on the chosen basis, in percent.}
+on the chosen basis, in percent. Values must be numeric, finite,
+nonnegative and nondecreasing; \code{NULL} selects the defaults for \code{basis}.}
 
 \item{basis}{\code{"study_var"} classifies by percent study variation (default,
 thresholds 10 and 30), \code{"contribution"} by percent contribution
