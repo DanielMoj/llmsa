@@ -2,7 +2,8 @@
 # Projektgate llmsa: Mutationslauf über feste Kerndateien, unabhängig vom Diff.
 # Fällig nur in MUTFULL_MILESTONES (Vorgabe M1c); sonst pass. Zählung wie 86-mutgate
 # (Killed und Timeout erkannt, RuntimeError nicht gezählt, Äquivalenz nur nach Reviewer-Approval;
-# roter unmutierter Vorlauf fail ohne Flake-Rerun).
+# roter unmutierter Vorlauf fail ohne Flake-Rerun; Flake-Rerun nur bis MUT_FLAKE_MARGIN Punkte unter
+# MUT_SCORE_MIN).
 set -euo pipefail
 source "$ORCH/gates.d/_lib.sh"
 gate_load_config
@@ -13,6 +14,8 @@ MUT_REPORT="${MUT_REPORT:-reports/mutation/mutation.json}"
 # Rote Tests des unmutierten Vorlaufs; MUT_CMD schreibt sie neben MUT_REPORT und endet mit rc=3.
 MUT_UNMUTATED="$(dirname "$MUT_REPORT")/unmutated.json"
 MUT_SCORE_MIN="${MUT_SCORE_MIN:-80}"
+# Höchster Abstand des ersten Scores zur Schwelle, bei dem noch genau ein Flake-Rerun läuft.
+MUT_FLAKE_MARGIN="${MUT_FLAKE_MARGIN:-5}"
 APPROVED="$ORCH/handoff/$MILESTONE/MUT-EQUIV-APPROVED.json"
 
 case " $MUTFULL_MILESTONES " in
@@ -20,6 +23,8 @@ case " $MUTFULL_MILESTONES " in
   *) echo "mutfull: pass (nicht fällig in $MILESTONE)"; exit 0 ;;
 esac
 [ -n "${MUT_CMD:-}" ] || { echo "mutfull: MUT_CMD ist leer" >&2; exit 2; }
+[[ "$MUT_FLAKE_MARGIN" =~ ^[0-9]+([.][0-9]+)?$ ]] \
+  || { echo "mutfull: MUT_FLAKE_MARGIN muss eine Zahl ab 0 sein: $MUT_FLAKE_MARGIN" >&2; exit 2; }
 IFS=',' read -r -a files <<<"$MUTFULL_FILES"
 for f in "${files[@]}"; do
   [ -f "$REPO_ROOT/$f" ] || { echo "mutfull: Datei fehlt: $f" >&2; exit 2; }
@@ -88,7 +93,14 @@ run_mutation() {
 run_mutation || exit $?
 FIRST_SCORE="$SCORE"
 if ! awk -v score="$SCORE" -v required="$MUT_SCORE_MIN" 'BEGIN {exit !(score>=required)}'; then
-  echo "mutfull: $SCORE < $MUT_SCORE_MIN; genau ein Flake-Rerun"
+  GAP="$(awk -v score="$SCORE" -v required="$MUT_SCORE_MIN" 'BEGIN {printf "%.2f",required-score}')"
+  # Der Rerun fängt Schwankungen von ein bis zwei Punkten ab; weiter unter der Schwelle kostet er
+  # einen vollen Durchgang und kann das Ergebnis nicht drehen.
+  if ! awk -v gap="$GAP" -v margin="$MUT_FLAKE_MARGIN" 'BEGIN {exit !(gap<=margin)}'; then
+    echo "mutfull: fail (score=$SCORE required=$MUT_SCORE_MIN files=$MUTFULL_FILES; $GAP Punkte unter der Schwelle, mehr als MUT_FLAKE_MARGIN=$MUT_FLAKE_MARGIN, ohne Flake-Rerun)"
+    exit 1
+  fi
+  echo "mutfull: $SCORE < $MUT_SCORE_MIN ($GAP Punkte darunter, höchstens MUT_FLAKE_MARGIN=$MUT_FLAKE_MARGIN); genau ein Flake-Rerun"
   run_mutation || exit $?
   SCORE="$(awk -v a="$FIRST_SCORE" -v b="$SCORE" 'BEGIN {printf "%.2f",(a>b)?a:b}')"
 fi

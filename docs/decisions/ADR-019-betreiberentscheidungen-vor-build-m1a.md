@@ -2,7 +2,7 @@
 
 ## Status
 
-Angenommen (Betreiber, 29.10.2026). Betreiber-Commit vor dem Neustart von `40-build` in M1a. Die Nummer ist frei: Das ADR-019 des abgebrochenen ersten BUILD-Versuchs hat der Rollback entfernt. Der erste Nachtrag vom 29.10.2026 ändert (a) Nr. 1 bis 3 und die Rücknahme; (a) bleibt als Verlauf stehen. Der zweite Nachtrag vom selben Tag, während der Gates von M1a Runde 1, ändert die Rollen-Prompts `60-rework.md` und `50-code-review.md`.
+Angenommen (Betreiber, 29.10.2026). Betreiber-Commit vor dem Neustart von `40-build` in M1a. Die Nummer ist frei: Das ADR-019 des abgebrochenen ersten BUILD-Versuchs hat der Rollback entfernt. Der erste Nachtrag vom 29.10.2026 ändert (a) Nr. 1 bis 3 und die Rücknahme; (a) bleibt als Verlauf stehen. Der zweite Nachtrag vom selben Tag, während der Gates von M1a Runde 1, ändert die Rollen-Prompts `60-rework.md` und `50-code-review.md`. Der dritte, nach diesen Gates, begrenzt die Flake-Wiederholung in `86-mutgate.sh` und `88-mutfull.sh` (`MUT_FLAKE_MARGIN`); wo er abweicht, gilt er.
 
 ## Kontext
 
@@ -100,7 +100,7 @@ Folgen:
 - golden-adr soll verlangen, dass das ADR den geänderten Pfad nennt;
 - wird `r-mutation.R` von außen beendet, soll es den laufenden Kindprozess mit beenden;
 - die Ausnahme für rotes mutgate oder mutfull in `60-rework.md` und die Befunde zu überlebenden Mutanten in `50-code-review.md` (zweiter Nachtrag), im Template mit dem Berichtspfad aus `MUT_REPORT`;
-- die Flake-Wiederholung in `86-mutgate.sh` und `88-mutfull.sh` nur dann, wenn der erste Score höchstens 5 Punkte unter der Schwelle liegt (`REQUIRED` beziehungsweise `MUT_SCORE_MIN`).
+- die Flake-Wiederholung in `86-mutgate.sh` und `88-mutfull.sh` nur dann, wenn der erste Score höchstens 5 Punkte unter der Schwelle liegt (`REQUIRED` beziehungsweise `MUT_SCORE_MIN`) — **umgesetzt** im dritten Nachtrag mit `MUT_FLAKE_MARGIN`; `86-mutgate.sh.example` und das Preset bleiben wie oben unverändert.
 
 ### Konsequenzen
 
@@ -133,3 +133,46 @@ Begründung: Mutation misst die Tests. Das Verbot, Tests zu schreiben, hätte Re
 - Unverändert: `orchestrator/gates.d/`, `orchestrator/state/`, `orchestrator/handoff/`, `STATUS.md`, `R/`, `tests/`; Territorien, Gates, Schwellen und die Zählung in 86-mutgate und 88-mutfull. `tests/testthat/` gehört über `BUILDER_EXTRA_PATHS_REGEX` schon zum Builder-Territorium, auch in `60-rework`; zwischen neuen und bestehenden Tests unterscheidet der Orchestrator dort nicht, die Grenze steht nur im Prompt.
 - Wirkung: `render_prompt()` liest den Prompt beim Start einer Phase; die Änderung gilt ab dem nächsten Code-Review und Rework von M1a. Den laufenden Mutationslauf berührt sie nicht: Seine Paketkopie enthält nur `DESCRIPTION`, `NAMESPACE`, `R`, `inst`, `data`, `src`, `tests/fixtures` und die Ordner aus `MUT_TEST_DIRS`.
 - `gates.json` dieser Gate-Runde nennt in `env.sha` diesen Commit statt `118618f`, weil `verifier.sh` HEAD erst nach dem letzten Gate liest. Produktcode und Tests sind die von `118618f`; dieser Commit ändert nur die beiden Prompts und dieses ADR. Der Gate-Commit des Orchestrators folgt auf ihn.
+
+## Dritter Nachtrag 29.10.2026 — nach den Gates von M1a Runde 1
+
+- Betreiber-Nachtrag auf `a92396f` (`orch(M1a): gates r1 (rc=1)`), umgesetzt mit Claude Code. Der Orchestrator steht: `orchestrator/logs/orchestrate.log` endet um 19:26:48 mit „FATAL: STOP-Datei gefunden — vor der nächsten Phase angehalten.“; kein `orchestrator/.lock`, kein Orchestrator-, Gate- oder Modellprozess. `orchestrator/STOP` bleibt liegen; der Orchestrator wurde nicht gestartet.
+- mutgate in Runde 1 laut `orchestrator/state/M1a/gate-mutgate.log`: 1003 Mutanten (`R/fit.R` 783, `R/grr.R` 220), zwei Durchgänge mit gleichem Ergebnis, je 517 Killed, 29 Timeout, 360 Survived und 97 RuntimeError; Score 60,26 bei Schwelle 80 (keine Baseline), also 19,74 Punkte darunter. Im Log: `mutgate: 60.26 < 80; genau ein Flake-Rerun`, am Ende `mutgate: fail (score=60.26 required=80 baseline=n/a floor=80)`.
+  - Dauer laut Gate-Log: unmutierter Vorlauf 85 s und 88,1 s, muttest („Duration“) 11895,14 s und 11701,83 s. Die Wiederholung kostete damit rund 3 h 16 min und änderte nichts.
+  - Das ganze Gate lief von 12:50:28 bis 19:26:46, rund 6 h 36 min (Beginn aus dem Prozessalter um 14:07:52, zweiter Nachtrag; Ende `env.ts` in `gates.json`).
+
+### Entscheidung
+
+1. **Flake-Rerun nur nahe der Schwelle.** Liegt der erste Score unter der verlangten Schwelle, wiederholen `86-mutgate.sh` und `88-mutfull.sh` den Lauf genau einmal, aber nur, wenn er höchstens `MUT_FLAKE_MARGIN` Punkte darunter liegt. Liegt er weiter darunter, melden beide Gates sofort `fail` mit Score, Schwelle und dem Hinweis, dass keine Wiederholung lief; in Runde 1 hätte das gelautet: `mutgate: fail (score=60.26 required=80 baseline=n/a floor=80; 19.74 Punkte unter der Schwelle, mehr als MUT_FLAKE_MARGIN=5, ohne Flake-Rerun)`.
+   - `MUT_FLAKE_MARGIN`: Vorgabe 5 in beiden Gate-Skripten und in `config.env.example`, Wert 5 in `config.env`; leer heißt Vorgabe, 0 schaltet die Wiederholung ab. Ein Wert, der keine Zahl ab 0 ist, ist ein Konfigurationsfehler (Exit 2, `error`) und fällt vor dem ersten Durchgang auf.
+   - Verlangte Schwelle: in 86-mutgate `REQUIRED` (ohne Baseline `MUT_SCORE_MIN`, sonst Baseline minus `MUT_RATCHET_TOL`, mindestens `MUT_SCORE_FLOOR`), in 88-mutfull `MUT_SCORE_MIN`. Der Abstand wird wie Score und Schwelle auf zwei Stellen gerundet; genau 5,00 Punkte lösen die Wiederholung noch aus.
+   - Unverändert: Zählung, Score, Ratchet und Baseline; der rote Vorlauf (`fail` ohne Rerun); über der Schwelle `pass` wie bisher; innerhalb des Abstands genau ein Rerun, das bessere Ergebnis zählt. Die Zeile vor dem Rerun nennt jetzt den Abstand.
+
+Begründung: Die Wiederholung fängt Schwankungen von ein bis zwei Punkten ab. Bei 20 Punkten Abstand kostet sie einen vollen Durchgang, in M1a Runde 1 rund 3 h 16 min, und kann das Ergebnis nicht drehen.
+
+### Nachweis (29.10.2026)
+
+Wegwerf-Paket mit einer Datei `R/a.R` (zwei Funktionen) und einer Testdatei: 8 Mutanten, 5 Killed, 3 Survived, Score 62,5. Die echten `86-mutgate.sh` und `88-mutfull.sh` dieses Commits liefen aus dem Repo über ein Schein-`ORCH` mit dem echten `_lib.sh`, je Fall frischer `config.env` und dem echten Adapter `r-mutation.R` (2 Worker), ohne Baseline, wo nicht anders genannt; ein Durchgang dauerte rund 3,5 s. Kein Mutationslauf über das Paket llmsa.
+
+| Fall | `MUT_SCORE_MIN` | `MUT_FLAKE_MARGIN` | Abstand | Durchgänge | Ergebnis, in beiden Gates gleich |
+| --- | --- | --- | --- | --- | --- |
+| über der Schwelle | 60 | 5 | – | 1 | `pass (score=62.5 required=60 …)` |
+| knapp darunter | 65 | 5 | 2,50 | 2 | `62.5 < 65 (2.50 Punkte darunter, höchstens MUT_FLAKE_MARGIN=5); genau ein Flake-Rerun`, dann `fail (score=62.50 required=65 …)` |
+| an der Grenze | 67.5 | 5 | 5,00 | 2 | Rerun, dann `fail (score=62.50 required=67.5 …)` |
+| knapp über der Grenze | 67.51 | 5 | 5,01 | 1 | `fail (score=62.5 required=67.51 …; 5.01 Punkte unter der Schwelle, mehr als MUT_FLAKE_MARGIN=5, ohne Flake-Rerun)` |
+| weit darunter | 82.5 | 5 | 20,00 | 1 | `fail (score=62.5 required=82.5 …; 20.00 Punkte unter der Schwelle, mehr als MUT_FLAKE_MARGIN=5, ohne Flake-Rerun)` |
+| Vorgabe | 65 | leer; ohne Eintrag | 2,50 | 2 | Rerun mit `höchstens MUT_FLAKE_MARGIN=5`, dann `fail` |
+| abgeschaltet | 65 | 0 | 2,50 | 1 | `fail (…; 2.50 Punkte unter der Schwelle, mehr als MUT_FLAKE_MARGIN=0, ohne Flake-Rerun)` |
+| altes Verhalten | 82.5 | 100 | 20,00 | 2 | Rerun, dann `fail (score=62.50 required=82.5 …)` |
+| ungültig | 65 | abc | – | 0 | Exit 2 vor dem ersten Durchgang, stderr `MUT_FLAKE_MARGIN muss eine Zahl ab 0 sein: abc` |
+
+- Ratchet in 86-mutgate (`MUT_SCORE_FLOOR=50`, `MUT_RATCHET_TOL=2`): Baseline 69 ergibt `required=67.00`, 4,50 Punkte Abstand, Rerun, dann `fail`; Baseline 70 ergibt `required=68.00`, 5,50 Punkte, `fail` ohne Rerun.
+- Gegenprobe mit den Skripten von `a92396f` in denselben Fällen: über der Schwelle und knapp darunter derselbe Kurzbefund wie mit den neuen; weit darunter liefen dort zwei Durchgänge bis `fail (score=62.50 required=82.5 …)`.
+- Aus den Läufen blieb kein Prozess übrig.
+
+### Konsequenzen
+
+- Geändert: `orchestrator/gates.d/86-mutgate.sh`, `orchestrator/gates.d/88-mutfull.sh`, `config.env.example` (Block „Mutgate v2“), `docs/gates-auswahl.md` (Zeile mutgate, Konfigurationsblock §2, Wortlaut von `88-mutfull.sh` in §4), dieses ADR (Status, Für das Template vorgemerkt, dieser Nachtrag). Lokal und git-ignoriert: `orchestrator/config.env` mit `MUT_FLAKE_MARGIN=5` und Kommentar wie im Konfigurationsblock.
+- Unverändert: `R/`, `man/`, `tests/`, `inst/`, `vignettes/`, `DESCRIPTION`, `NAMESPACE`, `reference/anchors/`, `orchestrator/state/`, `orchestrator/handoff/`, `orchestrator/prompts/`, `orchestrator/lib/r-mutation.R`, `orchestrator/gates.d/86-mutgate.sh.example`; das Ergebnis von Runde 1 (`gates.json`, `gate-mutgate.log`) bleibt, wie es ist.
+- Für M1a: Die nächste Gate-Runde (nach QA in Runde 1) läuft mit der neuen Regel. Liegt der Score wieder rund 20 Punkte unter 80, endet mutgate nach einem Durchgang, nach den Zahlen von Runde 1 in rund 3,3 h statt 6,6 h.
+- Rücknahme: `MUT_FLAKE_MARGIN=100` stellt das alte Verhalten her; jeder Score unter der Schwelle liegt höchstens 100 Punkte darunter.

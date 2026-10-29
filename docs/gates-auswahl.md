@@ -12,7 +12,7 @@ Typ-Grundsatz Software/R-Paket nach `PROJEKTIERUNG.md` und Preset `r-paket`. Sie
 | tests | `30-tests.sh` (`TEST_CMD='Rscript orchestrator/lib/r-tests.R tests/testthat tests/acceptance tests/simulation tests/e2e tests/fuzz'`) | ein testthat-Lauf über alle Rollenordner plus `tests/simulation/` (Klasse A), Paket aus den Quellen geladen; `r-tests.R` setzt `NOT_CRAN=true`, damit auch Tests mit `skip_on_cran()` im Gate laufen (BL-56, ADR-011); jeder Abnahmetest trägt eine Kriteriums-ID | Exit 1 bei Fehlschlag oder Fehler; leere Ordner übersprungen | K-M0-2, K-M0-4, K-M0-5, K-M0-7 und alle Kriterien mit Prüfweg Test in 02–04 |
 | trace | `70-trace.sh` (ohne `TRACE_CMD`) | `CRITERIA.json` muss jede Manifest-ID mit wörtlichem Spec-Zitat und Quelldatei führen, jede ID muss unter `tests/acceptance/` referenziert sein, jede dort gefundene ID bekannt sein | Exit 1 bei Waisen oder falschem Zitat | K-M0-6; Traceability aller Meilensteine (SPEC-KONTRAKT §3) |
 | territory | `82-territory.sh` | der letzte Territoriums-Audit muss zu Runde und Basis passen; schützt `tests/acceptance/`, `reference/anchors/`, `orchestrator/**` vor dem Builder | Exit 1 bei Verstoß | K-M0-6; Gewaltenteilung aller Meilensteine |
-| mutgate | `86-mutgate.sh` (`MUT_CMD='Rscript orchestrator/lib/r-mutation.R'`) | Mutation-Score der seit `plan/<MS>` geänderten Dateien im Scope; Scope in M0, M2 und M1a–M1d `R/fit.R` und `R/grr.R`, ab M3a alle `R/*.R`; Schwelle 80 % (`ANK-32`), Floor 80, Ratchet-Toleranz 2. Je Mutant laufen die Ordner aus `MUT_TEST_DIRS` ohne die M2-Abnahmetests und ohne `test-m0-testthat-count` (`MUT_TEST_EXCLUDE='^(m2-[0-9]\|m0-testthat-count$)'`) in einem eigenen R-Prozess mit Zeitlimit max(`MUT_TEST_TIMEOUT`, ⌈`MUT_TEST_TIMEOUT_FACTOR` × Vorlauf⌉), Faktor 5; ein Mutant darüber zählt als `Timeout`, also entdeckt. Vor dem ersten Mutanten läuft der Testsatz einmal unmutiert, auch ohne Zeitlimit; scheitern darin Tests, endet das Gate ohne Mutantenlauf und ohne Flake-Rerun mit `fail` und nennt Anzahl und Namen der Tests. Seit 29.10.2026, ADR-019 mit Nachtrag; gilt ebenso für mutfull | Exit 1 unter Schwelle oder bei rotem unmutiertem Vorlauf; `pass` ohne geänderten Scope | K-M0-6 (leer), Prüfstandard Nr. 7 in M1a–M3d |
+| mutgate | `86-mutgate.sh` (`MUT_CMD='Rscript orchestrator/lib/r-mutation.R'`) | Mutation-Score der seit `plan/<MS>` geänderten Dateien im Scope; Scope in M0, M2 und M1a–M1d `R/fit.R` und `R/grr.R`, ab M3a alle `R/*.R`; Schwelle 80 % (`ANK-32`), Floor 80, Ratchet-Toleranz 2. Je Mutant laufen die Ordner aus `MUT_TEST_DIRS` ohne die M2-Abnahmetests und ohne `test-m0-testthat-count` (`MUT_TEST_EXCLUDE='^(m2-[0-9]\|m0-testthat-count$)'`) in einem eigenen R-Prozess mit Zeitlimit max(`MUT_TEST_TIMEOUT`, ⌈`MUT_TEST_TIMEOUT_FACTOR` × Vorlauf⌉), Faktor 5; ein Mutant darüber zählt als `Timeout`, also entdeckt. Vor dem ersten Mutanten läuft der Testsatz einmal unmutiert, auch ohne Zeitlimit; scheitern darin Tests, endet das Gate ohne Mutantenlauf und ohne Flake-Rerun mit `fail` und nennt Anzahl und Namen der Tests. Liegt der erste Score unter der Schwelle, läuft genau ein Flake-Rerun, aber nur bei höchstens `MUT_FLAKE_MARGIN` Punkten Abstand (5); weiter darunter endet das Gate sofort mit `fail` und dem Hinweis, dass keine Wiederholung lief. Seit 29.10.2026, ADR-019 mit erstem und drittem Nachtrag; gilt ebenso für mutfull | Exit 1 unter Schwelle oder bei rotem unmutiertem Vorlauf; `pass` ohne geänderten Scope | K-M0-6 (leer), Prüfstandard Nr. 7 in M1a–M3d |
 | golden-adr | `87-golden-adr.sh` (`GOLDEN_PATH_REGEX='^inst/extdata/'`) | Änderungen an eingefrorenen Daten (`inst/extdata/`) oder Ankern (`reference/anchors/`) verlangen ein ADR im selben Meilenstein | Exit 1 ohne ADR | K-M0-6; K-M1d-1, K-M1d-3, K-M2-1 (Datenänderungen), Ankerpflege 01 §6 |
 | mutfull (projektspezifisch) | `88-mutfull.sh` (Betreiber, Abschnitt 4) | mutgate mutiert nur Diff-Dateien; der Prüfstandard verlangt einen Lauf über beide Kerndateien unabhängig vom Diff; nur in M1c fällig | Exit 1 unter `MUT_SCORE_MIN`; `pass (nicht fällig)` in anderen Meilensteinen | K-M1c-6 |
 
@@ -56,6 +56,14 @@ MUT_SCOPE_REGEX='^R/(fit|grr)\.R$'   # M0, M2, M1a–M1d; ab M3a: '^R/.*\.R$' un
 MUT_SCORE_MIN=80
 MUT_SCORE_FLOOR=80
 MUT_RATCHET_TOL=2
+# Flake-Rerun (Betreiber, 29.10.2026; ADR-019, dritter Nachtrag): Liegt der erste Score unter der verlangten
+# Schwelle, wiederholen mutgate und mutfull den Lauf genau einmal, aber nur bei höchstens MUT_FLAKE_MARGIN
+# Punkten Abstand; weiter darunter melden sie sofort fail mit Score, Schwelle und dem Hinweis, dass keine
+# Wiederholung lief. Begründung: Die Wiederholung fängt Schwankungen von ein bis zwei Punkten ab.
+# M1a Runde 1: beide Durchgänge 60,26 bei Schwelle 80 (19,74 Punkte darunter); die Wiederholung kostete
+# rund 3 h 16 min (Vorlauf 88,1 s, muttest 11701,83 s) und änderte nichts. Leer = 5; 0 schaltet sie ab,
+# 100 stellt das alte Verhalten her.
+MUT_FLAKE_MARGIN=5
 MUT_WORKERS=14
 MUT_TEST_DIRS='tests/testthat tests/acceptance tests/e2e tests/fuzz'   # ohne tests/simulation
 # Testauswahl und Zeitlimit je Mutant (Betreiber, 29.10.2026; E12 aus PLAN-REVIEW M1a Runde 2; ADR-019
@@ -125,7 +133,8 @@ Gate-Kriterien erhalten im Abnahmetest einen ID-Verweis (`skip("K-M0-3: decided 
 # Projektgate llmsa: Mutationslauf über feste Kerndateien, unabhängig vom Diff.
 # Fällig nur in MUTFULL_MILESTONES (Vorgabe M1c); sonst pass. Zählung wie 86-mutgate
 # (Killed und Timeout erkannt, RuntimeError nicht gezählt, Äquivalenz nur nach Reviewer-Approval;
-# roter unmutierter Vorlauf fail ohne Flake-Rerun).
+# roter unmutierter Vorlauf fail ohne Flake-Rerun; Flake-Rerun nur bis MUT_FLAKE_MARGIN Punkte unter
+# MUT_SCORE_MIN).
 set -euo pipefail
 source "$ORCH/gates.d/_lib.sh"
 gate_load_config
@@ -136,6 +145,8 @@ MUT_REPORT="${MUT_REPORT:-reports/mutation/mutation.json}"
 # Rote Tests des unmutierten Vorlaufs; MUT_CMD schreibt sie neben MUT_REPORT und endet mit rc=3.
 MUT_UNMUTATED="$(dirname "$MUT_REPORT")/unmutated.json"
 MUT_SCORE_MIN="${MUT_SCORE_MIN:-80}"
+# Höchster Abstand des ersten Scores zur Schwelle, bei dem noch genau ein Flake-Rerun läuft.
+MUT_FLAKE_MARGIN="${MUT_FLAKE_MARGIN:-5}"
 APPROVED="$ORCH/handoff/$MILESTONE/MUT-EQUIV-APPROVED.json"
 
 case " $MUTFULL_MILESTONES " in
@@ -143,6 +154,8 @@ case " $MUTFULL_MILESTONES " in
   *) echo "mutfull: pass (nicht fällig in $MILESTONE)"; exit 0 ;;
 esac
 [ -n "${MUT_CMD:-}" ] || { echo "mutfull: MUT_CMD ist leer" >&2; exit 2; }
+[[ "$MUT_FLAKE_MARGIN" =~ ^[0-9]+([.][0-9]+)?$ ]] \
+  || { echo "mutfull: MUT_FLAKE_MARGIN muss eine Zahl ab 0 sein: $MUT_FLAKE_MARGIN" >&2; exit 2; }
 IFS=',' read -r -a files <<<"$MUTFULL_FILES"
 for f in "${files[@]}"; do
   [ -f "$REPO_ROOT/$f" ] || { echo "mutfull: Datei fehlt: $f" >&2; exit 2; }
@@ -211,7 +224,14 @@ run_mutation() {
 run_mutation || exit $?
 FIRST_SCORE="$SCORE"
 if ! awk -v score="$SCORE" -v required="$MUT_SCORE_MIN" 'BEGIN {exit !(score>=required)}'; then
-  echo "mutfull: $SCORE < $MUT_SCORE_MIN; genau ein Flake-Rerun"
+  GAP="$(awk -v score="$SCORE" -v required="$MUT_SCORE_MIN" 'BEGIN {printf "%.2f",required-score}')"
+  # Der Rerun fängt Schwankungen von ein bis zwei Punkten ab; weiter unter der Schwelle kostet er
+  # einen vollen Durchgang und kann das Ergebnis nicht drehen.
+  if ! awk -v gap="$GAP" -v margin="$MUT_FLAKE_MARGIN" 'BEGIN {exit !(gap<=margin)}'; then
+    echo "mutfull: fail (score=$SCORE required=$MUT_SCORE_MIN files=$MUTFULL_FILES; $GAP Punkte unter der Schwelle, mehr als MUT_FLAKE_MARGIN=$MUT_FLAKE_MARGIN, ohne Flake-Rerun)"
+    exit 1
+  fi
+  echo "mutfull: $SCORE < $MUT_SCORE_MIN ($GAP Punkte darunter, höchstens MUT_FLAKE_MARGIN=$MUT_FLAKE_MARGIN); genau ein Flake-Rerun"
   run_mutation || exit $?
   SCORE="$(awk -v a="$FIRST_SCORE" -v b="$SCORE" 'BEGIN {printf "%.2f",(a>b)?a:b}')"
 fi

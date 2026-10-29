@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Mutation-Ratchet v2: Pre-Mutation-Tod=error, roter unmutierter Vorlauf=fail ohne Flake-Rerun,
-# Äquivalenz nur nach Reviewer-Approval.
+# Flake-Rerun nur bis MUT_FLAKE_MARGIN Punkte unter der Schwelle, Äquivalenz nur nach Reviewer-Approval.
 set -euo pipefail
 source "$ORCH/gates.d/_lib.sh"
 gate_load_config
@@ -12,6 +12,8 @@ MUT_UNMUTATED="$(dirname "$MUT_REPORT")/unmutated.json"
 MUT_SCORE_MIN="${MUT_SCORE_MIN:-65}"
 MUT_SCORE_FLOOR="${MUT_SCORE_FLOOR:-50}"
 MUT_RATCHET_TOL="${MUT_RATCHET_TOL:-2}"
+# Höchster Abstand des ersten Scores zur Schwelle, bei dem noch genau ein Flake-Rerun läuft.
+MUT_FLAKE_MARGIN="${MUT_FLAKE_MARGIN:-5}"
 BASELINE_FILE="$ORCH/state/mut-baseline"
 APPROVED="$ORCH/handoff/$MILESTONE/MUT-EQUIV-APPROVED.json"
 
@@ -21,6 +23,8 @@ if [ -z "$CHANGED" ]; then
   exit 0
 fi
 [ -n "${MUT_CMD:-}" ] || { echo "mutgate: MUT_CMD ist leer" >&2; exit 2; }
+[[ "$MUT_FLAKE_MARGIN" =~ ^[0-9]+([.][0-9]+)?$ ]] \
+  || { echo "mutgate: MUT_FLAKE_MARGIN muss eine Zahl ab 0 sein: $MUT_FLAKE_MARGIN" >&2; exit 2; }
 
 score_from_report() {
   local approved_json='[]'
@@ -88,7 +92,14 @@ fi
 run_mutation || exit $?
 FIRST_SCORE="$SCORE"
 if ! awk -v score="$SCORE" -v required="$REQUIRED" 'BEGIN {exit !(score>=required)}'; then
-  echo "mutgate: $SCORE < $REQUIRED; genau ein Flake-Rerun"
+  GAP="$(awk -v score="$SCORE" -v required="$REQUIRED" 'BEGIN {printf "%.2f",required-score}')"
+  # Der Rerun fängt Schwankungen von ein bis zwei Punkten ab; weiter unter der Schwelle kostet er
+  # einen vollen Durchgang und kann das Ergebnis nicht drehen.
+  if ! awk -v gap="$GAP" -v margin="$MUT_FLAKE_MARGIN" 'BEGIN {exit !(gap<=margin)}'; then
+    echo "mutgate: fail (score=$SCORE required=$REQUIRED baseline=$BASELINE floor=$MUT_SCORE_FLOOR; $GAP Punkte unter der Schwelle, mehr als MUT_FLAKE_MARGIN=$MUT_FLAKE_MARGIN, ohne Flake-Rerun)"
+    exit 1
+  fi
+  echo "mutgate: $SCORE < $REQUIRED ($GAP Punkte darunter, höchstens MUT_FLAKE_MARGIN=$MUT_FLAKE_MARGIN); genau ein Flake-Rerun"
   run_mutation || exit $?
   SCORE="$(awk -v a="$FIRST_SCORE" -v b="$SCORE" 'BEGIN {printf "%.2f",(a>b)?a:b}')"
 fi
