@@ -1,0 +1,577 @@
+# stdout
+r-tests: tests/testthat: 24 Testdatei(en)
+✔ | F W  S  OK | Context
+
+⠏ |          0 | acmg-api                                                       
+⠋ |          1 | acmg-api                                                       
+⠙ |         42 | acmg-api                                                       
+⠋ |         81 | acmg-api                                                       
+⠙ |        112 | acmg-api                                                       
+⠼ |        155 | acmg-api                                                       
+⠇ |        159 | acmg-api                                                       
+⠙ |        162 | acmg-api                                                       
+⠸ |        174 | acmg-api                                                       
+✔ |        177 | acmg-api [2.2s]
+
+⠏ |          0 | acmg-data                                                      
+⠧ |          8 | acmg-data                                                      
+⠼ |         25 | acmg-data                                                      
+✔ |         43 | acmg-data
+
+⠏ |          0 | acmg-evaluate                                                  
+⠹ |          3 | acmg-evaluate                                                  
+⠋ |         41 | acmg-evaluate                                                  
+⠋ |         51 | acmg-evaluate                                                  
+⠙ |         62 | acmg-evaluate                                                  
+⠋ |         71 | acmg-evaluate                                                  
+⠹ |         93 | acmg-evaluate                                                  
+⠏ |        100 | acmg-evaluate                                                  
+⠙ |        102 | acmg-evaluate                                                  
+⠴ |        106 | acmg-evaluate                                                  
+⠏ |        110 | acmg-evaluate                                                  
+⠸ |        114 | acmg-evaluate                                                  
+⠦ |        137 | acmg-evaluate                                                  
+✔ |        139 | acmg-evaluate [4.0s]
+
+⠏ |          0 | acmg-network                                                   
+⠦ |         37 | acmg-network                                                   
+⠋ |         81 | acmg-network                                                   
+⠋ |        121 | acmg-network                                                   
+⠧ |        148 | acmg-network                                                   
+⠏ |        180 | acmg-network                                                   
+⠼ |        185 | acmg-network                                                   
+⠙ |        202 | acmg-network                                                   
+⠏ |        210 | acmg-network                                                   
+⠦ |        217 | acmg-network                                                   
+⠸ |        224 | acmg-network                                                   
+⠏ |        230 | acmg-network                                                   
+✔ |        236 | acmg-network [5.0s]
+
+⠏ |          0 | acmg-pilot-backend-errors                                      
+⠧ |          8 | acmg-pilot-backend-errors                                      
+⠏ |         20 | acmg-pilot-backend-errors                                      
+⠸ |         24 | acmg-pilot-backend-errors                                      
+⠏ |         30 | acmg-pilot-backend-errors                                      
+⠙ |         32 | acmg-pilot-backend-errors                                      
+⠸ |         34 | acmg-pilot-backend-errors                                      
+⠙ |         42 | acmg-pilot-backend-errors                                      
+⠼ |         45 | acmg-pilot-backend-errors                                      
+✔ |         57 | acmg-pilot-backend-errors [2.5s]
+
+⠏ |          0 | acmg-pilot-costs                                               
+⠋ |          1 | acmg-pilot-costs                                               
+⠏ |         20 | acmg-pilot-costs                                               
+⠋ |         31 | acmg-pilot-costs                                               
+⠸ |         34 | acmg-pilot-costs                                               
+✔ |         42 | acmg-pilot-costs [1.0s]
+
+⠏ |          0 | acmg-pilot-metadata                                            
+⠧ |          8 | acmg-pilot-metadata                                            
+⠴ |         16 | acmg-pilot-metadata                                            
+⠇ |         29 | acmg-pilot-metadata                                            
+⠙ |         42 | acmg-pilot-metadata                                            
+⠼ |         55 | acmg-pilot-metadata                                            
+⠧ |         68 | acmg-pilot-metadata                                            
+⠋ |         81 | acmg-pilot-metadata                                            
+⠸ |         94 | acmg-pilot-metadata                                            
+⠼ |        105 | acmg-pilot-metadata                                            
+⠧ |        128 | acmg-pilot-metadata                                            
+⠼ |        145 | acmg-pilot-metadata                                            
+⠼ |        155 | acmg-pilot-metadata                                            
+⠧ |        158 | acmg-pilot-metadata                                            
+⠸ |        164 | acmg-pilot-metadata                                            
+⠧ |        168 | acmg-pilot-metadata                                            
+⠧ |        178 | acmg-pilot-metadata                                            
+⠋ |        181 | acmg-pilot-metadata                                            
+⠸ |        184 | acmg-pilot-metadata                                            
+⠇ |        209 | acmg-pilot-metadata                                            
+⠙ |        212 | acmg-pilot-metadata                                            
+✔ |        222 | acmg-pilot-metadata [7.4s]
+
+⠏ |          0 | acmg-pipeline                                                  
+⠙ |          2 | acmg-pipeline                                                  
+⠼ |          5 | acmg-pipeline                                                  
+⠦ |          7 | acmg-pipeline                                                  
+⠋ |         11 | acmg-pipeline                                                  
+⠼ |         15 | acmg-pipeline                                                  
+⠧ |         18 | acmg-pipeline                                                  
+⠋ |         21 | acmg-pipeline                                                  
+⠹ |         23 | acmg-pipeline                                                  
+⠴ |         26 | acmg-pipeline                                                  
+⠏ |         30 | acmg-pipeline                                                  
+⠸ |         34 | acmg-pipeline                                                  
+⠹ |         43 | acmg-pipeline                                                  
+⠸ |         44 | acmg-pipeline                                                  
+⠦ |         47 | acmg-pipeline                                                  
+⠧ |         48 | acmg-pipeline                                                  
+⠏ |         50 | acmg-pipeline                                                  
+⠇ |         59 | acmg-pipeline                                                  
+⠹ |         63 | acmg-pipeline                                                  
+⠙ |         72 | acmg-pipeline                                                  
+✔ |         75 | acmg-pipeline [3.0s]
+
+⠏ |          0 | acmg-policies                                                  
+⠹ |         23 | acmg-policies                                                  
+✔ |         70 | acmg-policies [1.1s]
+
+⠏ |          0 | acmg-rework                                                    
+⠋ |          1 | acmg-rework                                                    
+⠇ |         29 | acmg-rework                                                    
+⠸ |         64 | acmg-rework                                                    
+⠦ |         97 | acmg-rework                                                    
+⠋ |        101 | acmg-rework                                                    
+⠇ |        119 | acmg-rework                                                    
+⠏ |        120 | acmg-rework                                                    
+⠙ |        122 | acmg-rework                                                    
+⠸ |        124 | acmg-rework                                                    
+⠴ |        126 | acmg-rework                                                    
+⠦ |        127 | acmg-rework                                                    
+⠙ |        132 | acmg-rework                                                    
+⠸ |        174 | acmg-rework                                                    
+⠙ |        192 | acmg-rework                                                    
+✔ |        194 | acmg-rework [7.9s]
+
+⠏ |          0 | acmg-robustness-errors                                         
+⠋ |          1 | acmg-robustness-errors                                         
+⠏ |         10 | acmg-robustness-errors                                         
+⠦ |         17 | acmg-robustness-errors                                         
+⠴ |         36 | acmg-robustness-errors                                         
+✔ |         36 | acmg-robustness-errors [6.8s]
+
+⠏ |          0 | acmg-timeout                                                   
+⠇ |         29 | acmg-timeout                                                   
+⠧ |         68 | acmg-timeout                                                   
+⠇ |         99 | acmg-timeout                                                   
+✔ |        105 | acmg-timeout
+
+⠏ |          0 | agreement                                                      
+✔ |         13 | agreement
+
+⠏ |          0 | backend-finish-reason                                          
+⠹ |         33 | backend-finish-reason                                          
+⠹ |         43 | backend-finish-reason                                          
+✔ |         59 | backend-finish-reason
+
+⠏ |          0 | backend-reasoning                                              
+⠼ |         25 | backend-reasoning                                              
+⠙ |         32 | backend-reasoning                                              
+✔ |         45 | backend-reasoning
+
+⠏ |          0 | backends                                                       
+✔ |      1  10 | backends
+
+⠏ |          0 | design-run                                                     
+⠋ |         21 | design-run                                                     
+✔ |         37 | design-run
+
+⠏ |          0 | fit-grr                                                        
+⠋ |          1 | fit-grr                                                        
+⠙ |         12 | fit-grr                                                        
+⠸ |         14 | fit-grr                                                        
+⠦ |         17 | fit-grr                                                        
+⠙ |         22 | fit-grr                                                        
+⠸ |         24 | fit-grr                                                        
+✔ |         27 | fit-grr [7.6s]
+
+⠏ |          0 | fit-numeric                                                    
+⠸ |         14 | fit-numeric                                                    
+⠴ |         26 | fit-numeric                                                    
+⠸ |         34 | fit-numeric                                                    
+⠋ |         41 | fit-numeric                                                    
+⠧ |         48 | fit-numeric                                                    
+⠴ |         56 | fit-numeric                                                    
+⠸ |         64 | fit-numeric                                                    
+⠏ |         70 | fit-numeric                                                    
+⠦ |         77 | fit-numeric                                                    
+⠼ |         85 | fit-numeric                                                    
+⠏ |         90 | fit-numeric                                                    
+⠴ |         96 | fit-numeric                                                    
+✔ |        102 | fit-numeric [1.4s]
+
+⠏ |          0 | grr-numeric                                                    
+⠇ |         19 | grr-numeric                                                    
+✔ |         26 | grr-numeric
+
+⠏ |          0 | parsers                                                        
+⠴ |         26 | parsers                                                        
+⠼ |         75 | parsers                                                        
+✔ |         85 | parsers
+
+⠏ |          0 | report                                                         
+⠋ |          1 | report                                                         
+⠹ |         13 | report                                                         
+✔ |         33 | report [2.5s]
+
+⠏ |          0 | robustness-plan-spc                                            
+⠼ |         35 | robustness-plan-spc                                            
+✔ |         49 | robustness-plan-spc
+
+⠏ |          0 | validation-numeric                                             
+⠋ |          1 | validation-numeric                                             
+⠧ |          8 | validation-numeric                                             
+⠸ |         14 | validation-numeric                                             
+⠼ |         25 | validation-numeric                                             
+⠹ |         33 | validation-numeric                                             
+⠋ |         41 | validation-numeric                                             
+⠏ |         50 | validation-numeric                                             
+⠹ |         63 | validation-numeric                                             
+⠴ |         76 | validation-numeric                                             
+⠇ |         79 | validation-numeric                                             
+⠏ |        110 | validation-numeric                                             
+⠋ |        111 | validation-numeric                                             
+✔ |        116 | validation-numeric [2.2s]
+
+══ Results ═════════════════════════════════════════════════════════════════════
+Duration: 57.2 s
+
+── Skipped tests (1) ───────────────────────────────────────────────────────────
+• requireNamespace("ellmer", quietly = TRUE) is TRUE (1):
+  'test-backends.R:32:3'
+
+[ FAIL 0 | WARN 0 | SKIP 1 | PASS 1998 ]
+r-tests: tests/acceptance: 20 Testdatei(en)
+✔ | F W  S  OK | Context
+
+⠏ |          0 | m0-api-snapshot                                                
+⠋ |         41 | m0-api-snapshot                                                
+⠼ |         85 | m0-api-snapshot                                                
+⠴ |        136 | m0-api-snapshot                                                
+⠦ |        187 | m0-api-snapshot                                                
+⠋ |        221 | m0-api-snapshot                                                
+⠹ |        253 | m0-api-snapshot                                                
+✔ |        259 | m0-api-snapshot
+
+⠏ |          0 | m0-deps                                                        
+⠼ |         25 | m0-deps                                                        
+✔ |         45 | m0-deps
+
+⠏ |          0 | m0-gates                                                       
+✔ |          7 | m0-gates
+
+⠏ |          0 | m0-layout                                                      
+⠦ |          7 | m0-layout                                                      
+✔ |         16 | m0-layout
+
+⠏ |          0 | m0-r-unchanged                                                 
+⠇ |         29 | m0-r-unchanged                                                 
+✔ |         55 | m0-r-unchanged
+
+⠏ |          0 | m0-testthat-count                                              
+⠙ |          2 | m0-testthat-count                                              
+✔ |          2 | m0-testthat-count [63.2s]
+
+⠏ |          0 | m1a-1-reml-anova                                               
+⠸ |          4 | m1a-1-reml-anova                                               
+⠋ |         21 | m1a-1-reml-anova                                               
+⠹ |         23 | m1a-1-reml-anova                                               
+⠹ |         43 | m1a-1-reml-anova                                               
+⠇ |         59 | m1a-1-reml-anova                                               
+⠴ |         76 | m1a-1-reml-anova                                               
+⠏ |         90 | m1a-1-reml-anova                                               
+✔ |         91 | m1a-1-reml-anova [1.2s]
+
+⠏ |          0 | m1a-2-aiag                                                     
+⠇ |         19 | m1a-2-aiag                                                     
+✔ |         40 | m1a-2-aiag
+
+⠏ |          0 | m1a-3-oracles                                                  
+⠋ |          1 | m1a-3-oracles                                                  
+⠙ |          2 | m1a-3-oracles                                                  
+⠙ |         12 | m1a-3-oracles                                                  
+⠹ |         13 | m1a-3-oracles                                                  
+⠏ |         20 | m1a-3-oracles                                                  
+⠦ |         27 | m1a-3-oracles                                                  
+⠋ |         31 | m1a-3-oracles                                                  
+⠧ |         48 | m1a-3-oracles                                                  
+✔ |         66 | m1a-3-oracles [12.7s]
+
+⠏ |          0 | m1a-4-nist                                                     
+⠦ |          7 | m1a-4-nist                                                     
+⠋ |         11 | m1a-4-nist                                                     
+⠦ |         17 | m1a-4-nist                                                     
+⠹ |         23 | m1a-4-nist                                                     
+⠋ |         41 | m1a-4-nist                                                     
+⠹ |         53 | m1a-4-nist                                                     
+⠋ |         71 | m1a-4-nist                                                     
+⠦ |         87 | m1a-4-nist                                                     
+⠦ |         97 | m1a-4-nist                                                     
+✔ |        106 | m1a-4-nist [14.9s]
+
+⠏ |          0 | m1a-5-metrics-verdict                                          
+⠇ |         39 | m1a-5-metrics-verdict                                          
+⠴ |         66 | m1a-5-metrics-verdict                                          
+⠼ |         85 | m1a-5-metrics-verdict                                          
+⠼ |         95 | m1a-5-metrics-verdict                                          
+✔ |         99 | m1a-5-metrics-verdict
+
+⠏ |          0 | m1a-6-invariance-edge                                          
+⠋ |          1 | m1a-6-invariance-edge                                          
+⠹ |          3 | m1a-6-invariance-edge                                          
+⠴ |         16 | m1a-6-invariance-edge                                          
+⠇ |         29 | m1a-6-invariance-edge                                          
+⠙ |         42 | m1a-6-invariance-edge                                          
+⠇ |         59 | m1a-6-invariance-edge                                          
+⠴ |         76 | m1a-6-invariance-edge                                          
+⠏ |         80 | m1a-6-invariance-edge                                          
+⠋ |         91 | m1a-6-invariance-edge                                          
+⠼ |        105 | m1a-6-invariance-edge                                          
+⠸ |        124 | m1a-6-invariance-edge                                          
+⠹ |        143 | m1a-6-invariance-edge                                          
+⠙ |        152 | m1a-6-invariance-edge                                          
+⠇ |        159 | m1a-6-invariance-edge                                          
+⠦ |        167 | m1a-6-invariance-edge                                          
+✔ |        172 | m1a-6-invariance-edge [4.3s]
+
+⠏ |          0 | m1a-7-vignette                                                 
+⠴ |         16 | m1a-7-vignette                                                 
+⠇ |         69 | m1a-7-vignette                                                 
+⠼ |        115 | m1a-7-vignette                                                 
+⠹ |        133 | m1a-7-vignette                                                 
+⠧ |        148 | m1a-7-vignette                                                 
+✔ |        148 | m1a-7-vignette
+
+⠏ |          0 | m2-1-items                                                     
+⠇ |          9 | m2-1-items                                                     
+⠙ |         32 | m2-1-items                                                     
+⠴ |         36 | m2-1-items                                                     
+⠹ |         43 | m2-1-items                                                     
+⠇ |         59 | m2-1-items                                                     
+⠧ |         78 | m2-1-items                                                     
+⠦ |         87 | m2-1-items                                                     
+⠹ |        103 | m2-1-items                                                     
+⠧ |        108 | m2-1-items                                                     
+⠼ |        135 | m2-1-items                                                     
+⠸ |        144 | m2-1-items                                                     
+✔ |        149 | m2-1-items [135.0s]
+
+⠏ |          0 | m2-2-memorisation                                              
+⠙ |          2 | m2-2-memorisation                                              
+⠹ |          3 | m2-2-memorisation                                              
+⠇ |         19 | m2-2-memorisation                                              
+⠙ |         32 | m2-2-memorisation                                              
+✔ |         34 | m2-2-memorisation [86.9s]
+
+⠏ |          0 | m2-3-prompts-parser                                            
+⠦ |          7 | m2-3-prompts-parser                                            
+⠴ |         26 | m2-3-prompts-parser                                            
+⠙ |         52 | m2-3-prompts-parser                                            
+⠋ |        101 | m2-3-prompts-parser                                            
+⠧ |        148 | m2-3-prompts-parser                                            
+⠇ |        199 | m2-3-prompts-parser                                            
+⠹ |        223 | m2-3-prompts-parser                                            
+⠴ |        276 | m2-3-prompts-parser                                            
+⠹ |        333 | m2-3-prompts-parser                                            
+⠏ |        360 | m2-3-prompts-parser                                            
+⠹ |        413 | m2-3-prompts-parser                                            
+⠦ |        467 | m2-3-prompts-parser                                            
+⠧ |        498 | m2-3-prompts-parser                                            
+⠇ |        549 | m2-3-prompts-parser                                            
+⠙ |        602 | m2-3-prompts-parser                                            
+⠦ |        647 | m2-3-prompts-parser                                            
+⠋ |        681 | m2-3-prompts-parser                                            
+⠹ |        733 | m2-3-prompts-parser                                            
+⠙ |        742 | m2-3-prompts-parser                                            
+⠙ |        752 | m2-3-prompts-parser                                            
+⠙ |        782 | m2-3-prompts-parser                                            
+⠼ |        835 | m2-3-prompts-parser                                            
+⠴ |        836 | m2-3-prompts-parser                                            
+⠦ |        837 | m2-3-prompts-parser                                            
+✔ |        837 | m2-3-prompts-parser [502.6s]
+
+⠏ |          0 | m2-4-backends                                                  
+⠦ |          7 | m2-4-backends                                                  
+⠏ |         10 | m2-4-backends                                                  
+⠇ |         19 | m2-4-backends                                                  
+⠇ |         29 | m2-4-backends                                                  
+⠇ |         39 | m2-4-backends                                                  
+⠦ |         47 | m2-4-backends                                                  
+⠧ |         58 | m2-4-backends                                                  
+⠇ |         69 | m2-4-backends                                                  
+⠋ |         81 | m2-4-backends                                                  
+✔ |         89 | m2-4-backends [1.7s]
+
+⠏ |          0 | m2-5-plan                                                      
+⠇ |          9 | m2-5-plan                                                      
+⠴ |         16 | m2-5-plan                                                      
+⠇ |         49 | m2-5-plan                                                      
+⠧ |         68 | m2-5-plan                                                      
+⠧ |         98 | m2-5-plan                                                      
+⠇ |         99 | m2-5-plan                                                      
+⠋ |        101 | m2-5-plan                                                      
+⠸ |        104 | m2-5-plan                                                      
+✔ |        106 | m2-5-plan [1.8s]
+
+⠏ |          0 | m2-6-evaluate                                                  
+⠋ |          1 | m2-6-evaluate                                                  
+⠸ |         14 | m2-6-evaluate                                                  
+⠼ |         25 | m2-6-evaluate                                                  
+⠴ |         26 | m2-6-evaluate                                                  
+⠇ |         49 | m2-6-evaluate                                                  
+⠼ |         55 | m2-6-evaluate                                                  
+⠧ |         68 | m2-6-evaluate                                                  
+⠦ |         97 | m2-6-evaluate                                                  
+⠹ |        103 | m2-6-evaluate                                                  
+⠦ |        117 | m2-6-evaluate                                                  
+⠼ |        145 | m2-6-evaluate                                                  
+⠋ |        151 | m2-6-evaluate                                                  
+⠧ |        168 | m2-6-evaluate                                                  
+⠏ |        170 | m2-6-evaluate                                                  
+⠙ |        172 | m2-6-evaluate                                                  
+⠴ |        176 | m2-6-evaluate                                                  
+⠏ |        180 | m2-6-evaluate                                                  
+⠙ |        182 | m2-6-evaluate                                                  
+⠸ |        184 | m2-6-evaluate                                                  
+⠧ |        188 | m2-6-evaluate                                                  
+⠙ |        192 | m2-6-evaluate                                                  
+⠏ |        200 | m2-6-evaluate                                                  
+⠋ |        211 | m2-6-evaluate                                                  
+⠙ |        212 | m2-6-evaluate                                                  
+⠼ |        235 | m2-6-evaluate                                                  
+⠋ |        241 | m2-6-evaluate                                                  
+⠦ |        257 | m2-6-evaluate                                                  
+⠴ |        286 | m2-6-evaluate                                                  
+⠙ |        292 | m2-6-evaluate                                                  
+⠧ |        308 | m2-6-evaluate                                                  
+⠦ |        337 | m2-6-evaluate                                                  
+⠹ |        343 | m2-6-evaluate                                                  
+⠼ |        365 | m2-6-evaluate                                                  
+⠙ |        372 | m2-6-evaluate                                                  
+✔ |        374 | m2-6-evaluate [101.0s]
+
+⠏ |          0 | m2-7-robustness-pilot                                          
+⠇ |          9 | m2-7-robustness-pilot                                          
+⠧ |         18 | m2-7-robustness-pilot                                          
+⠦ |         27 | m2-7-robustness-pilot                                          
+⠼ |         35 | m2-7-robustness-pilot                                          
+⠦ |         77 | m2-7-robustness-pilot                                          
+⠦ |        127 | m2-7-robustness-pilot                                          
+⠋ |        161 | m2-7-robustness-pilot                                          
+⠏ |        170 | m2-7-robustness-pilot                                          
+⠹ |        173 | m2-7-robustness-pilot                                          
+⠇ |        189 | m2-7-robustness-pilot                                          
+⠏ |        200 | m2-7-robustness-pilot                                          
+⠋ |        211 | m2-7-robustness-pilot                                          
+⠹ |        243 | m2-7-robustness-pilot                                          
+⠇ |        249 | m2-7-robustness-pilot                                          
+⠙ |        262 | m2-7-robustness-pilot                                          
+⠏ |        300 | m2-7-robustness-pilot                                          
+⠴ |        306 | m2-7-robustness-pilot                                          
+⠇ |        319 | m2-7-robustness-pilot                                          
+⠦ |        357 | m2-7-robustness-pilot                                          
+⠹ |        363 | m2-7-robustness-pilot                                          
+✔ |        375 | m2-7-robustness-pilot [95.7s]
+
+══ Results ═════════════════════════════════════════════════════════════════════
+Duration: 1024.2 s
+
+[ FAIL 0 | WARN 0 | SKIP 0 | PASS 3070 ]
+r-tests: tests/simulation: keine Testdateien, übersprungen
+r-tests: tests/e2e: 1 Testdatei(en)
+✔ | F W  S  OK | Context
+
+⠏ |          0 | m2-qa-e2e                                                      
+⠋ |          1 | m2-qa-e2e                                                      
+⠦ |          7 | m2-qa-e2e                                                      
+✔ |          9 | m2-qa-e2e [2.5s]
+
+══ Results ═════════════════════════════════════════════════════════════════════
+Duration: 2.5 s
+
+[ FAIL 0 | WARN 0 | SKIP 0 | PASS 9 ]
+r-tests: tests/fuzz: 1 Testdatei(en)
+✔ | F W  S  OK | Context
+
+⠏ |          0 | m2-qa-fuzz                                                     
+⠋ |          1 | m2-qa-fuzz                                                     
+✔ |          5 | m2-qa-fuzz
+
+══ Results ═════════════════════════════════════════════════════════════════════
+[ FAIL 0 | WARN 0 | SKIP 0 | PASS 5 ]
+r-tests: pass — 276 Tests in tests/testthat, tests/acceptance, tests/e2e, tests/fuzz; 0 fehlgeschlagen, 0 Fehler, 1 übersprungen
+tests: Kommando erfolgreich
+
+# stderr
+[2026-10-29 12:32:20 CET] AP1 pilot block 1: start, 90 open
+[2026-10-29 12:32:21 CET] AP1 pilot block 1: start, 0 open
+boundary (singular) fit: see help('isSingular')
+boundary (singular) fit: see help('isSingular')
+boundary (singular) fit: see help('isSingular')
+[2026-10-29 12:32:36 CET] AP1 pilot block 1: start, 90 open
+[2026-10-29 12:32:37 CET] AP1 pilot block 1: start, 0 open
+[2026-10-29 12:32:37 CET] AP1 pilot block 1: start, 90 open
+[2026-10-29 12:32:41 CET] AP1 pilot block 1: start, 90 open
+[2026-10-29 12:32:54 CET] AP1 robustness block 1: start, 720 open
+[2026-10-29 12:32:55 CET] AP1 robustness block 1: backend error (llama); 85 done, 635 open; backend errors since start: sol 0, llama 1, qwen 0
+[2026-10-29 12:32:55 CET] AP1 robustness block 1: 100 done, 620 open; backend errors since start: sol 0, llama 1, qwen 0
+[2026-10-29 12:32:55 CET] AP1 robustness block 1: 200 done, 520 open; backend errors since start: sol 0, llama 1, qwen 0
+[2026-10-29 12:32:56 CET] AP1 robustness block 1: 300 done, 420 open; backend errors since start: sol 0, llama 1, qwen 0
+[2026-10-29 12:32:57 CET] AP1 robustness block 1: backend error (llama); 399 done, 321 open; backend errors since start: sol 0, llama 2, qwen 0
+[2026-10-29 12:32:57 CET] AP1 robustness block 1: 400 done, 320 open; backend errors since start: sol 0, llama 2, qwen 0
+[2026-10-29 12:32:57 CET] AP1 robustness block 1: 500 done, 220 open; backend errors since start: sol 0, llama 2, qwen 0
+[2026-10-29 12:32:57 CET] AP1 robustness block 1: backend error (qwen); 545 done, 175 open; backend errors since start: sol 0, llama 2, qwen 1
+[2026-10-29 12:32:58 CET] AP1 robustness block 1: 600 done, 120 open; backend errors since start: sol 0, llama 2, qwen 1
+[2026-10-29 12:32:58 CET] AP1 robustness block 1: 700 done, 20 open; backend errors since start: sol 0, llama 2, qwen 1
+boundary (singular) fit: see help('isSingular')
+[2026-10-29 12:33:20 CET] AP1 pilot block 1: start, 90 open
+[2026-10-29 12:33:21 CET] AP1 pilot block 1: start, 0 open
+boundary (singular) fit: see help('isSingular')
+boundary (singular) fit: see help('isSingular')
+boundary (singular) fit: see help('isSingular')
+[2026-10-29 12:33:39 CET] AP1 pilot block 1: start, 90 open
+[2026-10-29 12:33:40 CET] AP1 pilot block 1: start, 0 open
+[2026-10-29 12:33:40 CET] AP1 pilot block 1: start, 90 open
+[2026-10-29 12:33:44 CET] AP1 pilot block 1: start, 90 open
+[2026-10-29 12:33:59 CET] AP1 robustness block 1: start, 720 open
+[2026-10-29 12:34:00 CET] AP1 robustness block 1: backend error (llama); 85 done, 635 open; backend errors since start: sol 0, llama 1, qwen 0
+[2026-10-29 12:34:00 CET] AP1 robustness block 1: 100 done, 620 open; backend errors since start: sol 0, llama 1, qwen 0
+[2026-10-29 12:34:01 CET] AP1 robustness block 1: 200 done, 520 open; backend errors since start: sol 0, llama 1, qwen 0
+[2026-10-29 12:34:01 CET] AP1 robustness block 1: 300 done, 420 open; backend errors since start: sol 0, llama 1, qwen 0
+[2026-10-29 12:34:02 CET] AP1 robustness block 1: backend error (llama); 399 done, 321 open; backend errors since start: sol 0, llama 2, qwen 0
+[2026-10-29 12:34:02 CET] AP1 robustness block 1: 400 done, 320 open; backend errors since start: sol 0, llama 2, qwen 0
+[2026-10-29 12:34:03 CET] AP1 robustness block 1: 500 done, 220 open; backend errors since start: sol 0, llama 2, qwen 0
+[2026-10-29 12:34:03 CET] AP1 robustness block 1: backend error (qwen); 545 done, 175 open; backend errors since start: sol 0, llama 2, qwen 1
+[2026-10-29 12:34:03 CET] AP1 robustness block 1: 600 done, 120 open; backend errors since start: sol 0, llama 2, qwen 1
+[2026-10-29 12:34:04 CET] AP1 robustness block 1: 700 done, 20 open; backend errors since start: sol 0, llama 2, qwen 1
+boundary (singular) fit: see help('isSingular')
+K-M1a-2 report, AIAG example with interactions = TRUE (manual: interaction pooled; ndc 4 vs 4):
+ source published_sd observed_sd published_pct_study_var observed_pct_study_var
+     EV     0.199933    0.199933                    18.4                18.4219
+     AV     0.226838    0.226838                    20.9                20.9009
+    GRR     0.302373    0.302372                    27.9                27.8607
+     PV     1.042327    1.042327                    96.0                96.0405
+ deviation_sd
+  1.79721e-07
+ -4.78518e-07
+ -1.47769e-06
+  4.93824e-07
+K-M1a-3 report, VCA::anovaVCA on ic50_demo (unbalanced; ANOVA type I and REML estimators differ, Formelsammlung §2; no criterion, ADR-016 E2):
+       source    anovaVCA     msa_fit deviation_sigma2_TV
+         item 9.69968e-01 9.67220e-01        -2.71437e-03
+       prompt 4.88367e-03 4.86224e-03        -2.11699e-05
+        model 1.71099e-02 1.71354e-02         2.51574e-05
+        block 1.00892e-03 1.01740e-03         8.37400e-06
+  item:prompt 9.42738e-05 8.42409e-05        -9.90970e-06
+   item:model 5.34173e-03 5.34984e-03         8.00523e-06
+ prompt:model 2.15882e-05 2.12809e-05        -3.03501e-07
+     Residual 1.40107e-02 1.40103e-02        -3.93209e-07
+boundary (singular) fit: see help('isSingular')
+K-M1a-4 report SmLs07: LRE msa_fit residual 3.81, item 3.71; LRE aov residual 4.16, item 4.02
+K-M1a-4 report SmLs08: LRE msa_fit residual -0.60, item -0.60; LRE aov residual 2.67, item 3.92
+K-M1a-4 report SmLs09: LRE msa_fit residual -4.19, item -4.19; LRE aov residual -0.28, item 3.94
+boundary (singular) fit: see help('isSingular')
+boundary (singular) fit: see help('isSingular')
+boundary (singular) fit: see help('isSingular')
+boundary (singular) fit: see help('isSingular')
+boundary (singular) fit: see help('isSingular')
+boundary (singular) fit: see help('isSingular')
+boundary (singular) fit: see help('isSingular')
+boundary (singular) fit: see help('isSingular')
+boundary (singular) fit: see help('isSingular')
+boundary (singular) fit: see help('isSingular')
+boundary (singular) fit: see help('isSingular')
+boundary (singular) fit: see help('isSingular')
+boundary (singular) fit: see help('isSingular')
+boundary (singular) fit: see help('isSingular')
+
+# runner
+exit=0 status=pass script=30-tests.sh

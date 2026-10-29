@@ -1,0 +1,37 @@
+{
+  "milestone": "M1a",
+  "round": 1,
+  "base": "485c96057c7e4e2a9d35e0a31160988e33afb716",
+  "baseRef": "plan/M1a",
+  "env": {
+    "ts": "2026-10-29T19:26:46+01:00",
+    "sha": "4bf04d57b1f0a1312254b89e8b4c7d435a8f7b7a",
+    "bash": "5.3.9(1)-release",
+    "git": "2.53.0",
+    "toolchain": {
+      "R": "Rscript (R) version 4.6.1 (2026-06-24)",
+      "pandoc": "pandoc 3.7.0.2"
+    }
+  },
+  "gates": {
+    "deps": "pass",
+    "lint": "pass",
+    "tests": "pass",
+    "trace": "pass",
+    "territory": "pass",
+    "mutgate": "fail",
+    "golden-adr": "pass",
+    "mutfull": "pass"
+  },
+  "summaries": {
+    "deps": "deps: Kommando erfolgreich",
+    "lint": "lint: Kommando erfolgreich",
+    "tests": "tests: Kommando erfolgreich",
+    "trace": "trace: alle Kriterien sind wörtlich und beidseitig verknüpft",
+    "territory": "territory: letzter Diff sauber (builder/40-build, Runde 1, Basis 6bd85b4b7d95eaa35ab00557ec2785c8187b8004, 2026-10-29T12:29:51+01:00)",
+    "mutgate": "mutgate: fail (score=60.26 required=80 baseline=n/a floor=80)",
+    "golden-adr": "golden-adr: Änderung und ADR liegen im selben Meilenstein",
+    "mutfull": "mutfull: pass (nicht fällig in M1a)"
+  },
+  "result": "fail"
+}
