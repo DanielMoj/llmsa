@@ -1,11 +1,14 @@
 #!/usr/bin/env bash
-# Mutation-Ratchet v2: Pre-Mutation-Tod=error, Äquivalenz nur nach Reviewer-Approval.
+# Mutation-Ratchet v2: Pre-Mutation-Tod=error, roter unmutierter Vorlauf=fail ohne Flake-Rerun,
+# Äquivalenz nur nach Reviewer-Approval.
 set -euo pipefail
 source "$ORCH/gates.d/_lib.sh"
 gate_load_config
 
 MUT_SCOPE_REGEX="${MUT_SCOPE_REGEX:-^src/.*\.(ts|js|py)$}"
 MUT_REPORT="${MUT_REPORT:-reports/mutation/mutation.json}"
+# Rote Tests des unmutierten Vorlaufs; MUT_CMD schreibt sie neben MUT_REPORT und endet mit rc=3.
+MUT_UNMUTATED="$(dirname "$MUT_REPORT")/unmutated.json"
 MUT_SCORE_MIN="${MUT_SCORE_MIN:-65}"
 MUT_SCORE_FLOOR="${MUT_SCORE_FLOOR:-50}"
 MUT_RATCHET_TOL="${MUT_RATCHET_TOL:-2}"
@@ -39,13 +42,30 @@ score_from_report() {
   ' "$REPO_ROOT/$MUT_REPORT"
 }
 
+red_tests_from_report() {
+  jq -er '
+    if (.tests | length) > 0 then
+      "\(.tests | length) Tests: " + ([ .tests[] | "\(.file): \(.test) [\(.status)]" ] | join(" | "))
+    else empty end
+  ' "$REPO_ROOT/$MUT_UNMUTATED"
+}
+
 run_mutation() {
-  rm -f "$REPO_ROOT/$MUT_REPORT"
+  rm -f "$REPO_ROOT/$MUT_REPORT" "$REPO_ROOT/$MUT_UNMUTATED"
   export MUT_FILES="$CHANGED"
   set +e
   bash -c "$MUT_CMD"
   MUT_RC=$?
   set -e
+  # Über einem roten Vorlauf zählte jeder Mutant als entdeckt; deshalb fail und kein Flake-Rerun.
+  if [ "$MUT_RC" = 3 ]; then
+    if RED="$(red_tests_from_report 2>/dev/null)"; then
+      echo "mutgate: fail (unmutierter Vorlauf rot, kein Mutant gelaufen; $RED)"
+      return 1
+    fi
+    echo "mutgate: Vorlauf rot gemeldet (rc=3), aber $MUT_UNMUTATED fehlt oder nennt keinen Test" >&2
+    return 2
+  fi
   if [ ! -f "$REPO_ROOT/$MUT_REPORT" ]; then
     echo "mutgate: Werkzeug starb vor der Mutation (rc=$MUT_RC, Report fehlt: $MUT_REPORT)" >&2
     return 2

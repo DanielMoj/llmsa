@@ -12,7 +12,7 @@ Typ-Grundsatz Software/R-Paket nach `PROJEKTIERUNG.md` und Preset `r-paket`. Sie
 | tests | `30-tests.sh` (`TEST_CMD='Rscript orchestrator/lib/r-tests.R tests/testthat tests/acceptance tests/simulation tests/e2e tests/fuzz'`) | ein testthat-Lauf über alle Rollenordner plus `tests/simulation/` (Klasse A), Paket aus den Quellen geladen; `r-tests.R` setzt `NOT_CRAN=true`, damit auch Tests mit `skip_on_cran()` im Gate laufen (BL-56, ADR-011); jeder Abnahmetest trägt eine Kriteriums-ID | Exit 1 bei Fehlschlag oder Fehler; leere Ordner übersprungen | K-M0-2, K-M0-4, K-M0-5, K-M0-7 und alle Kriterien mit Prüfweg Test in 02–04 |
 | trace | `70-trace.sh` (ohne `TRACE_CMD`) | `CRITERIA.json` muss jede Manifest-ID mit wörtlichem Spec-Zitat und Quelldatei führen, jede ID muss unter `tests/acceptance/` referenziert sein, jede dort gefundene ID bekannt sein | Exit 1 bei Waisen oder falschem Zitat | K-M0-6; Traceability aller Meilensteine (SPEC-KONTRAKT §3) |
 | territory | `82-territory.sh` | der letzte Territoriums-Audit muss zu Runde und Basis passen; schützt `tests/acceptance/`, `reference/anchors/`, `orchestrator/**` vor dem Builder | Exit 1 bei Verstoß | K-M0-6; Gewaltenteilung aller Meilensteine |
-| mutgate | `86-mutgate.sh` (`MUT_CMD='Rscript orchestrator/lib/r-mutation.R'`) | Mutation-Score der seit `plan/<MS>` geänderten Dateien im Scope; Scope in M0, M2 und M1a–M1d `R/fit.R` und `R/grr.R`, ab M3a alle `R/*.R`; Schwelle 80 % (`ANK-32`), Floor 80, Ratchet-Toleranz 2. Je Mutant laufen die Ordner aus `MUT_TEST_DIRS` ohne die M2-Abnahmetests (`MUT_TEST_EXCLUDE='^m2-[0-9]'`) in einem eigenen R-Prozess mit Zeitlimit `MUT_TEST_TIMEOUT`; ein Mutant darüber zählt als `Timeout`, also entdeckt. Seit 29.10.2026, ADR-019; gilt ebenso für mutfull | Exit 1 unter Schwelle; `pass` ohne geänderten Scope | K-M0-6 (leer), Prüfstandard Nr. 7 in M1a–M3d |
+| mutgate | `86-mutgate.sh` (`MUT_CMD='Rscript orchestrator/lib/r-mutation.R'`) | Mutation-Score der seit `plan/<MS>` geänderten Dateien im Scope; Scope in M0, M2 und M1a–M1d `R/fit.R` und `R/grr.R`, ab M3a alle `R/*.R`; Schwelle 80 % (`ANK-32`), Floor 80, Ratchet-Toleranz 2. Je Mutant laufen die Ordner aus `MUT_TEST_DIRS` ohne die M2-Abnahmetests und ohne `test-m0-testthat-count` (`MUT_TEST_EXCLUDE='^(m2-[0-9]\|m0-testthat-count$)'`) in einem eigenen R-Prozess mit Zeitlimit max(`MUT_TEST_TIMEOUT`, ⌈`MUT_TEST_TIMEOUT_FACTOR` × Vorlauf⌉), Faktor 5; ein Mutant darüber zählt als `Timeout`, also entdeckt. Vor dem ersten Mutanten läuft der Testsatz einmal unmutiert, auch ohne Zeitlimit; scheitern darin Tests, endet das Gate ohne Mutantenlauf und ohne Flake-Rerun mit `fail` und nennt Anzahl und Namen der Tests. Seit 29.10.2026, ADR-019 mit Nachtrag; gilt ebenso für mutfull | Exit 1 unter Schwelle oder bei rotem unmutiertem Vorlauf; `pass` ohne geänderten Scope | K-M0-6 (leer), Prüfstandard Nr. 7 in M1a–M3d |
 | golden-adr | `87-golden-adr.sh` (`GOLDEN_PATH_REGEX='^inst/extdata/'`) | Änderungen an eingefrorenen Daten (`inst/extdata/`) oder Ankern (`reference/anchors/`) verlangen ein ADR im selben Meilenstein | Exit 1 ohne ADR | K-M0-6; K-M1d-1, K-M1d-3, K-M2-1 (Datenänderungen), Ankerpflege 01 §6 |
 | mutfull (projektspezifisch) | `88-mutfull.sh` (Betreiber, Abschnitt 4) | mutgate mutiert nur Diff-Dateien; der Prüfstandard verlangt einen Lauf über beide Kerndateien unabhängig vom Diff; nur in M1c fällig | Exit 1 unter `MUT_SCORE_MIN`; `pass (nicht fällig)` in anderen Meilensteinen | K-M1c-6 |
 
@@ -58,22 +58,32 @@ MUT_SCORE_FLOOR=80
 MUT_RATCHET_TOL=2
 MUT_WORKERS=14
 MUT_TEST_DIRS='tests/testthat tests/acceptance tests/e2e tests/fuzz'   # ohne tests/simulation
-# Testauswahl und Zeitlimit je Mutant (Betreiber, 29.10.2026; E12 aus PLAN-REVIEW M1a Runde 2; ADR-019).
-# Entscheidung: Die sieben M2-Abnahmetests tests/acceptance/test-m2-1 bis -7 laufen im Mutationslauf
-# nicht mit; test-m2-qa-e2e.R und test-m2-qa-fuzz.R bleiben. Begründung: Weniger Tests senken den Score
-# höchstens; ein Bestehen gilt damit auch für den vollen Testsatz.
+# Testauswahl und Zeitlimit je Mutant (Betreiber, 29.10.2026; E12 aus PLAN-REVIEW M1a Runde 2; ADR-019
+# mit Nachtrag vom 29.10.2026).
+# Entscheidung: Die sieben M2-Abnahmetests tests/acceptance/test-m2-1 bis -7 und test-m0-testthat-count.R
+# laufen im Mutationslauf nicht mit; test-m2-qa-e2e.R und test-m2-qa-fuzz.R bleiben. Begründung: Weniger
+# Tests senken den Score höchstens; ein Bestehen gilt damit auch für den vollen Testsatz.
+# test-m0-testthat-count lässt tests/testthat ein zweites Mal laufen und zählt nur.
 # Messung 29.10.2026 (unmutiert, Stand 485c960, Paketkopie wie r-mutation.R, test_dir je Ordner):
-# voller Satz 1036,6 s, davon test-m2-1 bis -7 918,7 s (test-m2-3 allein 497,7 s); gefiltert 116,9 s
-# (darin test-m0-testthat-count.R 46,4 s; setup-m2.R 0,01 s und die M2-QA-Tests rund 3 s).
-# MUT_TEST_TIMEOUT = max(60, 3 × 116,9 s), aufgerundet; ein Mutant darüber zählt als Timeout (entdeckt).
-# r-mutation.R misst vor jedem Lauf unmutiert nach; die Grenze ist mindestens das Dreifache davon.
-# Probelauf R/grr.R (211 Mutanten, 14 Worker): je Mutant Median 224 s, Maximum 260 s, kein Timeout,
-# 58 min gesamt; Hochrechnung R/fit.R und R/grr.R (451 Mutanten vor M1a) rund 2 h je Lauf.
+# voller Satz 1036,6 s, davon test-m2-1 bis -7 918,7 s (test-m2-3 allein 497,7 s); ohne sie 116,9 s,
+# darin test-m0-testthat-count.R 46,4 s (setup-m2.R 0,01 s, die M2-QA-Tests rund 3 s). Ohne beides
+# 116,9 s − 46,4 s = 70,5 s (gerechnet, nicht neu gemessen).
+# MUT_TEST_TIMEOUT = ⌈5 × 70,5 s⌉ = 353; ein Mutant darüber zählt als Timeout (entdeckt).
+# r-mutation.R misst vor jedem Lauf unmutiert nach; die Grenze ist max(MUT_TEST_TIMEOUT,
+# ⌈MUT_TEST_TIMEOUT_FACTOR × Vorlauf⌉). Faktor 5 statt 3: Ein Timeout zählt als entdeckt, und unter Last
+# braucht ein Mutant das 1,8-Fache des Einzellaufs; bei Faktor 3 bliebe nur das 1,7-Fache als Reserve.
+# Scheitern schon im Vorlauf Tests, bricht r-mutation.R vor dem ersten Mutanten ab; mutgate und mutfull
+# melden fail mit Anzahl und Namen der Tests, ohne Flake-Rerun. Der Vorlauf läuft immer; ein leeres
+# MUT_TEST_TIMEOUT hebt nur das Zeitlimit auf.
+# Probelauf R/grr.R (211 Mutanten, 14 Worker, noch mit '^m2-[0-9]' und Faktor 3): je Mutant Median 224 s,
+# Maximum 260 s, kein Timeout, 58 min gesamt; Hochrechnung R/fit.R und R/grr.R (451 Mutanten vor M1a)
+# rund 2 h je Lauf.
 # Wirkung auf mutfull (M1c): 88-mutfull nutzt denselben Adapter mit dieser Datei; Auswahl, Grenze und
 # Vorlauf gelten dort ebenso. Der Score über R/fit.R und R/grr.R ist höchstens niedriger als mit allen
 # Testdateien; ein Bestehen von K-M1c-6 gilt auch für den vollen Testsatz.
-MUT_TEST_EXCLUDE='^m2-[0-9]'
-MUT_TEST_TIMEOUT=351
+MUT_TEST_EXCLUDE='^(m2-[0-9]|m0-testthat-count$)'
+MUT_TEST_TIMEOUT=353
+MUT_TEST_TIMEOUT_FACTOR=5
 MUTFULL_MILESTONES='M1c'
 MUTFULL_FILES='R/fit.R,R/grr.R'
 
@@ -114,7 +124,8 @@ Gate-Kriterien erhalten im Abnahmetest einen ID-Verweis (`skip("K-M0-3: decided 
 #!/usr/bin/env bash
 # Projektgate llmsa: Mutationslauf über feste Kerndateien, unabhängig vom Diff.
 # Fällig nur in MUTFULL_MILESTONES (Vorgabe M1c); sonst pass. Zählung wie 86-mutgate
-# (Killed und Timeout erkannt, RuntimeError nicht gezählt, Äquivalenz nur nach Reviewer-Approval).
+# (Killed und Timeout erkannt, RuntimeError nicht gezählt, Äquivalenz nur nach Reviewer-Approval;
+# roter unmutierter Vorlauf fail ohne Flake-Rerun).
 set -euo pipefail
 source "$ORCH/gates.d/_lib.sh"
 gate_load_config
@@ -122,6 +133,8 @@ gate_load_config
 MUTFULL_MILESTONES="${MUTFULL_MILESTONES:-M1c}"
 MUTFULL_FILES="${MUTFULL_FILES:-R/fit.R,R/grr.R}"
 MUT_REPORT="${MUT_REPORT:-reports/mutation/mutation.json}"
+# Rote Tests des unmutierten Vorlaufs; MUT_CMD schreibt sie neben MUT_REPORT und endet mit rc=3.
+MUT_UNMUTATED="$(dirname "$MUT_REPORT")/unmutated.json"
 MUT_SCORE_MIN="${MUT_SCORE_MIN:-80}"
 APPROVED="$ORCH/handoff/$MILESTONE/MUT-EQUIV-APPROVED.json"
 
@@ -155,13 +168,30 @@ score_from_report() {
   ' "$REPO_ROOT/$MUT_REPORT"
 }
 
+red_tests_from_report() {
+  jq -er '
+    if (.tests | length) > 0 then
+      "\(.tests | length) Tests: " + ([ .tests[] | "\(.file): \(.test) [\(.status)]" ] | join(" | "))
+    else empty end
+  ' "$REPO_ROOT/$MUT_UNMUTATED"
+}
+
 run_mutation() {
-  rm -f "$REPO_ROOT/$MUT_REPORT"
+  rm -f "$REPO_ROOT/$MUT_REPORT" "$REPO_ROOT/$MUT_UNMUTATED"
   export MUT_FILES="$MUTFULL_FILES"
   set +e
   bash -c "$MUT_CMD"
   MUT_RC=$?
   set -e
+  # Über einem roten Vorlauf zählte jeder Mutant als entdeckt; deshalb fail und kein Flake-Rerun.
+  if [ "$MUT_RC" = 3 ]; then
+    if RED="$(red_tests_from_report 2>/dev/null)"; then
+      echo "mutfull: fail (unmutierter Vorlauf rot, kein Mutant gelaufen; $RED)"
+      return 1
+    fi
+    echo "mutfull: Vorlauf rot gemeldet (rc=3), aber $MUT_UNMUTATED fehlt oder nennt keinen Test" >&2
+    return 2
+  fi
   if [ ! -f "$REPO_ROOT/$MUT_REPORT" ]; then
     echo "mutfull: Werkzeug starb vor der Mutation (rc=$MUT_RC, Report fehlt: $MUT_REPORT)" >&2
     return 2

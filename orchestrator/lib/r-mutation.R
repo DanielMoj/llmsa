@@ -6,14 +6,18 @@
 # Der Bericht folgt dem Stryker-Schema (files -> mutants mit status, mutatorName, location);
 # das Urteil (Score, Floor, Ratchet, Äquivalenz) fällt allein in 86-mutgate.
 # Exit 0 = Lauf beendet und Bericht geschrieben, 2 = Infrastruktur (dann fehlt der Bericht und
-# 86-mutgate meldet error). Liegt im Betreiber-Territorium.
+# 86-mutgate meldet error), 3 = schon unmutiert scheitern Tests (Abbruch vor dem ersten Mutanten,
+# kein Bericht; die Tests stehen in unmutated.json neben MUT_REPORT, 86-mutgate und 88-mutfull
+# melden fail). Liegt im Betreiber-Territorium.
 #
 # Umgebung: MUT_FILES (kommagetrennt, von 86-mutgate), MUT_REPORT, REPO_ROOT,
 # MUT_TEST_DIRS (Vorgabe: die vier Testordner der Rollen), MUT_WORKERS (Vorgabe 1),
 # MUT_R_MUTATORS (kommagetrennte muttest-Funktionen ohne Argumente),
 # MUT_TEST_EXCLUDE (regulärer Ausdruck auf den Testnamen, also den Dateinamen ohne "test-" und
 # ".R" wie bei testthat::test_dir(filter); passende Testdateien laufen nicht; leer = keine Ausnahme),
-# MUT_TEST_TIMEOUT (Zeitlimit je Mutant in Sekunden; leer = ohne Grenze).
+# MUT_TEST_TIMEOUT (Zeitlimit je Mutant in Sekunden; leer = ohne Grenze, der Vorlauf läuft trotzdem),
+# MUT_TEST_TIMEOUT_FACTOR (die Grenze ist mindestens das Faktorfache des unmutierten Vorlaufs;
+# Vorgabe 5).
 
 say <- function(...) cat("r-mutation: ", ..., "\n", sep = "")
 infra <- function(...) {
@@ -34,6 +38,7 @@ repo <- normalizePath(Sys.getenv("REPO_ROOT", getwd()), mustWork = TRUE)
 if (!file.exists(file.path(repo, "DESCRIPTION"))) infra("DESCRIPTION fehlt in ", repo)
 report <- Sys.getenv("MUT_REPORT", "reports/mutation/mutation.json")
 if (!grepl("^/", report)) report <- file.path(repo, report)
+unmutated_report <- file.path(dirname(report), "unmutated.json")
 test_dirs <- env_list("MUT_TEST_DIRS", "tests/testthat tests/acceptance tests/e2e tests/fuzz", "[[:space:]]+")
 test_dirs <- test_dirs[dir.exists(file.path(repo, test_dirs))]
 if (!length(test_dirs)) infra("kein Testordner vorhanden: ", Sys.getenv("MUT_TEST_DIRS"))
@@ -45,6 +50,12 @@ if (nzchar(exclude) && inherits(try(grepl(exclude, ""), silent = TRUE), "try-err
 }
 timeout <- if (nzchar(Sys.getenv("MUT_TEST_TIMEOUT"))) suppressWarnings(as.numeric(Sys.getenv("MUT_TEST_TIMEOUT"))) else Inf
 if (is.na(timeout) || timeout <= 0) infra("MUT_TEST_TIMEOUT muss eine positive Zahl von Sekunden sein")
+timeout_factor <- if (nzchar(Sys.getenv("MUT_TEST_TIMEOUT_FACTOR"))) suppressWarnings(as.numeric(Sys.getenv("MUT_TEST_TIMEOUT_FACTOR"))) else 5
+# Unter 1 schützte der Vorlauf die Grenze nicht mehr: Wüchse der Testsatz über MUT_TEST_TIMEOUT,
+# zählte jeder Mutant als Timeout.
+if (is.na(timeout_factor) || !is.finite(timeout_factor) || timeout_factor < 1) {
+  infra("MUT_TEST_TIMEOUT_FACTOR muss eine Zahl ab 1 sein")
+}
 mutator_names <- env_list(
   "MUT_R_MUTATORS",
   paste(
@@ -81,7 +92,7 @@ mutators <- unlist(lapply(mutator_names, function(name) {
 old_wd <- setwd(stage)
 plan <- if (length(files)) muttest::muttest_plan(mutators = mutators, source_files = files) else NULL
 dir.create(dirname(report), recursive = TRUE, showWarnings = FALSE)
-unlink(report)
+unlink(c(report, unmutated_report))
 if (is.null(plan) || nrow(plan) == 0) {
   # Ohne Mutanten gibt muttest keinen Bericht aus; der leere Bericht gibt diesen Befund wieder.
   empty <- lapply(files, function(path) {
@@ -117,10 +128,13 @@ HarnessTestStrategy <- R6::R6Class("HarnessTestStrategy",
         for (dir in dirs) {
           # full.names = FALSE wie in test_dir: Der Filter gilt dem Testnamen, nicht dem Pfad.
           if (!length(testthat::find_test_scripts(dir, filter = filter, invert = TRUE, full.names = FALSE))) next
-          outcome <- testthat::test_dir(dir, filter = filter, invert = TRUE,
+          outcome <- as.data.frame(testthat::test_dir(dir, filter = filter, invert = TRUE,
             reporter = reporter, stop_on_failure = FALSE, load_package = "source"
-          )
-          results[[length(results) + 1L]] <- as.data.frame(outcome)
+          ))
+          # Der Ordner gehört zum Namen eines roten Tests im unmutierten Vorlauf; muttest liest nur
+          # failed und error.
+          outcome$dir <- rep(dir, nrow(outcome))
+          results[[length(results) + 1L]] <- outcome
         }
         if (!length(results)) return(list())
         do.call(rbind, results)
@@ -148,35 +162,47 @@ skipped <- if (nzchar(exclude)) unlist(lapply(test_dirs, function(dir) {
 say(nrow(plan), " Mutanten in ", paste(files, collapse = ", "), "; Tests: ", paste(test_dirs, collapse = ", "),
   if (length(skipped)) paste0("; ausgelassen nach MUT_TEST_EXCLUDE='", exclude, "': ", paste(skipped, collapse = ", ")))
 
+# Unmutierter Vorlauf mit demselben Testsatz in einer eigenen Kopie, immer vor dem ersten Mutanten.
+# Scheitern darin schon Tests, endet der Lauf hier mit Exit 3: Über einem roten Vorlauf zählte jeder
+# Mutant als entdeckt (Fehlschlag) oder als RuntimeError (nur Fehler, im Score nicht gezählt); der
+# Lauf wäre wertlos und kostete Stunden. Sonst ist die Grenze mindestens das Faktorfache seiner
+# Laufzeit: Ein gewachsener Testsatz soll nicht jeden Mutanten über die Grenze treiben, denn ein
+# Timeout zählt als entdeckt.
+base <- tempfile("harness-mutation-base-")
+dir.create(base)
+if (!file.copy(stage, base, recursive = TRUE)) infra("Kopie für den unmutierten Testlauf fehlgeschlagen")
+setwd(file.path(base, "pkg"))
+started <- proc.time()[["elapsed"]]
+unmutated <- tryCatch(
+  HarnessTestStrategy$new(test_dirs, exclude, Inf)$execute(test_dirs[1], NULL, "silent"),
+  error = function(e) infra("unmutierter Testlauf gescheitert: ", conditionMessage(e))
+)
+seconds <- proc.time()[["elapsed"]] - started
+setwd(stage)
+unlink(base, recursive = TRUE)
+red <- if (length(unmutated)) unmutated[unmutated$failed > 0 | unmutated$error, , drop = FALSE]
+say("unmutierter Testlauf: ", round(seconds, 1), " s; ", if (length(unmutated)) nrow(unmutated) else 0L,
+  " Tests, davon ", sum(red$failed > 0 & !red$error), " fehlgeschlagen, ", sum(red$error), " abgebrochen")
+if (NROW(red)) {
+  tests <- lapply(seq_len(nrow(red)), function(i) list(
+    file = file.path(red$dir[i], red$file[i]),
+    # Einen Fehler außerhalb von test_that() führt testthat ohne Testnamen.
+    test = if (is.na(red$test[i])) "(außerhalb von test_that())" else red$test[i],
+    status = if (red$error[i]) "abgebrochen" else "fehlgeschlagen"
+  ))
+  for (entry in tests) say("rot: ", entry$file, ": ", entry$test, " [", entry$status, "]")
+  jsonlite::write_json(list(seconds = round(seconds, 1), tests = tests), unmutated_report,
+    auto_unbox = TRUE, pretty = TRUE)
+  say("Abbruch vor dem ersten Mutanten: Schon unmutiert scheitern ", nrow(red), " Tests (", unmutated_report, ")")
+  quit(save = "no", status = 3)
+}
 if (is.finite(timeout)) {
-  # Unmutierter Vorlauf mit demselben Testsatz in einer eigenen Kopie. Die Grenze ist mindestens das
-  # Dreifache seiner Laufzeit: Ein gewachsener Testsatz soll nicht jeden Mutanten über die Grenze
-  # treiben, denn ein Timeout zählt als entdeckt.
-  base <- tempfile("harness-mutation-base-")
-  dir.create(base)
-  if (!file.copy(stage, base, recursive = TRUE)) infra("Kopie für den unmutierten Testlauf fehlgeschlagen")
-  setwd(file.path(base, "pkg"))
-  started <- proc.time()[["elapsed"]]
-  unmutated <- tryCatch(
-    HarnessTestStrategy$new(test_dirs, exclude, Inf)$execute(test_dirs[1], NULL, "silent"),
-    error = function(e) infra("unmutierter Testlauf gescheitert: ", conditionMessage(e))
-  )
-  seconds <- proc.time()[["elapsed"]] - started
-  setwd(stage)
-  unlink(base, recursive = TRUE)
-  failed <- if (length(unmutated)) sum(unmutated$failed > 0) else 0L
-  errors <- if (length(unmutated)) sum(unmutated$error) else 0L
-  say("unmutierter Testlauf: ", round(seconds, 1), " s; ", failed, " Tests fehlgeschlagen, ", errors, " mit Fehler")
-  if (failed || errors) {
-    say("WARNUNG: Schon unmutiert scheitern Tests; jeder Mutant zählt dann als entdeckt (Fehlschlag) ",
-      "oder als RuntimeError (nur Fehler, im Score nicht gezählt)")
-  }
-  limit <- max(timeout, ceiling(3 * seconds))
-  say("Zeitlimit je Mutant: ", limit, " s (MUT_TEST_TIMEOUT=", timeout, " s, dreifacher unmutierter Lauf ",
-    ceiling(3 * seconds), " s)")
+  limit <- max(timeout, ceiling(timeout_factor * seconds))
+  say("Zeitlimit je Mutant: ", limit, " s (MUT_TEST_TIMEOUT=", timeout, " s, ", timeout_factor,
+    " × unmutierter Lauf = ", ceiling(timeout_factor * seconds), " s)")
   timeout <- limit
 } else {
-  say("Zeitlimit je Mutant: keins")
+  say("Zeitlimit je Mutant: keins (MUT_TEST_TIMEOUT leer)")
 }
 
 muttest::muttest(

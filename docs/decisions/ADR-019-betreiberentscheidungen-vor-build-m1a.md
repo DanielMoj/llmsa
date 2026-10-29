@@ -2,7 +2,7 @@
 
 ## Status
 
-Angenommen (Betreiber, 29.10.2026). Betreiber-Commit vor dem Neustart von `40-build` in M1a. Die Nummer ist frei: Das ADR-019 des abgebrochenen ersten BUILD-Versuchs hat der Rollback entfernt.
+Angenommen (Betreiber, 29.10.2026). Betreiber-Commit vor dem Neustart von `40-build` in M1a. Die Nummer ist frei: Das ADR-019 des abgebrochenen ersten BUILD-Versuchs hat der Rollback entfernt. Der Nachtrag vom 29.10.2026 am Ende ändert (a) Nr. 1 bis 3 und die Rücknahme; (a) bleibt als Verlauf stehen.
 
 ## Kontext
 
@@ -33,7 +33,7 @@ Angenommen (Betreiber, 29.10.2026). Betreiber-Commit vor dem Neustart von `40-bu
 2. **Zeitlimit je Mutant.** `MUT_TEST_TIMEOUT` in Sekunden, Wert max(60, 3 × 116,9 s) aufgerundet, also `MUT_TEST_TIMEOUT=351`.
    - muttests eigene Grenze ist ungeeignet (Befund 1) und bleibt aus (`timeout = Inf`). Die Grenze sitzt in `HarnessTestStrategy$execute`: Die Tests eines Mutanten laufen in einem eigenen R-Prozess (`callr::r(timeout = …, cleanup_tree = TRUE)`). Nach der Grenze wird der Prozess samt Kindprozessen beendet.
    - Ein Mutant über der Grenze steht im Bericht als `Timeout` (Grund `harness-timeout: …`) und zählt in 86-mutgate und 88-mutfull als entdeckt; der Lauf geht mit dem nächsten Mutanten weiter. muttest selbst kennt den Status nicht und führt den Abbruch als `RuntimeError`; `r-mutation.R` benennt ihn nach dem Lauf um, sonst bleibt der Bericht unverändert.
-3. **Bei der Umsetzung ergänzt** (über den Auftrag hinaus, Befunde 2 und 4):
+3. **Bei der Umsetzung ergänzt** (über den Auftrag hinaus, Befunde 2 und 4; vom Betreiber nach dem Bericht vom 29.10.2026 angenommen, siehe Nachtrag):
    - `tests/fixtures/` gehört zur Paketkopie.
    - Unmutierter Vorlauf: Vor dem ersten Mutanten läuft der gefilterte Testsatz einmal unmutiert in einer eigenen Kopie. Das Log nennt Laufzeit, fehlgeschlagene und abgebrochene Tests und warnt, wenn schon unmutiert Tests scheitern. Die Grenze des Laufs ist max(`MUT_TEST_TIMEOUT`, ⌈3 × Laufzeit des Vorlaufs⌉); das Log nennt beide Werte. Grund: Der Testsatz wächst mit BUILD M1a und in M1b bis M1d; eine feste Grenze träfe dann auch Mutanten, die die Tests nicht verlangsamen, und jeder Timeout zählt als entdeckt.
    - `commit_phase()` und `park()` nehmen `orchestrator/STOP` beim `git add` aus.
@@ -68,4 +68,45 @@ Folgen:
   - Unmutiert gegen Grenze: 116,9 s gegen 351 s (Messung) und 121,8 s gegen 366 s (Vorlauf), je rund ein Drittel. Bei 14 parallelen Läufen brauchte ein Mutant im Median das 1,8-Fache des allein laufenden Satzes; das Maximum von 260 s lag bei 71 % der Grenze.
 - mutfull in M1c: `88-mutfull.sh` ruft denselben Adapter mit derselben `config.env` auf; Testauswahl, Zeitlimit und Vorlauf gelten dort ebenso. Der Score über `R/fit.R` und `R/grr.R` ist damit höchstens niedriger als mit allen Testdateien; ein Bestehen von K-M1c-6 gilt auch für den vollen Testsatz.
 - Code-Review M1a: E13 nach (b); den BACKLOG-Eintrag zu E12 schreibt der Reviewer (verdict-plan.json, E12).
-- Rücknahme: `MUT_TEST_EXCLUDE=` (leer) lässt alle Testdateien laufen, `MUT_TEST_TIMEOUT=` (leer) hebt Zeitlimit und Vorlauf auf. Die Änderungen an STOP gelten ohne Schalter.
+- Rücknahme (angepasst mit dem Nachtrag vom 29.10.2026): `MUT_TEST_EXCLUDE=` (leer) lässt alle Testdateien laufen. `MUT_TEST_TIMEOUT=` (leer) hebt nur das Zeitlimit auf; der unmutierte Vorlauf bleibt. `MUT_TEST_TIMEOUT_FACTOR=3` stellt den Faktor aus (a) Nr. 3 wieder her. Die Änderungen an STOP und der Abbruch bei rotem Vorlauf gelten ohne Schalter.
+
+## Nachtrag 29.10.2026 — vor dem Neustart von M1a
+
+- Betreiber-Nachtrag zu `e739f7b`, ebenfalls außerhalb des Harness (Orchestrator angehalten, kein `orchestrator/.lock`, `orchestrator/STOP` bleibt liegen; Umsetzung mit Claude Code). BUILD M1a hat noch nicht begonnen.
+- Die Ergänzungen unter (a) Nr. 3 hat der Betreiber nach dem Bericht vom 29.10.2026 angenommen.
+- Der Nachtrag ändert (a) Nr. 1 bis 3; wo er abweicht, gilt er.
+
+### Entscheidungen
+
+1. **Roter Vorlauf ist fail.** Scheitern schon im unmutierten Vorlauf Tests (fehlgeschlagen oder abgebrochen), bricht `r-mutation.R` vor dem ersten Mutanten ab: Exit 3, kein Bericht. Die roten Tests stehen im Log und in `unmutated.json` neben `MUT_REPORT` (Datei, Testname, fehlgeschlagen oder abgebrochen). `86-mutgate.sh` und `88-mutfull.sh` melden dann `fail`, nicht `pass` und nicht `error`, ohne Flake-Rerun und mit Anzahl und Namen der Tests im Kurzbefund: `mutgate: fail (unmutierter Vorlauf rot, kein Mutant gelaufen; 3 Tests: <Datei>: <Test> [fehlgeschlagen] | …)`. Der Vorlauf läuft immer, auch bei leerem `MUT_TEST_TIMEOUT`; leer hebt nur das Zeitlimit auf.
+   - Begründung: Über einem roten Vorlauf zählt jeder Mutant als entdeckt; der Lauf wäre wertlos und kostet Stunden. Bisher warnte nur das Log ((a) Nr. 3).
+   - Wie bisher `error`: Bricht der Vorlauf als Ganzes ab, etwa weil das Paket in der Kopie nicht lädt oder eine Testdatei nicht parst, gibt es keine Testergebnisse; das bleibt Infrastruktur (Exit 2). Exit 3 ohne lesbare `unmutated.json` ist ebenfalls `error`. Ohne Mutanten läuft kein Vorlauf; der leere Bericht ergibt `pass` wie bisher.
+2. **Faktor 5.** Neue Variable `MUT_TEST_TIMEOUT_FACTOR`, Vorgabe 5 in `r-mutation.R`, Wert 5 in `config.env`; leer heißt Vorgabe, ein Wert unter 1 ist ein Konfigurationsfehler (Exit 2). Die Grenze eines Laufs ist max(`MUT_TEST_TIMEOUT`, ⌈Faktor × Laufzeit des Vorlaufs⌉). Der Faktor 5 gilt für die feste Grenze (Nr. 3) wie für den Vorlauf.
+   - Begründung: Ein Timeout zählt als entdeckt. Unter Last braucht ein Mutant das 1,8-Fache des Einzellaufs (Probelauf `R/grr.R` unter Konsequenzen oben); bei Faktor 3 bliebe nur das 1,7-Fache als Reserve.
+3. **test-m0-testthat-count ausgenommen.** In `config.env` steht `MUT_TEST_EXCLUDE='^(m2-[0-9]|m0-testthat-count$)'`. Mit `testthat::find_test_scripts` über alle Ordner aus `MUT_TEST_DIRS` geprüft (Werte aus `config.env`): Der Ausdruck trifft genau acht Dateien, `tests/acceptance/test-m2-1` bis `test-m2-7` und `tests/acceptance/test-m0-testthat-count.R`, nicht `tests/e2e/test-m2-qa-e2e.R` und `tests/fuzz/test-m2-qa-fuzz.R`.
+   - Begründung: test-m0-testthat-count lässt `tests/testthat` ein zweites Mal laufen und zählt nur. Wie in (a) Nr. 1 senken weniger Tests den Score höchstens.
+   - Zeitlimit laut Messung im Kontext: gefilterter Satz 116,9 s − 46,4 s = 70,5 s, also `MUT_TEST_TIMEOUT=353` (5 × 70,5 s, aufgerundet). Keine neue Vollmessung; der Vorlauf misst vor jedem Lauf nach (Nr. 2).
+4. **Vorlage.** `config.env.example` führt `MUT_TEST_EXCLUDE`, `MUT_TEST_TIMEOUT` und `MUT_TEST_TIMEOUT_FACTOR` mit Kommentar im Block „Mutgate v2“, Vorgaben leer, leer, 5.
+   - Begründung: `orchestrator/config.env` ist git-ignoriert, und `bootstrap.sh` legt eine neue `config.env` aus der Vorlage an. Die Vorgaben entsprechen dem Verhalten ohne Eintrag: alle Testdateien, kein Zeitlimit, Faktor 5.
+
+### Bewusst unverändert
+
+- `NOT_CRAN` bleibt im Mutationslauf ungesetzt, anders als in `r-tests.R` (BL-56, ADR-011). Betroffen ist nur der erste Test in `tests/testthat/test-report.R`, der einzige mit `skip_on_cran()` unter `tests/`. test-report.R prüft den Bericht, nicht den Kern, und ein übersprungener Test verfälscht den Score nicht.
+- golden-adr bleibt in M1a, wie es ist, obwohl ADR-019 seine Bedingung für den ganzen Meilenstein erfüllt: `87-golden-adr.sh` verlangt nur irgendein geändertes `docs/decisions/ADR-*` seit `plan/<MS>`. Die Bedingung erfüllt jedes ADR im Meilenstein, auch eines des Builders.
+
+### Für das Template vorgemerkt
+
+- alle Änderungen aus `e739f7b` und diesem Nachtrag, auch in `orchestrator/gates.d/86-mutgate.sh.example` und im Preset `r-paket` (`projektierung/presets/r-paket/PRESET.md`), die hier unverändert bleiben;
+- golden-adr soll verlangen, dass das ADR den geänderten Pfad nennt;
+- wird `r-mutation.R` von außen beendet, soll es den laufenden Kindprozess mit beenden.
+
+### Konsequenzen
+
+- Geändert: `orchestrator/lib/r-mutation.R`, `orchestrator/gates.d/86-mutgate.sh`, `orchestrator/gates.d/88-mutfull.sh`, `config.env.example`, `docs/gates-auswahl.md` (Zeile mutgate, Konfigurationsblock §2, Wortlaut von `88-mutfull.sh` in §4), dieses ADR (Status, (a) Nr. 3, Rücknahme, Nachtrag). Lokal und git-ignoriert: `orchestrator/config.env` mit Werten und Kommentar wie im Konfigurationsblock.
+- Unverändert: `R/`, `man/`, `tests/`, `inst/`, `vignettes/`, `DESCRIPTION`, `NAMESPACE`, `reference/anchors/`, `orchestrator/state/`, `orchestrator/handoff/`; die Zählung in 86-mutgate und 88-mutfull (Killed und Timeout entdeckt, Survived und NoCoverage unentdeckt, RuntimeError nicht gezählt).
+- Für M1a: Auf `485c960` ist der Vorlauf rot (Befund 3). Bleiben nach BUILD Abnahmetests rot, endet mutgate nach dem Vorlauf mit `fail` und nennt sie, statt Stunden über einem wertlosen Score zu rechnen.
+- Nachweis (29.10.2026): Wegwerf-Paket mit 13 Mutanten in zwei Dateien, darunter zwei Endlosschleifen; die echten `86-mutgate.sh` und `88-mutfull.sh` dieses Commits über ein Schein-`ORCH` mit eigener `config.env` (`MUT_TEST_EXCLUDE` wie oben, 2 Worker). Kein Mutationslauf über das Paket.
+  - Vorlauf rot (ein fehlgeschlagener Test, ein Fehler außerhalb von `test_that()`, ein abgebrochener Test; dazu rote Tests in den ausgeschlossenen Dateien `test-m2-1-excluded.R` und `test-m0-testthat-count.R`): Beide Gates enden nach rund 1 s mit Exit 1 und `fail (unmutierter Vorlauf rot, kein Mutant gelaufen; 3 Tests: …)`; ein Vorlauf, kein Flake-Rerun, kein Mutant, kein Bericht, die ausgeschlossenen Dateien liefen nicht. Mit leerem `MUT_TEST_TIMEOUT` ebenso.
+  - Vorlauf grün: `mutgate: pass (score=84.62 …)` und `mutfull: pass (score=84.62 …)` mit 9 Killed, 2 Timeout und 2 Survived. Grenze bei `MUT_TEST_TIMEOUT=1`: 3 s, also ⌈5 × 0,5 s⌉ aus dem Vorlauf; bei `MUT_TEST_TIMEOUT=10` und leerem Faktor: 10 s. Leeres `MUT_TEST_TIMEOUT`: Vorlauf, „Zeitlimit je Mutant: keins“, `pass (score=100 …)`. Grüner Vorlauf mit niedrigem Score: genau ein Flake-Rerun wie bisher, dann `fail (score=20.00 …)`.
+  - `error` (Exit 2): Faktor 0,5; Vorlauf als Ganzes abgebrochen (Testdatei parst nicht); Exit 3 ohne `unmutated.json`.
+  - Aus den Läufen blieb kein Prozess übrig.
