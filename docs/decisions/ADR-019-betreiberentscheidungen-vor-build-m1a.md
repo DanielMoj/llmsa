@@ -2,7 +2,7 @@
 
 ## Status
 
-Angenommen (Betreiber, 29.10.2026). Betreiber-Commit vor dem Neustart von `40-build` in M1a. Die Nummer ist frei: Das ADR-019 des abgebrochenen ersten BUILD-Versuchs hat der Rollback entfernt. Der Nachtrag vom 29.10.2026 am Ende ändert (a) Nr. 1 bis 3 und die Rücknahme; (a) bleibt als Verlauf stehen.
+Angenommen (Betreiber, 29.10.2026). Betreiber-Commit vor dem Neustart von `40-build` in M1a. Die Nummer ist frei: Das ADR-019 des abgebrochenen ersten BUILD-Versuchs hat der Rollback entfernt. Der erste Nachtrag vom 29.10.2026 ändert (a) Nr. 1 bis 3 und die Rücknahme; (a) bleibt als Verlauf stehen. Der zweite Nachtrag vom selben Tag, während der Gates von M1a Runde 1, ändert die Rollen-Prompts `60-rework.md` und `50-code-review.md`.
 
 ## Kontext
 
@@ -98,7 +98,9 @@ Folgen:
 
 - alle Änderungen aus `e739f7b` und diesem Nachtrag, auch in `orchestrator/gates.d/86-mutgate.sh.example` und im Preset `r-paket` (`projektierung/presets/r-paket/PRESET.md`), die hier unverändert bleiben;
 - golden-adr soll verlangen, dass das ADR den geänderten Pfad nennt;
-- wird `r-mutation.R` von außen beendet, soll es den laufenden Kindprozess mit beenden.
+- wird `r-mutation.R` von außen beendet, soll es den laufenden Kindprozess mit beenden;
+- die Ausnahme für rotes mutgate oder mutfull in `60-rework.md` und die Befunde zu überlebenden Mutanten in `50-code-review.md` (zweiter Nachtrag), im Template mit dem Berichtspfad aus `MUT_REPORT`;
+- die Flake-Wiederholung in `86-mutgate.sh` und `88-mutfull.sh` nur dann, wenn der erste Score höchstens 5 Punkte unter der Schwelle liegt (`REQUIRED` beziehungsweise `MUT_SCORE_MIN`).
 
 ### Konsequenzen
 
@@ -110,3 +112,24 @@ Folgen:
   - Vorlauf grün: `mutgate: pass (score=84.62 …)` und `mutfull: pass (score=84.62 …)` mit 9 Killed, 2 Timeout und 2 Survived. Grenze bei `MUT_TEST_TIMEOUT=1`: 3 s, also ⌈5 × 0,5 s⌉ aus dem Vorlauf; bei `MUT_TEST_TIMEOUT=10` und leerem Faktor: 10 s. Leeres `MUT_TEST_TIMEOUT`: Vorlauf, „Zeitlimit je Mutant: keins“, `pass (score=100 …)`. Grüner Vorlauf mit niedrigem Score: genau ein Flake-Rerun wie bisher, dann `fail (score=20.00 …)`.
   - `error` (Exit 2): Faktor 0,5; Vorlauf als Ganzes abgebrochen (Testdatei parst nicht); Exit 3 ohne `unmutated.json`.
   - Aus den Läufen blieb kein Prozess übrig.
+
+## Zweiter Nachtrag 29.10.2026 — während der Gates von M1a Runde 1
+
+- Betreiber-Nachtrag auf `118618f` (`orch(M1a): builder 40-build r1`), umgesetzt mit Claude Code. Anders als bei `e739f7b` und `6bd85b4` läuft der Orchestrator: Gates Runde 1, `86-mutgate.sh` rechnet. `orchestrator/STOP` ist gesetzt, damit bis zu diesem Commit keine Modellphase beginnt; der Orchestrator wurde weder gestartet noch angehalten.
+- Lage um 14:07 Uhr laut Fortschrittsanzeige von muttest: 358 von 1003 Mutanten in `R/fit.R` und `R/grr.R` gelaufen, 179 Killed, 130 Survived, 49 Fehler. muttest zeigt auch die Harness-Timeouts als Fehler, bis `r-mutation.R` sie nach dem Lauf umbenennt; nach der Zählung von 86-mutgate läge der Score damit zwischen 57,9 und 63,7, verlangt sind 80 (keine Baseline). Zwischenstand, kein Gate-Ergebnis. Rund 12,7 s je Mutant, Hochrechnung rund 3,5 h je Durchgang; bleibt der Score unter 80, folgt genau ein Flake-Rerun über alle 1003 Mutanten.
+- Anlass: `60-rework.md` verlangte, jedes fachlich rote Gate „am Produktcode, niemals an Tests, Gates oder Schwellen“ zu beheben. Für das tests-Gate ist das richtig. Für mutgate und mutfull verbietet es den üblichen Weg: Überlebende Mutanten zeigen Lücken in den Tests, nicht Fehler im Code.
+
+### Entscheidungen
+
+1. **Rework darf Tests gegen überlebende Mutanten schreiben** (`orchestrator/prompts/60-rework.md`). Bei rotem mutgate oder mutfull darf der Builder neue Tests unter `tests/testthat/` schreiben, die überlebende Mutanten töten. Bestehende Tests, Abnahmetests (`tests/acceptance/`), QA-Tests (`tests/e2e/`, `tests/fuzz/`), Gates und Schwellen ändert er nicht; Produktcode ändert er dafür nur dort, wo ein Mutant toten oder überflüssigen Code zeigt. Echte Äquivalente beantragt er wie bisher in `MUT-EQUIV.json`. Neue Tests prüfen Verhalten gegen unabhängige Werte (Anker, Orakel, Formel), wo es sie gibt; eine Momentaufnahme der eigenen Ausgabe nur dort, wo es keine unabhängige Referenz gibt, und dann als solche gekennzeichnet.
+2. **Code-Review nennt die überlebenden Mutanten** (`orchestrator/prompts/50-code-review.md`). Bei rotem mutgate oder mutfull nennt der Reviewer die überlebenden Mutanten aus `reports/mutation/mutation.json` (`MUT_REPORT`; Survived oder NoCoverage ohne Approval, wie die Gates zählen) nach Datei und Stelle gruppiert als blocking-Befunde mit dem Gate als `ref`, je Mutant mit Zeile und `mutatorName` wörtlich aus dem Bericht, und mit der erwarteten Abhilfe (Test, Code entfernen, Äquivalenzantrag). Neue Tests prüft er darauf, dass sie Verhalten belegen und nicht nur die eigene Ausgabe einfrieren; eine gekennzeichnete Momentaufnahme gilt nur dort, wo es keine unabhängige Referenz gibt.
+   - Zeile und `mutatorName` wörtlich, weil die Gates eine Approval über Datei, `mutatorName` und Anfangszeile zuordnen; ein ungenauer Antrag ließe den Score unverändert.
+
+Begründung: Mutation misst die Tests. Das Verbot, Tests zu schreiben, hätte Rework-Runden ohne Fortschritt erzeugt: Änderungen am Produktcode töten keinen Mutanten, den kein Test prüft, und Äquivalenzanträge decken nur echte Äquivalente.
+
+### Konsequenzen
+
+- Geändert: `orchestrator/prompts/60-rework.md`, `orchestrator/prompts/50-code-review.md`, dieses ADR (Status, Für das Template vorgemerkt, dieser Nachtrag).
+- Unverändert: `orchestrator/gates.d/`, `orchestrator/state/`, `orchestrator/handoff/`, `STATUS.md`, `R/`, `tests/`; Territorien, Gates, Schwellen und die Zählung in 86-mutgate und 88-mutfull. `tests/testthat/` gehört über `BUILDER_EXTRA_PATHS_REGEX` schon zum Builder-Territorium, auch in `60-rework`; zwischen neuen und bestehenden Tests unterscheidet der Orchestrator dort nicht, die Grenze steht nur im Prompt.
+- Wirkung: `render_prompt()` liest den Prompt beim Start einer Phase; die Änderung gilt ab dem nächsten Code-Review und Rework von M1a. Den laufenden Mutationslauf berührt sie nicht: Seine Paketkopie enthält nur `DESCRIPTION`, `NAMESPACE`, `R`, `inst`, `data`, `src`, `tests/fixtures` und die Ordner aus `MUT_TEST_DIRS`.
+- `gates.json` dieser Gate-Runde nennt in `env.sha` diesen Commit statt `118618f`, weil `verifier.sh` HEAD erst nach dem letzten Gate liest. Produktcode und Tests sind die von `118618f`; dieser Commit ändert nur die beiden Prompts und dieses ADR. Der Gate-Commit des Orchestrators folgt auf ihn.
