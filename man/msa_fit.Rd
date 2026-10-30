@@ -97,6 +97,8 @@ emitted if completion fails. Final-model convergence checks remain
 active. Explicit lme4 arguments retain lme4 warnings and errors.
 Initialization failures on the default path identify the fitting stage
 and retain the underlying engine's message.
+Numerical warnings or errors during original-scale model construction
+produce a named representability error.
 
 Default numeric models store ordinary \code{nloptwrap} refit control with no
 extra optimizer options. \code{\link[=msa_boot]{msa_boot()}} and \code{\link[lme4:refit]{lme4::refit()}} therefore use
@@ -112,8 +114,11 @@ Constant numeric responses, non-finite values, non-identifiable
 components and a degenerate residual variance produce named errors.
 There is no absolute variance cutoff for small representable variation
 or tied scores. A positive residual variance does not guarantee a fit:
-with high repeatability, initialization or analytic completion can fail
-at working precision. Numeric \code{NaN} and the string \code{"NaN"} are
+with high repeatability, initialization, analytic completion or construction
+of the original-scale model can fail at working precision. Final convergence
+checks use the standard-deviation-ratio scale: a numerically singular Hessian
+warning can occur even for an identifiable balanced model with a closed-form
+solution. Numeric \code{NaN} and the string \code{"NaN"} are
 treated as missing responses, without a parsing warning. Missing numeric
 grouping values are rejected on both fitting paths. The default path
 rejects variances whose original-scale representation or model arithmetic

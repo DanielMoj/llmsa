@@ -330,3 +330,81 @@ die Reviewer-Messungen, keine neuen Messungen oder Budgets dieser Runde.
 Die Fehlerbehandlung aus E50 verändert die Projektion nicht. Ihre sparsame
 Umsetzung oder Verlagerung bleibt eine getrennte Optimierung; dieser
 Nachtrag erfüllt die vorgeschlagene Dokumentationsoption.
+
+## Nachtrag REWORK M1a, Runde 5: Modellbau auf der Originalskala (E54, E56)
+
+Nach ADR-022 Nr. 6.2 endet auch ein Abbruch beim Aufbau des
+Originalskalenmodells mit
+`Numeric model variance is not representable on the original scale at working precision.`
+Das betrifft `lFormula`, `mkLmerDevfun`, die Auswertung von `devfun(theta)`,
+`mkMerMod` und das anschließende Auslesen von `VarCorr`. Ein Fehler oder
+eine Warnung innerhalb dieser eng begrenzten Engineaufrufe beendet den
+Fit sofort mit `simpleError` und ohne internen Aufruf. Eine Warnung wird
+damit in einen benannten Fehler übersetzt, nicht still unterdrückt; ein
+teilweise aufgebautes Modell wird nicht verwendet. Die bestehenden
+Darstellbarkeitsprüfungen vor und nach diesen Schritten verwenden dieselbe
+Meldung. Nullgrenze, Präzisionsgrenze, Varianzschätzer und Abschlusskriterium
+bleiben unverändert.
+
+`checkConv` steht ausdrücklich außerhalb dieser Fehlerbehandlung. Seine
+Warnungen erreichen weiterhin den Aufrufer, und seine Diagnostik geht in
+das fertige Modell ein. Scheitert der Modellbau nach dem allgemeinen
+REML-Abschluss, gibt der vorhandene `on.exit`-Handler die gesammelten
+lme4-Startwarnungen weiterhin in ihrer Reihenfolge aus. Der direkte
+Durchreichweg nach ADR-018 Nr. 2 behält die originalen Enginebedingungen.
+
+`test-fit-model-construction.R` enthält 18 neue Testblöcke: die drei
+E54-Reproduktionen, den positiven Gegenfall mit Replikatrauschen `1e-3`,
+Fehler und Warnungen an allen fünf genannten Enginegrenzen, eine Warnung
+mit anschließendem Fehler, die getrennte Konvergenzprüfung, Startwarnungen
+nach einem späteren Modellbaufehler und den expliziten Durchreichweg.
+Die Vorbedingungen und Komponenten kommen aus `stats::aov` und den
+expliziten Zweifaktor-EMS-Formeln der Formelsammlung §2; numerische
+Toleranzen aus ANK-TOL. Nur der englische Diagnosetext ist als eigene
+Ausgabe charakterisiert. Wenn eine andere Plattform die drei schwierigen
+Modelle darstellen kann, verlangt der Test die ANOVA-Komponenten statt
+eines künstlich erzwungenen Enginefehlers. Die synthetischen
+Enginebedingungen prüfen die Fehlerbehandlung unabhängig von der Plattform.
+Mit dem Ausgangscode sind 15 Blöcke rot (47 fehlgeschlagene Erwartungen);
+mit der Korrektur bestehen alle 129 Erwartungen.
+
+**E56 / BL-87, zusätzliche balancierte Gegenrechnung:**
+`/tmp/llmsa-m1a-r5/probe-construction.R` wurde gegen den gesicherten Code
+der Runde 4 und den aktuellen Code ausgeführt. Synthetische Pläne:
+6 Items × 4 Prompts × 1 Modell × 2 Replikate,
+8 × 3 × 1 × 3 und 10 × 3 × 2 × 2, jeweils mit allen enthaltenen
+Zweifach-Wechselwirkungen. Effekte mit Seed 11, Replikatrauschen
+`10^(-3:-10)` mit Seeds 1001–1005, RNG
+`Mersenne-Twister/Inversion/Rejection`. Das sind 120 feste Prüfeingaben,
+keine ADEMP-, Coverage- oder populationsbezogene Erfolgsquotenaussage.
+Alle haben positive Restfreiheitsgrade, Restquadratsumme über der
+unveränderten Nullgrenze und endliche, nichtnegative ANOVA-Schätzer.
+
+Tatsächlicher Output (`probe-construction.log`, Exit 0):
+
+```text
+120 cases; 8 raw errors before, 0 after; 6 arithmetic warnings before, 0 after
+45 unchanged successful fits; maximum component/TV error against aov EMS 3.76805041e-09 (ANK-TOL.oracle 0.0001)
+```
+
+Die 45 erfolgreichen Fits behalten Komponenten, Theta, Numerikdiagnosen
+und Warnungen exakt bei. Die übrigen 75 Fälle enden benannt: 34 wegen
+Darstellbarkeit des Originalmodells, 41 wegen nicht auflösbarer Restskala
+im konditionierten Rechenschritt. Die Korrektur erweitert also nicht den
+Konvergenzbereich. Alle drei E54-Einzelfälle haben jetzt `simpleError`
+mit dem Darstellbarkeitstext, ohne Aufruf und ohne Warnung; vorher lieferten
+sie `Rcpp::exception`, einer davon zusätzlich zwei CHOLMOD-Warnungen.
+
+Für 6 × 4 × 1 × 2 mit Seed 11/1001 ist bei Rauschen `1e-3` der
+`closed_form`-Fit warnungsfrei. Bei `1e-4` und `1e-5` bleibt jeweils
+`Hessian is numerically singular: parameters are not uniquely determined`
+sichtbar, obwohl die Komponenten die EMS-Gegenrechnung bestehen.
+`checkConv` verwendet Theta, also Standardabweichungsverhältnisse;
+kleine Krümmung auf dieser Skala ist hier keine strukturelle
+Nichtidentifizierbarkeit. `?msa_fit` nennt jetzt sowohl diese Grenze
+als auch den Modellbau nach einer geschlossenen Lösung als mögliche
+Fehlerstelle. Die weitergehende Verbesserung des allgemeinen Abschlusses
+und dessen Robustheitsnachweis aus E51/BL-87 bleiben vor M1d offen.
+
+Die vollständigen Befehle, M1a-Abnahme und Infrastrukturgrenzen stehen in
+REWORK-NOTES und PROGRESS. Dieser Nachtrag erteilt keine Gate-Abnahme.

@@ -1,5 +1,125 @@
 # PROGRESS — Langzeitgedächtnis des Builders
 
+## M1a — REWORK, Runde 5 (30.10.2026)
+
+Ausgangslage: REVIEW/verdict-code Runde 4 verlangt REWORK wegen E54.
+Die unveränderten Orchestrator-Fakten nennen acht grüne Gates, `result:
+pass`, mutgate 93,74 bei required 91,79; kein Status error und kein
+aktueller QA-PENDING-Befund. ARBITER fehlt, LESSONS enthält keine Lehren.
+Die neue Gate-Abnahme verbleibt beim Orchestrator und Reviewer.
+
+**E54 ist im Produktcode behoben.** `R/fit.R:514–547` schützt den
+Aufbau des numerischen Originalskalenmodells: `lFormula`, `mkLmerDevfun`,
+`devfun(theta)`, `mkMerMod` und das Auslesen von `VarCorr`. Fehler und
+Warnungen an diesen Enginegrenzen beenden den Fit mit
+`Numeric model variance is not representable on the original scale at working precision.`
+Die Klasse ist `simpleError`, der Aufruf `NULL`. `checkConv` steht
+separat und gibt Konvergenzwarnungen weiter. Gesammelte Startwarnungen
+werden beim späteren Abbruch weiterhin in ihrer Reihenfolge ausgegeben.
+Der explizite Durchreichweg behält die originalen Enginebedingungen.
+Schätzer, Nullgrenze, Präzisionsgrenze und Abschlusskriterium bleiben
+unverändert; ein Teilmodell wird nicht als Ergebnis verwendet.
+
+Neu sind 18 Testblöcke in `tests/testthat/test-fit-model-construction.R`.
+Die drei E54-Reproduktionen und der positive Gegenfall werden mit
+`stats::aov` und den expliziten EMS-Formeln aus der Formelsammlung §2
+geprüft. Fehler und Warnungen an allen fünf Enginegrenzen, aktive
+Konvergenzprüfung, Startwarnungen und Durchreichweg werden zusätzlich
+synthetisch geprüft. Numerische Toleranzen kommen aus ANK-TOL; nur der
+Diagnosetext ist eigene Ausgabe. Vor der Korrektur scheitern 15 Blöcke
+mit 47 falschen Erwartungen, danach bestehen alle 129 Erwartungen.
+Die neue Datei blieb zwischen beiden Läufen gleich.
+
+E55/BL-89 bleibt **OUT-OF-TERRITORY für diesen Auftrag, nonblocking**:
+Der Auftrag untersagt die Änderung bestehender Tests. Deshalb bleibt
+`test-fit-initialization.R:22–49` byte-identisch. Die neuen E54-Tests
+erlauben auf einer anderen Plattform einen erfolgreichen Fit nur mit
+den unabhängig berechneten ANOVA-Komponenten; sie erzwingen keinen
+Engineabbruch. Synthetische Bedingungen sichern den genauen Fehlervertrag.
+Windows/macOS wurden hier nicht geprüft.
+
+E56: `?msa_fit` nennt jetzt auch den Modellbau nach geschlossener Lösung
+als mögliche Fehlerstelle bei hoher Wiederholpräzision und ordnet die
+mögliche Hessian-Warnung auf der Theta-Skala ein. ADR-020, Nachtrag
+Runde 5, enthält die zusätzliche balancierte Gegenrechnung. Die allgemeine
+Verbesserung des Abschlusses und dessen weitergehender Robustheitsnachweis
+aus E51/BL-87 bleiben vor M1d offen. NEWS und die erzeugte Rd-Hilfe
+dokumentieren den Produktfix.
+
+E50 und E52 sind laut REVIEW Runde 4 erledigt. E53/BL-84 bleibt mit
+seinen nicht verlangten Darstellbarkeits- und Redundanzfällen offen.
+Die zehn bestehenden Äquivalenzanträge wurden gegen identische
+Quellzeilen und die zwölf zugehörigen Überlebenden des Berichts Runde 4
+neu gebunden: neun Einträge in R/fit.R um fünf Zeilen verschoben,
+R/grr.R bytegleich. Keine neue Äquivalenz und keine eigene Approval.
+E48/BL-85, E49/BL-86 und E41/BL-79 sind OUT-OF-TERRITORY [INFRA].
+E39/BL-77 und E42/BL-80 bleiben beim Betreiber/Reviewer,
+E43/BL-81 gemäß ADR-022 in M1b. BACKLOG bleibt unverändert.
+
+Vollständige Antworten, Kommandos und Log-Bezüge stehen in
+`orchestrator/handoff/M1a/REWORK-NOTES.md`; Diagnoseartefakte unter
+`/tmp/llmsa-m1a-r5/`. Echte Ausgaben dieser Runde:
+
+```text
+Model construction regression: 18 tests; 15 failed blocks; 0 errors; 0 skipped
+[ FAIL 0 | WARN 0 | SKIP 0 | PASS 129 ]
+Model construction regression: 18 tests; 0 failed blocks; 0 errors; 0 skipped
+120 cases; 8 raw errors before, 0 after; 6 arithmetic warnings before, 0 after
+45 unchanged successful fits; maximum component/TV error against aov EMS 3.76805041e-09 (ANK-TOL.oracle 0.0001)
+[ FAIL 0 | WARN 0 | SKIP 1 | PASS 2809 ]
+[ FAIL 0 | WARN 0 | SKIP 0 | PASS 23 ]
+[ FAIL 0 | WARN 0 | SKIP 0 | PASS 12 ]
+r-tests: pass — 215 Tests in tests/testthat, tests/e2e, tests/fuzz; 0 fehlgeschlagen, 0 Fehler, 1 übersprungen
+Unit and QA elapsed seconds: 80.00; exit: 0
+[ FAIL 0 | WARN 0 | SKIP 0 | PASS 722 ]
+M1a acceptance: 54 tests; 0 failed blocks; 0 errors; 0 skipped
+M1a acceptance elapsed seconds: 37.05; exit: 0
+```
+
+Die drei E54-Einzelfälle liefern jetzt den Darstellbarkeitstext,
+`simpleError`, `call = NULL` und null Warnungen. Die Sensitivitätsrechnung
+verwendet 120 feste synthetische Prüfeingaben: 6×4×1×2, 8×3×1×3 und
+10×3×2×2 (Items×Prompts×Modelle×Replikate), Effekte mit Seed 11,
+Rauschen `10^(-3:-10)` mit Seeds 1001–1005. Alle haben nichtnegative
+EMS-Schätzer und positive Reststreuung über der unveränderten Nullgrenze.
+45 Fits bleiben erfolgreich und exakt gleich zum Ausgangscode;
+34 Fälle enden benannt wegen Darstellbarkeit, 41 wegen nicht auflösbarer
+Restskala. Kein zusätzlicher Konvergenzerfolg, keine ADEMP-/Coverage-Aussage.
+Bei Rauschen `1e-4` und `1e-5` bleibt im E54-Plan die vom Reviewer
+beschriebene Hessian-Warnung sichtbar; bei `1e-3` ist der Fit warnungsfrei.
+
+Öffentlicher Paketbau und `R CMD check --as-cran --no-manual`: jeweils
+Exit 0, keine ERRORs/WARNINGs, Vignetten neu gebaut. Echter Check-Output:
+
+```text
+Status: 1 NOTE
+Package check elapsed seconds: 123.19; exit: 0
+[ FAIL 0 | WARN 0 | SKIP 8 | PASS 2734 ]
+```
+
+Die acht bestehenden Standalone-Skips betreffen fünf Betreiber-Fixtures,
+den CRAN-Report-Test, Originalanker ohne Repository und ellmer. Alle neuen
+Tests laufen installiert. Der NOTE lautet `Unable to verify current time.`;
+die Zeitprüfung blieb aktiv. Die mirai-Probe endet mit `16 | Permission
+denied` (Exit 1). `sessionInfo()` meldet zusätzlich den gesperrten lokalen
+Systembus/`timedatectl`; der numerische Diagnosetreiber endet mit Exit 0.
+Diese Infrastrukturgrenzen sind mit tatsächlichen Logs OUT-OF-TERRITORY
+dokumentiert. Kein neuer Mutationsscore wurde erzeugt.
+
+`python3 /tmp/llmsa-m1a-r5/integrity.py` bestätigt mit Exit 0:
+315 Bestandsdateien inventarisiert, sieben zugewiesene Dateien geändert,
+308 bytegleich, keine gelöscht; eine neue Testdatei. Alle 69 bestehenden
+Test-/Fixture-Dateien bleiben bytegleich, ebenso Anker, Golden-Daten,
+Specs, Gates, Mutationsbericht, Reviewer-Approvals und BACKLOG. Alle
+110 öffentlichen Quelldateien stimmen mit der geprüften Paketkopie
+überein. R/fit.R SHA-256:
+`fff305a2c353c1f6bce60e549712913525e9c731087b0e6eac33fa1f6933be1c`.
+Die Inventur ersetzt keine Territoriumsprüfung. Keine Git-Kommandos,
+Abhängigkeitsinstallation oder eigenen API-Aufrufe. Territoriumsprüfung,
+Phasen-Commit, Gates und Review verbleiben bei den zuständigen Rollen;
+dieser Eintrag ist ein Builder-Prüfbeleg, kein Verdict.
+
+
 ## M1a — REWORK, Runde 4 (30.10.2026)
 
 Ausgangslage: REVIEW/verdict-code Runde 3 verlangt REWORK wegen E50.

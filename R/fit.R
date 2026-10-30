@@ -66,6 +66,8 @@
 #' active. Explicit lme4 arguments retain lme4 warnings and errors.
 #' Initialization failures on the default path identify the fitting stage
 #' and retain the underlying engine's message.
+#' Numerical warnings or errors during original-scale model construction
+#' produce a named representability error.
 #'
 #' Default numeric models store ordinary `nloptwrap` refit control with no
 #' extra optimizer options. [msa_boot()] and [lme4::refit()] therefore use
@@ -81,8 +83,11 @@
 #' components and a degenerate residual variance produce named errors.
 #' There is no absolute variance cutoff for small representable variation
 #' or tied scores. A positive residual variance does not guarantee a fit:
-#' with high repeatability, initialization or analytic completion can fail
-#' at working precision. Numeric `NaN` and the string `"NaN"` are
+#' with high repeatability, initialization, analytic completion or construction
+#' of the original-scale model can fail at working precision. Final convergence
+#' checks use the standard-deviation-ratio scale: a numerically singular Hessian
+#' warning can occur even for an identifiable balanced model with a closed-form
+#' solution. Numeric `NaN` and the string `"NaN"` are
 #' treated as missing responses, without a parsing warning. Missing numeric
 #' grouping values are rejected on both fitting paths. The default path
 #' rejects variances whose original-scale representation or model arithmetic
@@ -506,30 +511,40 @@ msa_numeric_fit <- function(form, dat) {
   precision <- sqrt(.Machine$double.eps)
   spacing <- .Machine$double.xmin * .Machine$double.eps
   positive <- c(theta > 0, TRUE)
+  not_representable <- function(condition = NULL) {
+    stop("Numeric model variance is not representable on the original scale at working precision.", call. = FALSE)
+  }
   if (any(!is.finite(expected_variances)) || any(expected_variances[positive] <= 0) ||
       any(spacing / expected_variances[positive] > precision)) {
-    stop("Numeric model variance is not representable on the original scale at working precision.", call. = FALSE)
+    not_representable()
   }
   derivs <- list(gradient = 2 * theta * solution$state$gradient,
                  Hessian = 4 * outer(theta, theta) * solution$state$Hessian +
                    diag(2 * solution$state$gradient, length(theta)))
-  original <- lme4::lFormula(form, data = dat, REML = TRUE, control = control)
-  devfun <- do.call(lme4::mkLmerDevfun, original)
-  value <- devfun(theta)
+  # An exact variance-ratio solution can still fail in original-scale model
+  # arithmetic. Stop on a warning as well as an error; never use a partial fit.
+  value <- tryCatch({
+    original <- lme4::lFormula(form, data = dat, REML = TRUE, control = control)
+    devfun <- do.call(lme4::mkLmerDevfun, original)
+    devfun(theta)
+  }, warning = not_representable, error = not_representable)
   opt <- list(par = theta, fval = value, conv = 0L, feval = solution$evaluations,
               message = paste("REML solution:", finish$method))
   attr(opt, "optimizer") <- "nloptwrap"
   attr(opt, "control") <- list()
   attr(opt, "derivs") <- derivs
+  # Keep convergence diagnostics separate from construction failures.
   cc <- lme4::checkConv(derivs, theta, ctrl = control$checkConv, lbound = original$reTrms$lower)
   mc <- call("lmer", formula = form, data = dat, REML = TRUE,
              control = quote(lme4::lmerControl(optimizer = "nloptwrap")))
   mc[[1]] <- quote(lme4::lmer)
-  model <- lme4::mkMerMod(environment(devfun), opt, original$reTrms, fr = original$fr, mc = mc, lme4conv = cc)
-  variances <- as.data.frame(lme4::VarCorr(model))$vcov
+  variances <- tryCatch({
+    model <- lme4::mkMerMod(environment(devfun), opt, original$reTrms, fr = original$fr, mc = mc, lme4conv = cc)
+    as.data.frame(lme4::VarCorr(model))$vcov
+  }, warning = not_representable, error = not_representable)
   if (!is.finite(value) || any(!is.finite(variances)) ||
       any(abs(variances[positive] / expected_variances[positive] - 1) > precision)) {
-    stop("Numeric model variance is not representable on the original scale at working precision.", call. = FALSE)
+    not_representable()
   }
   solution$lambda <- stats::setNames(solution$lambda, names)
   solution$active <- names[theta == 0]
