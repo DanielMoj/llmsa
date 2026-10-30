@@ -1,471 +1,313 @@
-# REVIEW — M1a, Runde 1 (Code-Review)
+# REVIEW — M1a, Runde 2 (Code-Review)
 
-Rolle: Reviewer · Phase: `50-code-review` · Runde: 1 · Stand: 29.10.2026
+Rolle: Reviewer · Phase: `50-code-review` · Runde: 2 · Stand: 30.10.2026
 
 Gegenstand:
-- der Diff seit `plan/M1a` (Tag-Objekt `a9d3f479…` → Commit `485c9605…`) bis HEAD `4701643…`;
-- die Gate-Fakten `orchestrator/state/M1a/gates.json` der Runde 1 nach QA;
-- `QA.md` mit den fünf QA-Tests.
+- der Diff seit `plan/M1a` (Tag-Objekt `a9d3f479…` → Commit `485c9605…`) bis HEAD `c47521a…`; Schwerpunkt ist der Rework-Commit `597b0c3…` gegenüber dem Review-Commit `595d240…` der Runde 1;
+- die Gate-Fakten `orchestrator/state/M1a/gates.json` der Runde 2 (`env.sha` `597b0c3`) mit allen `gate-*.log` und dem Mutationsbericht `reports/mutation/mutation.json`;
+- `REWORK-NOTES.md` und die acht Anträge in `MUT-EQUIV.json`.
 
 ## Gelesen
 
 - **Rollen und Protokoll:** `AGENTS.md`, `CLAUDE.md`, `IMPLEMENTATION-RULES.md`, `contracts/PROTOCOLS.md`, `orchestrator/handoff/SCHEMA.md`, `orchestrator/LESSONS.md` (keine Lehren).
-- **Handoff M1a:** `CRITERIA.json` (K-M1a-1 bis K-M1a-7, ACC-1 bis ACC-18), `PLAN.md`, `PLAN-UPDATE.md`, `PLAN-REVIEW.md` und `verdict-plan.json` (Runde 2), `QA.md`.
-  - Nicht vorhanden: `ARBITER.md`, `REVIEW-INPUT.md`, `MUT-EQUIV.json`, `MUT-EQUIV-APPROVED.json`.
+- **Handoff M1a:**
+  - `CRITERIA.json` (K-M1a-1 bis K-M1a-7, ACC-1 bis ACC-18);
+  - `PLAN-UPDATE.md`, Abschnitte Schnittstellen, numerisches Verfahren, Wiederanpassung und Randfälle;
+  - `PLAN.md` und `PLAN-REVIEW.md` nur über die Verweise in REVIEW r1, ADR-018 und ADR-022;
+  - `QA.md`, `REVIEW.md` und `verdict-code.json` der Runde 1, `REWORK-NOTES.md`, `MUT-EQUIV.json`.
+  - Nicht vorhanden: `ARBITER.md`, `REVIEW-INPUT.md`. `MUT-EQUIV-APPROVED.json` gab es vor diesem Review nicht.
 - **Spezifikation:**
-  - `docs/02-statistikkern.md`, Abschnitt M1a, K-M1a-1 bis K-M1a-7 im Wortlaut;
-  - `docs/01-fachspezifikation.md` vollständig;
-  - ADR-017 bis ADR-021 vollständig, davon ADR-019 (Betreiber) mit drei Nachträgen; ADR-016 über die Verweise in `CRITERIA.json` und ADR-018.
-- **Gates:** `gates.json` und alle acht `gate-*.log` der Runde 1 nach QA. Dazu `gates.json` und `gate-mutgate.log` des ersten Gate-Laufs derselben Runde vor QA, aus dem Phasen-Commit `a92396f`.
+  - K-M1a-1 bis K-M1a-7 im Wortlaut aus `CRITERIA.json`; das trace-Gate bestätigt die wörtliche Verknüpfung mit `docs/02-statistikkern.md`.
+  - ADR-018, ADR-022 und den Rework-Nachtrag zu ADR-020 habe ich vollständig gelesen, ADR-020 sonst in den numerischen Abschnitten.
+  - docs/01 §2 Nr. 4 und §5 über die Zitate in ADR-022.
+- **Gates:** `gates.json` und alle acht `gate-*.log` der Runde 2; `reports/mutation/mutation.json` mit 1097 Mutanten.
 - **Diff, vollständig gelesen:**
-  - `R/fit.R`, `R/grr.R`;
-  - `tests/testthat/test-fit-numeric.R`, `test-grr-numeric.R`, `test-validation-numeric.R`, `helper-validation-numeric.R`, der neue Block in `test-acmg-evaluate.R`;
-  - `vignettes/validation.Rmd`, `inst/validation/numeric/reference_checks.R`, `README.md`, `SOURCES.json`;
-  - `data-raw/make_validation_numeric.R`, `inst/extdata/nist-strd-anova_2026-10-22/QUELLE.txt` und `SHA256SUMS`;
-  - `DESCRIPTION`, `NEWS.md`, die drei Rd-Diffs, `PROGRESS.md` (M1a), ADR-020, ADR-021;
-  - die QA-Tests `tests/e2e/test-m1a-qa-e2e.R` und `tests/fuzz/test-m1a-qa-fuzz.R`.
-- **Visuelle Artefakte:** keine; `orchestrator/state/M1a/shots/` ist leer, in M1a nicht gefordert.
+  - `R/fit.R` und `R/grr.R` ganz, dazu `R/plan.R`, `NEWS.md` und die drei Rd-Diffs (`msa_fit`, `msa_grr`, `msa_plan`);
+  - `inst/validation/numeric/reference_checks.R` als Diff, dazu `validation_run()`;
+  - den Nachtrag zu ADR-020 und `PROGRESS.md` (M1a r2);
+  - die neuen Tests `helper-m1a-rework.R`, `test-fit-rework-inputs.R`, `test-fit-rework-numerics.R`, `test-grr-rework.R`, `test-validation-rework.R`;
+  - zum Abgleich `tests/e2e/test-m1a-qa-e2e.R`, Z. 70–119 (QA-M1a-003).
+- **Visuelle Artefakte:** keine; M1a fordert keine.
 
 ## Gate-Fakten
 
-| Gate | Runde 1 nach QA (`gates.json`, `env.sha` `3ca0dd9`) | erster Lauf Runde 1 vor QA (`a92396f`) |
-| --- | --- | --- |
-| deps | pass | pass |
-| lint | pass (`R CMD check`: Status OK, Vignette gebaut) | pass |
-| tests | **fail**: nur die fünf QA-Tests | pass |
-| trace | pass | pass |
-| territory | pass | pass |
-| mutgate | **fail**: unmutierter Vorlauf rot, kein Mutant gelaufen | **fail**: score=60.26 required=80 |
-| golden-adr | pass | pass |
-| mutfull | pass (nicht fällig) | pass (nicht fällig) |
-| result | **fail** | fail |
+| Gate | Runde 2 (`gates.json`, `env.sha` `597b0c3`) |
+| --- | --- |
+| deps | pass (22 Anforderungen, R 4.6.1, Matrix 1.7.4 ≥ 1.6-0) |
+| lint | pass (`R CMD check --as-cran`: Status OK, Vignetten neu gebaut) |
+| tests | pass |
+| trace | pass |
+| territory | pass (builder/60-rework, Runde 2) |
+| mutgate | pass: score=93.79 required=80 baseline=93.79 floor=80 |
+| golden-adr | pass |
+| mutfull | pass („nicht fällig in M1a“) |
+| **result** | **pass** |
 
 - **tests:**
-  - `tests/testthat`: `[ FAIL 0 | WARN 0 | SKIP 1 | PASS 1998 ]`;
-  - `tests/acceptance`: `[ FAIL 0 | WARN 0 | SKIP 0 | PASS 3070 ]`, alle Abnahmetests von M0, M2 und M1a grün;
-  - `tests/e2e`: `[ FAIL 9 | … | PASS 12 ]`;
-  - `tests/fuzz`: `[ FAIL 6 | … | PASS 6 ]`;
-  - Kurzbefund: „281 Tests …; 5 fehlgeschlagen, 0 Fehler, 1 übersprungen“. Rot sind genau QA-M1a-001 bis -005.
+  - `tests/testthat`: `[ FAIL 0 | WARN 0 | SKIP 1 | PASS 2477 ]`; der Skip ist der bekannte ellmer-Negativtest;
+  - `tests/acceptance`: `[ FAIL 0 | WARN 0 | SKIP 0 | PASS 3070 ]`;
+  - `tests/e2e`: `PASS 23`, `tests/fuzz`: `PASS 12`. Alle fünf QA-Tests (QA-M1a-001 bis -005) sind grün, unverändert.
+  - Kurzbefund: „314 Tests …; 0 fehlgeschlagen, 0 Fehler, 1 übersprungen“.
 - **mutgate:**
-  - Nach QA: Vorlauf 86,1 s, 218 Tests, 5 rot (`reports/mutation/unmutated.json`); ein `mutation.json` gibt es nicht.
-  - Vor QA (gleicher Produktcode, Nachprüfung 1): 1003 Mutanten (`R/fit.R` 783, `R/grr.R` 220); 517 Killed, 29 Timeout, 360 Survived, 97 RuntimeError; Score 60,26.
-- **Status error:** keiner. Alle roten Gates haben Ursachen im Builder-Territorium (Produktcode beziehungsweise Tests unter `tests/testthat/`); kein roter Gate-Befund ist [INFRA].
+  - unmutierter Vorlauf 90,4 s, 251 Tests, 0 rot; Zeitlimit 452 s je Mutant;
+  - Bericht: 1097 Mutanten (`R/fit.R` 855, `R/grr.R` 242). Davon 935 Killed, 31 Timeout, 64 Survived, 0 NoCoverage und 67 RuntimeError.
+  - Die Nachrechnung (Killed + Timeout) / (Killed + Timeout + Survived + NoCoverage) = 966 / 1030 ergibt 93,79 und trifft den Gate-Wert.
+- **Status error:** keiner. Kein Gate-Befund ist [INFRA].
+- **Laufzeit (BL-13):** Gate-Lauf 00:06–04:13, also ≈ 4 h 7 min:
+  - lint ≈ 3 min;
+  - tests ≈ 18,5 min (Abnahme 1038,1 s, testthat 65,1 s);
+  - mutgate ≈ 3 h 45 min, ein muttest-Durchgang mit 13.432,7 s.
 
 ## Eigene Nachprüfung (ausgeführt, ohne Git-Kommando)
 
-Den Diff habe ich ohne Git-Kommando gelesen:
-- mit einem eigenen R-Leser für `.git/objects` (lose Objekte und Pack mit Deltas);
-- verglichen mit `diff -u` über `Rscript`;
-- gerechnet mit `pkgload::load_all()` gegen den Arbeitsbaum und gegen eine Kopie des Paketbaums von `plan/M1a` (v0.1.0-Kern).
+**Methode:**
+- Den Diff habe ich mit einem eigenen R-Leser für `.git/objects` gelesen (lose Objekte und Pack mit Deltas) und mit `diff -u` über `Rscript` verglichen.
+- Gerechnet habe ich mit `pkgload::load_all()` gegen den Arbeitsbaum.
+- Den Code von Runde 1 (`595d240`) und von v0.1.0 (`plan/M1a`) habe ich zum Vergleich in eine Kindumgebung des Namensraums geladen.
+- Hilfsdateien lagen nur unter `reports/rv-m1a-r2/` (git-ignoriert, Artefakt-Allowlist) und sind gelöscht.
 
-Hilfsdateien lagen nur unter `/tmp/rv-m1a/` und `reports/rv-m1a/` (git-ignoriert, Artefakt-Allowlist) und sind gelöscht.
+1. **Inventar.**
+   - 87 Pfade seit `plan/M1a`.
+   - Der Rework ändert 23 Pfade:
+     - 17 Builder-Pfade: `R/fit.R`, `R/grr.R`, `R/plan.R`, drei Rd, `NEWS.md`, `PROGRESS.md`, ADR-020, `reference_checks.R`, fünf neue Testdateien, `REWORK-NOTES.md`, `MUT-EQUIV.json`;
+     - sonst Orchestrator-Zustand und `STATUS.md`.
+   - Rework → HEAD: 10 Pfade, nur Gate-Zustand und `STATUS.md`.
+   - Blob-gleich mit `plan/M1a`: `tests/acceptance/**`, `reference/anchors/**`, `tests/fixtures/**`, `NAMESPACE`, `.Rbuildignore`, `tests/testthat.R`.
+   - Im Rework unverändert: `DESCRIPTION`, `vignettes/validation.Rmd`, `inst/extdata/**` und alle bestehenden Testdateien.
+   - Der Arbeitsbaum gleicht HEAD bis auf `STATUS.md` und `orchestrator/state/summary.json` (Orchestrator).
+2. **E18, Refit.**
+   - `msa_boot()` läuft auf einem Fit aus einer Hilfsfunktion mit lokaler `lmerControl(optimizer = "bobyqa")`. `refit()` meldet dann bobyqa.
+   - Über eine weiterreichende Hilfsfunktion mit lokaler Steuerung ergibt sich ebenso bobyqa.
+   - Der gespeicherte Aufruf enthält kein `..N`.
+3. **E19, Durchreichweg.**
+   - `subset = item != levels(item)[1]` mit `control = lmerControl()` auf `ic50_demo`: `nobs` 2098 gleich `n$observations`, `nrow(fit$data)` und `length(input_rows)`. Items 39 sind gleich den Stufen im Modell.
+   - `subset = 1:200` endet wie der direkte `lmer`-Aufruf mit derselben Formel mit „grouping factors must have > 1 sampled level“. Das entspricht ADR-022 Nr. 1.1.
+   - Über eine Hilfsfunktion weitergereichte `subset`-Werte werden nicht gefunden (E46).
+4. **E20, Restvarianz null.**
+   - Benannt enden:
+     - balancierte Pläne (QA-Fall A; 5 × 3 × 3 mit identischen Replikaten), ohne Warnung;
+     - der unbalancierte Einwegplan (QA-Fall B);
+     - QA-Fall A ohne Zeile 1 oder ohne Zeilen 1 und 6 („… cannot be resolved at working precision.“, mit weitergegebenen lme4-Startwarnungen).
+   - **Nicht benannt** endet QA-Fall A mit einem einzigen fehlenden Wert (`value[16] <- NA`): „Downdated VtV is not positive definite“ (Klasse `Rcpp::exception`). Ebenso endet ein 5 × 3-Plan mit drei identischen Replikaten (Zellwerte `rnorm`, Seed 7) ohne Zeile 1 oder ohne Zeilen 1, 17 und 33.
+     - Unabhängig mit `aov` nachgerechnet: Restquadratsumme 4,0e-30 auf 7 FG bei SST 36,48, Verhältnis 1,1e-31. Das liegt unter der Grenze (64 · eps)² = 2,0e-28 aus ADR-020.
+     - Ohne Wechselwirkung läuft derselbe Datensatz (σ²_e = 2,591).
+     - Runde 1 und v0.1.0 liefern denselben Rohfehler (E44).
+5. **E21, Darstellbarkeit.**
+   - Messwerte × 1e-161, × 1e-160 und × 1e-158 enden benannt („… not representable …“).
+   - × 1e-155 bis × 1e153 rechnen; zurückskaliert höchstens 1,0e-13 · σ²_TV vom unskalierten Fit.
+   - × 1e154 und × 1e155 (Überlauf) enden benannt.
+   - Beide NaN-Formen und fehlende Gruppierungswerte auf beiden Pfaden prüft der Builder-Test; der QA-Test ist grün.
+6. **E22.**
+   - Die Schwellen `c(30, 10)`, `c(-5, 30)`, `"invalid"`, `10` und `c(NA, 30)` enden mit „`threshold` must contain two finite, nonnegative, nondecreasing numbers.“
+   - `c(10, 10)` und `c(0, 30)` ergeben ein Verdikt (ADR-022 Nr. 4).
+   - Die Manifestprüfung folgt ADR-022 Nr. 5; Diff und Tests habe ich gelesen.
+7. **E23, Präzision des Originalskalenmodells.**
+   - `ic50_demo` + c, verglichen mit denselben, gleich gerundeten Daten ohne Offset:
 
-1. **Inventar.** 69 Pfade seit `plan/M1a`:
-   - 38 Builder-Pfade (`R/fit.R`, `R/grr.R`, `DESCRIPTION`, `NEWS.md`, drei Rd, `PROGRESS.md`, ADR-020/021, `data-raw/`, `inst/extdata/` mit 12 Dateien, `inst/validation/numeric/` mit 8, `tests/testthat/` mit 5, `vignettes/validation.Rmd`);
-   - 2 QA-Tests und `QA.md`;
-   - sonst Betreiber und Orchestrator (ADR-019, `docs/gates-auswahl.md`, `RUNBOOK.md`, `config.env.example`, `orchestrator/**`).
+     | c | Abweichung · σ²_TV |
+     | --- | --- |
+     | 100 | 8,8e-16 |
+     | 1e4 | 3,8e-13 |
+     | 1e6 | 4,3e-11 |
+     | 1e7 | 8,6e-10 |
 
-   Blob-gleich mit `plan/M1a`: `tests/acceptance/**` (24), `reference/anchors/**` (32), `tests/fixtures/**` (6), `NAMESPACE`, `.Rbuildignore`, `tests/testthat.R`. `R/fit.R` und `R/grr.R` in `a92396f` sind byte-gleich mit dem Arbeitsbaum.
-2. **NIST-Golden-Daten.** Elf Tabellen gegen die Originale unter `../quellen/daten/nist-strd-anova_2026-10-22/`:
-   - Quell-SHA-256 gleich ANK-14;
-   - Zahlentokens, Behandlungen und Reihenfolge identisch;
-   - eingelesene Doubles `identical()`;
-   - größte Datei 44.487 B, Ordner 224.678 B, `inst/extdata/` 250.931 B (Grenzen aus ANK-TOL.data_size: 1 MB, 3 MB, 5 MB).
+     Ab c = 3e7 folgt der benannte Fehler. `ANK-TOL.invariance` beträgt 1e-6.
+   - NIST, öffentliche Kopien:
+     - SiRstv, SmLs01–SmLs06 und AtmWtAg laufen über `closed_form`.
+     - LRE von `msa_fit` gegen `aov`:
 
-   Keine erfundenen Daten.
-3. **QA-Befunde nachgerechnet**, gleiche Fälle auf dem Arbeitsbaum und auf v0.1.0:
+       | Datensatz | `msa_fit` (Rest / Item) | `aov` (Rest / Item) |
+       | --- | --- | --- |
+       | SmLs04 | 10,81 / 10,27 | 10,29 / 10,04 |
+       | SmLs05 | 10,24 / 9,92 | 10,29 / 9,94 |
+       | SmLs06 | 10,29 / 9,94 | 10,29 / 9,94 |
 
-   | QA | M1a (Arbeitsbaum) | v0.1.0 | Bewertung |
-   | --- | --- | --- | --- |
-   | 001 | `msa_boot()` auf Fit mit `control = lmerControl(optimizer = "bobyqa")`: „the ... list contains fewer than 1 element“; gespeicherter Aufruf `control = ..1` | gleich | gültig, E18 |
-   | 002 | `subset = item != "I001"`: „object 'item' not found“; Index-Subset und `NA`-Gewichte: `n$observations` 24, `nobs()` 20, `n$items` 6 gegen 5 Items im Modell, `nrow(fit$data)` 24 | gleich | gültig, E19 |
-   | 003 | balanciert: „leading principal minor of order 13 is not positive“, CHOLMOD-Warnung, zwei lme4-Warnungen; unbalanciert: „… order 4 …“, dazu CHOLMOD- und lme4-Warnungen | „Downdated VtV is not positive definite“ bzw. Rest 3,7e-13 mit Warnung | gültig, E20 |
-   | 004 | × 1e-161: 9,05 % von σ²_TV still, × 1e-160: 0,19 %; `"NaN"` warnt, `NaN` nicht (beide 19 Beobachtungen); NA-Gruppierung explizit: 20 gegen `nobs()` 18, Vorgabepfad: benannter Fehler | × 1e-161: 15,5 % mit lme4-Warnung; NA-Gruppierung auch im Vorgabepfad still | gültig, E21 |
-   | 005 | `c(30, 10)` → „unacceptable“, `"invalid"` → „acceptable“, `10` und `c(NA, 30)` → „missing value where TRUE/FALSE needed“; Manifestprüfung besteht ohne `datasets` und mit `ANK-99.json` | Schwellen gleich | gültig, E22 |
-
-   - Jede QA-Erwartung ist mit Spec, ADR-018 und der eigenen Dokumentation des Builders vereinbar. Wo die Spec schweigt, legt ADR-022 die Auslegung fest.
-   - Drei Zitate, die QA.md ADR-020 zuschreibt, stehen dort nicht (E39).
-   - Einen QA-Test stufe ich nicht herab. Ein herabgestufter Test bliebe rot und hielte tests und mutgate rot, denn `tests/e2e` und `tests/fuzz` ändert nur QA.
-4. **Präzision des Originalskalenmodells** (Vorgabepfad).
-
-   **Vergleich:** σ²_e des zurückgegebenen Modells (`sigma(fit$model)^2`) gegen das eigene konditionierte Ergebnis `numerics$state$residual · (scale · binary_scale)²`.
-
-   | Daten | Verfahren | σ²(Modell) | konditioniert | relative Lücke |
-   | --- | --- | --- | --- | --- |
-   | `ic50_demo` | analytic_reml | 1,401031e-02 | 1,401031e-02 | 1,1e-16 |
-   | `ic50_demo` + 1e8 / + 1e9 / + 1e10 | analytic_reml | … | … | 1,2e-7 / 8,5e-6 / 6,8e-4 |
-   | SiRstv, SmLs01–SmLs06, AtmWtAg | closed_form | … | … | höchstens 3,6e-11 |
-   | SmLs07 | closed_form | 1,000154e-02 | 1,000054e-02 | 1,0e-4 |
-   | SmLs08 | closed_form | 5,021323e-02 | 1,000054e-02 | 4,0 |
-   | SmLs09 | closed_form | 1,531459e+02 | 1,000054e-02 | 1,5e+4 |
-   | QA-004 × 1e-161 | analytic_reml | 9,881313e-324 | 9,881313e-324 | 0 |
-
-   - **Verschiebung gegen dieselben, gleich gerundeten Daten ohne Offset** (`(y + c) − c`):
-     - Die Varianzverhältnisse und %GRR sind bei jeder Verschiebung gleich.
-     - Die Komponenten weichen bei `ic50_demo` + 1e9 um 8,1e-6 · σ²_TV ab, bei + 1e10 um 6,5e-4 · σ²_TV.
-     - Beim balancierten Plan mit Block und Wechselwirkungen bleiben sie bis + 1e10 unter 4,7e-7.
-   - **v0.1.0 zum Vergleich:**
-     - SmLs07: 9,99e-3 und SmLs08: 1,14e-2, jeweils mit lme4-Warnung („Model is nearly unidentifiable … Rescale variables?“);
-     - SmLs09: 7,86e-2.
-     - Der neue Pfad ist auf SmLs08/09 schlechter und meldet nichts (E23).
-   - **Subnormaler Fall:** Eine reine Konsistenzprüfung fängt ihn nicht, denn beide Werte sind gleich ungenau. Er braucht die Darstellbarkeitsprüfung (E21).
-5. **Geschlossene Lösung gegen eine unabhängige EMS-Rechnung.**
-   - Rechnung: aus `stats::aov`-Mittelquadraten, eigene Koeffizientenmatrix.
-   - Pläne: `msa_simulate(12, 3, 3, 2, blocks)`, Komponenten der K-M1a-1-Pläne, ohne/mit Block, ohne/mit Wechselwirkungen, Seeds 1–3; elf Pläne mit nichtnegativen Schätzern.
-   - Ergebnis: Alle laufen über `closed_form` und weichen höchstens 2,1e-15 · σ²_TV ab. Die Rechnung stimmt.
-   - Kein Test sichert sie aber für Wechselwirkungen und Block ab (E28).
-6. **Vertragsprüfungen.**
-   - ADR-018:
-     - Nr. 1 (a)–(d) erfüllt: `mkMerMod` am Endwert, `vc` gleich `vc_from_model(model)`, im Unit-Test mit `expect_identical`.
-     - Nr. 2 erfüllt: `...length() == 0L`.
-     - Nr. 3 erfüllt bis auf den Fehlerfall Restvarianz 0 (E20).
-     - Nr. 4 erfüllt: Maßstab = größte absolute Differenz; Test mit 70 % Gleichständen.
-     - Nr. 5 erfüllt: ADR-020, 200 Fits ohne Fehler, Laufzeiten.
-     - Nr. 6 erfüllt: `Matrix (>= 1.6-0)`; `determinant(…, sqrt = )` laut installierter `Matrix/NEWS.Rd` neu in 1.6-0; `R (>= 4.1)` unverändert.
-   - ADR-017:
-     - Nr. 6 erfüllt.
-     - Nr. 7.1–7.6 erfüllt: Kopien byte-gleich laut `SOURCES.json`, Driftwache grün, `R/` liest keine Kopie.
-     - Lücke in der Manifestprüfung: E22.
-   - PLAN-REVIEW: E14, E15 und E17 erfüllt; E13 als Nachweis erfüllt, die Doku fehlt (E38); E16 nicht erreicht (E24–E37).
+     - SmLs07–SmLs09 enden benannt. `validation_run()` zeigt sie als `NA` mit dem Grund in der Diagnosetabelle (ADR-022 Nr. 6.3).
+8. **MUT-EQUIV:** jeden Antrag einzeln und unabhängig von den Builder-Belegen unter `/tmp/llmsa-m1a-r2/` nachgeprüft (Abschnitt MUT-EQUIV).
 
 ## Bewertung
 
 ### Spec- und Vertragstreue
 
-- Alle Abnahmetests von K-M1a-1 bis K-M1a-7 sind grün, und das lint-Gate baut die Vignette im Vollmodus ohne ERROR und WARNING. Der Builder hat sie nicht angefasst.
-- Der zusammengesetzte Vorgabepfad hält ADR-018 und ADR-019 (b) ein. Eine Ausnahme ist der Fehlerfall bei verschwindender Restvarianz (E20).
-- Offen sind drei Gruppen von Lücken:
-  - die gültigen QA-Befunde (E18–E22);
-  - die stille Ungenauigkeit des Originalskalenmodells bei großem Offset (E23);
-  - der Mutationsscore (E24–E37).
-- Kein wörtlicher Spec-Widerspruch, also kein ESCALATE. K-M1a-4 nimmt SmLs07–SmLs09 von der Genauigkeitsforderung aus. docs/01 §2 Nr. 4 verbietet unabhängig davon die stille falsche Zahl; beides ist zugleich erfüllbar (ADR-022 Nr. 6.3).
+- K-M1a-1 bis K-M1a-7: Alle Abnahmetests sind grün, die Vignette baut im lint-Gate. Die Prüfungen von SmLs04–SmLs06 halten die Marge aus `ANK-TOL.nist_digits`.
+- ADR-022:
+  - Nr. 1 bis 6 sind erfüllt (Nachprüfungen 2, 3 und 5 bis 7).
+  - Nr. 7 ist nur für balancierte Pläne, Einwegpläne und den analytischen Abschluss erfüllt. Im unbalancierten Mehrfaktorplan endet der Vorgabepfad noch roh (E44).
+  - Das betrifft auch ADR-018 Nr. 3, die Zusage in `?msa_fit` (`R/fit.R:71–72`) und die Tabelle „Randfälle“ im PLAN-UPDATE.
+- ADR-018 Nr. 1 bleibt gewahrt: `vc` stammt aus `VarCorr(model)`. Die Prüfung nach dem Modellbau (`R/fit.R:507–511`) wirft einen Fehler und setzt keine zweite Tabelle daneben.
+- Kein Widerspruch zwischen Spec-Stellen, also kein ESCALATE.
 
 ### API-Diff
 
-- Keine neuen Exporte; `NAMESPACE` ist byte-gleich.
-- Signaturen und Vorgaben sind gleich (`m0-api-snapshot` grün).
-- Neu ist das Rückgabefeld `numerics`; Druckausgaben haben sich geändert. Beides ist nach docs/01 §4 ohne ADR erlaubt.
-- `Matrix` wird mit ADR-020 importiert; VCA und SixSigma kommen unter Suggests hinzu.
-- Neue Fehler im Vorgabepfad: konstante, nicht endliche oder fehlende Werte. `?msa_fit` nennt sie, `NEWS.md` nicht (E38).
+- `NAMESPACE` ist byte-gleich; Signaturen und Vorgaben sind gleich (`m0-api-snapshot` grün).
+- Neu sind benannte Fehler:
+  - in `msa_fit()`: Gruppierungswerte, Restvarianz, Darstellbarkeit;
+  - in `msa_grr()`: `threshold`.
+- `NEWS.md`, `?msa_fit` und `?msa_grr` nennen sie, `?msa_plan` den Abbruch der Planung (E38 erledigt).
+- Der gespeicherte Modellaufruf enthält jetzt den Datenrahmen als Wert (E45).
 
 ### Integrität
 
-- **Entkernte oder geänderte Tests:** keine. Abnahmetests, Fixtures und Anker sind blob-gleich. `test-acmg-evaluate.R` hat nur einen Block dazubekommen.
-- **Gelockerte Konfiguration:** keine. `.Rbuildignore`, `NAMESPACE` und `tests/testthat.R` sind gleich; Toleranzen und Gates hat der Builder nicht geändert.
-- **Harte Erwartungswerte:** keine. In `R/` stehen keine Datensatz- oder Ankerwerte. Die Tests lesen Toleranzen aus den Ankerkopien mit Pflichtprüfung (`numeric_tolerance()`).
-- **Erfundene Daten:** keine (Nachprüfung 2).
-- **Golden-Daten:** `inst/extdata/nist-strd-anova_2026-10-22/` kommt mit ADR-021; golden-adr ist grün.
+- **Entkernte oder geänderte Tests:** keine. Der Rework fügt fünf Testdateien hinzu und ändert keine bestehende. Abnahme-, QA- und Fixture-Dateien sind blob-gleich.
+- **Gelockerte Konfiguration:** keine.
+- **Harte Erwartungswerte:** keine. Die neuen Konstanten in `R/fit.R` stammen aus der Maschinenarithmetik und stehen in ADR-020:
+  - (64 · eps)²;
+  - `sqrt(eps)`;
+  - `double.xmin · double.eps`.
+- **Erfundene Daten:** keine.
+- **Golden-Daten:** im Rework unverändert.
+- Der Builder hat die tote Neuberechnung von `residual_v` nach `variance <- 0` entfernt. Der zurückgegebene Quotient ist ohnehin 0; die Restvarianz bestimmt danach das REML-Kriterium, der Test vergleicht sie mit `var()`. Ebenso hat er `na.rm` nach dem Filter `is.finite()` entfernt. Beides ist verhaltensgleich.
 
 ### Neue Tests
 
-- Die neuen Unit-Tests belegen Verhalten gegen unabhängige Referenzen:
-  - EMS aus `aov`;
-  - direkte `lme4::lmer`- und `bootMer`-Aufrufe;
-  - dichte Matrixrechnung für Kriterium, Score und Krümmung;
-  - synthetische Zielfunktionen mit bekanntem Optimum;
-  - eigene Algebra für die GRR-Kennzahlen;
-  - Negativfälle für Ressourcen.
-- Keiner friert nur die eigene Ausgabe ein.
-- Lücken (zeigen sich in den Überlebenden):
-  - die geschlossene Lösung mit Wechselwirkungen und Block (E28);
-  - die Konditionierung, die nur über Eigenschaften geprüft wird (E27);
-  - `n` und `data` im Durchreichweg (E19);
-  - Meldungs-, Druck- und Bootstrap-Pfade (E25–E37).
+- Die neuen Tests belegen Verhalten gegen unabhängige Referenzen:
+  - EMS aus `stats::aov` mit eigener Koeffizientenmatrix;
+  - direkte `lme4::lmer`-, `bootMer`-, `VarCorr`- und `ordinal::VarCorr`-Aufrufe;
+  - dichte projizierte Kovarianzformel für die Informationsmatrix;
+  - Richardson-Differenzenquotienten der lme4-Devianzfunktion;
+  - von Hand hergeleitete Newton-Schritte auf Quadratiken und Quartiken;
+  - `stats::quantile` und Formeln mit ANK-16.
+- Die Konstanten des Abschlusses (Rundungsreserve, Armijo, Normen) prüfen die Tests gegen ADR-020.
+- Momentaufnahmen der eigenen Ausgabe gibt es nur für Wortlaut und Layout von Meldungen und Druck, jeweils gekennzeichnet:
+  - `helper-m1a-rework.R:16–18`;
+  - `test-grr-rework.R:60–61, 95, 144–145`;
+  - `test-fit-rework-inputs.R:218–219`.
+
+  Die Zahlen darin prüft jeweils ein Formeltest.
+- Lücken, ohne Gate-Wirkung (mutgate grün): E47.
+
+## Stand der Einwände aus Runde 1
+
+Der Builder beantwortet alle 26 IDs Punkt für Punkt (REWORK-NOTES).
+
+| ID | Stand | Beleg |
+| --- | --- | --- |
+| E18 | erledigt | Nachprüfung 2; `test-fit-rework-inputs.R:1–33` |
+| E19 | erledigt | Nachprüfung 3; Tests mit Ausdrucks-Subset, Index-Subset mit Dubletten, `NA`-Gewichten und `na.exclude`; Hinweis E46 |
+| E20 | **teilweise** | balanciert, Einweg und Abschluss benannt; unbalancierter Mehrfaktorplan roh → E44 |
+| E21 | erledigt | Nachprüfung 5 |
+| E22 | erledigt | Nachprüfung 6 |
+| E23 | erledigt | Nachprüfung 7 |
+| E24 | erledigt | Vorlauf grün, mutgate 93,79 ≥ 80 |
+| E25–E37 | durch das Gate erledigt | 64 Überlebende, davon 10 als äquivalent freigegeben; Hinweise in E47 |
+| E38 | erledigt | `NEWS.md`, `?msa_plan`; BL-76 gestrichen |
+| E39 | offen, Betreiber | BL-77 |
+| E40 | erledigt | BL-78 |
+| E41 | offen, Betreiber | BL-79; in Runde 2 lag `mutation.json` vor |
+| E42 | offen, Betreiber | BL-80 |
+| E43 | vertagt nach M1b | BL-81 |
 
 ## Einwände
 
-### Blocking aus QA (Gate tests)
+### Blocking
 
-- [E18] (blocking) QA-M1a-001 (`tests/e2e/test-m1a-qa-e2e.R:4–33`, Gate tests); `?msa_boot` (neu in M1a: „An explicit fitting control passed to [msa_fit()] remains the model's refit control.“); ADR-018 Nr. 3 („Der Modellaufruf enthält einen `control`-Ausdruck, der im Kontext des Aufrufers auswertbar ist. Grund: `bootMer` in lme4 2.0.6 wertet `eval.parent(x@call$control)` aus.“); ADR-022 Nr. 1.3 — **Befund:** Auf dem Durchreichweg speichert `lme4::lmer()` den Aufruf mit `control = ..1` (`R/fit.R:173`). Deshalb bricht `msa_boot()` bei jedem so gesteuerten Fit mit „the ... list contains fewer than 1 element“ ab, auch beim bobyqa-Auftrag aus ANK-TOL wie in K-M1a-1. Der Fehler bestand schon in v0.1.0; neu ist die gegenteilige Zusicherung in `?msa_boot`. — **Vorschlag:**
-  - einen selbsttragenden Aufruf speichern: Steuerung und übrige nicht datenbezogene Argumente als Werte, ohne die lme4-Rechnung zu ändern (ADR-018 Nr. 2);
-  - Unit-Test mit `msa_boot()` auf einem expliziten Fit, auch aus einer Hilfsfunktion mit lokaler Steuerung;
-  - `?msa_boot` sichert nur zu, was ein Test belegt.
-- [E19] (blocking) QA-M1a-002 (`tests/e2e/test-m1a-qa-e2e.R:35–68`, Gate tests); K-M1a-6 („`n$observations` die verbliebene Zahl“); docs/01 §2 Nr. 4 („nie stillschweigend eine falsche Zahl“); `?msa_fit` (`@return`: „the analysed `data`“; `@param ...`: „a direct [lme4::lmer()] call on the original response“); ADR-022 Nr. 1.1–1.2 — **Befund:**
-  - (a) `subset = item != "I001"` scheitert mit „object 'item' not found“. Das Weiterreichen über `...` bricht die Datenmaskierung von lme4; ein direkter `lmer`-Aufruf auf `dat` rechnet dagegen.
-  - (b) Verwirft lme4 Zeilen (Index-`subset`, `NA` in `weights`), beschreiben `fit$n`, `fit$data` und `numerics$input_rows` weiter die Zeilen vor dem Fit: 24 Beobachtungen und 6 Items gegen 20 und 5 im Modell. `print()` und `msa_grr()$n` zeigen die falschen Zahlen.
-  - Altbestand aus v0.1.0; `input_rows` ist neu in M1a.
-
-  — **Vorschlag:**
-  - `...` unausgewertet an lme4 geben: Ausdrücke in `dat` auswerten, mit der Umgebung des Aufrufers als Rahmen; zusammen mit E18 einen selbsttragenden Aufruf speichern;
-  - `data`, `n` und `input_rows` aus den tatsächlich analysierten Zeilen ableiten;
-  - Unit-Tests mit Ausdrucks-Subset, Index-Subset und `NA`-Gewichten;
-  - `?msa_fit` nennt die Spaltennamen und den Zeilenbezug.
-- [E20] (blocking) QA-M1a-003 (`tests/e2e/test-m1a-qa-e2e.R:70–119`, Gate tests); ADR-018 Nr. 3 („`msa_fit()` endet mit einer benannten englischen Fehlermeldung (docs/01 §2 Nr. 4), wenn … das Problem kein endliches Optimum hat, etwa bei Restvarianz 0“); `?msa_fit` („… a degenerate residual variance produce named errors.“); ADR-022 Nr. 7 — **Befund:** Identische Replikate enden mit dem rohen Matrix-Fehler „leading principal minor of order 13 (bzw. 4) is not positive“, dazu mit einer CHOLMOD-Warnung und lme4-Konvergenzwarnungen. Betroffen sind ein balancierter Zweifaktorplan mit Wechselwirkung und ein unbalancierter Einwegplan. Ursachen:
-  - Im balancierten Pfad prüft `R/fit.R:249` auf `residual_v == 0`. Der Rest nach Abzug der Effekte ist aber nicht genau 0, sondern ein Rundungsrest unter 1e-32 (konditionierte Skala; nachgerechnet 4,8e-33, QA nennt 7,17e-33).
-  - Die EMS-Schätzer von Item und Prompt sind echt negativ (−2,79 und −1,30 aus `aov`), nicht durch Rundung, wie QA.md schreibt. Der Plan geht deshalb an den Abschluss.
-  - Dort wächst λ ohne Grenze, bis `Matrix::Cholesky()` scheitert (`R/fit.R:281`).
+- [E44] (blocking) ADR-022 Nr. 7 („Die Meldung nennt „residual variance“.“) mit Konsequenzen („Blocking-Befund mit Bezug auf dieses ADR ist … jeder Fehler ohne benannte Meldung nach Nr. 2, 4, 5 oder 7.“); ADR-018 Nr. 3 („`msa_fit()` endet mit einer benannten englischen Fehlermeldung (docs/01 §2 Nr. 4), wenn … das Problem kein endliches Optimum hat, etwa bei Restvarianz 0.“); PLAN-UPDATE, Randfälle („Ist das restringierte Optimum ohne positive Restvarianz und damit ohne endliches darstellbares Theta, benannter Fehler über die degenerierte Restvarianz“); REVIEW r1 E20 und QA-M1a-003 (Titel: „… in mehrfaktoriellen balancierten sowie in unbalancierten Designs …“) — **Befund:**
+  - Der Vorgabepfad erkennt verschwindende Restvarianz an drei Stellen:
+    - im balancierten Plan (`R/fit.R:282`);
+    - im unbalancierten Einwegplan (`R/fit.R:257–260`);
+    - im analytischen Abschluss (`R/fit.R:323–328`, `336`).
+  - Bei unbalancierten Plänen mit mehreren Termen gibt `msa_numeric_balanced()` ohne Prüfung `NULL` zurück (`R/fit.R:256–261`). Der lme4-Startfit auf der konditionierten Antwort (`R/fit.R:453`) bricht dann mit einem rohen C++-Fehler ab.
+  - Reproduktion: QA-M1a-003 Fall A (4 Items × 2 Prompts × 2 Replikate, identische Replikate, `interactions = TRUE`) mit einem fehlenden Wert, `value[16] <- NA`. `msa_fit()` endet mit „Downdated VtV is not positive definite“ (`Rcpp::exception`); „residual variance“ kommt nicht vor.
+  - Unabhängig: Restquadratsumme aus `aov` 4,0e-30 auf 7 FG bei SST 36,48, unter der eigenen Grenze aus ADR-020. Ohne Wechselwirkung rechnet derselbe Datensatz normal.
+  - Ebenso endet ein 5 × 3-Plan mit drei identischen Replikaten nach Entfernen einer Zeile (Nachprüfung 4).
+  - Kein Rückschritt: Runde 1 und v0.1.0 enden gleich. `?msa_fit` sichert aber zu: „a degenerate residual variance produce named errors“.
+  - Deterministische LLM-Studien (gleiche Antwort je Zelle) mit einzelnen fehlenden Antworten treffen genau diesen Fall.
 
   — **Vorschlag:**
-  - verschwindende Restvarianz relativ zur Gesamtstreuung erkennen, im balancierten Pfad und im Abschluss (divergierendes λ, Q nahe 0), mit der benannten Meldung;
-  - keine Matrix- oder CHOLMOD-Meldung erreicht den Aufrufer;
-  - Unit-Tests für beide Pläne; die Grenze steht im numerischen ADR.
-- [E21] (blocking) QA-M1a-004 (`tests/fuzz/test-m1a-qa-fuzz.R:4–56`, Gate tests); docs/01 §2 Nr. 4; docs/01 §5 („Fehlende oder nicht parsbare Antworten bleiben fehlend und werden gezählt, nie ersetzt.“); PLAN-UPDATE, Randfälle („Bei tatsächlichem Nullmaßstab, Über-/Unterlauf oder fehlender Identifizierbarkeit benannter Fehler.“); ADR-022 Nr. 2, 3 und 6.2 — **Befund:**
-  - (1) Bei Messwerten × 1e-161 gibt `msa_fit()` subnormale Komponenten (≈ 1e-322) ohne Meldung zurück, 9,05 % von σ²_TV daneben (× 1e-160: 0,19 %). v0.1.0 warnte dort wenigstens. Die Prüfung `sigma(model) <= 0` (`R/fit.R:449`) greift nicht.
-  - (2) Die Zeichenkette `"NaN"` löst die Warnung „could not be interpreted as numbers“ aus, numerisches `NaN` nicht.
-  - (3) Fehlende Gruppierungswerte: Der Vorgabepfad bricht benannt ab, der Durchreichweg verwirft die Zeilen still in lme4 (`n$observations` 20, `nobs()` 18).
-  - QA.md stützt (1) auf ein Zitat, das in ADR-020 nicht steht (E39). Der Befund trägt sich über die genannten Stellen.
-
-  — **Vorschlag:**
-  - Darstellbarkeitsprüfung auf der Originalskala nach ADR-022 Nr. 6.2, zusammen mit E23;
-  - `NaN` nach ADR-022 Nr. 3;
-  - fehlende Gruppierungswerte vor der Pfadwahl prüfen (ADR-022 Nr. 2);
-  - je Punkt ein Unit-Test.
-- [E22] (blocking) QA-M1a-005 (`tests/fuzz/test-m1a-qa-fuzz.R:58–94`, Gate tests); docs/01 §2 Nr. 4; K-M1a-5 (Klassifikation nach den Schwellen, `ankerRef: ANK-16`); ADR-017 Nr. 7.2 und 7.3; ADR-022 Nr. 4 und 5 — **Befund:**
-  - (1) `msa_grr()` prüft `threshold` nicht. `c(30, 10)` und `c(-5, 30)` ergeben ein Verdikt ohne Meldung. `"invalid"` ergibt durch Zeichenvergleich „acceptable“. Länge 1 und `NA` enden mit „missing value where TRUE/FALSE needed“.
-  - (2) `validation_verify_resources()` (`inst/validation/numeric/reference_checks.R:47–67`) besteht ohne `datasets` im Manifest und mit einer zusätzlichen `anchors/ANK-99.json`.
-  - QA schlug nonblocking vor; ich stufe hoch:
-    - der Test bleibt sonst rot und hält tests und mutgate rot;
-    - nur eine Produktänderung macht ihn grün;
-    - die Erwartung folgt docs/01 §2 Nr. 4 und ADR-017 Nr. 7.
-
-  — **Vorschlag:** Schwellenprüfung nach ADR-022 Nr. 4 und Manifestprüfung nach ADR-022 Nr. 5, jeweils mit benannter Meldung und Unit-Test.
-
-### Blocking aus eigener Nachprüfung
-
-- [E23] (blocking) docs/01 §2 Nr. 4 („Ergebnis ist eine richtige Zahl oder eine klare Fehlermeldung, nie stillschweigend eine falsche Zahl.“); K-M1a-6 („Verschieben aller Werte um eine Konstante lassen Varianzkomponenten (Toleranz `ankerRef: ANK-TOL.invariance` als Anteil von σ²_TV) … unverändert“); ADR-022 Nr. 6 — **Befund:** Der Vorgabepfad rechnet die Varianzverhältnisse auf der konditionierten Antwort genau. σ² übernimmt er aber ungeprüft aus der Devianzfunktion von lme4 auf den Originaldaten (`R/fit.R:435–448`). Bei großem Offset verliert diese Rechnung Stellen, und `msa_fit()` gibt die falsche Zahl ohne Meldung zurück (Nachprüfung 4):
-  - **NIST:** SmLs08 liefert σ²_e = 5,02e-2, SmLs09 153,1. Die eigene konditionierte Lösung trifft dagegen 1,000054e-2 (zertifiziert 1e-2).
-  - **Regression:** v0.1.0 lag auf SmLs08 bei 1,14e-2 und warnte „Rescale variables?“, auf SmLs09 bei 7,86e-2. Der neue Pfad ist schlechter, und die Warnung entfällt.
-  - **Verschiebung:** `ic50_demo` + 1e9 verfehlt `ANK-TOL.invariance` (8,1e-6 · σ²_TV gegenüber denselben, gleich gerundeten Daten ohne Offset); + 1e10 weicht um 6,5e-4 ab.
-  - **Abnahmefälle:** nicht betroffen (Lücke höchstens 3,6e-11). K-M1a-4 wertet SmLs07–SmLs09 nicht, erlaubt aber keine stillen Fehlwerte.
-
-  — **Vorschlag:**
-  - σ² des Modells gegen die konditionierte Lösung prüfen (ADR-022 Nr. 6.1).
-  - Bei Überschreitung entweder ein Modell, das die genaue Lösung trägt (etwa mit konstantem Offset der Antwort, ADR-018 Nr. 1 gewahrt), oder ein benannter Fehler. SmLs07–SmLs09 dürfen dann `NA` mit Grund zeigen.
-  - Die Grenze im numerischen ADR begründen.
-  - Unit-Test mit der öffentlichen SmLs09-Tabelle oder `ic50_demo` + 1e10; SmLs04–SmLs06 bleiben grün.
-  - Die Konsistenzprüfung fängt den subnormalen Fall aus E21 nicht; dort gilt ADR-022 Nr. 6.2.
-
-### Blocking aus Gate mutgate
-
-- [E24] (blocking) Gate mutgate (`gates.json` Runde 1: „mutgate: fail (unmutierter Vorlauf rot, kein Mutant gelaufen; 5 Tests: …)“) — **Befund:**
-  - Der Mutationslauf brach vor dem ersten Mutanten ab, weil die fünf QA-Tests schon unmutiert scheitern. Einen `reports/mutation/mutation.json` gibt es deshalb nicht, nur `unmutated.json`.
-  - Der erste Gate-Lauf derselben Runde (`a92396f`, Produktcode byte-gleich) lief vollständig: 1003 Mutanten, 517 Killed, 29 Timeout, 360 Survived, 97 RuntimeError. Score 60,26 bei Schwelle 80 (keine Baseline), also 19,74 Punkte darunter.
-  - Bei unverändertem Mutantensatz fehlen 179 erkannte Mutanten: 725 von 906 gezählten.
-
-  — **Vorschlag:**
-  - E18 bis E22 beheben, damit der Vorlauf grün wird.
-  - Die Überlebenden aus E25–E37 behandeln: töten (Test), Code entfernen oder Äquivalenz in `MUT-EQUIV.json` beantragen.
-  - Neue Tests unter `tests/testthat/` prüfen Verhalten gegen unabhängige Werte (Anker, Orakel, Formel). Eine Momentaufnahme der eigenen Ausgabe ist nur zulässig, wo keine Referenz existiert, und dann gekennzeichnet (ADR-019, zweiter Nachtrag).
-
-**Überlebende Mutanten nach Datei und Stelle.** Quelle ist der Abschnitt „Survived Mutants“ in `orchestrator/state/M1a/gate-mutgate.log` des Phasen-Commits `a92396f` (360 Mutanten, 147 Zeilen). Zeilen und Mutatorbezeichnungen stehen wörtlich so in diesem Log. NoCoverage: 0. Approvals: keine.
-- Der Log nennt die Bezeichnung der muttest-Ausgabe. Die Gates ordnen eine Approval über Datei, `mutatorName` und Anfangszeile im JSON-Bericht zu.
-- Ein Äquivalenzantrag braucht deshalb den `mutatorName` aus dem nächsten `mutation.json` (E41).
-- Die genannten „Kandidaten für Verhaltensgleichheit“ sind Hinweise, keine Approval. Jeden Antrag prüfe ich einzeln.
-
-- [E25] (blocking) Gate mutgate (gate-mutgate.log des ersten Gate-Laufs der Runde 1 vor QA, Phasen-Commit a92396f: score=60.26 required=80; R/fit.R und R/grr.R byte-gleich mit HEAD) — 29 überlebende Mutanten in `R/fit.R`, `msa_fit()`: Eingabe, Parsing, ordinale und binäre Zweige, Prüfungen der numerischen Antwort — Vorschlag: Tests, die (a) den vollen Meldungstext und `conditionCall()` (NULL wegen `call. = FALSE`) der Fehler und Warnungen prüfen (Z. 95, 99, 111, 114, 125, 127, 134–136); (b) die ordinalen und binären Parsing-Zweige belegen: logische Werte, numerische 0/1, Labels mit `levels` (Ereignis = `levels[2]`, Werte außerhalb von `levels` → NA mit Warnung), ungültige Binärwerte, `is.ordered(fit$data$y)` bei ordinal (Z. 113–127); (c) die Konstantenprüfung mit genau einem gültigen Wert treffen (Z. 136). Z. 94 (`stringsAsFactors` bei `as.data.frame()` eines data.frame) und Z. 98/131 (`drop` bei mehrspaltigen Rahmen) sind Kandidaten für verhaltensgleiche Mutanten: Argument entfernen oder MUT-EQUIV-Antrag mit Begründung.
-  - Z. 94: `FALSE → TRUE`
-  - Z. 95: `<non-empty string> → ""`
-  - Z. 98: `FALSE → TRUE`
-  - Z. 99: `FALSE → TRUE`
-  - Z. 111: `FALSE → TRUE`
-  - Z. 113: `TRUE → FALSE`
-  - Z. 114: `<condition> → !(<condition>)`, `<non-empty string> → ""`
-  - Z. 118: `<condition> → !(<condition>)`
-  - Z. 119: `<condition> → !(<condition>)`
-  - Z. 120: `!<condition> → <condition>`, `<condition> → !(<condition>)`
-  - Z. 122: `<n> - 1 → <n> - 1`, `<n> + 1 → <n> + 1`, `== → !=`, `NA_integer_ → NA`, `x[<i>] → x[<i> + 1L]`, `x[<i>] → x[<i> - 1L]`
-  - Z. 125: `<condition> → !(<condition>)`, `<non-empty string> → ""`, `FALSE → TRUE`
-  - Z. 127: `<non-empty string> → ""`, `FALSE → TRUE`
-  - Z. 131: `FALSE → TRUE`
-  - Z. 134: `FALSE → TRUE`
-  - Z. 135: `FALSE → TRUE`
-  - Z. 136: `<n> + 1 → <n> + 1`, `FALSE → TRUE`, `x[<i>] → x[<i> + 1L]`
-
-- [E26] (blocking) Gate mutgate (gate-mutgate.log des ersten Gate-Laufs der Runde 1 vor QA, Phasen-Commit a92396f: score=60.26 required=80; R/fit.R und R/grr.R byte-gleich mit HEAD) — 27 überlebende Mutanten in `R/fit.R`, `msa_fit()`: Modellterme, Fehlermeldungen zur Itemzahl, `numerics`, abgeleitete Zwei-Stufen-Komponente, `singular`, `n` — Vorschlag: Tests für: Wechselwirkungsterme, wenn ein Faktor nur eine Stufe hat (`interactions = TRUE` mit einem Modell → kein `item:model` in `fit$formula`; Z. 154); die Meldungen bei zu wenigen Items, numerisch und ordinal (Z. 160–161); `fit$numerics` gleich NULL bei ordinal/binär (Z. 166); Zeilenfolge von `vc` und `attr(vc, "derived")` bei einer Zwei-Stufen-Komponente (Z. 187–189); die `singular`-Regel für clmm-Fits (Z. 193); `n$reps_per_cell` gegen eine unabhängige Zählung mit `table()` auf einem Plan mit ungleicher Zellbesetzung je Prompt, Modell und Block (Z. 195).
-  - Z. 154: `<n> - 1 → <n> - 1`, `<n> + 1 → <n> + 1`, `<n> + 1 → <n> + 1`, `<n> + 1 → <n> + 1`, `> → >=`, `x[<i>] → x[<i> + 1L]`
-  - Z. 160: `<condition> → !(<condition>)`, `<non-empty string> → ""`, `<non-empty string> → ""`, `== → !=`
-  - Z. 161: `<non-empty string> → ""`, `FALSE → TRUE`
-  - Z. 166: `NULL → NA`
-  - Z. 187: `<non-empty string> → ""`, `FALSE → TRUE`
-  - Z. 188: `FALSE → TRUE`
-  - Z. 189: `FALSE → TRUE`
-  - Z. 193: `!= → ==`, `< → >`, `< → <=`, `<n> - 1 → <n> - 1`, `<n> + 1 → <n> + 1`, `<non-empty string> → ""`, `<non-empty string> → ""`
-  - Z. 195: `+ → -`, `+ → -`, `+ → -`
-
-- [E27] (blocking) Gate mutgate (gate-mutgate.log des ersten Gate-Laufs der Runde 1 vor QA, Phasen-Commit a92396f: score=60.26 required=80; R/fit.R und R/grr.R byte-gleich mit HEAD) — 20 überlebende Mutanten in `R/fit.R`, `msa_numeric_condition()` — Vorschlag: Exakte Erwartungen für kleine Eingaben: `origin`, `center`, `scale` (größte absolute Differenz zum ersten Wert), `binary_scale = 1`, konditionierte Werte; für den Überlaufzweig `binary_scale = 2^floor(log2(max(abs(y))))` und die konditionierten Werte. Der vorhandene Test prüft nur `binary_scale > 1`, Endlichkeit und Mittelwert. Der Fehlerzweig in Z. 216 ist nach der Konstantenprüfung in `msa_fit()` womöglich unerreichbar: direkt über `msa_numeric_condition()` testen oder entfernen.
-  - Z. 209: `<n> - 1 → <n> - 1`, `<n> + 1 → <n> + 1`
-  - Z. 210: `- → +`, `<n> + 1 → <n> + 1`, `x[<i>] → x[<i> + 1L]`
-  - Z. 212: `- → +`, `^ → *`, `<n> - 1 → <n> - 1`, `<n> + 1 → <n> + 1`
-  - Z. 213: `- → +`, `<n> + 1 → <n> + 1`, `x[<i>] → x[<i> + 1L]`
-  - Z. 216: `<n> - 1 → <n> - 1`, `<non-empty string> → ""`, `|| → &&`, `FALSE → TRUE`
-  - Z. 219: `<n> - 1 → <n> - 1`, `<n> + 1 → <n> + 1`, `x[<i>] → x[<i> + 1L]`, `x[<i>] → x[<i> - 1L]`
-
-- [E28] (blocking) Gate mutgate (gate-mutgate.log des ersten Gate-Laufs der Runde 1 vor QA, Phasen-Commit a92396f: score=60.26 required=80; R/fit.R und R/grr.R byte-gleich mit HEAD) — 26 überlebende Mutanten in `R/fit.R`, `msa_numeric_balanced()` (geschlossene EMS-Lösung) — Vorschlag: Vorrangig ein Unit-Test, der Vorgabe-Fits (ohne `...`, `numerics$method == "closed_form"`) mit Wechselwirkungen und Block gegen eine unabhängige EMS-Rechnung aus `stats::aov` prüft. Das prüft bisher kein Test: K-M1a-1 läuft über den expliziten bobyqa-Pfad, K-M1a-6 prüft nur Selbstkonsistenz, der vorhandene Unit-Test nur Haupteffekte. Deshalb überlebt Z. 240 `- → +`. Die Rechnung selbst stimmt (Nachprüfung 5: höchstens 2,1e-15 · σ²_TV auf elf Plänen). Dazu Tests der Anwendbarkeitsgrenzen über `numerics$method`: eine Beobachtung je Zelle, unvollständige Kreuzung, ungleiche Besetzung, ein EMS-Schätzer genau 0 (Z. 227, 229, 259). Ferner die Meldung ohne Restfreiheitsgrade (Z. 232) und die Einweg-Grenze gegen `var()` (Z. 255–257). Z. 238/244 (`- grand`) wirkt auf eine bereits zentrierte Antwort (Mittel 0 bis auf Rundung): Subtraktion entfernen oder Äquivalenz beantragen. Z. 228/237 (`drop`) sind ebenfalls Kandidaten. Z. 249 gehört zu E20.
-  - Z. 227: `> → >=`, `NULL → NA`
-  - Z. 228: `TRUE → FALSE`
-  - Z. 229: `<n> + 1 → <n> + 1`, `x[<i>] → x[<i> + 1L]`
-  - Z. 232: `<= → <`, `<n> - 1 → <n> - 1`, `<n> + 1 → <n> + 1`, `<non-empty string> → ""`, `FALSE → TRUE`
-  - Z. 237: `TRUE → FALSE`
-  - Z. 238: `- → +`
-  - Z. 240: `- → +`
-  - Z. 244: `- → +`
-  - Z. 249: `<n> - 1 → <n> - 1`, `<n> + 1 → <n> + 1`, `FALSE → TRUE`
-  - Z. 255: `< → <=`, `<n> - 1 → <n> - 1`
-  - Z. 256: `<n> - 1 → <n> - 1`
-  - Z. 257: `- → +`, `- → +`, `/ → *`, `<n> - 1 → <n> - 1`, `<n> + 1 → <n> + 1`
-  - Z. 259: `< → <=`
-
-- [E29] (blocking) Gate mutgate (gate-mutgate.log des ersten Gate-Laufs der Runde 1 vor QA, Phasen-Commit a92396f: score=60.26 required=80; R/fit.R und R/grr.R byte-gleich mit HEAD) — 15 überlebende Mutanten in `R/fit.R`, `msa_numeric_reml()` (Kriterium, Score, Krümmung) — Vorschlag: Tests, die `information` (Grundlage der Identifizierbarkeitsprüfung) gegen eine unabhängige dichte Rechnung prüfen und einen knapp identifizierbaren von einem nicht identifizierbaren Plan trennen (Z. 306); den Fehlerzweig `Q <= 0` mit benannter Meldung (Z. 288, mit E20). Kandidaten für Verhaltensgleichheit, also Code vereinfachen oder MUT-EQUIV-Antrag mit Begründung: Z. 273 (`sparse`), Z. 281 (`LDL`, `perm`), Z. 283/296 (`drop`, alle Blöcke haben mindestens zwei Stufen), Z. 289 (`mean(residual)` ist bei zentrierter Antwort 0 bis auf Rundung), Z. 293 (Anfangswerte der Matrizen, die vollständig überschrieben werden).
-  - Z. 273: `TRUE → FALSE`
-  - Z. 281: `FALSE → TRUE`, `TRUE → FALSE`
-  - Z. 283: `FALSE → TRUE`
-  - Z. 288: `<= → <`, `<n> - 1 → <n> - 1`, `<non-empty string> → ""`, `|| → &&`, `FALSE → TRUE`
-  - Z. 289: `- → +`
-  - Z. 293: `<n> - 1 → <n> - 1`, `<n> + 1 → <n> + 1`
-  - Z. 296: `FALSE → TRUE`
-  - Z. 306: `- → +`, `/ → *`
-
-- [E30] (blocking) Gate mutgate (gate-mutgate.log des ersten Gate-Laufs der Runde 1 vor QA, Phasen-Commit a92396f: score=60.26 required=80; R/fit.R und R/grr.R byte-gleich mit HEAD) — 22 überlebende Mutanten in `R/fit.R`, `msa_numeric_step()` (Newton-Schritt, aktive Menge) — Vorschlag: Direkte Tests von `msa_numeric_step()` auf kleinen konstruierten Zuständen mit exakt bekannter Newton-Richtung: freie und aktive Menge, Blockierung an der Grenze 0, indefinite Krümmung (Eigenwert-Untergrenze), exakte Werte von `step`, `score`, `correction` und `positive`.
-  - Z. 313: `<n> + 1 → <n> + 1`
-  - Z. 315: `< → <=`, `<n> - 1 → <n> - 1`, `<n> - 1 → <n> - 1`, `<n> + 1 → <n> + 1`, `> → >=`
-  - Z. 317: `TRUE → FALSE`
-  - Z. 320: `FALSE → TRUE`
-  - Z. 321: `TRUE → FALSE`
-  - Z. 322: `* → /`, `<n> - 1 → <n> - 1`, `<n> + 1 → <n> + 1`
-  - Z. 323: `<n> - 1 → <n> - 1`, `> → >=`
-  - Z. 326: `< → <=`, `<n> - 1 → <n> - 1`, `<n> - 1 → <n> - 1`, `<n> + 1 → <n> + 1`, `<n> + 1 → <n> + 1`
-  - Z. 333: `* → /`, `/ → *`
-  - Z. 334: `/ → *`
-
-- [E31] (blocking) Gate mutgate (gate-mutgate.log des ersten Gate-Laufs der Runde 1 vor QA, Phasen-Commit a92396f: score=60.26 required=80; R/fit.R und R/grr.R byte-gleich mit HEAD) — 53 überlebende Mutanten in `R/fit.R`, `msa_numeric_optimize()` (Abschluss, Liniensuche, Zählungen) — Vorschlag: Tests auf konstruierten Zielfunktionen mit exakt erwarteten Zählungen: `iterations`, `evaluations`, `step_halvings`, `entered`, `released` als Gleichheit statt `> 0`. Ferner Schrittbegrenzung, die die Grenze 0 exakt trifft (Z. 357, 363); Armijo-Bedingung und Rundungsreserve getrennt erzwungen (Z. 368–372); Nicht-Konvergenz mit Meldung und `conditionCall()` (Z. 385–386); Identifizierbarkeitsfehler (Z. 340–343). Mutanten, die nachweislich nur die Zahl der Schritte ändern und nie das Ergebnis, nur mit Begründung per MUT-EQUIV-Antrag.
-  - Z. 340: `* → /`, `<n> + 1 → <n> + 1`
-  - Z. 341: `TRUE → FALSE`, `TRUE → FALSE`
-  - Z. 342: `* → /`, `<= → <`
-  - Z. 343: `FALSE → TRUE`
-  - Z. 349: `&& → ||`, `<= → <`, `<= → <`
-  - Z. 350: `- → +`
-  - Z. 356: `<n> - 1 → <n> - 1`
-  - Z. 357: `<n> + 1 → <n> + 1`
-  - Z. 359: `FALSE → TRUE`
-  - Z. 361: `<n> - 1 → <n> - 1`
-  - Z. 362: `<condition> → !(<condition>)`
-  - Z. 363: `/ → *`, `x[<i>] → x[<i> + 1L]`, `x[<i>] → x[<i> + 1L]`
-  - Z. 367: `+ → -`
-  - Z. 368: `* → /`, `* → /`, `<n> - 1 → <n> - 1`, `<n> - 1 → <n> - 1`, `<n> + 1 → <n> + 1`, `<n> + 1 → <n> + 1`
-  - Z. 369: `* → /`, `/ → *`, `+ → -`, `<= → <`, `<n> - 1 → <n> - 1`, `<n> + 1 → <n> + 1`
-  - Z. 370: `&& → ||`, `+ → -`, `<= → >=`, `<= → <`
-  - Z. 371: `< → >`, `< → <=`
-  - Z. 372: `< → <=`, `<n> + 1 → <n> + 1`, `|| → &&`
-  - Z. 376: `<n> + 1 → <n> + 1`
-  - Z. 380: `& → |`, `<n> - 1 → <n> - 1`, `<n> + 1 → <n> + 1`, `== → !=`, `> → >=`
-  - Z. 381: `& → |`, `<n> - 1 → <n> - 1`, `<n> + 1 → <n> + 1`, `== → !=`, `> → >=`
-  - Z. 386: `FALSE → TRUE`
-
-- [E32] (blocking) Gate mutgate (gate-mutgate.log des ersten Gate-Laufs der Runde 1 vor QA, Phasen-Commit a92396f: score=60.26 required=80; R/fit.R und R/grr.R byte-gleich mit HEAD) — 37 überlebende Mutanten in `R/fit.R`, `msa_numeric_fit()` (Start, Modellbau, Diagnostik) — Vorschlag: Tests für: `numerics$start$theta` gegen `lme4::lmer(REML = TRUE)` auf der konditionierten Antwort (Z. 406, 418); `fit$model@optinfo$derivs` gegen Differenzenquotienten der Devianzfunktion des Modells selbst (Z. 432–434); `stats::update(fit$model)` und `getCall(fit$model)` (REML, Funktionskopf `lme4::lmer`; Z. 444, 446); `numerics$active` auf einem singulären Fit (Z. 453); die Feldnamen von `optinfo$completion` (Z. 455); `optinfo$message` (Z. 439); Meldungstexte und `conditionCall()` von Fehlern und weitergegebener Startwarnung (Z. 390, 403, 450). Z. 449–450 gehören zu E21 und E23. Kandidaten für Verhaltensgleichheit: Z. 395 (`REML` in `lFormula()`, dort nur für `Zt` und die Termnamen verwendet), Z. 397 (`fixed` bei `":"`), Z. 403 `add` (einziges `on.exit()`).
-  - Z. 390: `<non-empty string> → ""`, `FALSE → TRUE`
-  - Z. 395: `TRUE → FALSE`
-  - Z. 397: `TRUE → FALSE`
-  - Z. 403: `FALSE → TRUE`, `TRUE → FALSE`
-  - Z. 406: `TRUE → FALSE`
-  - Z. 418: `^ → *`, `<n> - 1 → <n> - 1`, `<n> + 1 → <n> + 1`
-  - Z. 432: `* → /`, `<n> - 1 → <n> - 1`, `<n> + 1 → <n> + 1`
-  - Z. 433: `+ → -`, `<n> - 1 → <n> - 1`, `<n> + 1 → <n> + 1`
-  - Z. 434: `<n> - 1 → <n> - 1`, `<n> + 1 → <n> + 1`
-  - Z. 439: `<non-empty string> → ""`
-  - Z. 444: `TRUE → FALSE`
-  - Z. 446: `<n> - 1 → <n> - 1`, `<n> + 1 → <n> + 1`, `x[<i>] → x[<i> + 1L]`, `x[<i>] → x[<i> - 1L]`
-  - Z. 449: `<= → <`, `<n> - 1 → <n> - 1`, `|| → &&`, `|| → &&`
-  - Z. 450: `<non-empty string> → ""`, `FALSE → TRUE`
-  - Z. 453: `<n> - 1 → <n> - 1`, `<n> + 1 → <n> + 1`, `== → !=`
-  - Z. 455: `<non-empty string> → ""`, `<non-empty string> → ""`, `<non-empty string> → ""`, `<non-empty string> → ""`
-
-- [E33] (blocking) Gate mutgate (gate-mutgate.log des ersten Gate-Laufs der Runde 1 vor QA, Phasen-Commit a92396f: score=60.26 required=80; R/fit.R und R/grr.R byte-gleich mit HEAD) — 9 überlebende Mutanten in `R/fit.R`, `vc_from_model()`, `latent_residual()` — Vorschlag: Binäre und ordinale Fits mit Logit-Link prüfen die latente Restvarianz π²/3 (Z. 480) und dass die Zeile `Residual` genau einmal am Ende steht (Z. 467). Ferner den Typ der Spalte `source` (Z. 473).
-  - Z. 467: `<non-empty string> → ""`, `FALSE → TRUE`
-  - Z. 473: `FALSE → TRUE`
-  - Z. 480: `/ → *`, `^ → *`, `<n> - 1 → <n> - 1`, `<n> - 1 → <n> - 1`, `<n> + 1 → <n> + 1`, `<n> + 1 → <n> + 1`
-
-- [E34] (blocking) Gate mutgate (gate-mutgate.log des ersten Gate-Laufs der Runde 1 vor QA, Phasen-Commit a92396f: score=60.26 required=80; R/fit.R und R/grr.R byte-gleich mit HEAD) — 47 überlebende Mutanten in `R/fit.R`, `print.msa_fit()` — Vorschlag: Tests der Druckausgabe gegen dokumentierte Inhalte: Kopf mit Zielgröße und Zusatz zur latenten Skala, Formelzeile, Zählzeile mit Spanne der Replikate, `NA` statt Prozent bei Gesamtvarianz 0, Hinweis auf abgeleitete Komponenten in Einzahl und Mehrzahl, Hinweis auf singulären Fit. Wo es keine unabhängige Referenz gibt, als Momentaufnahme der eigenen Ausgabe gekennzeichnet.
-  - Z. 484: `<non-empty string> → ""`
-  - Z. 485: `!= → ==`, `"" → "mutant"`, `<condition> → !(<condition>)`, `<non-empty string> → ""`, `<non-empty string> → ""`, `<non-empty string> → ""`
-  - Z. 486: `"" → "mutant"`, `<non-empty string> → ""`, `<non-empty string> → ""`
-  - Z. 487: `<non-empty string> → ""`
-  - Z. 489: `<n> - 1 → <n> - 1`, `<n> - 1 → <n> - 1`, `<n> + 1 → <n> + 1`, `<n> + 1 → <n> + 1`, `x[<i>] → x[<i> + 1L]`, `x[<i>] → x[<i> + 1L]`, `x[<i>] → x[<i> - 1L]`, `x[<i>] → x[<i> - 1L]`
-  - Z. 493: `* → /`, `/ → *`, `<condition> → !(<condition>)`, `<n> - 1 → <n> - 1`, `<n> - 1 → <n> - 1`, `<n> + 1 → <n> + 1`, `<n> + 1 → <n> + 1`, `== → !=`, `NA_real_ → NA`
-  - Z. 495: `FALSE → TRUE`
-  - Z. 496: `<condition> → !(<condition>)`
-  - Z. 497: `<condition> → !(<condition>)`, `<n> - 1 → <n> - 1`, `<n> + 1 → <n> + 1`, `<non-empty string> → ""`, `<non-empty string> → ""`, `<non-empty string> → ""`, `<non-empty string> → ""`, `<non-empty string> → ""`, `> → <`, `> → >=`
-  - Z. 498: `<non-empty string> → ""`
-  - Z. 499: `"" → "mutant"`, `<non-empty string> → ""`
-  - Z. 501: `<condition> → !(<condition>)`
-  - Z. 502: `<non-empty string> → ""`
-  - Z. 503: `"" → "mutant"`, `<non-empty string> → ""`
-
-- [E35] (blocking) Gate mutgate (gate-mutgate.log des ersten Gate-Laufs der Runde 1 vor QA, Phasen-Commit a92396f: score=60.26 required=80; R/fit.R und R/grr.R byte-gleich mit HEAD) — 9 überlebende Mutanten in `R/grr.R`, `msa_grr()`, `grr_stats()` — Vorschlag: Tests für den Typ von `table$source` (character, Z. 87), die Zeilenbeschriftungen (Z. 79), Meldung und `conditionCall()` (Z. 50). Kandidaten für Verhaltensgleichheit, MUT-EQUIV-Antrag mit Begründung: Z. 68/76/88 `NA_real_ → NA` (Typanhebung in `vapply()`, Arithmetik und `c()`) und Z. 88 `> → >=` bei σ²_GRR = 0 (`max(1, floor(Inf))` ist `Inf`).
-  - Z. 50: `<non-empty string> → ""`, `FALSE → TRUE`
-  - Z. 68: `NA_real_ → NA`
-  - Z. 76: `NA_real_ → NA`
-  - Z. 79: `<non-empty string> → ""`
-  - Z. 87: `FALSE → TRUE`
-  - Z. 88: `<n> - 1 → <n> - 1`, `> → >=`, `NA_real_ → NA`
-
-- [E36] (blocking) Gate mutgate (gate-mutgate.log des ersten Gate-Laufs der Runde 1 vor QA, Phasen-Commit a92396f: score=60.26 required=80; R/fit.R und R/grr.R byte-gleich mit HEAD) — 30 überlebende Mutanten in `R/grr.R`, `print.msa_grr()` — Vorschlag: Tests der Druckausgabe: Kopf mit Zählungen und Zusatz zur latenten Skala, ndc-Zeile, ICC-Zeile, Verdiktzeile mit Basis und beiden Schwellen, Hinweis auf singulären Fit; gekennzeichnet wie bei E34.
-  - Z. 98: `<n> - 1 → <n> - 1`, `<n> + 1 → <n> + 1`
-  - Z. 99: `<non-empty string> → ""`
-  - Z. 100: `<non-empty string> → ""`
-  - Z. 101: `!= → ==`, `"" → "mutant"`, `<condition> → !(<condition>)`, `<non-empty string> → ""`, `<non-empty string> → ""`
-  - Z. 106: `FALSE → TRUE`
-  - Z. 107: `FALSE → TRUE`, `FALSE → TRUE`
-  - Z. 109: `<non-empty string> → ""`
-  - Z. 113: `<non-empty string> → ""`
-  - Z. 114: `<non-empty string> → ""`
-  - Z. 115: `<condition> → !(<condition>)`, `<non-empty string> → ""`, `<non-empty string> → ""`, `<non-empty string> → ""`, `== → !=`
-  - Z. 116: `<n> - 1 → <n> - 1`, `<n> - 1 → <n> - 1`, `<n> + 1 → <n> + 1`, `<n> + 1 → <n> + 1`, `x[<i>] → x[<i> + 1L]`, `x[<i>] → x[<i> + 1L]`, `x[<i>] → x[<i> - 1L]`, `x[<i>] → x[<i> - 1L]`
-  - Z. 117: `<condition> → !(<condition>)`, `<non-empty string> → ""`
-
-- [E37] (blocking) Gate mutgate (gate-mutgate.log des ersten Gate-Laufs der Runde 1 vor QA, Phasen-Commit a92396f: score=60.26 required=80; R/fit.R und R/grr.R byte-gleich mit HEAD) — 36 überlebende Mutanten in `R/grr.R`, `msa_boot()`, `print.msa_boot()` — Vorschlag: Test, dass `lower` und `upper` die Quantile von `attr(b, "boot")` zu (1 − level)/2 und 1 − (1 − level)/2 sind, für zwei Werte von `level` (Z. 166, 169). Ferner Meldungen (Z. 155, 158), Klasse (Z. 174) und Druckausgabe einschließlich `n_failed` (Z. 180–185). Z. 167 `na.rm` wirkt nach dem Filter `is.finite()` nicht: entfernen oder Äquivalenz beantragen.
-  - Z. 155: `<non-empty string> → ""`, `FALSE → TRUE`
-  - Z. 158: `FALSE → TRUE`
-  - Z. 166: `/ → *`, `<n> - 1 → <n> - 1`, `<n> + 1 → <n> + 1`
-  - Z. 167: `TRUE → FALSE`
-  - Z. 169: `<n> - 1 → <n> - 1`, `<n> - 1 → <n> - 1`, `<n> + 1 → <n> + 1`, `FALSE → TRUE`, `x[<i>] → x[<i> + 1L]`, `x[<i>] → x[<i> - 1L]`, `x[<i>] → x[<i> - 1L]`
-  - Z. 174: `<non-empty string> → ""`
-  - Z. 180: `<non-empty string> → ""`
-  - Z. 181: `* → /`, `<n> - 1 → <n> - 1`, `<n> + 1 → <n> + 1`, `<non-empty string> → ""`, `<non-empty string> → ""`
-  - Z. 183: `<n> - 1 → <n> - 1`, `<n> - 1 → <n> - 1`, `<n> - 1 → <n> - 1`, `<n> + 1 → <n> + 1`, `<n> + 1 → <n> + 1`, `<n> + 1 → <n> + 1`
-  - Z. 184: `FALSE → TRUE`
-  - Z. 185: `<condition> → !(<condition>)`, `<n> - 1 → <n> - 1`, `<n> + 1 → <n> + 1`, `<non-empty string> → ""`, `<non-empty string> → ""`, `<non-empty string> → ""`, `> → <`, `> → >=`
+  - Die Restvarianz im allgemeinen Pfad vor dem Startfit prüfen: etwa der Kleinste-Quadrate-Rest der konditionierten Antwort auf span(1, Z), mit Z aus `lf$reTrms$Zt`, über `msa_numeric_check_residual()`.
+    - Das verallgemeinert die vorhandenen Prüfungen; balanciert und Einweg sind Spezialfälle.
+    - Alternativ den Startfit abfangen und den Fehler über diese Prüfung benennen.
+  - Keine absolute Grenze, keine künstliche Reststreuung (PLAN-UPDATE, Randfälle).
+  - Unit-Tests: QA-Fall A mit `value[16] <- NA` und mit einer entfernten Zeile.
+    - Verlangt: die benannte Meldung, kein Rohfehler aus lme4 oder Matrix.
+    - Der Gegenfall mit ausgelassener Wechselwirkung (positive Restvarianz) bleibt grün.
+  - Der Durchreichweg bleibt lme4 (ADR-018 Nr. 2).
 
 ### Nonblocking
 
-- [E38] (minor) PLAN-REVIEW E13 („`?msa_plan` oder `NEWS.md` nennt, dass ein gescheiterter Fit die Planung beendet“); PLAN-REVIEW, Spec-Treue („Den neuen Fehler bei konstanten Werten und das geänderte Vorgabeverfahren nennen `NEWS.md` und `?msa_fit`.“) — **Befund:** `NEWS.md` nennt das neue Verfahren, aber weder die neuen benannten Fehler (konstante oder nicht endliche Antworten, degenerierte Restvarianz) noch, dass ein gescheiterter Fit `msa_plan()` beendet. `R/plan.R` und `man/msa_plan.Rd` sind unverändert; nur ADR-020 nennt das Verhalten. — **Vorschlag:** ein NEWS-Punkt und ein Satz in `?msa_plan` im Rework. BL-76.
-- [E39] (minor) [Prozess, Betreiber] `orchestrator/handoff/M1a/QA.md` (QA-M1a-001, -003, -004) — **Befund:** Drei Sätze, die QA ADR-020 zuschreibt, stehen weder in ADR-020 noch sonst im Repository:
-  - „Explizite `...`-Aufrufe gehen unverändert an `lme4::lmer()` und behalten ihre Steuerung.“
-  - „Verschwindet im Modell die Restvarianz, bricht der Fit wegen nicht darstellbarer `theta = sigma_j / sigma_e` benannt ab.“
-  - „Eingaben mit Unter- oder Überlauf der Modellvarianz auf Originalskala werden benannt abgelehnt.“
+- [E45] (minor) ADR-022 Nr. 1.3 (Werte verlangt nur für „`control` und alle übrigen nicht datenbezogenen Argumente“); lme4 `.prt.call()` (druckt `call$data`, `call$weights`, `call$offset` und `call$control` per `deparse()`) — **Befund:**
+  - Beide numerischen Wege legen den analysierten Datenrahmen als Wert in `fit$model@call` ab: `R/fit.R:192` über `do.call` und `R/fit.R:503`. Der Durchreichweg legt dort auch `subset`, `weights` und `offset` als Werte ab.
+  - Auf `ic50_demo`:
+    - `print(fit$model)`: 313 Zeilen;
+    - `summary(fit$model)`: 321 Zeilen, beginnend mit `Data: structure(list(item = structure(c(1L, …`;
+    - `deparse(getCall(fit$model))`: 813 Zeilen.
+  - In Runde 1 stand dort `Data: dat`. `update()`, `refit()` und `msa_boot()` laufen.
 
-  QA-M1a-003 nennt den negativen Haupteffekt zudem „durch Rundung“; er ist echt negativ. Die Befunde selbst sind nachgerechnet und anders belegt (E18–E21). — **Vorschlag:** QA-Prompt und Template verlangen wörtliche, per `grep` prüfbare Zitate mit Fundstelle. Für den Builder nichts zu tun. BL-77.
-- [E40] (minor) [INFRA] E12 aus PLAN-REVIEW M1a, Runde 2 (`verdict-plan.json`); ADR-019 — **Befund:** BACKLOG-Eintrag wie angekündigt. Umgesetzt durch ADR-019:
-  - `MUT_TEST_EXCLUDE`;
-  - Zeitlimit je Mutant mit unmutiertem Vorlauf und Faktor;
-  - Abbruch bei rotem Vorlauf;
-  - Flake-Rerun nur innerhalb von `MUT_FLAKE_MARGIN`.
+  — **Vorschlag:**
+  - Den Aufruf selbsttragend halten, ohne Daten einzubetten. Etwa: `data` als Symbol, gebunden in einer mit dem Modell gespeicherten Umgebung; `lme4::update.merMod` wertet zuerst in `environment(formula(object))` aus.
+  - Oder das Verhalten in `?msa_fit` nennen.
+  - Test: `print(fit$model)` zeigt eine kurze `Data:`-Zeile; `update()`, `refit()` und `msa_boot()` laufen nach `serialize()`.
+  - BL-82.
+- [E46] (minor) ADR-022 Nr. 1.1; `?msa_fit`, `@param ...` („Other arguments are evaluated in the caller's environment.“) — **Befund:**
+  - `subset`, `weights` und `offset` werden in `dat` mit `parent.frame()` als Rahmen ausgewertet (`R/fit.R:184–189`).
+  - Über eine weiterreichende Hilfsfunktion (`wrap <- function(r, ...) msa_fit(r, ...)`) findet `msa_fit()` eine lokale Variable des äußeren Aufrufers nicht, auch als fertigen Vektor nicht: „object 'sel' not found“. `control` geht über denselben Weg durch (Promise, `R/fit.R:190`).
+  - Der direkte lme4-Aufruf hat dieselbe NSE-Grenze; Nr. 1.1 ist also erfüllt. `?msa_fit` sagt aber nicht, wo andere Symbole dieser Ausdrücke gesucht werden.
 
-  Runde 1: Vorlauf 85–88 s, muttest 11.895 s je Durchgang bei 14 Workern. — **Vorschlag:** als erledigt führen; die Laufzeit bleibt bei BL-13. BL-78.
-- [E41] (minor) [INFRA] Gate mutgate (`orchestrator/gates.d/86-mutgate.sh`, `run_mutation()`: `rm -f "$REPO_ROOT/$MUT_REPORT" …`) — **Befund:** Jeder Gate-Lauf löscht den Bericht des vorigen. Nach dem roten Vorlauf gibt es keinen `mutation.json` mehr. Die Überlebenden kommen deshalb aus dem Log, mit der Bezeichnung der muttest-Ausgabe; dass sie dem `mutatorName` gleicht, auf den die Approval-Zuordnung prüft, ist nicht belegt. — **Vorschlag:** Der Betreiber archiviert den vollständigen Bericht je Gate-Lauf unter `orchestrator/state/<MS>/` oder hält den letzten vollständigen Bericht vor. Für den Builder nichts zu tun. BL-79.
-- [E42] (minor) [Spec, Betreiber] docs/02, K-M1a-4 („Bei mittlerer Schwierigkeit (`SmLs04`–`SmLs06`, Werte um 10¹²)“) — **Befund:** SmLs04–SmLs06 liegen um 10⁶ (`SmLs04.csv`: 1000000.4); um 10¹² liegen SmLs07–SmLs09. Kriterium, Tests und Anker sind nicht betroffen. — **Vorschlag:** Spec-Text bei Gelegenheit berichtigen (nur Betreiber). BL-80.
-- [E43] (minor) [M1b] QA.md, QA-M1a-004 Nr. 3 — **Befund:** Laut QA.md verwerfen clmm und glmer bei `type = "ordinal"` und `"binary"` Zeilen mit fehlenden Gruppierungswerten still, und `n` zählt sie mit. Vom Reviewer nicht nachgerechnet; nicht getestet; außerhalb von M1a. — **Vorschlag:** in M1b mit K-M1b-6 wie ADR-022 Nr. 2 behandeln. BL-81.
+  — **Vorschlag:** ein Satz in `?msa_fit`, wahlweise eine robustere Auswertung mit Test über eine Hilfsfunktion. BL-83.
+- [E47] (minor) Gate mutgate (grün, score=93.79; Überlebende in `reports/mutation/mutation.json`; ohne Gate-Wirkung) — **Befund:** Einige Überlebende liegen in Code, der Befunde der Runde 1 trägt:
+  - `R/fit.R:254` `NULL → NA`: kein Test mit weniger Zeilen als Zellen; der Mutant würde solche Fits brechen. E28 verlangte Tests der Anwendbarkeitsgrenzen.
+  - `R/fit.R:336` `^ → *`, `<n> - 1 → <n> - 1`, `<n> + 1 → <n> + 1`: Die Q-Prüfung des Abschlusses entscheidet in keinem Test.
+  - Darstellbarkeitsprüfung: kein Fall trennt die Komponenten vom Rest oder die zweite Prüfung von der ersten. Betroffen sind:
+    - `R/fit.R:486` `> → <` und `<n> + 1 → <n> + 1`;
+    - `:487` `|| → &&`, `<= → <` und `<n> - 1 → <n> - 1`;
+    - `:488` `> → >=`;
+    - `:508` `|| → &&`;
+    - `:509` `> → >=`.
+
+  — **Vorschlag:** mit E44 Tests für einen dünn besetzten Plan, für den Abschluss mit Q nahe 0 und für eine positive Komponente mit sehr kleinem Verhältnis bei darstellbarem Rest. Nicht verlangt. BL-84.
+- [E48] (minor) [INFRA] Gate mutgate (`orchestrator/gates.d/86-mutgate.sh:38–41`: Zuordnung über `endswith(file)`, `mutatorName` und `location.start.line`) — **Befund:**
+  - Eine Approval gilt für jede überlebende Mutante mit gleicher Datei, gleichem `mutatorName` und gleicher Anfangszeile.
+  - Verschiebt ein Rework die Zeilen, trifft eine alte Approval andere Mutanten. `mutation.json` trägt den Quelltext, die Zuordnung prüft ihn nicht.
+  - Die Approvals dieser Runde gelten für den Stand `597b0c3` (Abschnitt MUT-EQUIV).
+
+  — **Vorschlag:**
+  - Betreiber: die Approval um den Quelltext der Zeile oder dessen Hash ergänzen und im Gate vergleichen.
+  - Bis dahin prüft das Review jeder Runde jede Approval gegen den aktuellen Bericht.
+  - Für den Builder nichts zu tun. BL-85.
+- [E49] (minor) [INFRA] `REWORK-NOTES.md`, „OUT-OF-TERRITORY: lokale Infrastruktur“ (M1a-R2-INFRA-MUT-DISPATCH, M1a-R2-INFRA-CLOCK) — **Befund:**
+  - In der Builder-Sandbox endet `mirai::daemons(1L)` mit „16 | Permission denied“. Der Builder kann den Mutationstreiber des Gates nicht nutzen und hat eine eigene Diagnose gerechnet, korrekt als kein Gate-Ersatz gekennzeichnet.
+  - Lokales `R CMD check` meldet „Unable to verify current time“; im lint-Gate ist die Prüfung OK.
+
+  — **Vorschlag:** Der Betreiber prüft, ob die Builder-Sandbox lokale Sockets für mirai erlauben kann, oder hält im RUNBOOK fest, dass Mutationsläufe nur im Gate laufen. Für den Builder nichts zu tun. BL-86.
 
 ## MUT-EQUIV
 
-Es gibt keinen `MUT-EQUIV.json` und damit keinen Antrag. `MUT-EQUIV-APPROVED.json` habe ich nicht angelegt.
+**Grundlage:**
+- acht Anträge in `MUT-EQUIV.json`, die zehn überlebende Mutanten im Gate-Bericht betreffen;
+- jeden habe ich gegen `reports/mutation/mutation.json` (Datei, `mutatorName`, Zeile, Status Survived) und den Quelltext geprüft.
+
+**Ergebnis:** Alle acht sind echte Äquivalenzen und stehen in `MUT-EQUIV-APPROVED.json`.
+
+| Datei:Zeile | `mutatorName` | Quelltext (Stand `597b0c3`) | Nachprüfung |
+| --- | --- | --- | --- |
+| `R/fit.R:222` | `+ → -` (3 Mutanten) | `stats::aggregate(y ~ item + prompt + model + block, …)` | `model.frame()` baut aus `attr(terms(), "variables")` = `list(y, item, prompt, model, block)`, unabhängig von `-`. `aggregate()` ist auf 200 Zufallsplänen identisch, auch mit `NA` in `prompt` und `y`. |
+| `R/fit.R:102` | `FALSE → TRUE` | `as.data.frame(runs, stringsAsFactors = FALSE)` | Kein `as.data.frame`-Verfahren für `msa_runs`. `as.data.frame.data.frame(x, row.names, ...)` verwirft das Argument. Für `msa_runs` mit Zeichenspalten und für `msa_simulate()` identisch, sogar für eine schlichte Liste Ende-zu-Ende. |
+| `R/fit.R:341` | `<n> + 1 → <n> + 1` | `gram <- curvature <- matrix(0, k, k)` | Die Doppelschleife schreibt jedes Element vor dem ersten Lesen. REML-Zustand für die Startwerte 1, −1 und `NA` auf vier λ-Vektoren identisch; `NA` belegt, dass der Startwert nie gelesen wird. |
+| `R/fit.R:341` | `<n> - 1 → <n> - 1` | wie oben | wie oben |
+| `R/fit.R:442` | `TRUE → FALSE` | `lme4::lFormula(form, data = scaled, REML = TRUE, …)` | `lFormula` nutzt `REML` nur im Rückgabewert (`c(res, list(REML = REML))`). `lf` dient nur `reTrms$cnms`, `$Gp` und `$Zt`. `reTrms`, `fr` und `X` sind auf sechs Plänen identisch. |
+| `R/fit.R:444` | `TRUE → FALSE` | `strsplit(names, ":", fixed = TRUE)` | `:` ist kein Metazeichen. Die Teilung ist identisch, auch für `"a::b"`, `":x"`, `"x:"` und `""`. |
+| `R/fit.R:450` | `TRUE → FALSE` | `on.exit(…, add = TRUE)` | einziges `on.exit` in `msa_numeric_fit()` |
+| `R/grr.R:94` | `> → >=` | `… else if (grr_v > 0) max(1, floor(…)) else Inf` | Identisch auf 512 nichtnegativen Kombinationen, auch −0, subnormal und `Inf`. Abweichung nur bei negativer Item-Varianz, die `msa_fit()` nie liefert (ADR-018 Nr. 1 (d)). |
+
+- **Wirkung:** Auf denselben Bericht angewandt ergäben die Freigaben 966 / 1020 = 94,71. `mut-baseline` (93.79) schreibt nur das Gate.
+- **Bindung an den Stand:**
+  - Die Freigaben gelten für die Zeilen von `597b0c3`.
+  - Verschiebt der Rework zu E44 diese Zeilen, beantragt der Builder die betroffenen Äquivalenzen in `MUT-EQUIV.json` mit den neuen Zeilen neu.
+  - Das Review der Runde 3 gleicht jede Freigabe mit dem neuen Bericht ab und entfernt veraltete (E48).
 
 ## Verdict
 
 **REWORK.**
 
-- `gates.json` meldet `result: fail` (tests, mutgate).
-- 20 Einwände sind blocking, jeder mit `ref`:
-  - E18–E22: QA-Befunde, alle reproduziert und gültig;
-  - E23: stille Ungenauigkeit des Originalskalenmodells;
-  - E24–E37: mutgate mit den Überlebenden nach Datei und Stelle.
-- Nonblocking: E38–E43, nachgetragen als BL-76 bis BL-81.
-- Kein Spec-Widerspruch. ADR-022 hält die Auslegungen fest, wo die Spec schweigt; es bindet das Rework.
+- `gates.json` meldet `result: pass`. `blocking` ist aber nicht leer: E44 mit Bezug auf ADR-022 Nr. 7, ADR-018 Nr. 3 und das PLAN-UPDATE.
+- Nonblocking: E45–E49, nachgetragen als BL-82 bis BL-86. BL-76 ist gestrichen, BL-13 hat einen Laufzeit-Stand bekommen.
+- Kein Spec-Widerspruch. E44 braucht keine neue Auslegung, ADR-022 Nr. 7 deckt den Fall.
 
 ## Geschriebene Dateien
 
 - `orchestrator/handoff/M1a/REVIEW.md` (diese Datei);
-- `orchestrator/handoff/M1a/verdict-code.json` (`round: 1`);
-- `docs/decisions/ADR-022-m1a-code-review-auslegungen.md`;
-- `BACKLOG.md`: BL-76 bis BL-81 neu, dazu ein Laufzeit-Stand in BL-13.
+- `orchestrator/handoff/M1a/verdict-code.json` (`round: 2`);
+- `orchestrator/handoff/M1a/MUT-EQUIV-APPROVED.json` (acht Freigaben);
+- `BACKLOG.md`: BL-82 bis BL-86 neu, BL-76 erledigt, Laufzeit-Stand in BL-13.
 
-Keine Git-Kommandos. Weder Produktcode noch Tests habe ich geändert, ebenso wenig Gates oder Orchestrator-Zustand.
+Keine Git-Kommandos. Ich habe weder Produktcode noch Tests, Gates oder Orchestrator-Zustand geändert.
