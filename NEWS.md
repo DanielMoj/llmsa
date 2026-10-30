@@ -9,6 +9,8 @@
   values, degenerate residual variance and original-scale precision loss.
   The default path checks the residual model space before starting lme4,
   including unbalanced multi-factor studies with missing responses or cells.
+  Failed initialization now gives a named error with the engine's cause and
+  preserves start warnings, including for small positive residual variance.
   Numeric `NaN` and the string `"NaN"` are treated as missing responses.
   Explicit `subset`, `weights` and `offset` expressions use the fitting data;
   counts and row mappings describe the observations actually analysed.

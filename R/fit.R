@@ -64,6 +64,8 @@
 #' in `numerics$start$warnings` after successful analytic completion, and
 #' emitted if completion fails. Final-model convergence checks remain
 #' active. Explicit lme4 arguments retain lme4 warnings and errors.
+#' Initialization failures on the default path identify the fitting stage
+#' and retain the underlying engine's message.
 #'
 #' Default numeric models store ordinary `nloptwrap` refit control with no
 #' extra optimizer options. [msa_boot()] and [lme4::refit()] therefore use
@@ -77,8 +79,10 @@
 #'
 #' Constant numeric responses, non-finite values, non-identifiable
 #' components and a degenerate residual variance produce named errors.
-#' Small representable variation and tied scores are supported without
-#' an absolute variance cutoff. Numeric `NaN` and the string `"NaN"` are
+#' There is no absolute variance cutoff for small representable variation
+#' or tied scores. A positive residual variance does not guarantee a fit:
+#' with high repeatability, initialization or analytic completion can fail
+#' at working precision. Numeric `NaN` and the string `"NaN"` are
 #' treated as missing responses, without a parsing warning. Missing numeric
 #' grouping values are rejected on both fitting paths. The default path
 #' rejects variances whose original-scale representation or model arithmetic
@@ -464,7 +468,11 @@ msa_numeric_fit <- function(form, dat) {
       if (projection$rank < nrow(scaled)) {
         msa_numeric_check_residual(sum(projection$residuals^2), sum(scaled$y^2))
       }
-      initial <- withCallingHandlers(lme4::lmer(form, data = scaled, REML = TRUE, control = control),
+      initial <- withCallingHandlers(tryCatch(
+        lme4::lmer(form, data = scaled, REML = TRUE, control = control),
+        error = function(e) {
+          stop("Numeric model initialization failed: ", conditionMessage(e), call. = FALSE)
+        }),
         warning = function(w) {
           start$warnings <<- c(start$warnings, conditionMessage(w))
           invokeRestart("muffleWarning")

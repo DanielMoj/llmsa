@@ -1,5 +1,102 @@
 # PROGRESS — Langzeitgedächtnis des Builders
 
+## M1a — REWORK, Runde 4 (30.10.2026)
+
+Ausgangslage: REVIEW/verdict-code Runde 3 verlangt REWORK wegen E50.
+Die unveränderten Orchestrator-Fakten nennen acht grüne Gates, `result:
+pass`, mutgate 93,72 bei required 91,79; kein Status error und kein
+QA-PENDING. ARBITER fehlt, LESSONS enthält keine Lehren. Die aktuelle
+Gate-Abnahme verbleibt beim Orchestrator und Reviewer.
+
+**E50 ist im Produktcode behoben.** `R/fit.R:471` fängt Fehler des
+lme4-Startfits im numerischen Vorgabepfad ab und meldet
+`Numeric model initialization failed: ` mit der ursprünglichen
+Engine-Meldung als Ursache. Die äußere Klasse ist `simpleError` ohne
+internen Aufruf; die Warnungen des fehlgeschlagenen Starts werden weiterhin
+in ihrer Reihenfolge weitergegeben. Positive Reststreuung wird nicht als
+null umgedeutet. Daten, Nullgrenze, Präzisionsprüfung und Abschlusskriterium
+bleiben gleich. Der explizite lme4-Durchreichweg behält seine Fehlerklassen,
+Meldungen und Warnungen. ADR-020, Nachtrag Runde 4, NEWS.md und die
+erzeugte Hilfe `man/msa_fit.Rd` dokumentieren die Änderung.
+
+Die neue Datei `tests/testthat/test-fit-initialization.R` prüft die drei
+realen E50-Reproduktionen mit positiver Restquadratsumme aus `stats::aov`,
+die Engine-Ursache gegen einen direkten lme4-Aufruf, die Weitergabe zweier
+synthetischer Startwarnungen, den expliziten Durchreichweg und positive
+Gegenfälle gegen lme4 bei zwei absoluten Skalen. Vor der Codeänderung
+scheitern vier der sechs Blöcke; danach bestehen alle 79 Erwartungen.
+Die Testdatei wurde zwischen diesen beiden Läufen nicht verändert.
+
+E51: `?msa_fit` nennt jetzt die Einschränkung bei hoher Wiederholpräzision;
+die numerische Verbesserung und der zusätzliche Robustheitsnachweis
+bleiben BL-87/nonblocking vor M1d. E52: ADR-020 dokumentiert den
+Speicher-/Rechenaufwand der dichten Projektion und die größeren Messfälle
+aus REVIEW Runde 3 mit ausdrücklicher Quellenangabe; keine Behauptung
+einer Performanceverbesserung. E53: zwei Index-Äquivalenzen sind mit
+ausgeführtem Beleg beantragt, weitere Darstellbarkeits- und Redundanzpunkte
+bleiben BL-84/nonblocking. Sieben ältere R/fit.R-Claims wurden auf
+identische Quellzeilen versetzt; R/grr.R bleibt unverändert. MUT-EQUIV.json
+enthält zehn Anträge, keine Genehmigung. MUT-EQUIV-APPROVED.json bleibt
+bytegleich. E48/BL-85 und E49/BL-86 sind OUT-OF-TERRITORY [INFRA].
+
+Echter Output unter `/tmp/llmsa-m1a-r4/`; Befehle, einzelne Antworten und
+vollständige Log-Bezüge in `orchestrator/handoff/M1a/REWORK-NOTES.md`:
+
+```text
+[ FAIL 9 | WARN 0 | SKIP 0 | PASS 70 ]
+Initialization regression: 6 tests; 4 failed blocks; 0 errors; 0 skipped
+[ FAIL 0 | WARN 0 | SKIP 0 | PASS 79 ]
+Initialization regression: 6 tests; 0 failed blocks; 0 errors; 0 skipped
+[ FAIL 0 | WARN 0 | SKIP 1 | PASS 2680 ]
+[ FAIL 0 | WARN 0 | SKIP 0 | PASS 23 ]
+[ FAIL 0 | WARN 0 | SKIP 0 | PASS 12 ]
+r-tests: pass — 197 Tests in tests/testthat, tests/e2e, tests/fuzz; 0 fehlgeschlagen, 0 Fehler, 1 übersprungen
+Unit and QA elapsed seconds: 85.75; exit: 0
+[ FAIL 0 | WARN 0 | SKIP 0 | PASS 722 ]
+M1a acceptance: 54 tests; 0 failed blocks; 0 errors; 0 skipped
+M1a acceptance elapsed seconds: 40.65; exit: 0
+Count-vector enumeration: 9837 vectors, lengths 2..8, entries 1..3; both predicates identical
+Balanced helper: 4 valid designs x 2 index mutations; outputs and warnings exactly identical
+Equivalence evidence only; no mutation score or approval.
+```
+
+Die M1a-Abnahme enthält Originalanker, geschützte AIAG-Daten, NIST,
+Paketorakel und geknittete Vignette. Der einzige Quellbaum-Skip ist der
+bestehende ellmer-Negativtest. Keine neuen Skips oder geänderten Tests.
+
+Öffentlicher Paketbau und `R CMD check --as-cran --no-manual` jeweils
+Exit 0; keine ERRORs/WARNINGs, Vignetten neu gebaut. Echter Check-Output:
+
+```text
+Status: 1 NOTE
+Package check elapsed seconds: 129.93; exit: 0
+[ FAIL 0 | WARN 0 | SKIP 8 | PASS 2605 ]
+```
+
+Die acht bestehenden Standalone-Skips betreffen fünf Betreiber-Fixtures,
+den CRAN-Report-Test, Originalanker ohne Repository und ellmer. Alle neuen
+Tests werden ausgeführt. Der NOTE lautet `Unable to verify current time`;
+die Zeitprüfung bleibt aktiv. Die lokale mirai-Probe endet mit
+`16 | Permission denied` (Exit 1). Beides ist mit aktuellem Log-Beleg als
+OUT-OF-TERRITORY [INFRA] dokumentiert. Kein vollständiger Mutationslauf
+oder neuer Gate-Score wurde erzeugt.
+
+`python3 /tmp/llmsa-m1a-r4/integrity.py` bestätigt mit Exit 0:
+295 Bestandsdateien inventarisiert, sieben zugewiesene Dateien geändert,
+288 bytegleich, keine gelöscht; eine neue Testdatei. Alle 68 bestehenden
+Test-/Fixture-Dateien sind bytegleich. Alle 109 öffentlichen Quelldateien
+stimmen mit der geprüften Paketkopie überein. Gate-Fakten, Mutationsbericht
+und Reviewer-Approvals sind unverändert. R/fit.R SHA-256:
+`73caf9801081da31ef01ab26c3e026c44c34f4060804329b7f63e84e902ebd94`.
+Die Inventur ersetzt keine Territoriumsprüfung.
+
+Keine Git-Kommandos, Abhängigkeitsinstallation oder eigenen API-Aufrufe.
+Orchestratorzustand, BACKLOG, Abnahmetests, QA-Tests, Fixtures, Anker,
+Golden-Daten, Specs, Gates und Schwellen bleiben unverändert.
+Territoriumsprüfung, Phasen-Commit, Gates und Review erfolgen durch die
+zuständigen Rollen. Das ist ein Builder-Prüfbeleg, kein Verdict.
+
+
 ## M1a — REWORK, Runde 3 (30.10.2026)
 
 Ausgangslage: REVIEW/verdict-code Runde 2 verlangt REWORK wegen E44.

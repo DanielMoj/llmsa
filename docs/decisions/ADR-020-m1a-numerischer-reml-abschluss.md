@@ -286,3 +286,47 @@ Sechszeilenplan mit Seed 1 exakt gleich zum gesicherten
 Ausgangscode. Die neue Testdatei besteht mit 124 Erwartungen, die
 unveränderte M1a-Abnahme mit 54 Testblöcken / 722 Erwartungen. Dies sind
 lokale Prüfbelege; Gatebudgets und Abnahme bleiben unverändert.
+
+## Nachtrag REWORK M1a, Runde 4: Fehler des Startfits (E50–E52)
+
+Auch der lme4-Startfit auf der konditionierten Antwort kann scheitern,
+obwohl die Modellrestquadratsumme oberhalb der relativen Nullgrenze liegt
+(E50). Genau dieser Aufruf erhält eine Fehlerbehandlung: Er endet mit
+`Numeric model initialization failed: ` und der unveränderten Meldung
+der Engine als Ursache. Die äußere Fehlerklasse ist ein gewöhnlicher
+R-Fehler ohne internen Aufruf, keine durchgereichte `Rcpp::exception`.
+Der Zusatz benennt die fehlgeschlagene Stufe, ohne jede mögliche
+Startursache pauschal als Restvarianz null zu deklarieren. Vor dem Fehler
+gesammelte Warnungen werden weiter vom vorhandenen `on.exit`-Handler in
+ihrer Reihenfolge ausgegeben. Es gibt keinen Ersatzfit, keine künstliche
+Reststreuung und keine Änderung der Null-, Präzisions- oder Abschlussgrenzen.
+Der explizite Durchreichweg behält die originalen lme4-Fehler und Warnungen.
+
+Die neue Datei `tests/testthat/test-fit-initialization.R` prüft die drei
+Reproduktionen aus E50. `stats::aov` belegt unabhängig positive Reststreuung
+oberhalb der Grenze; ein direkter lme4-Aufruf liefert die tatsächliche
+Startursache. Ein ausdrücklich synthetischer Enginefehler mit zwei Warnungen
+prüft deren Weitergabe auch beim Startabbruch. Positive Gegenfälle mit
+ausgelassener Wechselwirkung werden gegen lme4 gerechnet, auch nach
+Skalierung mit `1e-100`. Numerische Toleranzen stammen aus ANK-TOL; nur der
+Präfix der eigenen Diagnose ist als Ausgabecharakterisierung gekennzeichnet.
+Ausgeführte Kommandos und echte Ausgaben stehen in REWORK-NOTES und PROGRESS.
+
+**E51 / BL-87:** Positive und darstellbare Restvarianz ist keine Garantie
+für erfolgreiche Initialisierung oder analytischen Abschluss bei hoher
+Wiederholpräzision. `?msa_fit` nennt diese Einschränkung jetzt ausdrücklich.
+Die weitergehende Verbesserung des Abschlusskriteriums und der zusätzliche
+Robustheitsnachweis für Restanteile `1e-4` und `1e-6` bleiben vor M1d offen.
+Die bisherige Robustheitstabelle belegt diese zusätzlichen Szenarien nicht.
+
+**E52 / BL-88:** Die Projektion aus Runde 3 benötigt O(Nq) zusätzlichen
+Speicher und O(Nq²) Arbeit für die dichte QR; jeder allgemeine Fit in
+`msa_plan()` trägt diesen Aufwand. Die Messungen des Reviewers aus REVIEW
+Runde 3, Nachprüfung 7, zeigen die Grenze des bisherigen ic50-Vergleichs:
+AP1-Gesamtplan, 5130 × 717, 28,1 MiB reine Double-Nutzlast, 0,76 s
+Projektion und Fit 1,73 → 2,50 s; Plan mit 200 Items, 6840 × 2027,
+105,8 MiB, 7,66 s Projektion und Fit 23,8 → 32,1 s. Das sind ausdrücklich
+die Reviewer-Messungen, keine neuen Messungen oder Budgets dieser Runde.
+Die Fehlerbehandlung aus E50 verändert die Projektion nicht. Ihre sparsame
+Umsetzung oder Verlagerung bleibt eine getrennte Optimierung; dieser
+Nachtrag erfüllt die vorgeschlagene Dokumentationsoption.
