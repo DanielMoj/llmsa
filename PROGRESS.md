@@ -1,5 +1,90 @@
 # PROGRESS — Langzeitgedächtnis des Builders
 
+## M1a — REWORK, Runde 3 (30.10.2026)
+
+Ausgangslage: REVIEW/verdict-code Runde 2 verlangt REWORK wegen E44.
+`orchestrator/state/M1a/gates.json` nennt Runde 2 mit acht grünen Gates,
+`result: pass`, mutgate 93,79; kein Status error, kein QA-PENDING.
+ARBITER fehlt, LESSONS enthält keine Lehren. Diese historischen
+Gate-Fakten bleiben unverändert; die aktuelle Abnahme folgt durch den
+Orchestrator und Reviewer.
+
+**E44 ist im Produktcode behoben.** Der allgemeine numerische Pfad
+prüft vor dem lme4-Startfit die Restnorm der konditionierten Antwort
+auf dem Spaltenraum des tatsächlichen Zufalls-Intercept-Designs.
+Rangaufdeckende QR erlaubt unbalancierte Pläne, abhängige Spalten und
+fehlende Zellen. Die vorhandene relative Restvarianzgrenze bleibt gleich.
+Die Diagnose verlangt positive Restfreiheitsgrade der Projektion:
+Ein gesättigter Spaltenraum lässt keinen Schluss auf die REML-Restvarianz
+zu; der neue Gegenfall wird gegen lme4 und die geschlossene Randlösung geprüft.
+Identische Replikate mit ausgelassener Wechselwirkung dürfen weiterhin
+positive Modellrestvarianz haben. Der explizite lme4-Durchreichweg bleibt
+unverändert. Umsetzung: R/fit.R; Begründung: ADR-020, Nachtrag Runde 3;
+neue Regressionen: tests/testthat/test-fit-residual-design.R.
+
+E45 und E46 sind über die vom Reviewer vorgeschlagene Dokumentationsoption
+in R/fit.R und man/msa_fit.Rd behandelt: große gespeicherte lme4-Aufrufe
+sowie die unmittelbare Aufruferumgebung datenbezogener Ausdrücke.
+NEWS nennt die Diagnose vor dem Startfit. E47 ist teilweise behandelt:
+dünn besetzte Pläne gegen lme4 und kleines positives Q gegen eine
+unabhängige Rang-eins-Formel; vier benannte Überlebende werden lokal
+erkannt. Die getrennten Darstellbarkeitsfälle bleiben BL-84/nonblocking.
+
+E48/BL-85 und E49/BL-86 sind **OUT-OF-TERRITORY [INFRA]**, mit aktuellen
+Log-Belegen und vollständiger Antwort auf alle IDs in
+`orchestrator/handoff/M1a/REWORK-NOTES.md`. Die sieben verschobenen
+Äquivalenz-Claims in R/fit.R wurden bei unverändertem Quelltext auf neue
+Zeilen gesetzt und erneut beantragt; der achte in R/grr.R:94 bleibt gleich.
+Die Reviewer-Approval-Datei wurde nicht geändert. E39/E41/E42 bleiben
+beim Betreiber/Reviewer, E43 gemäß ADR-022 in M1b.
+
+Echte Ausgaben aus `/tmp/llmsa-m1a-r3/`; vollständige Kommandos im Handoff:
+
+```text
+Baseline regression: 8 tests; 3 failed blocks; 0 errors; 0 skipped
+Neue Tests: [ FAIL 0 | WARN 0 | SKIP 0 | PASS 124 ]
+Unit: [ FAIL 0 | WARN 0 | SKIP 1 | PASS 2601 ]
+E2E: [ FAIL 0 | WARN 0 | SKIP 0 | PASS 23 ]
+Fuzz: [ FAIL 0 | WARN 0 | SKIP 0 | PASS 12 ]
+r-tests: pass — 191 Tests in tests/testthat, tests/e2e, tests/fuzz; 0 fehlgeschlagen, 0 Fehler, 1 übersprungen
+Unit and QA elapsed seconds: 78.44; exit: 0
+M1a acceptance: 54 tests; 0 failed blocks; 0 errors; 0 skipped
+M1a acceptance elapsed seconds: 40.72; exit: 0
+```
+
+Die M1a-Abnahme besteht mit 722 Erwartungen einschließlich Originaldaten,
+Orakeln und geknitteter Vignette. Bestehende Tests sind unverändert.
+Der einzige Quellbaum-Skip ist der bekannte ellmer-Negativtest.
+Die endgültigen neuen Tests wurden gegen die alte R/fit.R ausschließlich
+in einer temporären Paketkopie geprüft; der Arbeitsbaum wurde nicht
+zurückgesetzt. Die vier gezielten Mutationsversuche sind kein Gate-Lauf
+und ergeben keinen neuen Mutationsscore.
+
+Öffentlicher Paketbau und `R CMD check --as-cran --no-manual`: jeweils
+Exit 0, keine ERRORs/WARNINGs, Vignetten gebaut, `Status: 1 NOTE`,
+121,91 s; installierte Tests `FAIL 0 | WARN 0 | SKIP 8 | PASS 2526`.
+Die acht bestehenden Standalone-Skips betreffen fünf Betreiber-Fixtures,
+On CRAN, Originalanker ohne Repository und ellmer. Die neuen Tests
+werden ausgeführt. Der einzige NOTE ist die weiterhin aktive
+Zeitprüfung (`Unable to verify current time`). Der mirai-Probeaufruf
+endet erneut mit `16 | Permission denied` (Exit 1). Keine Scheinreparatur
+dieser Infrastruktur; Incoming-Remote entspricht dem Betreiber-Prüfskript.
+
+Sechs positive Pläne haben exakt gleiche Varianzkomponenten und
+Numerikdiagnosen wie der gesicherte Ausgangscode. Lokale Messung auf
+ic50_demo, fünf alternierende Läufe nach Aufwärmen: Median vorher
+0,489 s, nachher 0,564 s (Faktor 1,153); das zusätzliche Design mit
+2152 × 297 Einträgen benötigt 4,88 MiB. Die geschlossene Lösung
+benötigt diese zusätzliche Projektion nicht.
+
+`python3 /tmp/llmsa-m1a-r3/integrity.py` bestätigt mit Exit 0:
+289 Bestandsdateien inventarisiert, sieben zugewiesene Dateien geändert,
+282 bytegleich, keine gelöscht; eine neue Unit-Datei. Alle 67 vorhandenen
+Test-/Fixture-Dateien bleiben bytegleich. R/fit.R, die Rd-Datei und die
+neue Testdatei gleichen der geprüften Paketkopie. Gate-Fakten und
+Reviewer-Approvals bleiben bytegleich; keine eigene Approval, kein Verdict
+und keine Git-Kommandos. Die Inventur ersetzt nicht die Territoriumsprüfung.
+
 ## M1a — REWORK, Runde 2 (29.–30.10.2026)
 
 Grundlage: REVIEW/verdict-code und rote Gate-Logs aus Runde 1,

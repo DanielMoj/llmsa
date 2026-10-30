@@ -3,44 +3,44 @@
     {
       "file": "R/fit.R",
       "mutator": "+ → -",
-      "line": 222,
-      "reason": "stats::aggregate.formula verwendet nach model.frame alle RHS-Spalten als Gruppierungen; das Plus/Minus der Termattribute wird nicht als Modellmatrix ausgewertet. Alle drei Plus-zu-Minus-Mutanten dieser Zeile referenzieren dieselben vier Variablen in derselben Reihenfolge. Exakter Vergleich auf ungleich besetzter Vier-Faktoren-Tabelle in /tmp/llmsa-m1a-r2/equivalence-proofs.R; zusätzlich die Zähltests in test-fit-rework-inputs.R. Antrag, keine Genehmigung."
+      "line": 229,
+      "reason": "stats::aggregate.formula verwendet nach model.frame alle RHS-Spalten als Gruppierungen; das Plus/Minus der Termattribute wird nicht als Modellmatrix ausgewertet. Alle drei Plus-zu-Minus-Mutanten dieser Zeile referenzieren dieselben vier Variablen in derselben Reihenfolge. Exakter Vergleich auf ungleich besetzter Vier-Faktoren-Tabelle in /tmp/llmsa-m1a-r2/equivalence-proofs.R; zusätzlich die Zähltests in test-fit-rework-inputs.R. Antrag, keine Genehmigung. Runde 3: unveränderte Quellzeile von 222 nach 229 verschoben; erneuter Antrag für diesen Stand gemäß REVIEW r2, keine eigene Approval."
     },
     {
       "file": "R/fit.R",
       "mutator": "FALSE → TRUE",
-      "line": 102,
-      "reason": "Die dokumentierte Eingabe msa_runs erbt von data.frame; as.data.frame.data.frame konvertiert bestehende Spalten nicht durch stringsAsFactors. Das Argument liegt nur in ... und ist für diese Methode ohne Wirkung. Beide Flags liefern für msa_runs und dessen data.frame exakt dieselben Typen, Attribute und Werte (equivalence-proofs.R). Kein allgemeiner Claim für fremde benutzerdefinierte as.data.frame-Methoden. Antrag, keine Genehmigung."
+      "line": 109,
+      "reason": "Die dokumentierte Eingabe msa_runs erbt von data.frame; as.data.frame.data.frame konvertiert bestehende Spalten nicht durch stringsAsFactors. Das Argument liegt nur in ... und ist für diese Methode ohne Wirkung. Beide Flags liefern für msa_runs und dessen data.frame exakt dieselben Typen, Attribute und Werte (equivalence-proofs.R). Kein allgemeiner Claim für fremde benutzerdefinierte as.data.frame-Methoden. Antrag, keine Genehmigung. Runde 3: unveränderte Quellzeile von 102 nach 109 verschoben; erneuter Antrag für diesen Stand gemäß REVIEW r2, keine eigene Approval."
     },
     {
       "file": "R/fit.R",
       "mutator": "<n> + 1 → <n> + 1",
-      "line": 341,
-      "reason": "Nur der Initialwert der Matrizen gram/curvature wird von 0 auf +/-1 mutiert. Für k>=1 schreibt die Doppelschleife jedes Diagonal- und beide zugehörigen Nebendiagonalelemente vor dessen erster Verwendung; der Initialwert wird nie gelesen. Exakte Gleichheit aller REML-Zustandsfelder für drei unterschiedliche Lambda-Vektoren in equivalence-proofs.R. Die Informationsmatrix wird außerdem gegen eine unabhängige dichte Formel getestet. Antrag, keine Genehmigung."
+      "line": 348,
+      "reason": "Nur der Initialwert der Matrizen gram/curvature wird von 0 auf +/-1 mutiert. Für k>=1 schreibt die Doppelschleife jedes Diagonal- und beide zugehörigen Nebendiagonalelemente vor dessen erster Verwendung; der Initialwert wird nie gelesen. Exakte Gleichheit aller REML-Zustandsfelder für drei unterschiedliche Lambda-Vektoren in equivalence-proofs.R. Die Informationsmatrix wird außerdem gegen eine unabhängige dichte Formel getestet. Antrag, keine Genehmigung. Runde 3: unveränderte Quellzeile von 341 nach 348 verschoben; erneuter Antrag für diesen Stand gemäß REVIEW r2, keine eigene Approval."
     },
     {
       "file": "R/fit.R",
       "mutator": "<n> - 1 → <n> - 1",
-      "line": 341,
-      "reason": "Nur der Initialwert der Matrizen gram/curvature wird von 0 auf +/-1 mutiert. Für k>=1 schreibt die Doppelschleife jedes Diagonal- und beide zugehörigen Nebendiagonalelemente vor dessen erster Verwendung; der Initialwert wird nie gelesen. Exakte Gleichheit aller REML-Zustandsfelder für drei unterschiedliche Lambda-Vektoren in equivalence-proofs.R. Die Informationsmatrix wird außerdem gegen eine unabhängige dichte Formel getestet. Antrag, keine Genehmigung."
+      "line": 348,
+      "reason": "Nur der Initialwert der Matrizen gram/curvature wird von 0 auf +/-1 mutiert. Für k>=1 schreibt die Doppelschleife jedes Diagonal- und beide zugehörigen Nebendiagonalelemente vor dessen erster Verwendung; der Initialwert wird nie gelesen. Exakte Gleichheit aller REML-Zustandsfelder für drei unterschiedliche Lambda-Vektoren in equivalence-proofs.R. Die Informationsmatrix wird außerdem gegen eine unabhängige dichte Formel getestet. Antrag, keine Genehmigung. Runde 3: unveränderte Quellzeile von 341 nach 348 verschoben; erneuter Antrag für diesen Stand gemäß REVIEW r2, keine eigene Approval."
     },
     {
       "file": "R/fit.R",
       "mutator": "TRUE → FALSE",
-      "line": 442,
-      "reason": "Aus diesem ersten lFormula-Ergebnis werden ausschließlich reTrms$Zt, reTrms$cnms und reTrms$Gp verwendet. Diese Design-/Gruppierungsdaten hängen nicht vom REML-Flag ab; lFormula optimiert hier nichts. Initialer lmer-Fit und finaler Originalskalen-Modellbau behalten ihr eigenes REML=TRUE. Exakter Vergleich aller drei verwendeten Felder in equivalence-proofs.R. Antrag, keine Genehmigung."
+      "line": 449,
+      "reason": "Aus diesem ersten lFormula-Ergebnis werden ausschließlich reTrms$Zt, reTrms$cnms und reTrms$Gp verwendet. Diese Design-/Gruppierungsdaten hängen nicht vom REML-Flag ab; lFormula optimiert hier nichts. Initialer lmer-Fit und finaler Originalskalen-Modellbau behalten ihr eigenes REML=TRUE. Exakter Vergleich aller drei verwendeten Felder in equivalence-proofs.R. Antrag, keine Genehmigung. Runde 3: unveränderte Quellzeile von 442 nach 449 verschoben; erneuter Antrag für diesen Stand gemäß REVIEW r2, keine eigene Approval."
     },
     {
       "file": "R/fit.R",
       "mutator": "TRUE → FALSE",
-      "line": 444,
-      "reason": "Das Trennzeichen ':' ist kein Metazeichen eines regulären Ausdrucks. Für sämtliche vom Fit erzeugten Faktor-/Interaktionsnamen liefern fixed=TRUE und FALSE dieselbe Teilung. Exakter Vergleich des vollständigen Namensvorrats in equivalence-proofs.R. Antrag, keine Genehmigung."
+      "line": 451,
+      "reason": "Das Trennzeichen ':' ist kein Metazeichen eines regulären Ausdrucks. Für sämtliche vom Fit erzeugten Faktor-/Interaktionsnamen liefern fixed=TRUE und FALSE dieselbe Teilung. Exakter Vergleich des vollständigen Namensvorrats in equivalence-proofs.R. Antrag, keine Genehmigung. Runde 3: unveränderte Quellzeile von 444 nach 451 verschoben; erneuter Antrag für diesen Stand gemäß REVIEW r2, keine eigene Approval."
     },
     {
       "file": "R/fit.R",
       "mutator": "TRUE → FALSE",
-      "line": 450,
-      "reason": "msa_numeric_fit registriert genau einen on.exit-Handler. add=TRUE und FALSE ergeben ohne zuvor registrierten Handler dieselbe Exit-Aktion; aufgerufene Funktionen besitzen ihre eigenen Handler. Erfolgs- und Fehlerausstieg exakt verglichen in equivalence-proofs.R; der neue Warnungsweitergabe-Test prüft den tatsächlichen Produktpfad. Antrag, keine Genehmigung."
+      "line": 457,
+      "reason": "msa_numeric_fit registriert genau einen on.exit-Handler. add=TRUE und FALSE ergeben ohne zuvor registrierten Handler dieselbe Exit-Aktion; aufgerufene Funktionen besitzen ihre eigenen Handler. Erfolgs- und Fehlerausstieg exakt verglichen in equivalence-proofs.R; der neue Warnungsweitergabe-Test prüft den tatsächlichen Produktpfad. Antrag, keine Genehmigung. Runde 3: unveränderte Quellzeile von 450 nach 457 verschoben; erneuter Antrag für diesen Stand gemäß REVIEW r2, keine eigene Approval."
     },
     {
       "file": "R/grr.R",

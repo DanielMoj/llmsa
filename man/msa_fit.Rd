@@ -33,7 +33,10 @@ the original response, including when an argument is explicitly \code{NULL}.
 Expressions in \code{subset}, \code{weights} and \code{offset} can use the internal
 columns \code{item}, \code{prompt}, \code{model}, \code{block} and \code{y}. Row-based arguments
 refer to the rows remaining after missing or unreadable responses are
-removed. Other arguments are evaluated in the caller's environment.}
+removed. Other symbols in these expressions are looked up in the
+immediate caller of \code{msa_fit()}, as in a direct \code{lmer()} call; a wrapper
+forwarding \code{...} must make them available in that frame. Other arguments
+retain their original argument environments when forwarded.}
 }
 \value{
 An object of class \code{msa_fit}: a list with the fitted \code{model}, the
@@ -98,6 +101,10 @@ extra optimizer options. \code{\link[=msa_boot]{msa_boot()}} and \code{\link[lme
 normal lme4 optimization; they do not repeat the initial analytic
 completion. The actual initial method is also recorded in the model's
 \code{optinfo$completion}.
+Both numeric paths store the fitting data and evaluated arguments in the
+model call so it remains usable outside the original caller's scope.
+Printing or deparsing that embedded lme4 call can therefore be lengthy;
+printing the \code{msa_fit} object gives the compact study summary.
 
 Constant numeric responses, non-finite values, non-identifiable
 components and a degenerate residual variance produce named errors.

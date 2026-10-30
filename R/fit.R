@@ -40,7 +40,10 @@
 #'   Expressions in `subset`, `weights` and `offset` can use the internal
 #'   columns `item`, `prompt`, `model`, `block` and `y`. Row-based arguments
 #'   refer to the rows remaining after missing or unreadable responses are
-#'   removed. Other arguments are evaluated in the caller's environment.
+#'   removed. Other symbols in these expressions are looked up in the
+#'   immediate caller of `msa_fit()`, as in a direct `lmer()` call; a wrapper
+#'   forwarding `...` must make them available in that frame. Other arguments
+#'   retain their original argument environments when forwarded.
 #'
 #' @details
 #' With no arguments in `...`, the numeric fit preserves the input doubles
@@ -67,6 +70,10 @@
 #' normal lme4 optimization; they do not repeat the initial analytic
 #' completion. The actual initial method is also recorded in the model's
 #' `optinfo$completion`.
+#' Both numeric paths store the fitting data and evaluated arguments in the
+#' model call so it remains usable outside the original caller's scope.
+#' Printing or deparsing that embedded lme4 call can therefore be lengthy;
+#' printing the `msa_fit` object gives the compact study summary.
 #'
 #' Constant numeric responses, non-finite values, non-identifiable
 #' components and a degenerate residual variance produce named errors.
@@ -450,6 +457,13 @@ msa_numeric_fit <- function(form, dat) {
   on.exit(if (!completed) for (w in start$warnings) warning(w, call. = FALSE), add = TRUE)
   finish <- {
     if (is.null(lambda)) {
+      # Every random-intercept block spans the intercept. Rank-revealing QR
+      # handles dependencies and missing cells without an N-by-N covariance.
+      projection <- stats::lm.fit(as.matrix(Matrix::t(lf$reTrms$Zt)), scaled$y)
+      # A saturated span fits every response and cannot diagnose residual variance.
+      if (projection$rank < nrow(scaled)) {
+        msa_numeric_check_residual(sum(projection$residuals^2), sum(scaled$y^2))
+      }
       initial <- withCallingHandlers(lme4::lmer(form, data = scaled, REML = TRUE, control = control),
         warning = function(w) {
           start$warnings <<- c(start$warnings, conditionMessage(w))

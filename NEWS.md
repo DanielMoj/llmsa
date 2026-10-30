@@ -7,6 +7,8 @@
   path, and bootstrap refits use ordinary lme4 optimization.
 * Numeric fits diagnose constant or non-finite responses, missing grouping
   values, degenerate residual variance and original-scale precision loss.
+  The default path checks the residual model space before starting lme4,
+  including unbalanced multi-factor studies with missing responses or cells.
   Numeric `NaN` and the string `"NaN"` are treated as missing responses.
   Explicit `subset`, `weights` and `offset` expressions use the fitting data;
   counts and row mappings describe the observations actually analysed.

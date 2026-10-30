@@ -237,3 +237,52 @@ Gruppierungsfehlstellen bleiben wie in ADR-022 dem Meilenstein M1b zugeordnet.
 Die ausgeführten Belege und die Antwort auf jede Befund-ID stehen in
 `orchestrator/handoff/M1a/REWORK-NOTES.md` und `PROGRESS.md`. Nur die Gates
 des Orchestrators entscheiden über die Abnahme.
+
+## Nachtrag REWORK M1a, Runde 3: Modellrest vor dem Startfit (E44)
+
+Die Prüfung vor dem allgemeinen lme4-Startfit verwendet jetzt den
+Kleinste-Quadrate-Rest der konditionierten Antwort auf dem Spaltenraum
+des tatsächlich enthaltenen Zufalls-Intercept-Designs `Z`. Jeder vollständige
+Indikatorblock enthält bereits den Intercept in seinem Spaltenraum; die
+Projektion ist deshalb die auf `span(1, Z)`. `stats::lm.fit()` berechnet
+den Rest durch rangaufdeckende QR mit seiner üblichen Rangprüfung. Abhängige
+Indikatorspalten und fehlende Zellen sind zulässig. Es wird keine Kovarianz-
+oder Projektionsmatrix von N × N gebildet; die zusätzliche dichte Matrix
+ist ausschließlich das rechteckige Design N × q und nur im allgemeinen
+Pfad nötig. Die analytische REML-Rechnung im Zufallseffektraum bleibt gleich.
+
+Die zusätzliche Fehlerdiagnose setzt positive Restfreiheitsgrade dieser
+Projektion voraus. Bei vollem Zeilenrang ist jeder Antwortvektor im
+Spaltenraum; sein Projektionsrest ist dann ohne Aussage über die
+REML-Restvarianz. Solche Pläne behalten den bisherigen allgemeinen
+REML-Pfad. Ein sechszeiliger unbalancierter Gegenfall mit gesättigtem
+Spaltenraum hat nach direktem lme4 und der geschlossenen Randlösung
+`SST / (N - 1)` positive Restvarianz (Seed 1); ein eigener Unit-Test
+sichert diesen Unterschied ab.
+
+Die unveränderte relative Grenze `(64 * .Machine$double.eps)^2 * SST`
+aus dem Nachtrag der Runde 2 entscheidet über verschwindenden Modellrest.
+Damit scheitern auch unbalancierte Mehrfaktorpläne vor dem lme4-Startfit
+benannt, statt rohe C++-/Matrix-Fehler oder Startwarnungen auszulösen.
+Die Prüfung verändert weder Daten noch Varianzen. Ausgelassene
+Wechselwirkungen können weiterhin positive Restvarianz tragen; gleiche
+Replikate allein lösen keinen Fehler aus. Der explizite Durchreichweg
+nach ADR-018 Nr. 2 bleibt die unveränderte lme4-Rechnung.
+
+Neue Regressionen in `test-fit-residual-design.R` prüfen die Modellräume
+unabhängig über `stats::aov`, positive Gegenfälle gegen `lme4::lmer` und
+kleine positive profilierte Quadratsummen gegen eine Rang-eins-Formel.
+Runde 3 dokumentiert die tatsächlichen Ergebnisse und Laufzeiten in
+`REWORK-NOTES.md` und `PROGRESS.md`. Das bestehende Verhalten des gespeicherten
+Modellaufrufs bleibt erhalten; `?msa_fit` nennt die große Druckausgabe
+(E45) und die unmittelbare Aufruferumgebung für Datenmasken-Ausdrücke (E46).
+
+Gemessen in Runde 3: Auf ic50_demo (2152 × 297 Design-Einträge,
+4,88 MiB reine Double-Nutzlast) steigt die mediane Fit-Zeit über fünf
+alternierende Läufe nach Aufwärmen von 0,489 s auf 0,564 s, Faktor 1,153.
+Varianzkomponenten und Numerikdiagnosen sind dort, auf vier weiteren
+unbalancierten Plänen mit Seeds 1–4 und auf dem gesättigten
+Sechszeilenplan mit Seed 1 exakt gleich zum gesicherten
+Ausgangscode. Die neue Testdatei besteht mit 124 Erwartungen, die
+unveränderte M1a-Abnahme mit 54 Testblöcken / 722 Erwartungen. Dies sind
+lokale Prüfbelege; Gatebudgets und Abnahme bleiben unverändert.
