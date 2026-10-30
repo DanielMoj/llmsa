@@ -1,7 +1,7 @@
 # stdout
-r-mutation: 1106 Mutanten in R/fit.R, R/grr.R; Tests: tests/testthat, tests/acceptance, tests/e2e, tests/fuzz; ausgelassen nach MUT_TEST_EXCLUDE='^(m2-[0-9]|m0-testthat-count$)': tests/acceptance/test-m0-testthat-count.R, tests/acceptance/test-m2-1-items.R, tests/acceptance/test-m2-2-memorisation.R, tests/acceptance/test-m2-3-prompts-parser.R, tests/acceptance/test-m2-4-backends.R, tests/acceptance/test-m2-5-plan.R, tests/acceptance/test-m2-6-evaluate.R, tests/acceptance/test-m2-7-robustness-pilot.R
-r-mutation: unmutierter Testlauf: 89.7 s; 259 Tests, davon 0 fehlgeschlagen, 0 abgebrochen
-r-mutation: Zeitlimit je Mutant: 449 s (MUT_TEST_TIMEOUT=353 s, 5 × unmutierter Lauf = 449 s)
+r-mutation: 1108 Mutanten in R/fit.R, R/grr.R; Tests: tests/testthat, tests/acceptance, tests/e2e, tests/fuzz; ausgelassen nach MUT_TEST_EXCLUDE='^(m2-[0-9]|m0-testthat-count$)': tests/acceptance/test-m0-testthat-count.R, tests/acceptance/test-m2-1-items.R, tests/acceptance/test-m2-2-memorisation.R, tests/acceptance/test-m2-3-prompts-parser.R, tests/acceptance/test-m2-4-backends.R, tests/acceptance/test-m2-5-plan.R, tests/acceptance/test-m2-6-evaluate.R, tests/acceptance/test-m2-7-robustness-pilot.R
+r-mutation: unmutierter Testlauf: 90.5 s; 265 Tests, davon 0 fehlgeschlagen, 0 abgebrochen
+r-mutation: Zeitlimit je Mutant: 453 s (MUT_TEST_TIMEOUT=353 s, 5 × unmutierter Lauf = 453 s)
 ℹ Mutation Testing
   |   K |   S |   N |   E |   T |   % | Mutator  | File 
 ✔ |   1 |   0 |   0 |   0 |   1 | 100 | - → +    | fit.R 
@@ -566,8 +566,8 @@ x | 429 |  32 |   0 |  67 | 528 |  93 | <non-emp | fit.R
 ✔ | 461 |  32 |   0 |  67 | 560 |  94 | <non-emp | fit.R 
 ✔ | 462 |  32 |   0 |  67 | 561 |  94 | <non-emp | fit.R 
 ✔ | 463 |  32 |   0 |  67 | 562 |  94 | <non-emp | fit.R 
-x | 463 |  33 |   0 |  67 | 563 |  94 | <non-emp | fit.R 
-✔ | 464 |  33 |   0 |  67 | 564 |  94 | <non-emp | fit.R 
+✔ | 464 |  32 |   0 |  67 | 563 |  94 | <non-emp | fit.R 
+x | 464 |  33 |   0 |  67 | 564 |  94 | <non-emp | fit.R 
 ✔ | 465 |  33 |   0 |  67 | 565 |  94 | <non-emp | fit.R 
 ✔ | 466 |  33 |   0 |  67 | 566 |  94 | <non-emp | fit.R 
 ✔ | 467 |  33 |   0 |  67 | 567 |  94 | <non-emp | fit.R 
@@ -586,7 +586,7 @@ x | 463 |  33 |   0 |  67 | 563 |  94 | <non-emp | fit.R
 ✔ | 480 |  33 |   0 |  67 | 580 |  94 | <non-emp | fit.R 
 ✔ | 481 |  33 |   0 |  67 | 581 |  94 | <non-emp | fit.R 
 ✔ | 482 |  33 |   0 |  67 | 582 |  94 | <non-emp | fit.R 
-✔ | 483 |  33 |   0 |  67 | 583 |  94 | == → !=  | fit.R 
+✔ | 483 |  33 |   0 |  67 | 583 |  94 | <non-emp | fit.R 
 ✔ | 484 |  33 |   0 |  67 | 584 |  94 | == → !=  | fit.R 
 ✔ | 485 |  33 |   0 |  67 | 585 |  94 | == → !=  | fit.R 
 ✔ | 486 |  33 |   0 |  67 | 586 |  94 | == → !=  | fit.R 
@@ -613,7 +613,7 @@ x | 463 |  33 |   0 |  67 | 563 |  94 | <non-emp | fit.R
 ✔ | 507 |  33 |   0 |  67 | 607 |  94 | == → !=  | fit.R 
 ✔ | 508 |  33 |   0 |  67 | 608 |  94 | == → !=  | fit.R 
 ✔ | 509 |  33 |   0 |  67 | 609 |  94 | == → !=  | fit.R 
-✔ | 510 |  33 |   0 |  67 | 610 |  94 | > → <    | fit.R 
+✔ | 510 |  33 |   0 |  67 | 610 |  94 | == → !=  | fit.R 
 ✔ | 511 |  33 |   0 |  67 | 611 |  94 | > → <    | fit.R 
 ✔ | 512 |  33 |   0 |  67 | 612 |  94 | > → <    | fit.R 
 ✔ | 513 |  33 |   0 |  67 | 613 |  94 | > → <    | fit.R 
@@ -621,11 +621,11 @@ x | 463 |  33 |   0 |  67 | 563 |  94 | <non-emp | fit.R
 ✔ | 515 |  33 |   0 |  67 | 615 |  94 | > → <    | fit.R 
 ✔ | 516 |  33 |   0 |  67 | 616 |  94 | > → <    | fit.R 
 ✔ | 517 |  33 |   0 |  67 | 617 |  94 | > → <    | fit.R 
-x | 517 |  34 |   0 |  67 | 618 |  94 | > → <    | fit.R 
-✔ | 518 |  34 |   0 |  67 | 619 |  94 | > → <    | fit.R 
+✔ | 518 |  33 |   0 |  67 | 618 |  94 | > → <    | fit.R 
+x | 518 |  34 |   0 |  67 | 619 |  94 | > → <    | fit.R 
 ✔ | 519 |  34 |   0 |  67 | 620 |  94 | > → <    | fit.R 
 ✔ | 520 |  34 |   0 |  67 | 621 |  94 | > → <    | fit.R 
-✔ | 521 |  34 |   0 |  67 | 622 |  94 | > → >=   | fit.R 
+✔ | 521 |  34 |   0 |  67 | 622 |  94 | > → <    | fit.R 
 ✔ | 522 |  34 |   0 |  67 | 623 |  94 | > → >=   | fit.R 
 ✔ | 523 |  34 |   0 |  67 | 624 |  94 | > → >=   | fit.R 
 ✔ | 524 |  34 |   0 |  67 | 625 |  94 | > → >=   | fit.R 
@@ -634,21 +634,21 @@ x | 517 |  34 |   0 |  67 | 618 |  94 | > → <    | fit.R
 ✔ | 527 |  34 |   0 |  67 | 628 |  94 | > → >=   | fit.R 
 ✔ | 528 |  34 |   0 |  67 | 629 |  94 | > → >=   | fit.R 
 ✔ | 529 |  34 |   0 |  67 | 630 |  94 | > → >=   | fit.R 
-x | 529 |  35 |   0 |  67 | 631 |  94 | > → >=   | fit.R 
-x | 529 |  36 |   0 |  67 | 632 |  94 | > → >=   | fit.R 
-✔ | 530 |  36 |   0 |  67 | 633 |  94 | > → >=   | fit.R 
-✔ | 531 |  36 |   0 |  67 | 634 |  94 | | → &    | fit.R 
-✔ | 532 |  36 |   0 |  67 | 635 |  94 | || → &&  | fit.R 
+✔ | 530 |  34 |   0 |  67 | 631 |  94 | > → >=   | fit.R 
+x | 530 |  35 |   0 |  67 | 632 |  94 | > → >=   | fit.R 
+x | 530 |  36 |   0 |  67 | 633 |  94 | > → >=   | fit.R 
+✔ | 531 |  36 |   0 |  67 | 634 |  94 | > → >=   | fit.R 
+✔ | 532 |  36 |   0 |  67 | 635 |  94 | | → &    | fit.R 
 ✔ | 533 |  36 |   0 |  67 | 636 |  94 | || → &&  | fit.R 
 ✔ | 534 |  36 |   0 |  67 | 637 |  94 | || → &&  | fit.R 
 ✔ | 535 |  36 |   0 |  67 | 638 |  94 | || → &&  | fit.R 
 ✔ | 536 |  36 |   0 |  67 | 639 |  94 | || → &&  | fit.R 
-x | 536 |  37 |   0 |  67 | 640 |  94 | || → &&  | fit.R 
-✔ | 537 |  37 |   0 |  67 | 641 |  94 | || → &&  | fit.R 
-x | 537 |  38 |   0 |  67 | 642 |  94 | || → &&  | fit.R 
-✔ | 538 |  38 |   0 |  67 | 643 |  94 | || → &&  | fit.R 
-x | 538 |  39 |   0 |  67 | 644 |  93 | FALSE →  | fit.R 
-✔ | 539 |  39 |   0 |  67 | 645 |  93 | FALSE →  | fit.R 
+✔ | 537 |  36 |   0 |  67 | 640 |  94 | || → &&  | fit.R 
+x | 537 |  37 |   0 |  67 | 641 |  94 | || → &&  | fit.R 
+✔ | 538 |  37 |   0 |  67 | 642 |  94 | || → &&  | fit.R 
+x | 538 |  38 |   0 |  67 | 643 |  94 | || → &&  | fit.R 
+✔ | 539 |  38 |   0 |  67 | 644 |  94 | || → &&  | fit.R 
+x | 539 |  39 |   0 |  67 | 645 |  93 | FALSE →  | fit.R 
 ✔ | 540 |  39 |   0 |  67 | 646 |  93 | FALSE →  | fit.R 
 ✔ | 541 |  39 |   0 |  67 | 647 |  93 | FALSE →  | fit.R 
 ✔ | 542 |  39 |   0 |  67 | 648 |  93 | FALSE →  | fit.R 
@@ -659,21 +659,21 @@ x | 538 |  39 |   0 |  67 | 644 |  93 | FALSE →  | fit.R
 ✔ | 547 |  39 |   0 |  67 | 653 |  94 | FALSE →  | fit.R 
 ✔ | 548 |  39 |   0 |  67 | 654 |  94 | FALSE →  | fit.R 
 ✔ | 549 |  39 |   0 |  67 | 655 |  94 | FALSE →  | fit.R 
-x | 549 |  40 |   0 |  67 | 656 |  93 | FALSE →  | fit.R 
-x | 549 |  41 |   0 |  67 | 657 |  93 | FALSE →  | fit.R 
-x | 549 |  42 |   0 |  67 | 658 |  93 | FALSE →  | fit.R 
-x | 549 |  43 |   0 |  67 | 659 |  93 | FALSE →  | fit.R 
-✔ | 550 |  43 |   0 |  67 | 660 |  93 | FALSE →  | fit.R 
+✔ | 550 |  39 |   0 |  67 | 656 |  94 | FALSE →  | fit.R 
+x | 550 |  40 |   0 |  67 | 657 |  93 | FALSE →  | fit.R 
+x | 550 |  41 |   0 |  67 | 658 |  93 | FALSE →  | fit.R 
+x | 550 |  42 |   0 |  67 | 659 |  93 | FALSE →  | fit.R 
+x | 550 |  43 |   0 |  67 | 660 |  93 | FALSE →  | fit.R 
 ✔ | 551 |  43 |   0 |  67 | 661 |  93 | FALSE →  | fit.R 
 ✔ | 552 |  43 |   0 |  67 | 662 |  93 | FALSE →  | fit.R 
-x | 552 |  43 |   0 |  68 | 663 |  93 | FALSE →  | fit.R 
-x | 552 |  44 |   0 |  68 | 664 |  93 | FALSE →  | fit.R 
-✔ | 553 |  44 |   0 |  68 | 665 |  93 | FALSE →  | fit.R 
-x | 553 |  45 |   0 |  68 | 666 |  93 | FALSE →  | fit.R 
-x | 553 |  46 |   0 |  68 | 667 |  93 | FALSE →  | fit.R 
-x | 553 |  46 |   0 |  69 | 668 |  93 | FALSE →  | fit.R 
-x | 553 |  47 |   0 |  69 | 669 |  92 | FALSE →  | fit.R 
-✔ | 554 |  47 |   0 |  69 | 670 |  92 | FALSE →  | fit.R 
+✔ | 553 |  43 |   0 |  67 | 663 |  93 | FALSE →  | fit.R 
+x | 553 |  43 |   0 |  68 | 664 |  93 | FALSE →  | fit.R 
+x | 553 |  44 |   0 |  68 | 665 |  93 | FALSE →  | fit.R 
+✔ | 554 |  44 |   0 |  68 | 666 |  93 | FALSE →  | fit.R 
+x | 554 |  45 |   0 |  68 | 667 |  93 | FALSE →  | fit.R 
+x | 554 |  46 |   0 |  68 | 668 |  93 | FALSE →  | fit.R 
+x | 554 |  46 |   0 |  69 | 669 |  93 | FALSE →  | fit.R 
+x | 554 |  47 |   0 |  69 | 670 |  92 | FALSE →  | fit.R 
 ✔ | 555 |  47 |   0 |  69 | 671 |  92 | FALSE →  | fit.R 
 ✔ | 556 |  47 |   0 |  69 | 672 |  93 | FALSE →  | fit.R 
 ✔ | 557 |  47 |   0 |  69 | 673 |  93 | FALSE →  | fit.R 
@@ -681,43 +681,43 @@ x | 553 |  47 |   0 |  69 | 669 |  92 | FALSE →  | fit.R
 ✔ | 559 |  47 |   0 |  69 | 675 |  93 | FALSE →  | fit.R 
 ✔ | 560 |  47 |   0 |  69 | 676 |  93 | FALSE →  | fit.R 
 ✔ | 561 |  47 |   0 |  69 | 677 |  93 | FALSE →  | fit.R 
-x | 561 |  48 |   0 |  69 | 678 |  92 | FALSE →  | fit.R 
-✔ | 562 |  48 |   0 |  69 | 679 |  92 | FALSE →  | fit.R 
-✔ | 563 |  48 |   0 |  69 | 680 |  92 | FALSE →  | fit.R 
-x | 563 |  49 |   0 |  69 | 681 |  92 | NA_integ | fit.R 
-x | 563 |  50 |   0 |  69 | 682 |  92 | NA_real_ | fit.R 
-✔ | 564 |  50 |   0 |  69 | 683 |  92 | NULL → N | fit.R 
-✔ | 565 |  50 |   0 |  69 | 684 |  92 | NULL → N | fit.R 
+✔ | 562 |  47 |   0 |  69 | 678 |  93 | FALSE →  | fit.R 
+✔ | 563 |  47 |   0 |  69 | 679 |  93 | FALSE →  | fit.R 
+x | 563 |  48 |   0 |  69 | 680 |  92 | FALSE →  | fit.R 
+✔ | 564 |  48 |   0 |  69 | 681 |  92 | FALSE →  | fit.R 
+✔ | 565 |  48 |   0 |  69 | 682 |  92 | FALSE →  | fit.R 
+x | 565 |  49 |   0 |  69 | 683 |  92 | NA_integ | fit.R 
+x | 565 |  50 |   0 |  69 | 684 |  92 | NA_real_ | fit.R 
 ✔ | 566 |  50 |   0 |  69 | 685 |  92 | NULL → N | fit.R 
-x | 566 |  50 |   0 |  70 | 686 |  92 | NULL → N | fit.R 
-x | 566 |  50 |   0 |  71 | 687 |  92 | NULL → N | fit.R 
-✔ | 567 |  50 |   0 |  71 | 688 |  92 | NULL → N | fit.R 
-✔ | 568 |  50 |   0 |  71 | 689 |  92 | NULL → N | fit.R 
+✔ | 567 |  50 |   0 |  69 | 686 |  92 | NULL → N | fit.R 
+✔ | 568 |  50 |   0 |  69 | 687 |  92 | NULL → N | fit.R 
+x | 568 |  50 |   0 |  70 | 688 |  92 | NULL → N | fit.R 
+x | 568 |  50 |   0 |  71 | 689 |  92 | NULL → N | fit.R 
 ✔ | 569 |  50 |   0 |  71 | 690 |  92 | NULL → N | fit.R 
-✔ | 570 |  50 |   0 |  71 | 691 |  92 | TRUE → F | fit.R 
-✔ | 571 |  50 |   0 |  71 | 692 |  92 | TRUE → F | fit.R 
-x | 571 |  51 |   0 |  71 | 693 |  92 | TRUE → F | fit.R 
-x | 571 |  52 |   0 |  71 | 694 |  92 | TRUE → F | fit.R 
-x | 571 |  53 |   0 |  71 | 695 |  92 | TRUE → F | fit.R 
-x | 571 |  54 |   0 |  71 | 696 |  92 | TRUE → F | fit.R 
-x | 571 |  54 |   0 |  72 | 697 |  92 | TRUE → F | fit.R 
-✔ | 572 |  54 |   0 |  72 | 698 |  92 | TRUE → F | fit.R 
-x | 572 |  55 |   0 |  72 | 699 |  92 | TRUE → F | fit.R 
-x | 572 |  56 |   0 |  72 | 700 |  92 | TRUE → F | fit.R 
-x | 572 |  57 |   0 |  72 | 701 |  91 | TRUE → F | fit.R 
-✔ | 573 |  57 |   0 |  72 | 702 |  91 | TRUE → F | fit.R 
-x | 573 |  58 |   0 |  72 | 703 |  91 | TRUE → F | fit.R 
-x | 573 |  59 |   0 |  72 | 704 |  91 | TRUE → F | fit.R 
-x | 573 |  60 |   0 |  72 | 705 |  91 | TRUE → F | fit.R 
-✔ | 574 |  60 |   0 |  72 | 706 |  91 | TRUE → F | fit.R 
-✔ | 575 |  60 |   0 |  72 | 707 |  91 | TRUE → F | fit.R 
+✔ | 570 |  50 |   0 |  71 | 691 |  92 | NULL → N | fit.R 
+✔ | 571 |  50 |   0 |  71 | 692 |  92 | NULL → N | fit.R 
+✔ | 572 |  50 |   0 |  71 | 693 |  92 | TRUE → F | fit.R 
+✔ | 573 |  50 |   0 |  71 | 694 |  92 | TRUE → F | fit.R 
+x | 573 |  51 |   0 |  71 | 695 |  92 | TRUE → F | fit.R 
+x | 573 |  52 |   0 |  71 | 696 |  92 | TRUE → F | fit.R 
+x | 573 |  53 |   0 |  71 | 697 |  92 | TRUE → F | fit.R 
+x | 573 |  54 |   0 |  71 | 698 |  92 | TRUE → F | fit.R 
+x | 573 |  54 |   0 |  72 | 699 |  92 | TRUE → F | fit.R 
+✔ | 574 |  54 |   0 |  72 | 700 |  92 | TRUE → F | fit.R 
+x | 574 |  55 |   0 |  72 | 701 |  92 | TRUE → F | fit.R 
+x | 574 |  56 |   0 |  72 | 702 |  92 | TRUE → F | fit.R 
+x | 574 |  57 |   0 |  72 | 703 |  91 | TRUE → F | fit.R 
+✔ | 575 |  57 |   0 |  72 | 704 |  91 | TRUE → F | fit.R 
+x | 575 |  58 |   0 |  72 | 705 |  91 | TRUE → F | fit.R 
+x | 575 |  59 |   0 |  72 | 706 |  91 | TRUE → F | fit.R 
+x | 575 |  60 |   0 |  72 | 707 |  91 | TRUE → F | fit.R 
 ✔ | 576 |  60 |   0 |  72 | 708 |  91 | TRUE → F | fit.R 
 ✔ | 577 |  60 |   0 |  72 | 709 |  91 | TRUE → F | fit.R 
 ✔ | 578 |  60 |   0 |  72 | 710 |  91 | TRUE → F | fit.R 
-✔ | 579 |  60 |   0 |  72 | 711 |  91 | x[<i>] → | fit.R 
-x | 579 |  60 |   0 |  73 | 712 |  91 | x[<i>] → | fit.R 
-✔ | 580 |  60 |   0 |  73 | 713 |  91 | x[<i>] → | fit.R 
-✔ | 581 |  60 |   0 |  73 | 714 |  91 | x[<i>] → | fit.R 
+✔ | 579 |  60 |   0 |  72 | 711 |  91 | TRUE → F | fit.R 
+✔ | 580 |  60 |   0 |  72 | 712 |  91 | TRUE → F | fit.R 
+✔ | 581 |  60 |   0 |  72 | 713 |  91 | x[<i>] → | fit.R 
+x | 581 |  60 |   0 |  73 | 714 |  91 | x[<i>] → | fit.R 
 ✔ | 582 |  60 |   0 |  73 | 715 |  91 | x[<i>] → | fit.R 
 ✔ | 583 |  60 |   0 |  73 | 716 |  91 | x[<i>] → | fit.R 
 ✔ | 584 |  60 |   0 |  73 | 717 |  91 | x[<i>] → | fit.R 
@@ -731,16 +731,16 @@ x | 579 |  60 |   0 |  73 | 712 |  91 | x[<i>] → | fit.R
 ✔ | 592 |  60 |   0 |  73 | 725 |  91 | x[<i>] → | fit.R 
 ✔ | 593 |  60 |   0 |  73 | 726 |  91 | x[<i>] → | fit.R 
 ✔ | 594 |  60 |   0 |  73 | 727 |  91 | x[<i>] → | fit.R 
-x | 594 |  60 |   0 |  74 | 728 |  91 | x[<i>] → | fit.R 
-x | 594 |  60 |   0 |  75 | 729 |  91 | x[<i>] → | fit.R 
-✔ | 595 |  60 |   0 |  75 | 730 |  91 | x[<i>] → | fit.R 
-✔ | 596 |  60 |   0 |  75 | 731 |  91 | x[<i>] → | fit.R 
+✔ | 595 |  60 |   0 |  73 | 728 |  91 | x[<i>] → | fit.R 
+✔ | 596 |  60 |   0 |  73 | 729 |  91 | x[<i>] → | fit.R 
+x | 596 |  60 |   0 |  74 | 730 |  91 | x[<i>] → | fit.R 
+x | 596 |  60 |   0 |  75 | 731 |  91 | x[<i>] → | fit.R 
 ✔ | 597 |  60 |   0 |  75 | 732 |  91 | x[<i>] → | fit.R 
 ✔ | 598 |  60 |   0 |  75 | 733 |  91 | x[<i>] → | fit.R 
 ✔ | 599 |  60 |   0 |  75 | 734 |  91 | x[<i>] → | fit.R 
-x | 599 |  61 |   0 |  75 | 735 |  91 | x[<i>] → | fit.R 
-✔ | 600 |  61 |   0 |  75 | 736 |  91 | x[<i>] → | fit.R 
-✔ | 601 |  61 |   0 |  75 | 737 |  91 | x[<i>] → | fit.R 
+✔ | 600 |  60 |   0 |  75 | 735 |  91 | x[<i>] → | fit.R 
+✔ | 601 |  60 |   0 |  75 | 736 |  91 | x[<i>] → | fit.R 
+x | 601 |  61 |   0 |  75 | 737 |  91 | x[<i>] → | fit.R 
 ✔ | 602 |  61 |   0 |  75 | 738 |  91 | x[<i>] → | fit.R 
 ✔ | 603 |  61 |   0 |  75 | 739 |  91 | x[<i>] → | fit.R 
 ✔ | 604 |  61 |   0 |  75 | 740 |  91 | x[<i>] → | fit.R 
@@ -808,12 +808,12 @@ x | 599 |  61 |   0 |  75 | 735 |  91 | x[<i>] → | fit.R
 ✔ | 666 |  61 |   0 |  75 | 802 |  92 | x[<i>] → | fit.R 
 ✔ | 667 |  61 |   0 |  75 | 803 |  92 | x[<i>] → | fit.R 
 ✔ | 668 |  61 |   0 |  75 | 804 |  92 | x[<i>] → | fit.R 
-x | 668 |  61 |   0 |  76 | 805 |  92 | x[<i>] → | fit.R 
-x | 668 |  61 |   0 |  77 | 806 |  92 | x[<i>] → | fit.R 
-✔ | 669 |  61 |   0 |  77 | 807 |  92 | x[<i>] → | fit.R 
-x | 669 |  61 |   0 |  78 | 808 |  92 | x[<i>] → | fit.R 
-✔ | 670 |  61 |   0 |  78 | 809 |  92 | x[<i>] → | fit.R 
-✔ | 671 |  61 |   0 |  78 | 810 |  92 | x[<i>] → | fit.R 
+✔ | 669 |  61 |   0 |  75 | 805 |  92 | x[<i>] → | fit.R 
+✔ | 670 |  61 |   0 |  75 | 806 |  92 | x[<i>] → | fit.R 
+x | 670 |  61 |   0 |  76 | 807 |  92 | x[<i>] → | fit.R 
+x | 670 |  61 |   0 |  77 | 808 |  92 | x[<i>] → | fit.R 
+✔ | 671 |  61 |   0 |  77 | 809 |  92 | x[<i>] → | fit.R 
+x | 671 |  61 |   0 |  78 | 810 |  92 | x[<i>] → | fit.R 
 ✔ | 672 |  61 |   0 |  78 | 811 |  92 | x[<i>] → | fit.R 
 ✔ | 673 |  61 |   0 |  78 | 812 |  92 | x[<i>] → | fit.R 
 ✔ | 674 |  61 |   0 |  78 | 813 |  92 | x[<i>] → | fit.R 
@@ -839,11 +839,11 @@ x | 669 |  61 |   0 |  78 | 808 |  92 | x[<i>] → | fit.R
 ✔ | 694 |  61 |   0 |  78 | 833 |  92 | x[<i>] → | fit.R 
 ✔ | 695 |  61 |   0 |  78 | 834 |  92 | x[<i>] → | fit.R 
 ✔ | 696 |  61 |   0 |  78 | 835 |  92 | x[<i>] → | fit.R 
-x | 696 |  61 |   0 |  79 | 836 |  92 | x[<i>] → | fit.R 
-x | 696 |  61 |   0 |  80 | 837 |  92 | x[<i>] → | fit.R 
-x | 696 |  61 |   0 |  81 | 838 |  92 | x[<i>] → | fit.R 
-✔ | 697 |  61 |   0 |  81 | 839 |  92 | x[<i>] → | fit.R 
-✔ | 698 |  61 |   0 |  81 | 840 |  92 | x[<i>] → | fit.R 
+✔ | 697 |  61 |   0 |  78 | 836 |  92 | x[<i>] → | fit.R 
+✔ | 698 |  61 |   0 |  78 | 837 |  92 | x[<i>] → | fit.R 
+x | 698 |  61 |   0 |  79 | 838 |  92 | x[<i>] → | fit.R 
+x | 698 |  61 |   0 |  80 | 839 |  92 | x[<i>] → | fit.R 
+x | 698 |  61 |   0 |  81 | 840 |  92 | x[<i>] → | fit.R 
 ✔ | 699 |  61 |   0 |  81 | 841 |  92 | x[<i>] → | fit.R 
 ✔ | 700 |  61 |   0 |  81 | 842 |  92 | x[<i>] → | fit.R 
 ✔ | 701 |  61 |   0 |  81 | 843 |  92 | x[<i>] → | fit.R 
@@ -856,25 +856,27 @@ x | 696 |  61 |   0 |  81 | 838 |  92 | x[<i>] → | fit.R
 ✔ | 708 |  61 |   0 |  81 | 850 |  92 | x[<i>] → | fit.R 
 ✔ | 709 |  61 |   0 |  81 | 851 |  92 | x[<i>] → | fit.R 
 ✔ | 710 |  61 |   0 |  81 | 852 |  92 | x[<i>] → | fit.R 
-x | 710 |  61 |   0 |  82 | 853 |  92 | x[<i>] → | fit.R 
-✔ | 711 |  61 |   0 |  82 | 854 |  92 | x[<i>] → | fit.R 
-✔ | 712 |  61 |   0 |  82 | 855 |  92 | x[<i>] → | fit.R 
+✔ | 711 |  61 |   0 |  81 | 853 |  92 | x[<i>] → | fit.R 
+✔ | 712 |  61 |   0 |  81 | 854 |  92 | x[<i>] → | fit.R 
+x | 712 |  61 |   0 |  82 | 855 |  92 | x[<i>] → | fit.R 
 ✔ | 713 |  61 |   0 |  82 | 856 |  92 | x[<i>] → | fit.R 
 ✔ | 714 |  61 |   0 |  82 | 857 |  92 | x[<i>] → | fit.R 
 ✔ | 715 |  61 |   0 |  82 | 858 |  92 | x[<i>] → | fit.R 
 ✔ | 716 |  61 |   0 |  82 | 859 |  92 | x[<i>] → | fit.R 
 ✔ | 717 |  61 |   0 |  82 | 860 |  92 | x[<i>] → | fit.R 
 ✔ | 718 |  61 |   0 |  82 | 861 |  92 | x[<i>] → | fit.R 
-x | 718 |  61 |   0 |  83 | 862 |  92 | x[<i>] → | fit.R 
-✔ | 719 |  61 |   0 |  83 | 863 |  92 | x[<i>] → | fit.R 
-✔ | 720 |  61 |   0 |  83 | 864 |  92 | x[<i>] → | fit.R 
+✔ | 719 |  61 |   0 |  82 | 862 |  92 | x[<i>] → | fit.R 
+✔ | 720 |  61 |   0 |  82 | 863 |  92 | x[<i>] → | fit.R 
+x | 720 |  61 |   0 |  83 | 864 |  92 | x[<i>] → | fit.R 
+✔ | 721 |  61 |   0 |  83 | 865 |  92 | x[<i>] → | fit.R 
+✔ | 722 |  61 |   0 |  83 | 866 |  92 | x[<i>] → | fit.R 
 ✔ |   1 |   0 |   0 |   0 |   1 |  92 | - → +    | grr.R 
 ✔ |   2 |   0 |   0 |   0 |   2 |  92 | - → +    | grr.R 
 ✔ |   3 |   0 |   0 |   0 |   3 |  92 | !<condit | grr.R 
 x |   3 |   0 |   0 |   1 |   4 |  92 | !<condit | grr.R 
 ✔ |   4 |   0 |   0 |   1 |   5 |  92 | !<condit | grr.R 
-✔ |   5 |   0 |   0 |   1 |   6 |  92 | !<condit | grr.R 
-✔ |   6 |   0 |   0 |   1 |   7 |  92 | != → ==  | grr.R 
+✔ |   5 |   0 |   0 |   1 |   6 |  93 | !<condit | grr.R 
+✔ |   6 |   0 |   0 |   1 |   7 |  93 | != → ==  | grr.R 
 ✔ |   7 |   0 |   0 |   1 |   8 |  93 | != → ==  | grr.R 
 ✔ |   8 |   0 |   0 |   1 |   9 |  93 | "" → "mu | grr.R 
 ✔ |   9 |   0 |   0 |   1 |  10 |  93 | * → /    | grr.R 
@@ -1035,268 +1037,268 @@ x | 149 |   1 |   0 |  13 | 163 |  93 | <non-emp | grr.R
 x | 150 |   1 |   0 |  14 | 165 |  93 | <non-emp | grr.R 
 ✔ | 151 |   1 |   0 |  14 | 166 |  93 | <non-emp | grr.R 
 x | 151 |   1 |   0 |  15 | 167 |  93 | <non-emp | grr.R 
-✔ | 152 |   1 |   0 |  15 | 168 |  93 | <non-emp | grr.R 
-x | 152 |   1 |   0 |  16 | 169 |  93 | <non-emp | grr.R 
-✔ | 153 |   1 |   0 |  16 | 170 |  94 | <non-emp | grr.R 
-✔ | 154 |   1 |   0 |  16 | 171 |  94 | <non-emp | grr.R 
-✔ | 155 |   1 |   0 |  16 | 172 |  94 | <non-emp | grr.R 
-✔ | 156 |   1 |   0 |  16 | 173 |  94 | <non-emp | grr.R 
-✔ | 157 |   1 |   0 |  16 | 174 |  94 | <non-emp | grr.R 
-✔ | 158 |   1 |   0 |  16 | 175 |  94 | <non-emp | grr.R 
-✔ | 159 |   1 |   0 |  16 | 176 |  94 | <non-emp | grr.R 
-✔ | 160 |   1 |   0 |  16 | 177 |  94 | <non-emp | grr.R 
-✔ | 161 |   1 |   0 |  16 | 178 |  94 | <non-emp | grr.R 
-✔ | 162 |   1 |   0 |  16 | 179 |  94 | <non-emp | grr.R 
-✔ | 163 |   1 |   0 |  16 | 180 |  94 | <non-emp | grr.R 
-✔ | 164 |   1 |   0 |  16 | 181 |  94 | <non-emp | grr.R 
-✔ | 165 |   1 |   0 |  16 | 182 |  94 | <non-emp | grr.R 
-✔ | 166 |   1 |   0 |  16 | 183 |  94 | <non-emp | grr.R 
-✔ | 167 |   1 |   0 |  16 | 184 |  94 | <non-emp | grr.R 
-✔ | 168 |   1 |   0 |  16 | 185 |  94 | <non-emp | grr.R 
-x | 168 |   1 |   0 |  17 | 186 |  94 | <non-emp | grr.R 
-✔ | 169 |   1 |   0 |  17 | 187 |  94 | <non-emp | grr.R 
-✔ | 170 |   1 |   0 |  17 | 188 |  94 | <non-emp | grr.R 
-✔ | 171 |   1 |   0 |  17 | 189 |  94 | == → !=  | grr.R 
-✔ | 172 |   1 |   0 |  17 | 190 |  94 | == → !=  | grr.R 
-✔ | 173 |   1 |   0 |  17 | 191 |  94 | == → !=  | grr.R 
-✔ | 174 |   1 |   0 |  17 | 192 |  94 | == → !=  | grr.R 
-✔ | 175 |   1 |   0 |  17 | 193 |  94 | == → !=  | grr.R 
-✔ | 176 |   1 |   0 |  17 | 194 |  94 | > → <    | grr.R 
-✔ | 177 |   1 |   0 |  17 | 195 |  94 | > → <    | grr.R 
-✔ | 178 |   1 |   0 |  17 | 196 |  94 | > → <    | grr.R 
-x | 178 |   1 |   0 |  18 | 197 |  94 | > → >=   | grr.R 
-x | 178 |   2 |   0 |  18 | 198 |  94 | > → >=   | grr.R 
-✔ | 179 |   2 |   0 |  18 | 199 |  94 | > → >=   | grr.R 
-✔ | 180 |   2 |   0 |  18 | 200 |  94 | || → &&  | grr.R 
-✔ | 181 |   2 |   0 |  18 | 201 |  94 | || → &&  | grr.R 
-✔ | 182 |   2 |   0 |  18 | 202 |  94 | || → &&  | grr.R 
-✔ | 183 |   2 |   0 |  18 | 203 |  94 | || → &&  | grr.R 
-✔ | 184 |   2 |   0 |  18 | 204 |  94 | || → &&  | grr.R 
-✔ | 185 |   2 |   0 |  18 | 205 |  94 | || → &&  | grr.R 
-✔ | 186 |   2 |   0 |  18 | 206 |  94 | FALSE →  | grr.R 
-✔ | 187 |   2 |   0 |  18 | 207 |  94 | FALSE →  | grr.R 
-✔ | 188 |   2 |   0 |  18 | 208 |  94 | FALSE →  | grr.R 
-✔ | 189 |   2 |   0 |  18 | 209 |  94 | FALSE →  | grr.R 
-✔ | 190 |   2 |   0 |  18 | 210 |  94 | FALSE →  | grr.R 
-✔ | 191 |   2 |   0 |  18 | 211 |  94 | FALSE →  | grr.R 
-✔ | 192 |   2 |   0 |  18 | 212 |  94 | FALSE →  | grr.R 
-✔ | 193 |   2 |   0 |  18 | 213 |  94 | FALSE →  | grr.R 
-✔ | 194 |   2 |   0 |  18 | 214 |  94 | FALSE →  | grr.R 
-✔ | 195 |   2 |   0 |  18 | 215 |  94 | FALSE →  | grr.R 
-x | 195 |   3 |   0 |  18 | 216 |  94 | NA_real_ | grr.R 
-x | 195 |   4 |   0 |  18 | 217 |  93 | NA_real_ | grr.R 
-x | 195 |   5 |   0 |  18 | 218 |  93 | NA_real_ | grr.R 
-✔ | 196 |   5 |   0 |  18 | 219 |  93 | NULL → N | grr.R 
-✔ | 197 |   5 |   0 |  18 | 220 |  93 | NULL → N | grr.R 
-✔ | 198 |   5 |   0 |  18 | 221 |  93 | NULL → N | grr.R 
-✔ | 199 |   5 |   0 |  18 | 222 |  93 | TRUE → F | grr.R 
-✔ | 200 |   5 |   0 |  18 | 223 |  93 | x[<i>] → | grr.R 
-✔ | 201 |   5 |   0 |  18 | 224 |  93 | x[<i>] → | grr.R 
-✔ | 202 |   5 |   0 |  18 | 225 |  93 | x[<i>] → | grr.R 
-✔ | 203 |   5 |   0 |  18 | 226 |  93 | x[<i>] → | grr.R 
-✔ | 204 |   5 |   0 |  18 | 227 |  93 | x[<i>] → | grr.R 
-✔ | 205 |   5 |   0 |  18 | 228 |  93 | x[<i>] → | grr.R 
-✔ | 206 |   5 |   0 |  18 | 229 |  93 | x[<i>] → | grr.R 
-✔ | 207 |   5 |   0 |  18 | 230 |  93 | x[<i>] → | grr.R 
-✔ | 208 |   5 |   0 |  18 | 231 |  93 | x[<i>] → | grr.R 
-✔ | 209 |   5 |   0 |  18 | 232 |  93 | x[<i>] → | grr.R 
-✔ | 210 |   5 |   0 |  18 | 233 |  93 | x[<i>] → | grr.R 
-✔ | 211 |   5 |   0 |  18 | 234 |  93 | x[<i>] → | grr.R 
-✔ | 212 |   5 |   0 |  18 | 235 |  93 | x[<i>] → | grr.R 
-✔ | 213 |   5 |   0 |  18 | 236 |  94 | x[<i>] → | grr.R 
-✔ | 214 |   5 |   0 |  18 | 237 |  94 | x[<i>] → | grr.R 
-✔ | 215 |   5 |   0 |  18 | 238 |  94 | x[<i>] → | grr.R 
-✔ | 216 |   5 |   0 |  18 | 239 |  94 | x[<i>] → | grr.R 
-✔ | 217 |   5 |   0 |  18 | 240 |  94 | x[<i>] → | grr.R 
-✔ | 218 |   5 |   0 |  18 | 241 |  94 | x[<i>] → | grr.R 
-✔ | 219 |   5 |   0 |  18 | 242 |  94 | x[<i>] → | grr.R 
+✔ | 152 |   1 |   0 |  15 | 168 |  94 | <non-emp | grr.R 
+✔ | 153 |   1 |   0 |  15 | 169 |  94 | <non-emp | grr.R 
+✔ | 154 |   1 |   0 |  15 | 170 |  94 | <non-emp | grr.R 
+✔ | 155 |   1 |   0 |  15 | 171 |  94 | <non-emp | grr.R 
+✔ | 156 |   1 |   0 |  15 | 172 |  94 | <non-emp | grr.R 
+✔ | 157 |   1 |   0 |  15 | 173 |  94 | <non-emp | grr.R 
+✔ | 158 |   1 |   0 |  15 | 174 |  94 | <non-emp | grr.R 
+✔ | 159 |   1 |   0 |  15 | 175 |  94 | <non-emp | grr.R 
+✔ | 160 |   1 |   0 |  15 | 176 |  94 | <non-emp | grr.R 
+✔ | 161 |   1 |   0 |  15 | 177 |  94 | <non-emp | grr.R 
+✔ | 162 |   1 |   0 |  15 | 178 |  94 | <non-emp | grr.R 
+✔ | 163 |   1 |   0 |  15 | 179 |  94 | <non-emp | grr.R 
+✔ | 164 |   1 |   0 |  15 | 180 |  94 | <non-emp | grr.R 
+✔ | 165 |   1 |   0 |  15 | 181 |  94 | <non-emp | grr.R 
+✔ | 166 |   1 |   0 |  15 | 182 |  94 | <non-emp | grr.R 
+✔ | 167 |   1 |   0 |  15 | 183 |  94 | <non-emp | grr.R 
+✔ | 168 |   1 |   0 |  15 | 184 |  94 | <non-emp | grr.R 
+✔ | 169 |   1 |   0 |  15 | 185 |  94 | <non-emp | grr.R 
+x | 169 |   1 |   0 |  16 | 186 |  94 | <non-emp | grr.R 
+✔ | 170 |   1 |   0 |  16 | 187 |  94 | <non-emp | grr.R 
+✔ | 171 |   1 |   0 |  16 | 188 |  94 | <non-emp | grr.R 
+✔ | 172 |   1 |   0 |  16 | 189 |  94 | == → !=  | grr.R 
+✔ | 173 |   1 |   0 |  16 | 190 |  94 | == → !=  | grr.R 
+✔ | 174 |   1 |   0 |  16 | 191 |  94 | == → !=  | grr.R 
+✔ | 175 |   1 |   0 |  16 | 192 |  94 | == → !=  | grr.R 
+✔ | 176 |   1 |   0 |  16 | 193 |  94 | == → !=  | grr.R 
+✔ | 177 |   1 |   0 |  16 | 194 |  94 | > → <    | grr.R 
+✔ | 178 |   1 |   0 |  16 | 195 |  94 | > → <    | grr.R 
+✔ | 179 |   1 |   0 |  16 | 196 |  94 | > → <    | grr.R 
+x | 179 |   1 |   0 |  17 | 197 |  94 | > → >=   | grr.R 
+x | 179 |   2 |   0 |  17 | 198 |  94 | > → >=   | grr.R 
+✔ | 180 |   2 |   0 |  17 | 199 |  94 | > → >=   | grr.R 
+✔ | 181 |   2 |   0 |  17 | 200 |  94 | || → &&  | grr.R 
+✔ | 182 |   2 |   0 |  17 | 201 |  94 | || → &&  | grr.R 
+✔ | 183 |   2 |   0 |  17 | 202 |  94 | || → &&  | grr.R 
+✔ | 184 |   2 |   0 |  17 | 203 |  94 | || → &&  | grr.R 
+✔ | 185 |   2 |   0 |  17 | 204 |  94 | || → &&  | grr.R 
+✔ | 186 |   2 |   0 |  17 | 205 |  94 | || → &&  | grr.R 
+✔ | 187 |   2 |   0 |  17 | 206 |  94 | FALSE →  | grr.R 
+✔ | 188 |   2 |   0 |  17 | 207 |  94 | FALSE →  | grr.R 
+✔ | 189 |   2 |   0 |  17 | 208 |  94 | FALSE →  | grr.R 
+✔ | 190 |   2 |   0 |  17 | 209 |  94 | FALSE →  | grr.R 
+✔ | 191 |   2 |   0 |  17 | 210 |  94 | FALSE →  | grr.R 
+✔ | 192 |   2 |   0 |  17 | 211 |  94 | FALSE →  | grr.R 
+✔ | 193 |   2 |   0 |  17 | 212 |  94 | FALSE →  | grr.R 
+✔ | 194 |   2 |   0 |  17 | 213 |  94 | FALSE →  | grr.R 
+✔ | 195 |   2 |   0 |  17 | 214 |  94 | FALSE →  | grr.R 
+✔ | 196 |   2 |   0 |  17 | 215 |  94 | FALSE →  | grr.R 
+x | 196 |   3 |   0 |  17 | 216 |  94 | NA_real_ | grr.R 
+x | 196 |   4 |   0 |  17 | 217 |  93 | NA_real_ | grr.R 
+x | 196 |   5 |   0 |  17 | 218 |  93 | NA_real_ | grr.R 
+✔ | 197 |   5 |   0 |  17 | 219 |  93 | NULL → N | grr.R 
+✔ | 198 |   5 |   0 |  17 | 220 |  93 | NULL → N | grr.R 
+✔ | 199 |   5 |   0 |  17 | 221 |  93 | NULL → N | grr.R 
+✔ | 200 |   5 |   0 |  17 | 222 |  93 | TRUE → F | grr.R 
+✔ | 201 |   5 |   0 |  17 | 223 |  93 | x[<i>] → | grr.R 
+✔ | 202 |   5 |   0 |  17 | 224 |  93 | x[<i>] → | grr.R 
+✔ | 203 |   5 |   0 |  17 | 225 |  93 | x[<i>] → | grr.R 
+✔ | 204 |   5 |   0 |  17 | 226 |  93 | x[<i>] → | grr.R 
+✔ | 205 |   5 |   0 |  17 | 227 |  93 | x[<i>] → | grr.R 
+✔ | 206 |   5 |   0 |  17 | 228 |  93 | x[<i>] → | grr.R 
+✔ | 207 |   5 |   0 |  17 | 229 |  93 | x[<i>] → | grr.R 
+✔ | 208 |   5 |   0 |  17 | 230 |  93 | x[<i>] → | grr.R 
+✔ | 209 |   5 |   0 |  17 | 231 |  93 | x[<i>] → | grr.R 
+✔ | 210 |   5 |   0 |  17 | 232 |  93 | x[<i>] → | grr.R 
+✔ | 211 |   5 |   0 |  17 | 233 |  93 | x[<i>] → | grr.R 
+✔ | 212 |   5 |   0 |  17 | 234 |  94 | x[<i>] → | grr.R 
+✔ | 213 |   5 |   0 |  17 | 235 |  94 | x[<i>] → | grr.R 
+✔ | 214 |   5 |   0 |  17 | 236 |  94 | x[<i>] → | grr.R 
+✔ | 215 |   5 |   0 |  17 | 237 |  94 | x[<i>] → | grr.R 
+✔ | 216 |   5 |   0 |  17 | 238 |  94 | x[<i>] → | grr.R 
+✔ | 217 |   5 |   0 |  17 | 239 |  94 | x[<i>] → | grr.R 
+✔ | 218 |   5 |   0 |  17 | 240 |  94 | x[<i>] → | grr.R 
+✔ | 219 |   5 |   0 |  17 | 241 |  94 | x[<i>] → | grr.R 
+✔ | 220 |   5 |   0 |  17 | 242 |  94 | x[<i>] → | grr.R 
 
-Duration: 15860.78 s
+Duration: 16286.19 s
 
 ── Survived Mutants ────────────────────────────────────────────────────────────
 fit.R  - → +
-  265-       residual <- dat$y - stats::ave(dat$y, dat[[factors]], FUN = mean)
-  265+       residual <- dat$y + stats::ave(dat$y, dat[[factors]], FUN = mean)
+  269-       residual <- dat$y - stats::ave(dat$y, dat[[factors]], FUN = mean)
+  269+       residual <- dat$y + stats::ave(dat$y, dat[[factors]], FUN = mean)
 fit.R  - → +
-  266-       msa_numeric_check_residual(sum(residual^2), sum((dat$y - mean(dat$y))^2))
-  266+       msa_numeric_check_residual(sum(residual^2), sum((dat$y + mean(dat$y))^2))
+  270-       msa_numeric_check_residual(sum(residual^2), sum((dat$y - mean(dat$y))^2))
+  270+       msa_numeric_check_residual(sum(residual^2), sum((dat$y + mean(dat$y))^2))
 fit.R  - → +
-  289-   msa_numeric_check_residual(sum(residual^2), sum((dat$y - grand)^2))
-  289+   msa_numeric_check_residual(sum(residual^2), sum((dat$y + grand)^2))
+  293-   msa_numeric_check_residual(sum(residual^2), sum((dat$y - grand)^2))
+  293+   msa_numeric_check_residual(sum(residual^2), sum((dat$y + grand)^2))
 fit.R  - → +
-  344-     r <- as.numeric(Zt %*% residual) - counts * mean(residual)
-  344+     r <- as.numeric(Zt %*% residual) + counts * mean(residual)
+  348-     r <- as.numeric(Zt %*% residual) - counts * mean(residual)
+  348+     r <- as.numeric(Zt %*% residual) + counts * mean(residual)
 fit.R  * → /
-  423-       roundoff <- 64 * .Machine$double.eps * max(1, abs(state$value))
-  423+       roundoff <- 64 * .Machine$double.eps / max(1, abs(state$value))
+  427-       roundoff <- 64 * .Machine$double.eps * max(1, abs(state$value))
+  427+       roundoff <- 64 * .Machine$double.eps / max(1, abs(state$value))
 fit.R  * → /
-  495-   residual_sd <- sqrt(solution$state$residual) * conditioning$scale * conditioning$binary_scale
-  495+   residual_sd <- sqrt(solution$state$residual) * conditioning$scale / conditioning$binary_scale
+  503-   residual_sd <- sqrt(solution$state$residual) * conditioning$scale * conditioning$binary_scale
+  503+   residual_sd <- sqrt(solution$state$residual) * conditioning$scale / conditioning$binary_scale
 fit.R  ^ → *
-  266-       msa_numeric_check_residual(sum(residual^2), sum((dat$y - mean(dat$y))^2))
-  266+       msa_numeric_check_residual(sum(residual^2), sum((dat$y - mean(dat$y))*2))
+  270-       msa_numeric_check_residual(sum(residual^2), sum((dat$y - mean(dat$y))^2))
+  270+       msa_numeric_check_residual(sum(residual^2), sum((dat$y - mean(dat$y))*2))
 fit.R  ^ → *
-  289-   msa_numeric_check_residual(sum(residual^2), sum((dat$y - grand)^2))
-  289+   msa_numeric_check_residual(sum(residual^2), sum((dat$y - grand)*2))
+  293-   msa_numeric_check_residual(sum(residual^2), sum((dat$y - grand)^2))
+  293+   msa_numeric_check_residual(sum(residual^2), sum((dat$y - grand)*2))
 fit.R  + → -
-  229-   cell <- stats::aggregate(y ~ item + prompt + model + block, data = dat, FUN = length)
-  229+   cell <- stats::aggregate(y ~ item - prompt + model + block, data = dat, FUN = length)
+  233-   cell <- stats::aggregate(y ~ item + prompt + model + block, data = dat, FUN = length)
+  233+   cell <- stats::aggregate(y ~ item - prompt + model + block, data = dat, FUN = length)
 fit.R  + → -
-  229-   cell <- stats::aggregate(y ~ item + prompt + model + block, data = dat, FUN = length)
-  229+   cell <- stats::aggregate(y ~ item + prompt - model + block, data = dat, FUN = length)
+  233-   cell <- stats::aggregate(y ~ item + prompt + model + block, data = dat, FUN = length)
+  233+   cell <- stats::aggregate(y ~ item + prompt - model + block, data = dat, FUN = length)
 fit.R  + → -
-  229-   cell <- stats::aggregate(y ~ item + prompt + model + block, data = dat, FUN = length)
-  229+   cell <- stats::aggregate(y ~ item + prompt + model - block, data = dat, FUN = length)
+  233-   cell <- stats::aggregate(y ~ item + prompt + model + block, data = dat, FUN = length)
+  233+   cell <- stats::aggregate(y ~ item + prompt + model - block, data = dat, FUN = length)
 fit.R  < → <=
-  295-   if (length(variance) == 1L && variance < 0) {
-  295+   if (length(variance) == 1L && variance <= 0) {
+  299-   if (length(variance) == 1L && variance < 0) {
+  299+   if (length(variance) == 1L && variance <= 0) {
 fit.R  < → <=
-  370-   free <- which(lambda > 0 | state$gradient < 0)
-  370+   free <- which(lambda > 0 | state$gradient <= 0)
+  374-   free <- which(lambda > 0 | state$gradient < 0)
+  374+   free <- which(lambda > 0 | state$gradient <= 0)
 fit.R  < → <=
-  381-     blocked <- lambda[free] == 0 & direction < 0
-  381+     blocked <- lambda[free] == 0 & direction <= 0
+  385-     blocked <- lambda[free] == 0 & direction < 0
+  385+     blocked <- lambda[free] == 0 & direction <= 0
 fit.R  <= → <
-  501-   if (any(!is.finite(expected_variances)) || any(expected_variances[positive] <= 0) ||
-  501+   if (any(!is.finite(expected_variances)) || any(expected_variances[positive] < 0) ||
+  509-   if (any(!is.finite(expected_variances)) || any(expected_variances[positive] <= 0) ||
+  509+   if (any(!is.finite(expected_variances)) || any(expected_variances[positive] < 0) ||
 fit.R  <n> - 1 → <n> - 1
-  266-       msa_numeric_check_residual(sum(residual^2), sum((dat$y - mean(dat$y))^2))
-  266+       msa_numeric_check_residual(sum(residual^2), sum((dat$y - mean(dat$y))^1))
+  270-       msa_numeric_check_residual(sum(residual^2), sum((dat$y - mean(dat$y))^2))
+  270+       msa_numeric_check_residual(sum(residual^2), sum((dat$y - mean(dat$y))^1))
 fit.R  <n> - 1 → <n> - 1
-  289-   msa_numeric_check_residual(sum(residual^2), sum((dat$y - grand)^2))
-  289+   msa_numeric_check_residual(sum(residual^2), sum((dat$y - grand)^1))
+  293-   msa_numeric_check_residual(sum(residual^2), sum((dat$y - grand)^2))
+  293+   msa_numeric_check_residual(sum(residual^2), sum((dat$y - grand)^1))
 fit.R  <n> - 1 → <n> - 1
-  348-     gram <- curvature <- matrix(0, k, k)
-  348+     gram <- curvature <- matrix(-1, k, k)
+  352-     gram <- curvature <- matrix(0, k, k)
+  352+     gram <- curvature <- matrix(-1, k, k)
 fit.R  <n> - 1 → <n> - 1
-  381-     blocked <- lambda[free] == 0 & direction < 0
-  381+     blocked <- lambda[free] == 0 & direction < -1
+  385-     blocked <- lambda[free] == 0 & direction < 0
+  385+     blocked <- lambda[free] == 0 & direction < -1
 fit.R  <n> - 1 → <n> - 1
-  411-     descending <- which(step < 0)
-  411+     descending <- which(step < -1)
+  415-     descending <- which(step < 0)
+  415+     descending <- which(step < -1)
 fit.R  <n> - 1 → <n> - 1
-  416-       candidate <- pmax(0, lambda + alpha * step)
-  416+       candidate <- pmax(-1, lambda + alpha * step)
+  420-       candidate <- pmax(0, lambda + alpha * step)
+  420+       candidate <- pmax(-1, lambda + alpha * step)
 fit.R  <n> - 1 → <n> - 1
-  501-   if (any(!is.finite(expected_variances)) || any(expected_variances[positive] <= 0) ||
-  501+   if (any(!is.finite(expected_variances)) || any(expected_variances[positive] <= -1) ||
+  509-   if (any(!is.finite(expected_variances)) || any(expected_variances[positive] <= 0) ||
+  509+   if (any(!is.finite(expected_variances)) || any(expected_variances[positive] <= -1) ||
 fit.R  <n> - 1 → <n> - 1
-  505-   derivs <- list(gradient = 2 * theta * solution$state$gradient,
-  505+   derivs <- list(gradient = 1 * theta * solution$state$gradient,
+  513-   derivs <- list(gradient = 2 * theta * solution$state$gradient,
+  513+   derivs <- list(gradient = 1 * theta * solution$state$gradient,
 fit.R  <n> - 1 → <n> - 1
-  567-   tab$pct <- if (total == 0) rep(NA_real_, nrow(tab)) else 100 * tab$variance / total
-  567+   tab$pct <- if (total == -1) rep(NA_real_, nrow(tab)) else 100 * tab$variance / total
+  575-   tab$pct <- if (total == 0) rep(NA_real_, nrow(tab)) else 100 * tab$variance / total
+  575+   tab$pct <- if (total == -1) rep(NA_real_, nrow(tab)) else 100 * tab$variance / total
 fit.R  <n> + 1 → <n> + 1
-  263-   if (length(counts) != prod(sizes) || any(counts != counts[1])) {
-  263+   if (length(counts) != prod(sizes) || any(counts != counts[2])) {
+  267-   if (length(counts) != prod(sizes) || any(counts != counts[1])) {
+  267+   if (length(counts) != prod(sizes) || any(counts != counts[2])) {
 fit.R  <n> + 1 → <n> + 1
-  266-       msa_numeric_check_residual(sum(residual^2), sum((dat$y - mean(dat$y))^2))
-  266+       msa_numeric_check_residual(sum(residual^2), sum((dat$y - mean(dat$y))^3))
+  270-       msa_numeric_check_residual(sum(residual^2), sum((dat$y - mean(dat$y))^2))
+  270+       msa_numeric_check_residual(sum(residual^2), sum((dat$y - mean(dat$y))^3))
 fit.R  <n> + 1 → <n> + 1
-  348-     gram <- curvature <- matrix(0, k, k)
-  348+     gram <- curvature <- matrix(1, k, k)
+  352-     gram <- curvature <- matrix(0, k, k)
+  352+     gram <- curvature <- matrix(1, k, k)
 fit.R  <n> + 1 → <n> + 1
-  381-     blocked <- lambda[free] == 0 & direction < 0
-  381+     blocked <- lambda[free] == 0 & direction < 1
+  385-     blocked <- lambda[free] == 0 & direction < 0
+  385+     blocked <- lambda[free] == 0 & direction < 1
 fit.R  <n> + 1 → <n> + 1
-  500-   positive <- c(theta > 0, TRUE)
-  500+   positive <- c(theta > 1, TRUE)
+  508-   positive <- c(theta > 0, TRUE)
+  508+   positive <- c(theta > 1, TRUE)
 fit.R  <n> + 1 → <n> + 1
-  505-   derivs <- list(gradient = 2 * theta * solution$state$gradient,
-  505+   derivs <- list(gradient = 3 * theta * solution$state$gradient,
+  513-   derivs <- list(gradient = 2 * theta * solution$state$gradient,
+  513+   derivs <- list(gradient = 3 * theta * solution$state$gradient,
 fit.R  <n> + 1 → <n> + 1
-  567-   tab$pct <- if (total == 0) rep(NA_real_, nrow(tab)) else 100 * tab$variance / total
-  567+   tab$pct <- if (total == 1) rep(NA_real_, nrow(tab)) else 100 * tab$variance / total
+  575-   tab$pct <- if (total == 0) rep(NA_real_, nrow(tab)) else 100 * tab$variance / total
+  575+   tab$pct <- if (total == 1) rep(NA_real_, nrow(tab)) else 100 * tab$variance / total
 fit.R  <non-empty string> → ""
-  227-   singular <- if (inherits(model, "merMod")) lme4::isSingular(model) else any(vc$variance[vc$source != "Residual"] < 1e-6)
-  227+   singular <- if (inherits(model, "")) lme4::isSingular(model) else any(vc$variance[vc$source != "Residual"] < 1e-6)
+  231-   singular <- if (inherits(model, "merMod")) lme4::isSingular(model) else any(vc$variance[vc$source != "Residual"] < 1e-6)
+  231+   singular <- if (inherits(model, "")) lme4::isSingular(model) else any(vc$variance[vc$source != "Residual"] < 1e-6)
 fit.R  <non-empty string> → ""
-  541-       out <- out[out$source != "Residual", , drop = FALSE]
-  541+       out <- out[out$source != "", , drop = FALSE]
+  549-       out <- out[out$source != "Residual", , drop = FALSE]
+  549+       out <- out[out$source != "", , drop = FALSE]
 fit.R  > → <
-  500-   positive <- c(theta > 0, TRUE)
-  500+   positive <- c(theta < 0, TRUE)
+  508-   positive <- c(theta > 0, TRUE)
+  508+   positive <- c(theta < 0, TRUE)
 fit.R  > → >=
-  502-       any(spacing / expected_variances[positive] > precision)) {
-  502+       any(spacing / expected_variances[positive] >= precision)) {
+  510-       any(spacing / expected_variances[positive] > precision)) {
+  510+       any(spacing / expected_variances[positive] >= precision)) {
 fit.R  > → >=
-  523-       any(abs(variances[positive] / expected_variances[positive] - 1) > precision)) {
-  523+       any(abs(variances[positive] / expected_variances[positive] - 1) >= precision)) {
+  531-       any(abs(variances[positive] / expected_variances[positive] - 1) > precision)) {
+  531+       any(abs(variances[positive] / expected_variances[positive] - 1) >= precision)) {
 fit.R  || → &&
-  501-   if (any(!is.finite(expected_variances)) || any(expected_variances[positive] <= 0) ||
-  501+   if (any(!is.finite(expected_variances)) && any(expected_variances[positive] <= 0) ||
+  509-   if (any(!is.finite(expected_variances)) || any(expected_variances[positive] <= 0) ||
+  509+   if (any(!is.finite(expected_variances)) && any(expected_variances[positive] <= 0) ||
 fit.R  || → &&
-  522-   if (!is.finite(value) || any(!is.finite(variances)) ||
-  522+   if (!is.finite(value) && any(!is.finite(variances)) ||
+  530-   if (!is.finite(value) || any(!is.finite(variances)) ||
+  530+   if (!is.finite(value) && any(!is.finite(variances)) ||
 fit.R  FALSE → TRUE
-  109-   d <- as.data.frame(runs, stringsAsFactors = FALSE)
-  109+   d <- as.data.frame(runs, stringsAsFactors = TRUE)
+  113-   d <- as.data.frame(runs, stringsAsFactors = FALSE)
+  113+   d <- as.data.frame(runs, stringsAsFactors = TRUE)
 fit.R  FALSE → TRUE
-  205-     dat <- droplevels(dat[analysed, , drop = FALSE])
-  205+     dat <- droplevels(dat[analysed, , drop = TRUE])
+  209-     dat <- droplevels(dat[analysed, , drop = FALSE])
+  209+     dat <- droplevels(dat[analysed, , drop = TRUE])
 fit.R  FALSE → TRUE
-  221-     vc <- rbind(vc[vc$source != "Residual", , drop = FALSE],
-  221+     vc <- rbind(vc[vc$source != "Residual", , drop = TRUE],
+  225-     vc <- rbind(vc[vc$source != "Residual", , drop = FALSE],
+  225+     vc <- rbind(vc[vc$source != "Residual", , drop = TRUE],
 fit.R  FALSE → TRUE
-  222-                 data.frame(source = fixed_two, variance = unname(derived), stringsAsFactors = FALSE),
-  222+                 data.frame(source = fixed_two, variance = unname(derived), stringsAsFactors = TRUE),
+  226-                 data.frame(source = fixed_two, variance = unname(derived), stringsAsFactors = FALSE),
+  226+                 data.frame(source = fixed_two, variance = unname(derived), stringsAsFactors = TRUE),
 fit.R  FALSE → TRUE
-  223-                 vc[vc$source == "Residual", , drop = FALSE])
-  223+                 vc[vc$source == "Residual", , drop = TRUE])
+  227-                 vc[vc$source == "Residual", , drop = FALSE])
+  227+                 vc[vc$source == "Residual", , drop = TRUE])
 fit.R  FALSE → TRUE
-  333-     }, warning = function(w) stop(conditionMessage(w), call. = FALSE)), error = function(e) {
-  333+     }, warning = function(w) stop(conditionMessage(w), call. = TRUE)), error = function(e) {
+  337-     }, warning = function(w) stop(conditionMessage(w), call. = FALSE)), error = function(e) {
+  337+     }, warning = function(w) stop(conditionMessage(w), call. = TRUE)), error = function(e) {
 fit.R  FALSE → TRUE
-  338-     A <- as.matrix(cross - Matrix::crossprod(C, solved[, seq_along(w), drop = FALSE]))
-  338+     A <- as.matrix(cross - Matrix::crossprod(C, solved[, seq_along(w), drop = TRUE]))
+  342-     A <- as.matrix(cross - Matrix::crossprod(C, solved[, seq_along(w), drop = FALSE]))
+  342+     A <- as.matrix(cross - Matrix::crossprod(C, solved[, seq_along(w), drop = TRUE]))
 fit.R  FALSE → TRUE
-  351-         block <- A[blocks[[i]], blocks[[j]], drop = FALSE]
-  351+         block <- A[blocks[[i]], blocks[[j]], drop = TRUE]
+  355-         block <- A[blocks[[i]], blocks[[j]], drop = FALSE]
+  355+         block <- A[blocks[[i]], blocks[[j]], drop = TRUE]
 fit.R  FALSE → TRUE
-  375-     H <- state$Hessian[free, free, drop = FALSE] * outer(scale[free], scale[free])
-  375+     H <- state$Hessian[free, free, drop = TRUE] * outer(scale[free], scale[free])
+  379-     H <- state$Hessian[free, free, drop = FALSE] * outer(scale[free], scale[free])
+  379+     H <- state$Hessian[free, free, drop = TRUE] * outer(scale[free], scale[free])
 fit.R  FALSE → TRUE
-  541-       out <- out[out$source != "Residual", , drop = FALSE]
-  541+       out <- out[out$source != "Residual", , drop = TRUE]
+  549-       out <- out[out$source != "Residual", , drop = FALSE]
+  549+       out <- out[out$source != "Residual", , drop = TRUE]
 fit.R  NA_integer_ → NA
-  138-       y <- ifelse(vv %in% levels, as.integer(vv == levels[2]), NA_integer_)
-  138+       y <- ifelse(vv %in% levels, as.integer(vv == levels[2]), NA)
+  142-       y <- ifelse(vv %in% levels, as.integer(vv == levels[2]), NA_integer_)
+  142+       y <- ifelse(vv %in% levels, as.integer(vv == levels[2]), NA)
 fit.R  NA_real_ → NA
-  567-   tab$pct <- if (total == 0) rep(NA_real_, nrow(tab)) else 100 * tab$variance / total
-  567+   tab$pct <- if (total == 0) rep(NA, nrow(tab)) else 100 * tab$variance / total
+  575-   tab$pct <- if (total == 0) rep(NA_real_, nrow(tab)) else 100 * tab$variance / total
+  575+   tab$pct <- if (total == 0) rep(NA, nrow(tab)) else 100 * tab$variance / total
 fit.R  TRUE → FALSE
-  262-   counts <- table(interaction(dat[factors], drop = TRUE))
-  262+   counts <- table(interaction(dat[factors], drop = FALSE))
+  266-   counts <- table(interaction(dat[factors], drop = TRUE))
+  266+   counts <- table(interaction(dat[factors], drop = FALSE))
 fit.R  TRUE → FALSE
-  277-     group <- interaction(dat[terms[[j]]], drop = TRUE)
-  277+     group <- interaction(dat[terms[[j]]], drop = FALSE)
+  281-     group <- interaction(dat[terms[[j]]], drop = TRUE)
+  281+     group <- interaction(dat[terms[[j]]], drop = FALSE)
 fit.R  TRUE → FALSE
-  320-   cross <- Matrix::Matrix(cross, sparse = TRUE)
-  320+   cross <- Matrix::Matrix(cross, sparse = FALSE)
+  324-   cross <- Matrix::Matrix(cross, sparse = TRUE)
+  324+   cross <- Matrix::Matrix(cross, sparse = FALSE)
 fit.R  TRUE → FALSE
-  331-       factor <- Matrix::Cholesky(B, LDL = FALSE, perm = TRUE)
-  331+       factor <- Matrix::Cholesky(B, LDL = FALSE, perm = FALSE)
+  335-       factor <- Matrix::Cholesky(B, LDL = FALSE, perm = TRUE)
+  335+       factor <- Matrix::Cholesky(B, LDL = FALSE, perm = FALSE)
 fit.R  TRUE → FALSE
-  376-     e <- eigen(H, symmetric = TRUE)
-  376+     e <- eigen(H, symmetric = FALSE)
+  380-     e <- eigen(H, symmetric = TRUE)
+  380+     e <- eigen(H, symmetric = FALSE)
 fit.R  TRUE → FALSE
-  396-   ev <- eigen(information, symmetric = TRUE, only.values = TRUE)$values
-  396+   ev <- eigen(information, symmetric = FALSE, only.values = TRUE)$values
+  400-   ev <- eigen(information, symmetric = TRUE, only.values = TRUE)$values
+  400+   ev <- eigen(information, symmetric = FALSE, only.values = TRUE)$values
 fit.R  TRUE → FALSE
-  396-   ev <- eigen(information, symmetric = TRUE, only.values = TRUE)$values
-  396+   ev <- eigen(information, symmetric = TRUE, only.values = FALSE)$values
+  400-   ev <- eigen(information, symmetric = TRUE, only.values = TRUE)$values
+  400+   ev <- eigen(information, symmetric = TRUE, only.values = FALSE)$values
 fit.R  TRUE → FALSE
-  449-   lf <- lme4::lFormula(form, data = scaled, REML = TRUE, control = control)
-  449+   lf <- lme4::lFormula(form, data = scaled, REML = FALSE, control = control)
+  453-   lf <- lme4::lFormula(form, data = scaled, REML = TRUE, control = control)
+  453+   lf <- lme4::lFormula(form, data = scaled, REML = FALSE, control = control)
 fit.R  TRUE → FALSE
-  451-   terms <- strsplit(names, ":", fixed = TRUE)
-  451+   terms <- strsplit(names, ":", fixed = FALSE)
+  455-   terms <- strsplit(names, ":", fixed = TRUE)
+  455+   terms <- strsplit(names, ":", fixed = FALSE)
 fit.R  TRUE → FALSE
-  457-   on.exit(if (!completed) for (w in start$warnings) warning(w, call. = FALSE), add = TRUE)
-  457+   on.exit(if (!completed) for (w in start$warnings) warning(w, call. = FALSE), add = FALSE)
+  461-   on.exit(if (!completed) for (w in start$warnings) warning(w, call. = FALSE), add = TRUE)
+  461+   on.exit(if (!completed) for (w in start$warnings) warning(w, call. = FALSE), add = FALSE)
 fit.R  x[<i>] → x[<i> + 1L]
-  263-   if (length(counts) != prod(sizes) || any(counts != counts[1])) {
-  263+   if (length(counts) != prod(sizes) || any(counts != counts[1 + 1L])) {
+  267-   if (length(counts) != prod(sizes) || any(counts != counts[1])) {
+  267+   if (length(counts) != prod(sizes) || any(counts != counts[1 + 1L])) {
 grr.R  <n> - 1 → <n> - 1
   94-   ndc <- if (total_v == 0) NA_real_ else if (grr_v > 0) max(1, floor(1.41 * sqrt(item_v) / sqrt(grr_v))) else Inf
   94+   ndc <- if (total_v == 0) NA_real_ else if (grr_v > -1) max(1, floor(1.41 * sqrt(item_v) / sqrt(grr_v))) else Inf
@@ -1314,11 +1316,11 @@ grr.R  NA_real_ → NA
   94+   ndc <- if (total_v == 0) NA else if (grr_v > 0) max(1, floor(1.41 * sqrt(item_v) / sqrt(grr_v))) else Inf
 
 ── Results ─────────────────────────────────────────────────────────────────────
-[ KILLED 939 | SURVIVED 66 | NO COVERAGE 0 | ERRORS 101 | TOTAL 1106 | SCORE 94.0% ]
+[ KILLED 942 | SURVIVED 66 | NO COVERAGE 0 | ERRORS 100 | TOTAL 1108 | SCORE 94.0% ]
 
 r-mutation: 31 Mutanten über dem Zeitlimit, im Bericht als Timeout
 r-mutation: Bericht: /mnt/c/Users/Danie/dev/Llmsa/llmsa/reports/mutation/mutation.json
-mutgate: pass (score=93.72 required=91.79 baseline=93.79 floor=80)
+mutgate: pass (score=93.74 required=91.79 baseline=93.79 floor=80)
 
 # stderr
 JSON report: /mnt/c/Users/Danie/dev/Llmsa/llmsa/reports/mutation/mutation.json
