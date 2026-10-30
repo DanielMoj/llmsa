@@ -1,11 +1,11 @@
 {
   "milestone": "M1a",
-  "round": 1,
+  "round": 2,
   "base": "485c96057c7e4e2a9d35e0a31160988e33afb716",
   "baseRef": "plan/M1a",
   "env": {
-    "ts": "2026-10-29T22:53:38+01:00",
-    "sha": "3ca0dd9d6bf852a96426ca282319248de871aeae",
+    "ts": "2026-10-30T04:13:00+01:00",
+    "sha": "597b0c39936fc10965c1ef4947d9f5b59235f388",
     "bash": "5.3.9(1)-release",
     "git": "2.53.0",
     "toolchain": {
@@ -16,22 +16,22 @@
   "gates": {
     "deps": "pass",
     "lint": "pass",
-    "tests": "fail",
+    "tests": "pass",
     "trace": "pass",
     "territory": "pass",
-    "mutgate": "fail",
+    "mutgate": "pass",
     "golden-adr": "pass",
     "mutfull": "pass"
   },
   "summaries": {
     "deps": "deps: Kommando erfolgreich",
     "lint": "lint: Kommando erfolgreich",
-    "tests": "tests: Kommando meldet fachlichen Fehlschlag rc=1",
+    "tests": "tests: Kommando erfolgreich",
     "trace": "trace: alle Kriterien sind wörtlich und beidseitig verknüpft",
-    "territory": "territory: letzter Diff sauber (qa/45-qa, Runde 1, Basis 179d8e41252efd1169358cff3cf142e4c64a69b2, 2026-10-29T22:30:57+01:00)",
-    "mutgate": "mutgate: fail (unmutierter Vorlauf rot, kein Mutant gelaufen; 5 Tests: tests/e2e/test-m1a-qa-e2e.R: QA-M1a-001: msa_boot succeeds on fits created with explicit control or lme4 arguments passed via ... (seed = 20261029) [fehlgeschlagen] | tests/e2e/test-m1a-qa-e2e.R: QA-M1a-002: msa_fit with subset or NA-dropping lme4 arguments keeps fit$data, fit$n and input_rows consistent with fit$model (seed = 20261029) [fehlgeschlagen] | tests/e2e/test-m1a-qa-e2e.R: QA-M1a-003: multi-factor and unbalanced designs with zero residual variance fail with named residual-variance diagnostic without CHOLMOD warnings (seed = 20261029) [fehlgeschlagen] | tests/fuzz/test-m1a-qa-fuzz.R: QA-M1a-004: msa_fit handles subnormal variance scales cleanly and rejects malformed numeric/grouping inputs consistently (seed = 20261029) [fehlgeschlagen] | tests/fuzz/test-m1a-qa-fuzz.R: QA-M1a-005: msa_grr validates threshold argument and validation_verify_resources checks NIST dataset manifest and unlisted anchor files (seed = 20261029) [fehlgeschlagen])",
+    "territory": "territory: letzter Diff sauber (builder/60-rework, Runde 2, Basis 595d2405bf5ed5d310929875bf6bfe590877aa37, 2026-10-30T00:06:28+01:00)",
+    "mutgate": "mutgate: pass (score=93.79 required=80 baseline=93.79 floor=80)",
     "golden-adr": "golden-adr: Änderung und ADR liegen im selben Meilenstein",
     "mutfull": "mutfull: pass (nicht fällig in M1a)"
   },
-  "result": "fail"
+  "result": "pass"
 }
