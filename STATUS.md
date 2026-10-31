@@ -1,22 +1,20 @@
 # STATUS — llmsa
 
-Stand: 2026-10-31T04:27:58+01:00 · Fortschritt: **3/10 fertig**
+Stand: 2026-10-31T09:08:46+01:00 · Fortschritt: **3/10 fertig**
 
-`▓▓▓✖░░░░░░`  (▓ fertig · ▒ in Arbeit · ░ offen · ✖ geparkt)
+`▓▓▓▒░░░░░░`  (▓ fertig · ▒ in Arbeit · ░ offen · ✖ geparkt)
 
 | Paket | Inhalt | Status | Detail |
 |---|---|---|---|
 | M0 | Gerüst steht: Toolchain, Preset r-paket und alle gewählten Gates laufen grün auf v0.1.0, ohne Änderung an R/ | ✅ | fertig |
 | M2 | Pipeline für das Anwendungsbeispiel ACMG/AMP: Itemsatz mit SHA-256, Prompt-Vorlagen, Backends mit festem Routing, Auswertung, Validierungsplan; läuft vor dem Statistikkern, damit die AP1-Erhebung parallel zu M1 beginnt | ✅ | fertig |
 | M1a | Statistikkern numerisch nach Prüfstandard: Varianzkomponenten gleich ANOVA, AIAG-Beispiel, Gegenrechnung, NIST StRD, Kennzahlen und Verdikt, Invarianzen | ✅ | fertig |
-| M1b | Statistikkern ordinal und binär: Engine-Gleichheit, Recovery- und β²/2-Studien als Skripte mit reproduziertem Kurzlauf, rptR, Randfälle | ⛔ | PARKED: Plan nicht auflösbar; Arbiter benötigt HUMAN. |
+| M1b | Statistikkern ordinal und binär: Engine-Gleichheit, Recovery- und β²/2-Studien als Skripte mit reproduziertem Kurzlauf, rptR, Randfälle | 🔨 | Phase 10-acceptance · Runde 1 |
 | M1c | Bootstrap wie lme4::bootMer, Überdeckungsstudie als Skript mit reproduziertem Kurzlauf, Mutationslauf über R/fit.R und R/grr.R | ⬜ | offen |
 | M1d | Vignetten auf echten Daten ohne Modellaufruf (llm-stability, ClinVar-Einreichungen) und Abnahme der Klasse-B-Simulationsergebnisse aus M1b und M1c | ⬜ | offen |
 | M3a | Übereinstimmung (Cohen, Fleiss, Krippendorff, Attributkennzahlen), Bias und Linearität nach Prüfstandard | ⬜ | offen |
 | M3b | Robustheit: Plackett-Burman-Pläne, Lenth, Half-Normal-Plot, Fehlalarmrate | ⬜ | offen |
 | M3c | Systemeignung: Westgard-Regelkarte, Simulator und Fallzahlplanung | ⬜ | offen |
 | M3d | Ausführung mit Fortsetzen, Parser, Backends gegen Aufzeichnungen, zahlentreuer Bericht mit SHA-256 | ⬜ | offen |
-
-Geparkt: `M1b`
 
 _Automatisch aus `orchestrator/state/` erzeugt; Maschinenvertrag: `orchestrator/state/summary.json`._

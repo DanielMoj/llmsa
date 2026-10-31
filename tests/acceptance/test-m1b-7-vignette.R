@@ -54,15 +54,22 @@ test_that("K-M1b-7: the section shows the checks of K-M1b-1 with ANK-21 and ANK-
   }
 })
 
-test_that("K-M1b-7: the section shows the checks of K-M1b-5 with ANK-25 and ANK-TOL.rptr, expected and observed values", {
+# The checks of K-M1b-5 in the wording of ADR-024: ICC_items against rptR with
+# expect = "liability", performance::icc() and the recalculation with ANK-28
+# (ANK-TOL.rptr.live_tol); the installation check of rptR against both
+# published point estimates of ANK-25 (ANK-TOL.rptr.vignette_tol). Contract
+# details: ACC-11 (3) and ACC-18.
+test_that("K-M1b-7: the section shows the checks of K-M1b-5 with ANK-25, ANK-28 and ANK-TOL.rptr, published and observed values", {
   sec <- acc_m1b_7_section()
   expect_false(is.null(sec))
   if (is.null(sec)) return(invisible())
   text <- paste(sec, collapse = "\n")
-  for (id in c("ANK-25", "ANK-TOL.rptr")) expect_true(grepl(id, text, fixed = TRUE), label = paste("the section names", id))
+  for (id in c("ANK-25", "ANK-28", "ANK-TOL.rptr")) expect_true(grepl(id, text, fixed = TRUE), label = paste("the section names", id))
   tokens <- acc_m1b_7_tokens(sec)
-  pub <- as.numeric(acc_m1a_value("ANK-25", "link_scale"))
-  expect_true(acc_m1b_shown(tokens, pub), label = sprintf("ANK-25 link-scale value %s appears in the section", format(pub)))
+  for (key in c("link_scale", "original_scale")) {
+    pub <- as.numeric(acc_m1a_value("ANK-25", key))
+    expect_true(acc_m1b_shown(tokens, pub), label = sprintf("ANK-25 %s value %s appears in the section", key, format(pub)))
+  }
   icc <- acc_m1b_beetles_icc()
   expect_true(acc_m1b_shown(tokens, icc), label = sprintf("observed ICC_items on BeetlesMale %s appears in the section", format(icc, digits = 10)))
 })
@@ -85,13 +92,14 @@ for (study in acc_m1b_7_studies) {
   })
 }
 
-test_that("K-M1b-7: no numeric literal of a results file or of ANK-21 and ANK-25 is typed into validation.Rmd", {
+test_that("K-M1b-7: no numeric literal of a results file or of ANK-21, ANK-25 and ANK-28 is typed into validation.Rmd", {
   rmd <- acc_m1a_vignette_path()
   expect_true(file.exists(rmd))
   if (!file.exists(rmd)) return(invisible())
   lit <- acc_m1a_rmd_literals(readLines(rmd, warn = FALSE))
   values <- c(acc_m1a_leaves(acc_anchor("ANK-21")$value[c("laplace", "nagq10")]),
-              acc_m1a_leaves(acc_anchor("ANK-25")$value[c("link_scale", "original_scale")]))
+              acc_m1a_leaves(acc_anchor("ANK-25")$value[c("link_scale", "original_scale")]),
+              as.numeric(acc_m1a_value("ANK-28", "logit")))
   for (study in acc_m1b_7_studies) {
     path <- acc_m1b_expected_results_path(acc_m1b_sim_dir(), study)
     expect_true(file.exists(path), label = path)
