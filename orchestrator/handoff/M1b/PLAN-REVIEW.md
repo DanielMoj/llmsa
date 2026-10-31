@@ -1,287 +1,340 @@
-# PLAN-REVIEW — M1b, Runde 1
+# PLAN-REVIEW — M1b, Runde 2
 
-Rolle: Reviewer · Phase: `30-plan-review` · Runde: 1 (von `MAX_ROUNDS_PLAN=2`) · Stand: 31.10.2026 · Gegenstand: `orchestrator/handoff/M1b/PLAN.md` (Runde 1). Eine `ARBITER.md` und eine `PLAN-UPDATE.md` gibt es nicht. Keine Git-Kommandos.
+Rolle: Reviewer · Phase: `30-plan-review` · Runde: 2 (von `MAX_ROUNDS_PLAN=2`, letzte Planrunde) · Stand: 31.10.2026 · Gegenstand: `orchestrator/handoff/M1b/PLAN.md` (Runde 1) mit `PLAN-UPDATE.md` (Runde 2). Bindend: `ARBITER.md` (Verdict RESOLVE zu E1). Keine Git-Kommandos.
 
 ## Ergebnis
 
-**Verdict ESCALATE.**
+**Verdict PASS.** Es gibt keinen blocking-Befund.
 
-- **Grund ist allein E1:** K-M1b-5 widerspricht wörtlich docs/01 §5 und Formelsammlung §4 (CRITERIA ACC-1). Builder und Reviewer dürfen diesen Widerspruch nicht auflösen (AGENTS.md: „Widersprüchliche Specs führen zu `ESCALATE`“; docs/01 §1: „Änderungen am Spec-Text nur durch den Betreiber“).
-- **Der übrige Plan** ist spec-treu, vollständig und gut belegt. Alle anderen Befunde sind minor oder [INFRA]; PLAN-UPDATE beantwortet sie in Runde 2.
-- **Neu in dieser Phase:** `docs/decisions/ADR-023-m1b-reviewer-auslegungen.md`. Es hält die in CRITERIA angekündigten Auslegungen ACC-2 bis ACC-11 und ACC-14 fest, regelt das Feld `converged` (E2) und entscheidet PLAN-M1b-SIM-01.
-- **Ablauf:** Bei ESCALATE ruft der Orchestrator den Arbiter (`orchestrate.sh:926–927`), den es je Meilenstein nur einmal gibt (`:804–807`).
-  - Löst der Arbiter auf (RESOLVE), muss Runde 2 mit PASS enden. Sonst ist der Arbiter verbraucht, und M1b wird geparkt.
-  - Weder `30-plan-review` noch `70-arbiter` dürfen `tests/acceptance/` schreiben (`orchestrate.sh:488`, `:491`).
+- **E1:** PLAN-UPDATE übernimmt die Direktive aus ARBITER.md Nr. 1 bis 6 vollständig (Tabelle unten). Nach Direktive Nr. 6 prüft dieses Review zu E1 nur die Übernahme; neue Einwände derselben Sache gibt es nicht.
+- **E2 bis E8:** Alle sind mit `akzeptiert:` und der verlangten Änderung beantwortet. E7 und E8 hat der Betreiber umgesetzt (Prüflauf 7).
+- **Weitere Pflichten:** ADR-023 Nr. 10.9 und Nr. 13 sind bestätigt. ACC-1 bis ACC-18 und alle 66 offenen BACKLOG-Einträge sind adressiert (Prüflauf 6).
+- **Technische Zusagen nachgeprüft:** Konvergenzregel je Fitpfad, Optimiererwahl von `clmm` und numerische Enddiagnose (Prüfläufe 1 bis 3). Sie tragen.
+- **Neu in dieser Runde:** drei minor-Befunde, E9 bis E11; E10 ist [INFRA].
+- **Neu in dieser Phase:** `docs/decisions/ADR-025-m1b-reviewer-auslegungen-runde-2.md`.
+  - Es hält ACC-18 fest und ersetzt ADR-023 Nr. 11.4 und 11.7.
+  - Es präzisiert ADR-023 Nr. 10.9 für numerische Fits und den tatsächlich verwendeten `clmm`-Optimierer.
+  - Es richtet das Rückfallorakel der Abnahmetests zu K-M2-6 und K-M2-7 an ADR-006 Nr. 4.2 aus.
+  - In `CRITERIA.json` verweisen die Statuszeilen von ACC-10, ACC-11 und ACC-18 darauf. Kriterien und alle übrigen Felder sind unverändert.
+
+### Hinweis an den Betreiber (E10)
+
+- **Folge:** Nach einem spec-treuen BUILD wird das tests-Gate in K-M2-6 und K-M2-7 rot, ohne Fehler des Builders.
+- **Ursache:** Das Abnahmeorakel `acc_m2_with_conditions()` (`tests/acceptance/setup-m2.R:714`) wertet jede Warnung des ordinalen Fits als Rückfallauslöser. K-M2-6, ANK-68 und ADR-006 Nr. 4.2 nennen nur Fehler und Konvergenzwarnungen.
+  - Bisher war das folgenlos.
+  - Ab M1b verlangen K-M1b-4 und K-M1b-6 auf den AP1-Daten Warnungen, die keine Konvergenzwarnungen sind. Die Daten haben zwei Blöcke und fehlende Antworten (Prüfläufe 4 und 5).
+- **Betroffen:** `test-m2-6-evaluate.R` Z. 87, 93 und 164 sowie `test-m2-7-robustness-pilot.R` Z. 211.
+- **Zuständigkeit:** Der Reviewer darf `tests/acceptance/` erst in `50-code-review` schreiben (`orchestrate.sh:488`, `:490`). Dort kostet die Anpassung eine Rework-Runde, weil PASS `gates.result=pass` verlangt.
+- **Empfehlung:** Anpassung nach ADR-025 Nr. 4 vor den Gates von M1b, etwa durch eine wiederholte Abnahmephase wie in ADR-024 Nr. 2.
+
+### Ablauf
+
+Mit PASS gibt der Orchestrator den Plan frei, setzt den Tag `plan/M1b` und startet BUILD (`orchestrate.sh:926`, `:940–943`).
 
 ## Gelesen
 
-- **Rollen und Protokoll:** `AGENTS.md`, `CLAUDE.md`, `IMPLEMENTATION-RULES.md`, `contracts/PROTOCOLS.md`, `orchestrator/handoff/SCHEMA.md`, `orchestrator/LESSONS.md`.
+- **Rollen und Protokoll:** `AGENTS.md`, `CLAUDE.md`, `IMPLEMENTATION-RULES.md`, `contracts/PROTOCOLS.md`, `orchestrator/handoff/SCHEMA.md`, `orchestrator/LESSONS.md`, die Prompts `30-plan-review.md` und `50-code-review.md`.
 - **Spezifikation:**
-  - `docs/02-statistikkern.md`: M1b vollständig (Szenariotabelle, Schätzziele, K-M1b-1 bis K-M1b-7) und die Folgestellen K-M1d-6 und K-M1d-7;
-  - `docs/01-fachspezifikation.md` §1 bis §9;
-  - Formelsammlung §3, §4, §9 und §12.
-- **Handoff:** `CRITERIA.json` (sieben Kriterien, ACC-1 bis ACC-17), `PLAN.md` vollständig (661 Zeilen).
-- **Abnahmetests:** `setup-m1b.R`, die acht Dateien `test-m1b-*.R` und, für den AP1-Rückfall, `test-m2-6-evaluate.R`.
-- **Anker:** ANK-06, ANK-21, ANK-25, ANK-28 und die betroffenen Einträge von ANK-TOL (`engine_ordinal`, `rptr`, `n_check`, `sim_runtime`, `arithmetic`, `mc_factor`, `bias_report`, `package_compare`, `oracle`).
-- **ADRs:** ADR-017 (Format), ADR-021 (Ankerkopien), ADR-022 Nr. 2 und 3.
-- **Produktcode:** `R/fit.R` (`msa_fit`, `vc_from_model`, `print.msa_fit`), `R/grr.R` vollständig, `R/acmg.R:917–957`, `DESCRIPTION`.
-- **Harness und Backlog:**
-  - `BACKLOG.md` (Inventur, Prüflauf 5);
-  - `orchestrate.sh`: `path_allowed`, `ownership_check`, `verdict`, Planschleife, `arbiter`, `park`;
-  - die Prompts `30-plan-review.md` und `70-arbiter.md`;
-  - `config.env` (nur die Zeilen 138–203, die Pfade, Tests und Mutation betreffen);
-  - `lib/r-mutation.R` (Zeitlimit je Mutant).
+  - docs/02: M1b vollständig (Szenariotabelle, Schätzziele, K-M1b-1 bis K-M1b-7);
+  - docs/01 vollständig;
+  - docs/03: K-M2-6 (Z. 19) und der Hauptplan (Z. 67).
+- **Handoff M1b:**
+  - `ARBITER-REQUEST.md`, `ARBITER.md`, `verdict-arbiter.json`;
+  - `PLAN-REVIEW.md` und `verdict-plan.json` der Runde 1;
+  - `CRITERIA.json` (sieben Kriterien, ACC-1 bis ACC-18);
+  - `PLAN.md` (661 Zeilen) und `PLAN-UPDATE.md` (630 Zeilen), beide vollständig;
+  - `orchestrator/ESCALATION-M1b.md`.
+- **ADRs:** ADR-006 Nr. 4, ADR-021, ADR-023, ADR-024.
+- **Abnahmetests:**
+  - `setup-acceptance.R`, `setup-m1b.R`;
+  - `test-m1b-4-two-levels.R`, `test-m1b-5-binary-rptr.R`, `test-m1b-6-edge-cases.R`, `test-m1b-7-vignette.R`, `test-m1b-7-vignette-full-results.R`;
+  - `setup-m2.R` (Mock-Lauf, Orakel, `acc_m2_check_model()`), `test-m2-6-evaluate.R`, `test-m2-7-robustness-pilot.R` Z. 205–234;
+  - Durchsicht von `tests/e2e/` und `tests/fuzz/` auf ordinale Fits: Beide ersetzen `msa_fit()` durch eine Attrappe und sind nicht betroffen.
+- **Anker:** ANK-68 (`fallback_fit`).
+- **Produktcode:** `R/fit.R` vollständig, `R/acmg.R:905–957`.
+- **Harness:**
+  - `orchestrate.sh`: `path_allowed`, `ownership_check`, `verdict`, `arbiter`, `park`, Planschleife;
+  - `config.env` Z. 143, 178 und 189–204.
+- **Engines:** Quelltext von `ordinal::clmm`, `clmm.fit.env`, `clmm.fit.ssr`, `clmm.control`; `lme4::checkConv`, `lme4::nloptwrap`, `lme4:::optwrap`.
 
 ## Eigene Prüfläufe
 
-Alle Läufe am 31.10.2026 mit `Rscript --vanilla -e …` aus der Repo-Wurzel, ohne geschriebene Datei; ausgeführt wurden die Befehle, gezeigt ist ihr echter Output.
+- **Aufrufe:** am 31.10.2026 mit `Rscript --vanilla -e …` aus der Repo-Wurzel, das Paket bei Bedarf über `pkgload::load_all()`.
+- **Abnahmehelfer:** per `sys.source()` aus `tests/acceptance/setup-*.R` geladen, mit `REPO_ROOT` über `Sys.setenv()`.
+- **Versionen:** R 4.6.1, lme4 2.0.6, ordinal 2026.7.26.
+- **Arbeitsbaum:** Keine Datei wurde dort geschrieben. Die Prüfung mit `find -newer STATUS.md` zeigt nur die Orchestrator-Logs dieser Phase.
+- **Output:** Gezeigt ist der echte Output.
 
-1. **ACC-1 nachgerechnet.** Aufrufe:
-   - `glmer(Colour ~ (1 | Population), BeetlesMale, binomial("logit"))`;
-   - `rptR::rptBinary(…, link = "logit", nboot = 0, npermut = 0)`, einmal mit Vorgabe und einmal mit `expect = "liability"`;
-   - `performance::icc(m)`;
-   - die Formel σ²/(σ² + π²/3);
-   - Auszug aus `deparse(rptR::rptBinary)` zu `estdv_link`.
-
-   ```text
-   versions: R 4.6.1 lme4 2.0.6 rptR 0.9.23 performance 0.19.0
-   sigma2_Population = 0.945803710351675
-   rptBinary default R_link = 0.187930859738746  R_org = 0.18539884541501
-   rptBinary liability R_link = 0.223294850303547
-   performance::icc ICC_adjusted = 0.223294850303548
-   sigma2/(sigma2+pi^2/3) = 0.223294850303547
-   formals expect: "meanobs"
-               if (expect == "meanobs")
-                   estdv_link <- 1/(Ep * (1 - Ep))
-               if (expect == "liability")
-                   estdv_link <- pi^2/3
-   ```
-2. **Variante B gegengeprüft:** `performance::icc(m, approximation = a)` auf demselben Modell.
+1. **Optimiererwahl von `clmm`.** Auszug aus dem echten Output: die einschlägigen Zeilen aus `deparse()` von `ordinal::clmm` und `clmm.fit.env` sowie zwei Einträge von `formals(clmm.control)`; Leerzeilen und übrige Steuerparameter weggelassen.
 
    ```text
-   approximation = lognormal : 0.223294850303548
-   approximation = delta : 0.223294850303548
-   approximation = trigamma : 0.223294850303548
-   approximation = observation_level : 0.187526014414148
+   ordinal 2026.7.26  lme4 2.0.6
+   29     use.ssr <- (retrms$ssr && !control$useMatrix)
+   62         clmm.fit.ssr(rho, control = control$optCtrl, method = control$method,
+   64     else clmm.fit.env(rho, control = control$optCtrl, method = control$method,
+   ====  clmm.fit.env
+   5     if (method == "ucminf")
+   6         warning("cannot use ucminf optimizer for this model, using nlminb instead")
+   $method
+   c("nlminb", "ucminf", "model.frame")
+   $useMatrix
+   [1] FALSE
    ```
-3. **Konvergenzcodes der Engines.** Aufrufe:
-   - `clmm` auf wine mit `(1 | bottle) + (1 | judge)`, einmal mit `method = "nlminb"` und einmal mit `method = "ucminf"`;
-   - `clmm` mit nur `(1 | judge)`, mit `ucminf` und mit der Vorgabe;
-   - ein singulärer `glmer` mit `(1 | item) + (1 | prompt) + (1 | model)` (Seed 1).
+
+   Den angeforderten Optimierer nutzt `clmm` also nur bei einem einfachen Zufallsterm ohne `useMatrix`; sonst rechnet es immer mit nlminb. Das deckt die Aussage in PLAN-UPDATE Z. 165.
+2. **Enddiagnose numerischer Fits.** Gefittet wurden:
+   - `ic50_demo` auf dem Vorgabepfad;
+   - ein Plan mit wahrer Prompt- und Modellvarianz null (8 Items × 3 × 3 × 2, Seed 5), einmal auf dem Vorgabepfad;
+   - derselbe Plan zweimal auf dem Durchreichweg: mit `control = lme4::lmerControl()` und mit `lmerControl(optCtrl = list(maxeval = 3))`.
+
+   Auszug aus drei Läufen, Zeilen unverändert.
 
    ```text
-   nlminb : optRes$convergence = 0 ; message = relative convergence (4) ; var = 1.210133696 2.749610704
-     warning: cannot use ucminf optimizer for this model, using nlminb instead
-   ucminf : optRes$convergence = 0 ; message = relative convergence (4) ; var = 1.210133696 2.749610704
-   glmer singular: TRUE ; conv$opt = 0 ; recorded lme4 messages: boundary (singular) fit: see help('isSingular') ; emitted messages: boundary (singular) fit: see help('isSingular')
-   ucminf single term: optRes$convergence = 1 ; message = Stopped by small gradient (grtol). ; var judge = 0.3193604702
-   nlminb single term: optRes$convergence = 0 ; var judge = 0.3193604229
+   ic50_demo default            method=analytic_reml  opt=0 lme4.class=list msgs=[] singular=FALSE
+   zero prompt/model (default)  method=analytic_reml  opt=0 lme4.class=list msgs=[boundary (singular) fit: see help('isSingular')] singular=TRUE
+   lmer passthrough: optimizer=nloptwrap opt=0 msgs=[boundary (singular) fit: see help('isSingular')] optinfo$warnings=[]
+     emitted=[]
+   lmer passthrough: optimizer=nloptwrap opt=5 msgs=[unable to evaluate scaled gradient | Model failed to converge: degenerate  Hessian with 5 negative eigenvalues
+     See ?lme4::convergence and ?lme4::troubleshooting.] optinfo$warnings=[]
+     emitted=[convergence code 5 from nloptwrap: NLOPT_MAXEVAL_REACHED: Optimization stopped because maxeval (above) was reached. | unable to evaluate scaled gradient | Model failed to converge: degenerate  Hessian with 5 negative eigenvalues
+     See ?lme4::convergence and ?lme4::troubleshooting.]
+   8         conv = if (status < 0 || status == 5) status else 0,
+   [1] "bobyqa"      "Nelder_Mead"
    ```
-4. **`?ucminf::ucminf`, Rückgabewert `convergence`:** „1 Stopped by small gradient (grtol). 2 Stopped by small step (xtol). 3 Stopped by function evaluation limit (maxeval). 4 Stopped by zero step from line search“.
-5. **BACKLOG-Inventur** gegen die Tabelle des Plans:
+
+   Die vorletzte Zeile stammt aus `lme4::nloptwrap`, die letzte ist `glmerControl()$optimizer`. Die Regel „Erfolgscode 0 und keine Meldung außer der Randmeldung“ (PLAN-UPDATE Z. 166–168) ergibt also TRUE für reguläre Fits und Randfits und FALSE für den Abbruch, auf beiden numerischen Wegen.
+3. **glmer-Fall von K-M1b-6:** `acc_m1b_binary_runs(seed = 69L, items = 20L)`, direkter `glmer` mit `glmerControl(optCtrl = list(maxfun = 10))`.
 
    ```text
-   total 89  open 67  done 22
-   plan rows: 66
-   open but not in plan table: BL-38
-   in plan table but done:
-   in plan but unknown:
+   conv$opt = 4
+   recorded lme4 messages:
+   [1] "Model failed to converge with max|grad| = 0.172332 (tol = 0.002, component 1)\n  See ?lme4::convergence and ?lme4::troubleshooting."
+   emitted warnings:
+   [1] "maxfun < 10 * length(par)^2 is not recommended."
+   [2] "convergence code 1 from bobyqa: bobyqa -- maximum number of function evaluations exceeded"
+   [3] "failure to converge in 10 evaluations"
+   [4] "convergence code 4 from Nelder_Mead: failure to converge in 10 evaluations"
+   [5] "Model failed to converge with max|grad| = 0.172332 (tol = 0.002, component 1)\n  See ?lme4::convergence and ?lme4::troubleshooting."
+   emitted messages:
+   character(0)
    ```
 
-   BL-38 hat keine Fettmarke „**Erledigt**“, nennt sich aber im Text selbst erledigt: „`verdict()` prüfte die Runde nicht; behoben in v1.1.1 | erledigt, Hinweis für Logs“. Der Plan führt ihn zu Recht unter „bereits erledigt“. Damit sind alle offenen Einträge adressiert oder mit Begründung vertagt.
-6. **`config.env`:**
-   - Zeile 138: `BUILDER_EXTRA_PATHS_REGEX='^(R/|man/|tests/testthat/|vignettes/|inst/|data/|data-raw/|DESCRIPTION$|NAMESPACE$|NEWS\.md$|\.Rbuildignore$)'`;
-   - Zeile 178: `MUT_TEST_DIRS='tests/testthat tests/acceptance tests/e2e tests/fuzz'`;
-   - Zeile 202: `MUT_TEST_EXCLUDE='^(m2-[0-9]|m0-testthat-count$)'`;
-   - Zeile 203: `MUT_TEST_TIMEOUT=353`.
+4. **K-M2-6 auf dem heutigen Stand.** Ausgewertet wurden der Mock-Lauf aus `acc_m2_evaluation()`, der ordinale Fit je Modell und der gemeinsame Fit mit `acc_m2_with_conditions()`, dazu dasselbe für die konstruierten Läufe aus `test-m2-6-evaluate.R` Z. 165–197. Auszug aus drei Läufen, Zeilen unverändert.
 
-   `lib/r-mutation.R:53` setzt `MUT_TEST_TIMEOUT_FACTOR` auf die Vorgabe 5 (Grenze mindestens das Fünffache des unmutierten Vorlaufs).
-7. **ACC-15 im Orchestrator unverändert:**
-   - `orchestrate.sh:543`: `[ "$before" != __clean__ ] || OWNERSHIP_REMOVE+=("$path")`;
-   - `orchestrate.sh:456`: `rm -f -- "$path"`.
+   ```text
+   evaluation in 132 s
+   rows 5400  NA values 96
+   block
+      1    2
+   2700 2700
+   prompt
+   concise    json    role
+      1800    1800    1800
+   model
+   llama  qwen   sol
+    1800  1800  1800
+   rep
+      1    2    3
+   1800 1800 1800
+   model sol  : NA=30 | today: failed=FALSE derived=[block] formula=y ~ 1 + block + (1 | item) + (1 | prompt) warnings=[] | AP1 fallback=FALSE type=ordinal converge-code=0
+   model llama: NA=36 | today: failed=FALSE derived=[block] formula=y ~ 1 + block + (1 | item) + (1 | prompt) warnings=[] | AP1 fallback=FALSE type=ordinal converge-code=0
+   model qwen : NA=30 | today: failed=FALSE derived=[block] formula=y ~ 1 + block + (1 | item) + (1 | prompt) warnings=[] | AP1 fallback=FALSE type=ordinal converge-code=0
+   joint     : NA=96 | today: failed=FALSE derived=[block] warnings=[] | AP1 joint type=ordinal
+   AP1 trigger on planned warnings: FALSE FALSE
+   constructed sol  : NA=100 failed=FALSE derived=[block] warnings=[] | AP1 fallback=FALSE type=ordinal
+   constructed llama: NA=100 failed=FALSE derived=[block] warnings=[] | AP1 fallback=FALSE type=ordinal
+   constructed qwen : NA=100 failed=FALSE derived=[block] warnings=[] | AP1 fallback=FALSE type=ordinal
+   ```
 
-## Einwände
+   „AP1 trigger on planned warnings“ wendet `acmg_convergence_warning()` auf zwei Texte an:
+   - den Range-Warnungstext aus PLAN-UPDATE Z. 190–194;
+   - einen Platzhalter „32 missing response(s) were dropped.“, denn der Wortlaut der Verwerfungswarnung ist nicht festgelegt.
+5. **Gegenprobe mit den geplanten Warnungen.** Eine Attrappe ersetzte `msa_fit()` nur im Prozess über `testthat::local_mocked_bindings(.package = "llmsa")`.
+   - Für ordinale Fits gab sie vor dem echten Fit die Verwerfungswarnung aus, wenn Antworten fehlten.
+   - Danach gab sie die Range-Warnung nach PLAN-UPDATE aus, wenn `derived` nicht leer war.
+   - Alles andere reichte sie unverändert an das Original durch.
 
-- [E1] (blocking) docs/02-statistikkern.md Z. 43, K-M1b-5, gegen docs/01-fachspezifikation.md Z. 58 (§5), Formelsammlung §4 Z. 175–181 und docs/01 Z. 10 (§1); ANK-25, ANK-28, ANK-TOL.rptr; CRITERIA ACC-1 — **Befund:** Wörtlicher Spec-Widerspruch.
-  - **Die Stellen im Wortlaut:**
-    - K-M1b-5: „liefert `msa_fit(type = "binary", link = "logit")` eine ICC_items, die dem Punktschätzer von `rptR::rptBinary(Colour ~ (1 | Population), grname = "Population", link = "logit")` auf der Link-Skala und dem publizierten Vignettenwert gleicht (`ankerRef: ANK-25`, Toleranz `ankerRef: ANK-TOL.rptr`) und mit `performance::icc()` auf demselben `glmer`-Modell übereinstimmt“.
-    - docs/01 §5: „Latente Skala: Restvarianz 1 (Probit), π²/3 (Logit) (`ANK-28`)“.
-    - Formelsammlung §4: σ²_ε = π²/3 und „R_latent = σ²_α/(σ²_α + σ²_AV + π²/3)“.
-    - docs/01 §1: „Weicht der Code von einer Soll-Formel ab, gilt die Formelsammlung“.
-    - Formelsammlung §4 Z. 190 und docs/01 §3 Nr. 12 nennen zugleich 0,188 als Abnahmewert auf der Link-Skala.
-  - **Die Zahlen (Prüflauf 1):**
-    - Spec-gemäß ist ICC_items = 0,223294850303547. Das gleicht `performance::icc()` (0,223294850303548) und `rptBinary(…, expect = "liability")`.
-    - Der wörtlich verlangte Vorgabeaufruf rechnet mit `expect = "meanobs"` und 1/(Ep(1 − Ep)) und liefert 0,187930859738746; ANK-25 druckt 0,188.
-    - Der Abstand beträgt 0,0354. Die Toleranzen sind ANK-TOL.rptr.live_tol 1e-6 und vignette_tol 5e-4.
-  - **Auch Variante B löst es nicht:** `performance::icc(approximation = "observation_level")` liefert 0,187526014414148, also 4,0e-4 neben der rptR-Vorgabe; das ist mehr als 1e-6 (Prüflauf 2).
-  - **Keine Lesart erfüllt alle drei Vergleiche und docs/01 §5.**
-    - Toleranzen aufweiten ist verboten (AGENTS.md, Integrität Nr. 1 und 6).
-    - Ein anderer Aufruf (`expect = "liability"`) ändert den Kriteriumstext.
-    - Die Quellenregel aus docs/01 §1 trägt nicht. Die Formelsammlung folgt für R_latent ihrer Quelle (Nakagawa & Schielzeth 2010, Tab. 1: π²/3). Die rptR-Vignette, Quelle von 0,188, rechnet ausdrücklich mit 1/(p(1 − p)): „The current version of rptR implements the more accurate approximation 1/(p(1-p))“ (ANK-25). Zwei treu zitierte Quellen definieren die Link-Skala verschieden; erst das Kriterium verbindet sie.
-  - **Der Plan behandelt das richtig:** eigene Gegenrechnung, Empfehlung von Variante A, kein Eingriff in Test, Toleranz oder Anker (PLAN Ziel, Risiken ACC-1, Testplan K-M1b-5). — **Vorschlag:** ESCALATE und Betreiberentscheidung nach der Frage unten; dieses Review empfiehlt Variante A. Der Builder ändert bis zur Direktive nichts an K-M1b-5. PLAN-UPDATE übernimmt die Direktive in die K-M1b-5-Zeile des Testplans und in die K-M1b-5-Tabelle der Vignette.
-- [E2] (minor) K-M1b-6 (docs/02 Z. 44: „Nichtkonvergenz von `clmm` oder `glmer` wird als Warnung weitergegeben und `singular`/Konvergenz im Objekt vermerkt“); docs/01 §2 Nr. 4 und Nr. 6; CRITERIA ACC-10 (5), (6); `orchestrator/LESSONS.md` — **Befund:** PLAN, Schnittstellen Nr. 4 („TRUE nur bei bestätigter Engine-Konvergenz … einschließlich der tatsächlichen Konvergenzdiagnosen“) lässt die Regel offen. Zwei Engine-Fakten (Prüflauf 3) machen naheliegende Regeln falsch:
-  - (a) `clmm` mit `method = "ucminf"` und einem Zufallsterm meldet bei Erfolg `optRes$convergence = 1` („Stopped by small gradient (grtol).“). Mit „`== 0`“ gälte dieser Fit als nicht konvergiert und bekäme eine Warnung mit „converge“, und die ist zugleich AP1-Rückfallauslöser (`R/acmg.R:928`).
-  - (b) Jeder singuläre `glmer`-Fit vermerkt „boundary (singular) fit: see help('isSingular')“ in `optinfo$conv$lme4$messages`, bei `conv$opt = 0`. Mit „keine vermerkte Meldung“ hätte jeder singuläre binäre Fit `converged = FALSE`; in S-bin mit drei Prompts und drei Modellen ist das häufig.
+   ```text
+   with planned warnings, sol  : test helper failed=TRUE -> test expects fallback=TRUE type=numeric | AP1 gives fallback=FALSE type=ordinal reason=[]
+   with planned warnings, llama: test helper failed=TRUE -> test expects fallback=TRUE type=numeric | AP1 gives fallback=FALSE type=ordinal reason=[]
+   with planned warnings, qwen : test helper failed=TRUE -> test expects fallback=TRUE type=numeric | AP1 gives fallback=FALSE type=ordinal reason=[]
+   joint: test expects type=numeric | AP1 joint type=ordinal
+   ```
 
-  Eigene Schwellen für Gradient oder Hessekondition wären Toleranzen ohne Anker. Für numerische Fits nennt der Plan keine Regel. LESSONS verlangt, Engine-Randfälle als Klasse zu behandeln. — **Vorschlag:** Regel nach ADR-023 Nr. 10.9 übernehmen:
-  - Erfolgscodes des tatsächlich verwendeten Optimierers (nlminb 0, ucminf 1 und 2);
-  - `glmer`: `conv$opt == 0` und keine Meldung außer der Randmeldung;
-  - singulär heißt nicht „nicht konvergiert“;
-  - keine eigenen Schwellen.
+6. **Vollständigkeit von PLAN-UPDATE**, gegen `BACKLOG.md`, `CRITERIA.json` und docs/02. Die letzte Spalte prüft das Zitat gegen docs/02 und die Zeile im Testplan.
 
-  PLAN-UPDATE nennt die Regel für numerische Fits. Unit-Tests:
-  - `ucminf` mit einem Zufallsterm ergibt TRUE ohne Warnung;
-  - ein singulärer `glmer` ergibt TRUE und `singular` TRUE;
-  - ein erzwungener Abbruch ergibt FALSE mit Warnung.
-- [E3] (minor) docs/01 §4 (Z. 52: „Nur mit ADR und Übergangsfrist: … geänderte Bedeutung eines Arguments“); docs/01 §2 Nr. 5; `R/fit.R:31–33` (`levels`: „For binary outcomes given as labels: a length-two vector whose second element is the event“), `R/fit.R:145–151` — **Befund:** PLAN, Schnittstellen Nr. 2 sagt: „Bei Label-Eingaben bezeichnet die zweite der zwei unterschiedlichen, nicht fehlenden Klassen das Ereignis“.
-  - Offen bleibt, ob die Kodierung aus `levels` kommt oder aus den Daten, etwa nach der Reihenfolge des Auftretens.
-  - Kommt sie aus den Daten, änderte sich die dokumentierte Bedeutung von `levels`, und die Kodierung hinge von der Zeilenreihenfolge ab.
-  - Heute ist ein Label ohne `levels` ein benannter Fehler. — **Vorschlag:** PLAN-UPDATE legt fest:
-    - Labels nur mit `levels`;
-    - `levels` hat genau zwei verschiedene, nicht fehlende Werte, sonst ein benannter Fehler;
-    - `levels[2]` ist das Ereignis;
-    - Labels ohne `levels` bleiben ein Fehler.
+   ```text
+   BACKLOG rows 89  unique 89  open 66  done 23
+   plan BL rows 66  missing:   extra:   identical order: TRUE
+   ACC in CRITERIA 18  in plan 18  identical: TRUE
+   answers: - **E1 — akzeptiert: - **E2 — akzeptiert: - **E3 — akzeptiert: - **E4 — akzeptiert: - **E5 — akzeptiert: - **E6 — akzeptiert: - **E7 — akzeptiert: - **E8 — akzeptiert:
+   K-M1b-1 TRUE TRUE
+   K-M1b-2 TRUE TRUE
+   K-M1b-3 TRUE TRUE
+   K-M1b-4 TRUE TRUE
+   K-M1b-5 TRUE TRUE
+   K-M1b-6 TRUE TRUE
+   K-M1b-7 TRUE TRUE
+   ```
 
-    Unit-Test: Zeilen permutiert und `levels` vertauscht ergeben dieselben Komponenten (ANK-TOL.invariance).
-- [E4] (minor) Formelsammlung §4 (Z. 170: „Das entspricht dem AIAG-Term (X̄_DIFF · K₂)² mit K₂ = 0,7071 für zwei Prüfer, aber ohne die Korrektur −EV²/(n·r) des Handbuchs und mit positiver Verzerrung“); K-M1b-4 — **Befund:** Hilfe und Druckhinweis setzen β̂²/2 heute mit dem Handbuchverfahren gleich:
-  - `R/fit.R:25–26`: „which is how the AIAG X-bar/R procedure treats two appraisers“;
-  - `R/fit.R:596`: „as in the AIAG X-bar/R procedure“.
+7. **Betreiberpunkte E7 und E8**, gelesen:
+   - `config.env:202`: `MUT_TEST_EXCLUDE='^(m2-[0-9]|m0-testthat-count$|m1b-[23]-|m1b-7-vignette-full)'`;
+   - `config.env:203–204`: `MUT_TEST_TIMEOUT=353`, `MUT_TEST_TIMEOUT_FACTOR=5`;
+   - `orchestrate.sh:544`: `[ "$before" != __clean__ ] || git ls-files --error-unmatch -- "$path" >/dev/null 2>&1 || OWNERSHIP_REMOVE+=("$path")`.
 
-  PLAN Nr. 6 und 7 sagt nicht, dass diese Gleichsetzung fällt. Der heutige Hinweis verteilt außerdem den Namen der Komponente und „range method“ auf zwei Zeilen (`R/fit.R:594–596`); der Test verlangt beides in einer Zeile. Geprüft und in Ordnung: Der vorgesehene Warnungstext erfüllt alle Bestandteile von ADR-023 Nr. 9.5 und enthält keinen AP1-Auslöser. — **Vorschlag:** Hilfe, NEWS und beide Druckmethoden nennen den AIAG-Bezug nur zusammen mit der fehlenden Handbuchkorrektur EV²/(n·r), oder sie lassen ihn weg. Je Quelle gibt es eine Druckzeile mit Namen und „range method, see ?msa_fit“.
-- [E5] (minor) AGENTS.md, Integrität Nr. 5 („brechen sie benannt ab“); BL-12 (Vollläufe dauern Stunden bis Tage); CRITERIA ACC-6 („auch szenarioweise über `--scenarios`“); K-M1d-6 — **Befund:**
-  - PLAN sagt „Weniger als zwei endliche Werte führen zu einem benannten Abbruch“, aber nicht, ob vor dem Abbruch Replikat- und Session-Datei geschrieben werden. Ohne sie verliert ein abgebrochener Vollauf alle Einzelschätzer und die Diagnose.
-  - Für szenarioweise Vollläufe fehlt eine Anleitung, wie ihre Dateien zu den drei Dateien je Studie werden, die K-M1d-6 erwartet. — **Vorschlag:**
-  - Erst Replikat- und Session-Datei schreiben, dann benannt abbrechen: Exit ungleich 0, keine Ergebnisdatei, die Session nennt Szenario und Schätzziel.
-  - Die README unter `inst/validation/sim/` beschreibt den Vollauf in einem Aufruf je Studie. Für szenarioweise Läufe beschreibt sie die Zusammenführung: Zeilen nach `scenario`, `rep`, `estimand`, eine Session-Datei je Studie mit allen Seeds, ohne Neuberechnung von Einzelschätzern.
-- [E6] (minor) docs/01 §5 (Z. 61: „Tests unter `tests/testthat/` überspringen mit `skip_if_not_installed()`, Abnahmetests nicht“; „neue Imports nur mit ADR“) — **Befund:** Der Testplan sieht Unit-Tests mit Gegenrechnungen gegen Suggests-Pakete vor (rptR, performance), nennt aber `skip_if_not_installed()` nicht. Die DESCRIPTION-Zeile („`parallel` für die Studienskripte deklarieren“) lässt das Feld offen. — **Vorschlag:** Jede Nutzung eines Suggests-Pakets unter `tests/testthat/` steht hinter `testthat::skip_if_not_installed()`. `parallel` kommt unter Suggests, nicht unter Imports.
-- [E7] (minor) [INFRA] Gate mutgate; `orchestrator/config.env:202` (`MUT_TEST_EXCLUDE='^(m2-[0-9]|m0-testthat-count$)'`), `:203`; `orchestrator/lib/r-mutation.R:53`; CRITERIA ACC-12; BL-13 — **Befund:** ACC-12 ist nicht umgesetzt (Prüflauf 6).
-  - Im Vorlauf und je Mutant liefen dann `test-m1b-2-…` und `test-m1b-3-…` mit: Paketinstallation, Kurzläufe bis zweimal 20 Minuten, Teilmengenläufe.
-  - Dazu käme das zweite Knit in `test-m1b-7-vignette-full-results.R`.
-  - Das Zeitlimit je Mutant stiege auf das Fünffache des Vorlaufs, und mutgate dauerte Tage.
-  - PLAN.md hält `config.env` für „nicht vorhanden“. Die Datei existiert mit Modus 600; der Builder konnte sie nur nicht lesen. — **Vorschlag:** an den Betreiber, vor den Gates von M1b: `MUT_TEST_EXCLUDE='^(m2-[0-9]|m0-testthat-count$|m1b-[23]-|m1b-7-vignette-full)'`. Das Test-Gate führt weiter alle M1b-Tests aus. Für den Builder gibt es nichts zu tun. Den BACKLOG-Eintrag schreibt der Reviewer in `50-code-review`; in `30-plan-review` ist `BACKLOG.md` kein freigegebener Pfad (`orchestrate.sh:488`).
-- [E8] (minor) [INFRA] `orchestrator/orchestrate.sh:543`, `:456`; CRITERIA ACC-15; BL-55 — **Befund:** Unverändert löscht ein Territoriums-Rollback vorher saubere, versionierte Dateien (Prüflauf 7). — **Vorschlag:** an den Betreiber: nur unversionierte Pfade in `OWNERSHIP_REMOVE` aufnehmen (`git ls-files --error-unmatch`). Für den Builder gibt es nichts zu tun.
+## Antworten auf die Einwand-IDs
 
-## Betreiberfrage zu E1 (ACC-1)
+### E1 gegen die Arbiter-Direktive
 
-K-M1b-5 verlangt, dass ICC_items von `msa_fit(type = "binary", link = "logit")` auf BeetlesMale drei Werten zugleich gleicht:
+| Direktive | Verlangt | PLAN-UPDATE | Urteil |
+| --- | --- | --- | --- |
+| Nr. 1 | K-M1b-5 nach docs/02 Z. 43 | Ziel Z. 16–20; E1 Z. 37–39 | übernommen |
+| Nr. 2 | Logit mit π²/3, kein Sonderfall | Z. 17–18: „ICC_items bei Logit verwendet weiterhin die latente Restvarianz π²/3“ | übernommen |
+| Nr. 3 | Tests, Anker und Toleranzen nach ADR-024; der Builder ändert keine Abnahmetests | Z. 39–45, 102–103, 126–129 | übernommen |
+| Nr. 4 | E1 mit `akzeptiert:` | Z. 37 | erfüllt |
+| Nr. 4 | PLAN.md Z. 16–25, 330–333, 369–392, 398 und 408 sind erledigt | Z. 40–45, wörtlich diese Stellen, dazu der Schlusssatz nach der ACC-Tabelle | erfüllt |
+| Nr. 4 | Testplanzeile K-M1b-5 mit (i) und (ii) | Z. 498 enthält (i) mit `expect = "liability"`, performance auf direktem `glmer` und `fit$model`, Nachrechnung mit ANK-28 und live_tol sowie (ii) mit Vorgabeaufruf, beiden Punktschätzern aus ANK-25 und vignette_tol; dazu „Kein Vergleich ICC_items gegen ANK-25“ | erfüllt |
+| Nr. 4 | Vignettentabelle: ANK-25 nur als Installationsprüfung | Z. 298–310: zwei getrennte Prüfungen; „Diese Werte sind ausdrücklich keine Referenzwerte für ICC_items.“ | erfüllt; die Darstellung bindet ADR-025 Nr. 1.4 |
+| Nr. 5 | S-bin mit π²/3; K-M1b-7 im Wortlaut | ADR-023 Nr. 13 übernommen (Z. 88–96); Szenarien unverändert | erfüllt |
+| Nr. 6 | keine Erfüllungsbehauptung | Z. 19–20: „eine Erfüllung des Kriteriums wird damit noch nicht behauptet“ | erfüllt |
 
-- (a) dem Vorgabeaufruf `rptBinary(…, link = "logit")`: 0,187930859738746, Toleranz 1e-6;
-- (b) ANK-25: 0,188, Toleranz 5e-4;
-- (c) `performance::icc()`: 0,223294850303548.
+### E2 bis E8, ADR-023 und ACC
 
-Die Spec legt die latente Restvarianz π²/3 fest (docs/01 §5, Formelsammlung §4). Danach ist ICC_items 0,223294850303547. Welche Fassung gilt?
+| ID | Verlangt (Runde 1) | Antwort in PLAN-UPDATE | Urteil |
+| --- | --- | --- | --- |
+| E2 | Regel nach ADR-023 Nr. 10.9, Regel für numerische Fits, drei Unit-Tests | Z. 46–51; Tabelle je Fitpfad Z. 160–176; Unit-Tests Z. 504–515 (ucminf mit einem Term, nlminb bei mehreren Termen und `useMatrix`, singulärer `glmer`, Limitabbruch, seltene Codes synthetisch, numerischer Teil) | richtig; Engine-Fakten nachgeprüft (Prüfläufe 1 bis 3); festgehalten in ADR-025 Nr. 3 |
+| E3 | Labels nur mit `levels`; zwei verschiedene, nicht fehlende Werte; `levels[2]` ist das Ereignis; Invarianztest | Z. 52–57, 147–158, 516–520 | richtig |
+| E4 | AIAG-Bezug nur mit fehlender Korrektur oder gestrichen; eine Druckzeile je Quelle | Z. 58–62, 188–201 | richtig. Der Warnungstext erfüllt ADR-023 Nr. 9.5 und enthält keinen AP1-Auslöser |
+| E5 | Replikat- und Session-Datei vor dem Abbruch; README mit Vollauf und Zusammenführung | Z. 63–68, 254–291, 525–530 | richtig. Es geht über den Vorschlag hinaus: belegte Zielverzeichnisse werden abgewiesen, und der Zusammenführungscode ist ausführbar und mit Unit-Fällen geprüft. Das ist mit ADR-023 Nr. 1.2 verträglich und mit den Abnahmetests, die je Lauf ein frisches Verzeichnis anlegen (`setup-m1b.R:365–366`) |
+| E6 | `skip_if_not_installed()` in Unit-Tests; `parallel` unter Suggests | Z. 69–74, 115, 535–538 | richtig |
+| E7 | [INFRA], Betreiber | Z. 75–81 | richtig; umgesetzt (Prüflauf 7) |
+| E8 | [INFRA], Betreiber | Z. 82–86 | richtig; umgesetzt (Prüflauf 7) |
+| ADR-023 Nr. 10.9 und Nr. 13 | bestätigen oder mit Spec-Zitat ablehnen | Z. 46–51, 88–96 | bestätigt |
+| ACC-18 | Vignette nach ACC-18; Reviewer-ADR in Runde 2 | Z. 98–103, 298–310, 319–322 | richtig; ADR-025 Nr. 1 und 2 |
+| ACC-1 bis ACC-17 | — | Tabelle Z. 390–409 | richtig (Prüflauf 6) |
+| BACKLOG | jeder offene Eintrag | Z. 411–486 mit 66 Zeilen | vollständig (Prüflauf 6); Vertagungen wie in Runde 1 |
 
-- **Variante A (empfohlen von Reviewer 10-acceptance, Builder und diesem Review).**
-  - K-M1b-5 vergleicht ICC_items live mit `rptR::rptBinary(Colour ~ (1 | Population), grname = "Population", link = "logit", expect = "liability")` (ANK-TOL.rptr.live_tol) und mit `performance::icc()`.
-  - ANK-25 bleibt eine Installationsprüfung des Vorgabeaufrufs, wie ANK-21 in K-M1b-1. Der Test „the installed rptR reproduces both published point estimates of ANK-25 with its default call“ besteht schon (ACC-16).
-  - Im selben Sinn zu fassen sind Formelsammlung §4 Z. 190 („R = 0,188 auf der Link-Skala“) und docs/01 §3 Nr. 12 („Abnahme gegen rptR nur auf der Link-Skala“).
-  - Die zwei unabhängigen Belege nach docs/01 §2 Nr. 2 bleiben: Gegenrechnung (rptR mit `liability`, performance) und Nachrechnung (σ²/(σ² + π²/3)). Messwerte: 0,223294850303547, 0,223294850303548 und 0,223294850303547.
-  - Code und Plan folgen dieser Skala schon (`R/fit.R:577`). Am Plan ändert sich nur die K-M1b-5-Tabelle der Vignette.
-- **Variante B (nicht empfohlen).**
-  - Die binäre ICC rechnet mit der Beobachtungsvarianz 1/(p(1 − p)).
-  - Das widerspricht docs/01 §5, ANK-28, Formelsammlung §4 und Nakagawa, Johnson & Schielzeth 2017 (Druckseite 7).
-  - Auch B erfüllt K-M1b-5 nicht wörtlich: `performance::icc(approximation = "observation_level")` liegt 4,0e-4 neben der rptR-Vorgabe. Das Kriterium müsste zusätzlich umformuliert werden.
-- **Nach der Entscheidung.**
-  - Den Spec-Text ändert der Betreiber (docs/01 §1).
-  - `tests/acceptance/test-m1b-5-binary-rptr.R` und die K-M1b-5-Prüfung in `test-m1b-7-vignette.R` passt der Reviewer mit ADR an.
-  - Diese Anpassung sollte vor BUILD liegen, etwa durch eine Wiederholung von `10-acceptance` für M1b oder einen Betreiber-Commit. Sonst laufen BUILD und Gates gegen einen Test, den der Reviewer erst in `50-code-review` ändern darf; das kostet eine Rework-Runde.
+## Einwände (Runde 2)
+
+- [E9] (minor) K-M2-6 (docs/03 Z. 19: „oder, wenn dieser Fit mit Fehler oder Konvergenzwarnung endet, den numerischen Fit auf den Klassenscores als gekennzeichneten Rückfall (`ankerRef: ANK-68`)“); ADR-006 Nr. 4.2; K-M1b-4 („gibt in diesem Fall immer eine `warning()` aus“); K-M1b-6 („fehlende oder nicht in `levels` enthaltene Werte werden mit Warnung verworfen“); ADR-025 Nr. 4 — **Befund:** PLAN-UPDATE behandelt K-M2-6 als unveränderten Regressionslauf. Belege: Z. 203–207 („Regressionen prüfen den tatsächlichen Rückfallpfad; an dessen Kriterien oder Warnungsfilter in `R/acmg.R` ist keine Änderung geplant“), Reihenfolge Nr. 7 und Testplan Z. 521–524.
+  - Der Plan sieht nicht vor, dass die verlangten Warnungen vier Prüfungen von K-M2-6 und K-M2-7 rot machen.
+    - Der AP1-Hauptplan hat zwei Blöcke (docs/03 Z. 67), also hat jeder ordinale AP1-Fit die abgeleitete Komponente `block`.
+    - Die Mock-Daten enthalten fehlende Antworten (Prüflauf 4).
+    - Das Abnahmeorakel wertet jede Warnung als Rückfallauslöser, `acmg_fit()` zu Recht nicht (Prüflauf 5).
+  - Ohne Festlegung droht eine Abhilfe an der falschen Stelle.
+    - Ein Rückfall bei jeder Warnung machte jeden AP1-Fit numerisch und widerspräche K-M2-6 und ADR-006 Nr. 4.2.
+    - Unterdrückte oder bedingte Warnungen widersprächen K-M1b-4 („immer“) und K-M1b-6.
+
+  — **Vorschlag:**
+  - Der Plan bleibt, wie er ist: keine Änderung in `R/acmg.R`; die Regressionen „Range-/Ausschlusswarnungen ohne Rückfall, echte Konvergenzwarnung mit numerischem Rückfall“ bleiben.
+  - BUILD führt K-M2-6 und K-M2-7 aus. Rote Prüfungen mit genau dieser Ursache meldet der Builder mit echtem Output in `PROGRESS.md` als [INFRA] (ADR-025, Konsequenzen).
+  - Jede andere Abweichung bleibt ein Befund gegen den Builder.
+- [E10] (minor) [INFRA] Gate tests; `tests/acceptance/setup-m2.R:714` (`failed = inherits(value, "error") || length(warns) > 0L`), `:869–883`; `tests/acceptance/test-m2-6-evaluate.R:101–107`; K-M2-6; K-M2-7; ANK-68 (`fallback_fit.trigger`: „Fehler oder Konvergenzwarnung des ordinalen Fits“); ADR-006 Nr. 4.2; ADR-025 Nr. 4 — **Befund:** Das Abnahmeorakel weicht von K-M2-6, ANK-68 und ADR-006 Nr. 4.2 ab.
+  - Bei jeder Warnung verlangen `acc_m2_check_model()` und der Test des gemeinsamen Fits den numerischen Rückfall.
+  - Bis M1b war das folgenlos. Mit den verlangten Warnungen werden rot (Prüfläufe 4 und 5):
+    - `test-m2-6-evaluate.R` Z. 87, je Modell, dreimal;
+    - Z. 93, der gemeinsame Fit;
+    - Z. 164, die konstruierten Läufe, dreimal;
+    - `test-m2-7-robustness-pilot.R` Z. 211, dreimal.
+  - Die Ursache liegt außerhalb des Builder-Territoriums. `30-plan-review` darf `tests/acceptance/` nicht schreiben (`orchestrate.sh:488`).
+
+  — **Vorschlag:**
+  - Der Reviewer passt das Orakel nach ADR-025 Nr. 4 an: eine vom Produktcode unabhängige Auslöserregel nach ADR-006 Nr. 4.2. Bei Warnungen ohne Auslöser wird der ordinale Fit erwartet; alle übrigen Erwartungen bleiben.
+  - Am besten geschieht das vor den Gates von M1b. Der Betreiber entscheidet über eine wiederholte Abnahmephase für M1b; ihr Pfad `tests/acceptance/*` ist freigegeben (`orchestrate.sh:486`), Vorbild ist ADR-024 Nr. 2.
+  - Sonst geschieht es in `50-code-review` Runde 1 und kostet eine Rework-Runde („PASS nur bei gates.result=pass“).
+  - Den BACKLOG-Eintrag schreibt der Reviewer in `50-code-review`.
+- [E11] (minor) K-M1b-7 („Tabellen je Szenario mit Bias, EmpSE, MCSE“); ADR-023 Nr. 11.5 (CRITERIA ACC-11 (4)); `tests/acceptance/setup-m1b.R:566–583` (`acc_m1b_shows`: „at least two significant digits written and within one unit of the last written digit“) — **Befund:** PLAN-UPDATE legt fest, welche Werte die Vignette zeigt (Z. 312–317), aber nicht, mit welcher Genauigkeit.
+  - Eine feste Zahl von Dezimalstellen, etwa `knitr::kable(digits = 3)`, zeigt kleine Werte mit weniger als zwei signifikanten Stellen, als „0.000“ oder „0.004“. Das betrifft kleine Bias-Werte und das MCSE von EmpSE, das bei n_check = 20 etwa EmpSE/√38 beträgt.
+  - Solche Zahlen zählt der Test nicht als gezeigt, obwohl der Wert richtig gelesen wurde.
+  - ACC-16 nennt bereits die doppelte Rundung durch `kable`.
+
+  — **Vorschlag:**
+  - Ergebnis- und Vergleichswerte nach signifikanten Stellen formatieren, etwa mit `signif(x, 3)` oder `format(x, digits = 3)` vor `kable`.
+  - `n_sim` als ganze Zahl zeigen.
+  - Verglichen wird weiter ungerundet (Z. 310).
 
 ## Prüfung nach Gesichtspunkten
 
 ### Spec-Treue
 
-- **Szenariotabelle:** Die Tabelle des Plans stimmt Zeile für Zeile mit docs/02 Z. 28–35 überein: Pläne, wahre Komponenten, Links, μ und Schwellen. Für S-two füllt PLAN-M1b-SIM-01 die Lücke (ADR-023 Nr. 13.1).
-- **Wahre Werte:** %GRR = 100·√(GRR/TV) und ICC = Item/TV mit Rest in GRR, wie `acc_m1b_truth()` sie rechnet.
-- **Datenerzeugung:**
-  - S-two zieht beide Modellstufen in jeder Wiederholung neu; damit gilt E[β²/2] = σ², wie Formelsammlung §4 es voraussetzt.
-  - Für S-bin ist `plogis(μ + η)` gleichwertig zum logistischen Schwellenmodell.
-- **K-M1b-1:** Die Prüfung ist schon grün (ACC-16), und der Plan ändert den Fitpfad dafür nicht.
-- **K-M1b-2, K-M1b-3:** Skripte, Kurzläufe, Schema, Reproduktion, Teilmengen und Laufzeit sind vollständig geplant (ADR-023 Nr. 1–8).
-- **Seed-Regel:** Die Regel `20261031 + j(s) + 8(r − 1)` ist für alle (j, r) eindeutig, denn j läuft von 1 bis 8. Sie hängt nicht von n_sim, Auswahl oder Workerzahl ab, und Überlauf wird benannt abgewiesen.
+- **Szenarien und Wahrheiten:** unverändert gegenüber Runde 1. S-two folgt ADR-023 Nr. 13.1, S-ord Nr. 13.2, S-bin Nr. 13.3. Die Wahrheiten für %GRR und ICC entsprechen `acc_m1b_truth()`.
+- **K-M1b-1:** Der Fitpfad bleibt; dazu kommen nur Eingabeprüfungen und `converged`. Der Test ist heute schon grün (ACC-16).
+- **K-M1b-2 und K-M1b-3:**
+  - Skripte, Formate, Kennzahlen und Seed-Regel folgen ADR-023 Nr. 1 bis 8 und 13.
+  - Das Abbruchprotokoll aus E5 hält ADR-023 Nr. 5.5 ein: benannter Abbruch, kein Ersatzwert.
 - **K-M1b-4:**
-  - Der Fit mit festem Effekt und β̂²/2 besteht schon.
-  - Neu sind Warnung, Druckzeilen, `msa_grr$derived` und Hilfe.
-  - Der vorgeschlagene Warnungstext erfüllt alle Bestandteile von ADR-023 Nr. 9.5 und enthält keinen AP1-Auslöser.
-  - Siehe auch E4.
-- **K-M1b-5:** E1.
-- **K-M1b-6:** Alle acht Prüfungen aus ACC-10 sind abgedeckt, BL-81 eingeschlossen.
-  - Die Lücke 0,5 → 0 schließt Schnittstellen Nr. 2 (`R/fit.R:144` kürzt heute still).
-  - Die stille Verwerfung binärer Labels außerhalb von `levels` behebt Nr. 1 (`R/fit.R:147`).
-  - Siehe auch E2 und E3.
+  - Fester Effekt und β̂²/2 bestehen schon.
+  - Die Warnung (PLAN-UPDATE Z. 190–194) enthält „range method“, „positive“, „bias“, „Var(“ und „?msa_fit“.
+  - Je Quelle gibt es eine Druckzeile in beiden Druckmethoden.
+  - Die Hilfe nennt `two_level` und die Vignette.
+- **K-M1b-5:** gemäß Direktive. Der Code bleibt bei π²/3 (`R/fit.R:577`).
+- **K-M1b-6:**
+  - Alle acht Prüfungen aus ACC-10 sind abgedeckt, auch BL-81 und die Kodierung aus E3.
+  - Der glmer-Test vergleicht jede vermerkte lme4-Meldung wörtlich, nach Normalisierung der Zahlen, mit den Warnungen (`test-m1b-6-edge-cases.R:145–149`).
+  - Die geplante Regel „jede vermerkte lme4-Meldung als Warnung“ erfüllt das, wenn die Meldung ohne Präfix weitergegeben wird. Im Testfall warnt lme4 die einzige vermerkte Meldung schon selbst (Prüflauf 3).
 - **K-M1b-7:**
-  - Abschnitt, Live-Prüfungen und Dateiwahl über `system.file()` in beiden Kontexten sind geplant, ebenso Ankerkopien für den öffentlichen Bau und die Literalregel einschließlich der Helfer.
-  - Der K-M1b-5-Teil hängt an E1.
+  - Geplant sind der Abschnitt, beide K-M1b-5-Prüfungen getrennt, die Dateiwahl über `system.file()` und die Literalregel einschließlich ANK-28.
+  - Zur Anzeigegenauigkeit siehe E11.
 
 ### Architektur und Verträge
 
 - **Schnittstellen:**
-  - Es gibt keine neuen Argumente oder Exporte und keine geänderten Vorgaben; ANK-02 bleibt unberührt.
-  - `converged` und `msa_grr()$derived` sind zusätzliche Felder, und die Druckausgabe ändert sich; beides ist nach docs/01 §4 ohne ADR zulässig.
-  - Die numerische NA-/NaN-Regel aus ADR-022 bleibt.
-- **Abhängigkeiten:** Es gibt keine neuen Imports. rptR und performance kommen unter Suggests (ACC-13), `parallel` siehe E6.
+  - Keine neuen Argumente, Exporte oder Vorgaben; ANK-02 bleibt unberührt.
+  - `converged` und `msa_grr()$derived` sind zusätzliche Felder, und die Druckausgabe ändert sich; beides ist ohne ADR zulässig (docs/01 §4).
+- **Abhängigkeiten:** keine neuen Imports. `rptR`, `performance` und `parallel` kommen unter Suggests (ACC-13, E6).
+- **Konvergenz:** Die Regel je Fitpfad ist widerspruchsfrei zu ADR-023 Nr. 10.9 und zu ADR-018, ADR-020 und ADR-022.
+  - Der numerische Vorgabepfad liest `opt$conv = 0L` und die checkConv-Meldungen (`R/fit.R:531–542`).
+  - Startdiagnosen entscheiden nicht.
+  - Festgehalten in ADR-025 Nr. 3.
 - **Territorien:**
-  - Alle Pfade des Plans liegen im Builder-Territorium: `config.env:138` sowie `docs/decisions/*` und `PROGRESS.md` (`orchestrate.sh:496`).
-  - Geplant sind keine Dateien unter `tests/acceptance/`, `tests/simulation/`, `reference/` oder `orchestrator/` außer den zugewiesenen Handoffs.
+  - Alle BUILD-Pfade liegen im Builder-Territorium (`config.env:138`, `orchestrate.sh:496`).
+  - Unter `tests/acceptance/`, `tests/simulation/`, `reference/` und `orchestrator/` ist außer den Handoffs nichts geplant.
 - **Golden-Daten:**
-  - `inst/extdata/` bleibt unberührt.
-  - Die Ankerkopien unter `inst/validation/latent/anchors/` folgen dem Muster von ADR-021.
-  - ANK-TOL liegt damit zweimal im Paket, unter `numeric/` und unter `latent/`. Der geplante Drifttest muss beide Kopien gegen das Original prüfen; mit „Tests prüfen Schema, genaue Dateimenge, Hashes und Drift“ ist das abgedeckt.
-- **AP1 (K-M2-6):**
-  - Die Range-Warnung und die neuen Verwerfungswarnungen lösen keinen numerischen Rückfall aus.
-  - Die neue `clmm`-Konvergenzwarnung mit „converge“ soll ihn auslösen.
-  - Der Plan sieht für beide Fälle Regressionen vor.
-- **Parallelisierung:** `mclapply` steht nur unter `inst/validation/sim/` (docs/01 §5). Unter `R/` bleibt die Ausführung sequentiell (K-M1c-1).
+  - `inst/extdata/` und `reference/anchors/` bleiben unberührt.
+  - Die Ankerkopien unter `inst/validation/latent/anchors/` folgen ADR-021; der Drifttest prüft beide ANK-TOL-Kopien.
+- **AP1:**
+  - Keine Änderung in `R/acmg.R`. Das ist richtig (ADR-006 Nr. 4.2).
+  - Die neue Nichtkonvergenzwarnung von `clmm` enthält „converge“ und löst den Rückfall aus, wie K-M2-6 es verlangt.
+  - Zum Abnahmeorakel siehe E9 und E10.
+- **Parallelisierung:** `mclapply` nur unter `inst/validation/sim/`; unter `R/` bleibt die Ausführung sequentiell (docs/01 §5).
 
 ### Vollständigkeit
 
-- **Dateiliste:** Sie deckt K-M1b-1 bis K-M1b-7 ab, dazu Hilfe, NEWS, PROGRESS und das Builder-ADR. Das Builder-ADR bekommt eine Nummer nach ADR-023.
-- **BACKLOG:** Alle 66 offenen Einträge sind adressiert oder mit Zuständigkeit und Anlass vertagt; BL-38 ist erledigt (Prüflauf 5).
-- **Vertagungen:** BL-84, BL-87 und BL-89 sind mit Zeitpunkt vertagt (M1c-BUILD, vor M1d). Das ist mit LESSONS vereinbar, weil M1b den numerischen Pfad nicht umbaut.
-- **ACC:** ACC-1 bis ACC-17 sind vollständig behandelt (Tabelle unten).
+- **Dateiliste:** Sie deckt K-M1b-1 bis K-M1b-7 ab, dazu Hilfe, NEWS, PROGRESS und das Builder-ADR. Dessen Nummer beginnt bei ADR-026.
+- **Einwände und Einträge:** E1 bis E8, ACC-1 bis ACC-18 und alle 66 offenen BACKLOG-Einträge sind beantwortet (Prüflauf 6).
+- **Vertagungen:** BL-84, BL-87 und BL-89 sind mit Zeitpunkt vertagt, wie in Runde 1 angenommen.
+- **Verfahrensfragen:** Mit ADR-025 sind alle Reviewer-Auslegungen festgehalten, die CRITERIA.json für diese Runde ankündigt.
 
 ### Risiken
 
-Der Plan nennt Laufzeit, Mutationsauswahl, AP1-Integration, numerische Bestandsrisiken, Versionsbindung der Vollläufe und Sandbox, jeweils mit Gegenmaßnahme. Er behauptet keine Messung, die er nicht hat; die Werte der Attrappe gelten ausdrücklich nur als Planungsinformation. Ergänzt werden:
-
-- E2: Konvergenz als Klasse von Engine-Randfällen;
-- E5: Vollauf und Abbruch.
+- **Genannt mit Gegenmaßnahme:** Engine-Diagnosen als Klasse (LESSONS), Laufzeit und Mutationsauswahl, lange Fehlläufe, Reproduktion bis M1d, numerische Bestandsgrenzen und Plattformen.
+- **Ergänzt:**
+  - E9 und E10: Abnahmeorakel von K-M2-6 und K-M2-7;
+  - E11: Anzeigegenauigkeit der Vignettentabellen.
 
 ### Gate-Abdeckung
 
-- **tests:** führt alle M1b-Abnahmetests aus. Die Laufzeit des Gates wächst um die beiden Neuläufe (zusammen bis 2 × ANK-TOL.sim_runtime), die Paketinstallation und ein zweites Knit; die Messung folgt in BUILD (BL-13).
-- **lint:** baut `validation.Rmd` öffentlich. Dafür braucht der Bau rptR und performance unter Suggests (ACC-13) und die Ankerkopien.
-- **trace:** Jede Testdatei nennt ihre K-M1b-ID. Den Bau aus K-M1b-7 ordnet `test-m1b-7-vignette.R:10–11` dem lint-Gate zu.
-- **mutgate:** Der Scope bleibt `R/fit.R` und `R/grr.R`; die schnellen Tests K-M1b-1, -4, -5, -6 und -7 erkennen die neuen Fehlbilder. Die Testauswahl ist E7.
+- **tests:** führt alle Abnahmetests aus. K-M2-6 und K-M2-7 bleiben rot, bis ADR-025 Nr. 4 umgesetzt ist (E10).
+- **lint:** baut `validation.Rmd` öffentlich. Dafür braucht der Bau `rptR` und `performance` unter Suggests und die Ankerkopien.
+- **trace:**
+  - Jede Testdatei nennt ihre K-M1b-ID.
+  - Den Bau aus K-M1b-7 trägt das lint-Gate (`test-m1b-7-vignette.R:10–11`).
+  - `trace` liest aus `CRITERIA.json` nur `.criteria`, unverändert.
+- **mutgate:**
+  - Der Scope bleibt `R/fit.R` und `R/grr.R`; die Testauswahl ist gesetzt (E7).
+  - `m2-[0-9]` ist ausgeschlossen; E10 berührt mutgate daher nicht.
 - **golden-adr:** Unter `inst/extdata/` und `reference/anchors/` ist keine Änderung geplant.
-- **territory:** siehe Architektur.
+- **territory:**
+  - Diese Phase schreibt nur `PLAN-REVIEW.md`, `verdict-plan.json` und `CRITERIA.json` (nur Statuszeilen) im Handoff, dazu `docs/decisions/ADR-025-…` (`orchestrate.sh:488`).
+  - BUILD siehe Architektur.
 
-## Antworten auf die Einwand-IDs
+## Hinweise für BUILD
 
-| ID | Behandlung im Plan | Urteil |
-| --- | --- | --- |
-| ACC-1 | Widerspruch bestätigt, Variante A empfohlen, eigene Gegenrechnung, kein Eingriff | richtig; E1, ESCALATE |
-| ACC-2 | übernommen: CLI, installiertes Paket, Arbeitsverzeichnis, Dateinamen | richtig. Die CLI-Zeile des Plans nennt eine andere Schalterreihenfolge als der Test; der benannte Parser verträgt das. ADR-023 Nr. 1 |
-| ACC-3 | übernommen, alle vier Kennzahlen auch für `two_level` | richtig; ADR-023 Nr. 2 und 3 |
-| ACC-4 | übernommen: echte Zählungen, `derived`, gescheiterte Fits | richtig; ADR-023 Nr. 4 |
-| ACC-5 | übernommen; RMSE = 0 als Konvention 0 | richtig. Die Konvention ist zulässig und bei stetigen Schätzern ohne Wirkung. ADR-023 Nr. 5; Abbruch siehe E5 |
-| ACC-6 | stabile Ströme je ID und Wiederholung, Teilmengen | richtig; die Seed-Regel erfüllt ADR-023 Nr. 6 |
-| ACC-7 | übernommen, Namensräume vor dem Fork | richtig; ADR-023 Nr. 7 |
-| ACC-8 | übernommen | richtig; ADR-023 Nr. 8 |
-| ACC-9 | übernommen | richtig; ADR-023 Nr. 9, E4 |
-| ACC-10 | übernommen | richtig. Die Konvergenzregel ist offen (E2, ADR-023 Nr. 10.9), ebenso die Binärkodierung (E3) |
-| ACC-11 | übernommen; der K-M1b-5-Teil wartet | richtig; ADR-023 Nr. 11 |
-| ACC-12 | [INFRA] beim Betreiber | richtig; E7 (Wert noch alt) |
-| ACC-13 | rptR und performance unter Suggests | richtig; E6 |
-| ACC-14 | übernommen | richtig; ADR-023 Nr. 12 |
-| ACC-15 | [INFRA] beim Betreiber | richtig; E8 |
-| ACC-16 | nur als Planungsinformation | richtig |
-| ACC-17 | Mindestzahl aus ANK-06 | richtig |
-| PLAN-M1b-SIM-01 | Fünfklassenschema wie S-ord-1 vorgeschlagen | angenommen; ADR-023 Nr. 13.1 |
-
-## Hinweise für Runde 2
-
-- **Antworten:** PLAN-UPDATE beantwortet E1 bis E8 nach SCHEMA, je mit `akzeptiert: <Änderung>` oder `abgelehnt: <wörtliches Spec-Zitat mit Fundstelle>`.
-  - E1 nach der Direktive aus ARBITER.md bzw. vom Betreiber.
-  - E7 und E8 betreffen nur den Betreiber; „akzeptiert: keine Builder-Änderung“ genügt.
-- **Bindung:** ADR-023 bindet. Bestätigen oder mit Spec-Zitat ablehnen muss PLAN-UPDATE nur Nr. 10.9 und Nr. 13.
-- **Letzte Runde:** Runde 2 ist die letzte Planrunde. Löst der Arbiter jetzt auf, ist er verbraucht, und ohne PASS in Runde 2 wird M1b geparkt (`orchestrate.sh:804–807`, `:926–932`).
+- **Vertrag:** `PLAN.md` mit den Berichtigungen aus `PLAN-UPDATE.md`; ADR-023 Nr. 1 bis 13 mit ADR-025 Nr. 1 bis 4.
+- **E9 und E10:** Rote Prüfungen von K-M2-6 und K-M2-7, deren einzige Ursache das Abnahmeorakel ist, gehören mit Output als [INFRA] in `PROGRESS.md`.
+  - Keine Änderung an `acmg_fit()` oder `acmg_convergence_warning()`.
+  - Keine unterdrückte oder bedingte Pflichtwarnung.
+- **E11:** Vignettenwerte nach signifikanten Stellen anzeigen.
+- **Code-Review M1b:**
+  - Als Judge prüft es ADR-025 Nr. 1.4 (Trennung von ICC_items und ANK-25) und Nr. 2.3 (Literalregel einschließlich Helfer).
+  - Es setzt ADR-025 Nr. 4 um, falls der Betreiber das nicht vorher veranlasst hat.

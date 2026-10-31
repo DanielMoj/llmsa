@@ -120,7 +120,7 @@
     },
     {
       "id": "ACC-10",
-      "status": "Auslegung des Reviewers (Spec schweigt zu Wortlaut, Feldname und Auslösern); festgehalten in ADR-023 Nr. 10, Feld `converged` präzisiert in Nr. 10.9",
+      "status": "Auslegung des Reviewers (Spec schweigt zu Wortlaut, Feldname und Auslösern); festgehalten in ADR-023 Nr. 10, Feld `converged` präzisiert in Nr. 10.9 und ADR-025 Nr. 3 (numerische Fits, tatsächlich verwendeter clmm-Optimierer)",
       "ref": "K-M1b-6 (ganzer Wortlaut, CRITERIA.json); docs/01 §2 Nr. 4: „Ergebnis ist eine richtige Zahl oder eine klare Fehlermeldung, nie stillschweigend eine falsche Zahl.“; ADR-022 Nr. 2: „Ordinale und binäre Zielgrößen folgen in M1b (BACKLOG).“; BACKLOG BL-81",
       "kind": "Prüfform K-M1b-6",
       "owner": "Builder",
@@ -129,7 +129,7 @@
     },
     {
       "id": "ACC-11",
-      "status": "Auslegung des Reviewers; festgehalten in ADR-023 Nr. 11; K-M1b-5-Teil (3) und Literalregel (6) nach ADR-024 neu gefasst, siehe ACC-18",
+      "status": "Auslegung des Reviewers; festgehalten in ADR-023 Nr. 11; K-M1b-5-Teil (3) und Literalregel (6) nach ADR-024 neu gefasst, siehe ACC-18 (ADR-025 Nr. 1 und 2)",
       "ref": "K-M1b-7 (ganzer Wortlaut, CRITERIA.json); docs/01 §8: „solange nur Kurzlauf-Dateien vorliegen, liest die Vignette diese und nennt `n_sim` aus der Datei“",
       "kind": "Prüfform K-M1b-7",
       "owner": "Builder",
@@ -192,7 +192,7 @@
     },
     {
       "id": "ACC-18",
-      "status": "Auslegung des Reviewers (wiederholte Abnahme nach ADR-024); Reviewer-ADR zu ADR-023 Nr. 11.4 und 11.7 in 30-plan-review Runde 2",
+      "status": "Auslegung des Reviewers (wiederholte Abnahme nach ADR-024); festgehalten in ADR-025 Nr. 1 und 2 (30-plan-review Runde 2), ersetzt ADR-023 Nr. 11.4 und 11.7",
       "ref": "K-M1b-7: „mit den Prüfungen aus K-M1b-1, K-M1b-5“; K-M1b-5 (Fassung nach ADR-024, docs/02 Z. 43): „und der Nachrechnung σ²_Population/(σ²_Population + π²/3) (`ankerRef: ANK-28`)“ und „die in der Vignette publizierten Punktschätzer (`ankerRef: ANK-25`, Toleranz `ankerRef: ANK-TOL.rptr.vignette_tol`)“; ADR-023 Nr. 11.4: „Inhalt und Vergleichsgrößen dieses Teils hängen von der Betreiberentscheidung zu ACC-1 ab.“; ARBITER.md (Runde 1), Direktive Nr. 5: „K-M1b-7 braucht keine Textänderung; seine K-M1b-5-Prüfung folgt der gewählten Fassung von K-M1b-5.“; verdict-plan.json (Runde 1), E1: „passt der Reviewer test-m1b-5-binary-rptr.R und die K-M1b-5-Prüfung in test-m1b-7-vignette.R mit ADR an“",
       "kind": "Prüfform K-M1b-7, K-M1b-5-Teil",
       "owner": "Builder (Vignette), Reviewer (ADR)",

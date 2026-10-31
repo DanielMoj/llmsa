@@ -1,50 +1,24 @@
 {
   "milestone": "M1b",
   "phase": "plan",
-  "round": 1,
-  "verdict": "ESCALATE",
-  "blocking": [
-    {
-      "id": "E1",
-      "ref": "docs/02-statistikkern.md Z. 43 (K-M1b-5) gegen docs/01-fachspezifikation.md Z. 58 (§5: „Latente Skala: Restvarianz 1 (Probit), π²/3 (Logit) (`ANK-28`)“), Formelsammlung §4 Z. 175–181 (σ²_ε = π²/3; R_latent = σ²_α/(σ²_α + σ²_AV + π²/3)) und docs/01 Z. 10 (§1: „Weicht der Code von einer Soll-Formel ab, gilt die Formelsammlung“); ANK-25, ANK-28, ANK-TOL.rptr; CRITERIA ACC-1",
-      "note": "Wörtlicher Spec-Widerspruch, deshalb ESCALATE. K-M1b-5 verlangt eine ICC_items, die zugleich (a) dem Vorgabeaufruf rptR::rptBinary(Colour ~ (1 | Population), grname = \"Population\", link = \"logit\") gleicht (R_link 0.187930859738746; expect = \"meanobs\" rechnet mit 1/(Ep(1 - Ep)); ANK-TOL.rptr.live_tol 1e-6), (b) dem Vignettenwert ANK-25 (0.188; vignette_tol 5e-4) und (c) performance::icc() (0.223294850303548). Spec-gemäß (π²/3, docs/01 §5, Formelsammlung §4) ist ICC_items 0.223294850303547, gleich performance::icc() und rptBinary(..., expect = \"liability\"); der Abstand zu (a) und (b) beträgt 0.0354. Auch Variante B scheitert: performance::icc(approximation = \"observation_level\") ergibt 0.187526014414148, 4.0e-4 neben der rptR-Vorgabe. Keine Implementierung erfüllt alle drei Vergleiche. Toleranzen aufzuweiten ist verboten; ein anderer Aufruf ändert den Kriteriumstext. Die Quellenregel aus docs/01 §1 trägt nicht: Die Formelsammlung folgt für R_latent Nakagawa & Schielzeth 2010 (π²/3), die rptR-Vignette rechnet ausdrücklich mit 1/(p(1-p)). Reviewer-Nachrechnung mit echtem Output in PLAN-REVIEW.md (Prüfläufe 1 und 2). Dort steht auch die Betreiberfrage. Empfohlen wird Variante A: K-M1b-5 vergleicht live mit rptBinary(..., expect = \"liability\") und performance::icc(); ANK-25 bleibt Installationsprüfung des Vorgabeaufrufs; Formelsammlung §4 Z. 190 und docs/01 §3 Nr. 12 werden im selben Sinn gefasst. Der Plan behandelt den Punkt richtig; der Builder ändert bis zur Direktive nichts an K-M1b-5. Nach der Entscheidung passt der Reviewer test-m1b-5-binary-rptr.R und die K-M1b-5-Prüfung in test-m1b-7-vignette.R mit ADR an, möglichst vor BUILD; 30-plan-review und 70-arbiter dürfen tests/acceptance/ nicht schreiben (orchestrate.sh:488, :491)."
-    }
-  ],
+  "round": 2,
+  "verdict": "PASS",
+  "blocking": [],
   "nonblocking": [
     {
-      "id": "E2",
-      "ref": "K-M1b-6 (docs/02 Z. 44: „Nichtkonvergenz von `clmm` oder `glmer` wird als Warnung weitergegeben und `singular`/Konvergenz im Objekt vermerkt“); docs/01 §2 Nr. 4 und Nr. 6; CRITERIA ACC-10 (5), (6); ADR-023 Nr. 10.9; orchestrator/LESSONS.md",
-      "note": "Die Konvergenzregel ist offen (PLAN, Schnittstellen Nr. 4). Gemessen: clmm mit method = \"ucminf\" und einem Zufallsterm meldet bei Erfolg optRes$convergence = 1 (\"Stopped by small gradient (grtol).\"); ein singulärer glmer vermerkt \"boundary (singular) fit: see help('isSingular')\" in optinfo$conv$lme4$messages, bei conv$opt = 0. Mit \"== 0\" oder \"keine Meldung\" wären konvergierte Fits FALSE, und es gäbe eine falsche converge-Warnung, die zugleich AP1-Auslöser ist. Vorschlag: Regel nach ADR-023 Nr. 10.9 übernehmen, also Erfolgscodes je tatsächlich verwendetem Optimierer (nlminb 0, ucminf 1 und 2), für glmer conv$opt == 0 ohne Meldung außer der Randmeldung, singulär heißt nicht nicht konvergiert, keine eigenen Schwellen. PLAN-UPDATE nennt die Regel für numerische Fits. Unit-Tests: ucminf mit einem Zufallsterm, singulärer glmer, erzwungener Abbruch."
+      "id": "E9",
+      "ref": "K-M2-6 (docs/03 Z. 19: „oder, wenn dieser Fit mit Fehler oder Konvergenzwarnung endet, den numerischen Fit auf den Klassenscores als gekennzeichneten Rückfall (`ankerRef: ANK-68`)“); ADR-006 Nr. 4.2; K-M1b-4 („gibt in diesem Fall immer eine `warning()` aus“); K-M1b-6 („fehlende oder nicht in `levels` enthaltene Werte werden mit Warnung verworfen“); ADR-025 Nr. 4",
+      "note": "PLAN-UPDATE behandelt K-M2-6 als unveränderten Regressionslauf (Z. 203–207, Reihenfolge Nr. 7, Z. 521–524) und sieht nicht vor, dass die verlangten Warnungen vier Prüfungen von K-M2-6/K-M2-7 rot machen. Der AP1-Hauptplan hat zwei Blöcke, also hat jeder ordinale AP1-Fit die abgeleitete Komponente block, und die Mock-Daten enthalten fehlende Antworten (PLAN-REVIEW Prüflauf 4). Das Abnahmeorakel wertet jede Warnung als Rückfallauslöser, acmg_fit() zu Recht nicht (Prüflauf 5). Vorschlag: Plan bleibt, keine Änderung an acmg_fit() oder acmg_convergence_warning(), keine unterdrückte oder bedingte Pflichtwarnung; die Regressionen Range-/Ausschlusswarnung ohne Rückfall und echte Konvergenzwarnung mit Rückfall bleiben. BUILD meldet rote K-M2-6/-7-Prüfungen mit genau dieser Ursache mit echtem Output in PROGRESS.md als [INFRA] (ADR-025, Konsequenzen); jede andere Abweichung bleibt ein Befund gegen den Builder."
     },
     {
-      "id": "E3",
-      "ref": "docs/01 §4 Z. 52 („Nur mit ADR und Übergangsfrist: … geänderte Bedeutung eines Arguments“); docs/01 §2 Nr. 5; R/fit.R:31–33, :145–151",
-      "note": "Die binäre Label-Kodierung ist offen (\"die zweite der zwei unterschiedlichen, nicht fehlenden Klassen\"). Kommt sie aus den Daten, änderte sich die Bedeutung von levels, und die Kodierung hinge von der Zeilenreihenfolge ab. Vorschlag: Labels nur mit levels; levels hat genau zwei verschiedene, nicht fehlende Werte, sonst ein benannter Fehler; levels[2] ist das Ereignis; Labels ohne levels bleiben ein Fehler wie heute. Unit-Test mit permutierten Zeilen und vertauschten levels."
+      "id": "E10",
+      "ref": "[INFRA] Gate tests; tests/acceptance/setup-m2.R:714 (failed = inherits(value, \"error\") || length(warns) > 0L), :869–883; tests/acceptance/test-m2-6-evaluate.R:101–107; K-M2-6; K-M2-7; ANK-68 (fallback_fit.trigger: „Fehler oder Konvergenzwarnung des ordinalen Fits“); ADR-006 Nr. 4.2; ADR-025 Nr. 4",
+      "note": "Das Abnahmeorakel verlangt bei jeder Warnung des ordinalen Fits den numerischen Rückfall; K-M2-6, ANK-68 und ADR-006 Nr. 4.2 nur bei Fehler oder Konvergenzwarnung. Bis M1b folgenlos; mit den nach K-M1b-4/-6 verlangten Warnungen auf den AP1-Daten (zwei Blöcke, fehlende Antworten) rot: test-m2-6-evaluate.R Z. 87 (je Modell), Z. 93 (gemeinsamer Fit), Z. 164 (konstruiert), test-m2-7-robustness-pilot.R Z. 211 (Prüfläufe 4 und 5, Gegenprobe mit Attrappe). Ursache außerhalb des Builder-Territoriums; 30-plan-review darf tests/acceptance/ nicht schreiben (orchestrate.sh:488). Vorschlag: Reviewer passt das Orakel nach ADR-025 Nr. 4 an (vom Produktcode unabhängige Auslöserregel nach ADR-006 Nr. 4.2; bei Warnungen ohne Auslöser wird der ordinale Fit erwartet; übrige Erwartungen unverändert). Am besten vor den Gates von M1b, wenn der Betreiber eine wiederholte Abnahmephase anordnet (Vorbild ADR-024 Nr. 2); sonst in 50-code-review Runde 1, was eine Rework-Runde kostet (PASS nur bei gates.result=pass). BACKLOG-Eintrag durch den Reviewer in 50-code-review."
     },
     {
-      "id": "E4",
-      "ref": "Formelsammlung §4 Z. 170 („Das entspricht dem AIAG-Term (X̄_DIFF · K₂)² … aber ohne die Korrektur −EV²/(n·r) des Handbuchs und mit positiver Verzerrung“); K-M1b-4",
-      "note": "Die Hilfe (R/fit.R:25–26) und der Druckhinweis (R/fit.R:596) setzen beta-hat^2/2 mit dem AIAG-Verfahren gleich, und der Hinweis verteilt Komponentenname und \"range method\" auf zwei Zeilen (R/fit.R:594–596). Vorschlag: den AIAG-Bezug nur mit der fehlenden Korrektur nennen oder streichen; je Quelle eine Druckzeile mit Name und \"range method, see ?msa_fit\". Der vorgesehene Warnungstext erfüllt ADR-023 Nr. 9.5 und enthält keinen AP1-Auslöser."
-    },
-    {
-      "id": "E5",
-      "ref": "AGENTS.md Integrität Nr. 5 („brechen sie benannt ab“); BL-12; CRITERIA ACC-6 („auch szenarioweise über `--scenarios`“); K-M1d-6",
-      "note": "Vor dem benannten Abbruch bei weniger als zwei endlichen Schätzern Replikat- und Session-Datei schreiben: Exit ungleich 0, keine Ergebnisdatei, die Session nennt Szenario und Schätzziel. Die README unter inst/validation/sim/ beschreibt den Vollauf je Studie und die Zusammenführung szenarioweiser Läufe zu den drei Dateien, die K-M1d-6 erwartet."
-    },
-    {
-      "id": "E6",
-      "ref": "docs/01 §5 Z. 61 („Tests unter `tests/testthat/` überspringen mit `skip_if_not_installed()`, Abnahmetests nicht“; „neue Imports nur mit ADR“)",
-      "note": "In den Unit-Tests stehen Suggests-Pakete (rptR, performance und weitere) hinter testthat::skip_if_not_installed(). parallel kommt unter Suggests, nicht unter Imports."
-    },
-    {
-      "id": "E7",
-      "ref": "[INFRA] Gate mutgate; orchestrator/config.env:202–203; orchestrator/lib/r-mutation.R:53; CRITERIA ACC-12; BL-13",
-      "note": "MUT_TEST_EXCLUDE ist noch '^(m2-[0-9]|m0-testthat-count$)'. Im Vorlauf und je Mutant liefen dann die M1b-Skripttests mit (Paketinstallation, Kurzläufe bis 2 x 20 min, zweites Knit). Das Zeitlimit je Mutant stiege auf das Fünffache des Vorlaufs, und mutgate dauerte Tage. Betreiber vor den Gates von M1b: MUT_TEST_EXCLUDE='^(m2-[0-9]|m0-testthat-count$|m1b-[23]-|m1b-7-vignette-full)'. Builder: nichts zu tun. Den BACKLOG-Eintrag schreibt der Reviewer im Code-Review; in 30-plan-review ist BACKLOG.md nicht freigegeben."
-    },
-    {
-      "id": "E8",
-      "ref": "[INFRA] orchestrator/orchestrate.sh:543, :456; CRITERIA ACC-15; BL-55",
-      "note": "Ein Territoriums-Rollback löscht weiterhin vorher saubere, versionierte Dateien. Betreiber: nur unversionierte Pfade in OWNERSHIP_REMOVE aufnehmen (git ls-files --error-unmatch). Builder: nichts zu tun."
+      "id": "E11",
+      "ref": "K-M1b-7 („Tabellen je Szenario mit Bias, EmpSE, MCSE“); ADR-023 Nr. 11.5 (CRITERIA ACC-11 (4)); tests/acceptance/setup-m1b.R:566–583 (acc_m1b_shows: „at least two significant digits written and within one unit of the last written digit“)",
+      "note": "PLAN-UPDATE legt fest, welche Werte die Vignette zeigt (Z. 312–317), nicht ihre Anzeigegenauigkeit. Eine feste Zahl von Dezimalstellen (etwa knitr::kable(digits = 3)) zeigt kleine Bias-Werte und das MCSE von EmpSE (bei n_check = 20 etwa EmpSE/sqrt(38)) mit weniger als zwei signifikanten Stellen, etwa als 0.000 oder 0.004; der Test zählt sie dann nicht als gezeigt (vgl. ACC-16 zur doppelten Rundung durch kable). Vorschlag: Ergebnis- und Vergleichswerte nach signifikanten Stellen formatieren (signif(x, 3) oder format(x, digits = 3) vor kable), n_sim als ganze Zahl zeigen; Vergleiche weiter ungerundet (Z. 310)."
     }
   ]
 }
