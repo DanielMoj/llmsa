@@ -1,14 +1,14 @@
 {
   "approved": [
-    {"file": "R/fit.R", "mutator": "+ → -", "line": 233},
-    {"file": "R/fit.R", "mutator": "FALSE → TRUE", "line": 113},
-    {"file": "R/fit.R", "mutator": "<n> + 1 → <n> + 1", "line": 352},
-    {"file": "R/fit.R", "mutator": "<n> - 1 → <n> - 1", "line": 352},
-    {"file": "R/fit.R", "mutator": "TRUE → FALSE", "line": 453},
-    {"file": "R/fit.R", "mutator": "TRUE → FALSE", "line": 455},
-    {"file": "R/fit.R", "mutator": "TRUE → FALSE", "line": 461},
+    {"file": "R/fit.R", "mutator": "+ → -", "line": 238},
+    {"file": "R/fit.R", "mutator": "FALSE → TRUE", "line": 118},
+    {"file": "R/fit.R", "mutator": "<n> + 1 → <n> + 1", "line": 357},
+    {"file": "R/fit.R", "mutator": "<n> - 1 → <n> - 1", "line": 357},
+    {"file": "R/fit.R", "mutator": "TRUE → FALSE", "line": 458},
+    {"file": "R/fit.R", "mutator": "TRUE → FALSE", "line": 460},
+    {"file": "R/fit.R", "mutator": "TRUE → FALSE", "line": 466},
     {"file": "R/grr.R", "mutator": "> → >=", "line": 94},
-    {"file": "R/fit.R", "mutator": "<n> + 1 → <n> + 1", "line": 267},
-    {"file": "R/fit.R", "mutator": "x[<i>] → x[<i> + 1L]", "line": 267}
+    {"file": "R/fit.R", "mutator": "<n> + 1 → <n> + 1", "line": 272},
+    {"file": "R/fit.R", "mutator": "x[<i>] → x[<i> + 1L]", "line": 272}
   ]
 }
