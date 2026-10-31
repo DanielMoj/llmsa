@@ -34,10 +34,12 @@
 #'
 #' @param runs An `msa_runs` object (from [msa_run()] or [as_msa_runs()]).
 #' @param type Outcome type.
-#' @param levels For ordinal outcomes: the labels in scale order. For binary
-#'   outcomes given as labels: two distinct, non-missing labels, whose
-#'   second element is the event. Labels require this explicit argument;
-#'   their order of occurrence or factor levels do not determine the event.
+#' @param levels For ordinal outcomes: at least two distinct, non-missing,
+#'   non-empty labels in scale order. For binary outcomes: two such labels,
+#'   whose second element is the event. When supplied, these labels determine
+#'   the coding regardless of the response's storage type. Labels require
+#'   this explicit argument; their order of occurrence or factor levels do
+#'   not determine the event.
 #' @param interactions Include the two-way interactions as random effects?
 #'   Default `TRUE` for numeric, `FALSE` otherwise.
 #' @param link Link for ordinal and binary outcomes.
@@ -106,6 +108,16 @@
 #' rejected. No remaining response, or a constant response category, produces
 #' a named error. Binary numeric values (including numeric strings without
 #' `levels`) must be finite and exactly zero or one; they are never rounded.
+#' Row selection, including missing weights or offsets handled by `na.action`,
+#' precedes the choice of random and two-level fixed effects. Ordinal offsets
+#' are retained in `data$.msa_offset` and included in the model formula.
+#' Counts in `n` describe data rows; with ordinal frequency weights,
+#' `stats::nobs(model)` follows `clmm` and reports the sum of those weights.
+#' Non-identifiable two-level fixed effects and ordinal random-effect terms
+#' with fewer than three observed levels produce named errors. Ordinal
+#' singularity describes random effects only, not the derived components.
+#' Ordinal and binary estimates are invariant to row order and factor labels
+#' only up to the optimization tolerance of the underlying engines.
 #'
 #' `converged` records the final engine diagnosis, independently of
 #' `singular`. For `clmm`, success means code zero for `nlminb`, or code one
@@ -145,6 +157,19 @@ msa_fit <- function(runs, type = c("numeric", "ordinal", "binary"), levels = NUL
   type <- match.arg(type)
   link <- match.arg(link)
   d <- as.data.frame(runs, stringsAsFactors = FALSE)
+  if (type == "ordinal" && is.null(levels) && is.ordered(d$value)) {
+    levels <- levels(d$value)
+  }
+  if (type != "numeric" && !is.null(levels)) {
+    levels <- as.character(levels)
+    invalid <- anyNA(levels) || anyDuplicated(levels) || any(!nzchar(levels))
+    if (type == "ordinal" && (length(levels) < 2L || invalid)) {
+      stop("Ordinal `levels` must contain at least two distinct, non-missing, non-empty labels.", call. = FALSE)
+    }
+    if (type == "binary" && (length(levels) != 2L || invalid)) {
+      stop("Binary `levels` must contain two distinct, non-missing labels; labels must not be empty.", call. = FALSE)
+    }
+  }
   stop_if_missing_cols(d, c("item_id", "prompt_id", "model_id", "rep", "value"), "runs")
   if (!"block" %in% names(d)) d$block <- 1L
   if (type != "numeric") {
@@ -157,7 +182,6 @@ msa_fit <- function(runs, type = c("numeric", "ordinal", "binary"), levels = NUL
   input_rows <- which(!is.na(d$value))
   d <- d[input_rows, , drop = FALSE]
   if (!nrow(d)) stop("No valid (non-missing) values to analyse.", call. = FALSE)
-
   dat <- data.frame(item = factor(d$item_id), prompt = factor(d$prompt_id),
                     model = factor(d$model_id), block = factor(d$block))
 
@@ -168,24 +192,20 @@ msa_fit <- function(runs, type = c("numeric", "ordinal", "binary"), levels = NUL
     dat$y <- y
   } else if (type == "ordinal") {
     if (is.null(levels)) {
-      if (is.ordered(d$value)) levels <- levels(d$value) else
-        stop("`levels` (labels in scale order) are required for ordinal outcomes.", call. = FALSE)
+      stop("`levels` (labels in scale order) are required for ordinal outcomes.", call. = FALSE)
     }
     y <- factor(as.character(d$value), levels = levels, ordered = TRUE)
     if (anyNA(y)) warning(sum(is.na(y)), " value(s) are not among `levels` and were dropped.")
     dat$y <- y
   } else {
     v <- d$value
-    if (!is.null(levels) && (length(levels) != 2L || anyNA(levels) || anyDuplicated(levels))) {
-      stop("Binary `levels` must contain two distinct, non-missing labels.", call. = FALSE)
-    }
-    if (is.logical(v)) y <- as.integer(v)
-    else if (is.numeric(v)) y <- v
-    else if (!is.null(levels)) {
+    if (!is.null(levels)) {
       vv <- as.character(v)
       y <- ifelse(vv %in% levels, as.integer(vv == levels[2]), NA_integer_)
       if (anyNA(y)) warning(sum(is.na(y)), " value(s) are not among `levels` and were dropped.", call. = FALSE)
-    } else {
+    } else if (is.logical(v)) y <- as.integer(v)
+    else if (is.numeric(v)) y <- v
+    else {
       y <- suppressWarnings(as.numeric(as.character(v)))
       if (anyNA(y)) stop("Binary values must be 0/1, logical, or labels with `levels` given.", call. = FALSE)
     }
@@ -202,16 +222,46 @@ msa_fit <- function(runs, type = c("numeric", "ordinal", "binary"), levels = NUL
     if (all(dat$y == dat$y[1])) stop("Numeric response has zero variation.", call. = FALSE)
   } else {
     if (!nrow(dat)) stop("No valid response categories to analyse.", call. = FALSE)
+  }
+
+  # Evaluate row expressions in the cleaned data mask and other arguments in
+  # their promise environments. Embedded values keep later refits in scope.
+  caller <- parent.frame()
+  dots <- as.list(substitute(list(...)))[-1L]
+  args <- dots
+  for (i in seq_along(dots)) {
+    if (isTRUE(names(dots)[i] %in% c("subset", "weights", "offset"))) {
+      args[i] <- list(eval(dots[[i]], envir = dat, enclos = caller))
+    } else args[i] <- list(...elt(i))
+  }
+  if (type != "numeric") {
+    row_args <- intersect(names(args), c("subset", "weights", "offset", "na.action"))
+    if (length(row_args)) {
+      # Let model.frame apply indexing, duplicate indices and na.action once,
+      # before choosing effects from the levels actually analysed.
+      frame <- do.call(stats::model.frame,
+        c(list(formula = y ~ item + prompt + model + block, data = dat,
+               drop.unused.levels = TRUE), args[row_args]))
+      dat <- frame[c("item", "prompt", "model", "block", "y")]
+      args$subset <- NULL
+      for (name in intersect(row_args, c("weights", "offset"))) {
+        args[name] <- list(frame[[paste0("(", name, ")")]])
+      }
+    }
+    if (!nrow(dat)) stop("No valid response categories to analyse.", call. = FALSE)
+    if (anyNA(dat)) stop("Ordinal and binary fitting data contain missing values after row selection.", call. = FALSE)
     if (length(unique(dat$y)) < 2L) stop("Response is constant: at least two observed categories are needed.", call. = FALSE)
   }
 
   if (is.null(interactions)) interactions <- type == "numeric"
   nlev <- function(f) nlevels(f)
   terms <- character()
+  random_groups <- character()
   fixed_two <- character()
   for (m in c("item", "prompt", "model", "block")) {
     if (nlev(dat[[m]]) > 2 || (nlev(dat[[m]]) == 2 && type != "ordinal")) {
       terms <- c(terms, sprintf("(1 | %s)", m))
+      random_groups <- c(random_groups, m)
     } else if (nlev(dat[[m]]) == 2) {
       # ordinal::clmm needs > 2 levels per grouping factor; a two-level factor
       # enters as a fixed effect and its component is derived by the range method
@@ -222,6 +272,7 @@ msa_fit <- function(runs, type = c("numeric", "ordinal", "binary"), levels = NUL
     for (p in list(c("item", "prompt"), c("item", "model"), c("prompt", "model"))) {
       if (nlev(dat[[p[1]]]) > 1 && nlev(dat[[p[2]]]) > 1) {
         terms <- c(terms, sprintf("(1 | %s:%s)", p[1], p[2]))
+        random_groups <- c(random_groups, paste(p, collapse = ":"))
       }
     }
   }
@@ -229,8 +280,33 @@ msa_fit <- function(runs, type = c("numeric", "ordinal", "binary"), levels = NUL
     stop(if (type == "ordinal") "At least three items are needed for ordinal outcomes." else
       "At least two items are needed.", call. = FALSE)
   }
-  rhs <- c("1", fixed_two, terms)
-  form <- stats::as.formula(paste("y ~", paste(rhs, collapse = " + ")))
+  if (type == "ordinal") {
+    for (group in random_groups) {
+      columns <- strsplit(group, ":", fixed = TRUE)[[1L]]
+      if (nlevels(interaction(dat[columns], drop = TRUE)) <= 2L) {
+        stop("Ordinal random-effect term ", group, " requires at least three observed levels.", call. = FALSE)
+      }
+    }
+    if (length(fixed_two)) {
+      design <- stats::model.matrix(stats::reformulate(fixed_two), data = dat,
+                                     contrasts.arg = args[["contrasts"]])
+      if (qr(design)$rank < ncol(design)) {
+        stop("Ordinal two-level factors ", paste(fixed_two, collapse = ", "),
+             " are not identifiable: the fixed-effect design is rank deficient.", call. = FALSE)
+      }
+    }
+  }
+  rhs <- c("1", fixed_two)
+  if (type == "ordinal") {
+    # clmm accepts formula offsets. Put them before random terms so its full
+    # and fixed model frames address the offset at the same column position.
+    if (!is.null(args[["offset"]])) {
+      dat$.msa_offset <- args[["offset"]]
+      rhs <- c(rhs, "offset(.msa_offset)")
+    }
+    args$offset <- NULL
+  }
+  form <- stats::as.formula(paste("y ~", paste(c(rhs, terms), collapse = " + ")))
 
   numerics <- NULL
   engine_warnings <- character()
@@ -239,16 +315,6 @@ msa_fit <- function(runs, type = c("numeric", "ordinal", "binary"), levels = NUL
     model <- fitted$model
     numerics <- fitted$numerics
   } else if (type == "numeric") {
-    # Capture expressions before forcing ... so model-frame arguments retain
-    # their data mask. Store values in the call for refits outside this scope.
-    caller <- parent.frame()
-    dots <- as.list(substitute(list(...)))[-1L]
-    args <- dots
-    for (i in seq_along(dots)) {
-      if (isTRUE(names(dots)[i] %in% c("subset", "weights", "offset"))) {
-        args[i] <- list(eval(dots[[i]], envir = dat, enclos = caller))
-      } else args[i] <- list(...elt(i))
-    }
     model <- do.call(lme4::lmer, c(list(formula = form, data = dat, REML = TRUE), args))
     model@call[[1L]] <- quote(lme4::lmer)
     # dat has generated integer row names. Repeated subset indices acquire
@@ -259,9 +325,10 @@ msa_fit <- function(runs, type = c("numeric", "ordinal", "binary"), levels = NUL
     numerics <- list(method = "lmer")
   } else {
     model <- withCallingHandlers(switch(type,
-      ordinal = ordinal::clmm(form, data = dat, link = link, ...),
-      binary  = lme4::glmer(form, data = dat, family = stats::binomial(link = link), ...)),
+      ordinal = do.call(ordinal::clmm, c(list(formula = form, data = dat, link = link), args)),
+      binary = do.call(lme4::glmer, c(list(formula = form, data = dat, family = stats::binomial(link = link)), args))),
       warning = function(w) engine_warnings <<- c(engine_warnings, conditionMessage(w)))
+    if (type == "ordinal") model$call[[1L]] <- quote(ordinal::clmm) else model@call[[1L]] <- quote(lme4::glmer)
   }
   if (type == "numeric") numerics$input_rows <- input_rows
   converged <- if (type == "ordinal") msa_clmm_converged(model) else msa_mer_converged(model@optinfo$conv)
@@ -278,6 +345,7 @@ msa_fit <- function(runs, type = c("numeric", "ordinal", "binary"), levels = NUL
   }
 
   vc <- vc_from_model(model, type, link)
+  singular <- if (inherits(model, "merMod")) lme4::isSingular(model) else any(vc$variance[vc$source != "Residual"] < 1e-6)
   if (length(fixed_two)) {
     derived <- vapply(fixed_two, function(m) {
       # Evaluate the contrast between levels, including non-treatment coding.
@@ -298,8 +366,6 @@ msa_fit <- function(runs, type = c("numeric", "ordinal", "binary"), levels = NUL
             " use the range method (beta-hat^2/2), with positive bias: ",
             "E[beta-hat^2/2] = sigma^2 + Var(beta-hat)/2; see ?msa_fit.", call. = FALSE)
   }
-  singular <- if (inherits(model, "merMod")) lme4::isSingular(model) else any(vc$variance[vc$source != "Residual"] < 1e-6)
-
   cell <- stats::aggregate(y ~ item + prompt + model + block, data = dat, FUN = length)
   n <- list(items = nlev(dat$item), prompts = nlev(dat$prompt), models = nlev(dat$model),
             blocks = nlev(dat$block), observations = nrow(dat),

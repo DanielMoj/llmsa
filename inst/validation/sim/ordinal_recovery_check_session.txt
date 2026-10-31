@@ -1,7 +1,7 @@
 format: llmsa-class-b-v1
 study: ordinal_recovery
 n_sim: 20
-implementation: 9c90724ace72e28044d19f7721e7f56769aa0e2880c735801322c830e6557cfd
+implementation: cc34f15d2cd96684043f688b41b85ab70ffefb2ba41044e161a7bf9c88c5c4a7
 R_version: 4.6.1
 package_llmsa: 0.1.0
 package_lme4: 2.0.6
@@ -12,9 +12,9 @@ RNG: Mersenne-Twister; normal.kind=Inversion; sample.kind=Rejection
 seed_rule: 20261031 + j(scenario) + 8 * (rep - 1); permanent j=1..8 in specification order
 scenarios: S-ord-1,S-ord-2,S-ord-3,S-ord-4
 start_seeds: S-ord-1=20261032,S-ord-2=20261033,S-ord-3=20261034,S-ord-4=20261035
-command: Rscript ordinal_recovery.R '--n-sim' '20' '--out' '/tmp/llmsa-m1b-build/checks-final-v2/ordinal_recovery'
+command: Rscript ordinal_recovery.R '--n-sim' '20' '--out' '/tmp/llmsa-m1b-r2/checks-verified/ordinal_recovery'
 workers: 14
-elapsed_seconds: 104.660000
+elapsed_seconds: 104.210000
 
 Per-repetition diagnostics (including every repetition seed):
 S-ord-1 rep=1 seed=20261032 error=[(none)] warnings=[(none)] messages=[(none)]

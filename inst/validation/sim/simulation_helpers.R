@@ -347,6 +347,23 @@ sim_merge <- function(study, directories, out) {
           any(abs(d$true - truth[d$estimand]) > tolerance)) {
         stop("Inconsistent simulation replicate seeds, flags or truths: ", s$id, call. = FALSE)
       }
+      counts <- c(items = s$items, prompts = s$prompts, models = s$models, blocks = s$blocks,
+                  observations = s$items * s$prompts * s$models * s$reps * s$blocks)
+      for (name in names(counts)) {
+        observed <- d[[name]]
+        if (!is.numeric(observed) ||
+            any(!is.na(observed) & (!is.finite(observed) | observed != counts[[name]])) ||
+            any(is.na(observed) & !is.na(d$estimate))) {
+          stop("Inconsistent simulation replicate design count ", name, ": ", s$id, call. = FALSE)
+        }
+      }
+      missing_counts <- rowSums(is.na(d[names(counts)]))
+      no_fit <- missing_counts == length(counts)
+      if (any(missing_counts != 0L & !no_fit) ||
+          !is.logical(d$converged) || anyNA(d$converged) || !is.logical(d$singular) ||
+          any(is.na(d$singular) != no_fit) || any(d$converged[no_fit] | d$derived[no_fit])) {
+        stop("Inconsistent simulation replicate fit flags or missing design counts: ", s$id, call. = FALSE)
+      }
     }
     reference <- sim_summarize(reps, selected, as.integer(n), study)
     result <- result[order(result$scenario, result$estimand, result$measure), , drop = FALSE]

@@ -1,5 +1,106 @@
 # PROGRESS — Langzeitgedächtnis des Builders
 
+## M1b — REWORK Runde 2 (31.10.2026)
+
+Grundlage: REVIEW/verdict-code Runde 1 (E12–E23), gates.json samt roten
+Logs, CRITERIA, ARBITER, LESSONS und ADR-027. Rollen-/Buildregeln,
+Protokoll, Handoff-Schema, Spezifikationen und bestehende Prüfungen wurden
+gelesen. Dieser Eintrag berichtet Builder-Prüfungen, kein Abnahme-Verdict.
+Die Antworten auf jede Befund-ID, Befehle und echte Outputs stehen in
+[REWORK-NOTES.md](orchestrator/handoff/M1b/REWORK-NOTES.md).
+
+- **E12/E13:** `R/fit.R` wertet Argumente aus und speichert erneut
+  ausführbare Engine-Aufrufe. Zeilenauswahl, Gewichte und Offsets gelten
+  vor dem Formelaufbau; Daten, Stufen, abgeleitete Komponenten und
+  Zählungen beziehen sich auf dieselben Beobachtungen. Ordinale Offsets
+  sind Formelterme. Bei ordinalen Häufigkeitsgewichten ist `nobs(clmm)`
+  die Gewichtssumme, während `n` Zeilen zählt; direkte Engine-Vergleiche
+  belegen das. Hilfe und ADR-028 dokumentieren die Einzelheiten.
+- **E14/E16:** Singularität zählt nur Zufallskomponenten. Alle ordinalen
+  Zufallsterme und festen Zwei-Stufen-Designs werden vorab auf Schätzbarkeit
+  geprüft. Explizite Labels werden unabhängig vom Speichertyp validiert
+  und verwendet; bisherige Warnungen und Fehlermeldungen bleiben erhalten.
+- **E15:** Neuer Unit-Helfer ergänzt ausschließlich die fehlende
+  Dokumentationsfixture in Paketkopien über `REPO_ROOT`. Er lädt keinen
+  Produktcode aus dem Original nach. Der bestehende Test bleibt
+  byte-identisch; die vollständige Suite besteht auch ohne ursprünglich
+  vorhandenes `vignettes/` in der Kopie.
+- **E17:** Studien-Merge prüft alle Designzählungen und Diagnoseflags;
+  Ergebnisleser weist ungültige EmpSE/RMSE, Anteile und Seeds zurück.
+- **E18/E20:** Acht neue Testblöcke mit 179 Erwartungen verwenden
+  direkte Engines, Formeln und synthetische Korruptionen. Alle acht
+  erkennen den ursprünglichen Produktcode; am finalen Stand bestehen
+  sie. Die Hilfe nennt die Optimierertoleranz latenter Invarianz.
+  Kein Mutationsscore und kein MUT-EQUIV-Antrag ohne Mutationsbericht.
+
+Die neun Kurzlaufdateien wurden nach der letzten Implementierungsänderung
+mit dem installierten Paket, `n_sim = ANK-TOL.n_check` (20), den bestehenden
+Seeds und 14 Workern neu erzeugt. Echter Generator-Output:
+
+```text
+ordinal_recovery: 4 scenarios x 20 repetitions; 100 result rows; elapsed 104.210 s; workers 14
+binary_recovery: 2 scenarios x 20 repetitions; 40 result rows; elapsed 0.879 s; workers 14
+two_level: 2 scenarios x 20 repetitions; 42 result rows; elapsed 10.795 s; workers 14
+Nine genuine short-run files copied byte-identically; no full-run files written in the repository.
+```
+
+Alle drei Prozesse endeten mit Exit 0. Die sechs CSVs bleiben bytegleich
+zum Rundenbeginn; die drei Sessiondateien tragen den neuen Hash
+`cc34f15d2cd96684043f688b41b85ab70ffefb2ba41044e161a7bf9c88c5c4a7`,
+der separat mit den finalen Quellen abgeglichen wurde. E21 bleibt
+unverändert berichtet: 18/80 ordinale Wiederholungen nicht konvergiert,
+alle mit endlichen Schätzern (17 Iterationslimits, einmal singular
+convergence). Je Szenario 1/20, 5/20, 2/20 und 10/20; S-bin und S-two
+jeweils 0/40. Die Vollauswertung bleibt bei Betreiber/M1d (BL-92).
+
+Abschließende ausgeführte Prüfungen; Details und Rohlogs unter
+`/tmp/llmsa-m1b-r2/` sowie im Handoff:
+
+| Prüfung | Echter Output / Ergebnis |
+| --- | --- |
+| Vollständige Unit-Suite, Arbeitsbaum | `[ FAIL 0 \| WARN 0 \| SKIP 1 \| PASS 3400 ]`, 237 Blöcke, Exit 0 |
+| Vollständige Unit-Suite, Paketkopie ohne Vignetten | `[ FAIL 0 \| WARN 0 \| SKIP 1 \| PASS 3400 ]`, 237 Blöcke, Exit 0 |
+| M1a-Abnahme | `[ FAIL 0 \| WARN 0 \| SKIP 0 \| PASS 722 ]`, 54 Blöcke, Exit 0 |
+| Alle acht M1b-Abnahmedateien | `[ FAIL 5 \| WARN 2 \| SKIP 0 \| PASS 3270 ]`, 74 Blöcke, Exit 1; ausschließlich die ungültige Volllauf-Fixture rot |
+| Vollständige QA-Verzeichnisse | `16 Tests in tests/e2e, tests/fuzz; 0 fehlgeschlagen, 4 Fehler, 0 übersprungen`; alle sechs M1b-QA-Befunde grün, die vier M2-E2E-Blöcke scheitern am Namespace-Lebenszyklus |
+| M2-E2E allein, frischer Prozess | `[ FAIL 0 \| WARN 0 \| SKIP 0 \| PASS 9 ]`, Exit 0 |
+| K-M2-6 und K-M2-7 | `[ FAIL 1 \| WARN 0 \| SKIP 0 \| PASS 736 ]`, 20 Blöcke, Exit 1; K-M2-6 grün mit 383 Erwartungen, ein Socket-Fehler in K-M2-7 |
+| Paketbau und `R CMD check --as-cran --no-manual` | Exit 0, `Status: 1 NOTE` (Zeitprüfung); keine ERROR/WARNING; installierte Tests `[ FAIL 0 \| WARN 0 \| SKIP 9 \| PASS 3324 ]` |
+
+Der Unit-Skip ist der unveränderte ellmer-Negativtest. Die neun Skips im
+öffentlichen Paketcheck sind unveränderte Prüfungen, die lokale
+API-Aufzeichnungen bzw. Originalanker verlangen, der Report-CRAN-Skip
+und derselbe ellmer-Negativtest. Der vollständige Quellpaketlauf führt
+die Repository-Prüfungen aus. K-M1b-2/-3 reproduzieren die Kurzläufe
+byte-identisch. Es wurden keine Tests abgeschwächt oder neue Skips ergänzt.
+
+**OUT-OF-TERRITORY, mit Log-Belegen im Handoff:**
+
+- **M1B-R2-INFRA-FULL-FIXTURE:** Der geschützte Abnahmetest addiert 0.5
+  auf jeden Ergebniswert und erzeugt dadurch `derived_share = 1.5`.
+  ADR-027 Nr. 5 verlangt dessen Zurückweisung. Der Reviewer muss die
+  Fixture fachlich gültig machen; der Produktvalidator bleibt streng.
+- **M1B-R2-INFRA-QA-NAMESPACE:** QA-M1b-004 löscht seine temporäre
+  Paketkopie, während deren Namespace noch aktiv ist. Die nachfolgenden
+  M2-Tests finden kein Paket mehr. Auch mit dem alten Produktcode und
+  ohne den neuen Vignettenhelfer reproduziert; Zuständigkeit QA/Betreiber.
+- **E19 [INFRA]/BL-90:** Das vom Reviewer korrigierte M2-Orakel besteht
+  mit 383 Erwartungen; `R/acmg.R` bleibt byte-identisch.
+- **E22 [INFRA]/BL-86:** Der HTTP-Replay-Test endet mit „System failure for: socket() (Operation not permitted)“. Die lokale NOTE lautet
+  „Unable to verify current time“. Keine Umgehung der Sandbox oder
+  Abschaltung der Prüfungen.
+- **E23/BL-93:** Zwei Deprecation-Warnungen aus dem geschützten
+  Abnahmehelfer (`lme4::nobars`/`findbars`); kein Produktfehler.
+
+Bestehende Tests, QA, Abnahme, Fixtures, Specs, Anker, Gate-Fakten und
+Schwellen bleiben unverändert. Der abschließende SHA-256-Abgleich prüft
+die Änderungen gegen 303 zu Rundenbeginn gesicherte Dateien sowie die
+final getesteten Quellen und Paketbaueingaben. Keine Git-Kommandos,
+keine Änderungen an BACKLOG oder Betreiberzustand, keine Betreiber-
+Volllaufdateien. E18 und die Gate-Bestätigung bleiben offen bis zum
+nächsten regulären Lauf; dieser Builder erklärt den Meilenstein nicht
+für abgenommen.
+
 ## M1b — BUILD (31.10.2026)
 
 Grundlage: freigegebener PLAN und PLAN-UPDATE, PLAN-REVIEW Runde 2 mit

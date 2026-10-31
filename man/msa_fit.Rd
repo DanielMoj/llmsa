@@ -18,10 +18,12 @@ msa_fit(
 
 \item{type}{Outcome type.}
 
-\item{levels}{For ordinal outcomes: the labels in scale order. For binary
-outcomes given as labels: two distinct, non-missing labels, whose
-second element is the event. Labels require this explicit argument;
-their order of occurrence or factor levels do not determine the event.}
+\item{levels}{For ordinal outcomes: at least two distinct, non-missing,
+non-empty labels in scale order. For binary outcomes: two such labels,
+whose second element is the event. When supplied, these labels determine
+the coding regardless of the response's storage type. Labels require
+this explicit argument; their order of occurrence or factor levels do
+not determine the event.}
 
 \item{interactions}{Include the two-way interactions as random effects?
 Default \code{TRUE} for numeric, \code{FALSE} otherwise.}
@@ -139,6 +141,16 @@ counts describe the retained observations. Missing grouping values are
 rejected. No remaining response, or a constant response category, produces
 a named error. Binary numeric values (including numeric strings without
 \code{levels}) must be finite and exactly zero or one; they are never rounded.
+Row selection, including missing weights or offsets handled by \code{na.action},
+precedes the choice of random and two-level fixed effects. Ordinal offsets
+are retained in \code{data$.msa_offset} and included in the model formula.
+Counts in \code{n} describe data rows; with ordinal frequency weights,
+\code{stats::nobs(model)} follows \code{clmm} and reports the sum of those weights.
+Non-identifiable two-level fixed effects and ordinal random-effect terms
+with fewer than three observed levels produce named errors. Ordinal
+singularity describes random effects only, not the derived components.
+Ordinal and binary estimates are invariant to row order and factor labels
+only up to the optimization tolerance of the underlying engines.
 
 \code{converged} records the final engine diagnosis, independently of
 \code{singular}. For \code{clmm}, success means code zero for \code{nlminb}, or code one

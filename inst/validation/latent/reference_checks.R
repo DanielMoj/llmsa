@@ -201,6 +201,13 @@ latent_read_results <- function(study, sim_dir = system.file("validation", "sim"
       anyDuplicated(d[c("scenario", "estimand", "measure")])) {
     stop("Invalid latent study results values or duplicate keys: ", path, call. = FALSE)
   }
+  if (any(d$value[d$measure %in% c("empse", "rmse")] < 0) ||
+      any(d$value[d$measure == "derived_share"] < 0 | d$value[d$measure == "derived_share"] > 1)) {
+    stop("Invalid latent study result measure range: ", path, call. = FALSE)
+  }
+  if (any(d$seed != floor(d$seed) | d$seed < 1 | d$seed > .Machine$integer.max)) {
+    stop("Invalid latent study result seed: ", path, call. = FALSE)
+  }
   ids <- switch(study, ordinal_recovery = paste0("S-ord-", 1:4),
                 binary_recovery = paste0("S-bin-", 1:2), two_level = paste0("S-two-", 1:2))
   if (!setequal(unique(d$scenario), ids)) stop("Incomplete latent study scenarios: ", path, call. = FALSE)
