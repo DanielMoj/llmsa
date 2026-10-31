@@ -1,0 +1,37 @@
+{
+  "milestone": "M1b",
+  "round": 1,
+  "base": "104ca4dd63a24ae4f83730d99961baa88d0213db",
+  "baseRef": "plan/M1b",
+  "env": {
+    "ts": "2026-10-31T11:02:33+01:00",
+    "sha": "ff14f7830b14be9f8e14da06e1d05c07db3eede4",
+    "bash": "5.3.9(1)-release",
+    "git": "2.53.0",
+    "toolchain": {
+      "R": "Rscript (R) version 4.6.1 (2026-06-24)",
+      "pandoc": "pandoc 3.7.0.2"
+    }
+  },
+  "gates": {
+    "deps": "pass",
+    "lint": "pass",
+    "tests": "fail",
+    "trace": "pass",
+    "territory": "pass",
+    "mutgate": "fail",
+    "golden-adr": "pass",
+    "mutfull": "pass"
+  },
+  "summaries": {
+    "deps": "deps: Kommando erfolgreich",
+    "lint": "lint: Kommando erfolgreich",
+    "tests": "tests: Kommando meldet fachlichen Fehlschlag rc=1",
+    "trace": "trace: alle Kriterien sind wörtlich und beidseitig verknüpft",
+    "territory": "territory: letzter Diff sauber (builder/40-build, Runde 1, Basis 104ca4dd63a24ae4f83730d99961baa88d0213db, 2026-10-31T10:37:23+01:00)",
+    "mutgate": "mutgate: fail (unmutierter Vorlauf rot, kein Mutant gelaufen; 1 Tests: tests/testthat/test-validation-latent.R: latent display retains significant digits and documentation traces every source [abgebrochen])",
+    "golden-adr": "golden-adr: keine Golden-/Ankeränderung",
+    "mutfull": "mutfull: pass (nicht fällig in M1b)"
+  },
+  "result": "fail"
+}

@@ -1,17 +1,26 @@
 {
   "contract": 1,
   "project": "llmsa",
-  "ts": "2026-10-31T10:37:23+01:00",
+  "ts": "2026-10-31T11:02:33+01:00",
   "milestone": {
     "id": "M1b",
     "index": 4,
     "total": 10
   },
-  "phase": "40-build",
+  "phase": "gates",
   "round": 1,
   "needs_human": false,
   "reason": "",
-  "gates": {},
+  "gates": {
+    "deps": "pass",
+    "lint": "pass",
+    "tests": "fail",
+    "trace": "pass",
+    "territory": "pass",
+    "mutgate": "fail",
+    "golden-adr": "pass",
+    "mutfull": "pass"
+  },
   "parked": [],
   "last_events": [
     "[20261031-090905] RUN reviewer 70-arbiter (M1b r1, Versuch 1) -> /mnt/c/Users/Danie/dev/Llmsa/llmsa/orchestrator/logs/M1b-70-arbiter-r1-a1-20261031-090905.log",

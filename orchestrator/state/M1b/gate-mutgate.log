@@ -1,0 +1,9 @@
+# stdout
+r-mutation: 1214 Mutanten in R/fit.R, R/grr.R; Tests: tests/testthat, tests/acceptance, tests/e2e, tests/fuzz; ausgelassen nach MUT_TEST_EXCLUDE='^(m2-[0-9]|m0-testthat-count$|m1b-[23]-|m1b-7-vignette-full)': tests/acceptance/test-m0-testthat-count.R, tests/acceptance/test-m1b-2-recovery-scripts.R, tests/acceptance/test-m1b-3-two-level-script.R, tests/acceptance/test-m1b-7-vignette-full-results.R, tests/acceptance/test-m2-1-items.R, tests/acceptance/test-m2-2-memorisation.R, tests/acceptance/test-m2-3-prompts-parser.R, tests/acceptance/test-m2-4-backends.R, tests/acceptance/test-m2-5-plan.R, tests/acceptance/test-m2-6-evaluate.R, tests/acceptance/test-m2-7-robustness-pilot.R
+r-mutation: unmutierter Testlauf: 114.4 s; 349 Tests, davon 0 fehlgeschlagen, 1 abgebrochen
+r-mutation: rot: tests/testthat/test-validation-latent.R: latent display retains significant digits and documentation traces every source [abgebrochen]
+r-mutation: Abbruch vor dem ersten Mutanten: Schon unmutiert scheitern 1 Tests (/mnt/c/Users/Danie/dev/Llmsa/llmsa/reports/mutation/unmutated.json)
+mutgate: fail (unmutierter Vorlauf rot, kein Mutant gelaufen; 1 Tests: tests/testthat/test-validation-latent.R: latent display retains significant digits and documentation traces every source [abgebrochen])
+
+# runner
+exit=1 status=fail script=86-mutgate.sh
