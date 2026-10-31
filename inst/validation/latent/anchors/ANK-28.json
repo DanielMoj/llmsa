@@ -1,0 +1,28 @@
+{
+  "id": "ANK-28",
+  "title": "Verteilungsspezifische Varianz der latenten Skala (Restvarianz): 1 (Probit), π²/3 (Logit), π²/6 (cloglog)",
+  "criteria": ["docs/01 §5", "K-M1b-1", "K-M1b-2", "K-M1b-3", "K-M1b-5"],
+  "value": {
+    "probit": 1,
+    "logit": 3.289868133696453,
+    "cloglog": 1.6449340668482264,
+    "expression": {"probit": "1", "logit": "pi^2/3", "cloglog": "pi^2/6"}
+  },
+  "unit": "Varianz der latenten Verteilung (dimensionslos, Skala des linearen Prädiktors); logit und cloglog als Dezimaldarstellung von pi^2/3 und pi^2/6 in doppelter Genauigkeit, expression nennt den exakten Ausdruck",
+  "tolerance": 0,
+  "tolerance_note": "Mathematische Konstanten, exakt; die Dezimalwerte sind die Double-Darstellung von pi^2/3 und pi^2/6 (17 signifikante Stellen). Vergleiche gegen Paketwerte mit ANK-TOL.arithmetic.",
+  "source_url": "Nakagawa2010 (reference/privat/QUELLENKATALOG.md): Nakagawa, S. & Schielzeth, H. (2010), Repeatability for Gaussian and non-Gaussian data: a practical guide for biologists, Biological Reviews 85, 935–956, Tab. 1, Druckseite 942 (PDF-Seite 8); lokale Kopie quellen/literatur/A_statistikkern/Nakagawa_Schielzeth_2010_Repeatability_BiolRev85_935.pdf (SHA-256 b213bbd68c4b56b90bf233300dfdad0abc93d0872acc6acec93693918702f020). Nakagawa2017: Nakagawa, S., Johnson, P. C. D. & Schielzeth, H. (2017), The coefficient of determination R² and intra-class correlation coefficient from generalized linear mixed-effects models revisited and expanded, Journal of the Royal Society Interface 14, 20170213, Abschnitt 7, Druckseite 7 (PDF-Seite 7); lokale Kopie quellen/literatur/A_statistikkern/Nakagawa_Johnson_Schielzeth_2017_R2_ICC_GLMM_JRSocInterface14_20170213.pdf (SHA-256 faeafc54696b8d8b77d92a777feb4a5ed27912e6e97e54d515556709733bddfe)",
+  "source": "Literatur: Nakagawa2010 geschützt, bleibt lokal (nur Kurzzitat); Nakagawa2017 frei; Textspiegel reference/quellen/text/literatur/A_statistikkern/*.layout.txt; Festlegung in docs/01-fachspezifikation.md §5 und reference/privat/07_Formelsammlung_llmsa.md §4",
+  "quote": "Distribution-specific variance π 2 /3 1",
+  "quote_location": "Nakagawa & Schielzeth 2010, Tab. 1, Druckseite 942 (PDF-Seite 8), Zeile „Distribution-specific variance“, Spalten „Binomial model with logit link“ und „Binomial model with probit link“ (Textspiegel .layout.txt Zeile 492, Leerraum zusammengefasst; „π 2“ ist das gedruckte π² mit hochgestellter 2)",
+  "further_quotes": [
+    {"quote": "Binomial model with logit link Binomial model with probit link", "location": "Nakagawa & Schielzeth 2010, Tab. 1, Spaltenköpfe (.layout.txt Zeile 491, Leerraum zusammengefasst)"},
+    {"quote": "has a theoretical variance, namely, p 2/3, 1 and p 2/6, respect-", "location": "Nakagawa, Johnson & Schielzeth 2017, Abschnitt 7, Druckseite 7 (PDF-Seite 7), linke Spalte (.layout.txt Zeile 715, linke Spalte); „p 2“ ist in der Textschicht das gedruckte π² (Symbolschrift), Fortsetzung „ively“ in der nächsten Zeile"},
+    {"quote": "binomial GLMMs (logit, probit and complementary log –", "location": "Nakagawa, Johnson & Schielzeth 2017, Druckseite 7, linke Spalte (.layout.txt Zeile 711); Fortsetzung: „log) all have corresponding distributions on the latent scale: the logistic distribution, standard normal distribution and Gumbel distribution, respectively.“"},
+    {"quote": "Latente Skala: Restvarianz 1 (Probit), π²/3 (Logit) (`ANK-28`); AIAG-Schwellen dort nur Konvention, im Bericht so benannt.", "location": "docs/01-fachspezifikation.md §5, zweiter Punkt"}
+  ],
+  "observations": "Formelsammlung §4 setzt σ²_ε = 1 (Probit) und π²/3 (Logit) als Restvarianz der latenten Skala für ordinale und binäre Fits; R/fit.R (latent_residual) rechnet 1 bzw. pi^2/3. Nakagawa et al. 2017 unterscheiden diese theoretischen Varianzen ausdrücklich von der Beobachtungsvarianz 1/(np(1 − p)) der Delta-Methode (Druckseite 7: „The meaning of 1/(np(1 – p)) … is distinct from the meaning of p 2/3“); diese Unterscheidung betrifft K-M1b-5 (ANK-25, open ACC-1). cloglog ist ohne Kriterium und nur zur Vollständigkeit der Quelle aufgenommen.",
+  "retrieved": "2026-10-31",
+  "method": "Textspiegel gelesen und am Original geprüft: SHA-256 beider lokalen PDFs von R aus berechnet (gleich den Werten in source_url; die ersten 16 Zeichen stehen in den Köpfen der Textspiegel); pdftotext -f 8 -l 8 -layout (2010) und -f 7 -l 7 -layout (2017) liefern die zitierten Zeilen. pdfinfo: 2010 Creator dvips 5.83, Producer Acrobat Distiller 7.0.5; 2017 Creator Arbortext Advanced Print Publisher 9.1.520, Producer Acrobat Distiller 8.1.0; beide Textschichten stammen nicht aus OCR.",
+  "verification": "Die Dezimalwerte sind format(pi^2/3, digits = 17) und format(pi^2/6, digits = 17) in R 4.6.1. Dieselben Werte stehen in docs/01 §5 (1 und π²/3), AGENTS.md (Projektblock, AIAG-Konventionen: „Latente Skala: Restvarianz 1 (Probit), π²/3 (Logit)“) und Formelsammlung §4."
+}

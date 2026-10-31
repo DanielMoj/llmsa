@@ -28,22 +28,24 @@ test_that("single-level factors are dropped and thresholds classify", {
 
 test_that("ordinal and binary fits run on the demo data", {
   lv <- c("B", "LB", "VUS", "LP", "P")
-  fo <- msa_fit(acmg_demo, type = "ordinal", levels = lv)
+  missing_warning <- paste(sum(is.na(acmg_demo$value)), "missing response(s) were dropped.")
+  expect_warning(fo <- msa_fit(acmg_demo, type = "ordinal", levels = lv), missing_warning, fixed = TRUE)
   expect_equal(fo$vc$variance[fo$vc$source == "Residual"], 1)
   go <- msa_grr(fo)
   expect_true(go$summary["grr_pct_study_var"] > 0 && go$summary["grr_pct_study_var"] < 100)
   b <- acmg_demo
   b$value <- ifelse(is.na(b$value), NA, as.integer(b$value %in% c("LP", "P")))
-  fb <- msa_fit(b, type = "binary")
+  expect_warning(fb <- msa_fit(b, type = "binary"), missing_warning, fixed = TRUE)
   expect_equal(fb$vc$variance[fb$vc$source == "Residual"], 1)
   expect_s3_class(msa_grr(fb), "msa_grr")
-  expect_error(msa_fit(acmg_demo, type = "ordinal"), "levels")
+  expect_warning(expect_error(msa_fit(acmg_demo, type = "ordinal"), "levels"), missing_warning, fixed = TRUE)
 })
 
 test_that("ordinal fits handle two-level factors by the range method", {
   lv <- c("B", "LB", "VUS", "LP", "P")
   two <- acmg_demo[acmg_demo$model_id %in% c("model-a", "model-b"), ]
-  f <- msa_fit(two, type = "ordinal", levels = lv)
+  expect_warning(expect_warning(f <- msa_fit(two, type = "ordinal", levels = lv), "range method", fixed = TRUE),
+                 paste(sum(is.na(two$value)), "missing response(s) were dropped."), fixed = TRUE)
   expect_equal(f$derived, "model")
   expect_true(grepl("\\+ model \\+", deparse(f$formula)))
   expect_true("model" %in% f$vc$source)
@@ -58,7 +60,8 @@ test_that("bootstrap returns intervals that contain the estimate", {
   b <- msa_boot(f, nsim = 8, seed = 1)
   expect_s3_class(b, "msa_boot")
   expect_true(all(b$lower <= b$upper))
-  expect_error(msa_boot(msa_fit(acmg_demo, type = "ordinal", levels = c("B", "LB", "VUS", "LP", "P"))), "ordinal")
+  expect_warning(expect_error(msa_boot(msa_fit(acmg_demo, type = "ordinal", levels = c("B", "LB", "VUS", "LP", "P"))), "ordinal"),
+                 paste(sum(is.na(acmg_demo$value)), "missing response(s) were dropped."), fixed = TRUE)
 })
 
 test_that("msa_bias measures a known offset", {

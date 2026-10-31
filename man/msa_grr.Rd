@@ -22,7 +22,8 @@ An object of class \code{msa_grr} with elements \code{table} (one row per
 source), \code{summary} (named vector: \code{grr_pct_study_var},
 \code{grr_pct_contribution}, \code{repeatability_pct_study_var},
 \code{reproducibility_pct_study_var}, \code{ndc}, \code{icc_items}), \code{verdict}, the
-thresholds and the outcome type.
+thresholds, the outcome type and \code{derived} (the sources named by
+\code{attr(fit$vc, "derived")}).
 }
 \description{
 Turns the variance components of an \code{\link[=msa_fit]{msa_fit()}} into the statistics that
@@ -56,6 +57,10 @@ If total variance is zero, percentages, ICC and ndc are \code{NA} and the
 verdict is \code{"undetermined"}. With positive item variance and zero gauge
 variance, ndc is \code{Inf}. With zero item variance and positive gauge
 variance, ndc is one. These conventions also apply to \code{\link[=msa_boot]{msa_boot()}}.
+For latent outcomes these statistics use the link's fixed residual
+variance. Sources derived from two fixed ordinal levels are retained in
+\code{derived} and identified when printing; see \code{\link[=msa_fit]{msa_fit()}} for their positive
+bias and the \code{two_level} study in \code{vignette("validation")}.
 }
 \examples{
 g <- msa_grr(msa_fit(ic50_demo, type = "numeric"))

@@ -1,0 +1,99 @@
+format: llmsa-class-b-v1
+study: binary_recovery
+n_sim: 20
+implementation: 9c90724ace72e28044d19f7721e7f56769aa0e2880c735801322c830e6557cfd
+R_version: 4.6.1
+package_llmsa: 0.1.0
+package_lme4: 2.0.6
+package_ordinal: 2026.7.26
+package_Matrix: 1.7.4
+package_parallel: 4.6.1
+RNG: Mersenne-Twister; normal.kind=Inversion; sample.kind=Rejection
+seed_rule: 20261031 + j(scenario) + 8 * (rep - 1); permanent j=1..8 in specification order
+scenarios: S-bin-1,S-bin-2
+start_seeds: S-bin-1=20261036,S-bin-2=20261037
+command: Rscript binary_recovery.R '--n-sim' '20' '--out' '/tmp/llmsa-m1b-build/checks-final-v2/binary_recovery'
+workers: 14
+elapsed_seconds: 0.878000
+
+Per-repetition diagnostics (including every repetition seed):
+S-bin-1 rep=1 seed=20261036 error=[(none)] warnings=[(none)] messages=[(none)]
+S-bin-1 rep=2 seed=20261044 error=[(none)] warnings=[(none)] messages=[(none)]
+S-bin-1 rep=3 seed=20261052 error=[(none)] warnings=[(none)] messages=[(none)]
+S-bin-1 rep=4 seed=20261060 error=[(none)] warnings=[(none)] messages=[(none)]
+S-bin-1 rep=5 seed=20261068 error=[(none)] warnings=[(none)] messages=[(none)]
+S-bin-1 rep=6 seed=20261076 error=[(none)] warnings=[(none)] messages=[(none)]
+S-bin-1 rep=7 seed=20261084 error=[(none)] warnings=[(none)] messages=[(none)]
+S-bin-1 rep=8 seed=20261092 error=[(none)] warnings=[(none)] messages=[boundary (singular) fit: see help('isSingular')
+]
+S-bin-1 rep=9 seed=20261100 error=[(none)] warnings=[(none)] messages=[(none)]
+S-bin-1 rep=10 seed=20261108 error=[(none)] warnings=[(none)] messages=[(none)]
+S-bin-1 rep=11 seed=20261116 error=[(none)] warnings=[(none)] messages=[boundary (singular) fit: see help('isSingular')
+]
+S-bin-1 rep=12 seed=20261124 error=[(none)] warnings=[(none)] messages=[(none)]
+S-bin-1 rep=13 seed=20261132 error=[(none)] warnings=[(none)] messages=[(none)]
+S-bin-1 rep=14 seed=20261140 error=[(none)] warnings=[(none)] messages=[boundary (singular) fit: see help('isSingular')
+]
+S-bin-1 rep=15 seed=20261148 error=[(none)] warnings=[(none)] messages=[(none)]
+S-bin-1 rep=16 seed=20261156 error=[(none)] warnings=[(none)] messages=[(none)]
+S-bin-1 rep=17 seed=20261164 error=[(none)] warnings=[(none)] messages=[(none)]
+S-bin-1 rep=18 seed=20261172 error=[(none)] warnings=[(none)] messages=[(none)]
+S-bin-1 rep=19 seed=20261180 error=[(none)] warnings=[(none)] messages=[(none)]
+S-bin-1 rep=20 seed=20261188 error=[(none)] warnings=[(none)] messages=[(none)]
+S-bin-2 rep=1 seed=20261037 error=[(none)] warnings=[(none)] messages=[(none)]
+S-bin-2 rep=2 seed=20261045 error=[(none)] warnings=[(none)] messages=[(none)]
+S-bin-2 rep=3 seed=20261053 error=[(none)] warnings=[(none)] messages=[(none)]
+S-bin-2 rep=4 seed=20261061 error=[(none)] warnings=[(none)] messages=[boundary (singular) fit: see help('isSingular')
+]
+S-bin-2 rep=5 seed=20261069 error=[(none)] warnings=[(none)] messages=[boundary (singular) fit: see help('isSingular')
+]
+S-bin-2 rep=6 seed=20261077 error=[(none)] warnings=[(none)] messages=[(none)]
+S-bin-2 rep=7 seed=20261085 error=[(none)] warnings=[(none)] messages=[(none)]
+S-bin-2 rep=8 seed=20261093 error=[(none)] warnings=[(none)] messages=[(none)]
+S-bin-2 rep=9 seed=20261101 error=[(none)] warnings=[(none)] messages=[boundary (singular) fit: see help('isSingular')
+]
+S-bin-2 rep=10 seed=20261109 error=[(none)] warnings=[(none)] messages=[(none)]
+S-bin-2 rep=11 seed=20261117 error=[(none)] warnings=[(none)] messages=[(none)]
+S-bin-2 rep=12 seed=20261125 error=[(none)] warnings=[(none)] messages=[(none)]
+S-bin-2 rep=13 seed=20261133 error=[(none)] warnings=[(none)] messages=[boundary (singular) fit: see help('isSingular')
+]
+S-bin-2 rep=14 seed=20261141 error=[(none)] warnings=[(none)] messages=[(none)]
+S-bin-2 rep=15 seed=20261149 error=[(none)] warnings=[(none)] messages=[(none)]
+S-bin-2 rep=16 seed=20261157 error=[(none)] warnings=[(none)] messages=[(none)]
+S-bin-2 rep=17 seed=20261165 error=[(none)] warnings=[(none)] messages=[(none)]
+S-bin-2 rep=18 seed=20261173 error=[(none)] warnings=[(none)] messages=[(none)]
+S-bin-2 rep=19 seed=20261181 error=[(none)] warnings=[(none)] messages=[(none)]
+S-bin-2 rep=20 seed=20261189 error=[(none)] warnings=[(none)] messages=[(none)]
+
+R version 4.6.1 (2026-06-24)
+Platform: x86_64-pc-linux-gnu
+Running under: Ubuntu 26.04 LTS
+
+Matrix products: default
+BLAS:   /usr/lib/x86_64-linux-gnu/blas/libblas.so.3.12.1 
+LAPACK: /usr/lib/x86_64-linux-gnu/lapack/liblapack.so.3.12.1;  LAPACK version 3.12.0
+
+locale:
+ [1] LC_CTYPE=C.UTF-8       LC_NUMERIC=C           LC_TIME=C.UTF-8       
+ [4] LC_COLLATE=C.UTF-8     LC_MONETARY=C.UTF-8    LC_MESSAGES=C.UTF-8   
+ [7] LC_PAPER=C.UTF-8       LC_NAME=C              LC_ADDRESS=C          
+[10] LC_TELEPHONE=C         LC_MEASUREMENT=C.UTF-8 LC_IDENTIFICATION=C   
+
+time zone: Europe/Berlin
+tzcode source: system (glibc)
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+[1] llmsa_0.1.0
+
+loaded via a namespace (and not attached):
+ [1] lme4_2.0-6          digest_0.6.39       numDeriv_2016.8-1.1
+ [4] Matrix_1.7-4        lattice_0.22-9      splines_4.6.1      
+ [7] ordinal_2026.7-26   parallel_4.6.1      ucminf_1.2.3       
+[10] Rdpack_2.6.6        nloptr_2.2.1        grid_4.6.1         
+[13] reformulas_0.4.4    compiler_4.6.1      boot_1.3-32        
+[16] rbibutils_2.4.1     tools_4.6.1         nlme_3.1-168       
+[19] minqa_1.2.8         Rcpp_1.1.2          jsonlite_2.0.0     
+[22] MASS_7.3-65        

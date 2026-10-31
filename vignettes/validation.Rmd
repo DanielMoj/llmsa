@@ -119,3 +119,116 @@ infinite ndc; zero item variance with positive gauge variance gives the lower
 bound from ANK-16. Constant numeric responses and a degenerate residual
 variance produce named errors. These finite reference checks establish neither
 bootstrap coverage nor the later ordinal and binary simulation results.
+
+## Ordinal and binary outcomes (latent scale)
+
+```{r latent-setup, include=FALSE}
+latent_validation <- new.env(parent = globalenv())
+sys.source(system.file("validation", "latent", "reference_checks.R",
+                       package = "llmsa", mustWork = TRUE), envir = latent_validation)
+latent_context <- latent_validation$latent_context()
+latent_anchors <- latent_validation$latent_anchors(latent_context)
+latent_checks <- latent_validation$latent_reference_checks(latent_anchors)
+latent_results <- setNames(lapply(latent_validation$latent_studies,
+                                latent_validation$latent_read_results),
+                           latent_validation$latent_studies)
+```
+
+Ordinal `msa_fit()` uses cumulative link mixed models and binary `msa_fit()`
+uses binomial mixed models. Variance components, gauge R&R and `ICC_items`
+refer to the latent scale. ANK-28 fixes the residual variance to one for the
+probit link and to `pi^2 / 3` for the logit link. In both cases, `ICC_items` is
+the item variance divided by the sum of all variance components, including
+that residual. Gauge R&R includes every component except the item variance.
+
+All reference values below are read from ANK-21, ANK-25 and ANK-28, with
+tolerances from ANK-TOL. The **`r latent_context$mode`** context verifies
+whole anchor copies and their SHA-256 manifest under `validation/latent/`.
+When `REPO_ROOT` is set, original anchors are also checked and used; an
+invalid root or missing input is an error. There is no network access.
+
+### Wine: ordinal components and a separate installation check
+
+The wine comparison maps bottle to item, judge to prompt, with one model and
+one replicate. Each link is fitted again with `ordinal::clmm` and `msa_fit()`.
+The absolute comparison bound is `ANK-TOL.engine_ordinal` times the direct
+fit's total latent variance. The tutorial's `clmm2` model includes temperature
+and contact fixed effects, so its ANK-21 estimates form a separate installation
+check, using both Laplace approximation and quadrature.
+
+```{r latent-wine, echo=FALSE, results='asis'}
+print(knitr::kable(latent_validation$latent_display(latent_checks$wine), row.names = FALSE))
+cat("\n\n")
+print(knitr::kable(latent_validation$latent_display(latent_checks$ordinal_installation), row.names = FALSE))
+```
+
+### BeetlesMale: binary repeatability and a separate installation check
+
+Population is the item, with one prompt, one model and replicates numbered
+within Population. The latent logit `ICC_items` is compared with live
+`rptR::rptBinary(expect = "liability")`, `performance::icc()` on both the
+direct `glmer` model and the returned model, and the independent calculation
+`variance(Population) / (variance(Population) + pi^2 / 3)` using ANK-28.
+These comparisons use `ANK-TOL.rptr.live_tol`.
+
+The published ANK-25 values use rptR's default `expect = "meanobs"` and a
+different scale convention. Both the link and original scale values are
+reproduced separately with `ANK-TOL.rptr.vignette_tol`. They are installation
+checks, not reference values for `ICC_items`.
+
+```{r latent-beetles, echo=FALSE, results='asis'}
+print(knitr::kable(latent_validation$latent_display(latent_checks$binary), row.names = FALSE))
+cat("\n\n")
+print(knitr::kable(latent_validation$latent_display(latent_checks$rptr_installation), row.names = FALSE))
+if (length(latent_checks$diagnostics)) {
+  cat("\n\nRecorded fit diagnostics:\n\n")
+  print(knitr::kable(data.frame(Diagnostic = latent_checks$diagnostics), row.names = FALSE))
+}
+```
+
+### Simulation recovery and two-level factors
+
+The following tables read the installed studies' `<study>_results.csv` if it
+exists, otherwise `<study>_check_results.csv`. An invalid existing full result
+file stops the build. The displayed `n_sim` comes from each file. Knitting
+does not run simulations. Bias, relative bias, empirical standard error
+(EmpSE) and root mean squared error (RMSE) each have a Monte Carlo standard
+error (MCSE); the tables retain significant digits for small estimates.
+`n_finite` and `n_failed` count the usable and missing estimates separately.
+Finite estimates with non-convergence or singularity are retained, with the
+diagnoses recorded in the replicate and session files.
+
+Short runs check reproducibility and file structure. They do not establish
+quantitative recovery or bias findings. Full runs require at least
+`r latent_validation$latent_get(latent_anchors, "ANK-06", "value", "n_sim_min")`
+repetitions per scenario, according to ANK-06, and are performed separately
+by the operator after acceptance. The installed `validation/sim/README.md`
+gives executable full-run and scenario-merging instructions, the ADEMP design,
+MCSE formulas and failure handling. The random stream for each scenario and
+repetition is independent of the requested run length and worker count.
+
+For ordinal fits, a prompt, model or block with exactly two levels enters as
+a fixed effect. Its component is the squared fitted difference divided by
+two, `beta-hat^2 / 2`, marked in `attr(fit$vc, "derived")` and in `msa_grr()`.
+This range method does not subtract the AIAG correction `EV^2 / (n * r)`.
+Its bias is positive: `E[beta-hat^2 / 2] = sigma^2 + Var(beta-hat) / 2`.
+Every such fit warns, and printing names each derived component with
+`range method, see ?msa_fit`. The `two_level` study redraws both model effects
+in every repetition and reports `derived_share`, the fraction of repetitions
+with a derived model component. It measures this bias; quantitative
+conclusions await the full runs. Fewer than three ordinal items are rejected.
+
+```{r latent-simulation-tables, echo=FALSE, results='asis'}
+for (study in names(latent_results)) {
+  entry <- latent_results[[study]]
+  cat("\n### ", study, "\n\n", sep = "")
+  cat("Read `", basename(entry$path), "` (", entry$mode, "); n_sim = ",
+      entry$n_sim, " per scenario.\n\n", sep = "")
+  for (scenario in unique(entry$data$scenario)) {
+    cat("\n", scenario, "\n\n", sep = "")
+    rows <- entry$data[entry$data$scenario == scenario, , drop = FALSE]
+    print(knitr::kable(latent_validation$latent_display(rows), row.names = FALSE))
+    cat("\n\n")
+  }
+}
+```

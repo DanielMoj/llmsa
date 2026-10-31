@@ -19,8 +19,9 @@ msa_fit(
 \item{type}{Outcome type.}
 
 \item{levels}{For ordinal outcomes: the labels in scale order. For binary
-outcomes given as labels: a length-two vector whose second element is
-the event.}
+outcomes given as labels: two distinct, non-missing labels, whose
+second element is the event. Labels require this explicit argument;
+their order of occurrence or factor levels do not determine the event.}
 
 \item{interactions}{Include the two-way interactions as random effects?
 Default \code{TRUE} for numeric, \code{FALSE} otherwise.}
@@ -45,7 +46,9 @@ the analysed \code{data}, counts \code{n}, the outcome \code{type}, and a \code{
 flag (a variance estimated at zero, common with few prompt or model
 levels; the point estimate is still valid but its uncertainty is large,
 see \code{\link[=msa_boot]{msa_boot()}} and \code{\link[=msa_plan]{msa_plan()}}), plus numeric fitting diagnostics
-\code{numerics} (\code{NULL} for other outcome types).
+\code{numerics} (\code{NULL} for other outcome types), logical \code{converged}, and
+\code{derived} (sources estimated from two fixed levels, also in
+\code{attr(vc, "derived")}).
 }
 \description{
 Fits a crossed random-effects model to the parsed values of a study.
@@ -73,9 +76,15 @@ from the model automatically. For ordinal outcomes \code{ordinal::clmm}
 requires more than two levels per random-effect factor; a factor with
 exactly two levels (two models, two blocks) therefore enters as a fixed
 effect and its variance component is derived from the estimated
-difference \code{beta} by the range method (\code{beta^2 / 2}), which is how the
-AIAG X-bar/R procedure treats two appraisers. Ordinal outcomes need at
-least three items.
+difference \code{beta} by the range method (\code{beta^2 / 2}). This substitute
+does not subtract the AIAG handbook correction \code{EV^2 / (n * r)}.
+It has positive bias: \code{E[beta-hat^2 / 2] = sigma^2 + Var(beta-hat) / 2}.
+Every such fit warns and both print methods identify the derived sources.
+The \code{two_level} simulation study and its table in
+\code{vignette("validation")} (\code{vignettes/validation.Rmd}) investigate that
+bias. Short runs establish reproducibility; quantitative findings require
+the full simulation runs. With fewer than three ordinal items the error is
+"At least three items are needed for ordinal outcomes."
 
 With no arguments in \code{...}, the numeric fit preserves the input doubles
 and conditions their differences before solving for variance ratios.
@@ -123,6 +132,26 @@ treated as missing responses, without a parsing warning. Missing numeric
 grouping values are rejected on both fitting paths. The default path
 rejects variances whose original-scale representation or model arithmetic
 loses working precision; conditioning cannot recover digits lost in the inputs.
+
+Ordinal and binary fits discard missing responses, and labels outside
+\code{levels}, with a warning giving the count. All returned data and study
+counts describe the retained observations. Missing grouping values are
+rejected. No remaining response, or a constant response category, produces
+a named error. Binary numeric values (including numeric strings without
+\code{levels}) must be finite and exactly zero or one; they are never rounded.
+
+\code{converged} records the final engine diagnosis, independently of
+\code{singular}. For \code{clmm}, success means code zero for \code{nlminb}, or code one
+or two for \code{ucminf}; the matrix fitting path uses \code{nlminb} even if
+\code{ucminf} was requested. For lme4 models, success requires optimizer code
+zero and no convergence message other than the singular-boundary note.
+Missing or unreadable codes do not confirm convergence. On both numeric
+paths the final model decides: initialization diagnostics do not, and a
+final Hessian or gradient diagnostic means \code{converged = FALSE} even after
+analytic completion. Numeric warning behavior remains that of lme4 and
+its final convergence check. Ordinal and binary non-convergence is warned,
+including a diagnosis stored by the engine without an emitted warning.
+A range-method warning alone does not indicate non-convergence.
 }
 \examples{
 fit <- msa_fit(ic50_demo, type = "numeric")

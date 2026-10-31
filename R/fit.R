@@ -22,15 +22,22 @@
 #' requires more than two levels per random-effect factor; a factor with
 #' exactly two levels (two models, two blocks) therefore enters as a fixed
 #' effect and its variance component is derived from the estimated
-#' difference `beta` by the range method (`beta^2 / 2`), which is how the
-#' AIAG X-bar/R procedure treats two appraisers. Ordinal outcomes need at
-#' least three items.
+#' difference `beta` by the range method (`beta^2 / 2`). This substitute
+#' does not subtract the AIAG handbook correction `EV^2 / (n * r)`.
+#' It has positive bias: `E[beta-hat^2 / 2] = sigma^2 + Var(beta-hat) / 2`.
+#' Every such fit warns and both print methods identify the derived sources.
+#' The `two_level` simulation study and its table in
+#' `vignette("validation")` (`vignettes/validation.Rmd`) investigate that
+#' bias. Short runs establish reproducibility; quantitative findings require
+#' the full simulation runs. With fewer than three ordinal items the error is
+#' "At least three items are needed for ordinal outcomes."
 #'
 #' @param runs An `msa_runs` object (from [msa_run()] or [as_msa_runs()]).
 #' @param type Outcome type.
 #' @param levels For ordinal outcomes: the labels in scale order. For binary
-#'   outcomes given as labels: a length-two vector whose second element is
-#'   the event.
+#'   outcomes given as labels: two distinct, non-missing labels, whose
+#'   second element is the event. Labels require this explicit argument;
+#'   their order of occurrence or factor levels do not determine the event.
 #' @param interactions Include the two-way interactions as random effects?
 #'   Default `TRUE` for numeric, `FALSE` otherwise.
 #' @param link Link for ordinal and binary outcomes.
@@ -93,13 +100,35 @@
 #' rejects variances whose original-scale representation or model arithmetic
 #' loses working precision; conditioning cannot recover digits lost in the inputs.
 #'
+#' Ordinal and binary fits discard missing responses, and labels outside
+#' `levels`, with a warning giving the count. All returned data and study
+#' counts describe the retained observations. Missing grouping values are
+#' rejected. No remaining response, or a constant response category, produces
+#' a named error. Binary numeric values (including numeric strings without
+#' `levels`) must be finite and exactly zero or one; they are never rounded.
+#'
+#' `converged` records the final engine diagnosis, independently of
+#' `singular`. For `clmm`, success means code zero for `nlminb`, or code one
+#' or two for `ucminf`; the matrix fitting path uses `nlminb` even if
+#' `ucminf` was requested. For lme4 models, success requires optimizer code
+#' zero and no convergence message other than the singular-boundary note.
+#' Missing or unreadable codes do not confirm convergence. On both numeric
+#' paths the final model decides: initialization diagnostics do not, and a
+#' final Hessian or gradient diagnostic means `converged = FALSE` even after
+#' analytic completion. Numeric warning behavior remains that of lme4 and
+#' its final convergence check. Ordinal and binary non-convergence is warned,
+#' including a diagnosis stored by the engine without an emitted warning.
+#' A range-method warning alone does not indicate non-convergence.
+#'
 #' @return An object of class `msa_fit`: a list with the fitted `model`, the
 #'   variance-component table `vc` (source, variance), the model `formula`,
 #'   the analysed `data`, counts `n`, the outcome `type`, and a `singular`
 #'   flag (a variance estimated at zero, common with few prompt or model
 #'   levels; the point estimate is still valid but its uncertainty is large,
 #'   see [msa_boot()] and [msa_plan()]), plus numeric fitting diagnostics
-#'   `numerics` (`NULL` for other outcome types).
+#'   `numerics` (`NULL` for other outcome types), logical `converged`, and
+#'   `derived` (sources estimated from two fixed levels, also in
+#'   `attr(vc, "derived")`).
 #' @seealso [msa_grr()] to turn the variance components into gauge R&R
 #'   statistics.
 #' @examples
@@ -118,6 +147,13 @@ msa_fit <- function(runs, type = c("numeric", "ordinal", "binary"), levels = NUL
   d <- as.data.frame(runs, stringsAsFactors = FALSE)
   stop_if_missing_cols(d, c("item_id", "prompt_id", "model_id", "rep", "value"), "runs")
   if (!"block" %in% names(d)) d$block <- 1L
+  if (type != "numeric") {
+    if (anyNA(d[c("item_id", "prompt_id", "model_id", "block")])) {
+      stop("Ordinal and binary grouping factors must not contain missing values.", call. = FALSE)
+    }
+    missing <- is.na(d$value)
+    if (any(missing)) warning(sum(missing), " missing response(s) were dropped.", call. = FALSE)
+  }
   input_rows <- which(!is.na(d$value))
   d <- d[input_rows, , drop = FALSE]
   if (!nrow(d)) stop("No valid (non-missing) values to analyse.", call. = FALSE)
@@ -140,17 +176,21 @@ msa_fit <- function(runs, type = c("numeric", "ordinal", "binary"), levels = NUL
     dat$y <- y
   } else {
     v <- d$value
+    if (!is.null(levels) && (length(levels) != 2L || anyNA(levels) || anyDuplicated(levels))) {
+      stop("Binary `levels` must contain two distinct, non-missing labels.", call. = FALSE)
+    }
     if (is.logical(v)) y <- as.integer(v)
-    else if (is.numeric(v)) y <- as.integer(v)
+    else if (is.numeric(v)) y <- v
     else if (!is.null(levels)) {
       vv <- as.character(v)
       y <- ifelse(vv %in% levels, as.integer(vv == levels[2]), NA_integer_)
+      if (anyNA(y)) warning(sum(is.na(y)), " value(s) are not among `levels` and were dropped.", call. = FALSE)
     } else {
-      y <- suppressWarnings(as.integer(as.character(v)))
+      y <- suppressWarnings(as.numeric(as.character(v)))
       if (anyNA(y)) stop("Binary values must be 0/1, logical, or labels with `levels` given.", call. = FALSE)
     }
-    if (!all(y[!is.na(y)] %in% c(0L, 1L))) stop("Binary values must be 0 or 1.", call. = FALSE)
-    dat$y <- y
+    if (!all(y[!is.na(y)] %in% c(0, 1))) stop("Binary values must be 0 or 1.", call. = FALSE)
+    dat$y <- as.integer(y)
   }
   input_rows <- input_rows[!is.na(dat$y)]
   dat <- dat[!is.na(dat$y), , drop = FALSE]
@@ -160,6 +200,9 @@ msa_fit <- function(runs, type = c("numeric", "ordinal", "binary"), levels = NUL
     if (anyNA(dat)) stop("Numeric grouping factors must not contain missing values.", call. = FALSE)
     if (any(!is.finite(dat$y))) stop("Numeric response must contain only finite values.", call. = FALSE)
     if (all(dat$y == dat$y[1])) stop("Numeric response has zero variation.", call. = FALSE)
+  } else {
+    if (!nrow(dat)) stop("No valid response categories to analyse.", call. = FALSE)
+    if (length(unique(dat$y)) < 2L) stop("Response is constant: at least two observed categories are needed.", call. = FALSE)
   }
 
   if (is.null(interactions)) interactions <- type == "numeric"
@@ -190,6 +233,7 @@ msa_fit <- function(runs, type = c("numeric", "ordinal", "binary"), levels = NUL
   form <- stats::as.formula(paste("y ~", paste(rhs, collapse = " + ")))
 
   numerics <- NULL
+  engine_warnings <- character()
   if (type == "numeric" && ...length() == 0L) {
     fitted <- msa_numeric_fit(form, dat)
     model <- fitted$model
@@ -214,17 +258,35 @@ msa_fit <- function(runs, type = c("numeric", "ordinal", "binary"), levels = NUL
     dat <- droplevels(dat[analysed, , drop = FALSE])
     numerics <- list(method = "lmer")
   } else {
-    model <- switch(type,
+    model <- withCallingHandlers(switch(type,
       ordinal = ordinal::clmm(form, data = dat, link = link, ...),
-      binary  = lme4::glmer(form, data = dat, family = stats::binomial(link = link), ...))
+      binary  = lme4::glmer(form, data = dat, family = stats::binomial(link = link), ...)),
+      warning = function(w) engine_warnings <<- c(engine_warnings, conditionMessage(w)))
   }
   if (type == "numeric") numerics$input_rows <- input_rows
+  converged <- if (type == "ordinal") msa_clmm_converged(model) else msa_mer_converged(model@optinfo$conv)
+  if (!converged && type == "ordinal") {
+    warning("Ordinal model did not converge: ", model$optRes$message %||% "missing optimizer success code",
+            call. = FALSE)
+  } else if (!converged && type == "binary") {
+    recorded <- model@optinfo$conv$lme4$messages
+    for (message in setdiff(recorded, engine_warnings)) warning(message, call. = FALSE)
+    if (!length(recorded)) {
+      warning("Binary model did not converge: optimizer code ",
+              paste(model@optinfo$conv$opt %||% "missing", collapse = ", "), call. = FALSE)
+    }
+  }
 
   vc <- vc_from_model(model, type, link)
   if (length(fixed_two)) {
-    cf <- stats::coef(model)
     derived <- vapply(fixed_two, function(m) {
-      beta <- unname(cf[[paste0(m, levels(dat[[m]])[2])]])
+      # Evaluate the contrast between levels, including non-treatment coding.
+      pair <- dat[rep(1L, 2L), , drop = FALSE]
+      pair[[m]] <- factor(levels(dat[[m]]), levels = levels(dat[[m]]))
+      design <- stats::model.matrix(stats::delete.response(model$terms), pair,
+                                    contrasts.arg = model$contrasts)
+      difference <- design[2L, names(model$beta)] - design[1L, names(model$beta)]
+      beta <- sum(difference * model$beta)
       beta^2 / 2    # range method: two levels with effects 0 and beta
     }, numeric(1))
     vc <- rbind(vc[vc$source != "Residual", , drop = FALSE],
@@ -232,6 +294,9 @@ msa_fit <- function(runs, type = c("numeric", "ordinal", "binary"), levels = NUL
                 vc[vc$source == "Residual", , drop = FALSE])
     rownames(vc) <- NULL
     attr(vc, "derived") <- fixed_two
+    warning("Two-level component(s) ", paste(fixed_two, collapse = ", "),
+            " use the range method (beta-hat^2/2), with positive bias: ",
+            "E[beta-hat^2/2] = sigma^2 + Var(beta-hat)/2; see ?msa_fit.", call. = FALSE)
   }
   singular <- if (inherits(model, "merMod")) lme4::isSingular(model) else any(vc$variance[vc$source != "Residual"] < 1e-6)
 
@@ -242,8 +307,31 @@ msa_fit <- function(runs, type = c("numeric", "ordinal", "binary"), levels = NUL
 
   structure(list(model = model, type = type, link = link, formula = form, vc = vc,
                  data = dat, n = n, singular = singular, levels = levels,
-                 interactions = interactions, derived = fixed_two, numerics = numerics),
+                 interactions = interactions, derived = fixed_two, numerics = numerics,
+                 converged = converged),
             class = "msa_fit")
+}
+
+# Engine status is categorical, not a new gradient or Hessian tolerance.
+msa_mer_converged <- function(conv) {
+  code <- conv$opt
+  if (!(is.numeric(code) || is.character(code)) || length(code) != 1L) return(FALSE)
+  code <- suppressWarnings(as.numeric(code))
+  boundary <- "boundary (singular) fit: see help('isSingular')"
+  length(code) == 1L && is.finite(code) && code == 0 &&
+    all(conv$lme4$messages %in% boundary)
+}
+
+msa_clmm_converged <- function(model) {
+  # ordinal only uses the single simple random-effect optimizer outside
+  # the matrix path. Multiple terms and useMatrix force nlminb.
+  simple <- length(model$ST) == 1L && isTRUE(nrow(model$ST[[1L]]) == 1L)
+  method <- if (simple && !isTRUE(model$control$useMatrix)) model$control$method else "nlminb"
+  success <- if (identical(method, "nlminb")) 0 else if (identical(method, "ucminf")) c(1, 2) else numeric()
+  code <- model$optRes$convergence
+  if (!(is.numeric(code) || is.character(code)) || length(code) != 1L) return(FALSE)
+  code <- suppressWarnings(as.numeric(code))
+  length(code) == 1L && is.finite(code) && code %in% success
 }
 
 # Condition differences before taking sums of squares. No absolute cutoff on
@@ -591,9 +679,7 @@ print.msa_fit <- function(x, ...) {
   tab$variance <- fmt_num(tab$variance); tab$sd <- fmt_num(tab$sd); tab$pct <- fmt_pct(tab$pct)
   print(tab, row.names = FALSE)
   if (length(x$derived)) {
-    cat("note: ", paste(x$derived, collapse = ", "), " ha", if (length(x$derived) > 1) "ve" else "s",
-        " only two levels and entered as fixed effect(s); the component is derived from the\n",
-        "      estimated difference by the range method (beta^2 / 2), as in the AIAG X-bar/R procedure.\n", sep = "")
+    for (source in x$derived) cat("  ", source, ": range method, see ?msa_fit\n", sep = "")
   }
   if (isTRUE(x$singular)) {
     cat("note: singular fit (at least one variance estimated at zero). With few prompt or model levels this is expected;\n",

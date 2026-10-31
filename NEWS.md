@@ -1,5 +1,24 @@
 # llmsa (development version)
 
+* Ordinal and binary fits validate exact binary codes, explicit event labels,
+  missing grouping values and constant categories. Dropped responses are
+  counted in warnings and in the returned study size.
+* `msa_fit()` now reports final-engine `converged` independently of `singular`.
+  The actual clmm optimizer determines success, including its matrix fallback;
+  stored ordinal and binary failure diagnoses produce warnings. Numeric fits
+  retain their existing final-engine warning behavior.
+* Two-level ordinal components always warn about the positive bias of the
+  range method, `beta-hat^2 / 2`, which does not subtract the AIAG correction
+  `EV^2 / (n * r)`. Both print methods identify every derived component;
+  `msa_grr()` retains the component names in `derived`. The `two_level` study
+  and the validation vignette document the method and its limitations.
+* The validation vignette adds live ordinal and binary comparisons, separates
+  latent ICC from rptR's default scale convention, and reads reproducible
+  recovery-study results with MCSE. Offline anchor copies carry SHA-256
+  provenance. Three simulation scripts retain fit failures and seeds, support
+  separate scenario runs, and ship short reproducibility runs; full simulation
+  findings require the operator's later runs.
+
 * Default numeric `msa_fit()` preserves numeric input precision and completes
   REML using balanced-design formulas or an analytic constrained solution.
   The returned lme4 model stays on the original scale; `numerics` reports the

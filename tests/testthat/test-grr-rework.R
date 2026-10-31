@@ -79,13 +79,10 @@ test_that("fit print shows counts, formula, percentages and both reporting notes
   for (groups in list("model", c("model", "block"))) {
     f$derived <- groups
     f$singular <- TRUE
-    note <- c(paste0("note: ", paste(groups, collapse = ", "),
-                      if (length(groups) == 1L) " has" else " have",
-                      " only two levels and entered as fixed effect(s); the component is derived from the"),
-              "      estimated difference by the range method (beta^2 / 2), as in the AIAG X-bar/R procedure.",
+    note <- c(paste0("  ", groups, ": range method, see ?msa_fit"),
               "note: singular fit (at least one variance estimated at zero). With few prompt or model levels this is expected;",
               "      report bootstrap intervals (msa_boot) and consider a larger study (msa_plan).")
-    expect_identical(tail(capture.output(print(f)), 4L), note)
+    expect_identical(tail(capture.output(print(f)), length(note)), note)
   }
 })
 

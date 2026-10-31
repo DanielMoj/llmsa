@@ -28,6 +28,10 @@
 #' verdict is `"undetermined"`. With positive item variance and zero gauge
 #' variance, ndc is `Inf`. With zero item variance and positive gauge
 #' variance, ndc is one. These conventions also apply to [msa_boot()].
+#' For latent outcomes these statistics use the link's fixed residual
+#' variance. Sources derived from two fixed ordinal levels are retained in
+#' `derived` and identified when printing; see [msa_fit()] for their positive
+#' bias and the `two_level` study in `vignette("validation")`.
 #'
 #' @param fit An `msa_fit`.
 #' @param threshold Length-two vector of thresholds (acceptable / marginal)
@@ -41,7 +45,8 @@
 #'   source), `summary` (named vector: `grr_pct_study_var`,
 #'   `grr_pct_contribution`, `repeatability_pct_study_var`,
 #'   `reproducibility_pct_study_var`, `ndc`, `icc_items`), `verdict`, the
-#'   thresholds and the outcome type.
+#'   thresholds, the outcome type and `derived` (the sources named by
+#'   `attr(fit$vc, "derived")`).
 #' @examples
 #' g <- msa_grr(msa_fit(ic50_demo, type = "numeric"))
 #' g
@@ -64,7 +69,7 @@ msa_grr <- function(fit, threshold = NULL, basis = c("study_var", "contribution"
     if (crit <= threshold[2]) "marginal" else "unacceptable"
   structure(list(table = tab, summary = s, verdict = verdict, threshold = threshold,
                  basis = basis, type = fit$type, link = fit$link, singular = fit$singular,
-                 n = fit$n),
+                 n = fit$n, derived = attr(fit$vc, "derived")),
             class = "msa_grr")
 }
 
@@ -120,6 +125,7 @@ print.msa_grr <- function(x, digits = 4, ...) {
   cat(sprintf("  verdict: %s  [basis: %s, thresholds %g / %g]\n", toupper(x$verdict),
               if (x$basis == "study_var") "% study variation" else "% contribution",
               x$threshold[1], x$threshold[2]))
+  for (source in x$derived) cat("  ", source, ": range method, see ?msa_fit\n", sep = "")
   if (isTRUE(x$singular)) cat("  note: singular fit, see ?msa_fit\n")
   invisible(x)
 }

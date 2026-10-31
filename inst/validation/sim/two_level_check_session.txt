@@ -1,0 +1,92 @@
+format: llmsa-class-b-v1
+study: two_level
+n_sim: 20
+implementation: 9c90724ace72e28044d19f7721e7f56769aa0e2880c735801322c830e6557cfd
+R_version: 4.6.1
+package_llmsa: 0.1.0
+package_lme4: 2.0.6
+package_ordinal: 2026.7.26
+package_Matrix: 1.7.4
+package_parallel: 4.6.1
+RNG: Mersenne-Twister; normal.kind=Inversion; sample.kind=Rejection
+seed_rule: 20261031 + j(scenario) + 8 * (rep - 1); permanent j=1..8 in specification order
+scenarios: S-two-1,S-two-2
+start_seeds: S-two-1=20261038,S-two-2=20261039
+command: Rscript two_level.R '--n-sim' '20' '--out' '/tmp/llmsa-m1b-build/checks-final-v2/two_level'
+workers: 14
+elapsed_seconds: 10.696000
+
+Per-repetition diagnostics (including every repetition seed):
+S-two-1 rep=1 seed=20261038 error=[(none)] warnings=[Two-level component(s) model use the range method (beta-hat^2/2), with positive bias: E[beta-hat^2/2] = sigma^2 + Var(beta-hat)/2; see ?msa_fit.] messages=[(none)]
+S-two-1 rep=2 seed=20261046 error=[(none)] warnings=[Two-level component(s) model use the range method (beta-hat^2/2), with positive bias: E[beta-hat^2/2] = sigma^2 + Var(beta-hat)/2; see ?msa_fit.] messages=[(none)]
+S-two-1 rep=3 seed=20261054 error=[(none)] warnings=[Two-level component(s) model use the range method (beta-hat^2/2), with positive bias: E[beta-hat^2/2] = sigma^2 + Var(beta-hat)/2; see ?msa_fit.] messages=[(none)]
+S-two-1 rep=4 seed=20261062 error=[(none)] warnings=[Two-level component(s) model use the range method (beta-hat^2/2), with positive bias: E[beta-hat^2/2] = sigma^2 + Var(beta-hat)/2; see ?msa_fit.] messages=[(none)]
+S-two-1 rep=5 seed=20261070 error=[(none)] warnings=[Two-level component(s) model use the range method (beta-hat^2/2), with positive bias: E[beta-hat^2/2] = sigma^2 + Var(beta-hat)/2; see ?msa_fit.] messages=[(none)]
+S-two-1 rep=6 seed=20261078 error=[(none)] warnings=[Two-level component(s) model use the range method (beta-hat^2/2), with positive bias: E[beta-hat^2/2] = sigma^2 + Var(beta-hat)/2; see ?msa_fit.] messages=[(none)]
+S-two-1 rep=7 seed=20261086 error=[(none)] warnings=[Two-level component(s) model use the range method (beta-hat^2/2), with positive bias: E[beta-hat^2/2] = sigma^2 + Var(beta-hat)/2; see ?msa_fit.] messages=[(none)]
+S-two-1 rep=8 seed=20261094 error=[(none)] warnings=[Two-level component(s) model use the range method (beta-hat^2/2), with positive bias: E[beta-hat^2/2] = sigma^2 + Var(beta-hat)/2; see ?msa_fit.] messages=[(none)]
+S-two-1 rep=9 seed=20261102 error=[(none)] warnings=[Two-level component(s) model use the range method (beta-hat^2/2), with positive bias: E[beta-hat^2/2] = sigma^2 + Var(beta-hat)/2; see ?msa_fit.] messages=[(none)]
+S-two-1 rep=10 seed=20261110 error=[(none)] warnings=[Two-level component(s) model use the range method (beta-hat^2/2), with positive bias: E[beta-hat^2/2] = sigma^2 + Var(beta-hat)/2; see ?msa_fit.] messages=[(none)]
+S-two-1 rep=11 seed=20261118 error=[(none)] warnings=[Two-level component(s) model use the range method (beta-hat^2/2), with positive bias: E[beta-hat^2/2] = sigma^2 + Var(beta-hat)/2; see ?msa_fit.] messages=[(none)]
+S-two-1 rep=12 seed=20261126 error=[(none)] warnings=[Two-level component(s) model use the range method (beta-hat^2/2), with positive bias: E[beta-hat^2/2] = sigma^2 + Var(beta-hat)/2; see ?msa_fit.] messages=[(none)]
+S-two-1 rep=13 seed=20261134 error=[(none)] warnings=[Two-level component(s) model use the range method (beta-hat^2/2), with positive bias: E[beta-hat^2/2] = sigma^2 + Var(beta-hat)/2; see ?msa_fit.] messages=[(none)]
+S-two-1 rep=14 seed=20261142 error=[(none)] warnings=[Two-level component(s) model use the range method (beta-hat^2/2), with positive bias: E[beta-hat^2/2] = sigma^2 + Var(beta-hat)/2; see ?msa_fit.] messages=[(none)]
+S-two-1 rep=15 seed=20261150 error=[(none)] warnings=[Two-level component(s) model use the range method (beta-hat^2/2), with positive bias: E[beta-hat^2/2] = sigma^2 + Var(beta-hat)/2; see ?msa_fit.] messages=[(none)]
+S-two-1 rep=16 seed=20261158 error=[(none)] warnings=[Two-level component(s) model use the range method (beta-hat^2/2), with positive bias: E[beta-hat^2/2] = sigma^2 + Var(beta-hat)/2; see ?msa_fit.] messages=[(none)]
+S-two-1 rep=17 seed=20261166 error=[(none)] warnings=[Two-level component(s) model use the range method (beta-hat^2/2), with positive bias: E[beta-hat^2/2] = sigma^2 + Var(beta-hat)/2; see ?msa_fit.] messages=[(none)]
+S-two-1 rep=18 seed=20261174 error=[(none)] warnings=[Two-level component(s) model use the range method (beta-hat^2/2), with positive bias: E[beta-hat^2/2] = sigma^2 + Var(beta-hat)/2; see ?msa_fit.] messages=[(none)]
+S-two-1 rep=19 seed=20261182 error=[(none)] warnings=[Two-level component(s) model use the range method (beta-hat^2/2), with positive bias: E[beta-hat^2/2] = sigma^2 + Var(beta-hat)/2; see ?msa_fit.] messages=[(none)]
+S-two-1 rep=20 seed=20261190 error=[(none)] warnings=[Two-level component(s) model use the range method (beta-hat^2/2), with positive bias: E[beta-hat^2/2] = sigma^2 + Var(beta-hat)/2; see ?msa_fit.] messages=[(none)]
+S-two-2 rep=1 seed=20261039 error=[(none)] warnings=[Two-level component(s) model use the range method (beta-hat^2/2), with positive bias: E[beta-hat^2/2] = sigma^2 + Var(beta-hat)/2; see ?msa_fit.] messages=[(none)]
+S-two-2 rep=2 seed=20261047 error=[(none)] warnings=[Two-level component(s) model use the range method (beta-hat^2/2), with positive bias: E[beta-hat^2/2] = sigma^2 + Var(beta-hat)/2; see ?msa_fit.] messages=[(none)]
+S-two-2 rep=3 seed=20261055 error=[(none)] warnings=[Two-level component(s) model use the range method (beta-hat^2/2), with positive bias: E[beta-hat^2/2] = sigma^2 + Var(beta-hat)/2; see ?msa_fit.] messages=[(none)]
+S-two-2 rep=4 seed=20261063 error=[(none)] warnings=[Two-level component(s) model use the range method (beta-hat^2/2), with positive bias: E[beta-hat^2/2] = sigma^2 + Var(beta-hat)/2; see ?msa_fit.] messages=[(none)]
+S-two-2 rep=5 seed=20261071 error=[(none)] warnings=[Two-level component(s) model use the range method (beta-hat^2/2), with positive bias: E[beta-hat^2/2] = sigma^2 + Var(beta-hat)/2; see ?msa_fit.] messages=[(none)]
+S-two-2 rep=6 seed=20261079 error=[(none)] warnings=[Two-level component(s) model use the range method (beta-hat^2/2), with positive bias: E[beta-hat^2/2] = sigma^2 + Var(beta-hat)/2; see ?msa_fit.] messages=[(none)]
+S-two-2 rep=7 seed=20261087 error=[(none)] warnings=[Two-level component(s) model use the range method (beta-hat^2/2), with positive bias: E[beta-hat^2/2] = sigma^2 + Var(beta-hat)/2; see ?msa_fit.] messages=[(none)]
+S-two-2 rep=8 seed=20261095 error=[(none)] warnings=[Two-level component(s) model use the range method (beta-hat^2/2), with positive bias: E[beta-hat^2/2] = sigma^2 + Var(beta-hat)/2; see ?msa_fit.] messages=[(none)]
+S-two-2 rep=9 seed=20261103 error=[(none)] warnings=[Two-level component(s) model use the range method (beta-hat^2/2), with positive bias: E[beta-hat^2/2] = sigma^2 + Var(beta-hat)/2; see ?msa_fit.] messages=[(none)]
+S-two-2 rep=10 seed=20261111 error=[(none)] warnings=[Two-level component(s) model use the range method (beta-hat^2/2), with positive bias: E[beta-hat^2/2] = sigma^2 + Var(beta-hat)/2; see ?msa_fit.] messages=[(none)]
+S-two-2 rep=11 seed=20261119 error=[(none)] warnings=[Two-level component(s) model use the range method (beta-hat^2/2), with positive bias: E[beta-hat^2/2] = sigma^2 + Var(beta-hat)/2; see ?msa_fit.] messages=[(none)]
+S-two-2 rep=12 seed=20261127 error=[(none)] warnings=[Two-level component(s) model use the range method (beta-hat^2/2), with positive bias: E[beta-hat^2/2] = sigma^2 + Var(beta-hat)/2; see ?msa_fit.] messages=[(none)]
+S-two-2 rep=13 seed=20261135 error=[(none)] warnings=[Two-level component(s) model use the range method (beta-hat^2/2), with positive bias: E[beta-hat^2/2] = sigma^2 + Var(beta-hat)/2; see ?msa_fit.] messages=[(none)]
+S-two-2 rep=14 seed=20261143 error=[(none)] warnings=[Two-level component(s) model use the range method (beta-hat^2/2), with positive bias: E[beta-hat^2/2] = sigma^2 + Var(beta-hat)/2; see ?msa_fit.] messages=[(none)]
+S-two-2 rep=15 seed=20261151 error=[(none)] warnings=[Two-level component(s) model use the range method (beta-hat^2/2), with positive bias: E[beta-hat^2/2] = sigma^2 + Var(beta-hat)/2; see ?msa_fit.] messages=[(none)]
+S-two-2 rep=16 seed=20261159 error=[(none)] warnings=[Two-level component(s) model use the range method (beta-hat^2/2), with positive bias: E[beta-hat^2/2] = sigma^2 + Var(beta-hat)/2; see ?msa_fit.] messages=[(none)]
+S-two-2 rep=17 seed=20261167 error=[(none)] warnings=[Two-level component(s) model use the range method (beta-hat^2/2), with positive bias: E[beta-hat^2/2] = sigma^2 + Var(beta-hat)/2; see ?msa_fit.] messages=[(none)]
+S-two-2 rep=18 seed=20261175 error=[(none)] warnings=[Two-level component(s) model use the range method (beta-hat^2/2), with positive bias: E[beta-hat^2/2] = sigma^2 + Var(beta-hat)/2; see ?msa_fit.] messages=[(none)]
+S-two-2 rep=19 seed=20261183 error=[(none)] warnings=[Two-level component(s) model use the range method (beta-hat^2/2), with positive bias: E[beta-hat^2/2] = sigma^2 + Var(beta-hat)/2; see ?msa_fit.] messages=[(none)]
+S-two-2 rep=20 seed=20261191 error=[(none)] warnings=[Two-level component(s) model use the range method (beta-hat^2/2), with positive bias: E[beta-hat^2/2] = sigma^2 + Var(beta-hat)/2; see ?msa_fit.] messages=[(none)]
+
+R version 4.6.1 (2026-06-24)
+Platform: x86_64-pc-linux-gnu
+Running under: Ubuntu 26.04 LTS
+
+Matrix products: default
+BLAS:   /usr/lib/x86_64-linux-gnu/blas/libblas.so.3.12.1 
+LAPACK: /usr/lib/x86_64-linux-gnu/lapack/liblapack.so.3.12.1;  LAPACK version 3.12.0
+
+locale:
+ [1] LC_CTYPE=C.UTF-8       LC_NUMERIC=C           LC_TIME=C.UTF-8       
+ [4] LC_COLLATE=C.UTF-8     LC_MONETARY=C.UTF-8    LC_MESSAGES=C.UTF-8   
+ [7] LC_PAPER=C.UTF-8       LC_NAME=C              LC_ADDRESS=C          
+[10] LC_TELEPHONE=C         LC_MEASUREMENT=C.UTF-8 LC_IDENTIFICATION=C   
+
+time zone: Europe/Berlin
+tzcode source: system (glibc)
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+[1] llmsa_0.1.0
+
+loaded via a namespace (and not attached):
+ [1] lme4_2.0-6          digest_0.6.39       numDeriv_2016.8-1.1
+ [4] Matrix_1.7-4        lattice_0.22-9      splines_4.6.1      
+ [7] ordinal_2026.7-26   parallel_4.6.1      ucminf_1.2.3       
+[10] Rdpack_2.6.6        nloptr_2.2.1        grid_4.6.1         
+[13] reformulas_0.4.4    compiler_4.6.1      boot_1.3-32        
+[16] rbibutils_2.4.1     tools_4.6.1         nlme_3.1-168       
+[19] minqa_1.2.8         Rcpp_1.1.2          jsonlite_2.0.0     
+[22] MASS_7.3-65        

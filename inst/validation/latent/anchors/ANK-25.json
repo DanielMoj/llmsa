@@ -1,0 +1,35 @@
+{
+  "id": "ANK-25",
+  "title": "rptR::BeetlesMale: publizierte Wiederholbarkeit von Colour für die Gruppe Population, Punktschätzer auf der Link-Skala („Link-scale approximation“) und auf der Beobachtungsskala („Original-scale approximation“)",
+  "criteria": ["K-M1b-5", "K-M1b-7"],
+  "value": {
+    "model": "rpt(Colour ~ (1 | Container) + (1 | Population), grname = c(\"Container\", \"Population\"), data = BeetlesMale, datatype = \"Binary\", nboot = 1000, npermut = 0)",
+    "link": "logit",
+    "group": "Population",
+    "link_scale": 0.188,
+    "original_scale": 0.185,
+    "decimals": {"link_scale": 3, "original_scale": 3},
+    "link_scale_variance_in_source": "1 / (p(1 - p)) mit p als erwarteter Erfolgswahrscheinlichkeit (Vorgabe expect = \"meanobs\"), nicht π²/3; siehe further_quotes"
+  },
+  "unit": "Wiederholbarkeit (Intraklassenkorrelation), dimensionslos; decimals = Zahl der gedruckten Nachkommastellen",
+  "tolerance": 5e-4,
+  "tolerance_note": "Halbe Einheit der letzten gedruckten Stelle (docs/01 §2 Nr. 6), gleich ANK-TOL.rptr.vignette_tol („5e-4 gegen den gerundeten Vignettenwert 0,188“). Gilt für beide Werte.",
+  "source_url": "rptR (reference/privat/QUELLENKATALOG.md): Stoffel, M. A., Nakagawa, S. & Schielzeth, H., „An introduction to repeatability estimation with rptR“, Vignette des Pakets rptR, HTML, datiert 2025-04-29, Abschnitt „Repeatabilities for Binary data“, Modell rep10; lokale Kopie quellen/literatur/A_statistikkern/rptR_vignette.html (SHA-256 72ba5a1aeba36dafaf106c3e3c315209cc9cd2288b9419805addc13ba842706e)",
+  "source": "Literatur (frei); Textspiegel reference/quellen/text/literatur/A_statistikkern/rptR_vignette.html.txt (ohne Seitenzahlen); Daten rptR::BeetlesMale, Orakeldaten nach AGENTS.md",
+  "quote": "## R  = 0.188",
+  "quote_location": "Ausgabe von print(rep10), Block „Repeatability for Population“, Unterblock „Link-scale approximation:“ (HTML-Original Zeile 1142; Textspiegel .html.txt Zeile 534); dieselbe Ausgabe steht im Anhang „###Binary models###“ noch einmal (HTML Zeile 1426)",
+  "further_quotes": [
+    {"quote": "## R  = 0.185", "location": "Ausgabe von print(rep10), Block „Repeatability for Population“, Unterblock „Original-scale approximation:“ (HTML Zeile 1149; .html.txt Zeile 541)"},
+    {"quote": "## Repeatability for Population", "location": "Ausgabe von print(rep10) (.html.txt Zeile 531)"},
+    {"quote": "## Link-scale approximation:", "location": "Ausgabe von print(rep10), Block Population (.html.txt Zeile 533)"},
+    {"quote": "## Repeatability estimation using the glmm method and logit link", "location": "Kopf der Ausgabe von print(rep10) (.html.txt Zeile 513)"},
+    {"quote": "rep10 <- rpt(Colour ~ (1 | Container) + (1 | Population), grname = c(\"Container\",", "location": "Aufruf rep10, erste Zeile (.html.txt Zeile 506); Fortsetzung Zeile 507: \"Population\"), data = BeetlesMale, datatype = \"Binary\", nboot = 1000, npermut = 0)"},
+    {"quote": "We have previously adviced to estimate the distribution specific variance for the link scale approximation as \\(\\pi^2/3\\) (Nakagawa & Schielzeth 2010). While this gives a reasonable approximation, it is preferable to estimate the link scale variance as \\(1 / (p(1-p))\\) where \\(p\\) is the expected probability of success (Nakagawa & Schielzeth 2016). The current version of rptR implements the more accurate approximation \\(1 / (p(1-p))\\).", "location": "Abschnitt zu binären Daten, Absatz zur Link-Skala (.html.txt Zeile 618; LaTeX-Schreibweise des Textspiegels)"},
+    {"quote": "The default version with expect = \"meanobs\" takes the average succes rate across all observations.", "location": "Folgeabsatz (.html.txt Zeile 620, Schreibweise „succes“ wie im Original)"},
+    {"quote": "<h4 class=\"date\">2025-04-29</h4>", "location": "Kopf des HTML-Originals (Zeile 345)"}
+  ],
+  "observations": "1. Das Vignettenmodell rep10 enthält zusätzlich den Zufallseffekt Container, K-M1b-5 verlangt rptBinary(Colour ~ (1 | Population), grname = \"Population\", link = \"logit\"). Container wird mit Varianz 0 geschätzt (singulär), deshalb stimmen die Punktschätzer für Population überein: rptR 0.9.23 liefert für rep10 ohne Bootstrap R_link 0.1879314 und R_org 0.1854000, für das Modell aus K-M1b-5 0.187930859738746 und 0.18539884541501. 2. Die Link-Skala der Vignette rechnet mit der Beobachtungsvarianz 1/(p(1 − p)) (further_quotes; im Code von rptBinary: estdv_link <- 1/(Ep * (1 - Ep)) bei expect = \"meanobs\", pi^2/3 nur bei expect = \"liability\"). Spec und ANK-28 legen die latente Restvarianz π²/3 fest (docs/01 §5, Formelsammlung §4); damit ergibt sich auf denselben Daten 0.223294850303547 (gleich performance::icc() und rptBinary(…, expect = \"liability\")). Der Widerspruch innerhalb von K-M1b-5 steht in orchestrator/handoff/M1b/CRITERIA.json, open ACC-1.",
+  "retrieved": "2026-10-31",
+  "method": "Textspiegel (.html.txt) gelesen und am Original geprüft: SHA-256 der lokalen HTML-Datei von R aus berechnet (gleich dem Wert in source_url; die ersten 16 Zeichen stehen im Kopf des Textspiegels); die zitierten Ausgabezeilen stehen im HTML-Original (nach Entfernen der Tags) in den genannten Zeilen, der Kontext der ersten Fundstelle ist der Aufruf rep10 mit print(rep10). Werte wie gedruckt übernommen.",
+  "verification": "Reviewer 31.10.2026 (R 4.6.1, lme4 2.0.6, rptR 0.9.23, performance 0.19.0): glmer(Colour ~ (1 | Population), binomial(\"logit\")) auf rptR::BeetlesMale (480 Zeilen, 12 Populationen) ergibt σ²_Population 0.945803710351675. rptBinary(Colour ~ (1 | Population), grname = \"Population\", data = BeetlesMale, link = \"logit\", nboot = 0, npermut = 0): R_link 0.187930859738746 (Abweichung zu 0.188: 6.9e-5), R_org 0.18539884541501 (Abweichung zu 0.185: 4.0e-4); beide innerhalb 5e-4. Mit expect = \"liability\": R_link 0.223294850303547; performance::icc(): ICC_adjusted 0.223294850303548; σ²/(σ² + π²/3) = 0.223294850303547."
+}

@@ -1,0 +1,36 @@
+{
+  "schema": 1,
+  "generator": "data-raw/make_validation_latent.R",
+  "anchors": {
+    "ANK-06": {
+      "original": "reference/anchors/ANK-06.json",
+      "copied": "inst/validation/latent/anchors/ANK-06.json",
+      "original_sha256": "7d04a3080c869567bd97de7a61bcbaef062e78407268ec4492951220d218790f",
+      "copied_sha256": "7d04a3080c869567bd97de7a61bcbaef062e78407268ec4492951220d218790f"
+    },
+    "ANK-21": {
+      "original": "reference/anchors/ANK-21.json",
+      "copied": "inst/validation/latent/anchors/ANK-21.json",
+      "original_sha256": "84ea8cd90b92ad4aefb05006511eeeab671330101f66dccc94efc1cdc9f71eb5",
+      "copied_sha256": "84ea8cd90b92ad4aefb05006511eeeab671330101f66dccc94efc1cdc9f71eb5"
+    },
+    "ANK-25": {
+      "original": "reference/anchors/ANK-25.json",
+      "copied": "inst/validation/latent/anchors/ANK-25.json",
+      "original_sha256": "4b8fe57dc9118b14801e33231836c752e5182f68340b4ed0d0c5e660eaea4221",
+      "copied_sha256": "4b8fe57dc9118b14801e33231836c752e5182f68340b4ed0d0c5e660eaea4221"
+    },
+    "ANK-28": {
+      "original": "reference/anchors/ANK-28.json",
+      "copied": "inst/validation/latent/anchors/ANK-28.json",
+      "original_sha256": "2688f6c57020bd8ab714ca2d92b078cf6eff3efdca01dca69a3c50c4354ba973",
+      "copied_sha256": "2688f6c57020bd8ab714ca2d92b078cf6eff3efdca01dca69a3c50c4354ba973"
+    },
+    "ANK-TOL": {
+      "original": "reference/anchors/ANK-TOL.json",
+      "copied": "inst/validation/latent/anchors/ANK-TOL.json",
+      "original_sha256": "dfa241fe399a817e725091cafa6047e0054e0bd50f4b53813d48459a474451fd",
+      "copied_sha256": "dfa241fe399a817e725091cafa6047e0054e0bd50f4b53813d48459a474451fd"
+    }
+  }
+}

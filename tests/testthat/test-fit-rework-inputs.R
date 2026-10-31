@@ -156,7 +156,8 @@ test_that("binary parsing preserves the declared event and rejects invalid value
   }
   r$value <- ifelse(event, "event", "other")
   r$value[1L] <- "unknown"
-  f <- suppressMessages(msa_fit(r, type = "binary", levels = c("other", "event")))
+  expect_warning(f <- suppressMessages(msa_fit(r, type = "binary", levels = c("other", "event"))),
+                 "1 value(s) are not among `levels` and were dropped.", fixed = TRUE)
   expect_identical(f$data$y, as.integer(event[-1L]))
   expect_identical(f$n$observations, nrow(r) - 1L)
   # Probit fixes the latent normal residual scale to unit variance.
@@ -169,7 +170,7 @@ test_that("binary parsing preserves the declared event and rejects invalid value
 
 test_that("ordinal levels, derived components and logit residual follow their formulas", {
   r <- rework_categorical_runs()
-  ordered <- msa_fit(r, type = "ordinal", link = "logit")
+  expect_warning(ordered <- msa_fit(r, type = "ordinal", link = "logit"), "range method", fixed = TRUE)
   expect_true(is.ordered(ordered$data$y))
   expect_identical(levels(ordered$data$y), levels(r$value))
   expect_null(ordered$numerics)
@@ -190,7 +191,10 @@ test_that("ordinal levels, derived components and logit residual follow their fo
   r$value <- as.character(r$value)
   r$value[1L] <- "unknown"
   out <- rework_capture(msa_fit(r, type = "ordinal", levels = c("A", "B", "C", "D")))
-  expect_identical(vapply(out$warnings, conditionMessage, ""), "1 value(s) are not among `levels` and were dropped.")
+  expect_identical(vapply(out$warnings, conditionMessage, ""), c(
+    "1 value(s) are not among `levels` and were dropped.",
+    paste0("Two-level component(s) model, block use the range method (beta-hat^2/2), with positive bias: ",
+           "E[beta-hat^2/2] = sigma^2 + Var(beta-hat)/2; see ?msa_fit.")))
   expect_true(is.ordered(out$value$data$y))
   expect_identical(out$value$n$observations, nrow(r) - 1L)
 })
@@ -220,7 +224,9 @@ test_that("the ordinal singular flag retains its documented reporting distinctio
   r <- rework_categorical_runs()
   r$model_id <- "one"
   r$block <- 1L
-  local_mocked_bindings(clmm = function(...) structure(list(), class = "clmm"), .package = "ordinal")
+  local_mocked_bindings(clmm = function(...) structure(list(
+    ST = list(item = matrix(1)), control = list(method = "nlminb", useMatrix = FALSE),
+    optRes = list(convergence = 0L)), class = "clmm"), .package = "ordinal")
   for (case in list(list(v = 0, expected = TRUE), list(v = 1e-6, expected = FALSE), list(v = 1, expected = FALSE))) {
     local_mocked_bindings(vc_from_model = function(...) data.frame(source = c("item", "Residual"),
                                                                     variance = c(case$v, 0)))
