@@ -38,7 +38,7 @@ Die Formelsammlung ist bindend mit folgenden Festlegungen zu ihrem Abschnitt 12:
 | 9 | Datenhash | SHA-256 über die kanonische Form (§11) ersetzt MD5; Algorithmus im Bericht | M3d |
 | 10 | Modell ohne Block- und Dreifach-Wechselwirkungen | bestätigt; im Bericht benannt | M3d |
 | 11 | EWMA | nicht im Scope, Katalog | – |
-| 12 | Binär, Beobachtungsskala | nicht im Scope, Katalog; Abnahme gegen rptR nur auf der Link-Skala | – |
+| 12 | Binär, Beobachtungsskala | nicht im Scope, Katalog; Abnahme gegen rptR nur auf der Link-Skala (`expect = "liability"`, Restvarianz π²/3 nach `ANK-28`; ADR-024) | – |
 | 13 | %Contribution-Schwellen 1 % und 9 % | bestätigt als Konvention; im Bericht so benannt | M3d |
 | Zusatz | OpenRouter-Routing durchreichen und speichern | umsetzen | M2 |
 

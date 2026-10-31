@@ -540,7 +540,8 @@ ownership_check() {
     [ "$before" != __clean__ ] && [ "$before" = "$now" ] && continue
     if ! path_allowed "$role" "$phase" "$ms" "$path"; then
       OWNERSHIP_BAD="${OWNERSHIP_BAD}${OWNERSHIP_BAD:+ }$path"
-      [ "$before" != __clean__ ] || OWNERSHIP_REMOVE+=("$path")
+      # Nur unversionierte Pfade merken: versionierte stellt git reset --hard wieder her (ACC-15/E8 M1b, ADR-024).
+      [ "$before" != __clean__ ] || git ls-files --error-unmatch -- "$path" >/dev/null 2>&1 || OWNERSHIP_REMOVE+=("$path")
     fi
   done
 
