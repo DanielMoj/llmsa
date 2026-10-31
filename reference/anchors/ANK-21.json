@@ -1,0 +1,38 @@
+{
+  "id": "ANK-21",
+  "title": "wine: publizierte Komponente σ²_judge des Modells clmm2(rating ~ temp + contact, random = judge) mit Laplace-Approximation und mit adaptiver Gauss-Hermite-Quadratur (nAGQ = 10)",
+  "criteria": ["K-M1b-1", "K-M1b-7"],
+  "value": {
+    "model": "clmm2(rating ~ temp + contact, random = judge, data = wine)",
+    "data": "ordinal::wine (72 Beobachtungen: 9 judges × 8 bottles, je eine Bewertung)",
+    "laplace": {"variance": 1.279455, "sd": 1.13113},
+    "nagq10": {"variance": 1.287741, "sd": 1.134787, "extra_arguments": "Hess = TRUE, nAGQ = 10"},
+    "decimals": {
+      "laplace": {"variance": 6, "sd": 5},
+      "nagq10": {"variance": 6, "sd": 6}
+    }
+  },
+  "unit": "Varianz und Standardabweichung des Zufallseffekts judge auf der latenten (Logit-)Skala, dimensionslos; decimals = Zahl der gedruckten Nachkommastellen",
+  "tolerance": {
+    "laplace": {"variance": 5e-7, "sd": 5e-6},
+    "nagq10": {"variance": 5e-7, "sd": 5e-7}
+  },
+  "tolerance_note": "Halbe Einheit der letzten gedruckten Stelle (docs/01 §2 Nr. 6; AGENTS.md, Orakel- und Ankerstrategie), absolut. Die Werte prüfen die installierte ordinal-Version (K-M1b-1: „die installierte `ordinal`-Version reproduziert die … publizierte Komponente σ²_judge“), nicht msa_fit: das Vignettenmodell hat die festen Kovariaten temp und contact, die msa_fit nicht ausdrückt (BACKLOG BL-20).",
+  "source_url": "Christensen-clmm2 (reference/privat/QUELLENKATALOG.md): Christensen, R. H. B., „A Tutorial on fitting Cumulative Link Mixed Models with clmm2 from the ordinal Package“, Vignette des Pakets ordinal, Fassung vom 26.07.2026, PDF-Seiten 2 (Laplace) und 3 (nAGQ = 10); lokale Kopie quellen/literatur/A_statistikkern/ordinal_clmm2_tutorial.pdf (SHA-256 4ef27e9a8d0b739ea7566e2faae5960dca58486fd4dbaea1c92b73db276695e3)",
+  "source": "Literatur (frei); Textspiegel reference/quellen/text/literatur/A_statistikkern/ordinal_clmm2_tutorial.pdf.layout.txt; Daten ordinal::wine (Randall 1989), Orakeldaten nach AGENTS.md",
+  "quote": "judge 1.279455 1.13113",
+  "quote_location": "PDF-Seite 2 (Druckseite 2), Ausgabe von fm1, Abschnitt „Random effects:“, Spalten Var und Std.Dev (Textspiegel .layout.txt Zeile 87, Leerraum zusammengefasst)",
+  "further_quotes": [
+    {"quote": "R> fm1 <- clmm2(rating ~ temp + contact, random=judge, data=wine)", "location": "PDF-Seite 2 (.layout.txt Zeile 77)"},
+    {"quote": "Cumulative Link Mixed Model fitted with the Laplace approximation", "location": "PDF-Seite 2, Kopf der Ausgabe von fm1 (.layout.txt Zeile 80)"},
+    {"quote": "Var Std.Dev", "location": "PDF-Seite 2, Tabellenkopf der Zufallseffekte (.layout.txt Zeile 86, Leerraum zusammengefasst)"},
+    {"quote": "judge 1.287741 1.134787", "location": "PDF-Seite 3 (Druckseite 3), Ausgabe von summary(fm2), Abschnitt „Random effects:“ (.layout.txt Zeile 123, Leerraum zusammengefasst)"},
+    {"quote": "Hess=TRUE, nAGQ=10)", "location": "PDF-Seite 3, Fortsetzung des Aufrufs fm2 <- clmm2(rating ~ temp + contact, random=judge, data=wine, von PDF-Seite 2 (.layout.txt Zeilen 105 und 111)"},
+    {"quote": "quadrature approximation with 10 quadrature points", "location": "PDF-Seite 3, Kopf der Ausgabe von summary(fm2) (.layout.txt Zeile 115)"},
+    {"quote": "July 26, 2026", "location": "PDF-Seite 1, Titelblock (.layout.txt Zeile 14)"}
+  ],
+  "observations": "K-M1b-1 vergleicht msa_fit(type = \"ordinal\") auf wine (Item = bottle, Prompt = judge) mit einem direkten ordinal::clmm(rating ~ 1 + (1 | bottle) + (1 | judge)); dieser Vergleich ist ein Orakel zur Laufzeit und braucht keinen Ankerwert. Dieser Anker belegt zusätzlich, dass die installierte ordinal-Version die publizierte Komponente trifft. Zur Information (kein Anker, Reviewer 31.10.2026, R 4.6.1, ordinal 2026.7.26): das direkte clmm mit der msa-Formel ergibt mit Logit σ²_bottle 2.74961070428696 und σ²_judge 1.21013369557785, mit Probit 0.91103885216541 und 0.421726898712837.",
+  "retrieved": "2026-10-31",
+  "method": "Textspiegel (pdftotext -layout) gelesen und am Original geprüft: SHA-256 der lokalen PDF von R aus berechnet (gleich dem Wert in source_url; die ersten 16 Zeichen stehen im Kopf des Textspiegels); pdftotext -f 2 -l 2 -layout und -f 3 -l 3 -layout auf diese Datei liefern die zitierten Zeilen. pdfinfo: Creator TeX, Producer GPL Ghostscript 10.03.0, 10 Seiten; die Textschicht stammt nicht aus OCR. Werte wie gedruckt übernommen.",
+  "verification": "Reviewer 31.10.2026 (R 4.6.1, ordinal 2026.7.26, gleich der Vignettenfassung vom 26.07.2026): clmm2(rating ~ temp + contact, random = judge, data = wine)$stDev^2 = 1.27945505222333 (Abweichung 5.2e-8), mit Hess = TRUE, nAGQ = 10: 1.28774132731021 (Abweichung 3.3e-7); Standardabweichungen 1.13112998909203 (gedruckt 1.13113) und 1.13478690832694 (gedruckt 1.134787). Beide Varianzen liegen innerhalb der halben Einheit der letzten gedruckten Stelle (5e-7)."
+}

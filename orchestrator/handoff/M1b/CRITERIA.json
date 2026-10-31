@@ -1,0 +1,194 @@
+{
+  "criteria": [
+    {
+      "id": "K-M1b-1",
+      "quote": "**K-M1b-1:** Engine-Gleichheit ordinal: Auf `ordinal::wine` (Item = `bottle`, Prompt = `judge`, ein Replikat) liefert `msa_fit(type = \"ordinal\", link = \"logit\")` und `link = \"probit\"` dieselben Varianzkomponenten wie ein direkter Aufruf `ordinal::clmm(rating ~ 1 + (1 | bottle) + (1 | judge), link = …)` (Toleranz `ankerRef: ANK-TOL.engine_ordinal`), und die installierte `ordinal`-Version reproduziert die in der Vignette „clmm2“ publizierte Komponente σ²_judge des Modells `clmm2(rating ~ temp + contact, random = judge)` (`ankerRef: ANK-21`). (Prüfweg: Test)",
+      "source": "docs/02-statistikkern.md"
+    },
+    {
+      "id": "K-M1b-2",
+      "quote": "**K-M1b-2:** Simulationsskripte Wiederfinden latenter Komponenten (Klasse B, erste Stufe): `inst/validation/sim/ordinal_recovery.R` und `inst/validation/sim/binary_recovery.R` setzen S-ord-1 bis S-ord-4 beziehungsweise S-bin-1 bis S-bin-2 mit allen Schätzzielen und Kennzahlen nach Abschnitt 8 von `01-fachspezifikation.md` um (Parameter `--n-sim`, `--out`, `--scenarios`; Ergebnis-, Replikat- und Session-Datei), und der Builder committet je Studie den Kurzlauf mit `n_sim = ankerRef: ANK-TOL.n_check` (`*_check_results.csv`, `*_check_replicates.csv`, `*_check_session.txt`); der Abnahmetest führt beide Kurzläufe erneut aus und erhält byte-identische Einzelschätzer (nach `format(x, digits = 15)`), findet alle Szenarien, Schätzziele und Kennzahlen mit `mcse`, und beide Kurzläufe zusammen bleiben unter `ankerRef: ANK-TOL.sim_runtime`. Die vollen Läufe (`n_sim` ≥ `ANK-06`) rechnet der Betreiber nach der Abnahme von M1b; ihre Prüfung und die Befunde sind K-M1d-6 und K-M1d-7. (Prüfweg: Test)",
+      "source": "docs/02-statistikkern.md"
+    },
+    {
+      "id": "K-M1b-3",
+      "quote": "**K-M1b-3:** Simulationsskript Ersatzverfahren β²/2 (Klasse B, erste Stufe): `inst/validation/sim/two_level.R` setzt S-two-1 und S-two-2 um und schreibt je Wiederholung den Schätzer β̂²/2, die wahre Komponente und ob `msa_fit` den Faktor als fest behandelt hat, in der Ergebnisdatei Bias, relative Verzerrung, EmpSE und MCSE sowie den Anteil der Wiederholungen mit `derived`-Komponente; Kurzlauf, Reproduktion, Schema und Laufzeit wie in K-M1b-2. (Prüfweg: Test)",
+      "source": "docs/02-statistikkern.md"
+    },
+    {
+      "id": "K-M1b-4",
+      "quote": "**K-M1b-4:** Verhalten bei zwei Stufen: Ein Faktor mit genau zwei Stufen geht bei `type = \"ordinal\"` als fester Effekt ein, seine Komponente erscheint in `vc` mit `attr(vc, \"derived\")`, `print.msa_fit` und `print.msa_grr` kennzeichnen sie als abgeleitet („range method, see ?msa_fit“), und `msa_fit` gibt in diesem Fall immer eine `warning()` aus, die das Ersatzverfahren, seine bekannte positive Verzerrung (E[β̂²/2] = σ² + Var(β̂)/2) und den Verweis auf die Dokumentation nennt; die Dokumentation von `msa_fit()` verweist auf die Simulationsstudie `two_level` und die Tabelle in `vignettes/validation.Rmd` (die gemessenen Werte ergänzt K-M1d-7). (Prüfweg: Test)",
+      "source": "docs/02-statistikkern.md"
+    },
+    {
+      "id": "K-M1b-5",
+      "quote": "**K-M1b-5:** Engine-Gleichheit und Literaturwert binär: Auf `rptR::BeetlesMale` (Item = `Population`, ein Prompt, ein Modell) liefert `msa_fit(type = \"binary\", link = \"logit\")` eine ICC_items, die dem Punktschätzer von `rptR::rptBinary(Colour ~ (1 | Population), grname = \"Population\", link = \"logit\")` auf der Link-Skala und dem publizierten Vignettenwert gleicht (`ankerRef: ANK-25`, Toleranz `ankerRef: ANK-TOL.rptr`) und mit `performance::icc()` auf demselben `glmer`-Modell übereinstimmt. (Prüfweg: Test)",
+      "source": "docs/02-statistikkern.md"
+    },
+    {
+      "id": "K-M1b-6",
+      "quote": "**K-M1b-6:** Randfälle ordinal und binär: weniger als drei Items bei `type = \"ordinal\"` → Fehlermeldung mit dem Wortlaut der Dokumentation; alle Antworten in einer Kategorie → Fehlermeldung, nie `NaN`; fehlende oder nicht in `levels` enthaltene Werte werden mit Warnung verworfen und in `n$observations` gezählt; binäre Werte außerhalb {0, 1} → Fehlermeldung; Nichtkonvergenz von `clmm` oder `glmer` wird als Warnung weitergegeben und `singular`/Konvergenz im Objekt vermerkt; ein Faktor mit einer Stufe wird entfernt und in `formula` nicht geführt. (Prüfweg: Test)",
+      "source": "docs/02-statistikkern.md"
+    },
+    {
+      "id": "K-M1b-7",
+      "quote": "**K-M1b-7:** `vignettes/validation.Rmd` enthält den Abschnitt „Ordinal and binary outcomes (latent scale)“ mit den Prüfungen aus K-M1b-1, K-M1b-5 und den eingelesenen Ergebnisdateien der Studien aus K-M1b-2 und K-M1b-3 (Tabellen je Szenario mit Bias, EmpSE, MCSE; der Code liest `<studie>_results.csv`, falls vorhanden, sonst `<studie>_check_results.csv`, und nennt `n_sim` aus der Datei, kein numerisches Literal aus einer Ergebnisdatei im Rmd-Text), und `R CMD check` baut sie ohne ERROR und WARNING. (Prüfweg: Test für Struktur und Einlesen; Gate lint)",
+      "source": "docs/02-statistikkern.md"
+    }
+  ],
+  "open": [
+    {
+      "id": "ACC-1",
+      "status": "offen – Betreiberentscheidung nötig; Spec-Widerspruch (AGENTS.md, Handoff-Disziplin: „Widersprüchliche Specs führen zu `ESCALATE`“)",
+      "ref": "K-M1b-5: „liefert `msa_fit(type = \"binary\", link = \"logit\")` eine ICC_items, die dem Punktschätzer von `rptR::rptBinary(Colour ~ (1 | Population), grname = \"Population\", link = \"logit\")` auf der Link-Skala und dem publizierten Vignettenwert gleicht (`ankerRef: ANK-25`, Toleranz `ankerRef: ANK-TOL.rptr`) und mit `performance::icc()` auf demselben `glmer`-Modell übereinstimmt“ gegen docs/01-fachspezifikation.md §5: „Latente Skala: Restvarianz 1 (Probit), π²/3 (Logit) (`ANK-28`)“ und Formelsammlung §4 (R_latent = σ²_α/(σ²_α + σ²_AV + π²/3))",
+      "kind": "Spec-Widerspruch innerhalb von K-M1b-5",
+      "owner": "Betreiber",
+      "blocking_builder": false,
+      "note": "Nachgerechnet (Reviewer 31.10.2026, R 4.6.1, lme4 2.0.6, rptR 0.9.23, performance 0.19.0) auf rptR::BeetlesMale, glmer(Colour ~ (1 | Population), binomial(\"logit\")): σ²_Population = 0.945803710351675. (1) rptBinary(Colour ~ (1 | Population), grname = \"Population\", link = \"logit\") mit Vorgabe expect = \"meanobs\" rechnet die Link-Skala mit der Beobachtungsvarianz 1/(p(1 − p)) (Code: estdv_link <- 1/(Ep * (1 - Ep)); pi^2/3 nur bei expect = \"liability\") und liefert R_link = 0.187930859738746; die Vignette druckt 0.188 (ANK-25) und schreibt selbst: „The current version of rptR implements the more accurate approximation \\(1 / (p(1-p))\\).“ (2) Mit π²/3 nach docs/01 §5, Formelsammlung §4 und ANK-28: 0.223294850303547, gleich performance::icc() (ICC_adjusted 0.223294850303548) und rptBinary(…, expect = \"liability\"). Abstand 0.0354 gegen die Toleranzen 1e-6 (live) und 5e-4 (Vignette): Keine Implementierung erfüllt alle drei Vergleiche. Tests: tests/acceptance/test-m1b-5-binary-rptr.R prüft wörtlich. Für spec-treuen Code (π²/3; R/fit.R rechnet heute schon so: ICC_items 0.223294779042746) bleiben die Vergleiche mit rptBinary (Vorgabeaufruf) und mit 0.188 rot, damit auch das Gate tests und der unmutierte Vorlauf von mutgate; die Vergleiche mit performance::icc() und mit der Mini-Referenz σ²/(σ² + π²/3) sind grün; für Code mit 1/(p(1 − p)) wäre es umgekehrt. Builder: setzt docs/01 §5 um und schwächt keinen Test ab. Vorschlag A (Reviewer): K-M1b-5 auf rptBinary(…, link = \"logit\", expect = \"liability\") umstellen (Link-Skala mit π²/3, gleich performance::icc() und docs/01 §5) und ANK-25 wie ANK-21 als Installationsprüfung des rptR-Vorgabeaufrufs führen; der Test „the installed rptR reproduces both published point estimates of ANK-25 with its default call“ besteht bereits (R_link 0.18793, R_org 0.18540). Vorschlag B: binär auf die Beobachtungsvarianz umstellen; widerspricht ANK-28, Formelsammlung §4 und Nakagawa, Johnson & Schielzeth 2017 (Druckseite 7: theoretische Varianz π²/3 = latente Skala, 1/(np(1 − p)) = Beobachtungsskala); nicht empfohlen. Ohne Entscheidung lautet das Verdict in 30-plan-review ESCALATE; orchestrator/ESCALATION-M1b.md gehört dem Betreiber."
+    },
+    {
+      "id": "ACC-2",
+      "status": "Auslegung des Reviewers (Spec schweigt); ADR in 30-plan-review",
+      "ref": "K-M1b-2: „(Parameter `--n-sim`, `--out`, `--scenarios`; Ergebnis-, Replikat- und Session-Datei)“; docs/01 §8: „Skript des Builders unter `inst/validation/sim/<studie>.R` mit Parametern `--n-sim`, `--out` und `--scenarios` (Teilmenge der Szenarien), das drei Dateien schreibt“; K-M1c-4: „`Rscript inst/validation/sim/boot_coverage.R --n-sim <ANK-TOL.n_check> --scenarios S-boot-1,S-boot-7 --out <tmp>`“",
+      "kind": "Vertrag der Klasse-B-Skripte",
+      "owner": "Builder (Umsetzung), Reviewer (ADR)",
+      "blocking_builder": true,
+      "note": "Aufruf: `Rscript inst/validation/sim/<studie>.R --n-sim <n> --scenarios <ID>[,<ID>…] --out <Verzeichnis>` mit <studie> ∈ {ordinal_recovery, binary_recovery, two_level}; Wert durch Leerzeichen vom Schalter getrennt, Szenario-IDs wie in der Tabelle in docs/02 (S-ord-1 … S-ord-4, S-bin-1, S-bin-2, S-two-1, S-two-2), kommagetrennt; `--out` ist ein Verzeichnis (wird angelegt), darin die Namen aus docs/01 §8: `<studie>_results.csv`, `<studie>_replicates.csv`, `<studie>_session.txt`; Exit-Status 0. Das Skript lädt das installierte Paket (`library(llmsa)`), nicht den Quellbaum, und hängt nicht vom Arbeitsverzeichnis ab. Der Abnahmetest installiert das geladene Paket unter Test (Kopie aus DESCRIPTION, NAMESPACE, R/, inst/, data/ und, falls vorhanden, LICENSE, src/) mit `R CMD INSTALL --no-docs` in eine temporäre Bibliothek, setzt `R_LIBS` auf diese Bibliothek vor den vorhandenen und startet Rscript aus einem temporären Arbeitsverzeichnis. Seed fest im Skript (die Spec nennt keinen Seed-Parameter), ausgewiesen in der Spalte `seed`. Kurzlauf im Repo: die drei Dateien eines Laufs mit `--n-sim <ANK-TOL.n_check>` und allen Szenarien der Studie, umbenannt in `inst/validation/sim/<studie>_check_results.csv`, `<studie>_check_replicates.csv`, `<studie>_check_session.txt`. Die Szenarien liest der Test zur Laufzeit aus der Tabelle in docs/02 (docs/01 §8: Szenarien sind Spec, keine Anker); Zielgröße und Link je Szenario wie in der Tabelle (ordinal Probit, binär Logit). Hinweis: Die wahre Komponente Item×Modell (S-ord) ist nur mit der Wechselwirkung item:model im Fit schätzbar."
+    },
+    {
+      "id": "ACC-3",
+      "status": "Auslegung des Reviewers (Spec schweigt zu den Bezeichnern); ADR in 30-plan-review",
+      "ref": "docs/01 §8: „`<studie>_results.csv` (eine Zeile je Szenario und Kennzahl: `scenario`, `estimand`, `measure`, `value`, `mcse`, `n_sim`, `seed`)“; docs/02, M1b: „Schätzziele: jede wahre Komponente, %GRR und ICC_items auf der latenten Skala; Kennzahlen: Bias, relative Verzerrung, EmpSE, RMSE, jeweils mit MCSE; für S-two zusätzlich Anteil der Wiederholungen mit `derived`-Komponente.“; K-M1b-3: „Schema … wie in K-M1b-2“",
+      "kind": "Ergebnisdatei: Spalten und Bezeichner",
+      "owner": "Builder",
+      "blocking_builder": true,
+      "note": "CSV mit Kopfzeile wie von utils::write.csv(row.names = FALSE); mindestens die sieben Spalten aus docs/01 §8; eine Zeile je Szenario × Schätzziel × Kennzahl. estimand: jede wahre Komponente der Szenariotabelle außer Rest mit dem Namen wie in `msa_fit()$vc$source` (`item`, `prompt`, `model`, `item:model`, `block`), dazu `grr_pct_study_var` (%GRR = % Studienvariation der gesamten Gage R&R) und `icc_items` wie in `msa_grr()$summary`. measure: `bias`, `rel_bias`, `empse`, `rmse` für jedes Schätzziel aller Studien, also auch für two_level (Schätzziele-Zeile mit „für S-two zusätzlich“ und „Schema wie in K-M1b-2“); für S-two zusätzlich `derived_share` beim Schätzziel `model`. Je Pflichtzeile: `value` endlich, `mcse` endlich und ≥ 0, `n_sim` = Zahl der Wiederholungen des Laufs, `seed` = Seed (Zahl). Weitere Zeilen (etwa `Residual`, `item:prompt`, `prompt:model`) und Spalten sind zulässig. Die Restvarianz der latenten Skala ist durch den Link festgelegt (ANK-28) und kein Pflicht-Schätzziel."
+    },
+    {
+      "id": "ACC-4",
+      "status": "Auslegung des Reviewers (Spec schweigt zum Format); ADR in 30-plan-review",
+      "ref": "docs/01 §8: „`<studie>_replicates.csv` (Einzelschätzer je Wiederholung)“; K-M1b-3: „schreibt je Wiederholung den Schätzer β̂²/2, die wahre Komponente und ob `msa_fit` den Faktor als fest behandelt hat“; K-M1b-2: „setzen S-ord-1 bis S-ord-4 beziehungsweise S-bin-1 bis S-bin-2 … um“",
+      "kind": "Replikatdatei: Langformat und Spalten",
+      "owner": "Builder",
+      "blocking_builder": true,
+      "note": "Langformat, eine Zeile je Szenario × Wiederholung × Schätzziel. Spalten mindestens `scenario`, `rep` (1 … n_sim), `estimand` (Bezeichner wie ACC-3), `estimate` (Einzelschätzer), `true` (wahrer Wert aus der Szenariotabelle; %GRR und ICC_items nach Formelsammlung §3 auf der latenten Skala), `items`, `prompts`, `models`, `blocks`, `observations` (aus `fit$n` des Fits dieser Wiederholung; der Test vergleicht sie mit Items, Prompts, Modelle, Blöcke und Items × Prompts × Modelle × Replikate × Blöcke der Tabelle, damit ein falsch umgesetztes Szenario auffällt); two_level zusätzlich `derived` (TRUE/FALSE: `model` steht in `attr(fit$vc, \"derived\")`). In den Zeilen mit estimand `model` von two_level steht in `estimate` der Schätzer β̂²/2. Alle Spalten sind deterministisch (Laufzeiten gehören in die Session-Datei), weil der Abnahmetest jede Spalte vergleicht. Einzelschätzer mit 15 signifikanten Stellen (write.csv). Ein fehlgeschlagener Fit hat `estimate` NA; die Kennzahlen rechnen über die endlichen Schätzer."
+    },
+    {
+      "id": "ACC-5",
+      "status": "Auslegung des Reviewers (Formelsammlung §9 schweigt zu relativer Verzerrung, MCSE(RMSE) und MCSE des Anteils); ADR in 30-plan-review",
+      "ref": "Formelsammlung §9 (Bias, MCSE(Bias), EmpSE, MCSE(EmpSE), MSE, MCSE(MSE), RMSE = √MSE, Coverage mit MCSE); docs/02 Schätzziele-Zeile; Morris, White & Crowther 2019, Druckseite 2086: „It is sometimes preferable to report the relative bias, rather than absolute.“ und „relative bias can be used only for |𝜃| > 0“",
+      "kind": "Kennzahlen und Mini-Referenz",
+      "owner": "Builder",
+      "blocking_builder": true,
+      "note": "Mini-Referenz in tests/acceptance/setup-m1b.R (acc_m1b_performance, acc_m1b_share), unabhängig vom Produktcode: Bias, MCSE(Bias), EmpSE, MCSE(EmpSE), MSE, MCSE(MSE), RMSE = √MSE nach Formelsammlung §9; rel_bias = Bias/θ mit MCSE(Bias)/|θ| (θ ist konstant; alle wahren Werte der Tabelle sind > 0); MCSE(RMSE) = MCSE(MSE)/(2·RMSE) (Delta-Methode); derived_share p = Anteil der Wiederholungen mit derived = TRUE, MCSE = √(p(1 − p)/n) wie die Überdeckung in §9. n = Zahl der endlichen Einzelschätzer. Der Test rechnet jede Kennzahl der Ergebnisdatei (Kurzlauf und Neulauf) aus der zugehörigen Replikatdatei nach, mit den wahren Werten aus der Tabelle, Toleranz ANK-TOL.arithmetic (1e-10 absolut); das sichert zugleich, dass die Replikatdatei die Einzelschätzer mit voller Genauigkeit trägt."
+    },
+    {
+      "id": "ACC-6",
+      "status": "Auslegung des Reviewers; ADR in 30-plan-review",
+      "ref": "K-M1b-2: „der Abnahmetest führt beide Kurzläufe erneut aus und erhält byte-identische Einzelschätzer (nach `format(x, digits = 15)`)“; docs/01 §8: „`--scenarios` (Teilmenge der Szenarien)“ und „M1d … reproduziert die ersten `ANK-TOL.n_check` Wiederholungen mit demselben Seed byte-identisch“; K-M1d-6",
+      "kind": "Reproduktion, Präfix- und Teilmengenstabilität",
+      "owner": "Builder",
+      "blocking_builder": true,
+      "note": "Vergleich Neulauf gegen Kurzlauf: alle Spalten der Replikatdatei, Zahlen Element für Element nach format(x, digits = 15), Zeilen nach scenario, rep, estimand sortiert. Zusätzlich: ein Lauf mit `--n-sim 2` und einer echten Teilmenge der Szenarien (ordinal_recovery: S-ord-2,S-ord-4; binary_recovery: S-bin-2; two_level: S-two-2) enthält genau diese Szenarien und liefert dieselben Einzelschätzer wie die Wiederholungen 1 und 2 des Kurzlaufs. Grund: Der Betreiber rechnet nach der Abnahme den Vollauf mit n_sim ≥ ANK-06, auch szenarioweise über `--scenarios`; K-M1d-6 vergleicht dessen erste n_check Wiederholungen mit einem Neulauf. Das gelingt nur, wenn der Zufallsstrom je Szenario und Wiederholung nicht von n_sim und der Szenarioauswahl abhängt (etwa ein Seed je Szenario-ID und Wiederholung). Ohne diese Stabilität wäre der Vollauf erst in M1d als unbrauchbar erkennbar."
+    },
+    {
+      "id": "ACC-7",
+      "status": "Auslegung des Reviewers; ADR in 30-plan-review",
+      "ref": "docs/01 §8: „`<studie>_session.txt` (`sessionInfo()`, Seed, RNG, Laufzeit)“; docs/01 §5: „Simulationen nennen RNG (`Mersenne-Twister`, `sample.kind = \"Rejection\"`), R- und Paketversionen (`sessionInfo()`)“",
+      "kind": "Session-Datei",
+      "owner": "Builder",
+      "blocking_builder": true,
+      "note": "Der Test verlangt im Kurzlauf und im Neulauf: eine Zeile „R version …“ (sessionInfo()), Versionsangaben `llmsa_…`, `lme4_…` und bei ordinal_recovery und two_level `ordinal_…`, jeden Seed aus der Spalte `seed` als Zahl, die Wörter „Mersenne-Twister“ und „Rejection“ und eine Laufzeitangabe mit „runtime“ oder „elapsed“."
+    },
+    {
+      "id": "ACC-8",
+      "status": "Auslegung des Reviewers",
+      "ref": "K-M1b-2: „beide Kurzläufe zusammen bleiben unter `ankerRef: ANK-TOL.sim_runtime`“; K-M1b-3: „Kurzlauf, Reproduktion, Schema und Laufzeit wie in K-M1b-2“; ANK-TOL.sim_runtime: 20 Minuten, 14 Kerne",
+      "kind": "Laufzeitmessung",
+      "owner": "Builder",
+      "blocking_builder": true,
+      "note": "Gemessen wird die Wanduhrzeit der Rscript-Aufrufe der Kurzläufe (n_sim = ANK-TOL.n_check, alle Szenarien) ohne die Paketinstallation: ordinal_recovery und binary_recovery zusammen ≤ 20 min, two_level allein ≤ 20 min. `parallel::mclapply` ist unter inst/validation/sim/ zulässig (docs/01 §5); Vorbild 14 Kerne. Messung der Reviewer-Attrappe auf dieser Maschine siehe ACC-16."
+    },
+    {
+      "id": "ACC-9",
+      "status": "Auslegung des Reviewers (Spec schweigt zu Form und Toleranzbezug); ADR in 30-plan-review",
+      "ref": "K-M1b-4 (ganzer Wortlaut, CRITERIA.json); K-M1b-1: „(Toleranz `ankerRef: ANK-TOL.engine_ordinal`)“; docs/01 §2 Nr. 6: „Toleranzen für Varianzkomponenten gelten je Komponente als Anteil der Gesamtvarianz σ²_TV der Vergleichsrechnung, nie relativ zur einzelnen Komponente“",
+      "kind": "Prüfform K-M1b-1 und K-M1b-4",
+      "owner": "Builder",
+      "blocking_builder": true,
+      "note": "(1) ANK-TOL.engine_ordinal (1e-8, in ANKER-TODO „relative Toleranz msa_fit gegen direktes clmm“) wird je Komponente als Anteil von σ²_TV der direkten Rechnung angewandt (Summe der clmm-Komponenten plus latente Restvarianz aus ANK-28), wie docs/01 §2 Nr. 6 verlangt; abgeleitete Kennzahlen relativ, ndc gleich. (2) Fester Effekt: der Faktor steht im festen Teil von `fit$formula` (lme4::nobars) und nicht als Zufallsterm (lme4::findbars). (3) `attr(fit$vc, \"derived\")` nennt den Faktor, `fit$vc` hat eine Zeile mit diesem source; ihr Wert ist β̂²/2 aus einem direkten ordinal::clmm(y ~ 1 + model + (1 | item) + (1 | prompt), link = \"probit\"), Mini-Referenz Stichprobenvarianz von {0, β̂} (Formelsammlung §4). (4) print.msa_fit und print.msa_grr: mindestens eine Ausgabezeile enthält „range method, see ?msa_fit“ und den Namen der Komponente; ohne Zwei-Stufen-Faktor erscheint die Wendung nicht. (5) Warnung bei jedem solchen Fit (geprüft für zwei Modelle und für zwei Blöcke): eine Warnung mit „range method“, die außerdem „positive“, „bias“, „Var(“ und „?msa_fit“ enthält; ohne Zwei-Stufen-Faktor keine Warnung mit „range method“. (6) Die Hilfeseite man/msa_fit.Rd (gelesen im Repository, als Text über tools::Rd2txt) nennt „two_level“ und die Vignette (`vignette(\"validation\"` … oder „validation.Rmd“)."
+    },
+    {
+      "id": "ACC-10",
+      "status": "Auslegung des Reviewers (Spec schweigt zu Wortlaut, Feldname und Auslösern); ADR in 30-plan-review",
+      "ref": "K-M1b-6 (ganzer Wortlaut, CRITERIA.json); docs/01 §2 Nr. 4: „Ergebnis ist eine richtige Zahl oder eine klare Fehlermeldung, nie stillschweigend eine falsche Zahl.“; ADR-022 Nr. 2: „Ordinale und binäre Zielgrößen folgen in M1b (BACKLOG).“; BACKLOG BL-81",
+      "kind": "Prüfform K-M1b-6",
+      "owner": "Builder",
+      "blocking_builder": true,
+      "note": "(1) Weniger als drei Items (1 und 2 Items): die Fehlermeldung (Leerraum normalisiert, ohne Schlusspunkt) steht wörtlich im Text von man/msa_fit.Rd (tools::Rd2txt). Heute: Meldung „At least three items are needed for ordinal outcomes.“, Dokumentation „Ordinal outcomes need at least three items.“ (2) Alle Antworten in einer Kategorie (ordinal alle „c3“; binär alle 0 und alle 1): Fehler, dessen Meldung „categor“ oder „constant“ enthält; heute ordinal ein interner clmm-Fehler („length of start is 2 should equal 0“), binär lme4 „Response is constant“. (3) Fehlende Antworten (ordinal, binär) und Werte außerhalb von `levels` (ordinal; binär mit Labels und `levels`): mindestens eine Warnung, `n$observations` = verbliebene Zeilen, `nobs(fit$model)` ebenso, Komponenten gleich dem Fit auf den verbliebenen Zeilen (ANK-TOL.engine_ordinal · σ²_TV). (4) Binäre Werte 2, −1 und 0,5: Fehler mit „binary“ in der Meldung (heute wird 0,5 still zu 0). (5) Nichtkonvergenz: clmm mit `control = ordinal::clmm.control(method = \"nlminb\", iter.max = 1, eval.max = 2)` – das direkte clmm meldet optRes$convergence ≠ 0 ohne eigene Warnung, also muss msa_fit selbst warnen; glmer mit `control = lme4::glmerControl(optCtrl = list(maxfun = 10))` – jede im Modell vermerkte lme4-Meldung erreicht den Aufrufer als Warnung. In beiden Fällen `fit$converged` identisch FALSE; konvergierende Fits (Orakel ohne Meldung, nicht singulär) `fit$converged` identisch TRUE. Feldname `converged` (logisch, Länge 1) als neues Rückgabefeld (docs/01 §4: ohne ADR zulässig). (6) Singulär: Antworten unabhängig vom Prompt (das direkte clmm schätzt die Prompt-Varianz exakt 0, glmer ist isSingular) → `fit$singular` TRUE, keine negative Komponente. (7) Ein Faktor mit einer Stufe (ein Modell, ein Block) steht weder in all.vars(fit$formula) noch in fit$vc. (8) ADR-022 Nr. 2 / BL-81: ein fehlender Wert in item_id, prompt_id, model_id oder block beendet ordinale und binäre Fits mit einem Fehler, dessen Meldung „missing“ enthält."
+    },
+    {
+      "id": "ACC-11",
+      "status": "Auslegung des Reviewers; ADR in 30-plan-review",
+      "ref": "K-M1b-7 (ganzer Wortlaut, CRITERIA.json); docs/01 §8: „solange nur Kurzlauf-Dateien vorliegen, liest die Vignette diese und nennt `n_sim` aus der Datei“",
+      "kind": "Prüfform K-M1b-7",
+      "owner": "Builder",
+      "blocking_builder": true,
+      "note": "(1) Überschrift mit genau dem Text „Ordinal and binary outcomes (latent scale)“ (Ebene frei). (2) Die im Repository gestrickte Vignette (gemeinsamer Knit mit K-M1a-7, REPO_ROOT gesetzt) zeigt den Abschnitt ohne Fehler. (3) Prüfungen aus K-M1b-1: Abschnitt nennt ANK-21 und ANK-TOL.engine_ordinal und zeigt die beiden Varianzen aus ANK-21 und die beobachteten Komponenten item und prompt von msa_fit auf wine (Logit und Probit); Prüfungen aus K-M1b-5: nennt ANK-25 und ANK-TOL.rptr und zeigt 0.188 (ANK-25) und die beobachtete ICC_items auf BeetlesMale; jeweils auf die gezeigte Stellenzahl. (4) Je Studie: die Tabellen des Abschnitts enthalten die Wörter bias, EmpSE und MCSE und zeigen für jedes Szenario und Schätzziel value und mcse von bias und empse der gelesenen Datei; jedes Szenario wird genannt; n_sim aus der Datei steht im Abschnitt. (5) Dateiwahl: In einer temporären Paketkopie liegt neben dem Kurzlauf eine als Testattrappe gekennzeichnete `<studie>_results.csv` (Kurzlaufwerte verschoben, n_sim = 1234 als Marke); die Vignette wird in einem eigenen R-Prozess mit pkgload::load_all() der Kopie und ohne REPO_ROOT gestrickt (öffentlicher Kontext wie R CMD check) und muss deren Werte und n_sim zeigen. Die Vignette liest die Ergebnisdateien deshalb aus dem Paket (system.file(\"validation\", \"sim\", …, package = \"llmsa\")); für den öffentlichen Kontext braucht sie Ankerkopien wie unter ADR-021 (Builder-Entscheidung). (6) Kein Zahlenliteral mit mindestens drei signifikanten Stellen im Rmd-Text, das einem value oder mcse der gelesenen Ergebnisdateien oder einem Wert aus ANK-21 oder ANK-25 gleicht. (7) Bau durch R CMD check: Gate lint."
+    },
+    {
+      "id": "ACC-12",
+      "status": "[INFRA] offen – Betreiber vor den Gates von M1b",
+      "ref": "config.env: MUT_TEST_EXCLUDE='^(m2-[0-9]|m0-testthat-count$)'; ANK-TOL.sim_runtime (20 Minuten je Kurzlaufpaar); r-mutation.R führt je Mutant alle nicht ausgeschlossenen Abnahmetests aus",
+      "kind": "[INFRA] Testauswahl des Mutationslaufs",
+      "owner": "Betreiber",
+      "blocking_builder": false,
+      "note": "test-m1b-2-recovery-scripts.R und test-m1b-3-two-level-script.R installieren das Paket und rechnen die Kurzläufe neu (nach Spec bis 2 × 20 Minuten), test-m1b-7-vignette-full-results.R strickt die Vignette in einem eigenen Prozess ein zweites Mal. Je Mutant liefe das mit; der unmutierte Vorlauf und damit MUT_TEST_TIMEOUT stiegen auf das Vielfache, mutgate (M1b) und mutfull (M1c) dauerten Tage. Vorschlag: MUT_TEST_EXCLUDE='^(m2-[0-9]|m0-testthat-count$|m1b-[23]-|m1b-7-vignette-full)'. Die schnellen Tests K-M1b-1, -4, -5, -6 und -7 (Knit im Repository, mit K-M1a-7 geteilt) decken R/fit.R und R/grr.R weiter ab. Nur der Betreiber darf config.env ändern. Ein Backlog-Eintrag gehört nach BACKLOG.md; die Datei liegt außerhalb des Territoriums dieser Phase (ACC-15)."
+    },
+    {
+      "id": "ACC-13",
+      "status": "offen – Builder (DESCRIPTION)",
+      "ref": "docs/01 §5: „Suggests dürfen ergänzt werden; die Validierungssuite nutzt `VCA`, `SixSigma`, `irr`, `psych`, `DescTools`, `rptR`, `performance`, … als Suggests; Tests unter `tests/testthat/` überspringen mit `skip_if_not_installed()`, Abnahmetests nicht (das deps-Gate installiert Suggests).“",
+      "kind": "Suggests",
+      "owner": "Builder",
+      "blocking_builder": true,
+      "note": "DESCRIPTION nennt rptR und performance nicht unter Suggests; die Abnahmetests K-M1b-5 und K-M1b-7 rufen beide auf (lokal installiert: rptR 0.9.23, performance 0.19.0, insight 1.6.0). Der Builder ergänzt sie, damit das deps-Gate sie installiert. Weitere Werkzeuge der Tests: callr (Abhängigkeit von testthat), pkgload, knitr, jsonlite (schon Suggests)."
+    },
+    {
+      "id": "ACC-14",
+      "status": "Auslegung des Reviewers",
+      "ref": "K-M1b-1: „ein Replikat“; K-M1b-5: „(Item = `Population`, ein Prompt, ein Modell)“",
+      "kind": "Abbildung der Referenzdaten",
+      "owner": "Builder",
+      "blocking_builder": false,
+      "note": "wine: item_id = bottle, prompt_id = judge, model_id = „M1“, rep = 1, value = rating als Zeichen, levels = levels(wine$rating). BeetlesMale: item_id = Population, prompt_id = „P1“, model_id = „M1“, rep = laufende Nummer innerhalb der Population, value = Colour (0/1), link = „logit“. rptBinary läuft im Test mit nboot = 0 und npermut = 0 (der Punktschätzer hängt davon nicht ab). Die Vignette rep10 von rptR enthält zusätzlich Container (Varianz 0); der Punktschätzer für Population ist derselbe (ANK-25, observations)."
+    },
+    {
+      "id": "ACC-15",
+      "status": "[INFRA] erledigt in dieser Phase ohne Netto-Änderung; Orchestrator-Fehler für den Betreiber offen",
+      "ref": "orchestrator/orchestrate.sh, ownership_check: `[ \"$before\" != __clean__ ] || OWNERSHIP_REMOVE+=(\"$path\")` und restore_worktree: `rm -f -- \"$path\"` nach `git reset --hard`",
+      "kind": "[INFRA] Rollback löscht versionierte Dateien",
+      "owner": "Betreiber",
+      "blocking_builder": false,
+      "note": "Versuch 1 dieser Phase hatte BACKLOG.md geändert (Territorium von 10-acceptance: tests/acceptance/, reference/anchors/, orchestrator/handoff/M1b/, tests/simulation/). Der Rollback setzte die Datei mit git reset --hard zurück und löschte sie danach mit rm -f, weil ownership_check jede vorher saubere Datei in OWNERSHIP_REMOVE aufnimmt, auch versionierte. Zu Beginn von Versuch 2 fehlte BACKLOG.md im Arbeitsbaum; diese Löschung hätte die Territoriumsprüfung erneut als Verletzung gewertet. Der Reviewer hat BACKLOG.md byte-identisch aus dem Blob wiederhergestellt, den .git/index für HEAD nennt (SHA-1 3b75208089fe654333183d1b97487150013f2c09, 66980 Byte, SHA-1 des geschriebenen Inhalts geprüft), ohne Git-Kommando, nur lesend über R (memDecompress des losen Objekts). Gegenüber HEAD ändert diese Phase BACKLOG.md nicht. Vorschlag für den Betreiber: in ownership_check nur unversionierte Pfade in OWNERSHIP_REMOVE aufnehmen (etwa `git ls-files --error-unmatch -- \"$path\"` prüfen). Backlog-Einträge, die der Reviewer sonst anlegen würde (ACC-1 Widerspruch K-M1b-5, ACC-12 Mutationsauswahl), stehen deshalb nur hier."
+    },
+    {
+      "id": "ACC-16",
+      "status": "Stand vor der Implementierung",
+      "ref": "tests/acceptance/test-m1b-*.R",
+      "kind": "Testlauf",
+      "owner": "–",
+      "blocking_builder": false,
+      "note": "Lauf des Reviewers am 31.10.2026 auf dem Stand vor der Implementierung (HEAD e69865d, R 4.6.1, wie das Gate: testthat::test_dir(load_package = \"source\"), Filter ^m1b-): 75 Tests, 20 grün, 28 fehlgeschlagen, 27 Fehler, 0 übersprungen, 32.6 s. Grün: K-M1b-1 alle 7 (wine gleich direktem clmm für Logit und Probit, latente Restvarianz nach ANK-28, msa_grr auf der latenten Skala, ANK-21 reproduziert); K-M1b-2 und K-M1b-3 je die Szenariotabelle; K-M1b-4 fester Effekt bei zwei Modellen und zwei Blöcken, β̂²/2 gleich der Mini-Referenz, Gegenprobe ohne Zwei-Stufen-Faktor; K-M1b-5 performance::icc(), Mini-Referenz σ²/(σ² + π²/3), Installationsprüfung ANK-25; K-M1b-6 binär eine Kategorie (lme4: „Response is constant“), ordinal Werte außerhalb von levels, singulär, Faktor mit einer Stufe. Rot (Produktcode fehlt): Skripte und Kurzläufe von K-M1b-2 und K-M1b-3 (Fehler „script missing“ und „file missing“), Warnung, Druckhinweis und Rd-Verweis von K-M1b-4, die zwei Vergleiche von K-M1b-5 aus ACC-1 (Spec-Widerspruch), die Randfälle von K-M1b-6 (Wortlaut Dokumentation, eine Kategorie ordinal, Warnung bei fehlenden Werten und bei binären Labels außerhalb von levels, Wert 0,5, Konvergenzfeld und clmm-Warnung, fehlende Gruppierungswerte nach ADR-022 Nr. 2), der Vignettenabschnitt von K-M1b-7. Regression: M0- und M1a-Abnahmetests mit der neuen setup-m1b.R 69 Tests, 0 fehlgeschlagen, 0 Fehler. Gegenproben in temporären Kopien außerhalb des Arbeitsbaums (Reviewer-Attrappen, gelöscht): (a) konforme Attrappe von msa_fit und den print-Methoden samt Rd-Ergänzung: K-M1b-1, -4, -5, -6 35 Tests, grün bis auf die zwei Vergleiche aus ACC-1; (b) konforme Attrappen der drei Skripte (msa_fit mit Wechselwirkungen für S-ord, parallel::mclapply mit 14 Kernen) mit Kurzläufen und Vignettenabschnitt: K-M1b-2, -3, -7 40 Tests grün (zuletzt 37 + 12 nach Korrektur der Anzeigeprüfung auf doppelte Rundung von knitr::kable); Kurzläufe ordinal_recovery 131–196 s, binary_recovery 4–8 s, two_level 15–28 s; ohne Parallelisierung läge ordinal_recovery mit Wechselwirkungen grob beim 14-Fachen und damit über ANK-TOL.sim_runtime; (c) Verfälschungen: ein Einzelschätzer um 1e-12 relativ, ein Ergebniswert um 1e-6, ein von n_sim abhängiges Seeding von two_level und eine Vignette, die immer den Kurzlauf liest, machen genau die zugehörigen sechs Tests rot (40 Tests, 6 rot). Die Attrappen haben zudem drei eigene Fehler gezeigt, die die Tests erkannten: Item×Modell in S-bin und S-two (wahre Werte weichen von der Tabelle ab), sessionInfo() im Elternprozess nach mclapply ohne lme4 und ordinal, wine nicht im Namensraum von ordinal."
+    },
+    {
+      "id": "ACC-17",
+      "status": "Hinweis, nicht blocking",
+      "ref": "ANKER-TODO.md, Zeile ANK-06: „Prüfstandard (Projektdokument, Intake Feld 5: mindestens 1.000); Morris, White & Crowther 2019, S. 2089 (Morris2019)“",
+      "kind": "Anker ANK-06",
+      "owner": "Betreiber",
+      "blocking_builder": false,
+      "note": "Das Intake (Feld 5) liegt weder im Repository noch unter quellen/. ANK-06 = 1000 stützt sich auf die Formelsammlung §9 („Mit n\\_sim = 1.000 … das ist die Mindestzahl je Szenario.“, Teil der Spec nach docs/01 §1) und ANKER-TODO; Morris et al. 2019 (Druckseite 2089) liefert die Regel n_sim = E(Coverage)(1 − E(Coverage))/MCSE², am Original geprüft. ANK-06 wird in M1b nicht numerisch geprüft; der Betreiber braucht ihn für die Vollläufe nach der Abnahme, K-M1d-6 prüft ihn."
+    }
+  ]
+}

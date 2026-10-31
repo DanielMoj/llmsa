@@ -1,33 +1,24 @@
 {
   "contract": 1,
   "project": "llmsa",
-  "ts": "2026-10-31T01:37:26+01:00",
+  "ts": "2026-10-31T03:35:53+01:00",
   "milestone": {
-    "id": "M1a",
-    "index": 3,
+    "id": "M1b",
+    "index": 4,
     "total": 10
   },
-  "phase": "done",
-  "round": 5,
+  "phase": "10-acceptance",
+  "round": 1,
   "needs_human": false,
   "reason": "",
-  "gates": {
-    "deps": "pass",
-    "lint": "pass",
-    "tests": "pass",
-    "trace": "pass",
-    "territory": "pass",
-    "mutgate": "pass",
-    "golden-adr": "pass",
-    "mutfull": "pass"
-  },
+  "gates": {},
   "parked": [],
   "last_events": [
-    "[20261030-131807] RUN reviewer 50-code-review (M1a r3, Versuch 1) -> /mnt/c/Users/Danie/dev/Llmsa/llmsa/orchestrator/logs/M1a-50-code-review-r3-a1-20261030-131807.log",
-    "[20261030-140759] RUN builder 60-rework (M1a r4, Versuch 1) -> /mnt/c/Users/Danie/dev/Llmsa/llmsa/orchestrator/logs/M1a-60-rework-r4-a1-20261030-140759.log",
-    "[20261030-191142] RUN reviewer 50-code-review (M1a r4, Versuch 1) -> /mnt/c/Users/Danie/dev/Llmsa/llmsa/orchestrator/logs/M1a-50-code-review-r4-a1-20261030-191142.log",
-    "[20261030-194533] RUN builder 60-rework (M1a r5, Versuch 1) -> /mnt/c/Users/Danie/dev/Llmsa/llmsa/orchestrator/logs/M1a-60-rework-r5-a1-20261030-194533.log",
-    "[20261031-010653] RUN reviewer 50-code-review (M1a r5, Versuch 1) -> /mnt/c/Users/Danie/dev/Llmsa/llmsa/orchestrator/logs/M1a-50-code-review-r5-a1-20261031-010653.log"
+    "[20261031-014145] QA-Routenprobe bestanden (gemini-4-argon); Ausgabe: orchestrator/logs/qa-probe-20261031-014127-1.log",
+    "[20261031-014145] === M1b start ===",
+    "[20261031-014159] RUN reviewer 10-acceptance (M1b r1, Versuch 1) -> /mnt/c/Users/Danie/dev/Llmsa/llmsa/orchestrator/logs/M1b-10-acceptance-r1-a1-20261031-014159.log",
+    "[20261031-023147] WARN: reviewer verletzt Territorium: BACKLOG.md — genau ein Retry mit Hinweis",
+    "[20261031-023147] RUN reviewer 10-acceptance (M1b r1, Versuch 2) -> /mnt/c/Users/Danie/dev/Llmsa/llmsa/orchestrator/logs/M1b-10-acceptance-r1-a2-20261031-023147.log"
   ],
   "exit": null,
   "role_guards": "on"

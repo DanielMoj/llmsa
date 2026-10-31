@@ -1,0 +1,27 @@
+{
+  "id": "ANK-06",
+  "title": "Mindestzahl der Wiederholungen je Simulationsszenario (n_sim) und Grundlage des Monte-Carlo-Standardfehlers",
+  "criteria": ["docs/01 §2 Nr. 3", "docs/01 §8", "K-M1b-2", "K-M1b-3", "K-M1c-3", "K-M1d-6"],
+  "value": {
+    "n_sim_min": 1000,
+    "mcse_coverage_95_at_min": "sqrt(0.95 · 0.05 / 1000) = 0.00689, etwa 0,7 Prozentpunkte",
+    "n_sim_rule": "n_sim = E(Coverage) · (1 − E(Coverage)) / MCSE_req² (Morris, White & Crowther 2019, Gl. (1))"
+  },
+  "unit": "Wiederholungen je Szenario (Anzahl)",
+  "tolerance": 0,
+  "tolerance_note": "Betreiberfestlegung, Untergrenze: n_sim ≥ 1000 je Szenario (Vollläufe der Klasse B, docs/01 §8).",
+  "source_url": "reference/privat/07_Formelsammlung_llmsa.md §9, Absatz nach den MCSE-Formeln (Teil der Spec nach docs/01 §1); ANKER-TODO.md, Abschnitt „Querschnitt und M0“, Zeile ANK-06 (Intake Feld 5); Morris2019 (reference/privat/QUELLENKATALOG.md): Morris, T. P., White, I. R. & Crowther, M. J. (2019), Using simulation studies to evaluate statistical methods, Statistics in Medicine 38, 2074–2102, Abschnitt 5.3, Druckseite 2089 (PDF-Seite 16); lokale Kopie quellen/literatur/A_statistikkern/Morris_White_Crowther_2019_ADEMP_StatMed38_2074_Verlagsfassung.pdf (SHA-256 c5f0bb84146ddae63774529a6d435a43b92b4c0ce7c92abba25857b9c038b3ee)",
+  "source": "Betreiberfestlegung (Formelsammlung §9, bindend nach docs/01 §1; ANKER-TODO nennt Intake Feld 5); Begründung der MCSE-Grundlage aus Morris et al. 2019 (frei)",
+  "quote": "Mit n\\_sim = 1.000 beträgt der Monte-Carlo-Fehler einer Überdeckung von 95 % etwa 0,7 Prozentpunkte; das ist die Mindestzahl je Szenario.",
+  "quote_location": "reference/privat/07_Formelsammlung_llmsa.md §9, Absatz unter der Formel für MSE und RMSE (Markdown-Quelltext; „n\\_sim“ ist das maskierte n_sim)",
+  "further_quotes": [
+    {"quote": "Prüfstandard (Projektdokument, Intake Feld 5: mindestens 1.000); Morris, White & Crowther 2019, S. 2089 (Morris2019)", "location": "ANKER-TODO.md, Abschnitt „Querschnitt und M0“, Zeile ANK-06, Spalte „Vermutete Quelle und Fundstelle“"},
+    {"quote": "Plugging in the expected coverage (for example 95%) and rearranging, we get", "location": "Morris et al. 2019, Abschnitt 5.3, Druckseite 2089 (PDF-Seite 16; .layout.txt Zeile 985), gefolgt von Gl. (1) „nsim = E(Coverage) × (1 − E(Coverage)) / (Monte Carlo SEreq)²“"},
+    {"quote": "nsim = = 1900 repetitions.", "location": "Morris et al. 2019, Druckseite 2089, Beispiel 95 × 5 / 0.5² für einen verlangten MCSE von 0,5 % (.layout.txt Zeile 995, Leerraum zusammengefasst; Zähler und Nenner stehen in den Zeilen darüber und darunter)"},
+    {"quote": "mindestens `ankerRef: ANK-06` Wiederholungen je Szenario", "location": "docs/01-fachspezifikation.md §2 Nr. 3"}
+  ],
+  "observations": "Das Intake (Feld 5) liegt nicht im Repository und nicht unter quellen/; der Wert stützt sich auf die Formelsammlung (Teil der Spec) und auf ANKER-TODO, die beide 1.000 nennen. Morris et al. 2019 nennen keine feste Mindestzahl, sondern die Regel aus Gl. (1); mit n_sim = 1000 ist der MCSE einer Überdeckung von 95 % gleich sqrt(0.95 · 0.05 / 1000) = 0.0069, also etwa 0,7 Prozentpunkte, wie die Formelsammlung schreibt. Verwendung: Vollläufe der Klasse-B-Studien nach der Abnahme von M1b (ordinal_recovery, binary_recovery, two_level) und M1c (boot_coverage) durch den Betreiber; Prüfung in K-M1d-6.",
+  "retrieved": "2026-10-31",
+  "method": "Formelsammlung §9 und ANKER-TODO im Repository gelesen; Morris et al. 2019 im Textspiegel gelesen und am Original geprüft: SHA-256 der lokalen PDF von R aus berechnet (gleich source_url), pdftotext -f 16 -l 16 -layout liefert die zitierten Zeilen und die Druckseite 2089; pdfinfo: Creator LaTeX with hyperref package, Producer Acrobat Distiller 10.0.0, 29 Seiten, keine OCR-Textschicht.",
+  "verification": "sqrt(0.95 * 0.05 / 1000) = 0.006892 in R 4.6.1 (0,69 Prozentpunkte, gerundet 0,7 wie in der Formelsammlung); Gl. (1) mit MCSE 0,5 Prozentpunkte ergibt 1900 wie bei Morris et al. 2019."
+}
