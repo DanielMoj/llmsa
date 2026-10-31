@@ -1,5 +1,105 @@
 # PROGRESS — Langzeitgedächtnis des Builders
 
+## M1b — REWORK Runde 3 (31.10.2026)
+
+Grundlage: REVIEW/verdict-code Runde 2 (E24–E28), gates.json samt roten
+Logs, CRITERIA, ARBITER, LESSONS und ADR-029. Dieser Eintrag berichtet
+Builder-Prüfungen; Gate-Fakten bleiben unverändert Runde 2, `result: fail`
+wegen der beiden in REVIEW beschriebenen Fremdterritoriums-Ursachen.
+Die vollständigen Antworten, Befehle und echten Outputs stehen in
+[REWORK-NOTES.md](orchestrator/handoff/M1b/REWORK-NOTES.md).
+
+- **E24 umgesetzt:** `R/fit.R` prüft nach Zeilenauswahl alle ordinalen
+  und binären Zufallsterme einschließlich Wechselwirkungen auf getrennte
+  Identifizierbarkeit nach Abzug des festen Designs. Das Gram-Kriterium
+  verwendet die Eigenwertregel aus ADR-029. Vollständig aufgespannte Terme
+  werden mittels Rangnachweis exakt als null behandelt, auch wenn alle
+  Zufallsterme betroffen sind. Keine neue empirische Toleranz, keine
+  Änderung der Engine-Vorgaben. Hilfe und Builder-ADR-030 dokumentieren
+  die Umsetzung. Gültige Pläne stimmen weiter mit direkten Engines überein.
+- **E27 umgesetzt:** Zwei neue Testdateien liefern zehn Blöcke mit 221
+  Erwartungen: unabhängige Kovarianzrechnung, Konfundierung als Klasse,
+  gültige Pläne gegen direkte Engines, explizite Labelreihenfolge, zwei
+  ordinale Kategorien und erneut ausgewerteter binärer Aufruf. Alle vier
+  von E27 benannten Mutanten werden getötet. Eine Gegenprobe mit der
+  ursprünglichen `msa_fit()`-Definition ergibt 93 fehlgeschlagene
+  Erwartungen in sieben Blöcken, keine Testfehler.
+- **E28 umgesetzt:** NEWS nennt die Änderungen der Runden 2 und 3 an
+  latenten Fits, einschließlich Zeilenauswahl, Gewichten, Labelprüfung,
+  gespeicherten Engine-Aufrufen und `data$.msa_offset`.
+- **E25 OUT-OF-TERRITORY [INFRA]:** Die bereits vor dieser Runde vom
+  Reviewer korrigierte Volllauf-Fixture besteht jetzt mit 204 Erwartungen;
+  Produktvalidator und Abnahmetest blieben unverändert. Reguläre
+  Gate-Bestätigung bleibt bei Orchestrator/Reviewer (BL-94).
+- **E26 OUT-OF-TERRITORY [QA-PENDING]:** Alle sechs M1b-QA-Befunde bestehen,
+  danach scheitern die vier M2-E2E-Blöcke weiterhin am gelöschten Namespace
+  von QA-M1b-004. Der frische M2-Prozess besteht mit neun Erwartungen.
+  Kein Produkt-Scheinfix und kein Eingriff in QA oder Betreiberzustand;
+  erforderlicher QA-Nachlauf nach ADR-029 Nr. 3 bleibt offen (BL-95).
+
+Alle neun Kurzlaufdateien wurden nach der Produktänderung mit dem
+installierten aktuellen Paket, `n_sim = ANK-TOL.n_check` (20), den
+bisherigen Seeds und 14 Workern erzeugt. Echter Output:
+
+```text
+ordinal_recovery: 4 scenarios x 20 repetitions; 100 result rows; elapsed 108.138 s; workers 14
+binary_recovery: 2 scenarios x 20 repetitions; 40 result rows; elapsed 0.905 s; workers 14
+two_level: 2 scenarios x 20 repetitions; 42 result rows; elapsed 10.037 s; workers 14
+Nine genuine short-run files copied byte-identically; no full-run files written in the repository.
+```
+
+Alle drei Prozesse endeten mit Exit 0. Die sechs CSVs sind bytegleich zum
+Rundenbeginn, die drei Sessiondateien tragen den separat abgeglichenen
+Implementierungsnachweis
+`c2045c7c594adda23b5ecd516fcedf0ed28a52df00180c79f9cbea9ea0238c9d`.
+Der neue Rechenhelfer gehört ausdrücklich zum Hash. Keine Betreiber-
+Volllaufdatei wurde geschrieben; E21/BL-92 bleibt inhaltlich unverändert.
+
+Abschließende tatsächlich ausgeführte Prüfungen; Rohlogs unter
+`/tmp/llmsa-m1b-r3-2ug3odnl/`:
+
+| Prüfung | Echter Output / Ergebnis |
+| --- | --- |
+| Vollständige Unit-Suite | `[ FAIL 0 \| WARN 0 \| SKIP 1 \| PASS 3621 ]`, 247 Blöcke, Exit 0 |
+| Vollständige M1b-Abnahme | `[ FAIL 0 \| WARN 2 \| SKIP 0 \| PASS 3474 ]`, 74 Blöcke, Exit 0 |
+| M1a-Abnahme | `[ FAIL 0 \| WARN 0 \| SKIP 0 \| PASS 722 ]`, 54 Blöcke, Exit 0 |
+| Vollständige QA-Verzeichnisse | `16 Tests in tests/e2e, tests/fuzz; 0 fehlgeschlagen, 4 Fehler, 0 übersprungen`, Exit 1 wegen E26 |
+| M2-E2E allein, frischer Prozess | `[ FAIL 0 \| WARN 0 \| SKIP 0 \| PASS 9 ]`, Exit 0 |
+| K-M2-6 | `[ FAIL 0 \| WARN 0 \| SKIP 0 \| PASS 383 ]`, 11 Blöcke, Exit 0; wiederholt nach der im Handoff belegten Dateiinventur-Kollision |
+| Öffentlicher Paketbau und installierter `R CMD check --as-cran --no-manual` | Je Exit 0, `Status: 1 NOTE`; installierte Tests `[ FAIL 0 \| WARN 0 \| SKIP 9 \| PASS 3545 ]` |
+| 80 gezielte Mutationsproben | `{"Killed": 65, "RuntimeError": 4, "Survived": 11}`; Diagnose, kein vollständiger Gate-Score |
+
+Die Unit-/Paket-Skips sind unverändert: ellmer-Negativtest sowie im
+öffentlichen Paket fehlende lokale API-Aufzeichnungen/Originalanker und
+der bestehende Report-CRAN-Skip. Die beiden M1b-Abnahmewarnungen kommen
+weiter aus `lme4::nobars`/`findbars` im Reviewer-Helfer (E23/BL-93).
+M0-Prüfwege mit Git wurden nicht ausgeführt.
+
+**Zusätzliche OUT-OF-TERRITORY-Infrastruktur, keine Scheinreparaturen:**
+Der native parallele `muttest`-Start scheitert nach grünem Vorlauf mit
+`16 | Permission denied` in `.dispatcher_start` (M1B-R3-INFRA-MUTTEST).
+Die 80 generierten Mutanten wurden deshalb als lokale Diagnose jeweils
+in einer eigenen Paketkopie mit frischem R-Prozess ausgeführt; vier
+RuntimeErrors werden nicht als getötet gezählt. Die einzige Paketcheck-
+NOTE lautet `Unable to verify current time` (M1B-R3-INFRA-CLOCK);
+die Zeitprüfung bleibt aktiv. Befehle und Logstellen stehen im Handoff.
+
+Drei einzeln bewiesene Äquivalenzanträge stehen in `MUT-EQUIV.json`:
+literaler Doppelpunkt bei `strsplit`, vollständig überschriebene
+Gram-Anfangswerte 1 und −1. Keine Builder-Freigabe. Der letzte reguläre
+mutgate-Wert bleibt Runde 2 mit 91,91 bei 91,83; ein neuer vollständiger
+Lauf folgt durch den Orchestrator.
+
+Die abschließende SHA-256-Inventur bestätigt neun geänderte und vier neue
+Dateien ausschließlich im zugewiesenen Builder-Territorium. Alle 291
+geschützten Bestandsdateien und alle 91 bestehenden Test-/Fixture-Dateien
+sind bytegleich. Produktcode, Hilfe, `inst/`, Unit-Tests und Paketmetadaten
+stimmen mit dem tatsächlich gebauten und geprüften Paketstand überein.
+Keine Git-Kommandos; keine Änderung an Gates, Schwellen, Ankern, Specs,
+BACKLOG oder Betreiberzustand. Drei Äquivalenzanträge bleiben ohne
+Builder-Freigabe. E26 und der reguläre Gate-/Reviewer-Nachlauf bleiben offen;
+dieser Eintrag erklärt kein Meilenstein-PASS.
+
 ## M1b — REWORK Runde 2 (31.10.2026)
 
 Grundlage: REVIEW/verdict-code Runde 1 (E12–E23), gates.json samt roten

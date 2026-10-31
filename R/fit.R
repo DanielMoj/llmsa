@@ -114,8 +114,11 @@
 #' Counts in `n` describe data rows; with ordinal frequency weights,
 #' `stats::nobs(model)` follows `clmm` and reports the sum of those weights.
 #' Non-identifiable two-level fixed effects and ordinal random-effect terms
-#' with fewer than three observed levels produce named errors. Ordinal
-#' singularity describes random effects only, not the derived components.
+#' with fewer than three observed levels produce named errors. Before either
+#' latent engine is called, random-effect variances must be separately
+#' identifiable after accounting for the fixed effects. Confounded grouping
+#' factors, including interactions, produce an error naming the random terms.
+#' Ordinal singularity describes random effects only, not the derived components.
 #' Ordinal and binary estimates are invariant to row order and factor labels
 #' only up to the optimization tolerance of the underlying engines.
 #'
@@ -296,6 +299,15 @@ msa_fit <- function(runs, type = c("numeric", "ordinal", "binary"), levels = NUL
       }
     }
   }
+  if (type != "numeric") {
+    if (!length(fixed_two)) design <- matrix(1, nrow(dat), 1L)
+    information <- msa_latent_information(dat, random_groups, design)
+    ev <- eigen(information, symmetric = TRUE, only.values = TRUE)$values
+    if (min(ev) <= length(random_groups) * .Machine$double.eps * max(ev)) {
+      stop("Latent variance components are not identifiable: random-effect terms ",
+           paste(random_groups, collapse = ", "), " after accounting for fixed effects.", call. = FALSE)
+    }
+  }
   rhs <- c("1", fixed_two)
   if (type == "ordinal") {
     # clmm accepts formula offsets. Put them before random terms so its full
@@ -376,6 +388,37 @@ msa_fit <- function(runs, type = c("numeric", "ordinal", "binary"), levels = NUL
                  interactions = interactions, derived = fixed_two, numerics = numerics,
                  converged = converged),
             class = "msa_fit")
+}
+
+# Gram matrix of the projected covariance components (ADR-029):
+# G[i,j] = ||Z_i' (I - Q Q') Z_j||_F^2. Work in grouping-level space;
+# neither the observation covariance matrices nor the projector are formed.
+msa_latent_information <- function(dat, groups, design) {
+  Q <- qr.Q(qr(design))
+  Z <- lapply(strsplit(groups, ":", fixed = TRUE), function(columns) {
+    group <- interaction(dat[columns], drop = TRUE)
+    Matrix::sparseMatrix(i = seq_len(nrow(dat)), j = as.integer(group), x = 1,
+                         dims = c(nrow(dat), nlevels(group)))
+  })
+  fixed <- lapply(Z, function(z) as.matrix(Matrix::crossprod(Q, z)))
+  k <- length(Z)
+  gram <- matrix(0, k, k)
+  for (j in seq_len(k)) {
+    for (i in seq_len(j)) {
+      block <- as.matrix(Matrix::crossprod(Z[[i]], Z[[j]])) - crossprod(fixed[[i]], fixed[[j]])
+      gram[i, j] <- gram[j, i] <- sum(block^2)
+    }
+  }
+  # An indicator matrix has full column rank. It can lie wholly in the fixed
+  # space only when it has at most as many columns. Resolve that small rank
+  # test explicitly so roundoff cannot turn a zero one-component Gram matrix
+  # into a positive scalar with an apparent condition number of one.
+  spanned <- vapply(Z, function(z) {
+    ncol(z) <= ncol(design) && qr(cbind(design, as.matrix(z)))$rank == ncol(design)
+  }, logical(1))
+  gram[spanned, ] <- 0
+  gram[, spanned] <- 0
+  gram
 }
 
 # Engine status is categorical, not a new gradient or Hessian tolerance.

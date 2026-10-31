@@ -1,5 +1,18 @@
 # llmsa (development version)
 
+* Ordinal and binary fits reject confounded random-effect variances before
+  calling the engine, including interactions and terms spanned by fixed
+  effects. Errors name the random terms. Identifiable designs retain their
+  existing engine fits; ordinal singularity concerns random effects only.
+* Latent fits apply `subset`, `weights`, `offset` and `na.action` before
+  selecting model terms, so data and study counts describe the analysed rows.
+  Ordinal offsets are kept in `data$.msa_offset`; with frequency weights,
+  `n$observations` counts rows and `nobs(model)` reports the weight sum.
+  Stored engine calls retain evaluated arguments and can be evaluated again
+  outside the original caller, including for binary refits and bootstraps.
+* Explicit ordinal and binary `levels` must contain distinct, non-missing,
+  non-empty labels. They determine the coding independently of the response
+  storage type and take precedence over an ordered factor's levels.
 * Ordinal and binary fits validate exact binary codes, explicit event labels,
   missing grouping values and constant categories. Dropped responses are
   counted in warnings and in the returned study size.

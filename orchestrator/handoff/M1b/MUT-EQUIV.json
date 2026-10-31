@@ -1,0 +1,22 @@
+{
+  "claims": [
+    {
+      "file": "R/fit.R",
+      "mutator": "TRUE → FALSE",
+      "line": 398,
+      "reason": "msa_latent_information(): strsplit(groups, \":\", fixed = TRUE) gegenüber fixed = FALSE. Der unveränderte Suchtext besteht nur aus dem Doppelpunkt; dieser ist im verwendeten regulären Ausdruck ein Literal. Beide Varianten trennen dieselben Gruppennamen an denselben Zeichen in dieselben Teilvektoren. Keine Berechnung oder Fehlermeldung unterscheidet sich. Im lokalen, aus muttest erzeugten Lauf ist dies Mutant 23 (Survived); die unabhängige Kovarianzrechnung und alle latenten Unit-Tests bestehen. Antrag des Builders, keine Freigabe."
+    },
+    {
+      "file": "R/fit.R",
+      "mutator": "<n> + 1 → <n> + 1",
+      "line": 405,
+      "reason": "msa_latent_information(): matrix(0, k, k) wird zu matrix(1, k, k). Vor dem ersten Lesen von gram weist die doppelte Schleife für jedes j = 1,...,k und i = 1,...,j sowohl gram[i,j] als auch gram[j,i] aus sum(block^2) zu. Damit wird jede Zelle einschließlich der Diagonale überschrieben; die Anfangswerte sind unbeobachtbar. Bei k = 0 sind beide Matrizen leer, bei einem vorherigen Rechenfehler wird keine Matrix zurückgegeben. Im lokalen, aus muttest erzeugten Lauf ist dies Mutant 35 (Survived); die unabhängige Kovarianzrechnung und alle latenten Unit-Tests bestehen. Antrag des Builders, keine Freigabe."
+    },
+    {
+      "file": "R/fit.R",
+      "mutator": "<n> - 1 → <n> - 1",
+      "line": 405,
+      "reason": "msa_latent_information(): matrix(0, k, k) wird zu matrix(-1, k, k). Die vollständige symmetrische Zuweisung in den beiden Schleifen überschreibt vor dem ersten Lesen jede der k² Zellen; kein Anfangswert geht in das Ergebnis oder einen Kontrollfluss ein. Bei k = 0 sind beide Matrizen leer, bei einem vorherigen Rechenfehler wird keine Matrix zurückgegeben. Im lokalen, aus muttest erzeugten Lauf ist dies Mutant 42 (Survived); die unabhängige Kovarianzrechnung und alle latenten Unit-Tests bestehen. Antrag des Builders, keine Freigabe."
+    }
+  ]
+}

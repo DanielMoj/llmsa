@@ -147,8 +147,11 @@ are retained in \code{data$.msa_offset} and included in the model formula.
 Counts in \code{n} describe data rows; with ordinal frequency weights,
 \code{stats::nobs(model)} follows \code{clmm} and reports the sum of those weights.
 Non-identifiable two-level fixed effects and ordinal random-effect terms
-with fewer than three observed levels produce named errors. Ordinal
-singularity describes random effects only, not the derived components.
+with fewer than three observed levels produce named errors. Before either
+latent engine is called, random-effect variances must be separately
+identifiable after accounting for the fixed effects. Confounded grouping
+factors, including interactions, produce an error naming the random terms.
+Ordinal singularity describes random effects only, not the derived components.
 Ordinal and binary estimates are invariant to row order and factor labels
 only up to the optimization tolerance of the underlying engines.
 

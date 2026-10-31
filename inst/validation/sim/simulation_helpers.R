@@ -211,7 +211,7 @@ sim_implementation <- function() {
   scope <- environment(sim_implementation)
   helpers <- sort(ls(scope, pattern = "^sim_"))
   helpers <- helpers[vapply(helpers, function(name) is.function(get(name, scope, inherits = FALSE)), logical(1))]
-  code <- c(vapply(c("as_msa_runs", "msa_fit", "msa_grr", "msa_mer_converged", "msa_clmm_converged", "vc_from_model", "latent_residual", "grr_stats"),
+  code <- c(vapply(c("as_msa_runs", "msa_fit", "msa_latent_information", "msa_grr", "msa_mer_converged", "msa_clmm_converged", "vc_from_model", "latent_residual", "grr_stats"),
     function(name) paste(deparse(get(name, asNamespace("llmsa")), width.cutoff = 500L), collapse = "\n"), character(1)),
     vapply(helpers, function(name) paste(deparse(get(name, scope), width.cutoff = 500L), collapse = "\n"), character(1)))
   digest::digest(paste(code, collapse = "\n"), algo = "sha256", serialize = FALSE)
