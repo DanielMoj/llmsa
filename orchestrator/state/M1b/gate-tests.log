@@ -6,14 +6,14 @@ r-tests: tests/testthat: 37 Testdatei(en)
 ⠋ |          1 | acmg-api                                                       
 ⠋ |         41 | acmg-api                                                       
 ⠋ |         81 | acmg-api                                                       
-⠹ |        113 | acmg-api                                                       
+⠸ |        114 | acmg-api                                                       
 ⠇ |        159 | acmg-api                                                       
 ⠙ |        162 | acmg-api                                                       
 ⠸ |        174 | acmg-api                                                       
 ✔ |        177 | acmg-api [2.2s]
 
 ⠏ |          0 | acmg-data                                                      
-⠧ |          8 | acmg-data                                                      
+⠇ |          9 | acmg-data                                                      
 ⠼ |         25 | acmg-data                                                      
 ✔ |         43 | acmg-data
 
@@ -29,7 +29,6 @@ r-tests: tests/testthat: 37 Testdatei(en)
 ⠴ |        106 | acmg-evaluate                                                  
 ⠏ |        110 | acmg-evaluate                                                  
 ⠸ |        114 | acmg-evaluate                                                  
-⠧ |        138 | acmg-evaluate                                                  
 ✔ |        139 | acmg-evaluate [4.2s]
 
 ⠏ |          0 | acmg-latent-diagnostics                                        
@@ -39,17 +38,17 @@ r-tests: tests/testthat: 37 Testdatei(en)
 
 ⠏ |          0 | acmg-network                                                   
 ⠦ |         37 | acmg-network                                                   
-⠦ |         77 | acmg-network                                                   
-⠴ |        116 | acmg-network                                                   
+⠧ |         78 | acmg-network                                                   
+⠧ |        118 | acmg-network                                                   
 ⠧ |        148 | acmg-network                                                   
-⠏ |        180 | acmg-network                                                   
+⠋ |        181 | acmg-network                                                   
 ⠼ |        185 | acmg-network                                                   
 ⠙ |        202 | acmg-network                                                   
 ⠏ |        210 | acmg-network                                                   
 ⠦ |        217 | acmg-network                                                   
 ⠸ |        224 | acmg-network                                                   
 ⠏ |        230 | acmg-network                                                   
-✔ |        236 | acmg-network [5.0s]
+✔ |        236 | acmg-network [4.9s]
 
 ⠏ |          0 | acmg-pilot-backend-errors                                      
 ⠇ |          9 | acmg-pilot-backend-errors                                      
@@ -70,7 +69,7 @@ r-tests: tests/testthat: 37 Testdatei(en)
 ✔ |         42 | acmg-pilot-costs [1.0s]
 
 ⠏ |          0 | acmg-pilot-metadata                                            
-⠼ |          5 | acmg-pilot-metadata                                            
+⠧ |          8 | acmg-pilot-metadata                                            
 ⠴ |         16 | acmg-pilot-metadata                                            
 ⠇ |         29 | acmg-pilot-metadata                                            
 ⠙ |         42 | acmg-pilot-metadata                                            
@@ -89,7 +88,7 @@ r-tests: tests/testthat: 37 Testdatei(en)
 ⠸ |        184 | acmg-pilot-metadata                                            
 ⠇ |        209 | acmg-pilot-metadata                                            
 ⠙ |        212 | acmg-pilot-metadata                                            
-✔ |        222 | acmg-pilot-metadata [7.5s]
+✔ |        222 | acmg-pilot-metadata [7.4s]
 
 ⠏ |          0 | acmg-pipeline                                                  
 ⠙ |          2 | acmg-pipeline                                                  
@@ -98,9 +97,8 @@ r-tests: tests/testthat: 37 Testdatei(en)
 ⠋ |         11 | acmg-pipeline                                                  
 ⠼ |         15 | acmg-pipeline                                                  
 ⠧ |         18 | acmg-pipeline                                                  
-⠋ |         21 | acmg-pipeline                                                  
-⠹ |         23 | acmg-pipeline                                                  
-⠴ |         26 | acmg-pipeline                                                  
+⠙ |         22 | acmg-pipeline                                                  
+⠼ |         25 | acmg-pipeline                                                  
 ⠇ |         29 | acmg-pipeline                                                  
 ⠹ |         33 | acmg-pipeline                                                  
 ⠏ |         40 | acmg-pipeline                                                  
@@ -119,8 +117,8 @@ r-tests: tests/testthat: 37 Testdatei(en)
 
 ⠏ |          0 | acmg-rework                                                    
 ⠋ |          1 | acmg-rework                                                    
-⠙ |         32 | acmg-rework                                                    
-⠦ |         67 | acmg-rework                                                    
+⠧ |         28 | acmg-rework                                                    
+⠏ |         60 | acmg-rework                                                    
 ⠦ |         97 | acmg-rework                                                    
 ⠋ |        101 | acmg-rework                                                    
 ⠇ |        119 | acmg-rework                                                    
@@ -129,10 +127,10 @@ r-tests: tests/testthat: 37 Testdatei(en)
 ⠸ |        124 | acmg-rework                                                    
 ⠼ |        125 | acmg-rework                                                    
 ⠦ |        127 | acmg-rework                                                    
-⠇ |        139 | acmg-rework                                                    
+⠼ |        135 | acmg-rework                                                    
 ⠸ |        174 | acmg-rework                                                    
 ⠙ |        192 | acmg-rework                                                    
-✔ |        194 | acmg-rework [7.7s]
+✔ |        194 | acmg-rework [7.8s]
 
 ⠏ |          0 | acmg-robustness-errors                                         
 ⠋ |          1 | acmg-robustness-errors                                         
@@ -143,7 +141,7 @@ r-tests: tests/testthat: 37 Testdatei(en)
 
 ⠏ |          0 | acmg-timeout                                                   
 ⠧ |         28 | acmg-timeout                                                   
-⠸ |         64 | acmg-timeout                                                   
+⠴ |         66 | acmg-timeout                                                   
 ⠼ |         95 | acmg-timeout                                                   
 ✔ |        105 | acmg-timeout
 
@@ -156,7 +154,7 @@ r-tests: tests/testthat: 37 Testdatei(en)
 ✔ |         59 | backend-finish-reason
 
 ⠏ |          0 | backend-reasoning                                              
-⠸ |         24 | backend-reasoning                                              
+⠼ |         25 | backend-reasoning                                              
 ⠙ |         32 | backend-reasoning                                              
 ✔ |         45 | backend-reasoning
 
@@ -177,10 +175,10 @@ r-tests: tests/testthat: 37 Testdatei(en)
 ✔ |         33 | fit-grr [7.4s]
 
 ⠏ |          0 | fit-initialization                                             
-⠸ |         14 | fit-initialization                                             
+⠧ |         18 | fit-initialization                                             
 ⠴ |         36 | fit-initialization                                             
 ⠴ |         46 | fit-initialization                                             
-⠼ |         55 | fit-initialization                                             
+⠹ |         53 | fit-initialization                                             
 ⠸ |         64 | fit-initialization                                             
 ⠼ |         75 | fit-initialization                                             
 ✔ |         79 | fit-initialization
@@ -189,54 +187,56 @@ r-tests: tests/testthat: 37 Testdatei(en)
 ⠼ |          5 | fit-latent-diagnostics                                         
 ⠼ |         15 | fit-latent-diagnostics                                         
 ⠦ |         27 | fit-latent-diagnostics                                         
-⠏ |         70 | fit-latent-diagnostics                                         
+⠹ |         73 | fit-latent-diagnostics                                         
 ✔ |         82 | fit-latent-diagnostics [1.3s]
 
 ⠏ |          0 | fit-latent                                                     
 ⠇ |         19 | fit-latent                                                     
 ⠴ |         26 | fit-latent                                                     
 ⠏ |         40 | fit-latent                                                     
+⠴ |         56 | fit-latent                                                     
 ⠧ |         58 | fit-latent                                                     
 ⠼ |         65 | fit-latent                                                     
 ⠋ |         71 | fit-latent                                                     
 ✔ |         74 | fit-latent
 
 ⠏ |          0 | fit-model-construction                                         
-⠙ |         22 | fit-model-construction                                         
+⠇ |         19 | fit-model-construction                                         
 ⠏ |         40 | fit-model-construction                                         
 ⠴ |         66 | fit-model-construction                                         
-⠏ |         90 | fit-model-construction                                         
-⠋ |        111 | fit-model-construction                                         
+⠸ |         84 | fit-model-construction                                         
+⠧ |        108 | fit-model-construction                                         
+⠇ |        129 | fit-model-construction                                         
 ✔ |        129 | fit-model-construction
 
 ⠏ |          0 | fit-numeric                                                    
-⠸ |         14 | fit-numeric                                                    
+⠼ |         15 | fit-numeric                                                    
 ⠴ |         26 | fit-numeric                                                    
-⠸ |         34 | fit-numeric                                                    
+⠹ |         33 | fit-numeric                                                    
 ⠋ |         41 | fit-numeric                                                    
 ⠧ |         48 | fit-numeric                                                    
-⠸ |         54 | fit-numeric                                                    
-⠹ |         63 | fit-numeric                                                    
-⠦ |         67 | fit-numeric                                                    
-⠴ |         76 | fit-numeric                                                    
+⠴ |         56 | fit-numeric                                                    
+⠸ |         64 | fit-numeric                                                    
+⠏ |         70 | fit-numeric                                                    
+⠦ |         77 | fit-numeric                                                    
 ⠼ |         85 | fit-numeric                                                    
 ⠏ |         90 | fit-numeric                                                    
 ⠴ |         96 | fit-numeric                                                    
-✔ |        102 | fit-numeric [1.5s]
+✔ |        102 | fit-numeric [1.4s]
 
 ⠏ |          0 | fit-residual-design                                            
-⠹ |         33 | fit-residual-design                                            
-⠇ |         69 | fit-residual-design                                            
-⠏ |         80 | fit-residual-design                                            
+⠧ |         28 | fit-residual-design                                            
+⠹ |         63 | fit-residual-design                                            
+⠇ |         79 | fit-residual-design                                            
 ⠏ |         90 | fit-residual-design                                            
 ⠏ |        100 | fit-residual-design                                            
-⠏ |        110 | fit-residual-design                                            
-⠦ |        117 | fit-residual-design                                            
+⠋ |        111 | fit-residual-design                                            
+⠙ |        122 | fit-residual-design                                            
 ✔ |        124 | fit-residual-design
 
 ⠏ |          0 | fit-rework-inputs                                              
 ⠧ |          8 | fit-rework-inputs                                              
-⠴ |         26 | fit-rework-inputs                                              
+⠼ |         25 | fit-rework-inputs                                              
 ⠸ |         44 | fit-rework-inputs                                              
 ⠼ |         85 | fit-rework-inputs                                              
 ⠸ |         94 | fit-rework-inputs                                              
@@ -246,18 +246,19 @@ r-tests: tests/testthat: 37 Testdatei(en)
 ⠋ |        131 | fit-rework-inputs                                              
 ⠙ |        142 | fit-rework-inputs                                              
 ⠹ |        143 | fit-rework-inputs                                              
-⠹ |        153 | fit-rework-inputs                                              
-✔ |        154 | fit-rework-inputs [3.0s]
+⠏ |        150 | fit-rework-inputs                                              
+✔ |        154 | fit-rework-inputs [2.9s]
 
 ⠏ |          0 | fit-rework-numerics                                            
 ⠋ |         11 | fit-rework-numerics                                            
 ⠴ |         16 | fit-rework-numerics                                            
 ⠋ |         21 | fit-rework-numerics                                            
 ⠴ |         26 | fit-rework-numerics                                            
-⠼ |         35 | fit-rework-numerics                                            
+⠹ |         33 | fit-rework-numerics                                            
+⠴ |         46 | fit-rework-numerics                                            
 ⠧ |         48 | fit-rework-numerics                                            
-⠧ |         58 | fit-rework-numerics                                            
-⠴ |         86 | fit-rework-numerics                                            
+⠇ |         59 | fit-rework-numerics                                            
+⠦ |         87 | fit-rework-numerics                                            
 ⠇ |         89 | fit-rework-numerics                                            
 ⠋ |         91 | fit-rework-numerics                                            
 ⠼ |         95 | fit-rework-numerics                                            
@@ -265,7 +266,7 @@ r-tests: tests/testthat: 37 Testdatei(en)
 ⠙ |        142 | fit-rework-numerics                                            
 ⠇ |        149 | fit-rework-numerics                                            
 ⠇ |        159 | fit-rework-numerics                                            
-✔ |        188 | fit-rework-numerics [3.0s]
+✔ |        188 | fit-rework-numerics [3.2s]
 
 ⠏ |          0 | grr-latent                                                     
 ⠋ |          1 | grr-latent                                                     
@@ -273,24 +274,25 @@ r-tests: tests/testthat: 37 Testdatei(en)
 ✔ |         26 | grr-latent
 
 ⠏ |          0 | grr-numeric                                                    
-⠼ |         15 | grr-numeric                                                    
+⠸ |         14 | grr-numeric                                                    
 ✔ |         26 | grr-numeric
 
 ⠏ |          0 | grr-rework                                                     
-⠴ |         56 | grr-rework                                                     
-⠸ |         84 | grr-rework                                                     
-⠙ |         92 | grr-rework                                                     
+⠼ |         55 | grr-rework                                                     
+⠹ |         83 | grr-rework                                                     
+⠼ |         85 | grr-rework                                                     
+⠹ |         93 | grr-rework                                                     
 ✔ |        107 | grr-rework
 
 ⠏ |          0 | parsers                                                        
-⠸ |         24 | parsers                                                        
+⠼ |         25 | parsers                                                        
 ⠴ |         76 | parsers                                                        
 ✔ |         85 | parsers
 
 ⠏ |          0 | report                                                         
 ⠋ |          1 | report                                                         
 ⠹ |         13 | report                                                         
-✔ |         33 | report [2.9s]
+✔ |         33 | report [2.7s]
 
 ⠏ |          0 | robustness-plan-spc                                            
 ⠼ |         35 | robustness-plan-spc                                            
@@ -305,22 +307,23 @@ r-tests: tests/testthat: 37 Testdatei(en)
 ⠼ |         35 | validation-latent                                              
 ⠧ |         48 | validation-latent                                              
 ⠇ |         49 | validation-latent                                              
-✔ |         55 | validation-latent [3.3s]
+✔ |         55 | validation-latent [3.4s]
 
 ⠏ |          0 | validation-numeric                                             
 ⠋ |          1 | validation-numeric                                             
 ⠧ |          8 | validation-numeric                                             
-⠙ |         12 | validation-numeric                                             
+⠹ |         13 | validation-numeric                                             
 ⠋ |         21 | validation-numeric                                             
 ⠼ |         25 | validation-numeric                                             
-⠹ |         33 | validation-numeric                                             
+⠙ |         32 | validation-numeric                                             
 ⠋ |         41 | validation-numeric                                             
 ⠸ |         54 | validation-numeric                                             
 ⠦ |         67 | validation-numeric                                             
 ⠇ |         79 | validation-numeric                                             
+⠴ |        106 | validation-numeric                                             
 ⠏ |        110 | validation-numeric                                             
 ⠋ |        111 | validation-numeric                                             
-✔ |        117 | validation-numeric [3.0s]
+✔ |        117 | validation-numeric [3.1s]
 
 ⠏ |          0 | validation-rework                                              
 ⠋ |          1 | validation-rework                                              
@@ -328,13 +331,13 @@ r-tests: tests/testthat: 37 Testdatei(en)
 ✔ |         32 | validation-rework
 
 ⠏ |          0 | validation-simulation                                          
-⠴ |          6 | validation-simulation                                          
+⠦ |          7 | validation-simulation                                          
 ⠸ |         14 | validation-simulation                                          
-⠋ |         41 | validation-simulation                                          
-⠧ |         68 | validation-simulation                                          
-⠧ |         88 | validation-simulation                                          
-⠏ |        110 | validation-simulation                                          
-⠼ |        125 | validation-simulation                                          
+⠏ |         40 | validation-simulation                                          
+⠇ |         59 | validation-simulation                                          
+⠴ |         86 | validation-simulation                                          
+⠙ |        102 | validation-simulation                                          
+⠙ |        112 | validation-simulation                                          
 ⠹ |        133 | validation-simulation                                          
 ⠇ |        139 | validation-simulation                                          
 ⠋ |        141 | validation-simulation                                          
@@ -343,10 +346,10 @@ r-tests: tests/testthat: 37 Testdatei(en)
 ⠸ |        144 | validation-simulation                                          
 ⠼ |        145 | validation-simulation                                          
 ⠴ |        146 | validation-simulation                                          
-✔ |        146 | validation-simulation [2.8s]
+✔ |        146 | validation-simulation [2.9s]
 
 ══ Results ═════════════════════════════════════════════════════════════════════
-Duration: 77.3 s
+Duration: 77.2 s
 
 ── Skipped tests (1) ───────────────────────────────────────────────────────────
 • requireNamespace("ellmer", quietly = TRUE) is TRUE (1):
@@ -357,16 +360,16 @@ r-tests: tests/acceptance: 28 Testdatei(en)
 ✔ | F W  S  OK | Context
 
 ⠏ |          0 | m0-api-snapshot                                                
-⠋ |         41 | m0-api-snapshot                                                
-⠧ |         88 | m0-api-snapshot                                                
-⠙ |        142 | m0-api-snapshot                                                
-⠹ |        193 | m0-api-snapshot                                                
-⠙ |        222 | m0-api-snapshot                                                
-⠦ |        257 | m0-api-snapshot                                                
+⠇ |         39 | m0-api-snapshot                                                
+⠹ |         83 | m0-api-snapshot                                                
+⠙ |        132 | m0-api-snapshot                                                
+⠴ |        186 | m0-api-snapshot                                                
+⠋ |        221 | m0-api-snapshot                                                
+⠹ |        253 | m0-api-snapshot                                                
 ✔ |        259 | m0-api-snapshot
 
 ⠏ |          0 | m0-deps                                                        
-⠦ |         37 | m0-deps                                                        
+⠋ |         31 | m0-deps                                                        
 ✔ |         51 | m0-deps
 
 ⠏ |          0 | m0-gates                                                       
@@ -382,7 +385,7 @@ r-tests: tests/acceptance: 28 Testdatei(en)
 
 ⠏ |          0 | m0-testthat-count                                              
 ⠙ |          2 | m0-testthat-count                                              
-✔ |          2 | m0-testthat-count [79.5s]
+✔ |          2 | m0-testthat-count [80.3s]
 
 ⠏ |          0 | m1a-1-reml-anova                                               
 ⠸ |          4 | m1a-1-reml-anova                                               
@@ -391,7 +394,7 @@ r-tests: tests/acceptance: 28 Testdatei(en)
 ⠹ |         43 | m1a-1-reml-anova                                               
 ⠇ |         59 | m1a-1-reml-anova                                               
 ⠴ |         76 | m1a-1-reml-anova                                               
-⠋ |         91 | m1a-1-reml-anova                                               
+⠇ |         89 | m1a-1-reml-anova                                               
 ✔ |         91 | m1a-1-reml-anova [1.2s]
 
 ⠏ |          0 | m1a-2-aiag                                                     
@@ -407,23 +410,23 @@ r-tests: tests/acceptance: 28 Testdatei(en)
 ⠦ |         27 | m1a-3-oracles                                                  
 ⠋ |         31 | m1a-3-oracles                                                  
 ⠧ |         48 | m1a-3-oracles                                                  
-✔ |         66 | m1a-3-oracles [13.1s]
+✔ |         66 | m1a-3-oracles [13.0s]
 
 ⠏ |          0 | m1a-4-nist                                                     
 ⠦ |          7 | m1a-4-nist                                                     
 ⠋ |         11 | m1a-4-nist                                                     
 ⠦ |         17 | m1a-4-nist                                                     
 ⠹ |         23 | m1a-4-nist                                                     
-⠙ |         42 | m1a-4-nist                                                     
-⠹ |         53 | m1a-4-nist                                                     
+⠹ |         43 | m1a-4-nist                                                     
+⠼ |         55 | m1a-4-nist                                                     
 ⠋ |         71 | m1a-4-nist                                                     
 ⠦ |         87 | m1a-4-nist                                                     
 ⠦ |         97 | m1a-4-nist                                                     
 ✔ |        106 | m1a-4-nist [16.3s]
 
 ⠏ |          0 | m1a-5-metrics-verdict                                          
-⠧ |         38 | m1a-5-metrics-verdict                                          
-⠼ |         65 | m1a-5-metrics-verdict                                          
+⠏ |         40 | m1a-5-metrics-verdict                                          
+⠸ |         64 | m1a-5-metrics-verdict                                          
 ⠼ |         85 | m1a-5-metrics-verdict                                          
 ⠸ |         94 | m1a-5-metrics-verdict                                          
 ✔ |         99 | m1a-5-metrics-verdict
@@ -437,20 +440,20 @@ r-tests: tests/acceptance: 28 Testdatei(en)
 ⠇ |         59 | m1a-6-invariance-edge                                          
 ⠴ |         76 | m1a-6-invariance-edge                                          
 ⠇ |         79 | m1a-6-invariance-edge                                          
-⠼ |         95 | m1a-6-invariance-edge                                          
-⠏ |        110 | m1a-6-invariance-edge                                          
-⠴ |        126 | m1a-6-invariance-edge                                          
-⠹ |        143 | m1a-6-invariance-edge                                          
+⠴ |         96 | m1a-6-invariance-edge                                          
+⠹ |        113 | m1a-6-invariance-edge                                          
+⠇ |        129 | m1a-6-invariance-edge                                          
+⠏ |        150 | m1a-6-invariance-edge                                          
 ⠙ |        152 | m1a-6-invariance-edge                                          
 ⠇ |        159 | m1a-6-invariance-edge                                          
 ⠦ |        167 | m1a-6-invariance-edge                                          
 ✔ |        172 | m1a-6-invariance-edge [4.6s]
 
 ⠏ |          0 | m1a-7-vignette                                                 
-⠴ |         16 | m1a-7-vignette                                                 
-⠙ |         72 | m1a-7-vignette                                                 
-⠼ |        115 | m1a-7-vignette                                                 
-⠹ |        133 | m1a-7-vignette                                                 
+⠋ |         11 | m1a-7-vignette                                                 
+⠏ |         60 | m1a-7-vignette                                                 
+⠸ |        114 | m1a-7-vignette                                                 
+⠋ |        131 | m1a-7-vignette                                                 
 ⠧ |        148 | m1a-7-vignette                                                 
 ✔ |        148 | m1a-7-vignette
 
@@ -466,70 +469,70 @@ r-tests: tests/acceptance: 28 Testdatei(en)
 ⠏ |          0 | m1b-2-recovery-scripts                                         
 ⠼ |          5 | m1b-2-recovery-scripts                                         
 ⠋ |         11 | m1b-2-recovery-scripts                                         
-⠸ |         34 | m1b-2-recovery-scripts                                         
-⠙ |         82 | m1b-2-recovery-scripts                                         
-⠙ |        142 | m1b-2-recovery-scripts                                         
-⠏ |        200 | m1b-2-recovery-scripts                                         
-⠹ |        253 | m1b-2-recovery-scripts                                         
-⠧ |        308 | m1b-2-recovery-scripts                                         
-⠇ |        359 | m1b-2-recovery-scripts                                         
-⠴ |        416 | m1b-2-recovery-scripts                                         
-⠧ |        458 | m1b-2-recovery-scripts                                         
-⠼ |        515 | m1b-2-recovery-scripts                                         
-⠦ |        547 | m1b-2-recovery-scripts                                         
-⠇ |        599 | m1b-2-recovery-scripts                                         
-⠙ |        652 | m1b-2-recovery-scripts                                         
-⠦ |        707 | m1b-2-recovery-scripts                                         
+⠋ |         31 | m1b-2-recovery-scripts                                         
+⠋ |         81 | m1b-2-recovery-scripts                                         
+⠇ |        139 | m1b-2-recovery-scripts                                         
+⠹ |        193 | m1b-2-recovery-scripts                                         
+⠸ |        244 | m1b-2-recovery-scripts                                         
+⠋ |        301 | m1b-2-recovery-scripts                                         
+⠸ |        354 | m1b-2-recovery-scripts                                         
+⠹ |        413 | m1b-2-recovery-scripts                                         
+⠴ |        456 | m1b-2-recovery-scripts                                         
+⠴ |        516 | m1b-2-recovery-scripts                                         
+⠋ |        551 | m1b-2-recovery-scripts                                         
+⠹ |        603 | m1b-2-recovery-scripts                                         
+⠏ |        660 | m1b-2-recovery-scripts                                         
+⠹ |        713 | m1b-2-recovery-scripts                                         
 ⠸ |        734 | m1b-2-recovery-scripts                                         
-⠇ |        749 | m1b-2-recovery-scripts                                         
-⠴ |        786 | m1b-2-recovery-scripts                                         
-⠏ |        840 | m1b-2-recovery-scripts                                         
-⠦ |        897 | m1b-2-recovery-scripts                                         
-⠸ |        954 | m1b-2-recovery-scripts                                         
-⠦ |        1007 | m1b-2-recovery-scripts                                        
-⠹ |        1063 | m1b-2-recovery-scripts                                        
-⠸ |        1114 | m1b-2-recovery-scripts                                        
+⠧ |        748 | m1b-2-recovery-scripts                                         
+⠙ |        782 | m1b-2-recovery-scripts                                         
+⠼ |        835 | m1b-2-recovery-scripts                                         
+⠙ |        892 | m1b-2-recovery-scripts                                         
+⠇ |        949 | m1b-2-recovery-scripts                                         
+⠸ |        1004 | m1b-2-recovery-scripts                                        
+⠧ |        1058 | m1b-2-recovery-scripts                                        
+⠦ |        1107 | m1b-2-recovery-scripts                                        
 ⠸ |        1164 | m1b-2-recovery-scripts                                        
-⠙ |        1212 | m1b-2-recovery-scripts                                        
+⠇ |        1209 | m1b-2-recovery-scripts                                        
 ⠸ |        1264 | m1b-2-recovery-scripts                                        
-⠧ |        1318 | m1b-2-recovery-scripts                                        
-⠇ |        1369 | m1b-2-recovery-scripts                                        
-⠸ |        1424 | m1b-2-recovery-scripts                                        
-⠙ |        1472 | m1b-2-recovery-scripts                                        
+⠏ |        1320 | m1b-2-recovery-scripts                                        
+⠦ |        1377 | m1b-2-recovery-scripts                                        
+⠏ |        1430 | m1b-2-recovery-scripts                                        
+⠸ |        1474 | m1b-2-recovery-scripts                                        
 ⠦ |        1477 | m1b-2-recovery-scripts                                        
-⠇ |        1509 | m1b-2-recovery-scripts                                        
+⠦ |        1507 | m1b-2-recovery-scripts                                        
 ⠹ |        1553 | m1b-2-recovery-scripts                                        
-⠧ |        1608 | m1b-2-recovery-scripts                                        
-⠼ |        1665 | m1b-2-recovery-scripts                                        
-⠹ |        1703 | m1b-2-recovery-scripts                                        
-⠙ |        1742 | m1b-2-recovery-scripts                                        
-⠙ |        1792 | m1b-2-recovery-scripts                                        
+⠦ |        1607 | m1b-2-recovery-scripts                                        
+⠇ |        1659 | m1b-2-recovery-scripts                                        
+⠼ |        1705 | m1b-2-recovery-scripts                                        
+⠴ |        1746 | m1b-2-recovery-scripts                                        
+⠋ |        1791 | m1b-2-recovery-scripts                                        
 ⠏ |        1800 | m1b-2-recovery-scripts                                        
-⠙ |        1832 | m1b-2-recovery-scripts                                        
-⠧ |        1878 | m1b-2-recovery-scripts                                        
-⠙ |        1932 | m1b-2-recovery-scripts                                        
+⠋ |        1831 | m1b-2-recovery-scripts                                        
+⠇ |        1879 | m1b-2-recovery-scripts                                        
+⠼ |        1935 | m1b-2-recovery-scripts                                        
 ⠧ |        1988 | m1b-2-recovery-scripts                                        
 ⠹ |        2033 | m1b-2-recovery-scripts                                        
 ⠦ |        2087 | m1b-2-recovery-scripts                                        
 ⠹ |        2123 | m1b-2-recovery-scripts                                        
-✔ |        2155 | m1b-2-recovery-scripts [130.8s]
+✔ |        2155 | m1b-2-recovery-scripts [132.2s]
 
 ⠏ |          0 | m1b-3-two-level-script                                         
-⠋ |         11 | m1b-3-two-level-script                                         
-⠇ |         59 | m1b-3-two-level-script                                         
-⠦ |        107 | m1b-3-two-level-script                                         
-⠇ |        159 | m1b-3-two-level-script                                         
-⠇ |        199 | m1b-3-two-level-script                                         
-⠴ |        236 | m1b-3-two-level-script                                         
-⠋ |        291 | m1b-3-two-level-script                                         
+⠧ |          8 | m1b-3-two-level-script                                         
+⠋ |         51 | m1b-3-two-level-script                                         
+⠹ |        103 | m1b-3-two-level-script                                         
+⠙ |        162 | m1b-3-two-level-script                                         
+⠋ |        201 | m1b-3-two-level-script                                         
+⠦ |        237 | m1b-3-two-level-script                                         
+⠏ |        290 | m1b-3-two-level-script                                         
 ⠹ |        323 | m1b-3-two-level-script                                         
 ⠏ |        350 | m1b-3-two-level-script                                         
 ⠏ |        400 | m1b-3-two-level-script                                         
-⠋ |        451 | m1b-3-two-level-script                                         
+⠙ |        452 | m1b-3-two-level-script                                         
 ⠦ |        507 | m1b-3-two-level-script                                         
-⠦ |        557 | m1b-3-two-level-script                                         
-⠸ |        604 | m1b-3-two-level-script                                         
-⠧ |        658 | m1b-3-two-level-script                                         
+⠙ |        552 | m1b-3-two-level-script                                         
+⠙ |        602 | m1b-3-two-level-script                                         
+⠦ |        657 | m1b-3-two-level-script                                         
 ⠸ |        664 | m1b-3-two-level-script                                         
 ✔ |        687 | m1b-3-two-level-script [14.5s]
 
@@ -538,7 +541,7 @@ r-tests: tests/acceptance: 28 Testdatei(en)
 ⠙ |   2     10 | m1b-4-two-levels                                               
 ⠙ |   2     20 | m1b-4-two-levels                                               
 ⠹ |   2     31 | m1b-4-two-levels                                               
-✔ |   2     37 | m1b-4-two-levels [3.1s]
+✔ |   2     37 | m1b-4-two-levels [3.3s]
 ────────────────────────────────────────────────────────────────────────────────
 Warning ('test-m1b-4-two-levels.R:41:5'): K-M1b-4: with two levels of model the ordinal fit takes model as a fixed effect and lists it in attr(vc, "derived")
 the 'nobars' function has moved to the reformulas package. Please update your imports, or ask an upstream package maintainer to do so.
@@ -568,9 +571,9 @@ Backtrace:
 ────────────────────────────────────────────────────────────────────────────────
 
 ⠏ |          0 | m1b-5-binary-rptr                                              
-⠋ |          1 | m1b-5-binary-rptr                                              
-⠸ |          4 | m1b-5-binary-rptr                                              
-⠴ |          6 | m1b-5-binary-rptr                                              
+⠙ |          2 | m1b-5-binary-rptr                                              
+⠼ |          5 | m1b-5-binary-rptr                                              
+⠦ |          7 | m1b-5-binary-rptr                                              
 ✔ |          9 | m1b-5-binary-rptr
 
 ⠏ |          0 | m1b-6-edge-cases                                               
@@ -589,72 +592,73 @@ Backtrace:
 ⠴ |         76 | m1b-6-edge-cases                                               
 ⠏ |         80 | m1b-6-edge-cases                                               
 ⠹ |         83 | m1b-6-edge-cases                                               
-✔ |        108 | m1b-6-edge-cases [7.0s]
+✔ |        108 | m1b-6-edge-cases [6.8s]
 
 ⠏ |          0 | m1b-7-vignette-full-results                                    
 ⠋ |          1 | m1b-7-vignette-full-results                                    
-⠦ |          7 | m1b-7-vignette-full-results                                    
-⠙ |         12 | m1b-7-vignette-full-results                                    
-⠦ |         17 | m1b-7-vignette-full-results                                    
-⠙ |         22 | m1b-7-vignette-full-results                                    
+⠴ |          6 | m1b-7-vignette-full-results                                    
+⠋ |         11 | m1b-7-vignette-full-results                                    
+⠴ |         16 | m1b-7-vignette-full-results                                    
+⠋ |         21 | m1b-7-vignette-full-results                                    
 ⠦ |         27 | m1b-7-vignette-full-results                                    
 ⠸ |         34 | m1b-7-vignette-full-results                                    
 ⠇ |         39 | m1b-7-vignette-full-results                                    
-⠼ |         45 | m1b-7-vignette-full-results                                    
-⠋ |         51 | m1b-7-vignette-full-results                                    
-⠧ |         58 | m1b-7-vignette-full-results                                    
-⠹ |         63 | m1b-7-vignette-full-results                                    
-⠧ |         68 | m1b-7-vignette-full-results                                    
-⠹ |         73 | m1b-7-vignette-full-results                                    
-⠧ |         78 | m1b-7-vignette-full-results                                    
-⠼ |         85 | m1b-7-vignette-full-results                                    
-⠏ |         90 | m1b-7-vignette-full-results                                    
-⠼ |         95 | m1b-7-vignette-full-results                                    
-⠏ |        100 | m1b-7-vignette-full-results                                    
-⠴ |        106 | m1b-7-vignette-full-results                                    
-⠙ |        112 | m1b-7-vignette-full-results                                    
-⠇ |        119 | m1b-7-vignette-full-results                                    
-⠸ |        124 | m1b-7-vignette-full-results                                    
-⠇ |        129 | m1b-7-vignette-full-results                                    
-⠸ |        134 | m1b-7-vignette-full-results                                    
-⠋ |        141 | m1b-7-vignette-full-results                                    
-⠴ |        146 | m1b-7-vignette-full-results                                    
-⠋ |        151 | m1b-7-vignette-full-results                                    
-⠴ |        156 | m1b-7-vignette-full-results                                    
-⠸ |        164 | m1b-7-vignette-full-results                                    
-⠇ |        169 | m1b-7-vignette-full-results                                    
-⠸ |        174 | m1b-7-vignette-full-results                                    
-⠇ |        179 | m1b-7-vignette-full-results                                    
-⠴ |        186 | m1b-7-vignette-full-results                                    
-⠋ |        191 | m1b-7-vignette-full-results                                    
-⠴ |        196 | m1b-7-vignette-full-results                                    
-⠋ |        201 | m1b-7-vignette-full-results                                    
-✔ |        204 | m1b-7-vignette-full-results [19.0s]
+⠸ |         44 | m1b-7-vignette-full-results                                    
+⠇ |         49 | m1b-7-vignette-full-results                                    
+⠸ |         54 | m1b-7-vignette-full-results                                    
+⠋ |         61 | m1b-7-vignette-full-results                                    
+⠴ |         66 | m1b-7-vignette-full-results                                    
+⠋ |         71 | m1b-7-vignette-full-results                                    
+⠴ |         76 | m1b-7-vignette-full-results                                    
+⠋ |         81 | m1b-7-vignette-full-results                                    
+⠧ |         88 | m1b-7-vignette-full-results                                    
+⠹ |         93 | m1b-7-vignette-full-results                                    
+⠧ |         98 | m1b-7-vignette-full-results                                    
+⠹ |        103 | m1b-7-vignette-full-results                                    
+⠧ |        108 | m1b-7-vignette-full-results                                    
+⠸ |        114 | m1b-7-vignette-full-results                                    
+⠏ |        120 | m1b-7-vignette-full-results                                    
+⠼ |        125 | m1b-7-vignette-full-results                                    
+⠏ |        130 | m1b-7-vignette-full-results                                    
+⠼ |        135 | m1b-7-vignette-full-results                                    
+⠙ |        142 | m1b-7-vignette-full-results                                    
+⠦ |        147 | m1b-7-vignette-full-results                                    
+⠙ |        152 | m1b-7-vignette-full-results                                    
+⠦ |        157 | m1b-7-vignette-full-results                                    
+⠼ |        165 | m1b-7-vignette-full-results                                    
+⠏ |        170 | m1b-7-vignette-full-results                                    
+⠼ |        175 | m1b-7-vignette-full-results                                    
+⠏ |        180 | m1b-7-vignette-full-results                                    
+⠦ |        187 | m1b-7-vignette-full-results                                    
+⠙ |        192 | m1b-7-vignette-full-results                                    
+⠦ |        197 | m1b-7-vignette-full-results                                    
+⠙ |        202 | m1b-7-vignette-full-results                                    
+✔ |        204 | m1b-7-vignette-full-results [19.7s]
 
 ⠏ |          0 | m1b-7-vignette                                                 
 ⠏ |         10 | m1b-7-vignette                                                 
-⠧ |         18 | m1b-7-vignette                                                 
-⠹ |         23 | m1b-7-vignette                                                 
-⠋ |         31 | m1b-7-vignette                                                 
-⠦ |         37 | m1b-7-vignette                                                 
-⠙ |         42 | m1b-7-vignette                                                 
-⠦ |         47 | m1b-7-vignette                                                 
-⠙ |         52 | m1b-7-vignette                                                 
-⠇ |         59 | m1b-7-vignette                                                 
-⠸ |         64 | m1b-7-vignette                                                 
-⠇ |         69 | m1b-7-vignette                                                 
-⠸ |         74 | m1b-7-vignette                                                 
-⠋ |         81 | m1b-7-vignette                                                 
-⠴ |         86 | m1b-7-vignette                                                 
-⠋ |         91 | m1b-7-vignette                                                 
-⠴ |         96 | m1b-7-vignette                                                 
-⠋ |        101 | m1b-7-vignette                                                 
-⠧ |        108 | m1b-7-vignette                                                 
-⠹ |        113 | m1b-7-vignette                                                 
-⠧ |        118 | m1b-7-vignette                                                 
-⠹ |        123 | m1b-7-vignette                                                 
-⠇ |        129 | m1b-7-vignette                                                 
-⠸ |        134 | m1b-7-vignette                                                 
+⠇ |         19 | m1b-7-vignette                                                 
+⠦ |         27 | m1b-7-vignette                                                 
+⠹ |         33 | m1b-7-vignette                                                 
+⠧ |         38 | m1b-7-vignette                                                 
+⠹ |         43 | m1b-7-vignette                                                 
+⠧ |         48 | m1b-7-vignette                                                 
+⠼ |         55 | m1b-7-vignette                                                 
+⠏ |         60 | m1b-7-vignette                                                 
+⠼ |         65 | m1b-7-vignette                                                 
+⠋ |         71 | m1b-7-vignette                                                 
+⠴ |         76 | m1b-7-vignette                                                 
+⠹ |         83 | m1b-7-vignette                                                 
+⠧ |         88 | m1b-7-vignette                                                 
+⠹ |         93 | m1b-7-vignette                                                 
+⠧ |         98 | m1b-7-vignette                                                 
+⠹ |        103 | m1b-7-vignette                                                 
+⠏ |        110 | m1b-7-vignette                                                 
+⠼ |        115 | m1b-7-vignette                                                 
+⠏ |        120 | m1b-7-vignette                                                 
+⠼ |        125 | m1b-7-vignette                                                 
+⠏ |        130 | m1b-7-vignette                                                 
+⠦ |        137 | m1b-7-vignette                                                 
 ⠼ |        145 | m1b-7-vignette                                                 
 ⠏ |        150 | m1b-7-vignette                                                 
 ⠼ |        155 | m1b-7-vignette                                                 
@@ -663,16 +667,17 @@ Backtrace:
 ⠙ |        172 | m1b-7-vignette                                                 
 ⠦ |        177 | m1b-7-vignette                                                 
 ⠙ |        182 | m1b-7-vignette                                                 
-⠋ |        191 | m1b-7-vignette                                                 
-⠦ |        197 | m1b-7-vignette                                                 
-⠙ |        202 | m1b-7-vignette                                                 
-⠦ |        207 | m1b-7-vignette                                                 
-⠙ |        212 | m1b-7-vignette                                                 
-⠇ |        219 | m1b-7-vignette                                                 
-⠼ |        225 | m1b-7-vignette                                                 
-⠋ |        231 | m1b-7-vignette                                                 
-⠦ |        237 | m1b-7-vignette                                                 
-✔ |        240 | m1b-7-vignette [4.4s]
+⠸ |        184 | m1b-7-vignette                                                 
+⠼ |        195 | m1b-7-vignette                                                 
+⠏ |        200 | m1b-7-vignette                                                 
+⠼ |        205 | m1b-7-vignette                                                 
+⠏ |        210 | m1b-7-vignette                                                 
+⠦ |        217 | m1b-7-vignette                                                 
+⠙ |        222 | m1b-7-vignette                                                 
+⠦ |        227 | m1b-7-vignette                                                 
+⠙ |        232 | m1b-7-vignette                                                 
+⠧ |        238 | m1b-7-vignette                                                 
+✔ |        240 | m1b-7-vignette [4.6s]
 
 ⠏ |          0 | m2-1-items                                                     
 ⠇ |          9 | m2-1-items                                                     
@@ -680,49 +685,49 @@ Backtrace:
 ⠴ |         36 | m2-1-items                                                     
 ⠹ |         43 | m2-1-items                                                     
 ⠇ |         59 | m2-1-items                                                     
-⠴ |         76 | m2-1-items                                                     
-⠴ |         86 | m2-1-items                                                     
-⠙ |        102 | m2-1-items                                                     
+⠧ |         78 | m2-1-items                                                     
+⠦ |         87 | m2-1-items                                                     
 ⠹ |        103 | m2-1-items                                                     
 ⠧ |        108 | m2-1-items                                                     
 ⠼ |        135 | m2-1-items                                                     
 ⠸ |        144 | m2-1-items                                                     
-✔ |        149 | m2-1-items [136.5s]
+✔ |        149 | m2-1-items [136.1s]
 
 ⠏ |          0 | m2-2-memorisation                                              
 ⠙ |          2 | m2-2-memorisation                                              
 ⠹ |          3 | m2-2-memorisation                                              
 ⠇ |         19 | m2-2-memorisation                                              
-⠙ |         32 | m2-2-memorisation                                              
+⠹ |         33 | m2-2-memorisation                                              
 ✔ |         34 | m2-2-memorisation [87.0s]
 
 ⠏ |          0 | m2-3-prompts-parser                                            
-⠦ |          7 | m2-3-prompts-parser                                            
-⠏ |         10 | m2-3-prompts-parser                                            
-⠧ |         58 | m2-3-prompts-parser                                            
-⠧ |         98 | m2-3-prompts-parser                                            
-⠦ |        147 | m2-3-prompts-parser                                            
-⠼ |        185 | m2-3-prompts-parser                                            
-⠸ |        234 | m2-3-prompts-parser                                            
-⠹ |        273 | m2-3-prompts-parser                                            
-⠴ |        326 | m2-3-prompts-parser                                            
-⠋ |        361 | m2-3-prompts-parser                                            
-⠋ |        411 | m2-3-prompts-parser                                            
-⠋ |        461 | m2-3-prompts-parser                                            
-⠹ |        513 | m2-3-prompts-parser                                            
-⠋ |        561 | m2-3-prompts-parser                                            
-⠸ |        614 | m2-3-prompts-parser                                            
-⠋ |        661 | m2-3-prompts-parser                                            
-⠼ |        695 | m2-3-prompts-parser                                            
-⠸ |        734 | m2-3-prompts-parser                                            
-⠸ |        744 | m2-3-prompts-parser                                            
-⠏ |        750 | m2-3-prompts-parser                                            
-⠼ |        775 | m2-3-prompts-parser                                            
-⠴ |        826 | m2-3-prompts-parser                                            
+⠹ |          3 | m2-3-prompts-parser                                            
+⠹ |         13 | m2-3-prompts-parser                                            
+⠹ |         63 | m2-3-prompts-parser                                            
+⠴ |         86 | m2-3-prompts-parser                                            
+⠸ |        134 | m2-3-prompts-parser                                            
+⠋ |        171 | m2-3-prompts-parser                                            
+⠴ |        216 | m2-3-prompts-parser                                            
+⠧ |        258 | m2-3-prompts-parser                                            
+⠼ |        305 | m2-3-prompts-parser                                            
+⠸ |        344 | m2-3-prompts-parser                                            
+⠧ |        398 | m2-3-prompts-parser                                            
+⠏ |        430 | m2-3-prompts-parser                                            
+⠋ |        481 | m2-3-prompts-parser                                            
+⠴ |        516 | m2-3-prompts-parser                                            
+⠼ |        565 | m2-3-prompts-parser                                            
+⠴ |        616 | m2-3-prompts-parser                                            
+⠋ |        651 | m2-3-prompts-parser                                            
+⠹ |        683 | m2-3-prompts-parser                                            
+⠙ |        732 | m2-3-prompts-parser                                            
+⠇ |        739 | m2-3-prompts-parser                                            
+⠴ |        746 | m2-3-prompts-parser                                            
+⠏ |        760 | m2-3-prompts-parser                                            
+⠼ |        795 | m2-3-prompts-parser                                            
 ⠼ |        835 | m2-3-prompts-parser                                            
 ⠴ |        836 | m2-3-prompts-parser                                            
 ⠦ |        837 | m2-3-prompts-parser                                            
-✔ |        837 | m2-3-prompts-parser [504.0s]
+✔ |        837 | m2-3-prompts-parser [503.7s]
 
 ⠏ |          0 | m2-4-backends                                                  
 ⠦ |          7 | m2-4-backends                                                  
@@ -739,17 +744,17 @@ Backtrace:
 ⠏ |          0 | m2-5-plan                                                      
 ⠏ |         10 | m2-5-plan                                                      
 ⠴ |         16 | m2-5-plan                                                      
-⠏ |         50 | m2-5-plan                                                      
-⠦ |         67 | m2-5-plan                                                      
-⠏ |         90 | m2-5-plan                                                      
+⠴ |         46 | m2-5-plan                                                      
+⠴ |         66 | m2-5-plan                                                      
+⠙ |         92 | m2-5-plan                                                      
 ⠇ |         99 | m2-5-plan                                                      
 ⠋ |        101 | m2-5-plan                                                      
 ⠸ |        104 | m2-5-plan                                                      
-✔ |        106 | m2-5-plan [2.5s]
+✔ |        106 | m2-5-plan [2.4s]
 
 ⠏ |          0 | m2-6-evaluate                                                  
 ⠋ |          1 | m2-6-evaluate                                                  
-⠸ |         14 | m2-6-evaluate                                                  
+⠹ |         13 | m2-6-evaluate                                                  
 ⠼ |         25 | m2-6-evaluate                                                  
 ⠴ |         26 | m2-6-evaluate                                                  
 ⠇ |         49 | m2-6-evaluate                                                  
@@ -760,7 +765,6 @@ Backtrace:
 ⠙ | 4      108 | m2-6-evaluate                                                  
 ⠋ | 4      137 | m2-6-evaluate                                                  
 ⠦ | 4      143 | m2-6-evaluate                                                  
-⠏ | 6      154 | m2-6-evaluate                                                  
 ⠙ | 7      155 | m2-6-evaluate                                                  
 ⠹ | 7      156 | m2-6-evaluate                                                  
 ⠼ | 7      158 | m2-6-evaluate                                                  
@@ -773,7 +777,6 @@ Backtrace:
 ⠹ | 7      186 | m2-6-evaluate                                                  
 ⠸ | 7      197 | m2-6-evaluate                                                  
 ⠼ | 7      198 | m2-6-evaluate                                                  
-⠦ | 7      200 | m2-6-evaluate                                                  
 ⠧ | 7      221 | m2-6-evaluate                                                  
 ⠸ | 7      227 | m2-6-evaluate                                                  
 ⠧ | 9      239 | m2-6-evaluate                                                  
@@ -783,7 +786,7 @@ Backtrace:
 ⠴ | 11      315 | m2-6-evaluate                                                 
 ⠙ | 11      321 | m2-6-evaluate                                                 
 ⠙ | 13      339 | m2-6-evaluate                                                 
-✖ | 13      348 | m2-6-evaluate [104.7s]
+✖ | 13      348 | m2-6-evaluate [106.0s]
 ────────────────────────────────────────────────────────────────────────────────
 Failure ('test-m2-6-evaluate.R:90:3'): K-M2-6: acmg_evaluate() per model: modal answer, hit rates, NA share, dangerous errors, kappa with bootstrap interval, agreement, fit, verdicts, report (ankerRef: ANK-58, ANK-68)
 Expected `isTRUE(mo$fallback)` to be TRUE.
@@ -934,7 +937,7 @@ Backtrace:
 Maximum number of failures exceeded; quitting.
 ℹ Increase this number with (e.g.) `testthat::set_max_fails(Inf)` 
 r-tests: tests/simulation: keine Testdateien, übersprungen
-r-tests: tests/e2e: 2 Testdatei(en)
+r-tests: tests/e2e: 3 Testdatei(en)
 ✔ | F W  S  OK | Context
 
 ⠏ |          0 | m1a-qa-e2e                                                     
@@ -942,76 +945,393 @@ r-tests: tests/e2e: 2 Testdatei(en)
 ⠹ |         13 | m1a-qa-e2e                                                     
 ✔ |         14 | m1a-qa-e2e
 
-⠏ |          0 | m2-qa-e2e                                                      
-⠋ |          1 | m2-qa-e2e                                                      
-⠦ |          7 | m2-qa-e2e                                                      
-✔ |          9 | m2-qa-e2e [2.5s]
+⠏ |          0 | m1b-qa-e2e                                                     
+⠼ | 3        2 | m1b-qa-e2e                                                     
+⠏ | 8        2 | m1b-qa-e2e                                                     
+⠋ | 9        2 | m1b-qa-e2e                                                     
+⠸ | 11        3 | m1b-qa-e2e                                                    
+⠦ | 13        4 | m1b-qa-e2e                                                    
+⠙ | 14        8 | m1b-qa-e2e                                                    
+⠼ | 15       10 | m1b-qa-e2e                                                    
+✖ | 16       10 | m1b-qa-e2e [5.1s]
+────────────────────────────────────────────────────────────────────────────────
+Failure ('test-m1b-qa-e2e.R:55:3'): QA-M1b-001: msa_boot succeeds on binary fits created with explicit control or lme4 arguments passed via ... (seed = 20261031)
+Expected `inherits(boot_res, "error")` to be FALSE.
+Differences:
+`actual`:   TRUE 
+`expected`: FALSE
 
-══ Results ═════════════════════════════════════════════════════════════════════
-Duration: 2.8 s
+the ... list contains fewer than 1 element
 
-[ FAIL 0 | WARN 0 | SKIP 0 | PASS 23 ]
-r-tests: tests/fuzz: 2 Testdatei(en)
+Failure ('test-m1b-qa-e2e.R:57:3'): QA-M1b-001: msa_boot succeeds on binary fits created with explicit control or lme4 arguments passed via ... (seed = 20261031)
+Expected `boot_res` to inherit from "msa_boot".
+Actual class: "simpleError"/"error"/"condition".
+
+Failure ('test-m1b-qa-e2e.R:68:3'): QA-M1b-001: msa_boot succeeds on binary fits created with explicit control or lme4 arguments passed via ... (seed = 20261031)
+Expected `inherits(boot_scoped, "error")` to be FALSE.
+Differences:
+`actual`:   TRUE 
+`expected`: FALSE
+
+the ... list contains fewer than 1 element
+
+Failure ('test-m1b-qa-e2e.R:83:3'): QA-M1b-002: msa_fit for ordinal and binary outcomes supports subset/weights expressions and keeps fit$data and fit$n consistent with fit$model (seed = 20261031)
+Expected `inherits(fit_bin_expr, "error")` to be FALSE.
+Differences:
+`actual`:   TRUE 
+`expected`: FALSE
+
+object 'item' not found
+
+Failure ('test-m1b-qa-e2e.R:90:3'): QA-M1b-002: msa_fit for ordinal and binary outcomes supports subset/weights expressions and keeps fit$data and fit$n consistent with fit$model (seed = 20261031)
+Expected `inherits(fit_ord_expr, "error")` to be FALSE.
+Differences:
+`actual`:   TRUE 
+`expected`: FALSE
+
+object 'item' not found
+
+Failure ('test-m1b-qa-e2e.R:96:3'): QA-M1b-002: msa_fit for ordinal and binary outcomes supports subset/weights expressions and keeps fit$data and fit$n consistent with fit$model (seed = 20261031)
+Expected `fit_bin_sub$n$observations` to be identical to `as.integer(stats::nobs(fit_bin_sub$model))`.
+Differences:
+  `actual`: 216
+`expected`: 198
+
+
+Failure ('test-m1b-qa-e2e.R:97:3'): QA-M1b-002: msa_fit for ordinal and binary outcomes supports subset/weights expressions and keeps fit$data and fit$n consistent with fit$model (seed = 20261031)
+Expected `nrow(fit_bin_sub$data)` to be identical to `as.integer(stats::nobs(fit_bin_sub$model))`.
+Differences:
+  `actual`: 216
+`expected`: 198
+
+
+Failure ('test-m1b-qa-e2e.R:98:3'): QA-M1b-002: msa_fit for ordinal and binary outcomes supports subset/weights expressions and keeps fit$data and fit$n consistent with fit$model (seed = 20261031)
+Expected `fit_bin_sub$n$items` to be identical to `as.integer(lme4::ngrps(fit_bin_sub$model)[["item"]])`.
+Differences:
+  `actual`: 12
+`expected`: 11
+
+
+Failure ('test-m1b-qa-e2e.R:101:3'): QA-M1b-002: msa_fit for ordinal and binary outcomes supports subset/weights expressions and keeps fit$data and fit$n consistent with fit$model (seed = 20261031)
+Expected `fit_ord_sub$n$observations` to be identical to `as.integer(stats::nobs(fit_ord_sub$model))`.
+Differences:
+  `actual`: 216
+`expected`: 198
+
+
+Failure ('test-m1b-qa-e2e.R:102:3'): QA-M1b-002: msa_fit for ordinal and binary outcomes supports subset/weights expressions and keeps fit$data and fit$n consistent with fit$model (seed = 20261031)
+Expected `nrow(fit_ord_sub$data)` to be identical to `as.integer(stats::nobs(fit_ord_sub$model))`.
+Differences:
+  `actual`: 216
+`expected`: 198
+
+
+Failure ('test-m1b-qa-e2e.R:103:3'): QA-M1b-002: msa_fit for ordinal and binary outcomes supports subset/weights expressions and keeps fit$data and fit$n consistent with fit$model (seed = 20261031)
+Expected `fit_ord_sub$n$items` to be identical to `nlevels(droplevels(stats::model.frame(fit_ord_sub$model)$item))`.
+Differences:
+  `actual`: 12
+`expected`: 11
+
+
+Failure ('test-m1b-qa-e2e.R:121:3'): QA-M1b-003: ordinal msa_fit does not falsely mark interior random-effect fits as singular when a two-level fixed factor has zero contrast, and rejects collinear two-level factors or <=2-level interactions cleanly (seed = 20261031)
+Expected `fit_2blk$singular` to be FALSE.
+Differences:
+`actual`:   TRUE 
+`expected`: FALSE
+
+
+Failure ('test-m1b-qa-e2e.R:131:3'): QA-M1b-003: ordinal msa_fit does not falsely mark interior random-effect fits as singular when a two-level fixed factor has zero contrast, and rejects collinear two-level factors or <=2-level interactions cleanly (seed = 20261031)
+Expected `is.character(err_conf) && ...` to be TRUE.
+Differences:
+`actual`:   FALSE
+`expected`: TRUE 
+
+Expected named identifiability/rank-deficiency error, got: msa_fit object with silent 0 variance
+
+Failure ('test-m1b-qa-e2e.R:147:5'): QA-M1b-003: ordinal msa_fit does not falsely mark interior random-effect fits as singular when a two-level fixed factor has zero contrast, and rejects collinear two-level factors or <=2-level interactions cleanly (seed = 20261031)
+Expected `grepl("sapply(gfl, nlevels)", err_int2, fixed = TRUE)` to be FALSE.
+Differences:
+`actual`:   TRUE 
+`expected`: FALSE
+
+
+Failure ('test-m1b-qa-e2e.R:182:3'): QA-M1b-004: test-validation-latent.R succeeds in a staged package copy with REPO_ROOT set (as in 86-mutgate.sh / r-mutation.R) (seed = 20261031)
+Expected `sum(res$failed)` to be identical to 0L.
+Differences:
+  `actual`: 1
+`expected`: 0
+
+
+Failure ('test-m1b-qa-e2e.R:183:3'): QA-M1b-004: test-validation-latent.R succeeds in a staged package copy with REPO_ROOT set (as in 86-mutgate.sh / r-mutation.R) (seed = 20261031)
+Expected `any(res$error)` to be FALSE.
+Differences:
+`actual`:   TRUE 
+`expected`: FALSE
+
+────────────────────────────────────────────────────────────────────────────────
+
+Maximum number of failures exceeded; quitting.
+ℹ Increase this number with (e.g.) `testthat::set_max_fails(Inf)` 
+r-tests: tests/fuzz: 3 Testdatei(en)
 ✔ | F W  S  OK | Context
 
 ⠏ |          0 | m1a-qa-fuzz                                                    
 ⠋ |          1 | m1a-qa-fuzz                                                    
-⠴ |          6 | m1a-qa-fuzz                                                    
+⠼ |          5 | m1a-qa-fuzz                                                    
 ✔ |          7 | m1a-qa-fuzz
+
+⠏ |          0 | m1b-qa-fuzz                                                    
+⠋ | 1        0 | m1b-qa-fuzz                                                    
+⠦ | 7        0 | m1b-qa-fuzz                                                    Merged 2 disjoint scenario triplets for two_level; no fits recomputed
+
+⠇ | 9        0 | m1b-qa-fuzz                                                    
+✖ | 12        0 | m1b-qa-fuzz
+────────────────────────────────────────────────────────────────────────────────
+Failure ('test-m1b-qa-fuzz.R:32:5'): QA-M1b-005: msa_fit validates ordinal/binary levels and respects explicit binary levels regardless of value storage mode (seed = 20261031)
+Expected `... && ...` to be TRUE.
+Differences:
+`actual`:   FALSE
+`expected`: TRUE 
+
+Expected clean ordinal levels validation error for c("c1", NA, "c2", "c3") got: succeeded without error
+
+Failure ('test-m1b-qa-fuzz.R:32:5'): QA-M1b-005: msa_fit validates ordinal/binary levels and respects explicit binary levels regardless of value storage mode (seed = 20261031)
+Expected `... && ...` to be TRUE.
+Differences:
+`actual`:   FALSE
+`expected`: TRUE 
+
+Expected clean ordinal levels validation error for c("c1", "c2", "c2", "c3") got: factor level [3] is duplicated
+
+Failure ('test-m1b-qa-fuzz.R:32:5'): QA-M1b-005: msa_fit validates ordinal/binary levels and respects explicit binary levels regardless of value storage mode (seed = 20261031)
+Expected `... && ...` to be TRUE.
+Differences:
+`actual`:   FALSE
+`expected`: TRUE 
+
+Expected clean ordinal levels validation error for "c1" got: Response is constant: at least two observed categories are needed.
+
+Failure ('test-m1b-qa-fuzz.R:32:5'): QA-M1b-005: msa_fit validates ordinal/binary levels and respects explicit binary levels regardless of value storage mode (seed = 20261031)
+Expected `... && ...` to be TRUE.
+Differences:
+`actual`:   FALSE
+`expected`: TRUE 
+
+Expected clean ordinal levels validation error for character(0) got: No valid response categories to analyse.
+
+Failure ('test-m1b-qa-fuzz.R:32:5'): QA-M1b-005: msa_fit validates ordinal/binary levels and respects explicit binary levels regardless of value storage mode (seed = 20261031)
+Expected `... && ...` to be TRUE.
+Differences:
+`actual`:   FALSE
+`expected`: TRUE 
+
+Expected clean ordinal levels validation error for c("", "c2", "c3") got: succeeded without error
+
+Failure ('test-m1b-qa-fuzz.R:45:3'): QA-M1b-005: msa_fit validates ordinal/binary levels and respects explicit binary levels regardless of value storage mode (seed = 20261031)
+Expected `is.character(err_bin_empty) && ...` to be TRUE.
+Differences:
+`actual`:   FALSE
+`expected`: TRUE 
+
+
+Failure ('test-m1b-qa-fuzz.R:54:3'): QA-M1b-005: msa_fit validates ordinal/binary levels and respects explicit binary levels regardless of value storage mode (seed = 20261031)
+Expected `is.character(err_unrelated) && ...` to be TRUE.
+Differences:
+`actual`:   FALSE
+`expected`: TRUE 
+
+Expected error when binary levels do not match numeric 0/1 values, got: succeeded by ignoring levels
+
+Failure ('test-m1b-qa-fuzz.R:69:3'): QA-M1b-005: msa_fit validates ordinal/binary levels and respects explicit binary levels regardless of value storage mode (seed = 20261031)
+Expected `inherits(fit_12_num, "error")` to be FALSE.
+Differences:
+`actual`:   TRUE 
+`expected`: FALSE
+
+Binary values must be 0 or 1.
+
+Failure ('test-m1b-qa-fuzz.R:119:3'): QA-M1b-006: sim_merge and latent_read_results reject corrupted replicate design counts, contradictory failure states, and out-of-range result metrics (seed = 20261031)
+Expected `... && ...` to be TRUE.
+Differences:
+`actual`:   FALSE
+`expected`: TRUE 
+
+Expected sim_merge to reject corrupted replicate design counts, got: merged without error
+
+Failure ('test-m1b-qa-fuzz.R:139:3'): QA-M1b-006: sim_merge and latent_read_results reject corrupted replicate design counts, contradictory failure states, and out-of-range result metrics (seed = 20261031)
+Expected `is.character(err_empse)` to be TRUE.
+Differences:
+`actual`:   FALSE
+`expected`: TRUE 
+
+latent_read_results accepted negative empse
+
+Failure ('test-m1b-qa-fuzz.R:148:3'): QA-M1b-006: sim_merge and latent_read_results reject corrupted replicate design counts, contradictory failure states, and out-of-range result metrics (seed = 20261031)
+Expected `is.character(err_share)` to be TRUE.
+Differences:
+`actual`:   FALSE
+`expected`: TRUE 
+
+latent_read_results accepted derived_share > 1
+
+Failure ('test-m1b-qa-fuzz.R:157:3'): QA-M1b-006: sim_merge and latent_read_results reject corrupted replicate design counts, contradictory failure states, and out-of-range result metrics (seed = 20261031)
+Expected `is.character(err_seed)` to be TRUE.
+Differences:
+`actual`:   FALSE
+`expected`: TRUE 
+
+latent_read_results accepted negative fractional seed
+────────────────────────────────────────────────────────────────────────────────
 
 ⠏ |          0 | m2-qa-fuzz                                                     
 ⠋ |          1 | m2-qa-fuzz                                                     
 ✔ |          5 | m2-qa-fuzz
 
 ══ Results ═════════════════════════════════════════════════════════════════════
-Duration: 1.2 s
+Duration: 2.1 s
 
-[ FAIL 0 | WARN 0 | SKIP 0 | PASS 12 ]
-r-tests: fail — 435 Tests in tests/testthat, tests/acceptance, tests/e2e, tests/fuzz; 3 fehlgeschlagen, 0 Fehler, 1 übersprungen
+── Failed tests ────────────────────────────────────────────────────────────────
+Failure ('test-m1b-qa-fuzz.R:32:5'): QA-M1b-005: msa_fit validates ordinal/binary levels and respects explicit binary levels regardless of value storage mode (seed = 20261031)
+Expected `... && ...` to be TRUE.
+Differences:
+`actual`:   FALSE
+`expected`: TRUE 
+
+Expected clean ordinal levels validation error for c("c1", NA, "c2", "c3") got: succeeded without error
+
+Failure ('test-m1b-qa-fuzz.R:32:5'): QA-M1b-005: msa_fit validates ordinal/binary levels and respects explicit binary levels regardless of value storage mode (seed = 20261031)
+Expected `... && ...` to be TRUE.
+Differences:
+`actual`:   FALSE
+`expected`: TRUE 
+
+Expected clean ordinal levels validation error for c("c1", "c2", "c2", "c3") got: factor level [3] is duplicated
+
+Failure ('test-m1b-qa-fuzz.R:32:5'): QA-M1b-005: msa_fit validates ordinal/binary levels and respects explicit binary levels regardless of value storage mode (seed = 20261031)
+Expected `... && ...` to be TRUE.
+Differences:
+`actual`:   FALSE
+`expected`: TRUE 
+
+Expected clean ordinal levels validation error for "c1" got: Response is constant: at least two observed categories are needed.
+
+Failure ('test-m1b-qa-fuzz.R:32:5'): QA-M1b-005: msa_fit validates ordinal/binary levels and respects explicit binary levels regardless of value storage mode (seed = 20261031)
+Expected `... && ...` to be TRUE.
+Differences:
+`actual`:   FALSE
+`expected`: TRUE 
+
+Expected clean ordinal levels validation error for character(0) got: No valid response categories to analyse.
+
+Failure ('test-m1b-qa-fuzz.R:32:5'): QA-M1b-005: msa_fit validates ordinal/binary levels and respects explicit binary levels regardless of value storage mode (seed = 20261031)
+Expected `... && ...` to be TRUE.
+Differences:
+`actual`:   FALSE
+`expected`: TRUE 
+
+Expected clean ordinal levels validation error for c("", "c2", "c3") got: succeeded without error
+
+Failure ('test-m1b-qa-fuzz.R:45:3'): QA-M1b-005: msa_fit validates ordinal/binary levels and respects explicit binary levels regardless of value storage mode (seed = 20261031)
+Expected `is.character(err_bin_empty) && ...` to be TRUE.
+Differences:
+`actual`:   FALSE
+`expected`: TRUE 
+
+
+Failure ('test-m1b-qa-fuzz.R:54:3'): QA-M1b-005: msa_fit validates ordinal/binary levels and respects explicit binary levels regardless of value storage mode (seed = 20261031)
+Expected `is.character(err_unrelated) && ...` to be TRUE.
+Differences:
+`actual`:   FALSE
+`expected`: TRUE 
+
+Expected error when binary levels do not match numeric 0/1 values, got: succeeded by ignoring levels
+
+Failure ('test-m1b-qa-fuzz.R:69:3'): QA-M1b-005: msa_fit validates ordinal/binary levels and respects explicit binary levels regardless of value storage mode (seed = 20261031)
+Expected `inherits(fit_12_num, "error")` to be FALSE.
+Differences:
+`actual`:   TRUE 
+`expected`: FALSE
+
+Binary values must be 0 or 1.
+
+Failure ('test-m1b-qa-fuzz.R:119:3'): QA-M1b-006: sim_merge and latent_read_results reject corrupted replicate design counts, contradictory failure states, and out-of-range result metrics (seed = 20261031)
+Expected `... && ...` to be TRUE.
+Differences:
+`actual`:   FALSE
+`expected`: TRUE 
+
+Expected sim_merge to reject corrupted replicate design counts, got: merged without error
+
+Failure ('test-m1b-qa-fuzz.R:139:3'): QA-M1b-006: sim_merge and latent_read_results reject corrupted replicate design counts, contradictory failure states, and out-of-range result metrics (seed = 20261031)
+Expected `is.character(err_empse)` to be TRUE.
+Differences:
+`actual`:   FALSE
+`expected`: TRUE 
+
+latent_read_results accepted negative empse
+
+Failure ('test-m1b-qa-fuzz.R:148:3'): QA-M1b-006: sim_merge and latent_read_results reject corrupted replicate design counts, contradictory failure states, and out-of-range result metrics (seed = 20261031)
+Expected `is.character(err_share)` to be TRUE.
+Differences:
+`actual`:   FALSE
+`expected`: TRUE 
+
+latent_read_results accepted derived_share > 1
+
+Failure ('test-m1b-qa-fuzz.R:157:3'): QA-M1b-006: sim_merge and latent_read_results reject corrupted replicate design counts, contradictory failure states, and out-of-range result metrics (seed = 20261031)
+Expected `is.character(err_seed)` to be TRUE.
+Differences:
+`actual`:   FALSE
+`expected`: TRUE 
+
+latent_read_results accepted negative fractional seed
+
+[ FAIL 12 | WARN 0 | SKIP 0 | PASS 12 ]
+r-tests: fail — 437 Tests in tests/testthat, tests/acceptance, tests/e2e, tests/fuzz; 9 fehlgeschlagen, 0 Fehler, 1 übersprungen
 tests: Kommando meldet fachlichen Fehlschlag rc=1
 
 # stderr
-[2026-10-31 10:40:16 CET] AP1 pilot block 1: start, 90 open
-[2026-10-31 10:40:17 CET] AP1 pilot block 1: start, 0 open
+[2026-10-31 11:23:17 CET] AP1 pilot block 1: start, 90 open
+[2026-10-31 11:23:18 CET] AP1 pilot block 1: start, 0 open
 boundary (singular) fit: see help('isSingular')
 boundary (singular) fit: see help('isSingular')
 boundary (singular) fit: see help('isSingular')
-[2026-10-31 10:40:33 CET] AP1 pilot block 1: start, 90 open
-[2026-10-31 10:40:34 CET] AP1 pilot block 1: start, 0 open
-[2026-10-31 10:40:34 CET] AP1 pilot block 1: start, 90 open
-[2026-10-31 10:40:37 CET] AP1 pilot block 1: start, 90 open
-[2026-10-31 10:40:51 CET] AP1 robustness block 1: start, 720 open
-[2026-10-31 10:40:52 CET] AP1 robustness block 1: backend error (llama); 85 done, 635 open; backend errors since start: sol 0, llama 1, qwen 0
-[2026-10-31 10:40:52 CET] AP1 robustness block 1: 100 done, 620 open; backend errors since start: sol 0, llama 1, qwen 0
-[2026-10-31 10:40:52 CET] AP1 robustness block 1: 200 done, 520 open; backend errors since start: sol 0, llama 1, qwen 0
-[2026-10-31 10:40:53 CET] AP1 robustness block 1: 300 done, 420 open; backend errors since start: sol 0, llama 1, qwen 0
-[2026-10-31 10:40:53 CET] AP1 robustness block 1: backend error (llama); 399 done, 321 open; backend errors since start: sol 0, llama 2, qwen 0
-[2026-10-31 10:40:53 CET] AP1 robustness block 1: 400 done, 320 open; backend errors since start: sol 0, llama 2, qwen 0
-[2026-10-31 10:40:54 CET] AP1 robustness block 1: 500 done, 220 open; backend errors since start: sol 0, llama 2, qwen 0
-[2026-10-31 10:40:54 CET] AP1 robustness block 1: backend error (qwen); 545 done, 175 open; backend errors since start: sol 0, llama 2, qwen 1
-[2026-10-31 10:40:55 CET] AP1 robustness block 1: 600 done, 120 open; backend errors since start: sol 0, llama 2, qwen 1
-[2026-10-31 10:40:55 CET] AP1 robustness block 1: 700 done, 20 open; backend errors since start: sol 0, llama 2, qwen 1
+[2026-10-31 11:23:34 CET] AP1 pilot block 1: start, 90 open
+[2026-10-31 11:23:35 CET] AP1 pilot block 1: start, 0 open
+[2026-10-31 11:23:35 CET] AP1 pilot block 1: start, 90 open
+[2026-10-31 11:23:39 CET] AP1 pilot block 1: start, 90 open
+[2026-10-31 11:23:53 CET] AP1 robustness block 1: start, 720 open
+[2026-10-31 11:23:53 CET] AP1 robustness block 1: backend error (llama); 85 done, 635 open; backend errors since start: sol 0, llama 1, qwen 0
+[2026-10-31 11:23:54 CET] AP1 robustness block 1: 100 done, 620 open; backend errors since start: sol 0, llama 1, qwen 0
+[2026-10-31 11:23:54 CET] AP1 robustness block 1: 200 done, 520 open; backend errors since start: sol 0, llama 1, qwen 0
+[2026-10-31 11:23:55 CET] AP1 robustness block 1: 300 done, 420 open; backend errors since start: sol 0, llama 1, qwen 0
+[2026-10-31 11:23:55 CET] AP1 robustness block 1: backend error (llama); 399 done, 321 open; backend errors since start: sol 0, llama 2, qwen 0
+[2026-10-31 11:23:55 CET] AP1 robustness block 1: 400 done, 320 open; backend errors since start: sol 0, llama 2, qwen 0
+[2026-10-31 11:23:56 CET] AP1 robustness block 1: 500 done, 220 open; backend errors since start: sol 0, llama 2, qwen 0
+[2026-10-31 11:23:56 CET] AP1 robustness block 1: backend error (qwen); 545 done, 175 open; backend errors since start: sol 0, llama 2, qwen 1
+[2026-10-31 11:23:56 CET] AP1 robustness block 1: 600 done, 120 open; backend errors since start: sol 0, llama 2, qwen 1
+[2026-10-31 11:23:57 CET] AP1 robustness block 1: 700 done, 20 open; backend errors since start: sol 0, llama 2, qwen 1
 boundary (singular) fit: see help('isSingular')
-[2026-10-31 10:41:36 CET] AP1 pilot block 1: start, 90 open
-[2026-10-31 10:41:37 CET] AP1 pilot block 1: start, 0 open
+[2026-10-31 11:24:37 CET] AP1 pilot block 1: start, 90 open
+[2026-10-31 11:24:39 CET] AP1 pilot block 1: start, 0 open
 boundary (singular) fit: see help('isSingular')
 boundary (singular) fit: see help('isSingular')
 boundary (singular) fit: see help('isSingular')
-[2026-10-31 10:41:54 CET] AP1 pilot block 1: start, 90 open
-[2026-10-31 10:41:55 CET] AP1 pilot block 1: start, 0 open
-[2026-10-31 10:41:56 CET] AP1 pilot block 1: start, 90 open
-[2026-10-31 10:41:59 CET] AP1 pilot block 1: start, 90 open
-[2026-10-31 10:42:13 CET] AP1 robustness block 1: start, 720 open
-[2026-10-31 10:42:14 CET] AP1 robustness block 1: backend error (llama); 85 done, 635 open; backend errors since start: sol 0, llama 1, qwen 0
-[2026-10-31 10:42:14 CET] AP1 robustness block 1: 100 done, 620 open; backend errors since start: sol 0, llama 1, qwen 0
-[2026-10-31 10:42:15 CET] AP1 robustness block 1: 200 done, 520 open; backend errors since start: sol 0, llama 1, qwen 0
-[2026-10-31 10:42:15 CET] AP1 robustness block 1: 300 done, 420 open; backend errors since start: sol 0, llama 1, qwen 0
-[2026-10-31 10:42:16 CET] AP1 robustness block 1: backend error (llama); 399 done, 321 open; backend errors since start: sol 0, llama 2, qwen 0
-[2026-10-31 10:42:16 CET] AP1 robustness block 1: 400 done, 320 open; backend errors since start: sol 0, llama 2, qwen 0
-[2026-10-31 10:42:17 CET] AP1 robustness block 1: 500 done, 220 open; backend errors since start: sol 0, llama 2, qwen 0
-[2026-10-31 10:42:17 CET] AP1 robustness block 1: backend error (qwen); 545 done, 175 open; backend errors since start: sol 0, llama 2, qwen 1
-[2026-10-31 10:42:17 CET] AP1 robustness block 1: 600 done, 120 open; backend errors since start: sol 0, llama 2, qwen 1
-[2026-10-31 10:42:18 CET] AP1 robustness block 1: 700 done, 20 open; backend errors since start: sol 0, llama 2, qwen 1
+[2026-10-31 11:24:56 CET] AP1 pilot block 1: start, 90 open
+[2026-10-31 11:24:57 CET] AP1 pilot block 1: start, 0 open
+[2026-10-31 11:24:58 CET] AP1 pilot block 1: start, 90 open
+[2026-10-31 11:25:02 CET] AP1 pilot block 1: start, 90 open
+[2026-10-31 11:25:15 CET] AP1 robustness block 1: start, 720 open
+[2026-10-31 11:25:16 CET] AP1 robustness block 1: backend error (llama); 85 done, 635 open; backend errors since start: sol 0, llama 1, qwen 0
+[2026-10-31 11:25:16 CET] AP1 robustness block 1: 100 done, 620 open; backend errors since start: sol 0, llama 1, qwen 0
+[2026-10-31 11:25:17 CET] AP1 robustness block 1: 200 done, 520 open; backend errors since start: sol 0, llama 1, qwen 0
+[2026-10-31 11:25:17 CET] AP1 robustness block 1: 300 done, 420 open; backend errors since start: sol 0, llama 1, qwen 0
+[2026-10-31 11:25:18 CET] AP1 robustness block 1: backend error (llama); 399 done, 321 open; backend errors since start: sol 0, llama 2, qwen 0
+[2026-10-31 11:25:18 CET] AP1 robustness block 1: 400 done, 320 open; backend errors since start: sol 0, llama 2, qwen 0
+[2026-10-31 11:25:19 CET] AP1 robustness block 1: 500 done, 220 open; backend errors since start: sol 0, llama 2, qwen 0
+[2026-10-31 11:25:19 CET] AP1 robustness block 1: backend error (qwen); 545 done, 175 open; backend errors since start: sol 0, llama 2, qwen 1
+[2026-10-31 11:25:19 CET] AP1 robustness block 1: 600 done, 120 open; backend errors since start: sol 0, llama 2, qwen 1
+[2026-10-31 11:25:20 CET] AP1 robustness block 1: 700 done, 20 open; backend errors since start: sol 0, llama 2, qwen 1
 boundary (singular) fit: see help('isSingular')
 K-M1a-2 report, AIAG example with interactions = TRUE (manual: interaction pooled; ndc 4 vs 4):
  source published_sd observed_sd published_pct_study_var observed_pct_study_var
@@ -1050,6 +1370,13 @@ boundary (singular) fit: see help('isSingular')
 boundary (singular) fit: see help('isSingular')
 boundary (singular) fit: see help('isSingular')
 boundary (singular) fit: see help('isSingular')
+boundary (singular) fit: see help('isSingular')
+boundary (singular) fit: see help('isSingular')
+boundary (singular) fit: see help('isSingular')
+boundary (singular) fit: see help('isSingular')
+boundary (singular) fit: see help('isSingular')
+design is column rank deficient so dropping 1 coef
+design is column rank deficient so dropping 1 coef
 boundary (singular) fit: see help('isSingular')
 boundary (singular) fit: see help('isSingular')
 

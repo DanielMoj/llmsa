@@ -4,8 +4,8 @@
   "base": "104ca4dd63a24ae4f83730d99961baa88d0213db",
   "baseRef": "plan/M1b",
   "env": {
-    "ts": "2026-10-31T11:02:33+01:00",
-    "sha": "ff14f7830b14be9f8e14da06e1d05c07db3eede4",
+    "ts": "2026-10-31T11:45:46+01:00",
+    "sha": "43608d3f4a931a486409e00bb184ef7706a0ec94",
     "bash": "5.3.9(1)-release",
     "git": "2.53.0",
     "toolchain": {
@@ -28,8 +28,8 @@
     "lint": "lint: Kommando erfolgreich",
     "tests": "tests: Kommando meldet fachlichen Fehlschlag rc=1",
     "trace": "trace: alle Kriterien sind wörtlich und beidseitig verknüpft",
-    "territory": "territory: letzter Diff sauber (builder/40-build, Runde 1, Basis 104ca4dd63a24ae4f83730d99961baa88d0213db, 2026-10-31T10:37:23+01:00)",
-    "mutgate": "mutgate: fail (unmutierter Vorlauf rot, kein Mutant gelaufen; 1 Tests: tests/testthat/test-validation-latent.R: latent display retains significant digits and documentation traces every source [abgebrochen])",
+    "territory": "territory: letzter Diff sauber (qa/45-qa, Runde 1, Basis 291c3a0173ccdf248d40998a93588f3d079afceb, 2026-10-31T11:20:25+01:00)",
+    "mutgate": "mutgate: fail (unmutierter Vorlauf rot, kein Mutant gelaufen; 7 Tests: tests/testthat/test-validation-latent.R: latent display retains significant digits and documentation traces every source [abgebrochen] | tests/e2e/test-m1b-qa-e2e.R: QA-M1b-001: msa_boot succeeds on binary fits created with explicit control or lme4 arguments passed via ... (seed = 20261031) [fehlgeschlagen] | tests/e2e/test-m1b-qa-e2e.R: QA-M1b-002: msa_fit for ordinal and binary outcomes supports subset/weights expressions and keeps fit$data and fit$n consistent with fit$model (seed = 20261031) [fehlgeschlagen] | tests/e2e/test-m1b-qa-e2e.R: QA-M1b-003: ordinal msa_fit does not falsely mark interior random-effect fits as singular when a two-level fixed factor has zero contrast, and rejects collinear two-level factors or <=2-level interactions cleanly (seed = 20261031) [fehlgeschlagen] | tests/e2e/test-m1b-qa-e2e.R: QA-M1b-004: test-validation-latent.R succeeds in a staged package copy with REPO_ROOT set (as in 86-mutgate.sh / r-mutation.R) (seed = 20261031) [fehlgeschlagen] | tests/fuzz/test-m1b-qa-fuzz.R: QA-M1b-005: msa_fit validates ordinal/binary levels and respects explicit binary levels regardless of value storage mode (seed = 20261031) [fehlgeschlagen] | tests/fuzz/test-m1b-qa-fuzz.R: QA-M1b-006: sim_merge and latent_read_results reject corrupted replicate design counts, contradictory failure states, and out-of-range result metrics (seed = 20261031) [fehlgeschlagen])",
     "golden-adr": "golden-adr: keine Golden-/Ankeränderung",
     "mutfull": "mutfull: pass (nicht fällig in M1b)"
   },
