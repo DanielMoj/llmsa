@@ -1,259 +1,359 @@
-# REVIEW — M1b, Runde 1 (Code-Review)
+# REVIEW — M1b, Runde 2 (Code-Review)
 
-Rolle: Reviewer · Phase: `50-code-review` · Runde: 1 · Stand: 31.10.2026 · Keine Git-Kommandos.
+Rolle: Reviewer · Phase: `50-code-review` · Runde: 2 · Stand: 31.10.2026 · Keine Git-Kommandos.
 
 Gegenstand:
-- der Diff seit `plan/M1b` (Basis `104ca4dd…`) bis zum Gate-Stand `43608d3…` (`gates.json`, `env.sha`): BUILD-Commit des Builders und QA-Commit;
-- die Gate-Fakten `orchestrator/state/M1b/gates.json` mit allen acht `gate-*.log` und `reports/mutation/unmutated.json`;
-- `QA.md` mit den Tests `tests/e2e/test-m1b-qa-e2e.R` und `tests/fuzz/test-m1b-qa-fuzz.R`.
+- der Diff seit `plan/M1b` (Basis `104ca4dd…`) bis zum Gate-Stand `5764521…` (`gates.json`, `env.sha`). Schwerpunkt ist der Rework-Commit der Runde 2 gegenüber dem Review-Commit `5823adb…` der Runde 1;
+- die Gate-Fakten `orchestrator/state/M1b/gates.json` der Runde 2 mit allen acht `gate-*.log` und dem Mutationsbericht `reports/mutation/mutation.json`;
+- `REWORK-NOTES.md` der Runde 2 mit den beiden gemeldeten OUT-OF-TERRITORY-Ursachen.
 
 ## Ergebnis
 
-**Verdict REWORK.** `gates.result` ist `fail` (tests, mutgate); sieben blocking-Befunde (E12 bis E18), fünf nonblocking (E19 bis E23).
+**Verdict REWORK.** `gates.result` ist `fail` (tests). Es gibt einen blocking-Befund (E24) und vier nonblocking-Befunde (E25 bis E28).
 
-- **Abnahme M1b:** Alle acht M1b-Abnahmedateien sind im Gate grün (Gate-Fakten unten). Die Klasse-B-Kurzläufe reproduziert der Abnahmetest byte-identisch.
-- **Rot sind:**
-  - die sechs reproduzierenden QA-Tests QA-M1b-001 bis -006;
-  - K-M2-6 wegen des Abnahmeorakels (E10 der Planrunde, [INFRA]);
-  - mutgate, weil sein unmutierter Vorlauf an denselben QA-Tests und an `tests/testthat/test-validation-latent.R` scheitert.
-- **Alle sechs QA-Befunde sind echt.** Keine QA-Erwartung widerspricht der Spec. Wo die Spec schweigt, legt ADR-027 die Auslegung fest. Damit sind die QA-Tests erfüllbar (E12 bis E17).
-- **In dieser Phase umgesetzt:** ADR-025 Nr. 4 (Rückfallorakel K-M2-6/-7) in `tests/acceptance/setup-m2.R`, dazu ein Selbsttest des Orakels in `tests/acceptance/test-m2-6-evaluate.R`. Mein Lauf: K-M2-6 und K-M2-7 grün, 20 Blöcke, 758 Erwartungen (Prüflauf 1).
-- **Neu in dieser Phase:**
-  - `docs/decisions/ADR-027-m1b-code-review-auslegungen.md`;
-  - ein Projekt-Amendment in `IMPLEMENTATION-RULES.md` (ADR-027 Nr. 7);
-  - BL-90 bis BL-93 und ein Stand-Vermerk in BL-86 in `BACKLOG.md`.
-- **MUT-EQUIV:** Es gibt weder einen Mutationsbericht noch Anträge. `MUT-EQUIV-APPROVED.json` wird nicht geschrieben.
+- **Runde-1-Befunde:** E12 bis E18 sind behoben. Gate-Fakten und eigene Prüfläufe belegen das:
+  - alle sechs QA-Tests QA-M1b-001 bis -006 sind im Gate grün;
+  - mutgate ist grün: 91,91 bei verlangten 91,83, der unmutierte Vorlauf hat 363 Tests und 0 rote.
+  - E19 ist bestätigt: K-M2-6 und K-M2-7 sind im Gate grün; BL-90 ist erledigt.
+- **Rot im Gate tests sind zwei Ursachen außerhalb des Builder-Territoriums:**
+  - meine eigene Abnahmefixture zu K-M1b-7. Sie erzeugte `derived_share` = 1,5, das der von ADR-027 Nr. 5.2 verlangte Bereichstest zu Recht abweist. Behoben in dieser Phase (E25, [INFRA], ADR-029 Nr. 1).
+  - ein Seiteneffekt von QA-M1b-004 auf die M2-E2E-Tests (E26, [QA-PENDING], ADR-029 Nr. 3). Ohne QA-Nachlauf bleibt das Gate rot. Der Betreiber muss ihn anfordern.
+- **Neu und blocking (E24):** Bei `type = "ordinal"` und `"binary"` liefert `msa_fit()` für nicht trennbare Zufallskomponenten still eine beliebige Aufteilung. Ein Beispiel: Prompt und Modell mit derselben Partition. Bei Items, die in Modellen verschachtelt sind, wird mit Wechselwirkungen ICC_items still halbiert. Der numerische Pfad bricht in denselben Plänen benannt ab.
+  - Die Lücke liegt in meiner Aufzählung in ADR-027 Nr. 3, nicht in der Umsetzung der Runde 2.
+  - ADR-029 Nr. 2 legt die Klasse fest.
+- **In dieser Phase umgesetzt:**
+  - die Fixture in `tests/acceptance/test-m1b-7-vignette-full-results.R`;
+  - `docs/decisions/ADR-029-m1b-code-review-auslegungen-runde-2.md`;
+  - in `BACKLOG.md` BL-94 bis BL-97, BL-90 gestrichen, Stand-Vermerke in BL-86, BL-91, BL-92 und BL-93.
+- **MUT-EQUIV:** Es gibt keine Anträge und keine Freigaben. `MUT-EQUIV-APPROVED.json` wird nicht geschrieben.
 
 ## Gelesen
 
-- **Rollen und Protokoll:** `AGENTS.md`, `CLAUDE.md`, `IMPLEMENTATION-RULES.md`, `contracts/PROTOCOLS.md`, `orchestrator/handoff/SCHEMA.md`, `orchestrator/LESSONS.md`. Dazu `orchestrator/prompts/60-rework.md` und `50-code-review.md` sowie `orchestrate.sh` (`path_allowed`).
+- **Rollen und Protokoll:** `AGENTS.md`, `CLAUDE.md`, `IMPLEMENTATION-RULES.md` mit dem Amendment [ADR-027], `contracts/PROTOCOLS.md`, `orchestrator/handoff/SCHEMA.md` und `orchestrator/LESSONS.md`. Dazu die Prompts `50-code-review` Runde 2 und `60-rework` Runde 2 sowie `orchestrator/orchestrate.sh`:
+  - `path_allowed`, Z. 483–512;
+  - `verdict()`, Z. 701–723;
+  - Code-Schleife mit dem QA-Nachlauf über `qa-requested`, Z. 963–1053;
+  - `orchestrator/lib/r-tests.R`.
 - **Handoff M1b:**
-  - `CRITERIA.json` (K-M1b-1 bis K-M1b-7, ACC-1 bis ACC-18);
-  - `PLAN.md` (Auszüge), `PLAN-UPDATE.md` vollständig, `PLAN-REVIEW.md` und `verdict-plan.json` der Runde 2;
-  - `ARBITER-REQUEST.md`, `verdict-arbiter.json`, `orchestrator/ESCALATION-M1b.md`, `QA.md`.
-  - Nicht vorhanden: `REVIEW-INPUT.md`, `MUT-EQUIV.json`.
-- **Spezifikation:**
-  - docs/02, Abschnitt M1b, mit Szenariotabelle und den Kriterien im Wortlaut (das trace-Gate bestätigt die wörtliche Verknüpfung);
-  - docs/01 §2 (Prüfstandard);
-  - ADR-006 Nr. 4, ADR-023, ADR-025 vollständig, ADR-026 (Builder) vollständig.
+  - `CRITERIA.json`, insbesondere ACC-11 zur Fixture der Dateiwahl;
+  - `REVIEW.md` und `verdict-code.json` der Runde 1;
+  - `REWORK-NOTES.md` der Runde 2, `QA.md`, `ARBITER.md` und `verdict-arbiter.json` (nur E1 und K-M1b-5, hier nicht berührt).
+  - Nicht vorhanden: `REVIEW-INPUT.md`, `MUT-EQUIV.json`, `MUT-EQUIV-APPROVED.json`.
+- **Spezifikation:** docs/02, Abschnitt M1b (Z. 20–45, K-M1b-1 bis K-M1b-7 und die Szenariotabelle); docs/01 §2 Nr. 4; ADR-023 Nr. 9 und 10, ADR-027 vollständig, ADR-028 (Builder) vollständig.
 - **Diff, ohne Git:**
-  - Änderungen über `find -newer orchestrator/state/M1b/3-plan-approved.done`;
-  - Inhalt der Änderungen aus den `diff --git`-Blöcken des BUILD-Logs `orchestrator/logs/M1b-40-build-r1-a1-20261031-095737.log` (Z. 69129–71100, letzter kumulativer Stand).
+  - geänderte Dateien seit dem Review der Runde 1 über `find -newer orchestrator/state/M1b/code-review-r1-infra0.done`;
+  - Inhalt aus den `diff --git`-Blöcken des Rework-Logs `orchestrator/logs/M1b-60-rework-r2-a1-20261031-121017.log`. Gelesen ist der letzte kumulative Stand, Z. 24442–25027; dazu Z. 10060–10100, wo `DESCRIPTION` und `man/llmsa-package.Rd` nach einem roxygen-Lauf bytegleich zurückgeschrieben werden.
   - Vollständig gelesen:
-    - `R/fit.R` und `R/grr.R`;
-    - `inst/validation/sim/simulation_helpers.R` und die drei CLI-Skripte;
-    - `inst/validation/latent/reference_checks.R` und `SOURCES.json`;
-    - `vignettes/validation.Rmd`, `DESCRIPTION`, `NEWS.md` (Kopf);
-    - die neuen Unit-Tests `test-fit-latent.R`, `test-fit-latent-diagnostics.R`, `test-grr-latent.R`, `test-acmg-latent-diagnostics.R`, `test-validation-latent.R` und `helper-validation-latent.R`;
-    - die Diffs der geänderten Bestandstests `test-fit-grr.R`, `test-fit-rework-inputs.R` und `test-grr-rework.R`;
-    - `PROGRESS.md`, Abschnitt M1b.
-  - Stichprobe: die Kurzlaufdateien von two_level und die Diagnosen der Sessiondateien.
+    - `R/fit.R`, Z. 1–379 und 705–759;
+    - die Änderungen in `inst/validation/latent/reference_checks.R` (Z. 186–224) und `inst/validation/sim/simulation_helpers.R` (`sim_merge()`);
+    - die neuen Testdateien `test-fit-latent-rework.R`, `test-validation-latent-rework.R` und `helper-validation-vignette.R`;
+    - `helper-validation-latent.R`, `man/msa_fit.Rd` (neue Absätze), ADR-028, PROGRESS M1b Runde 2 und `NEWS.md` (Kopf);
+    - der Inhalt von `DESCRIPTION`. Imports sind unverändert, Suggests wie in Runde 1 geprüft.
+  - Die sechs Kurzlauf-CSVs gibt das Gate über K-M1b-2/-3 als bytegleich reproduziert aus. Die Sessiondateien tragen den Implementierungs-Hash `cc34f15d…`.
 - **Visuelle Artefakte:** keine; M1b fordert keine (`orchestrator/state/M1b/shots/` ist leer).
 
 ## Gate-Fakten
 
-| Gate | Runde 1 (`gates.json`, `env.sha` `43608d3`) |
+| Gate | Runde 2 (`gates.json`, `env.sha` `5764521`) |
 | --- | --- |
-| deps | pass (25 Anforderungen, R 4.6.1, lme4 2.0.6, ordinal 2026.7.26, rptR 0.9.23, performance 0.19.0) |
-| lint | pass (`R CMD check --as-cran --no-manual`: Status OK, beide Vignetten gebaut und neu gebaut) |
+| deps | pass (25 Anforderungen, R 4.6.1, lme4 2.0.6, ordinal 2026.7.26) |
+| lint | pass (`R CMD check --as-cran --no-manual`: Status OK, Tests und beide Vignetten OK) |
 | tests | **fail** |
 | trace | pass |
-| territory | pass (qa/45-qa, Runde 1) |
-| mutgate | **fail**: unmutierter Vorlauf rot, kein Mutant gelaufen |
+| territory | pass (builder/60-rework, Runde 2) |
+| mutgate | pass: score=91.91 required=91.83 baseline=93.83 floor=80 |
 | golden-adr | pass (keine Golden- oder Ankeränderung) |
 | mutfull | pass („nicht fällig in M1b“) |
 | **result** | **fail** |
 
 - **tests** (`gate-tests.log`):
-  - `tests/testthat`: `[ FAIL 0 | WARN 0 | SKIP 1 | PASS 3221 ]`; der Skip ist der bekannte ellmer-Negativtest.
-  - `tests/acceptance`:
-    - M0, M1a und alle M1b-Dateien grün: m1b-1 34, m1b-2 2155, m1b-3 687, m1b-4 37, m1b-5 9, m1b-6 108, m1b-7-vignette-full-results 204, m1b-7-vignette 240 Erwartungen.
-    - m1b-4 trägt zwei Warnungen aus dem Abnahmehelfer selbst (`lme4::nobars` und `findbars` nach `reformulas` verschoben, E23).
-    - `m2-6-evaluate`: 13 Fehlschläge mit genau dem Muster aus E10 der Planrunde: `isTRUE(mo$fallback)` FALSE statt TRUE, Typ „ordinal“ statt „numeric“, je Modell im Hauptplan und in den konstruierten Läufen sowie im gemeinsamen Fit.
-    - Danach endet der Lauf mit „Maximum number of failures exceeded; quitting.“ `m2-7-robustness-pilot` lief im Gate nicht.
-  - `tests/e2e`: QA-M1b-001 bis -004 rot, 16 Fehlschläge (`gate-tests.log` Z. 958–1070).
-  - `tests/fuzz`: QA-M1b-005 und -006 rot, 12 Fehlschläge (Z. 1090–1183).
-  - Kurzbefund: „437 Tests …; 9 fehlgeschlagen, 0 Fehler, 1 übersprungen“.
-- **mutgate** (`gate-mutgate.log`, `reports/mutation/unmutated.json`):
-  - geplant waren 1214 Mutanten in `R/fit.R` und `R/grr.R`;
-  - der unmutierte Testlauf dauerte 118,2 s mit 355 Tests, davon 6 fehlgeschlagen und 1 abgebrochen;
-  - abgebrochen ist `tests/testthat/test-validation-latent.R` („latent display retains significant digits and documentation traces every source“), fehlgeschlagen sind die sechs QA-Tests;
-  - „Abbruch vor dem ersten Mutanten“: `reports/mutation/mutation.json` existiert nicht. Überlebende Mutanten lassen sich deshalb noch nicht benennen (E18).
-- **Status error:** keiner. [INFRA] ist allein die Ursache der K-M2-6-Fehlschläge (E19).
+  - `tests/testthat`: `[ FAIL 0 | WARN 0 | SKIP 1 | PASS 3400 ]` (Z. 419). Runde 1 hatte 3221; der Skip ist der bekannte ellmer-Negativtest.
+  - `tests/acceptance`: `[ FAIL 5 | WARN 2 | SKIP 0 | PASS 6355 ]` (Z. 912).
+    - M0, M1a und sieben M1b-Dateien sind grün: m1b-1 34, m1b-2 2155, m1b-3 687, m1b-4 37, m1b-5 9, m1b-6 108, m1b-7-vignette 240 Erwartungen.
+    - `m2-6-evaluate` 383 und `m2-7-robustness-pilot` 375 sind grün, einschließlich Orakel-Selbsttest und HTTP-Replay (Z. 813–871).
+    - Rot ist allein `m1b-7-vignette-full-results`: vier Blöcke, fünf Erwartungen. Der Knit endet mit „Invalid latent study result measure range: …/two_level_results.csv“ (Z. 660–696; E25).
+    - Die zwei Warnungen stammen aus dem Abnahmehelfer von m1b-4 (Z. 607–631; BL-93).
+  - `tests/e2e`: `[ FAIL 4 | WARN 4 | SKIP 0 | PASS 40 ]` (Z. 1084).
+    - `m1a-qa-e2e` 14 und `m1b-qa-e2e` 26 sind grün; QA-M1b-001 bis -004 bestehen.
+    - Alle vier Blöcke von `m2-qa-e2e` enden mit „there is no package called 'llmsa'“. Laut Backtrace liegt `acmg.R` unter `qa-m1b-stage-…/R/` (Z. 933–1038; E26).
+  - `tests/fuzz`: `[ FAIL 0 | WARN 0 | SKIP 0 | PASS 25 ]`, auch QA-M1b-005 und -006 (Z. 1104).
+  - Kurzbefund: „459 Tests …; 4 fehlgeschlagen, 4 Fehler, 1 übersprungen“ (Z. 1105).
+- **mutgate** (`gate-mutgate.log`, `mutation.json`):
+  - `MUT_TEST_EXCLUDE='^(m2-[0-9]|m0-testthat-count$|m1b-[23]-|m1b-7-vignette-full)'` (Z. 2). Der unmutierte Vorlauf dauerte 121,7 s mit 363 Tests und 0 roten (Z. 3).
+  - Bericht: 1308 Mutanten, davon `R/fit.R` 1062 und `R/grr.R` 246: 1118 Killed, 29 Timeout, 101 Survived, 0 NoCoverage, 60 RuntimeError.
+  - Nachrechnung: (1118 + 29) / (1118 + 29 + 101) = 91,91 trifft den Gate-Wert. Für M1b gibt es keine Approvals.
+  - `required` 91,83 ist die Baseline 93,83 minus Ratchet 2. Der Abstand beträgt 0,08 Punkte.
+- **Status error:** keiner. [INFRA] ist die Fixture (E25), [QA-PENDING] die Ursache in QA-M1b-004 (E26).
+- **Laufzeit:** Rework fertig 12:43, Gate fertig 19:08. Das sind ≈ 6 h 25 min, davon tests bis 13:09 und mutgate ≈ 6 h.
 
 ## Eigene Prüfläufe
 
-Alle am 31.10.2026, R 4.6.1, lme4 2.0.6, ordinal 2026.7.26. Probeskripte lagen als `tests/acceptance/.probe-*` im eigenen Territorium und sind per `unlink()` gelöscht (Kontrolle: `list.files(..., pattern = "^[.]probe")` ergibt `character(0)`). Gezeigt ist der echte Output.
+Alle am 31.10.2026, R 4.6.1, lme4 2.0.6, ordinal 2026.7.26, Produktstand `5764521`, `REPO_ROOT` gesetzt.
 
-1. **K-M2-6 und K-M2-7 nach ADR-025 Nr. 4.** Aufruf `testthat::test_dir("tests/acceptance", filter = "^m2-[67]-", load_package = "source")`, `REPO_ROOT` gesetzt, `set_max_fails(Inf)`. Auszug:
+- Probeskripte lagen unter `tests/acceptance/.probe-m1b-r2/` im eigenen Territorium und sind per `unlink()` gelöscht.
+- Daten sind synthetisch mit Seeds ab 20261101; Paketausgaben dienen nirgends als Referenz.
+- Gezeigt ist echter Output, gekürzt auf die Zeilen zur Sache.
 
-   ```text
-   ✔ |        383 | m2-6-evaluate [222.4s]
-   ✔ |        375 | m2-7-robustness-pilot [88.3s]
-   [ FAIL 0 | WARN 0 | SKIP 0 | PASS 758 ]
-   M2-6/7 after ADR-025 Nr. 4: 20 tests; 0 failed blocks; 0 error blocks; 0 skipped; elapsed 312.4 s
-   ```
-
-   - Der Block mit erzwungenem Fehler und erzwungener Konvergenzwarnung bleibt grün (24 Erwartungen), der neue Orakel-Selbsttest ebenso (9 Erwartungen).
-   - Auch der HTTP-Replay-Test von K-M2-7 ist grün (22 Erwartungen). Der Socket-Fehler aus PROGRESS (M1B-INFRA-SOCKET) betrifft nur die Builder-Sandbox (E22).
-2. **QA-M1b-003 im Detail.** Daten wie `tests/e2e/test-m1b-qa-e2e.R:106–135`, Seed 20261031. Echte Ausgabe:
+1. **QA-M1b-004 und der Namespace (E26).** Ablauf: `pkgload::load_all(".")`, dann `testthat::test_file("tests/e2e/test-m1b-qa-e2e.R", load_package = "none")`:
 
    ```text
-   zero-drift blocks: singular = TRUE
-       source     variance
-   1     item 8.979282e-01
-   2   prompt 9.718532e-01
-   3    block 7.805441e-14
-   4 Residual 1.000000e+00
-   message: design is column rank deficient so dropping 1 coef
-   confounded model/block: beta names = modelM2
-       source     variance
-   1     item 8.979282e-01
-   2   prompt 9.718532e-01
-   3    model 7.805441e-14
-   4    block 0.000000e+00
-   5 Residual 1.000000e+00
+   before: /mnt/c/Users/Danie/dev/Llmsa/llmsa exists=TRUE
+   acmg_plan before: ok
+    nb failed error
+     5      0 FALSE
+     8      0 FALSE
+     5      0 FALSE
+     8      0 FALSE
+   after: /tmp/Rtmp8j5moR/qa-m1b-stage-2a411622c5369a exists=FALSE
+   acmg_plan after: there is no package called ‘llmsa’
    ```
 
-   Bei konfundierten Faktoren meldet `msa_fit()` still die Varianz 0 für einen nicht identifizierbaren Faktor.
-3. **Ankerkopien.** `sha256sum` der Originale unter `reference/anchors/` und der Kopien unter `inst/validation/latent/anchors/`: Für ANK-06, ANK-21, ANK-25, ANK-28 und ANK-TOL sind die Hashes paarweise gleich, ebenso mit `inst/validation/numeric/anchors/ANK-TOL.json` (`dfa241fe…51fd`). `SOURCES.json` nennt dieselben Werte.
+2. **Rework-Verhalten gegen direkte Engines.** E12: ein binärer Fit über eine Hilfsfunktion `wrap <- function(r, ...) msa_fit(r, type = "binary", link = "logit", ...)`. E13: ein Ausdruck in `subset` gegen `clmm`/`glmer`, unabhängig auf denselben Zeilen aufgebaut. Toleranz ANK-TOL.engine_ordinal 1e-8 als Anteil an σ²_TV.
+
+   ```text
+   binary call symbols with '..': FALSE
+   binary call fun: lme4::glmer ; control optimizer: bobyqa bobyqa
+   binary call re-evaluated, max |theta diff|: 0
+   msa_boot on wrapped binary fit: msa_boot
+   ordinal call fun: ordinal::clmm ; '..' symbols: FALSE
+   ordinal : share deviation 0 (tol 1e-08 ) ; n$items 13 n$models 2 obs 208 rows 208 nobs 208 ; derived model
+   binary : share deviation 0 (tol 1e-08 ) ; n$items 13 n$models 2 obs 208 rows 208 nobs 208 ; derived -
+   zero drift: singular = FALSE ; direct VarCorr item/prompt: 1.6938802 0.5236735 ; block derived: 1.444438e-14
+   confounded model/block: Ordinal two-level factors model, block are not identifiable: the fixed-effect design is rank deficient.
+   confounded prompt/model + interactions: Ordinal random-effect term prompt:model requires at least three observed levels.
+   ordinal levels c("k1", NA) -> Ordinal `levels` must contain at least two distinct, non-missing, non-empty labels.
+   binary levels c('', 'x') -> Binary `levels` must contain two distinct, non-missing labels; labels must not be empty.
+   binary numeric 1/2 vs character with levels: identical y TRUE ; y equals original 0/1: TRUE
+   binary 0/1 with levels c('no','yes') -> No valid response categories to analyse.
+   (a) explicit levels over ordered factor: fit$levels = c("k4", "k3", "k2", "k1") ; y levels = c("k4", "k3", "k2", "k1")
+   (b) two ordinal labels: fit
+   (d) ordinal weights: n$observations 90 ; nobs 135 ; sum(w) 135
+   ```
+
+   Doppelte Labels, leere Labels und nur ein Label ergeben ordinal dieselbe Meldung wie der NA-Fall.
+
+3. **Ordinale Offsets, unabhängig geprüft.** Ein Offset c · 1(model = M2) mit c = 0,7 muss den festen Kontrast um −c verschieben und die Zufallskomponenten unverändert lassen:
+
+   ```text
+   package: beta without offset 0.488745 ; with offset -0.211255 ; difference -0.7 (expected -0.7 )
+   package: random components item/prompt without 1.29805419 0.58884008 with 1.29805419 0.58884008
+   Error in model.offset(mf) : 'offset' must be numeric
+   ```
+
+   Die letzte Zeile stammt aus einem direkten `clmm` mit dem Offset hinter den Zufallstermen. Das bestätigt ADR-028 Nr. 3: Der Offset muss vor den Zufallstermen stehen.
+
+4. **Nicht trennbare Zufallskomponenten (E24).**
+   - a) Prompt und Modell mit derselben dreistufigen Partition (jeder Prompt nur mit einem Modell), 20 Items, zwei Replikate, Seed 20261101:
+
+     ```text
+     numeric, prompt=model with 3 levels: ERROR Numeric variance components are not identifiable.
+     binary,  prompt=model with 3 levels: item=1.2061; prompt=0.3006; model=0.2815; Residual=1.0000 | singular=FALSE converged=FALSE
+        warnings: Model failed to converge with max|grad| = 0.0296585 (tol = 0.002, component 1)
+     ordinal, prompt=model with 3 levels: item=0.9425; model=0.3558; prompt=0.3558; Residual=1.0000 | singular=FALSE converged=TRUE
+     ```
+
+   - b) Derselbe Plan mit den Seeds 20261101 bis 20261110 (Häufigkeiten über die zehn Fits), dazu Items in Modellen verschachtelt mit `interactions = TRUE`:
+
+     ```text
+     ordinal, prompt and model with identical 3-level partitions:
+     singular=FALSE converged=TRUE warnings=0
+                                           10
+       e.g. item=0.943 model=0.356 prompt=0.356 Residual=1.000
+     binary, prompt and model with identical 3-level partitions:
+     singular=FALSE converged=FALSE warnings=1
+                                             4
+     singular=FALSE converged=FALSE warnings=2
+                                             4
+       singular=TRUE converged=TRUE warnings=0
+                                             2
+       e.g. item=1.206 prompt=0.301 model=0.281 Residual=1.000
+     items nested in models, interactions = TRUE (item:model has the partition of item):
+      numeric: error: Numeric variance components are not identifiable. | NA
+      ordinal: singular=TRUE converged=TRUE warnings=0 | item:prompt=0.0000 item:model=0.6817 item=0.6817 prompt:model=0.0000 model=0.0000 prompt=0.0948 Residual=1.0000
+      binary: singular=TRUE converged=TRUE warnings=0 | item:prompt=0.000 item:model=0.327 item=0.353 prompt:model=0.000 model=0.000 prompt=0.115 Residual=1.000
+     ```
+
+   - c) Binär, zwei Modelle und zwei Blöcke derselben Partition; beide gehen bei `glmer` als Zufallsterme ein. 15 Items, vier Prompts, zwei Replikate:
+
+     ```text
+     seed 20261101: model 0.0751 block 0.0731 | singular=FALSE converged=FALSE warnings=2
+     seed 20261102: model 0.0104 block 0.0176 | singular=FALSE converged=TRUE warnings=0
+     seed 20261103: model 0.1553 block 0.0047 | singular=FALSE converged=FALSE warnings=2
+     seed 20261104: model 0.3193 block 0.1977 | singular=FALSE converged=FALSE warnings=1
+     seed 20261105: model 0.1277 block 0.0316 | singular=FALSE converged=FALSE warnings=2
+     ```
+
+5. **Gram-Kriterium für E24** (Vorschlag aus ADR-029):
+   - G[i, j] = ‖Z_iᵀ P Z_j‖²_F, P projiziert auf das orthogonale Komplement des festen Designs;
+   - nicht identifizierbar, wenn min(ev) ≤ k · eps · max(ev), wie `R/fit.R:558–562`;
+   - gezeigt ist min(ev)/max(ev).
+
+   ```text
+   S-ord-1 (item, prompt, model, item:model)                      ratio 0.0144 identifiable TRUE
+   S-ord-4 ordinal (block fixed)                                  ratio 0.0087 identifiable TRUE
+   S-bin-1 (item, prompt, model)                                  ratio 0.0737 identifiable TRUE
+   S-two-1 ordinal (model fixed)                                  ratio 0.0738 identifiable TRUE
+   wine-like (bottle x judge, one replicate)                      ratio 0.617 identifiable TRUE
+   S-ord-1 with all interactions                                  ratio 0.0102 identifiable TRUE
+   prompt and model with identical 3-level partitions             ratio 0 identifiable FALSE
+   items nested in models, interactions                           ratio -5.17e-17 identifiable FALSE
+   items nested in models, no interactions                        ratio 0.158 identifiable TRUE
+   binary: two-level model and block with one partition           ratio -3.16e-17 identifiable FALSE
+   binary: crossed two-level model and block                      ratio 0.249 identifiable TRUE
+   3-level prompt spanned by fixed model + block                  ratio 7.83e-29 identifiable FALSE
+   ```
+
+6. **K-M1b-7 nach der Fixture-Korrektur (E25).**
+   - Aufbau: Kopien von `setup-*.R`, `test-m1b-7-vignette-full-results.R` und `test-m1b-7-vignette.R` in einem `tempfile()`-Verzeichnis, `testthat::test_dir(load_package = "none")` nach `pkgload::load_all(".")`.
+   - An die Kopie der Fixture-Datei ist ein Probeblock angehängt. Er prüft, dass der Abschnitt des Kurzlaufs keine Fixture-Zelle (Bias und EmpSE, je value und mcse) und nicht die Marke 1234 zeigt.
+
+   ```text
+   ordinal_recovery: 0 of 100 fixture cells appear in the short-run section
+   binary_recovery: 0 of 40 fixture cells appear in the short-run section
+   two_level: 0 of 40 fixture cells appear in the short-run section
+   ✔ |        211 | m1b-7-vignette-full-results [38.5s]
+   ✔ |        240 | m1b-7-vignette [4.8s]
+   [ FAIL 0 | WARN 0 | SKIP 0 | PASS 451 ]
+   ```
+
+   Von den 211 Erwartungen sind 204 die der Abnahmedatei, wie in Runde 1; 7 gehören zum Probeblock. Ohne Korrektur ist dieselbe Datei im Gate rot (Z. 660–696).
+
+7. **Kurzlauf-Diagnose (BL-92)**, nachgezählt aus `*_check_replicates.csv`, nicht konvergierte Wiederholungen je Szenario:
+
+   ```text
+   ordinal_recovery : S-ord-1 S-ord-2 S-ord-3 S-ord-4
+         1       5       2      10
+   binary_recovery : S-bin-1 S-bin-2
+         0       0
+   two_level : S-two-1 S-two-2
+         0       0
+   ```
+
+## Stand der Einwände aus Runde 1
+
+| ID | Stand | Beleg |
+| --- | --- | --- |
+| E12 | erledigt | QA-M1b-001 grün (Gate); Prüflauf 2 (keine `..`-Platzhalter, Neuauswertung identisch, `msa_boot()` über eine Hilfsfunktion); `test-fit-latent-rework.R:16–53` gegen `bootMer()` mit unabhängiger ICC |
+| E13 | erledigt | QA-M1b-002 grün; Prüflauf 2 (Abweichung 0 gegen direkte Engines, Zählungen gleich); Gewichtsfall nach ADR-029 Nr. 4 |
+| E14 | erledigt für die Fälle aus ADR-027 Nr. 2 und 3 | QA-M1b-003 grün; Prüflauf 2. Die Klasse reicht weiter: E24 |
+| E15 | erledigt | QA-M1b-004 grün; unmutierter Vorlauf von mutgate grün (363 Tests, 0 rot); Umsetzung über den Helfer zulässig (ADR-029 Nr. 5) |
+| E16 | erledigt | QA-M1b-005 grün; Prüflauf 2, auch Fall (a) |
+| E17 | erledigt | QA-M1b-006 grün; `sim_merge()` und `latent_read_results()` gelesen, Grenzfälle in `test-validation-latent-rework.R` |
+| E18 | erledigt | mutgate pass 91,91; Überlebende in neuem Code: E27 |
+| E19 | erledigt | K-M2-6 383 und K-M2-7 375 grün im Gate; BL-90 gestrichen |
+| E20 | Builder-Teil erledigt | `R/fit.R:119–120`, `man/msa_fit.Rd:153`; BL-91 |
+| E21 | unverändert, spec-gemäß | Prüflauf 7; BL-92 |
+| E22 | Gate bestätigt | K-M2-7 einschließlich HTTP-Replay im Gate grün; lint-Zeitprüfung OK; BL-86 |
+| E23 | offen, Reviewer | `gate-tests.log` Z. 607–631; BL-93 |
 
 ## Prüfung nach Gesichtspunkten
 
 ### Spec- und Vertragstreue
 
-- **K-M1b-1:** `latent_reference_checks()` vergleicht wine mit dem direkten `clmm` für beide Links. Die Schranke ist ANK-TOL.engine_ordinal · σ²_TV der direkten Rechnung, der Rest kommt aus ANK-28. Getrennt davon steht die clmm2-Installationsprüfung mit beiden ANK-21-Varianzen (ADR-023 Nr. 9.1, Nr. 11.3).
-- **K-M1b-2 und K-M1b-3:**
-  - Szenarien, Seed-Regel `20261031 + j + 8(r − 1)`, RNG, Kennzahlen und MCSE folgen ADR-023 Nr. 1 bis 8 und 13, ebenso Abbruch, Session und Laufzeit.
-    - MCSE(EmpSE) = EmpSE/√(2(n − 1)), MCSE(MSE) = sd(Fehlerquadrate)/√n, MCSE(RMSE) = MCSE(MSE)/(2 · RMSE), `derived_share` mit √(p(1 − p)/n_sim).
-  - Die wahren Werte gleichen der Tabelle, etwa S-two-1 mit %GRR 72,569 und ICC 0,47337. Die Nachrechnung des Abnahmetests ist grün.
-  - Kurzlaufzeiten nach PROGRESS: ordinal 105 s, binär 1,5 s, two_level 11 s.
-  - Diagnosen der Kurzläufe: S-ord 17/80 Iterationslimit und 1/80 „singular convergence (7)“ (E21).
-- **K-M1b-4:**
-  - Fester Effekt, β̂²/2 über die Differenz der Designzeilen (ADR-026 Nr. 7), Warnung mit allen Teilen aus ADR-023 Nr. 9.5 und ohne AP1-Auslöser.
-  - Eine Druckzeile je Quelle in beiden Methoden; die Hilfe nennt `two_level` und die Vignette.
-  - Lücken bei konfundierten Faktoren und bei `singular`: E14.
-- **K-M1b-5:**
-  - π²/3 ohne Sonderfall (`R/fit.R:665`).
-  - Die drei Vergleichsgrößen werden zur Laufzeit gerechnet, mit `ANK-TOL.rptr.live_tol`; die Installationsprüfung mit beiden ANK-25-Werten und `vignette_tol`.
-- **K-M1b-6:** alle acht Prüfungen aus ACC-10 erfüllt, auch BL-81. Offen sind Lücken an angrenzenden Eingaben: `...` (E12, E13) und `levels` (E16).
-- **K-M1b-7:**
-  - Abschnitt, Dateiwahl über `system.file()`, `n_sim` aus der Datei, sechs signifikante Stellen vor `kable` (E11 der Planrunde).
-  - Literalregel: Weder `validation.Rmd` noch die nachgeladenen Helfer enthalten ein Dezimalliteral eines Anker- oder Ergebniswerts. Die Simulationsparameter der Szenariotabelle sind Spec; der Logit-Rest steht als `pi^2 / 3`.
-- **ADR-025 Nr. 1 bis 3 als Vertrag:**
-  - **Nr. 1.4 (Trennung):** erfüllt. Die Zeilen der ICC-Prüfung tragen „ANK-28 / ANK-TOL.rptr.live_tol“, die Installationsprüfung „ANK-25 / ANK-TOL.rptr.vignette_tol“ (`reference_checks.R:171–181`). Der Text sagt „They are installation checks, not reference values for `ICC_items`.“ (`validation.Rmd:176–177`). Keine Zeile stellt ICC_items einem ANK-25-Wert gegenüber.
-  - **Nr. 1.5:** `nboot = 0`, `npermut = 0`.
-  - **Nr. 2.3:** Literalregel einschließlich Helfer erfüllt (`test-validation-latent.R:123–155` prüft sie, siehe aber E15).
-  - **Nr. 3:** `msa_mer_converged()` und `msa_clmm_converged()` folgen der Regel. Fehlende oder unlesbare Codes ergeben FALSE. Der tatsächliche Optimierer folgt aus dem Rechenweg; Unit-Tests belegen ucminf mit einem Term sowie nlminb bei mehreren Termen und bei `useMatrix`. Der numerische Pfad warnt nicht zusätzlich.
+- **ADR-027 Nr. 1 (`...` latent):**
+  - `subset`, `weights` und `offset` werden in der bereinigten Datenmaske ausgewertet, mit dem unmittelbaren Aufrufer als Umgebung (`R/fit.R:227–236`).
+  - `model.frame()` wählt die Zeilen vor der Stufenregel (`:237–254`). Formel, `derived`, `data` und `n` beziehen sich damit auf dieselbe Auswahl (Prüflauf 2).
+  - Die gespeicherten Aufrufe tragen ausgewertete Argumente (`:328–331`).
+  - Ordinale Offsets stehen als Formelterm vor den Zufallstermen (`:300–308`), unabhängig bestätigt (Prüflauf 3).
+  - Nr. 1.2 bei Gewichten: ADR-029 Nr. 4.
+- **ADR-027 Nr. 2:** `singular` wird vor dem Anhängen der abgeleiteten Komponenten bestimmt; die Schwelle 1e-6 bleibt (`:348`).
+- **ADR-027 Nr. 3:**
+  - Nr. 3.1: Rang des festen Zwei-Stufen-Designs, mit übergebenen `contrasts` (`:290–297`);
+  - Nr. 3.2: jeder ordinale Zufallsterm, auch Wechselwirkungen, braucht mehr als zwei beobachtete Stufen (`:284–289`).
+  - Nicht trennbare Zufallsterme fehlen: E24.
+- **ADR-027 Nr. 4:**
+  - `levels` wird vor jeder Datenprüfung validiert (`:160–172`);
+  - die binäre Meldung enthält weiter „two distinct, non-missing labels“;
+  - explizite binäre Labels kodieren über `as.character()` unabhängig vom Speichertyp (`:202–205`);
+  - ohne `levels` bleibt „Binary values must be 0 or 1.“ (`:212`).
+- **ADR-027 Nr. 5:**
+  - `sim_merge()` prüft alle fünf Designzählungen gegen das Szenario, NA nur ohne Schätzer, logische Flags und `singular` NA genau ohne Fit;
+  - `latent_read_results()` prüft die Bereiche von EmpSE, RMSE und `derived_share` sowie ganzzahlige Seeds in [1, `.Machine$integer.max`] (`reference_checks.R:204–210`).
+- **ADR-027 Nr. 6:** Der Satz zur Optimierertoleranz steht in `?msa_fit` (`R/fit.R:119–120`). Vorgabe-Optimierer und Toleranzen sind unverändert.
+- **ADR-027 Nr. 7:** Neuer Helfer statt Pfadänderung im bestehenden Test; zulässig (ADR-029 Nr. 5).
+- **K-M1b-1 bis K-M1b-7:** Im Gate sind alle Abnahmedateien außer der Fixture-Datei grün. K-M1b-2/-3 reproduzieren die neu erzeugten Kurzläufe bytegleich.
 
 ### API-Diff
 
-- **Schnittstellen:** keine neuen Exporte, Argumente oder Vorgaben; der API-Snapshot (`test-m0-api-snapshot.R`, 259 Erwartungen) ist grün.
-- **Neue Rückgabefelder:** `msa_fit()$converged` und `msa_grr()$derived`; `msa_fit()$derived` gab es schon. Zusätzlich ändert sich die Druckausgabe. Beides ist nach docs/01 §4 ohne ADR zulässig.
-- **Abhängigkeiten:** nur neue Suggests (`parallel`, `performance`, `rptR`; ACC-13, E6); Imports unverändert.
+- **Schnittstellen:** keine neuen Exporte, Argumente oder Vorgaben; der API-Snapshot ist grün (259 Erwartungen).
+- **Neu in `fit$data`:** die Spalte `.msa_offset`, nur bei ordinalen Offsets. Sie ist dokumentiert (`R/fit.R:112–113`); ein neues Rückgabefeld ist nach docs/01 §4 ohne ADR zulässig.
+- **Neue Fehlermeldungen für bisher angenommene ungültige Eingaben:** ungültige `levels` und nicht identifizierbare Designs. Sie folgen ADR-027 Nr. 3 und 4.
+- **Abhängigkeiten:** Imports und Suggests unverändert; `DESCRIPTION` ist nach dem roxygen-Lauf bytegleich zurückgeschrieben (Rework-Log Z. 10060–10100).
 
 ### Tests: entkernt, eingefroren, hart
 
-- **Geänderte Bestandstests** (Diff aus dem BUILD-Log):
-  - `test-fit-grr.R` und `test-fit-rework-inputs.R` erwarten zusätzlich die neuen Pflichtwarnungen. Keine Erwartung fehlt.
-  - In `test-fit-rework-inputs.R` bekommt die `clmm`-Attrappe die Felder, die `msa_clmm_converged()` liest; die Schwellenprüfung (0, 1e-6, 1) bleibt.
-  - `test-grr-rework.R` friert die eigene Druckausgabe ein. Zulässig: Die neue Zeile ist der Wortlaut aus K-M1b-4 („range method, see ?msa_fit“), und ADR-026 Nr. 9 kennzeichnet die Momentaufnahme.
-- **Neue Tests:** Sie prüfen Verhalten an echten Engines und gegen unabhängige Größen:
-  - direkte `clmm`- und `glmer`-Fits auf den bereinigten Zeilen;
-  - β̂²/2 aus `model$beta` und als Stichprobenvarianz bei Summenkodierung;
-  - %GRR und ICC aus den Komponenten nach Formelsammlung §3;
-  - lme4-Meldungen des direkten `lmer` als Orakel.
-  - Wörtliche Warnungstexte sind Vertragstexte des Plans, keine Referenzwerte.
-- **Harte Erwartungswerte:** keine abgetippten Referenzwerte; Toleranzen kommen aus ANK-TOL.
-- **ADR-026 Nr. 8:** Die Invarianztests verwenden ausdrücklich engere Optimierer-Steuerung, die Toleranz bleibt. Bewertung in E20 und ADR-027 Nr. 6.
+- **Bestandstests:** unter `tests/testthat` ist keine Bestandsdatei geändert; nach `find -newer` sind nur die drei neuen Dateien jünger. Abnahme- und QA-Tests sind unverändert, bis auf meine Fixture (E25).
+- **Neue Tests belegen Verhalten:**
+  - direkte `clmm`- und `glmer`-Fits auf unabhängig ausgewählten Zeilen, Gewichten und Offsets;
+  - `bootMer()` mit unabhängig formulierter ICC;
+  - der Rang einer unabhängig aufgebauten Designmatrix;
+  - die Stichprobenvarianz {0, β̂};
+  - synthetische CSV-Verfälschungen, als solche gekennzeichnet.
+  - Keine Erwartung friert eine eigene Paketausgabe ein. Die festen Zählungen in `test-fit-latent-rework.R:92–96` folgen aus dem Design.
+- **Harte Erwartungswerte:** keine abgetippten Referenzwerte; die Toleranzen kommen aus den ANK-TOL-Kopien.
+- **Testlücken nach dem Mutationsbericht:** E27.
 
 ### Konfiguration, Daten, Golden
 
-- **Konfiguration:** Keine Gate-, Schwellen- oder Lint-Regel ist gelockert.
-- **Daten:**
-  - Die neun `_check_`-Dateien sind echte Läufe; die Abnahme rechnet sie byte-identisch nach. Ein Vollauf liegt nicht im Repository.
-  - Die Ankerkopien sind byte-identisch (Prüflauf 3).
-  - `inst/extdata/` und `reference/anchors/` sind unverändert (golden-adr pass).
-- **Öffentliches Repository:** In den neuen Paketdateien steht kein privater Bezug; die Sessiondateien nennen nur `/tmp`-Pfade und die Zeitzone.
+- **Konfiguration:** Keine Gate-, Schwellen- oder Lint-Regel ist gelockert. `MUT_TEST_EXCLUDE` ist Betreiber-Sache und schließt die Fixture-Datei schon aus.
+- **Daten:** Die neun `_check_`-Dateien sind echte Läufe. Die Ergebnis-CSVs sind laut Gate bytegleich reproduziert, die Sessiondateien tragen den neuen Implementierungs-Hash. Volllaufdateien gibt es nicht.
+- **Golden:** `inst/extdata/` und `reference/anchors/` sind unverändert (golden-adr pass).
+- **Öffentliches Repository:** Die neuen Dateien enthalten keinen privaten Bezug.
 
-## Einwände (Runde 1)
+### MUT-EQUIV
 
-- [E12] (blocking) Gate tests (`tests/e2e/test-m1b-qa-e2e.R`, QA-M1b-001, `gate-tests.log` Z. 958–976); `?msa_boot` (`R/grr.R:141`: „Available for numeric and binary outcomes (lme4 models).“; `:153–154`: „An explicit fitting control passed to [msa_fit()] remains the model's refit control.“); ADR-027 Nr. 1.3 — **Befund:** Der binäre Zweig ruft `lme4::glmer(form, data = dat, family = …, ...)` unausgewertet auf (`R/fit.R:263`). `fit$model@call` speichert deshalb `control = ..1`. `msa_boot()` und `lme4::refit()` scheitern mit „the ... list contains fewer than 1 element“, im selben Rahmen und aus einer Hilfsfunktion. Der ordinale Zweig (`:262`) speichert dieselben Platzhalter. — **Vorschlag:**
-  - `...` wie im numerischen Durchreichweg vorab auswerten (`R/fit.R:241–253`) und die ausgewerteten Argumente samt `data` und `family` im gespeicherten Aufruf ablegen, für `glmer` und `clmm`.
-  - Unit-Test: `msa_boot()` auf einem binären Fit mit `control =` im selben Rahmen und aus einer Funktion; die gespeicherte Steuerung gleicht der übergebenen.
-- [E13] (blocking) Gate tests (QA-M1b-002, `gate-tests.log` Z. 978–1034); `?msa_fit` (`R/fit.R:47–50`: „Expressions in `subset`, `weights` and `offset` can use the internal columns … Row-based arguments refer to the rows remaining after missing or unreadable responses are removed.“; `:104–105`: „All returned data and study counts describe the retained observations.“); K-M1b-6 („… und in `n$observations` gezählt“); docs/01 §2 Nr. 4; ADR-027 Nr. 1.1–1.2 — **Befund:** Nur der numerische Zweig wertet `subset`, `weights` und `offset` in der Datenmaske aus und gleicht `dat` mit dem Modellrahmen ab (`R/fit.R:244–258`).
-  - Ordinal und binär endet `subset = item != "I01"` mit „object 'item' not found“.
-  - Ein Zeilenvektor schätzt das Modell auf 198 Beobachtungen und 11 Items, `fit$n` und `fit$data` melden aber 216 und 12. Das ist eine still falsche Zählung.
-  — **Vorschlag:**
-  - Zeilenargumente vor dem Formelaufbau auswerten und anwenden, `weights` und `offset` ausrichten. Dann bestimmen Stufenregel (eine Stufe, zwei Stufen), Formel, `derived`, `data` und `n` dieselben Zeilen wie `nobs(model)`.
-  - Unit-Tests für beide Typen mit Ausdruck und Zeilenvektor, Vergleich mit dem direkten Engine-Fit auf den ausgewählten Zeilen (ANK-TOL.engine_ordinal · σ²_TV).
-- [E14] (blocking) Gate tests (QA-M1b-003, `gate-tests.log` Z. 1036–1056); docs/01 §2 Nr. 4 („Ergebnis ist eine richtige Zahl oder eine klare Fehlermeldung, nie stillschweigend eine falsche Zahl.“); K-M1b-4; K-M1b-6 („`singular`/Konvergenz im Objekt vermerkt“); ADR-027 Nr. 2 und 3 — **Befund:**
-  1. `singular` zählt im ordinalen Zweig die abgeleiteten Komponenten mit (`R/fit.R:301` nach `:292–296`). Zwei Blöcke ohne Drift ergeben `singular = TRUE` bei inneren Zufallseffekten (Prüflauf 2).
-  2. Konfundierte Zwei-Stufen-Faktoren: `clmm` verwirft einen Koeffizienten, und `R/fit.R:288` summiert nur über `names(model$beta)`. Der nicht identifizierbare Faktor erhält still die Varianz 0 (Prüflauf 2).
-  3. Ein Zufallsterm mit höchstens zwei beobachteten Stufen erreicht `clmm` (`R/fit.R:221–227` prüft nur die Haupteffekte) und endet mit der rohen Assertion „all(sapply(gfl, nlevels) > 2) is not TRUE“.
-  — **Vorschlag:**
-  - zu 1: `singular` ordinal nur über die `clmm`-Komponenten bestimmen, die bestehende Schwelle bleibt;
-  - zu 2 und 3: vor dem Fit den Rang des festen Designs der Zwei-Stufen-Faktoren und die Stufenzahl jedes Zufallsterms prüfen und benannt abbrechen; nach LESSONS für die ganze Klasse, nicht nur für den gemeldeten Fall.
-  - Unit-Tests: Blöcke ohne Drift (Zufallseffekte gegen direktes `clmm`); konfundierte Modelle und Blöcke; Wechselwirkung konfundierter Faktoren.
-  - Danach die Kurzläufe neu erzeugen, weil sich die Spalte `singular` ändern kann (ADR-023 Nr. 1.5).
-- [E15] (blocking) Gate mutgate (`gate-mutgate.log` Z. 4: „rot: tests/testthat/test-validation-latent.R: latent display retains significant digits and documentation traces every source [abgebrochen]“); Gate tests (QA-M1b-004, `gate-tests.log` Z. 1058–1069); ADR-027 Nr. 7; `IMPLEMENTATION-RULES.md`, Projekt-Amendment [ADR-027] — **Befund:** `tests/testthat/test-validation-latent.R:129–132` sucht `validation.Rmd` nur über `system.file("doc", …)` und `test_path("..", "..")`. In der Paketkopie des Mutationslaufs gibt es kein `vignettes/`, obwohl `REPO_ROOT` gesetzt ist. `expect_true(file.exists(rmd))` schlägt fehl, danach bricht `normalizePath(…, mustWork = TRUE)` im Helfer ab. Der unmutierte Vorlauf ist rot, kein Mutant läuft. — **Vorschlag:**
-  - den Pfad wie `test-validation-numeric.R:236–238` auflösen: `validation_find_repo()`, sonst `system.file("doc", "validation.Rmd", mustWork = TRUE)`;
-  - Erwartungen, Quellenliste und Literalprüfung unverändert lassen;
-  - mit dem QA-Test (Paketkopie mit `REPO_ROOT`) und dem regulären Lauf belegen.
-  - Diese Änderung ist nach ADR-027 Nr. 7 Builder-Arbeit im Rework und keine Behebung „an Tests“: Der Test bricht vor seinen Erwartungen ab, nichts wird abgeschwächt.
-- [E16] (blocking) Gate tests (QA-M1b-005, `gate-tests.log` Z. 1090–1151); `?msa_fit` (`R/fit.R:37–40`: „For ordinal outcomes: the labels in scale order. For binary outcomes given as labels: two distinct, non-missing labels, whose second element is the event. Labels require this explicit argument …“); PLAN-UPDATE, Schnittstellen („Bei Labels bestimmt allein das validierte Argument `levels` die Kodierung“); docs/01 §2 Nr. 4; ADR-027 Nr. 4 — **Befund:**
-  - Ordinales `levels` wird nicht geprüft: NA und `""` laufen durch und stehen in `fit$levels`; Duplikate enden mit dem R-internen Fehler „factor level [3] is duplicated“; ein Label oder keines endet mit Meldungen ohne Bezug auf `levels`.
-  - Binär werden leere Labels angenommen.
-  - Bei numerischen oder logischen Werten ignoriert der binäre Zweig ein übergebenes `levels` (`R/fit.R:182–183` vor `:184`). `levels = c("no", "yes")` auf 0/1 läuft still ohne Ausschluss, numerische 1/2 mit `levels = c("1", "2")` enden mit „Binary values must be 0 or 1.“, als Zeichen gelingt derselbe Fit.
-  — **Vorschlag:**
-  - `levels` vor jeder Datenprüfung validieren, ordinal mit einer Meldung, die „levels“ enthält;
-  - die bestehende binäre Meldung mit „two distinct, non-missing labels“ beibehalten (`test-fit-latent.R:11–13`) und um leere Labels erweitern;
-  - bei gegebenem binären `levels` über `as.character(value)` kodieren, unabhängig vom Speichertyp;
-  - ohne `levels` bleibt K-M1b-6 („binäre Werte außerhalb {0, 1} → Fehlermeldung“).
-  - Unit-Tests einschließlich der Invarianz gegenüber dem Speichertyp (gleiche `data$y` für numerisch, logisch und Zeichen).
-- [E17] (blocking) Gate tests (QA-M1b-006, `gate-tests.log` Z. 1153–1183); ADR-026 Nr. 5 („`sim_merge()` verlangt … gültige Seeds und Kennzahlen“); PLAN-UPDATE, Vignette („Eine vorhandene fehlerhafte Datei führt zum benannten Fehler.“); ADR-023 Nr. 2.3 und Nr. 4.4; ADR-027 Nr. 5 — **Befund:**
-  - `sim_merge()` (`simulation_helpers.R:341–350`) prüft weder die Designspalten noch die logischen Flags; `items = 999` wird still zusammengeführt.
-  - `latent_read_results()` (`reference_checks.R:197–203`) nimmt `empse` < 0, `derived_share` > 1 und `seed` = −10,5 an.
-  - QA schlägt nonblocking vor. Herabgestuft wird nicht: Der Test hält das Gate rot, die Erwartungen decken sich mit dem eigenen Vertrag des Builders (ADR-026 Nr. 5), und die Prüfungen sind klein.
-  — **Vorschlag:** Prüfungen nach ADR-027 Nr. 5 ergänzen, je ein synthetischer Negativfall im Unit-Test.
-- [E18] (blocking) Gate mutgate (`gate-mutgate.log` Z. 3 und 11–12: „Abbruch vor dem ersten Mutanten: Schon unmutiert scheitern 7 Tests“; `reports/mutation/unmutated.json`) — **Befund:**
-  - Kein Mutant ist gelaufen; `reports/mutation/mutation.json` fehlt. Überlebende Mutanten (Survived, NoCoverage) mit Zeile und `mutatorName` lassen sich daher noch nicht benennen.
-  - Die sieben roten Tests des Vorlaufs sind die QA-Tests aus E12 bis E14, E16 und E17, der QA-Test zu E15 und `test-validation-latent.R` (E15).
-  — **Vorschlag:**
-  - E12 bis E17 so beheben, dass der unmutierte Vorlauf über `tests/testthat`, `tests/acceptance` (ohne `MUT_TEST_EXCLUDE`), `tests/e2e` und `tests/fuzz` grün ist.
-  - Der neue Code in `R/fit.R` (Konvergenzhelfer, Binärprüfung, Kontrast, Warnungen, Identifizierbarkeit) braucht Tests, die Mutanten erkennen. Über die Schwelle entscheidet der nächste Gate-Lauf.
-  - Äquivalenzanträge nur einzeln mit Begründung in `MUT-EQUIV.json` (SCHEMA.md).
-- [E19] (minor) [INFRA] Gate tests (`test-m2-6-evaluate.R`, 13 Fehlschläge); ADR-025 Nr. 4; E9 und E10 der Planrunde — **Befund:** Das Abnahmeorakel wertete jede Warnung als Rückfallauslöser. In dieser Phase angepasst:
-  - `acc_m2_convergence_warning()` und `acc_m2_with_conditions()` in `tests/acceptance/setup-m2.R`;
-  - neuer Selbsttest in `test-m2-6-evaluate.R` mit den Meldungen aus ADR-006 Nr. 4.2, den Pflichtwarnungen von K-M1b-4 und K-M1b-6 und der Optimiererumstellung.
-  - Die Regel ist vom Produktcode unabhängig. Sonst ändert sich nichts; der Block mit erzwungenem Fehler und erzwungener Konvergenzwarnung bleibt unverändert.
-  - K-M2-6 und K-M2-7 sind in meinem Lauf grün (Prüflauf 1). Das nächste Gate bestätigt es.
-  — **Vorschlag:** Keine Builder-Arbeit. `R/acmg.R` bleibt unverändert (ADR-025 Nr. 4.5). BL-90.
-- [E20] (minor) ADR-026 Nr. 8; PROGRESS M1b, M1B-NUM-01; docs/01 §2 Nr. 5; ADR-027 Nr. 6 — **Befund:** Mit den Vorgabe-Optimierern weichen latente Fits nach Zeilenumkehr, Umbenennung und Ereignistausch bis 8,1e-6 · σ²_TV ab; die Toleranz ist 1e-6 · σ²_TV. Die Unit-Tests belegen die Invarianz mit engerer Steuerung bei unveränderter Toleranz. Das wird nach ADR-027 Nr. 6 angenommen: Der Vorgabepfad muss gleich den Vorgabeaufrufen der Engines bleiben (K-M1b-1, K-M1b-5). — **Vorschlag:** In `?msa_fit` einen Satz ergänzen, dass ordinale und binäre Schätzer nur bis zur Optimierertoleranz der Engines von Zeilenreihenfolge und Stufennamen unabhängig sind. Kein Eingriff in den Vorgabepfad. BL-91.
-- [E21] (minor) K-M1b-2; K-M1d-7; docs/01 §2 Nr. 3 („Berichtet wird, was herauskommt …“); `inst/validation/sim/ordinal_recovery_check_session.txt` — **Befund:** Im Kurzlauf enden 17 von 80 S-ord-Wiederholungen mit „iteration limit reached without convergence (10)“, eine mit „singular convergence (7)“; alle sind `converged = FALSE` mit endlichen Schätzern. Nach ADR-023 Nr. 10.9 und 13.2 ist das spec-gemäß (nlminb-Erfolg nur Code 0, Vorgabesteuerung). — **Vorschlag:** keine Änderung in M1b. Betreiber und M1d berichten im Vollauf den Nichtkonvergenzanteil je Szenario, und K-M1d-7 bewertet die Schätzer mit und ohne diese Wiederholungen. BL-92.
-- [E22] (minor) [INFRA] PROGRESS M1b, M1B-INFRA-SOCKET und M1B-INFRA-CLOCK; BL-86 — **Befund:** In der Builder-Sandbox ist `socket()` gesperrt; der HTTP-Replay-Test von K-M2-7 endet dort mit einem Fehler. In meinem Lauf ist er grün (Prüflauf 1); im Gate lief K-M2-7 in Runde 1 nicht (Abbruch nach `m2-6-evaluate`), das nächste tests-Gate entscheidet. Die NOTE „Unable to verify current time“ betrifft nur den lokalen Check, das lint-Gate ist OK. — **Vorschlag:** keine Builder-Arbeit; Stand-Vermerk in BL-86.
-- [E23] (minor) `gate-tests.log` Z. 546–571 (zwei Warnungen in `test-m1b-4-two-levels.R:41–42`) — **Befund:** Der Abnahmehelfer ruft `lme4::nobars()` und `lme4::findbars()` auf, die lme4 2.0.6 nach `reformulas` verschoben hat. Kein Fehlschlag, kein Produktbezug. — **Vorschlag:** Der Reviewer stellt den Helfer bei der nächsten Abnahmepflege um, etwa auf `reformulas`, sobald es deklariert ist. BL-93.
+Es gibt keine Anträge. Äquivalent und nicht beantragt sind unter anderem `R/fit.R:204`, `:243` (dreimal), `:285`, `:348`, `:352`, `:360–362` und `:369` (E27). Freigegeben wird nichts.
 
-## Hinweise für REWORK (Runde 2)
+## Einwände (Runde 2)
 
-- **Reihenfolge:**
-  1. Fit-Eingaben (E12, E13, E16) und Identifizierbarkeit (E14) als eine Klasse im ordinalen und binären Zweig umsetzen, mit gemeinsamem Pfad für `...`, Zeilenauswahl und Stufenregel.
-  2. Danach `inst/validation/` (E17) und den Testpfad (E15).
-- **Bestehende Meldungen beibehalten, die Tests prüfen:**
-  - „Binary values must be 0 or 1.“;
-  - „Binary `levels` must contain two distinct, non-missing labels.“ (darf erweitert werden, muss aber „two distinct, non-missing labels“ enthalten);
-  - „At least three items are needed for ordinal outcomes.“;
-  - die Verwerfungs- und Range-Warnungen. Neue Meldungen dürfen keinen AP1-Rückfallauslöser enthalten, außer bei echter Nichtkonvergenz.
-- **Kurzläufe:** Nach der letzten Änderung an `msa_fit()`, `msa_grr()` oder den Studienhelfern alle neun `_check_`-Dateien mit dem endgültigen Paketstand neu erzeugen (ADR-023 Nr. 1.5); die Implementierungs-Hashes der Sessions ändern sich mit.
-- **Belege:** echter Output der gezielten Läufe in `REWORK-NOTES.md`, je Befund-ID. Zusätzlich die vollständigen QA-Verzeichnisse und eine Paketkopie wie im QA-Test zu QA-M1b-004.
-- **Abnahme- und QA-Tests:** unverändert lassen; die Orakelanpassung zu E19 ist bereits geschehen.
+- [E24] (blocking) docs/01 §2 Nr. 4 („Randfälle sind Pflicht: … unbalancierte Pläne … Ergebnis ist eine richtige Zahl oder eine klare Fehlermeldung, nie stillschweigend eine falsche Zahl.“); ADR-027 Nr. 3 („Das gilt als Klasse für alle Zufallsterme und alle Zwei-Stufen-Faktoren“); `orchestrator/LESSONS.md` („Numerische Randfälle als Klasse beheben.“); ADR-029 Nr. 2 — **Befund:** Bei `type = "ordinal"` und `"binary"` prüft `msa_fit()` nicht, ob sich die Varianzen der Zufallsterme nach Abzug des festen Teils trennen lassen. Der numerische Pfad endet in denselben Plänen mit „Numeric variance components are not identifiable.“ (`R/fit.R:558–562`). Prüflauf 4:
+  - Prompt und Modell mit derselben dreistufigen Partition: ordinal in 10 von 10 Fits ohne Warnung, mit `singular` FALSE und `converged` TRUE; bei Seed 20261101 still `model` = `prompt` = 0,356. Binär ist die Aufteilung beliebig, in 2 von 10 Fits ohne Warnung.
+  - Items in Modellen verschachtelt mit `interactions = TRUE`: ordinal `item` = `item:model` = 0,6817, die Item-Varianz ist halbiert, ICC_items und %GRR sind still falsch; binär 0,353/0,327.
+  - Binär mit zwei Modellen und zwei Blöcken derselben Partition: Seed 20261102 liefert ohne Warnung model 0,0104 und block 0,0176.
+  - Die Prüfungen aus E14 (`R/fit.R:283–298`) erfassen nur feste Zwei-Stufen-Faktoren und Zufallsterme mit höchstens zwei Stufen. Das war die Aufzählung in ADR-027 Nr. 3; die Umsetzung der Runde 2 erfüllt sie.
+  — **Vorschlag:**
+  - Vor dem ordinalen und dem binären Engine-Aufruf die Identifizierbarkeit aller Zufallsterme prüfen, einschließlich Wechselwirkungen, nach Abzug des festen Teils (Achsenabschnitt und feste Zwei-Stufen-Faktoren). Bei Verstoß benannt abbrechen und die Terme nennen (ADR-029 Nr. 2).
+  - Empfohlen ist das Gram-Kriterium aus Prüflauf 5 mit der Eigenwertregel von `R/fit.R:558–562`, also ohne neue Konstante. Ein gleichwertiges exaktes Kriterium ist zulässig.
+  - Unit-Tests ordinal und binär: die drei Pläne aus Prüflauf 4 und ein dreistufiger Zufallsterm, den das feste Design aufspannt, je mit benanntem Fehler. Dazu unveränderte Komponenten identifizierbarer Pläne gegen direkte Engine-Fits, etwa Items in Modellen ohne Wechselwirkungen und gekreuzte Zwei-Stufen-Faktoren binär.
+  - Die Tests müssen Mutanten der neuen Prüfung töten; der Abstand zur mutgate-Schwelle beträgt 0,08 Punkte.
+  - Danach die neun `_check_`-Dateien neu erzeugen (ADR-023 Nr. 1.5).
+- [E25] (minor) [INFRA] Gate tests (`tests/acceptance/test-m1b-7-vignette-full-results.R`, `gate-tests.log` Z. 660–696); ADR-027 Nr. 5.2; ADR-029 Nr. 1 — **Befund:** Meine Fixture addierte 0,5 auch auf `derived_share`, aus 1 wurde 1,5. Der Bereichstest weist die Datei zu Recht ab; der Builder hat das als M1B-R2-INFRA-FULL-FIXTURE belegt. In dieser Phase korrigiert:
+  - Anteile werden zu (Wert + 0,5) mod 1, alles andere bleibt wie in ACC-11 (5);
+  - Reviewer-Lauf: 204 Erwartungen grün, 0 von 180 Fixture-Zellen im Kurzlauf-Abschnitt (Prüflauf 6).
+  — **Vorschlag:** Keine Builder-Arbeit; der Validator bleibt streng. Das nächste Gate tests bestätigt die Korrektur. BL-94.
+- [E26] (minor) [QA-PENDING] Gate tests (`tests/e2e/test-m2-qa-e2e.R`, vier Fehler, `gate-tests.log` Z. 933–1084); `tests/e2e/test-m1b-qa-e2e.R:151–184`; ADR-029 Nr. 3 — **Befund:** QA-M1b-004 lädt mit `test_file(load_package = "source")` eine Paketkopie in den laufenden Prozess und löscht sie danach (Z. 160). Den vorher geladenen Namespace stellt der Test nicht wieder her. Alle folgenden Tests im selben Prozess finden kein `llmsa` mehr (Prüflauf 1). Die Ursache liegt allein im QA-Territorium; der Builder hat sie als M1B-R2-INFRA-QA-NAMESPACE belegt. — **Vorschlag:**
+  - Keine Builder-Arbeit und kein Scheinfix im Produktcode.
+  - QA: den verschachtelten Lauf in einem eigenen Prozess ausführen, etwa mit `callr::r()`, oder den zuvor geladenen Pfad wiederherstellen. Nicht aus `REPO_ROOT` nachladen, das würde im Mutationslauf den Mutanten ersetzen.
+  - Betreiber: QA-Nachlauf mit `orchestrator/state/M1b/qa-requested` anfordern. Ohne ihn bleibt das Gate tests rot und `PASS` unmöglich. BL-95.
+- [E27] (minor) Gate mutgate (pass; `reports/mutation/mutation.json`, Runde 2) — **Befund:** Von den 45 Überlebenden in `msa_fit()` haben drei im neuen Code eine fachliche Lücke:
+  - `R/fit.R:160` `&& → ||`: kein Test mit geordnetem Faktor und davon abweichendem `levels`;
+  - `:166` `< → <=`: kein ordinaler Fit mit genau zwei Labels;
+  - `:331` `x[<i>] → x[<i> + 1L]` und `x[<i>] → x[<i> - 1L]`: der gespeicherte `glmer`-Aufruf wird nirgends neu ausgewertet.
+  - Die übrigen sind Meldungs- und `call.`-Mutanten oder Äquivalente (`:204`, `:243`, `:285`, `:348`, `:352`, `:360–362`, `:369`).
+  — **Vorschlag:** nicht verlangt, sinnvoll zusammen mit E24, weil die Schwelle knapp ist:
+  - drei Tests: explizite Labels gewinnen über den geordneten Faktor, zwei ordinale Labels fitten, `eval(fit$model@call)` gleicht dem binären Fit (Prüflauf 2 zeigt das Sollverhalten);
+  - Äquivalente nur einzeln in `MUT-EQUIV.json`.
+  - BL-96.
+- [E28] (minor) `NEWS.md` (Kopf) — **Befund:** Der Eintrag nennt die nutzersichtbaren Änderungen der Runde 2 an latenten Fits nicht: Zeilenargumente und Gewichte, Labelprüfung, Identifizierbarkeitsfehler, neu auswertbare Engine-Aufrufe und `data$.msa_offset`. — **Vorschlag:** bei der nächsten Produktänderung ergänzen. BL-97.
+
+## Hinweise für REWORK (Runde 3)
+
+- **Umfang:**
+  - E24 im Produktcode, mit Tests und neu erzeugten Kurzläufen.
+  - E27 ist empfohlen, weil neuer Code ohne tötende Tests die mutgate-Schwelle (91,83, zuletzt 91,91) unterschreiten kann.
+  - E25 und E26 sind keine Builder-Arbeit. In `REWORK-NOTES.md` genügt der Verweis auf den Gate-Beleg als OUT-OF-TERRITORY.
+- **Bestehende Meldungen beibehalten:** alle aus Runde 1 und die neuen Meldungen der Runde 2. Tests und QA prüfen sie wörtlich oder über Teilstrings, etwa „not identifiable“, „requires at least three observed levels“ und „levels“.
+- **Unveränderter Vorgabepfad:** Identifizierbare Pläne behalten exakt den bisherigen Fit (K-M1b-1, K-M1b-5).
+- **Belege:** echter Output der gezielten Läufe je Befund-ID in `REWORK-NOTES.md`.
+- **Abnahme- und QA-Tests:** unverändert lassen.
 
 ## Backlog
 
 - **Neu:**
-  - BL-90: E19, ADR-025 Nr. 4 umgesetzt, Gate-Bestätigung ausstehend;
-  - BL-91: E20, Invarianz der Vorgabepfade latenter Fits;
-  - BL-92: E21, Nichtkonvergenz im S-ord-Vollauf;
-  - BL-93: E23, `nobars`/`findbars` im Abnahmehelfer.
-- **Ergänzt:** BL-86 um den Stand-Vermerk zu E22.
-- Die blocking-Befunde stehen nicht im Backlog.
+  - BL-94: E25, Fixture korrigiert, Gate-Bestätigung ausstehend;
+  - BL-95: E26, QA-M1b-004, QA und Betreiber;
+  - BL-96: E27, Testlücken im neuen latenten Code;
+  - BL-97: E28, `NEWS.md`.
+- **Gestrichen:** BL-90, bestätigt im Gate Runde 2.
+- **Stand-Vermerke:** BL-86 (E22), BL-91 (E20), BL-92 (E21) und BL-93 (E23).
+- Der blocking-Befund E24 steht nicht im Backlog.

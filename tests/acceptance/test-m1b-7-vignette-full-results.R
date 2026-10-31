@@ -4,7 +4,8 @@
 # temporary copy of the package under test (ACC-11): for every study a TEST
 # FIXTURE <study>_results.csv is written next to the short run, made from the
 # short-run results with every value and mcse shifted and n_sim replaced by a
-# marker (no simulation result, never written into the repository); the
+# marker (no simulation result, never written into the repository); shares
+# stay valid shares (ADR-027 Nr. 5.2, ADR-029 Nr. 1); the
 # replicates and session files of the short run are copied under the names of
 # a full run. The vignette is knitted in a separate R process with the copy
 # loaded by pkgload::load_all() and without REPO_ROOT, i.e. in the public
@@ -15,9 +16,13 @@
 acc_m1b_7f_studies <- c("ordinal_recovery", "binary_recovery", "two_level")
 acc_m1b_7f_marker <- 1234L   # fixture marker for n_sim, not a reference value
 
+# Every value moves by 0.5; a derived_share moves by 0.5 modulo 1, which keeps
+# it in [0, 1] and has no fixed point, so no fixture value equals the short run.
 acc_m1b_7f_fixture <- function(res) {
   res$n_sim <- acc_m1b_7f_marker
-  res$value <- as.numeric(res$value) + 0.5
+  value <- as.numeric(res$value)
+  share <- res$measure == "derived_share"
+  res$value <- ifelse(share, (value + 0.5) %% 1, value + 0.5)
   res$mcse <- as.numeric(res$mcse) + 0.25
   res
 }
