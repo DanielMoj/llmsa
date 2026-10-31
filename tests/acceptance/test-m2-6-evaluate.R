@@ -226,3 +226,39 @@ test_that("K-M2-6: the mini-references of the evaluation detect wrong modal answ
   expect_identical(acc_m2_band_dangerous(2), "unacceptable")
   expect_identical(acc_m2_worst(c("acceptable", "marginal", "acceptable")), "marginal")
 })
+
+test_that("K-M2-6: the fallback trigger of the oracle is an error or a convergence warning by ADR-006 Nr. 4.2, not any warning (ankerRef: ANK-68; ADR-025 Nr. 4)", {
+  # Messages named in ADR-006 Nr. 4.2 and engine messages of lme4 and ordinal.
+  conv <- c("Model failed to converge with max|grad| = 0.172332 (tol = 0.002, component 1)",
+            "Model may not have converged with 1 eigenvalue close to zero",
+            "Inner loop did not converge at iteration 7",
+            "Hessian is numerically singular: parameters are not uniquely determined",
+            "non-finite values in HESSIAN",
+            "unable to evaluate scaled gradient",
+            "Model is nearly unidentifiable: very large eigenvalue")
+  # Warnings that K-M1b-4 and K-M1b-6 require, and the optimiser switch of ADR-006 Nr. 4.2.
+  other <- c("Two-level component(s) block use the range method (beta-hat^2/2), with positive bias: E[beta-hat^2/2] = sigma^2 + Var(beta-hat)/2; see ?msa_fit.",
+             "30 missing response(s) were dropped.",
+             "2 value(s) are not among `levels` and were dropped.",
+             "cannot use ucminf optimizer for this model, using nlminb instead")
+  expect_identical(acc_m2_convergence_warning(conv), rep(TRUE, length(conv)))
+  expect_identical(acc_m2_convergence_warning(other), rep(FALSE, length(other)))
+  plain <- acc_m2_with_conditions({
+    warning(other[1L], call. = FALSE)
+    warning(other[2L], call. = FALSE)
+    "ordinal fit"
+  })
+  expect_false(plain$failed)
+  expect_identical(plain$value, "ordinal fit")
+  expect_identical(plain$warnings, other[1:2])
+  triggered <- acc_m2_with_conditions({
+    warning(other[1L], call. = FALSE)
+    warning(conv[1L], call. = FALSE)
+    "ordinal fit"
+  })
+  expect_true(triggered$failed)
+  expect_identical(triggered$warnings, c(other[1L], conv[1L]))
+  failed <- acc_m2_with_conditions(stop("acceptance: forced failure", call. = FALSE))
+  expect_true(failed$failed)
+  expect_s3_class(failed$value, "error")
+})

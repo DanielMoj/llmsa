@@ -1,0 +1,70 @@
+{
+  "milestone": "M1b",
+  "phase": "code",
+  "round": 1,
+  "verdict": "REWORK",
+  "blocking": [
+    {
+      "id": "E12",
+      "ref": "Gate tests (tests/e2e/test-m1b-qa-e2e.R, QA-M1b-001; gate-tests.log Z. 958–976); ?msa_boot (R/grr.R:141 „Available for numeric and binary outcomes (lme4 models).“; R/grr.R:153–154 „An explicit fitting control passed to [msa_fit()] remains the model's refit control.“); ADR-027 Nr. 1.3",
+      "note": "Der binäre Zweig ruft lme4::glmer(form, data = dat, family = …, ...) unausgewertet auf (R/fit.R:263); fit$model@call speichert control = ..1, msa_boot()/refit() scheitern mit „the ... list contains fewer than 1 element“ (auch aus einer Hilfsfunktion). Der ordinale Zweig (R/fit.R:262) speichert dieselben Platzhalter. Abhilfe: ... wie im numerischen Durchreichweg vorab auswerten (R/fit.R:241–253) und ausgewertete Argumente samt data und family im gespeicherten Aufruf ablegen, für glmer und clmm; Unit-Test mit msa_boot() auf binärem Fit mit control im selben Rahmen und aus einer Funktion."
+    },
+    {
+      "id": "E13",
+      "ref": "Gate tests (QA-M1b-002; gate-tests.log Z. 978–1034); ?msa_fit (R/fit.R:47–50 „Expressions in `subset`, `weights` and `offset` can use the internal columns … Row-based arguments refer to the rows remaining after missing or unreadable responses are removed.“; R/fit.R:104–105 „All returned data and study counts describe the retained observations.“); K-M1b-6 („… und in `n$observations` gezählt“); docs/01 §2 Nr. 4; ADR-027 Nr. 1.1–1.2",
+      "note": "Nur der numerische Zweig wertet subset/weights/offset in der Datenmaske aus und gleicht dat mit dem Modellrahmen ab (R/fit.R:244–258). Ordinal und binär endet subset = item != \"I01\" mit „object 'item' not found“; ein Zeilenvektor schätzt auf 198 Beobachtungen und 11 Items, fit$n/fit$data melden 216 und 12 (still falsche Zählung). Abhilfe: Zeilenargumente vor dem Formelaufbau auswerten und anwenden, weights/offset ausrichten, damit Stufenregel, formula, derived, data und n zu nobs(model) passen; Unit-Tests beider Typen gegen den direkten Engine-Fit auf den ausgewählten Zeilen (ANK-TOL.engine_ordinal · σ²_TV)."
+    },
+    {
+      "id": "E14",
+      "ref": "Gate tests (QA-M1b-003; gate-tests.log Z. 1036–1056); docs/01 §2 Nr. 4 („Ergebnis ist eine richtige Zahl oder eine klare Fehlermeldung, nie stillschweigend eine falsche Zahl.“); K-M1b-4; K-M1b-6 („`singular`/Konvergenz im Objekt vermerkt“); ADR-027 Nr. 2 und 3",
+      "note": "(1) singular zählt ordinal die abgeleiteten Komponenten mit (R/fit.R:301 nach :292–296): zwei Blöcke ohne Drift ergeben singular = TRUE bei item 0,898 und prompt 0,972 (REVIEW Prüflauf 2). (2) Konfundierte Zwei-Stufen-Faktoren: clmm verwirft einen Koeffizienten, R/fit.R:288 summiert nur über names(model$beta), block erhält still die Varianz 0. (3) Zufallsterme mit höchstens zwei beobachteten Stufen erreichen clmm (R/fit.R:221–227) und enden mit „all(sapply(gfl, nlevels) > 2) is not TRUE“. Abhilfe: singular ordinal nur über die clmm-Komponenten (Schwelle bleibt); vor dem Fit Rang des festen Zwei-Stufen-Designs und Stufenzahl jedes Zufallsterms prüfen, benannt abbrechen, als Klasse (LESSONS); Unit-Tests für alle drei Fälle; danach die neun _check_-Dateien neu erzeugen (ADR-023 Nr. 1.5)."
+    },
+    {
+      "id": "E15",
+      "ref": "Gate mutgate (gate-mutgate.log Z. 4: „rot: tests/testthat/test-validation-latent.R: latent display retains significant digits and documentation traces every source [abgebrochen]“); Gate tests (QA-M1b-004; gate-tests.log Z. 1058–1069); ADR-027 Nr. 7; IMPLEMENTATION-RULES.md, Projekt-Amendment [ADR-027]",
+      "note": "tests/testthat/test-validation-latent.R:129–132 sucht validation.Rmd nur über system.file(\"doc\", …) und test_path(\"..\", \"..\"); in der Paketkopie des Mutationslaufs fehlt vignettes/, obwohl REPO_ROOT gesetzt ist. expect_true(file.exists(rmd)) schlägt fehl, danach bricht normalizePath(mustWork = TRUE) im Helfer ab; der unmutierte Vorlauf ist rot. Abhilfe: Pfad wie test-validation-numeric.R:236–238 auflösen (validation_find_repo(), sonst system.file(\"doc\", \"validation.Rmd\", mustWork = TRUE)); Erwartungen, Quellenliste und Literalprüfung unverändert. Nach ADR-027 Nr. 7 Builder-Arbeit im Rework, keine Behebung „an Tests“ im Sinn von 60-rework.md."
+    },
+    {
+      "id": "E16",
+      "ref": "Gate tests (QA-M1b-005; gate-tests.log Z. 1090–1151); ?msa_fit (R/fit.R:37–40 „For ordinal outcomes: the labels in scale order. For binary outcomes given as labels: two distinct, non-missing labels, whose second element is the event. Labels require this explicit argument …“); PLAN-UPDATE, Schnittstellen („Bei Labels bestimmt allein das validierte Argument `levels` die Kodierung“); docs/01 §2 Nr. 4; ADR-027 Nr. 4",
+      "note": "Ordinales levels wird nicht geprüft: NA und \"\" laufen durch, Duplikate enden mit „factor level [3] is duplicated“, ein oder kein Label mit Meldungen ohne levels-Bezug. Binär werden leere Labels angenommen; bei numerischen oder logischen Werten ignoriert der Zweig ein übergebenes levels (R/fit.R:182–183 vor :184): levels = c(\"no\", \"yes\") auf 0/1 läuft still, numerische 1/2 mit levels = c(\"1\", \"2\") enden mit „Binary values must be 0 or 1.“, als Zeichen gelingt derselbe Fit. Abhilfe: levels vor jeder Datenprüfung validieren (ordinal Meldung mit „levels“; binäre Meldung mit „two distinct, non-missing labels“ beibehalten, test-fit-latent.R:11–13, und um leere Labels erweitern); bei binärem levels über as.character(value) kodieren; ohne levels bleibt K-M1b-6; Unit-Tests inklusive Invarianz gegenüber dem Speichertyp."
+    },
+    {
+      "id": "E17",
+      "ref": "Gate tests (QA-M1b-006; gate-tests.log Z. 1153–1183); ADR-026 Nr. 5 („sim_merge() verlangt … gültige Seeds und Kennzahlen“); PLAN-UPDATE, Vignette („Eine vorhandene fehlerhafte Datei führt zum benannten Fehler.“); ADR-023 Nr. 2.3 und Nr. 4.4; ADR-027 Nr. 5",
+      "note": "sim_merge() (inst/validation/sim/simulation_helpers.R:341–350) prüft weder Designspalten noch logische Flags; items = 999 wird still zusammengeführt. latent_read_results() (inst/validation/latent/reference_checks.R:197–203) nimmt empse < 0, derived_share > 1 und seed = −10,5 an. QA schlägt nonblocking vor; keine Herabstufung, weil der reproduzierende Test das Gate rot hält und die Erwartungen dem eigenen Vertrag (ADR-026 Nr. 5) entsprechen. Abhilfe: Prüfungen nach ADR-027 Nr. 5 mit je einem synthetischen Negativfall im Unit-Test."
+    },
+    {
+      "id": "E18",
+      "ref": "Gate mutgate (gate-mutgate.log Z. 3 und 11–12: „Abbruch vor dem ersten Mutanten: Schon unmutiert scheitern 7 Tests“; reports/mutation/unmutated.json)",
+      "note": "Kein Mutant ist gelaufen, reports/mutation/mutation.json fehlt; überlebende Mutanten mit Zeile und mutatorName lassen sich noch nicht benennen. Die sieben roten Tests des Vorlaufs sind die sechs QA-Tests (E12–E17) und test-validation-latent.R (E15). Abhilfe: E12–E17 beheben, sodass der unmutierte Vorlauf über tests/testthat, tests/acceptance (ohne MUT_TEST_EXCLUDE), tests/e2e und tests/fuzz grün ist; den neuen Code in R/fit.R mit mutantentötenden Tests absichern; Äquivalenzanträge nur einzeln begründet in MUT-EQUIV.json. Die Schwelle entscheidet der nächste Gate-Lauf."
+    }
+  ],
+  "nonblocking": [
+    {
+      "id": "E19",
+      "ref": "[INFRA] Gate tests (tests/acceptance/test-m2-6-evaluate.R, 13 Fehlschläge); ADR-025 Nr. 4; PLAN-REVIEW Runde 2 E9/E10",
+      "note": "Abnahmeorakel in dieser Phase angepasst: acc_m2_convergence_warning() und acc_m2_with_conditions() in tests/acceptance/setup-m2.R (Auslöser nur Fehler oder Konvergenzwarnung nach ADR-006 Nr. 4.2, unabhängig vom Produktcode), Selbsttest in test-m2-6-evaluate.R. Reviewer-Lauf: K-M2-6 und K-M2-7 grün, 20 Blöcke, 758 Erwartungen. Keine Builder-Arbeit; R/acmg.R bleibt unverändert. BL-90."
+    },
+    {
+      "id": "E20",
+      "ref": "ADR-026 Nr. 8; PROGRESS M1b (M1B-NUM-01); docs/01 §2 Nr. 5; ADR-027 Nr. 6",
+      "note": "Vorgabe-Optimierer von clmm/glmer weichen bei Zeilenumkehr, Umbenennung und Ereignistausch bis 8,1e-6 · σ²_TV ab (ANK-TOL.invariance 1e-6); die Unit-Tests belegen die Invarianz mit engerer Steuerung bei unveränderter Toleranz. Angenommen nach ADR-027 Nr. 6, weil der Vorgabepfad gleich den Engine-Vorgabeaufrufen bleiben muss (K-M1b-1, K-M1b-5). Vorschlag: einen Satz zur Optimierertoleranz in ?msa_fit. BL-91."
+    },
+    {
+      "id": "E21",
+      "ref": "K-M1b-2; K-M1d-7; docs/01 §2 Nr. 3; inst/validation/sim/ordinal_recovery_check_session.txt",
+      "note": "Kurzlauf S-ord: 17/80 Wiederholungen „iteration limit reached without convergence (10)“, 1/80 „singular convergence (7)“, alle converged = FALSE mit endlichen Schätzern; spec-gemäß nach ADR-023 Nr. 10.9 und 13.2. Betreiber/M1d: Nichtkonvergenzanteil je Szenario im Vollauf berichten, K-M1d-7 bewertet mit und ohne diese Wiederholungen. BL-92."
+    },
+    {
+      "id": "E22",
+      "ref": "[INFRA] PROGRESS M1b (M1B-INFRA-SOCKET, M1B-INFRA-CLOCK); BL-86",
+      "note": "In der Builder-Sandbox ist socket() gesperrt; der HTTP-Replay-Test von K-M2-7 ist im Reviewer-Lauf grün. Die NOTE „Unable to verify current time“ betrifft nur den lokalen Check; lint-Gate OK. Keine Builder-Arbeit; Stand-Vermerk in BL-86."
+    },
+    {
+      "id": "E23",
+      "ref": "gate-tests.log Z. 546–571 (Warnungen aus tests/acceptance/test-m1b-4-two-levels.R:41–42)",
+      "note": "Der Abnahmehelfer nutzt lme4::nobars()/findbars(), die lme4 2.0.6 nach reformulas verschoben hat; zwei Warnungen, kein Fehlschlag, kein Produktbezug. Zuständig Reviewer bei der nächsten Abnahmepflege. BL-93."
+    }
+  ]
+}

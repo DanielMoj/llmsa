@@ -704,14 +704,30 @@ acc_m2_expected_model <- function(main_rows, items, key) {
        n_no_modal = sum(!md$has_modal), kappa_items = md[use, , drop = FALSE], runs = r)
 }
 
-# Fits a model and records an error or warnings instead of stopping.
+# Convergence warning in the sense of ADR-006 Nr. 4.2 (ADR-025 Nr. 4.1): the
+# message contains one of these parts, ignoring case. Written independently of
+# the package (no call of acmg_convergence_warning()); a mere optimiser switch
+# such as "cannot use ucminf optimizer for this model, using nlminb instead"
+# contains none of them.
+acc_m2_convergence_warning <- function(text) {
+  parts <- c("converge", "hessian", "max|grad", "gradient", "unidentifiable")
+  text <- tolower(as.character(text))
+  vapply(text, function(t) any(vapply(parts, function(p) grepl(p, t, fixed = TRUE), logical(1))),
+         logical(1), USE.NAMES = FALSE)
+}
+
+# Fits a model and records an error or warnings instead of stopping. `failed`
+# is the fallback trigger of K-M2-6 and ANK-68: an error or a convergence
+# warning (ADR-025 Nr. 4). Other warnings, such as the range-method warning
+# (K-M1b-4) or the warning on dropped responses (K-M1b-6), do not trigger it.
 acc_m2_with_conditions <- function(expr) {
   warns <- character()
   value <- withCallingHandlers(tryCatch(expr, error = function(e) e), warning = function(w) {
     warns <<- c(warns, conditionMessage(w))
     invokeRestart("muffleWarning")
   })
-  list(value = value, warnings = warns, failed = inherits(value, "error") || length(warns) > 0L)
+  list(value = value, warnings = warns,
+       failed = inherits(value, "error") || any(acc_m2_convergence_warning(warns)))
 }
 
 acc_m2_scores <- function(values) {

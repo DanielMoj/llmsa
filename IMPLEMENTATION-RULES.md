@@ -66,4 +66,11 @@ Regeln und schlägt Änderungen ausschließlich im PLAN vor. Bei Konflikt gilt
 
 ## Projekt-Amendments
 
-_Leer. Format: `- [ADR-nnn] <Regel>`; nur per Reviewer-Commit._
+_Format: `- [ADR-nnn] <Regel>`; nur per Reviewer-Commit._
+
+- [ADR-027] Bricht ein vom Builder geschriebener Test unter `tests/testthat/`
+  in einer Gate-Umgebung vor seinen Erwartungen ab, etwa weil eine Datei in
+  der Paketkopie des Mutationslaufs fehlt, behebt der Builder die
+  Testumgebung auch im Rework, zum Beispiel die Pfadauflösung über
+  `REPO_ROOT`. Erwartungen, geprüfte Inhalte und Toleranzen bleiben
+  unverändert; kein roter Befund wird dadurch grün.
