@@ -1,11 +1,11 @@
 {
   "milestone": "M1a",
-  "round": 4,
+  "round": 5,
   "base": "485c96057c7e4e2a9d35e0a31160988e33afb716",
   "baseRef": "plan/M1a",
   "env": {
-    "ts": "2026-10-30T19:11:23+01:00",
-    "sha": "4f0547b4b3d1c5ef9089b489cd34e21781bc1a6e",
+    "ts": "2026-10-31T01:06:37+01:00",
+    "sha": "f25ff79c71ff335607872730ce2681956e88eb03",
     "bash": "5.3.9(1)-release",
     "git": "2.53.0",
     "toolchain": {
@@ -28,8 +28,8 @@
     "lint": "lint: Kommando erfolgreich",
     "tests": "tests: Kommando erfolgreich",
     "trace": "trace: alle Kriterien sind wörtlich und beidseitig verknüpft",
-    "territory": "territory: letzter Diff sauber (builder/60-rework, Runde 4, Basis e263066a1521c9d23e9316ef041683549914b935, 2026-10-30T14:16:34+01:00)",
-    "mutgate": "mutgate: pass (score=93.74 required=91.79 baseline=93.79 floor=80)",
+    "territory": "territory: letzter Diff sauber (builder/60-rework, Runde 5, Basis b0d28544312aae12bdfe3ffb22eab6aa8f2a5d83, 2026-10-30T19:57:50+01:00)",
+    "mutgate": "mutgate: pass (score=93.83 required=91.79 baseline=93.83 floor=80)",
     "golden-adr": "golden-adr: Änderung und ADR liegen im selben Meilenstein",
     "mutfull": "mutfull: pass (nicht fällig in M1a)"
   },
