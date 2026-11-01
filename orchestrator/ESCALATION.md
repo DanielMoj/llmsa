@@ -1,6 +1,6 @@
 # ESCALATION M1b
 
-Plan nicht auflösbar; Arbiter benötigt HUMAN.
+Codepfad festgefahren (Gates rc=1, Verdict=REWORK); Arbiter benötigt HUMAN.
 
 Handoff: `orchestrator/handoff/M1b/`
 
