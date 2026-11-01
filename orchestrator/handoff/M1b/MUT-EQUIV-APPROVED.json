@@ -1,0 +1,9 @@
+{
+  "approved": [
+    {"file": "R/fit.R", "mutator": "<n> + 1 → <n> + 1", "line": 405, "reason": "msa_latent_information(): matrix(0, k, k) -> matrix(1, k, k). Die Doppelschleife weist fuer alle i <= j gram[i, j] und gram[j, i] zu, bevor eine Zelle gelesen wird; bei k = 0 ist die Matrix leer. Antrag des Builders (MUT-EQUIV.json); in M1a vom Reviewer freigegeben (damals Zeile 357)."},
+    {"file": "R/fit.R", "mutator": "<n> - 1 → <n> - 1", "line": 405, "reason": "msa_latent_information(): matrix(0, k, k) -> matrix(-1, k, k). Begruendung wie beim Mutanten <n> + 1 derselben Zeile."},
+    {"file": "R/fit.R", "mutator": "TRUE → FALSE", "line": 398, "reason": "msa_latent_information(): strsplit(groups, \":\", fixed = TRUE) -> fixed = FALSE. Das Trennmuster \":\" ist auch als regulaerer Ausdruck ein Literal; beide Varianten trennen identisch. Antrag des Builders (MUT-EQUIV.json)."},
+    {"file": "R/grr.R", "mutator": "> → >=", "line": 99, "reason": "grr_stats(): grr_v > 0 -> grr_v >= 0. Unterschied nur bei grr_v = 0 und total_v != 0, also item_v > 0; der mutierte Zweig liefert max(1, floor(Inf)) = Inf wie der else-Zweig. In M1a vom Reviewer freigegeben (R/grr.R:94) und in der Basis 93,83 enthalten."}
+  ],
+  "approvedBy": "Betreiber, 01.11.2026, ADR-031 (Ausnahme statt Reviewer-Approval; Reviewer kann widerrufen)"
+}
