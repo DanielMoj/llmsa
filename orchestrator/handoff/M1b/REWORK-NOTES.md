@@ -1,3 +1,242 @@
+# M1b — REWORK, Runde 6
+
+Rolle: Builder · Stand: 01.11.2026 · Keine Git-Kommandos.
+
+## Ergebnis und Grundlage
+
+**Kein offener blocking-Befund und keine verlangte Produktänderung.**
+REVIEW/verdict-code der Runde 5 enthalten `blocking: []`. ADR-037 Nr. 2
+ordnet für Runde 6 ausdrücklich die Dokumentation fortbestehender
+Infrastrukturursachen an. Die Datei
+`reference/quellen/data/aiag/anova_example.csv` fehlt weiterhin; die
+gezielten Abnahmeläufe reproduzieren den Fehler. M1b ist damit weiterhin
+**nicht abgenommen**.
+
+Gelesen: AGENTS.md, IMPLEMENTATION-RULES.md, contracts/PROTOCOLS.md,
+Handoff-Schema, REVIEW.md und verdict-code.json der Runde 5, gates.json
+samt roten Logs, CRITERIA.json, ARBITER.md, LESSONS.md, PROGRESS.md
+(aktueller M1b-Stand), docs/01 und docs/02 (M1b), ADR-035/037 sowie die
+unten ausgeführten unveränderten Abnahmedateien und ihre Helfer.
+Die beiden privaten Belegdokumente sind wie die übrigen Dateien unter
+`reference/privat/` nicht vorhanden (R6-P1).
+
+Die vorhandenen Gate-Fakten gehören zu **Runde 5**, Zeitpunkt
+`2026-11-01T22:22:23+01:00`, Produktstand `a8f8db7`:
+lint, tests und mutgate `fail`; deps, trace, territory, golden-adr und
+mutfull `pass`; `result: fail`. Kein Gate hat Status `error`, kein
+offenes `[QA-PENDING]` ist im aktuellen Verdict ausgewiesen. Die roten
+Gates bleiben als Fakten bestehen, obwohl ihre Ursache nach ADR-037
+für den Builder nonblocking ist. Die folgenden Läufe sind gezielte
+Diagnosen und kein neuer Gate-Lauf oder Mutationsscore.
+
+## Antworten auf die Befund-IDs
+
+### E37 — OUT-OF-TERRITORY [INFRA], weiterhin reproduzierbar
+
+Ref: REVIEW E37; ADR-037 Nr. 2; AGENTS.md, Handoff-Disziplin und
+Domänenregeln; docs/01 §6; BL-103.
+
+Das geschützte AIAG-Datenblatt fehlt samt `QUELLE.txt`; auch
+`reference/quellen/` und `reference/privat/` enthalten weiterhin keine
+Dateien (R6-P1). Die Wiederherstellung gehört dem Betreiber.
+
+Belege aus den vorhandenen Gate-Logs:
+
+- `orchestrator/state/M1b/gate-lint.log:16` und `:26`:
+  `Validation input is missing: /mnt/c/Users/Danie/dev/Llmsa/llmsa/reference/quellen/data/aiag/anova_example.csv`;
+  Zeile 34: `r-check: fail — R CMD build fehlgeschlagen`.
+- `orchestrator/state/M1b/gate-tests.log:571` und die nachfolgenden
+  AIAG-Stacktraces nennen `acceptance: local AIAG data sheet missing`.
+- `orchestrator/state/M1b/gate-mutgate.log:3`:
+  `r-mutation: unmutierter Testlauf: 125 s; 392 Tests, davon 12 fehlgeschlagen, 4 abgebrochen`;
+  Zeile 20: `r-mutation: Abbruch vor dem ersten Mutanten: Schon unmutiert scheitern 16 Tests (/mnt/c/Users/Danie/dev/Llmsa/llmsa/reports/mutation/unmutated.json)`.
+
+Eigene Reproduktion: K-M1a-2 endet mit drei Fehlern und Exit 1 (R6-P2);
+die Repository-Vignette K-M1b-7 endet wegen derselben fehlenden Datei mit
+sieben fehlgeschlagenen Erwartungen und Exit 1 (R6-P3). Das vorgeschriebene
+Fehlschlagen bleibt erhalten. Es wurden keine Ersatzdaten erzeugt.
+
+Weiterer Schritt laut BL-103: Betreiber stellt die Originaldateien wieder
+her, prüft den Datenblatt-Hash gegen ANK-10 und den Rollback-Mechanismus
+und führt danach die Gates erneut aus. BACKLOG und Orchestrator bleiben
+außerhalb dieses Builder-Auftrags.
+
+### E38 — OUT-OF-TERRITORY [INFRA], Testtreiber beim Betreiber
+
+Ref: REVIEW E38; ADR-037 Nr. 2; BL-104;
+`orchestrator/state/M1b/gate-tests.log:685`.
+
+Echter Log-Output:
+
+```text
+Maximum number of failures exceeded; quitting.
+```
+
+Der Testordner wurde nach m1a-4 abgebrochen. Der gelesene Treiber
+`orchestrator/lib/r-tests.R` verwendet weiterhin den ProgressReporter
+ohne eigene Aufhebung seiner Abbruchgrenze. Die in BL-104 verlangte
+Korrektur am Gate-Treiber gehört dem Betreiber.
+
+R6-P3 und R6-P4 führen ausgewählte M1b-Abnahmedateien unmittelbar aus.
+Dies ersetzt weder die im Gate ausgelassenen Dateien noch einen
+vollständigen Abnahmelauf. Die übrige Abnahme wird in dieser Runde ohne
+Produktänderung nicht wiederholt; der vollständige zusätzliche Lauf
+des Reviewers steht in REVIEW Runde 5, Prüflauf 1.
+
+### E39 — nonblocking, Entscheidung nach neuem Mutationsbericht
+
+Ref: REVIEW E39; ADR-037 Nr. 3; Handoff-Schema MUT-EQUIV; BL-102.
+
+`reports/mutation/mutation.json` fehlt weiterhin (R6-P1).
+`unmutated.json` enthält 16 rote Testblöcke (12 fehlgeschlagen,
+4 abgebrochen); das Gate ist vor dem ersten Mutanten abgebrochen.
+Es gibt damit keinen aktuellen vollständigen Score und keinen neuen
+Survived-/NoCoverage-Bericht, aus dem ein Testauftrag abgeleitet wird.
+
+Die drei nicht freigegebenen Überlebenden des früheren lokalen Teillaufs
+bleiben ausdrücklich offen: `R/fit.R:338:74` (`>` → `>=`) sowie
+`:331:42` und `:337:55` (`symmetric = TRUE` → `FALSE`). Gemäß REVIEW
+E39 ist deren Bearbeitung jetzt nicht verlangt; entschieden wird über
+den nächsten Bericht. Eine allgemeine Äquivalenz wird nicht behauptet.
+
+`R/fit.R`, `R/grr.R`, die 16 bestehenden Anträge in `MUT-EQUIV.json`
+und `MUT-EQUIV-APPROVED.json` bleiben unverändert. Die vom Reviewer
+gebundenen Quellzeilen werden nicht verschoben. Neue Claims oder eigene
+Approvals gibt es nicht.
+
+### Fortgeltung der früheren Befunde
+
+E33/E34 sind laut REVIEW Runde 5 und ADR-037 Nr. 1 erledigt, E35 ist
+dokumentiert, E36 ist behoben. Die früheren Antworten und Prüfnachweise
+bleiben unten als historischer Handoff der Runde 5 erhalten; sie sind
+keine neuen Läufe dieser Runde. E32/BL-100 und E35/BL-101 bleiben nach
+ADR-035 zurückgestellt. Der Arbiterentscheid zu K-M1b-5 (π²/3,
+rptR-Liability-Vergleich, ANK-25 nur Installationsprüfung) gilt weiter;
+R6-P4 prüft diesen Vertrag erneut gegen die Orakel.
+
+## Ausgeführte gezielte Prüfungen
+
+Alle Befehle liefen aus `/mnt/c/Users/Danie/dev/Llmsa/llmsa` mit
+R 4.6.1, testthat 3.3.2, lme4 2.0.6, ordinal 2026.7.26,
+rptR 0.9.23 und performance 0.19.0. Die folgenden Ausgaben sind echte,
+auf die Befunde gekürzte Auszüge; die vollständige Werkzeugspur liegt
+im vom Orchestrator geführten Modellphasen-Log.
+
+### R6-P1 — fehlende Betreiberdateien und fehlender Mutationsbericht
+
+```sh
+python3 - <<'PY'
+from pathlib import Path
+for name in ('reference/quellen/data/aiag/anova_example.csv', 'reference/quellen/data/aiag/QUELLE.txt', 'reference/privat/QUELLENKATALOG.md', 'reference/privat/07_Formelsammlung_llmsa.md', 'reports/mutation/mutation.json', 'reports/mutation/unmutated.json'):
+    path = Path(name)
+    print(f'{name}: {"PRESENT" if path.is_file() else "MISSING"}')
+for name in ('reference/quellen', 'reference/privat'):
+    print(f'{name}: {sum(p.is_file() for p in Path(name).rglob("*"))} files')
+PY
+```
+
+Exit 0 (Bestandsaufnahme, kein Abnahmelauf):
+
+```text
+reference/quellen/data/aiag/anova_example.csv: MISSING
+reference/quellen/data/aiag/QUELLE.txt: MISSING
+reference/privat/QUELLENKATALOG.md: MISSING
+reference/privat/07_Formelsammlung_llmsa.md: MISSING
+reports/mutation/mutation.json: MISSING
+reports/mutation/unmutated.json: PRESENT
+reference/quellen: 0 files
+reference/privat: 0 files
+```
+
+### R6-P2 — unveränderte AIAG-Abnahme, Exit 1
+
+```sh
+Rscript --vanilla -e 'Sys.setenv(REPO_ROOT = normalizePath("."), NOT_CRAN = "true"); grDevices::pdf(NULL); testthat::test_dir("tests/acceptance", filter = "^m1a-2-aiag$", load_package = "source", reporter = testthat::ProgressReporter$new(show_praise = FALSE), stop_on_failure = TRUE)'
+```
+
+```text
+Error: acceptance: local AIAG data sheet missing (K-M1a-2, ANK-10, docs/01 §6): /mnt/c/Users/Danie/dev/Llmsa/llmsa/reference/quellen/data/aiag/anova_example.csv
+[ FAIL 3 | WARN 0 | SKIP 0 | PASS 0 ]
+Error:
+! Test failures.
+Execution halted
+```
+
+Alle drei Fehler stammen aus `acc_m1a_aiag()`, aufgerufen in
+`test-m1a-2-aiag.R:14`, `:39` und `:69`.
+
+### R6-P3 — unveränderte Repository-Vignette, Exit 1
+
+```sh
+Rscript --vanilla -e 'Sys.setenv(REPO_ROOT = normalizePath("."), NOT_CRAN = "true"); grDevices::pdf(NULL); testthat::test_dir("tests/acceptance", filter = "^m1b-7-vignette$", load_package = "source", reporter = testthat::ProgressReporter$new(show_praise = FALSE), stop_on_failure = TRUE)'
+```
+
+```text
+Failure ('test-m1b-7-vignette.R:31:3'): K-M1b-7: the vignette knits in the repository without error and shows the section
+Expected `k$error` to be NULL.
+Differences:
+`actual` is a character vector ('Validation input is missing: /mnt/c/Users/Danie/dev/Llmsa/llmsa/reference/quellen/data/aiag/anova_example.csv')
+`expected` is NULL
+[ FAIL 7 | WARN 0 | SKIP 0 | PASS 11 ]
+Error:
+! Test failures.
+Execution halted
+```
+
+Die übrigen sechs fehlgeschlagenen Erwartungen betreffen den durch den
+Knit-Abbruch fehlenden Abschnitt (`test-m1b-7-vignette.R:33`, `:39`,
+`:64` sowie `:84` je Studie).
+
+### R6-P4 — ordinale und binäre Orakel, Exit 0
+
+```sh
+Rscript --vanilla -e 'Sys.setenv(REPO_ROOT = normalizePath("."), NOT_CRAN = "true"); grDevices::pdf(NULL); testthat::test_dir("tests/acceptance", filter = "^m1b-(1-engine-ordinal|5-binary-rptr)$", load_package = "source", reporter = testthat::ProgressReporter$new(show_praise = FALSE), stop_on_failure = TRUE)'
+```
+
+```text
+✔ |         34 | m1b-1-engine-ordinal [2.7s]
+✔ |          9 | m1b-5-binary-rptr
+Duration: 3.2 s
+[ FAIL 0 | WARN 0 | SKIP 0 | PASS 43 ]
+```
+
+### R6-P5 — Integrität, Exit 0
+
+Vor den Testläufen wurde eine SHA-256-Inventur von 376 Dateien angelegt
+(`/tmp/llmsa-m1b-r6-_4e_x1e3/before.json`). Sie umfasst Produkt- und
+Testverzeichnisse, Referenzen, Specs, Handoffs, Gate-Skripte, M1b-Zustand
+und die einzeln aufgeführten Regel-/Paketdateien; keine Git-Metadaten
+oder Schlüsseldateien. Die Vergleichsprüfung liest diese Inventur und
+erlaubt ausschließlich die beiden hier beauftragten Dokumentänderungen.
+
+```sh
+python3 /tmp/llmsa-m1b-r6-_4e_x1e3/verify_integrity.py
+```
+
+```text
+Inventory: 2 changed, 0 added, 0 removed files
+Changed: PROGRESS.md
+Changed: orchestrator/handoff/M1b/REWORK-NOTES.md
+Unchanged inventory files: 374/374
+Tests and fixtures unchanged: 96/96
+Prior REWORK-NOTES and PROGRESS history: byte-identical
+Gate facts unchanged: round 5, result fail
+AIAG data sheet and mutation.json: still missing
+```
+
+Diese Dateiinventur ersetzt nicht die Territoriumsprüfung des Orchestrators.
+
+## Änderungen und Übergabe
+
+Geändert wurden nur dieser zugewiesene Handoff und PROGRESS.md.
+Produktcode, bestehende Tests, Gates, Schwellen, Anker, Daten,
+Kurzlaufdateien, Claims und Approvals bleiben erhalten. Kein neuer
+Paketcheck, keine Simulation und kein Mutationslauf wurde gestartet.
+Der Betreiberauftrag aus BL-103/104 ist Voraussetzung für aussagekräftige
+neue Gate-Fakten; ein PASS wird hier nicht behauptet.
+
+---
+
 # M1b — REWORK, Runde 5
 
 Rolle: Builder · Stand: 01.11.2026 · Keine Git-Kommandos.

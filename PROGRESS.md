@@ -1,5 +1,67 @@
 # PROGRESS — Langzeitgedächtnis des Builders
 
+## M1b — REWORK Runde 6 (01.11.2026)
+
+REVIEW/verdict-code Runde 5 enthalten `blocking: []`; ADR-037 Nr. 2
+verlangt keine Produktänderung. Die vorhandenen Gate-Fakten sind weiterhin
+Runde 5: lint, tests und mutgate `fail`, die übrigen fünf Gates `pass`,
+`result: fail`. Kein Gate hat Status `error`; kein offenes `[QA-PENDING]`
+im aktuellen Verdict. M1b bleibt nicht abgenommen.
+
+- **E37 — OUT-OF-TERRITORY [INFRA]:** Das geschützte AIAG-Datenblatt
+  `reference/quellen/data/aiag/anova_example.csv` fehlt weiterhin;
+  `reference/quellen/` und `reference/privat/` enthalten je null Dateien.
+  Die vorhandenen Logs belegen denselben Grund für den roten Paketbau,
+  die Abnahmefehler und den Abbruch vor dem ersten Mutanten. Betreiber
+  stellt die Originaldateien gemäß BL-103 wieder her und prüft den
+  Rollback. Keine Ersatzdaten oder Produkt-Scheinreparatur.
+- **E38 — OUT-OF-TERRITORY [INFRA]:** `gate-tests.log:685` meldet
+  `Maximum number of failures exceeded; quitting.` Der Abbruch nach
+  m1a-4 und die Korrektur am Testtreiber bleiben Betreiber-Auftrag BL-104.
+- **E39 — nonblocking:** Kein `mutation.json`, damit kein neuer
+  vollständiger Score. Der vorhandene unmutierte Bericht enthält
+  12 fehlgeschlagene und vier abgebrochene Testblöcke. Die drei im
+  früheren Teillauf überlebenden, nicht freigegebenen Mutanten bleiben
+  offen bis zum nächsten Bericht (ADR-037 Nr. 3, BL-102). Bestehende
+  16 Claims und Reviewer-Approvals bleiben unverändert.
+
+E33/E34 sind nach REVIEW Runde 5 und ADR-037 Nr. 1 erledigt, E35 ist
+dokumentiert, E36 ist behoben. Keine zusätzliche Arbeit an den durch
+ADR-035 zurückgestellten Befunden BL-100/101. Die Arbiter-Direktive zu
+K-M1b-5 bleibt maßgeblich.
+
+Gezielte unveränderte Abnahmetests dieser Runde (R 4.6.1), echter Output:
+
+```text
+K-M1a-2, Exit 1: [ FAIL 3 | WARN 0 | SKIP 0 | PASS 0 ]
+Error: acceptance: local AIAG data sheet missing (K-M1a-2, ANK-10, docs/01 §6): /mnt/c/Users/Danie/dev/Llmsa/llmsa/reference/quellen/data/aiag/anova_example.csv
+K-M1b-7, Exit 1: [ FAIL 7 | WARN 0 | SKIP 0 | PASS 11 ]
+`actual` is a character vector ('Validation input is missing: /mnt/c/Users/Danie/dev/Llmsa/llmsa/reference/quellen/data/aiag/anova_example.csv')
+K-M1b-1 und K-M1b-5, Exit 0: [ FAIL 0 | WARN 0 | SKIP 0 | PASS 43 ]
+```
+
+Vollständige Befehle, Befundantworten und Log-Fundstellen stehen in
+[REWORK-NOTES.md](orchestrator/handoff/M1b/REWORK-NOTES.md), R6-P1 bis
+R6-P5. Die Nachweise der Runde 5 sind dort als historischer Handoff
+erhalten. Die SHA-256-Inventur bestätigt (Exit 0):
+
+```text
+Inventory: 2 changed, 0 added, 0 removed files
+Changed: PROGRESS.md
+Changed: orchestrator/handoff/M1b/REWORK-NOTES.md
+Unchanged inventory files: 374/374
+Tests and fixtures unchanged: 96/96
+Prior REWORK-NOTES and PROGRESS history: byte-identical
+Gate facts unchanged: round 5, result fail
+AIAG data sheet and mutation.json: still missing
+```
+
+Nur PROGRESS.md und der zugewiesene Handoff wurden geändert;
+kein neuer Gate-Lauf, kein Paketcheck, keine Simulation und kein
+Mutationslauf. Keine Git-Kommandos. Wiederherstellung, neue Gate-Fakten,
+Territoriumsprüfung und Commit bleiben beim Orchestrator/Betreiber,
+Abnahme und Äquivalenzfreigaben beim Reviewer.
+
 ## M1b — REWORK Runde 5 (01.11.2026)
 
 Grundlage: REVIEW/verdict-code Runde 4 (E33–E36), gates.json samt Logs,
