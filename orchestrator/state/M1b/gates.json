@@ -1,11 +1,11 @@
 {
   "milestone": "M1b",
-  "round": 6,
+  "round": 7,
   "base": "104ca4dd63a24ae4f83730d99961baa88d0213db",
   "baseRef": "plan/M1b",
   "env": {
-    "ts": "2026-11-01T23:08:10+01:00",
-    "sha": "ca34c5ada6d8aa8886ffc931a5da633b70dcdb27",
+    "ts": "2026-11-01T23:48:02+01:00",
+    "sha": "39bf5ffe844a9ebc159fc9f50ddab81b4c3bbd14",
     "bash": "5.3.9(1)-release",
     "git": "2.53.0",
     "toolchain": {
@@ -28,7 +28,7 @@
     "lint": "lint: Kommando meldet fachlichen Fehlschlag rc=1",
     "tests": "tests: Kommando meldet fachlichen Fehlschlag rc=1",
     "trace": "trace: alle Kriterien sind wörtlich und beidseitig verknüpft",
-    "territory": "territory: letzter Diff sauber (builder/60-rework, Runde 6, Basis 72f6b7c420ea4b879476f100cdffcc0e60696269, 2026-11-01T23:01:20+01:00)",
+    "territory": "territory: letzter Diff sauber (builder/60-rework, Runde 7, Basis 64b1df921552d9f7201c1948bbfc8e6fa9b898b8, 2026-11-01T23:41:09+01:00)",
     "mutgate": "mutgate: fail (unmutierter Vorlauf rot, kein Mutant gelaufen; 16 Tests: tests/acceptance/test-m1a-2-aiag.R: K-M1a-2: the local data sheet is the AIAG example and reproduces Tab. III-B 7 (ankerRef: ANK-10) [abgebrochen] | tests/acceptance/test-m1a-2-aiag.R: K-M1a-2: msa_fit(interactions = FALSE) and msa_grr() reproduce EV, AV, GRR, PV, TV, % study variation, % contribution and ndc of the AIAG example (ankerRef: ANK-10) [abgebrochen] | tests/acceptance/test-m1a-2-aiag.R: K-M1a-2: with interactions = TRUE the deviation from the manual is reported, not judged (ankerRef: ANK-10) [abgebrochen] | tests/acceptance/test-m1a-3-oracles.R: K-M1a-3: VCA::remlVCA and VCA::anovaVCA on the AIAG data give the components of msa_fit (ankerRef: ANK-TOL.oracle, ANK-10) [abgebrochen] | tests/acceptance/test-m1a-4-nist.R: K-M1a-4: vignettes/validation.Rmd reports the LRE of msa_fit and of stats::aov for both quantities per dataset SmLs04-SmLs09 [fehlgeschlagen] | tests/acceptance/test-m1a-7-vignette.R: K-M1a-7: the vignette knits in the repository without error, shows the section and writes nothing into vignettes/ [fehlgeschlagen] | tests/acceptance/test-m1a-7-vignette.R: K-M1a-7: the section holds a table per reference check of K-M1a-1 to K-M1a-5 with anchor, source, expected, observed, tolerance and result [fehlgeschlagen] | tests/acceptance/test-m1a-7-vignette.R: K-M1a-7: the expected values of the AIAG example are the values of ANK-10 (ankerRef: ANK-10) [fehlgeschlagen] | tests/acceptance/test-m1a-7-vignette.R: K-M1a-7: the expected values of the NIST checks are the certified values of ANK-14 (ankerRef: ANK-14) [fehlgeschlagen] | tests/acceptance/test-m1a-7-vignette.R: K-M1a-7: the expected values of the Penicillin check are the published estimates of ANK-13 (ankerRef: ANK-13) [fehlgeschlagen] | tests/acceptance/test-m1b-7-vignette.R: K-M1b-7: the vignette knits in the repository without error and shows the section [fehlgeschlagen] | tests/acceptance/test-m1b-7-vignette.R: K-M1b-7: the section shows the checks of K-M1b-1 with ANK-21 and ANK-TOL.engine_ordinal, expected and observed values [fehlgeschlagen] | tests/acceptance/test-m1b-7-vignette.R: K-M1b-7: the section shows the checks of K-M1b-5 with ANK-25, ANK-28 and ANK-TOL.rptr, published and observed values [fehlgeschlagen] | tests/acceptance/test-m1b-7-vignette.R: K-M1b-7: the section tabulates bias and EmpSE with MCSE per scenario of ordinal_recovery from the results file and names n_sim from it [fehlgeschlagen] | tests/acceptance/test-m1b-7-vignette.R: K-M1b-7: the section tabulates bias and EmpSE with MCSE per scenario of binary_recovery from the results file and names n_sim from it [fehlgeschlagen] | tests/acceptance/test-m1b-7-vignette.R: K-M1b-7: the section tabulates bias and EmpSE with MCSE per scenario of two_level from the results file and names n_sim from it [fehlgeschlagen])",
     "golden-adr": "golden-adr: keine Golden-/Ankeränderung",
     "mutfull": "mutfull: pass (nicht fällig in M1b)"

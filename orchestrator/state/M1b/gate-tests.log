@@ -4,7 +4,7 @@ r-tests: tests/testthat: 44 Testdatei(en)
 
 ⠏ |          0 | acmg-api                                                       
 ⠋ |          1 | acmg-api                                                       
-⠙ |         42 | acmg-api                                                       
+⠹ |         43 | acmg-api                                                       
 ⠋ |         81 | acmg-api                                                       
 ⠙ |        112 | acmg-api                                                       
 ⠦ |        157 | acmg-api                                                       
@@ -14,9 +14,8 @@ r-tests: tests/testthat: 44 Testdatei(en)
 ✔ |        177 | acmg-api [2.2s]
 
 ⠏ |          0 | acmg-data                                                      
-⠦ |          7 | acmg-data                                                      
-⠹ |         23 | acmg-data                                                      
-⠙ |         42 | acmg-data                                                      
+⠧ |          8 | acmg-data                                                      
+⠼ |         25 | acmg-data                                                      
 ✔ |         43 | acmg-data
 
 ⠏ |          0 | acmg-evaluate                                                  
@@ -31,7 +30,6 @@ r-tests: tests/testthat: 44 Testdatei(en)
 ⠴ |        106 | acmg-evaluate                                                  
 ⠏ |        110 | acmg-evaluate                                                  
 ⠸ |        114 | acmg-evaluate                                                  
-⠦ |        137 | acmg-evaluate                                                  
 ✔ |        139 | acmg-evaluate [4.2s]
 
 ⠏ |          0 | acmg-latent-diagnostics                                        
@@ -41,8 +39,8 @@ r-tests: tests/testthat: 44 Testdatei(en)
 
 ⠏ |          0 | acmg-network                                                   
 ⠴ |         36 | acmg-network                                                   
-⠼ |         75 | acmg-network                                                   
-⠴ |        116 | acmg-network                                                   
+⠦ |         77 | acmg-network                                                   
+⠧ |        118 | acmg-network                                                   
 ⠧ |        148 | acmg-network                                                   
 ⠋ |        181 | acmg-network                                                   
 ⠼ |        185 | acmg-network                                                   
@@ -54,7 +52,7 @@ r-tests: tests/testthat: 44 Testdatei(en)
 ✔ |        236 | acmg-network [5.0s]
 
 ⠏ |          0 | acmg-pilot-backend-errors                                      
-⠦ |          7 | acmg-pilot-backend-errors                                      
+⠴ |          6 | acmg-pilot-backend-errors                                      
 ⠏ |         20 | acmg-pilot-backend-errors                                      
 ⠸ |         24 | acmg-pilot-backend-errors                                      
 ⠧ |         28 | acmg-pilot-backend-errors                                      
@@ -91,7 +89,7 @@ r-tests: tests/testthat: 44 Testdatei(en)
 ⠸ |        184 | acmg-pilot-metadata                                            
 ⠇ |        209 | acmg-pilot-metadata                                            
 ⠙ |        212 | acmg-pilot-metadata                                            
-✔ |        222 | acmg-pilot-metadata [7.1s]
+✔ |        222 | acmg-pilot-metadata [7.2s]
 
 ⠏ |          0 | acmg-pipeline                                                  
 ⠙ |          2 | acmg-pipeline                                                  
@@ -103,9 +101,9 @@ r-tests: tests/testthat: 44 Testdatei(en)
 ⠋ |         21 | acmg-pipeline                                                  
 ⠹ |         23 | acmg-pipeline                                                  
 ⠴ |         26 | acmg-pipeline                                                  
-⠏ |         30 | acmg-pipeline                                                  
-⠸ |         34 | acmg-pipeline                                                  
-⠹ |         43 | acmg-pipeline                                                  
+⠇ |         29 | acmg-pipeline                                                  
+⠹ |         33 | acmg-pipeline                                                  
+⠏ |         40 | acmg-pipeline                                                  
 ⠸ |         44 | acmg-pipeline                                                  
 ⠦ |         47 | acmg-pipeline                                                  
 ⠧ |         48 | acmg-pipeline                                                  
@@ -113,7 +111,7 @@ r-tests: tests/testthat: 44 Testdatei(en)
 ⠇ |         59 | acmg-pipeline                                                  
 ⠹ |         63 | acmg-pipeline                                                  
 ⠙ |         72 | acmg-pipeline                                                  
-✔ |         75 | acmg-pipeline [3.2s]
+✔ |         75 | acmg-pipeline [3.3s]
 
 ⠏ |          0 | acmg-policies                                                  
 ⠹ |         23 | acmg-policies                                                  
@@ -121,9 +119,10 @@ r-tests: tests/testthat: 44 Testdatei(en)
 
 ⠏ |          0 | acmg-rework                                                    
 ⠋ |          1 | acmg-rework                                                    
-⠇ |         29 | acmg-rework                                                    
-⠏ |         60 | acmg-rework                                                    
-⠙ |         92 | acmg-rework                                                    
+⠧ |         28 | acmg-rework                                                    
+⠧ |         58 | acmg-rework                                                    
+⠇ |         89 | acmg-rework                                                    
+⠇ |         99 | acmg-rework                                                    
 ⠋ |        101 | acmg-rework                                                    
 ⠇ |        119 | acmg-rework                                                    
 ⠏ |        120 | acmg-rework                                                    
@@ -135,19 +134,19 @@ r-tests: tests/testthat: 44 Testdatei(en)
 ⠸ |        174 | acmg-rework                                                    
 ⠴ |        186 | acmg-rework                                                    
 ⠙ |        192 | acmg-rework                                                    
-✔ |        194 | acmg-rework [8.4s]
+✔ |        194 | acmg-rework [8.3s]
 
 ⠏ |          0 | acmg-robustness-errors                                         
 ⠋ |          1 | acmg-robustness-errors                                         
 ⠏ |         10 | acmg-robustness-errors                                         
 ⠦ |         17 | acmg-robustness-errors                                         
 ⠴ |         36 | acmg-robustness-errors                                         
-✔ |         36 | acmg-robustness-errors [7.1s]
+✔ |         36 | acmg-robustness-errors [7.2s]
 
 ⠏ |          0 | acmg-timeout                                                   
 ⠸ |         24 | acmg-timeout                                                   
-⠙ |         62 | acmg-timeout                                                   
-⠇ |         89 | acmg-timeout                                                   
+⠹ |         63 | acmg-timeout                                                   
+⠋ |         91 | acmg-timeout                                                   
 ✔ |        105 | acmg-timeout
 
 ⠏ |          0 | agreement                                                      
@@ -167,7 +166,7 @@ r-tests: tests/testthat: 44 Testdatei(en)
 ✔ |      1  10 | backends
 
 ⠏ |          0 | design-run                                                     
-⠋ |         21 | design-run                                                     
+⠙ |         22 | design-run                                                     
 ✔ |         37 | design-run
 
 ⠏ |          0 | fit-grr                                                        
@@ -177,7 +176,7 @@ r-tests: tests/testthat: 44 Testdatei(en)
 ⠏ |         20 | fit-grr                                                        
 ⠦ |         27 | fit-grr                                                        
 ⠇ |         29 | fit-grr                                                        
-✔ |         33 | fit-grr [7.2s]
+✔ |         33 | fit-grr [7.3s]
 
 ⠏ |          0 | fit-initialization                                             
 ⠸ |         14 | fit-initialization                                             
@@ -194,86 +193,86 @@ r-tests: tests/testthat: 44 Testdatei(en)
 ✔ |         17 | fit-latent-calls-labels
 
 ⠏ |          0 | fit-latent-design-grid                                         
-⠙ |         12 | fit-latent-design-grid                                         
-⠋ |         31 | fit-latent-design-grid                                         
-⠦ |         47 | fit-latent-design-grid                                         
-⠋ |         71 | fit-latent-design-grid                                         
-⠏ |        100 | fit-latent-design-grid                                         
-⠸ |        124 | fit-latent-design-grid                                         
-⠙ |        142 | fit-latent-design-grid                                         
-⠼ |        165 | fit-latent-design-grid                                         
-⠧ |        188 | fit-latent-design-grid                                         
-⠴ |        206 | fit-latent-design-grid                                         
+⠏ |         10 | fit-latent-design-grid                                         
+⠏ |         30 | fit-latent-design-grid                                         
+⠴ |         46 | fit-latent-design-grid                                         
+⠇ |         69 | fit-latent-design-grid                                         
+⠴ |         96 | fit-latent-design-grid                                         
+⠇ |        119 | fit-latent-design-grid                                         
+⠦ |        137 | fit-latent-design-grid                                         
+⠋ |        161 | fit-latent-design-grid                                         
+⠹ |        183 | fit-latent-design-grid                                         
+⠼ |        205 | fit-latent-design-grid                                         
 ⠦ |        227 | fit-latent-design-grid                                         
 ⠹ |        243 | fit-latent-design-grid                                         
-⠼ |        265 | fit-latent-design-grid                                         
-⠏ |        280 | fit-latent-design-grid                                         
-⠧ |        298 | fit-latent-design-grid                                         
-⠸ |        314 | fit-latent-design-grid                                         
-⠋ |        341 | fit-latent-design-grid                                         
-⠼ |        365 | fit-latent-design-grid                                         
-⠸ |        384 | fit-latent-design-grid                                         
-⠼ |        405 | fit-latent-design-grid                                         
-⠋ |        431 | fit-latent-design-grid                                         
-⠋ |        451 | fit-latent-design-grid                                         
-⠹ |        473 | fit-latent-design-grid                                         
-⠦ |        497 | fit-latent-design-grid                                         
-⠇ |        519 | fit-latent-design-grid                                         
-⠦ |        537 | fit-latent-design-grid                                         
-⠴ |        556 | fit-latent-design-grid                                         
-⠹ |        573 | fit-latent-design-grid                                         
-⠹ |        593 | fit-latent-design-grid                                         
-⠦ |        617 | fit-latent-design-grid                                         
-⠼ |        635 | fit-latent-design-grid                                         
-⠇ |        659 | fit-latent-design-grid                                         
-⠦ |        677 | fit-latent-design-grid                                         
-⠦ |        707 | fit-latent-design-grid                                         
-⠦ |        727 | fit-latent-design-grid                                         
-⠋ |        751 | fit-latent-design-grid                                         
+⠦ |        267 | fit-latent-design-grid                                         
+⠙ |        282 | fit-latent-design-grid                                         
+⠋ |        301 | fit-latent-design-grid                                         
+⠋ |        321 | fit-latent-design-grid                                         
+⠧ |        348 | fit-latent-design-grid                                         
+⠋ |        371 | fit-latent-design-grid                                         
+⠹ |        393 | fit-latent-design-grid                                         
+⠼ |        415 | fit-latent-design-grid                                         
+⠦ |        437 | fit-latent-design-grid                                         
+⠸ |        464 | fit-latent-design-grid                                         
+⠹ |        483 | fit-latent-design-grid                                         
+⠹ |        503 | fit-latent-design-grid                                         
+⠦ |        527 | fit-latent-design-grid                                         
+⠼ |        545 | fit-latent-design-grid                                         
+⠹ |        563 | fit-latent-design-grid                                         
+⠹ |        583 | fit-latent-design-grid                                         
+⠋ |        601 | fit-latent-design-grid                                         
+⠦ |        627 | fit-latent-design-grid                                         
+⠏ |        650 | fit-latent-design-grid                                         
+⠦ |        667 | fit-latent-design-grid                                         
+⠇ |        689 | fit-latent-design-grid                                         
+⠦ |        717 | fit-latent-design-grid                                         
+⠼ |        735 | fit-latent-design-grid                                         
+⠦ |        757 | fit-latent-design-grid                                         
 ✔ |        768 | fit-latent-design-grid [3.8s]
 
 ⠏ |          0 | fit-latent-diagnostics                                         
 ⠼ |          5 | fit-latent-diagnostics                                         
 ⠼ |         15 | fit-latent-diagnostics                                         
 ⠦ |         27 | fit-latent-diagnostics                                         
-⠇ |         69 | fit-latent-diagnostics                                         
+⠏ |         70 | fit-latent-diagnostics                                         
 ✔ |         82 | fit-latent-diagnostics [1.3s]
 
 ⠏ |          0 | fit-latent-identifiability                                     
-⠴ |          6 | fit-latent-identifiability                                     
-⠼ |         35 | fit-latent-identifiability                                     
-⠙ |         72 | fit-latent-identifiability                                     
-⠇ |        109 | fit-latent-identifiability                                     
-⠧ |        138 | fit-latent-identifiability                                     
-⠏ |        160 | fit-latent-identifiability                                     
+⠦ |          7 | fit-latent-identifiability                                     
+⠙ |         32 | fit-latent-identifiability                                     
+⠧ |         68 | fit-latent-identifiability                                     
+⠧ |        108 | fit-latent-identifiability                                     
+⠦ |        137 | fit-latent-identifiability                                     
+⠦ |        157 | fit-latent-identifiability                                     
 ⠦ |        187 | fit-latent-identifiability                                     
 ⠏ |        190 | fit-latent-identifiability                                     
 ⠹ |        193 | fit-latent-identifiability                                     
 ⠴ |        196 | fit-latent-identifiability                                     
-⠇ |        199 | fit-latent-identifiability                                     
+⠋ |        201 | fit-latent-identifiability                                     
 ⠙ |        202 | fit-latent-identifiability                                     
 ✔ |        204 | fit-latent-identifiability [5.9s]
 
 ⠏ |          0 | fit-latent-precision                                           
-⠋ |         41 | fit-latent-precision                                           
-⠼ |         85 | fit-latent-precision                                           
-⠏ |        130 | fit-latent-precision                                           
-⠏ |        170 | fit-latent-precision                                           
-⠏ |        210 | fit-latent-precision                                           
-⠙ |        232 | fit-latent-precision                                           
-⠴ |        266 | fit-latent-precision                                           
-⠧ |        278 | fit-latent-precision                                           
-⠹ |        283 | fit-latent-precision                                           
-⠏ |        320 | fit-latent-precision                                           
-⠼ |        365 | fit-latent-precision                                           
-⠙ |        402 | fit-latent-precision                                           
-⠋ |        441 | fit-latent-precision                                           
-⠸ |        484 | fit-latent-precision                                           
+⠧ |         38 | fit-latent-precision                                           
+⠋ |         81 | fit-latent-precision                                           
+⠴ |        126 | fit-latent-precision                                           
+⠼ |        165 | fit-latent-precision                                           
+⠸ |        204 | fit-latent-precision                                           
+⠏ |        230 | fit-latent-precision                                           
+⠹ |        263 | fit-latent-precision                                           
+⠴ |        276 | fit-latent-precision                                           
+⠙ |        282 | fit-latent-precision                                           
+⠹ |        313 | fit-latent-precision                                           
+⠴ |        356 | fit-latent-precision                                           
+⠹ |        393 | fit-latent-precision                                           
+⠼ |        435 | fit-latent-precision                                           
+⠙ |        482 | fit-latent-precision                                           
 ⠴ |        526 | fit-latent-precision                                           
 ⠋ |        531 | fit-latent-precision                                           
 ⠴ |        536 | fit-latent-precision                                           
 ⠋ |        541 | fit-latent-precision                                           
-✔ |        545 | fit-latent-precision [3.9s]
+✔ |        545 | fit-latent-precision [4.0s]
 
 ⠏ |          0 | fit-latent-residual-weights                                    
 ⠼ |          5 | fit-latent-residual-weights                                    
@@ -281,10 +280,10 @@ r-tests: tests/testthat: 44 Testdatei(en)
 ⠴ |         16 | fit-latent-residual-weights                                    
 ⠸ |         24 | fit-latent-residual-weights                                    
 ⠏ |         30 | fit-latent-residual-weights                                    
-⠋ |         61 | fit-latent-residual-weights                                    
-⠼ |         95 | fit-latent-residual-weights                                    
-⠋ |        131 | fit-latent-residual-weights                                    
-⠇ |        169 | fit-latent-residual-weights                                    
+⠦ |         57 | fit-latent-residual-weights                                    
+⠸ |         94 | fit-latent-residual-weights                                    
+⠧ |        128 | fit-latent-residual-weights                                    
+⠼ |        165 | fit-latent-residual-weights                                    
 ⠴ |        196 | fit-latent-residual-weights                                    
 ⠋ |        241 | fit-latent-residual-weights                                    
 ⠋ |        281 | fit-latent-residual-weights                                    
@@ -302,8 +301,8 @@ r-tests: tests/testthat: 44 Testdatei(en)
 ⠙ |         12 | fit-latent-rework                                              
 ⠇ |         19 | fit-latent-rework                                              
 ⠸ |         34 | fit-latent-rework                                              
-⠼ |         55 | fit-latent-rework                                              
-⠦ |         67 | fit-latent-rework                                              
+⠹ |         53 | fit-latent-rework                                              
+⠴ |         66 | fit-latent-rework                                              
 ⠹ |         93 | fit-latent-rework                                              
 ⠼ |         95 | fit-latent-rework                                              
 ⠏ |        110 | fit-latent-rework                                              
@@ -313,19 +312,19 @@ r-tests: tests/testthat: 44 Testdatei(en)
 ⠏ |          0 | fit-latent                                                     
 ⠇ |         19 | fit-latent                                                     
 ⠴ |         26 | fit-latent                                                     
-⠧ |         38 | fit-latent                                                     
-⠦ |         57 | fit-latent                                                     
+⠦ |         37 | fit-latent                                                     
+⠼ |         55 | fit-latent                                                     
 ⠧ |         58 | fit-latent                                                     
 ⠼ |         65 | fit-latent                                                     
 ⠋ |         71 | fit-latent                                                     
 ✔ |         74 | fit-latent
 
 ⠏ |          0 | fit-model-construction                                         
-⠙ |         22 | fit-model-construction                                         
-⠏ |         40 | fit-model-construction                                         
-⠴ |         66 | fit-model-construction                                         
-⠸ |         84 | fit-model-construction                                         
-⠧ |        108 | fit-model-construction                                         
+⠹ |         23 | fit-model-construction                                         
+⠦ |         47 | fit-model-construction                                         
+⠙ |         72 | fit-model-construction                                         
+⠏ |         90 | fit-model-construction                                         
+⠋ |        111 | fit-model-construction                                         
 ✔ |        129 | fit-model-construction
 
 ⠏ |          0 | fit-numeric                                                    
@@ -333,8 +332,8 @@ r-tests: tests/testthat: 44 Testdatei(en)
 ⠴ |         26 | fit-numeric                                                    
 ⠹ |         33 | fit-numeric                                                    
 ⠋ |         41 | fit-numeric                                                    
-⠧ |         48 | fit-numeric                                                    
-⠴ |         56 | fit-numeric                                                    
+⠇ |         49 | fit-numeric                                                    
+⠧ |         58 | fit-numeric                                                    
 ⠸ |         64 | fit-numeric                                                    
 ⠏ |         70 | fit-numeric                                                    
 ⠦ |         77 | fit-numeric                                                    
@@ -344,7 +343,7 @@ r-tests: tests/testthat: 44 Testdatei(en)
 ✔ |        102 | fit-numeric [1.5s]
 
 ⠏ |          0 | fit-residual-design                                            
-⠧ |         28 | fit-residual-design                                            
+⠇ |         29 | fit-residual-design                                            
 ⠹ |         63 | fit-residual-design                                            
 ⠇ |         79 | fit-residual-design                                            
 ⠏ |         90 | fit-residual-design                                            
@@ -355,39 +354,39 @@ r-tests: tests/testthat: 44 Testdatei(en)
 
 ⠏ |          0 | fit-rework-inputs                                              
 ⠧ |          8 | fit-rework-inputs                                              
-⠙ |         22 | fit-rework-inputs                                              
-⠙ |         42 | fit-rework-inputs                                              
-⠇ |         79 | fit-rework-inputs                                              
-⠼ |         85 | fit-rework-inputs                                              
+⠹ |         23 | fit-rework-inputs                                              
+⠹ |         43 | fit-rework-inputs                                              
+⠙ |         82 | fit-rework-inputs                                              
+⠴ |         86 | fit-rework-inputs                                              
 ⠸ |         94 | fit-rework-inputs                                              
 ⠹ |        103 | fit-rework-inputs                                              
 ⠙ |        112 | fit-rework-inputs                                              
 ⠋ |        121 | fit-rework-inputs                                              
 ⠋ |        131 | fit-rework-inputs                                              
-⠙ |        142 | fit-rework-inputs                                              
 ⠹ |        143 | fit-rework-inputs                                              
-⠏ |        150 | fit-rework-inputs                                              
+⠙ |        152 | fit-rework-inputs                                              
 ✔ |        154 | fit-rework-inputs [2.9s]
 
 ⠏ |          0 | fit-rework-numerics                                            
 ⠋ |         11 | fit-rework-numerics                                            
 ⠴ |         16 | fit-rework-numerics                                            
 ⠋ |         21 | fit-rework-numerics                                            
-⠼ |         25 | fit-rework-numerics                                            
-⠙ |         32 | fit-rework-numerics                                            
+⠴ |         26 | fit-rework-numerics                                            
+⠸ |         34 | fit-rework-numerics                                            
 ⠋ |         41 | fit-rework-numerics                                            
 ⠧ |         48 | fit-rework-numerics                                            
-⠙ |         62 | fit-rework-numerics                                            
-⠴ |         86 | fit-rework-numerics                                            
+⠧ |         58 | fit-rework-numerics                                            
+⠸ |         84 | fit-rework-numerics                                            
 ⠇ |         89 | fit-rework-numerics                                            
 ⠋ |         91 | fit-rework-numerics                                            
 ⠹ |         93 | fit-rework-numerics                                            
 ⠏ |        110 | fit-rework-numerics                                            
-⠙ |        142 | fit-rework-numerics                                            
-⠇ |        149 | fit-rework-numerics                                            
+⠏ |        140 | fit-rework-numerics                                            
+⠹ |        143 | fit-rework-numerics                                            
+⠏ |        150 | fit-rework-numerics                                            
 ⠇ |        159 | fit-rework-numerics                                            
-⠴ |        186 | fit-rework-numerics                                            
-✔ |        188 | fit-rework-numerics [3.1s]
+⠼ |        185 | fit-rework-numerics                                            
+✔ |        188 | fit-rework-numerics [3.2s]
 
 ⠏ |          0 | grr-latent                                                     
 ⠋ |          1 | grr-latent                                                     
@@ -395,14 +394,14 @@ r-tests: tests/testthat: 44 Testdatei(en)
 ✔ |         26 | grr-latent
 
 ⠏ |          0 | grr-numeric                                                    
-⠋ |         11 | grr-numeric                                                    
+⠏ |         10 | grr-numeric                                                    
 ✔ |         26 | grr-numeric
 
 ⠏ |          0 | grr-rework                                                     
-⠹ |         53 | grr-rework                                                     
-⠇ |         79 | grr-rework                                                     
+⠏ |         50 | grr-rework                                                     
+⠦ |         77 | grr-rework                                                     
 ⠸ |         84 | grr-rework                                                     
-⠋ |         91 | grr-rework                                                     
+⠙ |         92 | grr-rework                                                     
 ✔ |        107 | grr-rework
 
 ⠏ |          0 | parsers                                                        
@@ -420,7 +419,7 @@ r-tests: tests/testthat: 44 Testdatei(en)
 ✔ |         49 | robustness-plan-spc
 
 ⠏ |          0 | validation-latent-rework                                       
-⠹ |         13 | validation-latent-rework                                       
+⠙ |         12 | validation-latent-rework                                       
 ⠦ |         17 | validation-latent-rework                                       
 ⠧ |         18 | validation-latent-rework                                       
 ⠇ |         19 | validation-latent-rework                                       
@@ -464,7 +463,7 @@ r-tests: tests/testthat: 44 Testdatei(en)
 ⠦ |         57 | validation-latent-rework                                       
 ⠧ |         58 | validation-latent-rework                                       
 ⠇ |         59 | validation-latent-rework                                       
-✔ |         59 | validation-latent-rework [9.8s]
+✔ |         59 | validation-latent-rework [9.9s]
 
 ⠏ |          0 | validation-latent                                              
 ⠋ |          1 | validation-latent                                              
@@ -475,22 +474,23 @@ r-tests: tests/testthat: 44 Testdatei(en)
 ⠴ |         36 | validation-latent                                              
 ⠧ |         48 | validation-latent                                              
 ⠇ |         49 | validation-latent                                              
-✔ |         55 | validation-latent [3.5s]
+✔ |         55 | validation-latent [3.6s]
 
 ⠏ |          0 | validation-numeric                                             
 ⠋ |          1 | validation-numeric                                             
 ⠧ |          8 | validation-numeric                                             
-⠹ |         13 | validation-numeric                                             
+⠋ |         11 | validation-numeric                                             
 ⠧ |         18 | validation-numeric                                             
 ⠼ |         25 | validation-numeric                                             
-⠙ |         32 | validation-numeric                                             
-⠋ |         41 | validation-numeric                                             
+⠹ |         33 | validation-numeric                                             
+⠙ |         42 | validation-numeric                                             
 ⠸ |         54 | validation-numeric                                             
-⠦ |         67 | validation-numeric                                             
+⠴ |         66 | validation-numeric                                             
+⠦ |         77 | validation-numeric                                             
 ⠇ |         79 | validation-numeric                                             
 ⠏ |        110 | validation-numeric                                             
 ⠋ |        111 | validation-numeric                                             
-✔ |        117 | validation-numeric [3.0s]
+✔ |        117 | validation-numeric [3.2s]
 
 ⠏ |          0 | validation-rework                                              
 ⠋ |          1 | validation-rework                                              
@@ -500,9 +500,10 @@ r-tests: tests/testthat: 44 Testdatei(en)
 ⠏ |          0 | validation-simulation                                          
 ⠇ |          9 | validation-simulation                                          
 ⠸ |         14 | validation-simulation                                          
-⠋ |         41 | validation-simulation                                          
-⠧ |         68 | validation-simulation                                          
-⠧ |         88 | validation-simulation                                          
+⠧ |         38 | validation-simulation                                          
+⠇ |         59 | validation-simulation                                          
+⠸ |         84 | validation-simulation                                          
+⠏ |         90 | validation-simulation                                          
 ⠏ |        110 | validation-simulation                                          
 ⠧ |        128 | validation-simulation                                          
 ⠹ |        133 | validation-simulation                                          
@@ -516,7 +517,7 @@ r-tests: tests/testthat: 44 Testdatei(en)
 ✔ |        146 | validation-simulation [2.8s]
 
 ══ Results ═════════════════════════════════════════════════════════════════════
-Duration: 111.7 s
+Duration: 112.3 s
 
 ── Skipped tests (1) ───────────────────────────────────────────────────────────
 • requireNamespace("ellmer", quietly = TRUE) is TRUE (1):
@@ -527,16 +528,16 @@ r-tests: tests/acceptance: 28 Testdatei(en)
 ✔ | F W  S  OK | Context
 
 ⠏ |          0 | m0-api-snapshot                                                
-⠙ |         32 | m0-api-snapshot                                                
-⠋ |         81 | m0-api-snapshot                                                
+⠸ |         34 | m0-api-snapshot                                                
+⠹ |         83 | m0-api-snapshot                                                
 ⠇ |        119 | m0-api-snapshot                                                
-⠸ |        174 | m0-api-snapshot                                                
+⠙ |        172 | m0-api-snapshot                                                
 ⠇ |        219 | m0-api-snapshot                                                
 ⠼ |        245 | m0-api-snapshot                                                
 ✔ |        259 | m0-api-snapshot
 
 ⠏ |          0 | m0-deps                                                        
-⠸ |         34 | m0-deps                                                        
+⠴ |         36 | m0-deps                                                        
 ✔ |         51 | m0-deps
 
 ⠏ |          0 | m0-gates                                                       
@@ -552,7 +553,7 @@ r-tests: tests/acceptance: 28 Testdatei(en)
 
 ⠏ |          0 | m0-testthat-count                                              
 ⠙ |          2 | m0-testthat-count                                              
-✔ |          2 | m0-testthat-count [114.4s]
+✔ |          2 | m0-testthat-count [115.5s]
 
 ⠏ |          0 | m1a-1-reml-anova                                               
 ⠸ |          4 | m1a-1-reml-anova                                               
@@ -620,7 +621,7 @@ Backtrace:
 ⠋ |         11 | m1a-4-nist                                                     
 ⠦ |         17 | m1a-4-nist                                                     
 ⠹ |         23 | m1a-4-nist                                                     
-⠋ |         41 | m1a-4-nist                                                     
+⠏ |         40 | m1a-4-nist                                                     
 ⠹ |         53 | m1a-4-nist                                                     
 ⠋ |         71 | m1a-4-nist                                                     
 ⠦ |         87 | m1a-4-nist                                                     
@@ -705,10 +706,10 @@ r-tests: tests/e2e: 3 Testdatei(en)
 ⠏ |          0 | m2-qa-e2e                                                      
 ⠋ |          1 | m2-qa-e2e                                                      
 ⠦ |          7 | m2-qa-e2e                                                      
-✔ |          9 | m2-qa-e2e [2.5s]
+✔ |          9 | m2-qa-e2e [2.6s]
 
 ══ Results ═════════════════════════════════════════════════════════════════════
-Duration: 9.1 s
+Duration: 9.2 s
 
 [ FAIL 0 | WARN 0 | SKIP 0 | PASS 49 ]
 r-tests: tests/fuzz: 3 Testdatei(en)
@@ -729,54 +730,54 @@ r-tests: tests/fuzz: 3 Testdatei(en)
 ✔ |          5 | m2-qa-fuzz
 
 ══ Results ═════════════════════════════════════════════════════════════════════
-Duration: 1.7 s
+Duration: 1.6 s
 
 [ FAIL 0 | WARN 0 | SKIP 0 | PASS 25 ]
 r-tests: fail — 322 Tests in tests/testthat, tests/acceptance, tests/e2e, tests/fuzz; 1 fehlgeschlagen, 4 Fehler, 1 übersprungen
 tests: Kommando meldet fachlichen Fehlschlag rc=1
 
 # stderr
-[2026-11-01 23:01:44 CET] AP1 pilot block 1: start, 90 open
-[2026-11-01 23:01:45 CET] AP1 pilot block 1: start, 0 open
+[2026-11-01 23:41:34 CET] AP1 pilot block 1: start, 90 open
+[2026-11-01 23:41:35 CET] AP1 pilot block 1: start, 0 open
 boundary (singular) fit: see help('isSingular')
 boundary (singular) fit: see help('isSingular')
 boundary (singular) fit: see help('isSingular')
-[2026-11-01 23:02:02 CET] AP1 pilot block 1: start, 90 open
-[2026-11-01 23:02:02 CET] AP1 pilot block 1: start, 0 open
-[2026-11-01 23:02:03 CET] AP1 pilot block 1: start, 90 open
-[2026-11-01 23:02:06 CET] AP1 pilot block 1: start, 90 open
-[2026-11-01 23:02:21 CET] AP1 robustness block 1: start, 720 open
-[2026-11-01 23:02:21 CET] AP1 robustness block 1: backend error (llama); 85 done, 635 open; backend errors since start: sol 0, llama 1, qwen 0
-[2026-11-01 23:02:21 CET] AP1 robustness block 1: 100 done, 620 open; backend errors since start: sol 0, llama 1, qwen 0
-[2026-11-01 23:02:22 CET] AP1 robustness block 1: 200 done, 520 open; backend errors since start: sol 0, llama 1, qwen 0
-[2026-11-01 23:02:22 CET] AP1 robustness block 1: 300 done, 420 open; backend errors since start: sol 0, llama 1, qwen 0
-[2026-11-01 23:02:23 CET] AP1 robustness block 1: backend error (llama); 399 done, 321 open; backend errors since start: sol 0, llama 2, qwen 0
-[2026-11-01 23:02:23 CET] AP1 robustness block 1: 400 done, 320 open; backend errors since start: sol 0, llama 2, qwen 0
-[2026-11-01 23:02:23 CET] AP1 robustness block 1: 500 done, 220 open; backend errors since start: sol 0, llama 2, qwen 0
-[2026-11-01 23:02:24 CET] AP1 robustness block 1: backend error (qwen); 545 done, 175 open; backend errors since start: sol 0, llama 2, qwen 1
-[2026-11-01 23:02:24 CET] AP1 robustness block 1: 600 done, 120 open; backend errors since start: sol 0, llama 2, qwen 1
-[2026-11-01 23:02:25 CET] AP1 robustness block 1: 700 done, 20 open; backend errors since start: sol 0, llama 2, qwen 1
+[2026-11-01 23:41:51 CET] AP1 pilot block 1: start, 90 open
+[2026-11-01 23:41:52 CET] AP1 pilot block 1: start, 0 open
+[2026-11-01 23:41:52 CET] AP1 pilot block 1: start, 90 open
+[2026-11-01 23:41:56 CET] AP1 pilot block 1: start, 90 open
+[2026-11-01 23:42:10 CET] AP1 robustness block 1: start, 720 open
+[2026-11-01 23:42:11 CET] AP1 robustness block 1: backend error (llama); 85 done, 635 open; backend errors since start: sol 0, llama 1, qwen 0
+[2026-11-01 23:42:11 CET] AP1 robustness block 1: 100 done, 620 open; backend errors since start: sol 0, llama 1, qwen 0
+[2026-11-01 23:42:11 CET] AP1 robustness block 1: 200 done, 520 open; backend errors since start: sol 0, llama 1, qwen 0
+[2026-11-01 23:42:12 CET] AP1 robustness block 1: 300 done, 420 open; backend errors since start: sol 0, llama 1, qwen 0
+[2026-11-01 23:42:12 CET] AP1 robustness block 1: backend error (llama); 399 done, 321 open; backend errors since start: sol 0, llama 2, qwen 0
+[2026-11-01 23:42:12 CET] AP1 robustness block 1: 400 done, 320 open; backend errors since start: sol 0, llama 2, qwen 0
+[2026-11-01 23:42:13 CET] AP1 robustness block 1: 500 done, 220 open; backend errors since start: sol 0, llama 2, qwen 0
+[2026-11-01 23:42:13 CET] AP1 robustness block 1: backend error (qwen); 545 done, 175 open; backend errors since start: sol 0, llama 2, qwen 1
+[2026-11-01 23:42:14 CET] AP1 robustness block 1: 600 done, 120 open; backend errors since start: sol 0, llama 2, qwen 1
+[2026-11-01 23:42:14 CET] AP1 robustness block 1: 700 done, 20 open; backend errors since start: sol 0, llama 2, qwen 1
 boundary (singular) fit: see help('isSingular')
-[2026-11-01 23:03:39 CET] AP1 pilot block 1: start, 90 open
-[2026-11-01 23:03:40 CET] AP1 pilot block 1: start, 0 open
+[2026-11-01 23:43:29 CET] AP1 pilot block 1: start, 90 open
+[2026-11-01 23:43:30 CET] AP1 pilot block 1: start, 0 open
 boundary (singular) fit: see help('isSingular')
 boundary (singular) fit: see help('isSingular')
 boundary (singular) fit: see help('isSingular')
-[2026-11-01 23:03:58 CET] AP1 pilot block 1: start, 90 open
-[2026-11-01 23:03:59 CET] AP1 pilot block 1: start, 0 open
-[2026-11-01 23:03:59 CET] AP1 pilot block 1: start, 90 open
-[2026-11-01 23:04:03 CET] AP1 pilot block 1: start, 90 open
-[2026-11-01 23:04:18 CET] AP1 robustness block 1: start, 720 open
-[2026-11-01 23:04:18 CET] AP1 robustness block 1: backend error (llama); 85 done, 635 open; backend errors since start: sol 0, llama 1, qwen 0
-[2026-11-01 23:04:18 CET] AP1 robustness block 1: 100 done, 620 open; backend errors since start: sol 0, llama 1, qwen 0
-[2026-11-01 23:04:19 CET] AP1 robustness block 1: 200 done, 520 open; backend errors since start: sol 0, llama 1, qwen 0
-[2026-11-01 23:04:19 CET] AP1 robustness block 1: 300 done, 420 open; backend errors since start: sol 0, llama 1, qwen 0
-[2026-11-01 23:04:20 CET] AP1 robustness block 1: backend error (llama); 399 done, 321 open; backend errors since start: sol 0, llama 2, qwen 0
-[2026-11-01 23:04:20 CET] AP1 robustness block 1: 400 done, 320 open; backend errors since start: sol 0, llama 2, qwen 0
-[2026-11-01 23:04:21 CET] AP1 robustness block 1: 500 done, 220 open; backend errors since start: sol 0, llama 2, qwen 0
-[2026-11-01 23:04:21 CET] AP1 robustness block 1: backend error (qwen); 545 done, 175 open; backend errors since start: sol 0, llama 2, qwen 1
-[2026-11-01 23:04:21 CET] AP1 robustness block 1: 600 done, 120 open; backend errors since start: sol 0, llama 2, qwen 1
-[2026-11-01 23:04:22 CET] AP1 robustness block 1: 700 done, 20 open; backend errors since start: sol 0, llama 2, qwen 1
+[2026-11-01 23:43:48 CET] AP1 pilot block 1: start, 90 open
+[2026-11-01 23:43:49 CET] AP1 pilot block 1: start, 0 open
+[2026-11-01 23:43:49 CET] AP1 pilot block 1: start, 90 open
+[2026-11-01 23:43:53 CET] AP1 pilot block 1: start, 90 open
+[2026-11-01 23:44:08 CET] AP1 robustness block 1: start, 720 open
+[2026-11-01 23:44:09 CET] AP1 robustness block 1: backend error (llama); 85 done, 635 open; backend errors since start: sol 0, llama 1, qwen 0
+[2026-11-01 23:44:09 CET] AP1 robustness block 1: 100 done, 620 open; backend errors since start: sol 0, llama 1, qwen 0
+[2026-11-01 23:44:09 CET] AP1 robustness block 1: 200 done, 520 open; backend errors since start: sol 0, llama 1, qwen 0
+[2026-11-01 23:44:10 CET] AP1 robustness block 1: 300 done, 420 open; backend errors since start: sol 0, llama 1, qwen 0
+[2026-11-01 23:44:11 CET] AP1 robustness block 1: backend error (llama); 399 done, 321 open; backend errors since start: sol 0, llama 2, qwen 0
+[2026-11-01 23:44:11 CET] AP1 robustness block 1: 400 done, 320 open; backend errors since start: sol 0, llama 2, qwen 0
+[2026-11-01 23:44:11 CET] AP1 robustness block 1: 500 done, 220 open; backend errors since start: sol 0, llama 2, qwen 0
+[2026-11-01 23:44:11 CET] AP1 robustness block 1: backend error (qwen); 545 done, 175 open; backend errors since start: sol 0, llama 2, qwen 1
+[2026-11-01 23:44:12 CET] AP1 robustness block 1: 600 done, 120 open; backend errors since start: sol 0, llama 2, qwen 1
+[2026-11-01 23:44:12 CET] AP1 robustness block 1: 700 done, 20 open; backend errors since start: sol 0, llama 2, qwen 1
 boundary (singular) fit: see help('isSingular')
 K-M1a-3 report, VCA::anovaVCA on ic50_demo (unbalanced; ANOVA type I and REML estimators differ, Formelsammlung §2; no criterion, ADR-016 E2):
        source    anovaVCA     msa_fit deviation_sigma2_TV
