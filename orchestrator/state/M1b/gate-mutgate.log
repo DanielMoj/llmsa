@@ -1,6 +1,6 @@
 # stdout
 r-mutation: 1456 Mutanten in R/fit.R, R/grr.R; Tests: tests/testthat, tests/acceptance, tests/e2e, tests/fuzz; ausgelassen nach MUT_TEST_EXCLUDE='^(m2-[0-9]|m0-testthat-count$|m1b-[23]-|m1b-7-vignette-full)': tests/acceptance/test-m0-testthat-count.R, tests/acceptance/test-m1b-2-recovery-scripts.R, tests/acceptance/test-m1b-3-two-level-script.R, tests/acceptance/test-m1b-7-vignette-full-results.R, tests/acceptance/test-m2-1-items.R, tests/acceptance/test-m2-2-memorisation.R, tests/acceptance/test-m2-3-prompts-parser.R, tests/acceptance/test-m2-4-backends.R, tests/acceptance/test-m2-5-plan.R, tests/acceptance/test-m2-6-evaluate.R, tests/acceptance/test-m2-7-robustness-pilot.R
-r-mutation: unmutierter Testlauf: 125 s; 392 Tests, davon 12 fehlgeschlagen, 4 abgebrochen
+r-mutation: unmutierter Testlauf: 125.3 s; 392 Tests, davon 12 fehlgeschlagen, 4 abgebrochen
 r-mutation: rot: tests/acceptance/test-m1a-2-aiag.R: K-M1a-2: the local data sheet is the AIAG example and reproduces Tab. III-B 7 (ankerRef: ANK-10) [abgebrochen]
 r-mutation: rot: tests/acceptance/test-m1a-2-aiag.R: K-M1a-2: msa_fit(interactions = FALSE) and msa_grr() reproduce EV, AV, GRR, PV, TV, % study variation, % contribution and ndc of the AIAG example (ankerRef: ANK-10) [abgebrochen]
 r-mutation: rot: tests/acceptance/test-m1a-2-aiag.R: K-M1a-2: with interactions = TRUE the deviation from the manual is reported, not judged (ankerRef: ANK-10) [abgebrochen]
