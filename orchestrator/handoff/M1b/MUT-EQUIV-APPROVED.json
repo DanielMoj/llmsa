@@ -1,9 +1,125 @@
 {
   "approved": [
-    {"file": "R/fit.R", "mutator": "<n> + 1 → <n> + 1", "line": 405, "reason": "msa_latent_information(): gram <- matrix(0, k, k) -> matrix(1, k, k). Die Doppelschleife (R/fit.R:406-411) weist fuer alle i <= j gram[i, j] und gram[j, i] zu, bevor eine Zelle gelesen wird; danach setzt nur die Nullsetzung aufgespannter Terme Werte. k >= 1, weil item stets Zufallsterm ist (R/fit.R:282-285). Der Schluessel trifft genau einen Mutanten. Antrag des Builders (MUT-EQUIV.json); Betreiberfreigabe ADR-031, vom Reviewer einzeln bestaetigt: identische Ergebnisse auf 200 Zufallsplaenen (REVIEW r3, Prueflauf 5). Nicht der M1a-Mutant 'Zeile 357' (heute R/fit.R:554, ADR-032 Nr. 2)."},
-    {"file": "R/fit.R", "mutator": "<n> - 1 → <n> - 1", "line": 405, "reason": "msa_latent_information(): gram <- matrix(0, k, k) -> matrix(-1, k, k). Begruendung und Beleg wie beim Mutanten <n> + 1 derselben Zeile; der Schluessel trifft genau einen Mutanten. Antrag des Builders; Betreiberfreigabe ADR-031, vom Reviewer bestaetigt."},
-    {"file": "R/fit.R", "mutator": "TRUE → FALSE", "line": 398, "reason": "msa_latent_information(): strsplit(groups, \":\", fixed = TRUE) -> fixed = FALSE. groups stammt aus den intern gebildeten Namen item, prompt, model, block, item:prompt, item:model, prompt:model; der Doppelpunkt ist auch als regulaerer Ausdruck ein Literal. Identische Teilung des vollstaendigen Namensvorrats (REVIEW r3, Prueflauf 5); der Schluessel trifft genau einen Mutanten. Antrag des Builders; Betreiberfreigabe ADR-031, vom Reviewer bestaetigt."},
-    {"file": "R/grr.R", "mutator": "> → >=", "line": 99, "reason": "grr_stats(): grr_v > 0 -> grr_v >= 0. Unterschied nur bei grr_v = 0; dann ist wegen total_v != 0 und nichtnegativer Komponenten item_v > 0, und max(1, floor(Inf)) = Inf wie im else-Zweig. Der Schluessel trifft genau einen Mutanten. In M1a vom Reviewer als R/grr.R:94 freigegeben (Antrag des Builders M1a); Betreiber-Neubindung ADR-031, vom Reviewer bestaetigt: identisch auf 1176 nichtnegativen Komponentensaetzen einschliesslich grr_v = 0 (REVIEW r3, Prueflauf 5). Kein Anspruch fuer negative Varianzen."}
+    {
+      "file": "R/fit.R",
+      "mutator": "TRUE → FALSE",
+      "line": 299,
+      "column": 47,
+      "code": "columns <- strsplit(group, \":\", fixed = TRUE)[[1L]]",
+      "reason": "msa_fit(): strsplit(group, \":\", fixed = FALSE). Der Doppelpunkt ist auch als regulärer Ausdruck ein Literal; group stammt aus den intern gebildeten Namen item, prompt, model, block, item:prompt, item:model, prompt:model. Identische Teilung des vollständigen Namensvorrats und identische Entscheidungen auf 120 Plänen mit gesperrten Engines (REVIEW r4, Prüflauf 7). Antrag des Builders; der Schlüssel trifft genau einen Mutanten."
+    },
+    {
+      "file": "R/fit.R",
+      "mutator": "FALSE → TRUE",
+      "line": 300,
+      "column": 64,
+      "code": "if (nlevels(interaction(dat[weights > 0, columns, drop = FALSE], drop = TRUE)) <= 2L) {",
+      "reason": "msa_fit(): dat[weights > 0, columns, drop = TRUE]. Bei einer Spalte entsteht ein Faktor statt eines einspaltigen Datenrahmens; interaction() entpackt den Datenrahmen ohnehin, und drop = TRUE in interaction() entfernt dieselben unbeobachteten Stufen. Bei zwei Spalten ist drop ohne Wirkung. Identische Stufenzahlen auf 300 gewichteten Plänen und identische Entscheidungen auf 120 Plänen (Prüflauf 7). Antrag des Builders; der Schlüssel trifft genau einen Mutanten."
+    },
+    {
+      "file": "R/fit.R",
+      "mutator": "<n> + 1 → <n> + 1",
+      "line": 314,
+      "column": 46,
+      "code": "if (!length(fixed_two)) design <- matrix(1, nrow(dat), 1L)",
+      "reason": "msa_fit(): design <- matrix(2, nrow(dat), 1L). design speist nur msa_latent_information(); die Skalierung um die Zweierpotenz 2 ist exakt und lässt QR-Basis, Rangnachweis und ncol(design) unverändert. Bitgleiche Gram-Matrizen auf 300 gewichteten Plänen, je mit und ohne Restterm, einschließlich nicht ganzzahliger Gewichte und identische Entscheidungen auf 120 Plänen (Prüflauf 7). Antrag des Builders; der Schlüssel trifft genau einen Mutanten."
+    },
+    {
+      "file": "R/fit.R",
+      "mutator": "+ → -",
+      "line": 400,
+      "column": 37,
+      "code": "cell <- stats::aggregate(y ~ item + prompt + model + block, data = dat, FUN = length)",
+      "reason": "msa_fit(): aggregate(y ~ item - prompt + model + block, ...) und die beiden anderen Spalten 46 und 54 derselben Zeile. aggregate.formula() baut den Datenrahmen über model.frame() aus allen Variablen der Formel und gruppiert nach allen rechten Spalten; die Operatoren wählen keine Terme aus. Identische Ergebnisse in 50 unbalancierten Plänen je Mutant und gleiche Ergebnisse in je drei numerischen msa_fit()-Läufen (Prüflauf 7). Der Schlüssel trifft genau die drei beantragten Mutanten der Spalten 37, 46 und 54; alle drei sind äquivalent. In M1a als R/fit.R:238 freigegeben."
+    },
+    {
+      "file": "R/fit.R",
+      "mutator": "TRUE → FALSE",
+      "line": 424,
+      "column": 45,
+      "code": "Z <- lapply(strsplit(groups, \":\", fixed = TRUE), function(columns) {",
+      "reason": "msa_latent_information(): strsplit(groups, \":\", fixed = FALSE). Doppelpunkt als Literal, interne Gruppennamen wie bei R/fit.R:299; bitgleiche Gram-Matrizen auf 300 Plänen, je mit und ohne Restterm (Prüflauf 7). Antrag des Builders; ersetzt die Freigabe R/fit.R:398 der Runde 3; der Schlüssel trifft genau einen Mutanten."
+    },
+    {
+      "file": "R/fit.R",
+      "mutator": "<n> + 1 → <n> + 1",
+      "line": 431,
+      "column": 18,
+      "code": "gram <- matrix(0, k + residual, k + residual)",
+      "reason": "msa_latent_information(): gram <- matrix(1, k + residual, k + residual). Die Doppelschleife weist alle k × k Zellen zu, bevor eine gelesen wird; mit residual = TRUE folgen beide Restränder und die Restdiagonale; danach nur Nullsetzungen. Bitgleiche Ergebnisse auf 300 Plänen, je mit und ohne Restterm (Prüflauf 7). Antrag des Builders; ersetzt die Freigabe R/fit.R:405 der Runde 3; der Schlüssel trifft genau einen Mutanten."
+    },
+    {
+      "file": "R/fit.R",
+      "mutator": "<n> - 1 → <n> - 1",
+      "line": 431,
+      "column": 18,
+      "code": "gram <- matrix(0, k + residual, k + residual)",
+      "reason": "msa_latent_information(): gram <- matrix(-1, k + residual, k + residual). Begründung und Beleg wie beim Mutanten <n> + 1 derselben Zeile; der Schlüssel trifft genau einen Mutanten."
+    },
+    {
+      "file": "R/fit.R",
+      "mutator": "<n> + 1 → <n> + 1",
+      "line": 501,
+      "column": 61,
+      "code": "if (length(counts) != prod(sizes) || any(counts != counts[1])) {",
+      "reason": "msa_numeric_balanced(): counts[1] -> counts[2]. Die rechte Seite des || wird nur bei length(counts) == prod(sizes) ausgewertet; jeder numerische Zufallsterm hat mindestens zwei Stufen, also gilt prod(sizes) >= 2, und beide Prädikate fragen, ob alle Zellzahlen gleich sind. Identische Ergebnisse auf 300 Plänen (Prüflauf 7). In M1a als R/fit.R:272 freigegeben; der Schlüssel trifft genau einen Mutanten."
+    },
+    {
+      "file": "R/fit.R",
+      "mutator": "x[<i>] → x[<i> + 1L]",
+      "line": 501,
+      "column": 61,
+      "code": "if (length(counts) != prod(sizes) || any(counts != counts[1])) {",
+      "reason": "msa_numeric_balanced(): counts[1] -> counts[1 + 1L]. Begründung und Beleg wie beim Mutanten <n> + 1 derselben Zeile. In M1a als R/fit.R:272 freigegeben; der Schlüssel trifft genau einen Mutanten."
+    },
+    {
+      "file": "R/fit.R",
+      "mutator": "<n> + 1 → <n> + 1",
+      "line": 586,
+      "column": 33,
+      "code": "gram <- curvature <- matrix(0, k, k)",
+      "reason": "msa_numeric_reml(): gram <- curvature <- matrix(1, k, k). Die Doppelschleife schreibt jede Zelle beider Matrizen vor dem ersten Lesen; curvature liest gram[i, j] erst nach dessen Zuweisung. Identische Rückgaben in je 80 Auswertungen (20 Pläne, vier Verhältnisvektoren einschließlich Varianzgrenzen) (Prüflauf 7). In M1a als R/fit.R:357 freigegeben; der Schlüssel trifft genau einen Mutanten."
+    },
+    {
+      "file": "R/fit.R",
+      "mutator": "<n> - 1 → <n> - 1",
+      "line": 586,
+      "column": 33,
+      "code": "gram <- curvature <- matrix(0, k, k)",
+      "reason": "msa_numeric_reml(): matrix(-1, k, k). Begründung und Beleg wie beim Mutanten <n> + 1 derselben Zeile; der Schlüssel trifft genau einen Mutanten."
+    },
+    {
+      "file": "R/fit.R",
+      "mutator": "TRUE → FALSE",
+      "line": 687,
+      "column": 52,
+      "code": "lf <- lme4::lFormula(form, data = scaled, REML = TRUE, control = control)",
+      "reason": "msa_numeric_fit(): lme4::lFormula(..., REML = FALSE). Verwendet werden nur reTrms$cnms, reTrms$Gp und reTrms$Zt; der REML-Rechenkern und alle lmer()-Aufrufe setzen REML selbst. Alle Teile von lFormula() außer dem Feld REML und die msa_fit()-Ergebnisse samt numerics sind identisch (Prüflauf 7, lme4 2.0.6). In M1a als R/fit.R:458 freigegeben; der Schlüssel trifft genau einen Mutanten."
+    },
+    {
+      "file": "R/fit.R",
+      "mutator": "TRUE → FALSE",
+      "line": 689,
+      "column": 41,
+      "code": "terms <- strsplit(names, \":\", fixed = TRUE)",
+      "reason": "msa_numeric_fit(): strsplit(names, \":\", fixed = FALSE). Doppelpunkt als Literal; names sind die Gruppennamen aus lFormula(). Identische msa_fit()-Ergebnisse (Prüflauf 7). In M1a als R/fit.R:460 freigegeben; der Schlüssel trifft genau einen Mutanten."
+    },
+    {
+      "file": "R/fit.R",
+      "mutator": "TRUE → FALSE",
+      "line": 695,
+      "column": 86,
+      "code": "on.exit(if (!completed) for (w in start$warnings) warning(w, call. = FALSE), add = TRUE)",
+      "reason": "msa_numeric_fit(): on.exit(..., add = FALSE). Die Funktion enthält genau einen on.exit()-Aufruf, der einmal ausgeführt wird; add wirkt nur auf zuvor registrierte Handler derselben Funktion (Prüflauf 7). In M1a als R/fit.R:466 freigegeben; der Schlüssel trifft genau einen Mutanten."
+    },
+    {
+      "file": "R/grr.R",
+      "mutator": "> → >=",
+      "line": 99,
+      "column": 52,
+      "code": "ndc <- if (total_v == 0) NA_real_ else if (grr_v > 0) max(1, floor(1.41 * sqrt(item_v) / sqrt(grr_v))) else Inf",
+      "reason": "grr_stats(): grr_v > 0 -> grr_v >= 0. Unterschied nur bei grr_v = 0; dann ist wegen total_v != 0 und nichtnegativer Komponenten item_v > 0, und max(1, floor(Inf)) = Inf wie im else-Zweig. Identisch auf 1176 nichtnegativen Komponentensätzen (REVIEW r3, Prüflauf 5). In M1a als R/grr.R:94 freigegeben, in M1b r3 bestätigt; der Schlüssel trifft genau einen Mutanten. Kein Anspruch für negative Varianzen."
+    }
   ],
-  "approvedBy": "Reviewer, 50-code-review M1b Runde 3, 01.11.2026: die vier Betreiberfreigaben aus ADR-031 einzeln geprueft und bestaetigt (ADR-032 Nr. 2). R/grr.R:99 '<n> - 1 → <n> - 1' (ADR-031 Nr. 2) ist auf nichtnegativen Komponenten aequivalent, wird aber nicht freigegeben: Der Schluessel aus Datei, Mutator und Zeile trifft vier Mutanten (Spalten 25, 54, 61, 70), von denen drei nicht aequivalent sind (BL-85). Zeilenbindung nach BL-85; nach dem naechsten Rework neu zu binden."
+  "approvedBy": "Reviewer, 50-code-review M1b Runde 4, 01.11.2026 (ADR-034 Nr. 3): 16 der 17 Anträge aus MUT-EQUIV.json einzeln geprüft und freigegeben, dazu die bestätigte Freigabe R/grr.R:99 '> → >='. Gebunden an den Bericht reports/mutation/mutation.json der Runde 4 (env.sha 91d82c1); jeder Schlüssel trifft dort genau die beantragten Mutanten. Nicht freigegeben: R/fit.R:168 'FALSE → TRUE' (stringsAsFactors), Gegenbeispiel Zeichenmatrix (fit$data mit Zeichen-Zeilennamen, numerics$input_rows benannt; REVIEW r4, Prüflauf 7). Entfernt: R/fit.R:398 und :405 der Runde 3 (kein Treffer im Bericht der Runde 4). Die Felder column und code liest das Gate nicht; nach jedem Rework prüft der Reviewer jeden Treffer gegen sie (BL-85)."
 }
