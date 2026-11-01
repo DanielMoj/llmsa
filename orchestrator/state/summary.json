@@ -1,23 +1,23 @@
 {
   "contract": 1,
   "project": "llmsa",
-  "ts": "2026-11-01T22:15:32+01:00",
+  "ts": "2026-11-01T22:22:23+01:00",
   "milestone": {
     "id": "M1b",
     "index": 4,
     "total": 10
   },
-  "phase": "60-rework",
+  "phase": "gates",
   "round": 5,
   "needs_human": false,
   "reason": "",
   "gates": {
     "deps": "pass",
-    "lint": "pass",
-    "tests": "pass",
+    "lint": "fail",
+    "tests": "fail",
     "trace": "pass",
     "territory": "pass",
-    "mutgate": "pass",
+    "mutgate": "fail",
     "golden-adr": "pass",
     "mutfull": "pass"
   },
