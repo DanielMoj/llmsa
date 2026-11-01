@@ -120,10 +120,14 @@
 #' factors, including interactions, produce an error naming the affected terms.
 #' This check includes the fixed latent residual variance: a random term with
 #' one observation per level, or a confounded linear combination of terms,
-#' cannot be separated from that residual. Frequency weights count as
-#' multiplicities, including binomial prior weights for zero/one responses;
-#' zero-weight rows contribute no information. Weights must be finite,
-#' non-negative numeric values with a finite positive sum.
+#' cannot be separated from that residual. If all retained weights are
+#' integers, they count as multiplicities, including binomial prior weights
+#' for zero/one responses. Otherwise each positive-weight row counts once
+#' in this check, including the fixed-effect rank check. Zero-weight rows
+#' contribute no information. The original weights are passed to the engine
+#' unchanged. Weights must be finite, non-negative numeric values with a
+#' finite positive sum. Sparse covariance cross-products avoid dense
+#' level-by-level projection blocks when checking large designs.
 #' Ordinal singularity describes random effects only, not the derived components.
 #' Ordinal and binary estimates are invariant to row order and factor labels
 #' only up to the optimization tolerance of the underlying engines.
@@ -140,6 +144,14 @@
 #' its final convergence check. Ordinal and binary non-convergence is warned,
 #' including a diagnosis stored by the engine without an emitted warning.
 #' A range-method warning alone does not indicate non-convergence.
+#'
+#' @section Known limitations:
+#' Zero-weight rows still contribute levels when selecting random versus
+#' two-level fixed effects. An ordinal fit can therefore reject a random
+#' factor with fewer than three levels among its positive-weight rows.
+#' Use `subset` to exclude those rows when that is the intended design.
+#' Numeric fits with explicit arguments in `...` use lme4's diagnostics;
+#' the default numeric path's identifiability check does not apply to them.
 #'
 #' @return An object of class `msa_fit`: a list with the fitted `model`, the
 #'   variance-component table `vc` (source, variance), the model `formula`,
@@ -165,7 +177,7 @@ msa_fit <- function(runs, type = c("numeric", "ordinal", "binary"), levels = NUL
                     interactions = NULL, link = c("probit", "logit"), ...) {
   type <- match.arg(type)
   link <- match.arg(link)
-  d <- as.data.frame(runs, stringsAsFactors = FALSE)
+  d <- as.data.frame(runs)
   if (type == "ordinal" && is.null(levels) && is.ordered(d$value)) {
     levels <- levels(d$value)
   }
@@ -264,6 +276,9 @@ msa_fit <- function(runs, type = c("numeric", "ordinal", "binary"), levels = NUL
         !is.finite(sum(weights)) || sum(weights) <= 0) {
       stop("Ordinal and binary weights must be finite, non-negative numeric values with a finite positive sum.", call. = FALSE)
     }
+    # Only integer frequencies add replicated observations. Other weights
+    # define observed support for every precheck (ADR-034); args is unchanged.
+    if (any(weights != trunc(weights))) weights <- as.numeric(weights > 0)
     if (length(unique(dat$y[weights > 0])) < 2L) stop("Response is constant: at least two observed categories are needed.", call. = FALSE)
   }
 
@@ -409,10 +424,11 @@ msa_fit <- function(runs, type = c("numeric", "ordinal", "binary"), levels = NUL
             class = "msa_fit")
 }
 
-# Gram matrix of projected covariance components (ADR-029, ADR-032).
+# Gram matrix of projected covariance components (ADR-029, ADR-032, ADR-034).
 # Weighted indicators represent frequency-expanded observations without
 # allocating them. With Q spanning sqrt(W) X, G[i,j] = ||Z_i' P Z_j||_F^2.
 # The optional residual adds trace(P Z_j Z_j') and sum(weights) - rank(X).
+# msa_fit resolves noninteger weights to positive-row indicators beforehand.
 # Work in grouping-level space; never form observation covariance matrices.
 msa_latent_information <- function(dat, groups, design,
                                    weights = rep(1, nrow(dat)), residual = FALSE) {
@@ -427,12 +443,18 @@ msa_latent_information <- function(dat, groups, design,
                          dims = c(nrow(dat), nlevels(group)))
   })
   fixed <- lapply(Z, function(z) as.matrix(Matrix::crossprod(Q, z)))
+  fixed_gram <- lapply(fixed, tcrossprod)
   k <- length(Z)
   gram <- matrix(0, k + residual, k + residual)
   for (j in seq_len(k)) {
     for (i in seq_len(j)) {
-      block <- as.matrix(Matrix::crossprod(Z[[i]], Z[[j]])) - crossprod(fixed[[i]], fixed[[j]])
-      gram[i, j] <- gram[j, i] <- sum(block^2)
+      # Expand ||N - B_i' B_j||_F^2 into sparse and fixed-space contractions.
+      # Squaring a dense projected block accumulates rounding error over
+      # every pair of levels, enough to hide exact residual relations.
+      counts <- Matrix::crossprod(Z[[i]], Z[[j]])
+      gram[i, j] <- gram[j, i] <- sum(counts^2) -
+        2 * sum((fixed[[i]] %*% counts) * fixed[[j]]) +
+        sum(fixed_gram[[i]] * fixed_gram[[j]])
     }
   }
   # An indicator matrix has full column rank. It can lie wholly in the fixed

@@ -1,6 +1,6 @@
 # STATUS — llmsa
 
-Stand: 2026-11-01T20:02:52+01:00 · Fortschritt: **3/10 fertig**
+Stand: 2026-11-01T22:15:32+01:00 · Fortschritt: **3/10 fertig**
 
 `▓▓▓▒░░░░░░`  (▓ fertig · ▒ in Arbeit · ░ offen · ✖ geparkt)
 
@@ -9,7 +9,7 @@ Stand: 2026-11-01T20:02:52+01:00 · Fortschritt: **3/10 fertig**
 | M0 | Gerüst steht: Toolchain, Preset r-paket und alle gewählten Gates laufen grün auf v0.1.0, ohne Änderung an R/ | ✅ | fertig |
 | M2 | Pipeline für das Anwendungsbeispiel ACMG/AMP: Itemsatz mit SHA-256, Prompt-Vorlagen, Backends mit festem Routing, Auswertung, Validierungsplan; läuft vor dem Statistikkern, damit die AP1-Erhebung parallel zu M1 beginnt | ✅ | fertig |
 | M1a | Statistikkern numerisch nach Prüfstandard: Varianzkomponenten gleich ANOVA, AIAG-Beispiel, Gegenrechnung, NIST StRD, Kennzahlen und Verdikt, Invarianzen | ✅ | fertig |
-| M1b | Statistikkern ordinal und binär: Engine-Gleichheit, Recovery- und β²/2-Studien als Skripte mit reproduziertem Kurzlauf, rptR, Randfälle | 🔨 | Phase 50-code-review · Runde 4 |
+| M1b | Statistikkern ordinal und binär: Engine-Gleichheit, Recovery- und β²/2-Studien als Skripte mit reproduziertem Kurzlauf, rptR, Randfälle | 🔨 | Phase 60-rework · Runde 5 |
 | M1c | Bootstrap wie lme4::bootMer, Überdeckungsstudie als Skript mit reproduziertem Kurzlauf, Mutationslauf über R/fit.R und R/grr.R | ⬜ | offen |
 | M1d | Vignetten auf echten Daten ohne Modellaufruf (llm-stability, ClinVar-Einreichungen) und Abnahme der Klasse-B-Simulationsergebnisse aus M1b und M1c | ⬜ | offen |
 | M3a | Übereinstimmung (Cohen, Fleiss, Krippendorff, Attributkennzahlen), Bias und Linearität nach Prüfstandard | ⬜ | offen |

@@ -1,5 +1,106 @@
 # PROGRESS — Langzeitgedächtnis des Builders
 
+## M1b — REWORK Runde 5 (01.11.2026)
+
+Grundlage: REVIEW/verdict-code Runde 4 (E33–E36), gates.json samt Logs,
+CRITERIA, ARBITER, LESSONS und ADR-034/035. Die vorhandenen acht Gates
+sind Runde 4, alle `pass`; kein `error`. Mutgate: 93,02 bei verlangten
+90,83. Dieser Eintrag berichtet lokale Builder-Prüfungen; neues Gate,
+Verdict und Commit bleiben beim Orchestrator beziehungsweise Reviewer.
+Vollständige Antworten, Befehle, Rohlogpfade und echte Outputs stehen in
+[REWORK-NOTES.md](orchestrator/handoff/M1b/REWORK-NOTES.md).
+
+- **E33 umgesetzt:** `R/fit.R` berechnet die latente Gram-Matrix über
+  dünn besetzte Kreuztabellen und Produkte im festen Effektraum gemäß
+  ADR-034. Dichte Stufen-mal-Stufen-Projektionsblöcke entfallen.
+  Restterm, Rangnachweis, Eigenwertregel und Namensdiagnose bleiben
+  unverändert; keine neue Toleranz. Neue Tests decken die verlangten
+  Größen bis 2000 Items/Zellen und geschlossene Formeln bis 5000 Items
+  ab. Das Raster mit drei Seeds/sieben Größen ergibt 588 übereinstimmende
+  Entscheidungen (252 identifizierbar, 336 abgewiesen).
+- **E34 umgesetzt:** Nach Zeilenauswahl zählen ganzzahlige Gewichte als
+  Häufigkeiten; sobald ein verbleibendes Gewicht nicht ganzzahlig ist,
+  zählt jede positive Zeile genau einmal, auch im festen Rang und dessen
+  Rangnachweis. Engine-Gewichte und Engine-Daten bleiben unverändert.
+  Direkte clmm/glmer-Orakel und ein unabhängiges Beobachtungspaar-/SVD-
+  Raster bestätigen das Verhalten: 768 Entscheidungen, keine Abweichung
+  (340 identifizierbar, 60 Eingabe-/Stufenprüfung, 368 konfundiert).
+- **E35 dokumentiert:** „Known limitations“ in `?msa_fit` nennt die
+  Stufenzählung bei Nullgewichten und verweist auf `subset`, außerdem
+  den numerischen Durchreichweg aus E32/BL-100. Keine weitere Änderung
+  dieser Wege; ADR-035 bleibt maßgeblich.
+- **E36 bearbeitet:** Überflüssiges `stringsAsFactors = FALSE` entfernt,
+  widerlegten Äquivalenzclaim zurückgenommen. Gegenprobe mit msa_runs,
+  Datenrahmen, Liste und Zeichenmatrix ist identisch zum bisherigen
+  Verhalten. Die 16 verbleibenden Anträge sind an endgültige Zeilen,
+  Spalten und Quelltexte gebunden; APPROVED bleibt unverändert.
+- **Mutation:** Gezielte Diagnose über 179 Mutanten plus zusätzlicher
+  algebraischer Test für den Rangnachweis: 168 Killed, 9 Survived,
+  2 syntaktische RuntimeErrors. Alle 32 Mutanten der neuen Gewichts-
+  normalisierung und Sparse-Arithmetik werden getötet. Sechs Überlebende
+  sind beantragt; `>`→`>=` an `R/fit.R:338:74` und die beiden `symmetric`
+  TRUE→FALSE-Mutanten an `:331:42`/`:337:55` bleiben ungeclaimt.
+  Kein vollständiger Gate-Score; keine eigenen Freigaben.
+
+Neu: `tests/testthat/test-fit-latent-precision.R` mit sieben Blöcken und
+545 Erwartungen sowie Builder-ADR-036. Bestehende Tests sind unverändert.
+Die Gegenprobe mit dem alten Produktcode ergibt erwartete 73
+fehlgeschlagene Erwartungen, 470 bestandene und keinen Testfehler.
+Hilfe und NEWS sind ergänzt; die Hilfe entspricht der Roxygen-Erzeugung.
+
+Alle neun Kurzlaufdateien wurden mit dem aktuellen installierten Paket,
+unveränderten Seeds, n_sim = ANK-TOL.n_check (20) und 14 Workern neu
+erzeugt. Echter Output:
+
+```text
+ordinal_recovery: 4 scenarios x 20 repetitions; 100 result rows; elapsed 107.327 s; workers 14
+binary_recovery: 2 scenarios x 20 repetitions; 40 result rows; elapsed 0.964 s; workers 14
+two_level: 2 scenarios x 20 repetitions; 42 result rows; elapsed 9.623 s; workers 14
+Nine genuine short-run files copied; six CSVs byte-identical to the pre-rework files.
+No full-run files written in the repository.
+```
+
+Alle drei Prozesse Exit 0. Sessionhash separat bestätigt:
+`477e84a5ad763c15cbcd4e12142b7ca02797fb96571f66ceb0b2a68368ae5c1e`.
+Die unveränderten Abnahmetests reproduzieren die sechs CSVs bytegleich.
+
+Ausgeführte Schlussprüfungen, Rohlogs unter `/tmp/llmsa-m1b-r5-VqXqW8/`:
+
+```text
+Gezielte latente Tests: [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1957 ]
+tests/testthat: [ FAIL 0 | WARN 0 | SKIP 1 | PASS 5254 ]
+tests/e2e:      [ FAIL 0 | WARN 0 | SKIP 0 | PASS 49 ]
+tests/fuzz:     [ FAIL 0 | WARN 0 | SKIP 0 | PASS 25 ]
+r-tests: pass — 282 Tests in tests/testthat, tests/e2e, tests/fuzz; 0 fehlgeschlagen, 0 Fehler, 1 übersprungen
+M1a/M1b-Abnahme: [ FAIL 59 | WARN 2 | SKIP 0 | PASS 3765 ]
+Blocks: 128; failed expectations: 55; error blocks: 4; skipped: 0; elapsed: 216.189 s
+R CMD check: Status: 1 NOTE
+Installierte Tests: [ FAIL 0 | WARN 0 | SKIP 9 | PASS 5178 ]
+```
+
+**OUT-OF-TERRITORY:** Die lokale Abnahme ist durch die fehlende geschützte
+Datei `reference/quellen/data/aiag/anova_example.csv` rot. Die vier
+direkten Fehler und 55 Folgefehlschläge der Repo-Vignette sind im Log
+belegt; keine Ersatzdaten und kein Skip. K-M1b-1 bis K-M1b-6 bestehen
+mit 3030 Erwartungen, die Volllauf-Fixture mit weiteren 204. E23 bleibt
+wegen zweier Reviewer-Abnahmehelfer-Deprecations nonblocking (BL-93).
+Der Paketcheck hat keine ERRORs/WARNINGs; seine einzige NOTE lautet
+`Unable to verify current time.` Die Zeitprüfung bleibt aktiv.
+Der native Mutationstreiber scheitert mit `.dispatcher_start: 16 |
+Permission denied`; die zusätzliche Diagnose läuft mit gewöhnlichen
+R-Unterprozessen innerhalb derselben Sandbox. Zwei erzeugte Mutanten
+sind syntaktisch ungültig (`unexpected '!'`); sie zählen nicht als
+Killed. Bei der Sessionerfassung scheitert `timedatectl` mit Status 1,
+die Simulationen selbst enden mit Exit 0. Belege und Zuständigkeiten
+stehen in REWORK-NOTES P3–P6. Kein offenes [QA-PENDING].
+
+Integrität: 405/405 geschützte Bestandsdateien und 95/95 bestehende
+Test-/Fixture-Dateien bytegleich; numerische Helfer, Eigenwertregel und
+Namensdiagnose unverändert. Alle 22 Snapshot-Schnittstellen behalten
+Positionen und Vorgabewerte. Keine Änderung von Ankern, Schwellen,
+Gates, APPROVED oder Orchestrator-Zustand; keine Git-Kommandos.
+
+
 ## M1b — REWORK Runde 4 (01.11.2026)
 
 Grundlage: REVIEW/verdict-code Runde 3 (E29–E32), gates.json und Gate-Logs,

@@ -2,105 +2,147 @@
   "claims": [
     {
       "file": "R/fit.R",
-      "mutator": "FALSE → TRUE",
-      "line": 168,
-      "reason": "Spalte 47, Ersetzung 'TRUE'. msa_fit(): Bei den vertraglichen Eingaben msa_runs und data.frame übernimmt as.data.frame.data.frame() die vorhandenen Spaltentypen; stringsAsFactors konvertiert sie nicht nachträglich. Der Schalter ist daher wirkungslos. Der Antrag gilt dem dokumentierten Eingabebereich, nicht beliebigen fremden S3-Konvertiermethoden. Ausgeführter Beleg: vier Antworttypen (numerisch, Zeichen, geordnet, logisch) liefern identische Datenrahmen. Beleglauf: /tmp/llmsa-m1b-r4-3lho07s_/equivalence-proofs.R, Output in equivalence-proofs.log; siehe REWORK-NOTES.md P5. Antrag des Builders mit endgültiger Zeile, keine Freigabe."
+      "mutator": "+ → -",
+      "line": 415,
+      "column": 37,
+      "code": "  cell <- stats::aggregate(y ~ item + prompt + model + block, data = dat, FUN = length)",
+      "replacement": "-",
+      "reason": "Spalte 37, Ersetzung '-'. stats::aggregate.formula() bildet den Datenrahmen aus sämtlichen in der Formel genannten Variablen und verwendet dessen RHS-Spalten als Gruppierung; es wertet die Plus-/Minus-Operatoren nicht als model.matrix-Termselektion aus. Jeder der drei einzeln geprüften Operatorwechsel lässt item, prompt, model und block in derselben Reihenfolge stehen. Ausgeführter Beleg: unbalancierter Vier-Faktor-Plan, exakte Gleichheit von Zellzahlen und Reihenfolge. Achtung: Der Gate-Schlüssel Datei/Mutator/Zeile trifft drei Mutanten; alle drei Spalten sind hier einzeln begründet und geprüft. Beleglauf: /tmp/llmsa-m1b-r5-VqXqW8/equivalence-proofs.R, Output in equivalence-proofs.log; siehe REWORK-NOTES.md P5. Antrag des Builders mit endgültiger Zeile, keine Freigabe. In Runde 5 erneut ausgeführt; Quelltext und Spalte sind hier zusätzlich gebunden (ADR-034 Nr. 3)."
     },
     {
       "file": "R/fit.R",
       "mutator": "+ → -",
-      "line": 400,
-      "reason": "Spalte 37, Ersetzung '-'. stats::aggregate.formula() bildet den Datenrahmen aus sämtlichen in der Formel genannten Variablen und verwendet dessen RHS-Spalten als Gruppierung; es wertet die Plus-/Minus-Operatoren nicht als model.matrix-Termselektion aus. Jeder der drei einzeln geprüften Operatorwechsel lässt item, prompt, model und block in derselben Reihenfolge stehen. Ausgeführter Beleg: unbalancierter Vier-Faktor-Plan, exakte Gleichheit von Zellzahlen und Reihenfolge. Achtung: Der Gate-Schlüssel Datei/Mutator/Zeile trifft drei Mutanten; alle drei Spalten sind hier einzeln begründet und geprüft. Beleglauf: /tmp/llmsa-m1b-r4-3lho07s_/equivalence-proofs.R, Output in equivalence-proofs.log; siehe REWORK-NOTES.md P5. Antrag des Builders mit endgültiger Zeile, keine Freigabe."
+      "line": 415,
+      "column": 46,
+      "code": "  cell <- stats::aggregate(y ~ item + prompt + model + block, data = dat, FUN = length)",
+      "replacement": "-",
+      "reason": "Spalte 46, Ersetzung '-'. stats::aggregate.formula() bildet den Datenrahmen aus sämtlichen in der Formel genannten Variablen und verwendet dessen RHS-Spalten als Gruppierung; es wertet die Plus-/Minus-Operatoren nicht als model.matrix-Termselektion aus. Jeder der drei einzeln geprüften Operatorwechsel lässt item, prompt, model und block in derselben Reihenfolge stehen. Ausgeführter Beleg: unbalancierter Vier-Faktor-Plan, exakte Gleichheit von Zellzahlen und Reihenfolge. Achtung: Der Gate-Schlüssel Datei/Mutator/Zeile trifft drei Mutanten; alle drei Spalten sind hier einzeln begründet und geprüft. Beleglauf: /tmp/llmsa-m1b-r5-VqXqW8/equivalence-proofs.R, Output in equivalence-proofs.log; siehe REWORK-NOTES.md P5. Antrag des Builders mit endgültiger Zeile, keine Freigabe. In Runde 5 erneut ausgeführt; Quelltext und Spalte sind hier zusätzlich gebunden (ADR-034 Nr. 3)."
     },
     {
       "file": "R/fit.R",
       "mutator": "+ → -",
-      "line": 400,
-      "reason": "Spalte 46, Ersetzung '-'. stats::aggregate.formula() bildet den Datenrahmen aus sämtlichen in der Formel genannten Variablen und verwendet dessen RHS-Spalten als Gruppierung; es wertet die Plus-/Minus-Operatoren nicht als model.matrix-Termselektion aus. Jeder der drei einzeln geprüften Operatorwechsel lässt item, prompt, model und block in derselben Reihenfolge stehen. Ausgeführter Beleg: unbalancierter Vier-Faktor-Plan, exakte Gleichheit von Zellzahlen und Reihenfolge. Achtung: Der Gate-Schlüssel Datei/Mutator/Zeile trifft drei Mutanten; alle drei Spalten sind hier einzeln begründet und geprüft. Beleglauf: /tmp/llmsa-m1b-r4-3lho07s_/equivalence-proofs.R, Output in equivalence-proofs.log; siehe REWORK-NOTES.md P5. Antrag des Builders mit endgültiger Zeile, keine Freigabe."
-    },
-    {
-      "file": "R/fit.R",
-      "mutator": "+ → -",
-      "line": 400,
-      "reason": "Spalte 54, Ersetzung '-'. stats::aggregate.formula() bildet den Datenrahmen aus sämtlichen in der Formel genannten Variablen und verwendet dessen RHS-Spalten als Gruppierung; es wertet die Plus-/Minus-Operatoren nicht als model.matrix-Termselektion aus. Jeder der drei einzeln geprüften Operatorwechsel lässt item, prompt, model und block in derselben Reihenfolge stehen. Ausgeführter Beleg: unbalancierter Vier-Faktor-Plan, exakte Gleichheit von Zellzahlen und Reihenfolge. Achtung: Der Gate-Schlüssel Datei/Mutator/Zeile trifft drei Mutanten; alle drei Spalten sind hier einzeln begründet und geprüft. Beleglauf: /tmp/llmsa-m1b-r4-3lho07s_/equivalence-proofs.R, Output in equivalence-proofs.log; siehe REWORK-NOTES.md P5. Antrag des Builders mit endgültiger Zeile, keine Freigabe."
+      "line": 415,
+      "column": 54,
+      "code": "  cell <- stats::aggregate(y ~ item + prompt + model + block, data = dat, FUN = length)",
+      "replacement": "-",
+      "reason": "Spalte 54, Ersetzung '-'. stats::aggregate.formula() bildet den Datenrahmen aus sämtlichen in der Formel genannten Variablen und verwendet dessen RHS-Spalten als Gruppierung; es wertet die Plus-/Minus-Operatoren nicht als model.matrix-Termselektion aus. Jeder der drei einzeln geprüften Operatorwechsel lässt item, prompt, model und block in derselben Reihenfolge stehen. Ausgeführter Beleg: unbalancierter Vier-Faktor-Plan, exakte Gleichheit von Zellzahlen und Reihenfolge. Achtung: Der Gate-Schlüssel Datei/Mutator/Zeile trifft drei Mutanten; alle drei Spalten sind hier einzeln begründet und geprüft. Beleglauf: /tmp/llmsa-m1b-r5-VqXqW8/equivalence-proofs.R, Output in equivalence-proofs.log; siehe REWORK-NOTES.md P5. Antrag des Builders mit endgültiger Zeile, keine Freigabe. In Runde 5 erneut ausgeführt; Quelltext und Spalte sind hier zusätzlich gebunden (ADR-034 Nr. 3)."
     },
     {
       "file": "R/fit.R",
       "mutator": "<n> + 1 → <n> + 1",
-      "line": 501,
-      "reason": "Spalte 61, Ersetzung '2'. msa_numeric_balanced(): Im erreichbaren Fit-Pfad hat mindestens ein Zufallsterm mindestens zwei beobachtete Stufen. Wird die rechte Seite des || ausgewertet, ist length(counts) gleich prod(sizes) und mindestens zwei. any(counts != counts[1]) und any(counts != counts[2]) prüfen beide genau, ob nicht alle positiven Zellzahlen gleich sind. Der erste Index ist kein numerischer Referenzwert. Ausgeführter Beleg: alle 9837 Vektoren der Längen 2 bis 8 mit Einträgen 1 bis 3 liefern identische Prädikate. Beleglauf: /tmp/llmsa-m1b-r4-3lho07s_/equivalence-proofs.R, Output in equivalence-proofs.log; siehe REWORK-NOTES.md P5. Antrag des Builders mit endgültiger Zeile, keine Freigabe."
+      "line": 523,
+      "column": 61,
+      "code": "  if (length(counts) != prod(sizes) || any(counts != counts[1])) {",
+      "replacement": "2",
+      "reason": "Spalte 61, Ersetzung '2'. msa_numeric_balanced(): Im erreichbaren Fit-Pfad hat mindestens ein Zufallsterm mindestens zwei beobachtete Stufen. Wird die rechte Seite des || ausgewertet, ist length(counts) gleich prod(sizes) und mindestens zwei. any(counts != counts[1]) und any(counts != counts[2]) prüfen beide genau, ob nicht alle positiven Zellzahlen gleich sind. Der erste Index ist kein numerischer Referenzwert. Ausgeführter Beleg: alle 9837 Vektoren der Längen 2 bis 8 mit Einträgen 1 bis 3 liefern identische Prädikate. Beleglauf: /tmp/llmsa-m1b-r5-VqXqW8/equivalence-proofs.R, Output in equivalence-proofs.log; siehe REWORK-NOTES.md P5. Antrag des Builders mit endgültiger Zeile, keine Freigabe. In Runde 5 erneut ausgeführt; Quelltext und Spalte sind hier zusätzlich gebunden (ADR-034 Nr. 3)."
     },
     {
       "file": "R/fit.R",
       "mutator": "x[<i>] → x[<i> + 1L]",
-      "line": 501,
-      "reason": "Spalte 61, Ersetzung '1 + 1L'. msa_numeric_balanced(): Im erreichbaren Fit-Pfad hat mindestens ein Zufallsterm mindestens zwei beobachtete Stufen. Wird die rechte Seite des || ausgewertet, ist length(counts) gleich prod(sizes) und mindestens zwei. any(counts != counts[1]) und any(counts != counts[2]) prüfen beide genau, ob nicht alle positiven Zellzahlen gleich sind. Der erste Index ist kein numerischer Referenzwert. Ausgeführter Beleg: alle 9837 Vektoren der Längen 2 bis 8 mit Einträgen 1 bis 3 liefern identische Prädikate. Beleglauf: /tmp/llmsa-m1b-r4-3lho07s_/equivalence-proofs.R, Output in equivalence-proofs.log; siehe REWORK-NOTES.md P5. Antrag des Builders mit endgültiger Zeile, keine Freigabe."
+      "line": 523,
+      "column": 61,
+      "code": "  if (length(counts) != prod(sizes) || any(counts != counts[1])) {",
+      "replacement": "1 + 1L",
+      "reason": "Spalte 61, Ersetzung '1 + 1L'. msa_numeric_balanced(): Im erreichbaren Fit-Pfad hat mindestens ein Zufallsterm mindestens zwei beobachtete Stufen. Wird die rechte Seite des || ausgewertet, ist length(counts) gleich prod(sizes) und mindestens zwei. any(counts != counts[1]) und any(counts != counts[2]) prüfen beide genau, ob nicht alle positiven Zellzahlen gleich sind. Der erste Index ist kein numerischer Referenzwert. Ausgeführter Beleg: alle 9837 Vektoren der Längen 2 bis 8 mit Einträgen 1 bis 3 liefern identische Prädikate. Beleglauf: /tmp/llmsa-m1b-r5-VqXqW8/equivalence-proofs.R, Output in equivalence-proofs.log; siehe REWORK-NOTES.md P5. Antrag des Builders mit endgültiger Zeile, keine Freigabe. In Runde 5 erneut ausgeführt; Quelltext und Spalte sind hier zusätzlich gebunden (ADR-034 Nr. 3)."
     },
     {
       "file": "R/fit.R",
       "mutator": "<n> + 1 → <n> + 1",
-      "line": 586,
-      "reason": "Spalte 33, Ersetzung '1'. msa_numeric_reml(): Die gemeinsame Initialisierung von gram und curvature mit 1 beziehungsweise -1 statt 0 ist unbeobachtbar. Die Schleifen über j=1,...,k und i=1,...,j schreiben jede symmetrische Zelle beider Matrizen vor dem ersten Lesen. Der Zugriff auf gram in der Krümmungsformel erfolgt erst nach dessen Zuweisung. Für k=0 sind die Matrizen leer; ein früherer Fehler liefert kein Ergebnis. Ausgeführter Beleg: tatsächlicher muttest-Mutant gegen das Original in 33 REML-Zuständen einschließlich Varianzgrenzen, jeweils identisches vollständiges Ergebnis. Beleglauf: /tmp/llmsa-m1b-r4-3lho07s_/equivalence-proofs.R, Output in equivalence-proofs.log; siehe REWORK-NOTES.md P5. Antrag des Builders mit endgültiger Zeile, keine Freigabe."
+      "line": 608,
+      "column": 33,
+      "code": "    gram <- curvature <- matrix(0, k, k)",
+      "replacement": "1",
+      "reason": "Spalte 33, Ersetzung '1'. msa_numeric_reml(): Die gemeinsame Initialisierung von gram und curvature mit 1 beziehungsweise -1 statt 0 ist unbeobachtbar. Die Schleifen über j=1,...,k und i=1,...,j schreiben jede symmetrische Zelle beider Matrizen vor dem ersten Lesen. Der Zugriff auf gram in der Krümmungsformel erfolgt erst nach dessen Zuweisung. Für k=0 sind die Matrizen leer; ein früherer Fehler liefert kein Ergebnis. Ausgeführter Beleg: tatsächlicher muttest-Mutant gegen das Original in 33 REML-Zuständen einschließlich Varianzgrenzen, jeweils identisches vollständiges Ergebnis. Beleglauf: /tmp/llmsa-m1b-r5-VqXqW8/equivalence-proofs.R, Output in equivalence-proofs.log; siehe REWORK-NOTES.md P5. Antrag des Builders mit endgültiger Zeile, keine Freigabe. In Runde 5 erneut ausgeführt; Quelltext und Spalte sind hier zusätzlich gebunden (ADR-034 Nr. 3)."
     },
     {
       "file": "R/fit.R",
       "mutator": "<n> - 1 → <n> - 1",
-      "line": 586,
-      "reason": "Spalte 33, Ersetzung '-1'. msa_numeric_reml(): Die gemeinsame Initialisierung von gram und curvature mit 1 beziehungsweise -1 statt 0 ist unbeobachtbar. Die Schleifen über j=1,...,k und i=1,...,j schreiben jede symmetrische Zelle beider Matrizen vor dem ersten Lesen. Der Zugriff auf gram in der Krümmungsformel erfolgt erst nach dessen Zuweisung. Für k=0 sind die Matrizen leer; ein früherer Fehler liefert kein Ergebnis. Ausgeführter Beleg: tatsächlicher muttest-Mutant gegen das Original in 33 REML-Zuständen einschließlich Varianzgrenzen, jeweils identisches vollständiges Ergebnis. Beleglauf: /tmp/llmsa-m1b-r4-3lho07s_/equivalence-proofs.R, Output in equivalence-proofs.log; siehe REWORK-NOTES.md P5. Antrag des Builders mit endgültiger Zeile, keine Freigabe."
+      "line": 608,
+      "column": 33,
+      "code": "    gram <- curvature <- matrix(0, k, k)",
+      "replacement": "-1",
+      "reason": "Spalte 33, Ersetzung '-1'. msa_numeric_reml(): Die gemeinsame Initialisierung von gram und curvature mit 1 beziehungsweise -1 statt 0 ist unbeobachtbar. Die Schleifen über j=1,...,k und i=1,...,j schreiben jede symmetrische Zelle beider Matrizen vor dem ersten Lesen. Der Zugriff auf gram in der Krümmungsformel erfolgt erst nach dessen Zuweisung. Für k=0 sind die Matrizen leer; ein früherer Fehler liefert kein Ergebnis. Ausgeführter Beleg: tatsächlicher muttest-Mutant gegen das Original in 33 REML-Zuständen einschließlich Varianzgrenzen, jeweils identisches vollständiges Ergebnis. Beleglauf: /tmp/llmsa-m1b-r5-VqXqW8/equivalence-proofs.R, Output in equivalence-proofs.log; siehe REWORK-NOTES.md P5. Antrag des Builders mit endgültiger Zeile, keine Freigabe. In Runde 5 erneut ausgeführt; Quelltext und Spalte sind hier zusätzlich gebunden (ADR-034 Nr. 3)."
     },
     {
       "file": "R/fit.R",
       "mutator": "TRUE → FALSE",
-      "line": 687,
-      "reason": "Spalte 52, Ersetzung 'FALSE'. msa_numeric_fit(): Dieser erste lFormula()-Aufruf dient nur dem Aufbau von reTrms (Zt, cnms, Gp); sein REML-Feld wird nicht verwendet. Der eigene REML-Rechenkern und die nachfolgenden lmer()-Aufrufe behalten ihre unveränderte REML-Vorgabe. Die Gruppierungs- und Designmatrizen von lFormula() hängen nicht von REML ab. Ausgeführter Beleg: Zt, cnms und Gp sind mit REML TRUE und FALSE exakt identisch. Beleglauf: /tmp/llmsa-m1b-r4-3lho07s_/equivalence-proofs.R, Output in equivalence-proofs.log; siehe REWORK-NOTES.md P5. Antrag des Builders mit endgültiger Zeile, keine Freigabe."
+      "line": 709,
+      "column": 52,
+      "code": "  lf <- lme4::lFormula(form, data = scaled, REML = TRUE, control = control)",
+      "replacement": "FALSE",
+      "reason": "Spalte 52, Ersetzung 'FALSE'. msa_numeric_fit(): Dieser erste lFormula()-Aufruf dient nur dem Aufbau von reTrms (Zt, cnms, Gp); sein REML-Feld wird nicht verwendet. Der eigene REML-Rechenkern und die nachfolgenden lmer()-Aufrufe behalten ihre unveränderte REML-Vorgabe. Die Gruppierungs- und Designmatrizen von lFormula() hängen nicht von REML ab. Ausgeführter Beleg: Zt, cnms und Gp sind mit REML TRUE und FALSE exakt identisch. Beleglauf: /tmp/llmsa-m1b-r5-VqXqW8/equivalence-proofs.R, Output in equivalence-proofs.log; siehe REWORK-NOTES.md P5. Antrag des Builders mit endgültiger Zeile, keine Freigabe. In Runde 5 erneut ausgeführt; Quelltext und Spalte sind hier zusätzlich gebunden (ADR-034 Nr. 3)."
     },
     {
       "file": "R/fit.R",
       "mutator": "TRUE → FALSE",
-      "line": 689,
-      "reason": "Spalte 41, Ersetzung 'FALSE'. strsplit(): Der unveränderte Suchtext ist allein der Doppelpunkt. Er ist auch im regulären Ausdruck ein Literal; fixed TRUE und FALSE trennen dieselben Zeichen an denselben Positionen. Ausgeführter Beleg: alle sieben internen Gruppennamen, einschließlich sämtlicher Wechselwirkungen, ergeben identische Teilvektoren. Beleglauf: /tmp/llmsa-m1b-r4-3lho07s_/equivalence-proofs.R, Output in equivalence-proofs.log; siehe REWORK-NOTES.md P5. Antrag des Builders mit endgültiger Zeile, keine Freigabe."
+      "line": 711,
+      "column": 41,
+      "code": "  terms <- strsplit(names, \":\", fixed = TRUE)",
+      "replacement": "FALSE",
+      "reason": "Spalte 41, Ersetzung 'FALSE'. strsplit(): Der unveränderte Suchtext ist allein der Doppelpunkt. Er ist auch im regulären Ausdruck ein Literal; fixed TRUE und FALSE trennen dieselben Zeichen an denselben Positionen. Ausgeführter Beleg: alle sieben internen Gruppennamen, einschließlich sämtlicher Wechselwirkungen, ergeben identische Teilvektoren. Beleglauf: /tmp/llmsa-m1b-r5-VqXqW8/equivalence-proofs.R, Output in equivalence-proofs.log; siehe REWORK-NOTES.md P5. Antrag des Builders mit endgültiger Zeile, keine Freigabe. In Runde 5 erneut ausgeführt; Quelltext und Spalte sind hier zusätzlich gebunden (ADR-034 Nr. 3)."
     },
     {
       "file": "R/fit.R",
       "mutator": "TRUE → FALSE",
-      "line": 695,
-      "reason": "Spalte 86, Ersetzung 'FALSE'. msa_numeric_fit(): Vor diesem on.exit()-Aufruf ist kein Exit-Handler registriert, und es gibt keinen weiteren on.exit()-Aufruf in der Funktion. add TRUE und FALSE registrieren damit denselben einzigen Handler. Ausgeführter Beleg: gleiche Exit-Aktionen bei normaler Rückkehr und bei Fehler; die Bedingung completed und die weitergegebenen Warnungen bleiben unverändert. Beleglauf: /tmp/llmsa-m1b-r4-3lho07s_/equivalence-proofs.R, Output in equivalence-proofs.log; siehe REWORK-NOTES.md P5. Antrag des Builders mit endgültiger Zeile, keine Freigabe."
+      "line": 717,
+      "column": 86,
+      "code": "  on.exit(if (!completed) for (w in start$warnings) warning(w, call. = FALSE), add = TRUE)",
+      "replacement": "FALSE",
+      "reason": "Spalte 86, Ersetzung 'FALSE'. msa_numeric_fit(): Vor diesem on.exit()-Aufruf ist kein Exit-Handler registriert, und es gibt keinen weiteren on.exit()-Aufruf in der Funktion. add TRUE und FALSE registrieren damit denselben einzigen Handler. Ausgeführter Beleg: gleiche Exit-Aktionen bei normaler Rückkehr und bei Fehler; die Bedingung completed und die weitergegebenen Warnungen bleiben unverändert. Beleglauf: /tmp/llmsa-m1b-r5-VqXqW8/equivalence-proofs.R, Output in equivalence-proofs.log; siehe REWORK-NOTES.md P5. Antrag des Builders mit endgültiger Zeile, keine Freigabe. In Runde 5 erneut ausgeführt; Quelltext und Spalte sind hier zusätzlich gebunden (ADR-034 Nr. 3)."
     },
     {
       "file": "R/fit.R",
       "mutator": "TRUE → FALSE",
-      "line": 299,
-      "reason": "Spalte 47, Ersetzung 'FALSE'. strsplit(): Der unveränderte Suchtext ist allein der Doppelpunkt. Er ist auch im regulären Ausdruck ein Literal; fixed TRUE und FALSE trennen dieselben Zeichen an denselben Positionen. Ausgeführter Beleg: alle sieben internen Gruppennamen, einschließlich sämtlicher Wechselwirkungen, ergeben identische Teilvektoren. Beleglauf: /tmp/llmsa-m1b-r4-3lho07s_/equivalence-proofs.R, Output in equivalence-proofs.log; siehe REWORK-NOTES.md P5. Antrag des Builders mit endgültiger Zeile, keine Freigabe."
+      "line": 314,
+      "column": 47,
+      "code": "      columns <- strsplit(group, \":\", fixed = TRUE)[[1L]]",
+      "replacement": "FALSE",
+      "reason": "Spalte 47, Ersetzung 'FALSE'. strsplit(): Der unveränderte Suchtext ist allein der Doppelpunkt. Er ist auch im regulären Ausdruck ein Literal; fixed TRUE und FALSE trennen dieselben Zeichen an denselben Positionen. Ausgeführter Beleg: alle sieben internen Gruppennamen, einschließlich sämtlicher Wechselwirkungen, ergeben identische Teilvektoren. Beleglauf: /tmp/llmsa-m1b-r5-VqXqW8/equivalence-proofs.R, Output in equivalence-proofs.log; siehe REWORK-NOTES.md P5. Antrag des Builders mit endgültiger Zeile, keine Freigabe. In Runde 5 erneut ausgeführt; Quelltext und Spalte sind hier zusätzlich gebunden (ADR-034 Nr. 3)."
     },
     {
       "file": "R/fit.R",
       "mutator": "FALSE → TRUE",
-      "line": 300,
-      "reason": "Spalte 64, Ersetzung 'TRUE'. Die Stufenzahlprüfung übergibt die ausgewählten Faktor-Spalten unmittelbar an interaction(). Bei genau einer Spalte entfaltet interaction(data.frame(f)) die Liste zu demselben Faktor wie interaction(f); bei mehreren Spalten bleibt der Datenrahmen durch drop TRUE unverändert. drop TRUE in interaction() entfernt in beiden Fällen dieselben unbeobachteten Kombinationen. Ausgeführter Beleg: 1400 Gruppierungsfaktoren (200 gewichtete Pläne mal sieben Termnamen) sind exakt identisch. Nicht zu verwechseln mit dem nicht äquivalenten drop-Mutanten der späteren dat-Zeilenauswahl. Beleglauf: /tmp/llmsa-m1b-r4-3lho07s_/equivalence-proofs.R, Output in equivalence-proofs.log; siehe REWORK-NOTES.md P5. Antrag des Builders mit endgültiger Zeile, keine Freigabe."
+      "line": 315,
+      "column": 64,
+      "code": "      if (nlevels(interaction(dat[weights > 0, columns, drop = FALSE], drop = TRUE)) <= 2L) {",
+      "replacement": "TRUE",
+      "reason": "Spalte 64, Ersetzung 'TRUE'. Die Stufenzahlprüfung übergibt die ausgewählten Faktor-Spalten unmittelbar an interaction(). Bei genau einer Spalte entfaltet interaction(data.frame(f)) die Liste zu demselben Faktor wie interaction(f); bei mehreren Spalten bleibt der Datenrahmen durch drop TRUE unverändert. drop TRUE in interaction() entfernt in beiden Fällen dieselben unbeobachteten Kombinationen. Ausgeführter Beleg: 1400 Gruppierungsfaktoren (200 gewichtete Pläne mal sieben Termnamen) sind exakt identisch. Nicht zu verwechseln mit dem nicht äquivalenten drop-Mutanten der späteren dat-Zeilenauswahl. Beleglauf: /tmp/llmsa-m1b-r5-VqXqW8/equivalence-proofs.R, Output in equivalence-proofs.log; siehe REWORK-NOTES.md P5. Antrag des Builders mit endgültiger Zeile, keine Freigabe. In Runde 5 erneut ausgeführt; Quelltext und Spalte sind hier zusätzlich gebunden (ADR-034 Nr. 3)."
     },
     {
       "file": "R/fit.R",
       "mutator": "<n> + 1 → <n> + 1",
-      "line": 314,
-      "reason": "Spalte 46, Ersetzung '2'. Ohne fixed_two wird ausschließlich der konstante Achsenabschnitt als festes Design verwendet. Dessen Skalierung von 1 auf 2 ändert weder den gewichteten Spaltenraum noch den Projektor oder den Rangnachweis. Die Skalierung um eine Zweierpotenz ist auf den endlichen hier zulässigen Werten exakt. Ausgeführter Beleg: 200 gewichtete Designs liefern identische QR-Basen; der tatsächliche Mutant besteht zusätzlich die unabhängigen Paar- und Rasterprüfungen. Beleglauf: /tmp/llmsa-m1b-r4-3lho07s_/equivalence-proofs.R, Output in equivalence-proofs.log; siehe REWORK-NOTES.md P5. Antrag des Builders mit endgültiger Zeile, keine Freigabe."
+      "line": 329,
+      "column": 46,
+      "code": "    if (!length(fixed_two)) design <- matrix(1, nrow(dat), 1L)",
+      "replacement": "2",
+      "reason": "Spalte 46, Ersetzung '2'. Ohne fixed_two wird ausschließlich der konstante Achsenabschnitt als festes Design verwendet. Dessen Skalierung von 1 auf 2 ändert weder den gewichteten Spaltenraum noch den Projektor oder den Rangnachweis. Die Skalierung um eine Zweierpotenz ist auf den endlichen hier zulässigen Werten exakt. Ausgeführter Beleg: 200 gewichtete Designs liefern identische QR-Basen; der tatsächliche Mutant besteht zusätzlich die unabhängigen Paar- und Rasterprüfungen. Beleglauf: /tmp/llmsa-m1b-r5-VqXqW8/equivalence-proofs.R, Output in equivalence-proofs.log; siehe REWORK-NOTES.md P5. Antrag des Builders mit endgültiger Zeile, keine Freigabe. In Runde 5 erneut ausgeführt; Quelltext und Spalte sind hier zusätzlich gebunden (ADR-034 Nr. 3)."
     },
     {
       "file": "R/fit.R",
       "mutator": "TRUE → FALSE",
-      "line": 424,
-      "reason": "Spalte 45, Ersetzung 'FALSE'. strsplit(): Der unveränderte Suchtext ist allein der Doppelpunkt. Er ist auch im regulären Ausdruck ein Literal; fixed TRUE und FALSE trennen dieselben Zeichen an denselben Positionen. Ausgeführter Beleg: alle sieben internen Gruppennamen, einschließlich sämtlicher Wechselwirkungen, ergeben identische Teilvektoren. Beleglauf: /tmp/llmsa-m1b-r4-3lho07s_/equivalence-proofs.R, Output in equivalence-proofs.log; siehe REWORK-NOTES.md P5. Antrag des Builders mit endgültiger Zeile, keine Freigabe."
+      "line": 440,
+      "column": 45,
+      "code": "  Z <- lapply(strsplit(groups, \":\", fixed = TRUE), function(columns) {",
+      "replacement": "FALSE",
+      "reason": "Spalte 45, Ersetzung 'FALSE'. strsplit(): Der unveränderte Suchtext ist allein der Doppelpunkt. Er ist auch im regulären Ausdruck ein Literal; fixed TRUE und FALSE trennen dieselben Zeichen an denselben Positionen. Ausgeführter Beleg: alle sieben internen Gruppennamen, einschließlich sämtlicher Wechselwirkungen, ergeben identische Teilvektoren. Beleglauf: /tmp/llmsa-m1b-r5-VqXqW8/equivalence-proofs.R, Output in equivalence-proofs.log; siehe REWORK-NOTES.md P5. Antrag des Builders mit endgültiger Zeile, keine Freigabe. In Runde 5 erneut ausgeführt; Quelltext und Spalte sind hier zusätzlich gebunden (ADR-034 Nr. 3)."
     },
     {
       "file": "R/fit.R",
       "mutator": "<n> + 1 → <n> + 1",
-      "line": 431,
-      "reason": "Spalte 18, Ersetzung '1'. msa_latent_information(): Die Schleifen schreiben jede Zelle des k-mal-k-Zufallsblocks, bevor dieser gelesen wird. Bei residual TRUE werden anschließend beide Rest-Kreuzränder und die Restdiagonale vollständig zugewiesen. Damit ist jeder Anfangswert (0, 1 oder -1) in allen zurückgegebenen Matrizen überschrieben. Bei k=0 ist entweder die Matrix leer oder die einzige Restdiagonale wird zugewiesen; bei früherem Fehler wird keine Matrix zurückgegeben. Ausgeführter Beleg: der tatsächliche Mutant liefert auf 200 gewichteten Plänen jeweils mit und ohne Restterm 400 identische Matrizen. Beleglauf: /tmp/llmsa-m1b-r4-3lho07s_/equivalence-proofs.R, Output in equivalence-proofs.log; siehe REWORK-NOTES.md P5. Antrag des Builders mit endgültiger Zeile, keine Freigabe."
+      "line": 448,
+      "column": 18,
+      "code": "  gram <- matrix(0, k + residual, k + residual)",
+      "replacement": "1",
+      "reason": "Spalte 18, Ersetzung '1'. msa_latent_information(): Die Schleifen schreiben jede Zelle des k-mal-k-Zufallsblocks, bevor dieser gelesen wird. Bei residual TRUE werden anschließend beide Rest-Kreuzränder und die Restdiagonale vollständig zugewiesen. Damit ist jeder Anfangswert (0, 1 oder -1) in allen zurückgegebenen Matrizen überschrieben. Bei k=0 ist entweder die Matrix leer oder die einzige Restdiagonale wird zugewiesen; bei früherem Fehler wird keine Matrix zurückgegeben. Ausgeführter Beleg: der tatsächliche Mutant liefert auf 200 gewichteten Plänen jeweils mit und ohne Restterm 400 identische Matrizen. Beleglauf: /tmp/llmsa-m1b-r5-VqXqW8/equivalence-proofs.R, Output in equivalence-proofs.log; siehe REWORK-NOTES.md P5. Antrag des Builders mit endgültiger Zeile, keine Freigabe. In Runde 5 erneut ausgeführt; Quelltext und Spalte sind hier zusätzlich gebunden (ADR-034 Nr. 3)."
     },
     {
       "file": "R/fit.R",
       "mutator": "<n> - 1 → <n> - 1",
-      "line": 431,
-      "reason": "Spalte 18, Ersetzung '-1'. msa_latent_information(): Die Schleifen schreiben jede Zelle des k-mal-k-Zufallsblocks, bevor dieser gelesen wird. Bei residual TRUE werden anschließend beide Rest-Kreuzränder und die Restdiagonale vollständig zugewiesen. Damit ist jeder Anfangswert (0, 1 oder -1) in allen zurückgegebenen Matrizen überschrieben. Bei k=0 ist entweder die Matrix leer oder die einzige Restdiagonale wird zugewiesen; bei früherem Fehler wird keine Matrix zurückgegeben. Ausgeführter Beleg: der tatsächliche Mutant liefert auf 200 gewichteten Plänen jeweils mit und ohne Restterm 400 identische Matrizen. Beleglauf: /tmp/llmsa-m1b-r4-3lho07s_/equivalence-proofs.R, Output in equivalence-proofs.log; siehe REWORK-NOTES.md P5. Antrag des Builders mit endgültiger Zeile, keine Freigabe."
+      "line": 448,
+      "column": 18,
+      "code": "  gram <- matrix(0, k + residual, k + residual)",
+      "replacement": "-1",
+      "reason": "Spalte 18, Ersetzung '-1'. msa_latent_information(): Die Schleifen schreiben jede Zelle des k-mal-k-Zufallsblocks, bevor dieser gelesen wird. Bei residual TRUE werden anschließend beide Rest-Kreuzränder und die Restdiagonale vollständig zugewiesen. Damit ist jeder Anfangswert (0, 1 oder -1) in allen zurückgegebenen Matrizen überschrieben. Bei k=0 ist entweder die Matrix leer oder die einzige Restdiagonale wird zugewiesen; bei früherem Fehler wird keine Matrix zurückgegeben. Ausgeführter Beleg: der tatsächliche Mutant liefert auf 200 gewichteten Plänen jeweils mit und ohne Restterm 400 identische Matrizen. Beleglauf: /tmp/llmsa-m1b-r5-VqXqW8/equivalence-proofs.R, Output in equivalence-proofs.log; siehe REWORK-NOTES.md P5. Antrag des Builders mit endgültiger Zeile, keine Freigabe. In Runde 5 erneut ausgeführt; Quelltext und Spalte sind hier zusätzlich gebunden (ADR-034 Nr. 3)."
     }
   ]
 }

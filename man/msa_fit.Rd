@@ -153,10 +153,14 @@ identifiable after accounting for the fixed effects. Confounded grouping
 factors, including interactions, produce an error naming the affected terms.
 This check includes the fixed latent residual variance: a random term with
 one observation per level, or a confounded linear combination of terms,
-cannot be separated from that residual. Frequency weights count as
-multiplicities, including binomial prior weights for zero/one responses;
-zero-weight rows contribute no information. Weights must be finite,
-non-negative numeric values with a finite positive sum.
+cannot be separated from that residual. If all retained weights are
+integers, they count as multiplicities, including binomial prior weights
+for zero/one responses. Otherwise each positive-weight row counts once
+in this check, including the fixed-effect rank check. Zero-weight rows
+contribute no information. The original weights are passed to the engine
+unchanged. Weights must be finite, non-negative numeric values with a
+finite positive sum. Sparse covariance cross-products avoid dense
+level-by-level projection blocks when checking large designs.
 Ordinal singularity describes random effects only, not the derived components.
 Ordinal and binary estimates are invariant to row order and factor labels
 only up to the optimization tolerance of the underlying engines.
@@ -174,6 +178,16 @@ its final convergence check. Ordinal and binary non-convergence is warned,
 including a diagnosis stored by the engine without an emitted warning.
 A range-method warning alone does not indicate non-convergence.
 }
+\section{Known limitations}{
+
+Zero-weight rows still contribute levels when selecting random versus
+two-level fixed effects. An ordinal fit can therefore reject a random
+factor with fewer than three levels among its positive-weight rows.
+Use \code{subset} to exclude those rows when that is the intended design.
+Numeric fits with explicit arguments in \code{...} use lme4's diagnostics;
+the default numeric path's identifiability check does not apply to them.
+}
+
 \examples{
 fit <- msa_fit(ic50_demo, type = "numeric")
 fit

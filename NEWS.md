@@ -6,6 +6,11 @@
   weights: zero-weight rows contribute no information, and a random term with
   one observation per level cannot be separated from the residual. Errors
   name only the affected terms and explain residual confounding when present.
+  Sparse cross-products preserve this check for designs with thousands of
+  factor levels without dense projection blocks. Integer weights count as
+  frequencies; if any retained weight is noninteger, each positive-weight
+  row counts once in the check. Engine weights are unchanged. The help page
+  documents the limitations of term selection with zero-weight rows.
   Identifiable designs retain their
   existing engine fits; ordinal singularity concerns random effects only.
 * Latent fits apply `subset`, `weights`, `offset` and `na.action` before
