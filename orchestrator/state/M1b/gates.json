@@ -1,11 +1,11 @@
 {
   "milestone": "M1b",
-  "round": 3,
+  "round": 4,
   "base": "104ca4dd63a24ae4f83730d99961baa88d0213db",
   "baseRef": "plan/M1b",
   "env": {
-    "ts": "2026-11-01T10:17:47+01:00",
-    "sha": "6f45bf732ab9620b6d1dc0126cc7e7997d68e3e1",
+    "ts": "2026-11-01T19:21:58+01:00",
+    "sha": "91d82c16c27de76f4b1e76ceecf6e077a7b5832c",
     "bash": "5.3.9(1)-release",
     "git": "2.53.0",
     "toolchain": {
@@ -28,8 +28,8 @@
     "lint": "lint: Kommando erfolgreich",
     "tests": "tests: Kommando erfolgreich",
     "trace": "trace: alle Kriterien sind wörtlich und beidseitig verknüpft",
-    "territory": "territory: letzter Diff sauber (qa/45-qa, Runde 3, Basis 19d65630b29ed13516f7d71642097aae0e2f96d4, 2026-11-01T03:08:22+01:00)",
-    "mutgate": "mutgate: pass (score=92.14 required=91.83 baseline=93.83 floor=80)",
+    "territory": "territory: letzter Diff sauber (builder/60-rework, Runde 4, Basis 3b9861c582ebf574ca1dfb885daeb6545a5a90a6, 2026-11-01T11:27:09+01:00)",
+    "mutgate": "mutgate: pass (score=93.02 required=90.83 baseline=93.83 floor=80)",
     "golden-adr": "golden-adr: keine Golden-/Ankeränderung",
     "mutfull": "mutfull: pass (nicht fällig in M1b)"
   },
