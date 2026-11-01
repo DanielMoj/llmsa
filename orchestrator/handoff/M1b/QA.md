@@ -76,6 +76,8 @@ Rolle: QA / Red Team (keine Verdict-Macht; Schweregrade sind Vorschläge für de
 - **Erwartetes Verhalten:**
   `test-validation-latent.R` (bzw. ein Repo-Suchhelfer in `inst/validation/latent/reference_checks.R` analog zu `validation_find_repo()`) muss `REPO_ROOT` berücksichtigen, damit der Test auch in der ausgelagerten Paketkopie von `r-mutation.R` (`86-mutgate.sh`) grün durchläuft.
 - **Vorgeschlagene Schwere:** `blocking` (Vorschlag, Entscheidung beim Reviewer)
+- **QA-Nachlauf nach Gates Runde 3 (`E26` / `BL-95`, `ADR-029` Nr. 3):**
+  In `tests/e2e/test-m1b-qa-e2e.R` (Zeilen 151–194) kopiert `QA-M1b-004` die Paketdateien aus dem aktuell geladenen `llmsa`-Namespace-Pfad (`getNamespaceInfo(asNamespace("llmsa"), "path")`, mit Rückfall auf `repo_root` für fehlende Testdateien) und führt `testthat::test_file(file.path(stage_path, "tests/testthat/test-validation-latent.R"), reporter = "silent", load_package = "source")` isoliert in einem eigenen Kindprozess über `callr::r()` aus. Dadurch bleibt der `llmsa`-Namespace des aufrufenden R-Prozesses unverändert (auch im Mutationslauf), und `tests/e2e/test-m2-qa-e2e.R` (`QA-M2-001` bis `QA-M2-004`) läuft unmittelbar danach fehlerfrei durch.
 
 ---
 
@@ -110,3 +112,12 @@ Rolle: QA / Red Team (keine Verdict-Macht; Schweregrade sind Vorschläge für de
   1. `sim_merge()` prüft in `<studie>_replicates.csv` auch die Designzählungen (`items`, `prompts`, `models`, `blocks`, `observations` gleich den Szenariowerten bei erfolgreichem Fit bzw. `NA` bei fehlgeschlagenem Fit) und die Konsistenz von `converged`/`singular`.
   2. `latent_read_results()` weist Ergebnisdateien mit `empse < 0`, `rmse < 0`, `derived_share` außerhalb von $[0, 1]$ oder ungültigen `seed`-Werten (`seed < 1`, `seed != floor(seed)`, `seed > .Machine$integer.max`) benannt zurück.
 - **Vorgeschlagene Schwere:** `nonblocking` (Vorschlag, Entscheidung beim Reviewer)
+
+---
+
+## QA-Nachlauf nach Gates Runde 3 (Stand: 01.11.2026)
+
+- **Behebung `E26` / `BL-95` (`ADR-029` Nr. 3):** `QA-M1b-004` (`tests/e2e/test-m1b-qa-e2e.R`, Zeilen 151–194) führt den verschachtelten `testthat::test_file(..., load_package = "source")`-Lauf in einem eigenen R-Prozess mittels `callr::r()` aus und bezieht die Paketdateien aus dem geladenen `llmsa`-Namespace-Pfad (`getNamespaceInfo(asNamespace("llmsa"), "path")`). Der Namespace des Elternprozesses wird nicht mehr auf das temporäre Staging-Verzeichnis umgebogen.
+- **Verifikation der bestehenden QA-Tests (`Seed = 20261031`):** Alle 6 M1b-Befunde (`QA-M1b-001` bis `QA-M1b-006`) sind durch die Reworks in Runde 2 und Runde 3 behoben und im gemeinsamen Lauf über `tests/e2e` (11 Blöcke: `m1a-qa-e2e`, `m1b-qa-e2e`, `m2-qa-e2e`, 0 Fehlschläge, 0 Fehler) und `tests/fuzz` (5 Blöcke: `m1a-qa-fuzz`, `m1b-qa-fuzz`, `m2-qa-fuzz`, 0 Fehlschläge, 0 Fehler) grün.
+- **Nachprüfung des Runde-3-Diffs (`ADR-029`, `ADR-030`, `R/fit.R`, `msa_latent_information()`):** Keine weiteren Gegenbeispiele an Nutzerflüssen, Protokollgrenzen, Extremwerten, Seeds, Nebenläufigkeit oder Kombinationen gefunden.
+

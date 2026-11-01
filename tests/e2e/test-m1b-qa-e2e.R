@@ -155,12 +155,14 @@ test_that("QA-M1b-004: test-validation-latent.R succeeds in a staged package cop
   repo_root <- e$validation_find_repo()
   skip_if(is.null(repo_root), "Repository root required for staged-copy test")
 
+  pkg_root <- normalizePath(getNamespaceInfo(asNamespace("llmsa"), "path"), mustWork = TRUE)
   stage <- tempfile("qa-m1b-stage-")
   dir.create(stage, recursive = TRUE)
   on.exit(unlink(stage, recursive = TRUE), add = TRUE)
 
   for (part in c("DESCRIPTION", "NAMESPACE", "R", "inst", "data", "tests/testthat")) {
-    src <- file.path(repo_root, part)
+    src <- file.path(pkg_root, part)
+    if (!file.exists(src)) src <- file.path(repo_root, part)
     if (file.exists(src)) {
       dst <- file.path(stage, dirname(part))
       dir.create(dst, recursive = TRUE, showWarnings = FALSE)
@@ -174,11 +176,17 @@ test_that("QA-M1b-004: test-validation-latent.R succeeds in a staged package cop
   }, add = TRUE)
   Sys.setenv(REPO_ROOT = repo_root)
 
-  res <- as.data.frame(testthat::test_file(
-    file.path(stage, "tests/testthat/test-validation-latent.R"),
-    reporter = "silent",
-    load_package = "source"
-  ))
+  res <- callr::r(
+    function(stage_path, root) {
+      Sys.setenv(REPO_ROOT = root)
+      as.data.frame(testthat::test_file(
+        file.path(stage_path, "tests/testthat/test-validation-latent.R"),
+        reporter = "silent",
+        load_package = "source"
+      ))
+    },
+    args = list(stage, repo_root)
+  )
   expect_identical(sum(res$failed), 0L)
   expect_false(any(res$error))
 })
