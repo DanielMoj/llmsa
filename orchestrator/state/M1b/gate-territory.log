@@ -1,5 +1,5 @@
 # stdout
-territory: letzter Diff sauber (builder/60-rework, Runde 2, Basis 5823adb7bb2a7ac73241893057696fa3e0c1c9f3, 2026-10-31T12:43:24+01:00)
+territory: letzter Diff sauber (builder/60-rework, Runde 3, Basis e876ce9ade79f50a5de7f8ba78613627856e9328, 2026-10-31T20:02:47+01:00)
 
 # runner
 exit=0 status=pass script=82-territory.sh
