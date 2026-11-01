@@ -2,7 +2,11 @@
 
 * Ordinal and binary fits reject confounded random-effect variances before
   calling the engine, including interactions and terms spanned by fixed
-  effects. Errors name the random terms. Identifiable designs retain their
+  effects. The check includes the fixed latent residual variance and frequency
+  weights: zero-weight rows contribute no information, and a random term with
+  one observation per level cannot be separated from the residual. Errors
+  name only the affected terms and explain residual confounding when present.
+  Identifiable designs retain their
   existing engine fits; ordinal singularity concerns random effects only.
 * Latent fits apply `subset`, `weights`, `offset` and `na.action` before
   selecting model terms, so data and study counts describe the analysed rows.

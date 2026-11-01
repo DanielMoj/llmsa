@@ -150,7 +150,13 @@ Non-identifiable two-level fixed effects and ordinal random-effect terms
 with fewer than three observed levels produce named errors. Before either
 latent engine is called, random-effect variances must be separately
 identifiable after accounting for the fixed effects. Confounded grouping
-factors, including interactions, produce an error naming the random terms.
+factors, including interactions, produce an error naming the affected terms.
+This check includes the fixed latent residual variance: a random term with
+one observation per level, or a confounded linear combination of terms,
+cannot be separated from that residual. Frequency weights count as
+multiplicities, including binomial prior weights for zero/one responses;
+zero-weight rows contribute no information. Weights must be finite,
+non-negative numeric values with a finite positive sum.
 Ordinal singularity describes random effects only, not the derived components.
 Ordinal and binary estimates are invariant to row order and factor labels
 only up to the optimization tolerance of the underlying engines.

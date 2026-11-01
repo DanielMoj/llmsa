@@ -1,518 +1,571 @@
-# M1b — REWORK, Runde 3
+# M1b — REWORK, Runde 4
 
-Rolle: Builder · Stand: 31.10.2026 · Keine Git-Kommandos.
+Rolle: Builder · Stand: 01.11.2026 · Keine Git-Kommandos.
 
 ## Grundlage und Grenze der Aussage
 
-Gelesen wurden AGENTS.md, IMPLEMENTATION-RULES.md, contracts/PROTOCOLS.md,
-PROGRESS.md, Handoff-Schema, REVIEW/verdict-code Runde 2, CRITERIA.json,
-gates.json samt Fehlerstellen der Gate-Logs, ARBITER.md, LESSONS.md,
-die M1b-Spezifikation, ihre Auslegungen und die betroffenen Abnahmetests.
-Insbesondere bindet ADR-029 Nr. 2 für E24. Der Arbiterentscheid zu K-M1b-5
-bleibt unverändert: Logit-Restvarianz pi²/3, ANK-25 nur Installationsprüfung.
+Gelesen: AGENTS.md, IMPLEMENTATION-RULES.md, contracts/PROTOCOLS.md,
+PROGRESS.md, Handoff-Schema, REVIEW/verdict-code Runde 3, CRITERIA.json,
+ARBITER.md, LESSONS.md, gates.json und Gate-Logs, die M1b-Spezifikation,
+ADR-029 bis ADR-032 sowie die betroffenen Abnahmetests. Maßgeblich für
+E29 ist ADR-032 Nr. 1. Der Arbiterentscheid zu K-M1b-5 bleibt unverändert:
+Logit-Restvarianz π²/3, ANK-25 nur Installationsprüfung.
 
-Die vorhandenen Gate-Fakten sind weiterhin **Runde 2**: `tests: fail`,
-sieben weitere Gates `pass`, kein Status `error`; mutgate 91,91 bei
-verlangten 91,83. Diese Datei schreibt kein neues Gate-Ergebnis und kein
-Abnahme-Verdict. E24 ist umgesetzt; E27 und E28 sind zusätzlich bearbeitet.
-E25 ist durch die vorhandene Reviewer-Korrektur lokal bestätigt. E26 bleibt
-OUT-OF-TERRITORY [QA-PENDING].
+Die vorhandenen Gate-Fakten stammen aus **Runde 3**: alle acht Gates
+`pass`, kein `error`, keine offenen [INFRA]- oder [QA-PENDING]-Gate-Ursachen.
+Mutgate meldet 92,14 bei verlangten 91,83. Die Betreiberentscheidung
+ADR-031 für das nächste Gate bleibt unangetastet. Dieser Handoff berichtet
+lokale Builder-Prüfungen und schreibt weder Gate-Ergebnis noch Verdict.
 
-Rohlogs und temporäre Paketkopien dieser Runde liegen unter
-`/tmp/llmsa-m1b-r3-2ug3odnl/`. Die nachstehenden Auszüge sind echter Output;
-die vollständige Werkzeugspur bleibt im Modellphasen-Log des Orchestrators.
+E29 ist umgesetzt; E30 und die konkret benannten Testlücken aus E31 sind
+bearbeitet. E32 bleibt nach ausdrücklicher Reviewer-Entscheidung außerhalb
+der M1b-Arbeit. Lokale Infrastrukturgrenzen stehen unten als
+OUT-OF-TERRITORY mit echtem Log-Beleg.
+
+Rohlogs, Prüfskripte und isolierte Paketkopien liegen unter
+`/tmp/llmsa-m1b-r4-3lho07s_/`. Die vollständige Werkzeugspur bleibt im
+Modellphasen-Log des Orchestrators. Alle nachstehenden Auszüge sind echter
+Output. Temporäre Kopien enthalten keine Schlüssel oder Git-Daten.
 
 ## Antworten auf die Befund-IDs
 
-### E24 — umgesetzt, gezielt geprüft
+### E29 — umgesetzt und gezielt geprüft
 
-Ref: docs/01 §2 Nr. 4; ADR-029 Nr. 2; LESSONS „Numerische Randfälle als
-Klasse beheben.“
+Ref: ADR-032 Nr. 1; ADR-029 Nr. 2.1; docs/01 §2 Nr. 4;
+LESSONS „Numerische Randfälle als Klasse beheben.“
 
-- `R/fit.R:302` prüft vor beiden latenten Engine-Aufrufen das gemeinsame
-  Varianzdesign aller Zufallsterme, einschließlich Wechselwirkungen.
-  Zeilenauswahl und Bereinigung sind dann bereits abgeschlossen. Der feste
-  Teil enthält den Achsenabschnitt und die ordinalen Zwei-Stufen-Faktoren
-  mit den tatsächlich übergebenen Kontrasten.
-- `msa_latent_information()` (`R/fit.R:396`) berechnet das Gram-Kriterium
-  G_ij = ||Z_iᵀ P Z_j||²_F in Faktorstufenräumen; n × n-Matrizen werden
-  nicht angelegt. Es gilt die Eigenwertregel aus ADR-029, mit k und
-  `.Machine$double.eps`, ohne neue empirische Konstante. Vollständig vom
-  festen Design aufgespannte Terme werden mittels Rangnachweis als exakte
-  Nullzeile/-spalte behandelt. Das deckt auch den Fall ab, dass **alle**
-  Zufallsterme aufgespannt sind und Rundungsreste sonst eine positive
-  1 × 1-Matrix vortäuschen könnten. ADR-030 begründet die Umsetzung.
-- Die Fehlermeldung nennt die gemeinsam geprüften Zufallsterme und den
-  Bezug auf den festen Teil. Bestehende Fehler für feste Rangdefizienz,
-  zu wenige beobachtete ordinale Zufallsstufen und ungültige Labels bleiben.
-- `tests/testthat/test-fit-latent-identifiability.R` enthält sieben neue
-  Blöcke: unabhängige Rechnung mit Beobachtungspaaren; alle sechs Paare
-  der vier Gruppierungsfaktoren, beide Zielgrößen und Links; verschachtelte
-  Items mit Wechselwirkungen, auch erst nach `subset`; konfundierte
-  zweistufige binäre Modell-/Blockfaktoren; vom festen Design aufgespannte
-  Komponenten mit q = p und q < p; eine exakte Kovarianzabhängigkeit ohne
-  identische Partitionen; gültige verschachtelte und gekreuzte Pläne gegen
-  direkte `clmm`-/`glmer`-Fits. Engine-Sperren prüfen ausdrücklich, dass
-  die unzulässigen Pläne vor dem Aufruf abbrechen.
-- `man/msa_fit.Rd` wurde aus Roxygen in einer temporären Paketkopie erzeugt;
-  ausschließlich diese generierte Hilfeseite wurde übernommen.
-- `inst/validation/sim/simulation_helpers.R:214` nimmt den neuen Helfer in
-  den Implementierungshash auf. Alle neun Kurzlaufdateien sind mit dem
-  aktuellen installierten Paket neu erzeugt (P4). Alle sechs CSVs sind
-  bytegleich zum Rundenbeginn; die drei Sessiondateien sind aktualisiert.
+- `R/fit.R:262` validiert die ausgewerteten latenten Gewichte: numerisch,
+  endlich, nichtnegativ, endliche positive Summe. Gewicht null liefert
+  weder Antwortkategorien noch beobachtete ordinale Zufallsstufen oder
+  Ranginformation. Der ordinale feste Rang wird gewichtet geprüft.
+- `R/fit.R:313` fordert vor beiden latenten Engines die gemeinsame
+  Identifizierbarkeit aller Zufallsterme **und der festen Restvarianz**.
+  `msa_latent_information()` (`R/fit.R:417`) rechnet mit √W X und √W Z
+  im Stufenraum. Mit B_j = Qᵀ√W Z_j gilt
+  G_ij = ‖Z_iᵀWZ_j − B_iᵀB_j‖²_F,
+  G_jε = Σw − ‖B_j‖²_F und G_εε = Σw − p.
+  Nullgewichte werden für diese Rechnung entfernt. Vollständig vom
+  gewichteten festen Design aufgespannte Terme erhalten exakt null als
+  Zeile/Spalte, einschließlich ihrer Rest-Kreuzprodukte.
+- Die Eigenwertregel bleibt min(ev) ≤ k · eps · max(ev), mit k einschließlich
+  des Restterms. Der bisherige Aufruf mit `only.values = TRUE` entscheidet;
+  zusätzliche Eigenvektoren erklären ausschließlich einen bereits
+  festgestellten Verstoß. Ein exaktes synthetisches Nullraumbeispiel deckt
+  unterschiedliche LAPACK-Rundungsreste dieser beiden Aufrufe ab.
+- Bei beteiligter Restvarianz erklärt der Fehler die fehlende Trennbarkeit
+  von der festen latenten Restvarianz. `not identifiable`, die betroffenen
+  Termnamen und `call. = FALSE` bleiben. Fehler treten vor `clmm`/`glmer` auf.
+- Die zwei neuen Dateien `tests/testthat/test-fit-latent-residual-weights.R`
+  und `tests/testthat/test-fit-latent-design-grid.R` enthalten zwölf Blöcke
+  mit 1088 Erwartungen. Sie prüfen die verlangten Singleton-Items,
+  Singleton-Zellen und wine-Wechselwirkungen für ordinal/binär und
+  Probit/Logit, Nullgewichte gegenüber `subset`, Häufigkeitsvielfachheiten,
+  feste Rangdefizienz, mehrere Nullraumrelationen und gültige gewichtete
+  Fits gegen direkte Engines. Referenzen sind expandierte Beobachtungspaare
+  samt vec(P), algebraische Rangrelationen, unabhängige SVD und laufende
+  Engine-Orakel; keine Momentaufnahmen eigener Fit-Ausgaben.
+- Das Raster umfasst 96 synthetische Pläne, beide Zielgrößen und Links:
+  384 Entscheidungen ohne Abweichung von der unabhängigen Referenz (P3).
+  Dazu gehören unbalancierte, verschachtelte, gekreuzte, teilweise
+  unbeobachtete und erst durch Nullgewichte konfundierte Pläne.
+- `man/msa_fit.Rd`, `NEWS.md` und Builder-ADR-033 dokumentieren das Verhalten.
+  Die Hilfeseite stimmt exakt mit der Roxygen-Erzeugung überein.
+- Alle neun Kurzlaufdateien wurden mit dem installierten aktuellen Paket
+  neu erzeugt. Die sechs CSVs sind bytegleich zum Rundenbeginn; die drei
+  Sessiondateien enthalten den neuen, separat abgeglichenen Hash (P4).
+  Engine-Aufrufe gültiger Pläne, numerischer Rechenkern und `R/grr.R`
+  bleiben unverändert (P7).
 
-Belege: P1 (vollständige Units), P2 (unveränderte M1b- und M1a-Abnahme),
-P4 (Kurzläufe), P5 (Mutation), P6 (Paketcheck). Die Gegenprobe P3 setzt nur
-`msa_fit()` in einer temporären Kopie auf den Rundenbeginn zurück: sieben
-Testblöcke, 93 fehlgeschlagene Erwartungen, keine Testfehler. Die neuen
-Prüfungen erkennen somit das bisherige Verhalten; die Gram-Nachrechnung
-wird dabei nicht durch einen fehlenden neuen Helfer künstlich rot.
+Belege: P1 bis P8. Weder vorhandene Tests noch Akzeptanzregeln wurden geändert.
 
-### E25 — OUT-OF-TERRITORY [INFRA], Reviewer-Korrektur lokal bestätigt
+### E30 — umgesetzt: ausschließlich beteiligte Terme
 
-Ref: `orchestrator/state/M1b/gate-tests.log:662–696`,
-`tests/acceptance/test-m1b-7-vignette-full-results.R`, ADR-029 Nr. 1.
-Der alte Gate-Output lautet unter anderem:
+Ref: ADR-029 Nr. 2.1; ADR-030 Nr. 5; REVIEW E30/BL-98.
 
-```text
-Expected `k$error` to be NULL.
-Invalid latent study result measure range: .../two_level_results.csv
-[ FAIL 5 | WARN 2 | SKIP 0 | PASS 6355 ]
-```
+`R/fit.R:323` bestimmt die Vereinigung der beteiligten Komponenten über
+alle erkannten Nullraumrichtungen. Die quadrierte Zeilenlänge der
+orthonormalen Nullraumbasis muss größer als k · eps sein; dies entfernt
+Rundungsrauschen aus der Namensliste und verändert die Rangentscheidung
+nicht. Bei mehreren unabhängigen Relationen werden alle betroffenen
+Komponenten genannt. Die Restvarianz erhält zusätzlich die Erklärung aus
+E29. Die neuen Tests prüfen **exakte** Meldungen, Termlisten, fehlenden Call
+und fehlende Warnungen, auch bei verschachtelten Items und bei gleichzeitig
+mehreren Relationen. Unbeteiligte Terme erscheinen nicht (P1, P5).
 
-Die Fixture des Reviewers hatte `derived_share = 1.5` erzeugt. Ihre bereits
-vor dieser Runde vorhandene Korrektur bleibt bytegleich; der Produktvalidator
-bleibt unverändert streng. P2 bestätigt jetzt:
+### E31 — benannte Testlücken geschlossen; Äquivalenzen beantragt
 
-```text
-✔ |        204 | m1b-7-vignette-full-results [36.9s]
-✔ |        240 | m1b-7-vignette [34.2s]
-```
+Ref: REVIEW E31, Mutationsbericht Runde 3, ADR-032 Nr. 2, BL-99/BL-85.
 
-Keine Builder-Reparatur an Fixture oder Prüfschwelle. BL-94 und die
-Bestätigung im regulären Gate bleiben beim Reviewer/Orchestrator.
+Die vier konkret als nicht äquivalent beschriebenen Überlebenden werden
+jetzt durch neue Verhaltenstests getötet. Alte Dateien bleiben unverändert:
 
-### E26 — OUT-OF-TERRITORY [QA-PENDING], weiterhin reproduzierbar
-
-Ref: `orchestrator/state/M1b/gate-tests.log:951–1084`,
-`tests/e2e/test-m1b-qa-e2e.R:151–184`, ADR-029 Nr. 3, BL-95.
-QA-M1b-004 lädt seine Paketkopie in denselben Prozess und löscht sie,
-ohne den vorherigen Namespace-Pfad wiederherzustellen. Der aktuelle
-unveränderte QA-Lauf P7 reproduziert die vier nachfolgenden M2-Fehler:
-
-```text
-✔ |         26 | m1b-qa-e2e [9.8s]
-Error in `find.package(package)`: there is no package called 'llmsa'
-[ FAIL 4 | WARN 4 | SKIP 0 | PASS 40 ]
-[ FAIL 0 | WARN 0 | SKIP 0 | PASS 25 ]
-r-tests: fail — 16 Tests in tests/e2e, tests/fuzz; 0 fehlgeschlagen, 4 Fehler, 0 übersprungen
-```
-
-Die Fehler stehen in `qa.log:47–172`; der Backtrace verweist auf die
-`qa-m1b-stage-*`-Kopie. Alle sechs M1b-QA-Befunde bestehen. Die vier
-M2-E2E-Blöcke bestehen in einem frischen Prozess mit neun Erwartungen
-(P7). Das ist ein Gegenbeleg zur Ursache, kein Ersatz für den roten
-zusammenhängenden QA-Lauf.
-
-Kein Produkt-Scheinfix, kein Nachladen des Originals aus `REPO_ROOT`,
-keine Änderung an QA oder Betreiberzustand. QA muss nach ADR-029 den
-verschachtelten Lauf isolieren oder den ursprünglichen Namespace exakt
-wiederherstellen; der Betreiber fordert den QA-Nachlauf an. Ein neues
-Gesamt-PASS kann der Builder nicht erklären.
-
-### E27 — die benannten Testlücken geschlossen; drei Äquivalenzanträge
-
-Ref: REVIEW Runde 2, E27; Mutationsbericht der Runde 2; BL-96.
-Neue Datei `tests/testthat/test-fit-latent-calls-labels.R`, drei Blöcke:
-explizite umgekehrte Labels eines geordneten Faktors gegen unabhängig
-kodiertes `clmm`; genau zwei ordinale Kategorien gegen `clmm`; erneute
-Auswertung des gespeicherten binären Aufrufs nach Verlassen seiner
-Aufrufumgebung, mit Steuerung, Offset und Gewichten, gegen direktes
-`glmer`. Keine eingefrorene eigene Ausgabe.
-
-P5 tötet alle vier in E27 ausdrücklich benannten Überlebenden. Die Zeilen
-haben sich durch Dokumentation und die neue Prüfung verschoben:
-
-| Runde-2-Stelle | Aktuelle Stelle / lokale Mutanten-ID | Ergebnis |
+| Mutant aus Runde 3 | Gegenstück im aktuellen Code | Lokaler echter Output |
 | --- | --- | --- |
-| 160, zweites `&& → \|\|` | 163, ID 17 | Killed |
-| 166, `< → <=` | 169, ID 13 | Killed |
-| 331, binäres Call-Index `+ 1L` | 343, ID 56 | Killed |
-| 331, binäres Call-Index `- 1L` | 343, ID 69 | Killed |
+| `R/fit.R:302:15`, `"numeric"` → `""` | `313:15`, ID 123 | Killed, 2 fehlgeschlagene Erwartungen, 0 Testfehler |
+| `308:51`, Meldungsende → `""` | `327:12`, ID 127 | Killed, 32 fehlgeschlagene Erwartungen, 0 Testfehler |
+| `308:99`, `call. FALSE` → `TRUE` | `327:60`, ID 62 | Killed, 32 fehlgeschlagene Erwartungen, 0 Testfehler |
+| `399:47`, `interaction(drop=TRUE)` → `FALSE` | `425:47`, ID 55 | Killed, 4 fehlgeschlagene Erwartungen, 0 Testfehler |
 
-Die gezielten Proben des neuen Kriteriums führten zu zusätzlichen
-Erwartungen für die vollständige Nullzeile/-spalte und getrennt lesbare
-Termnamen. Der abschließende Lauf über alle 80 ausgewählten Mutanten
-liefert 65 Killed, vier RuntimeError und elf Survived. RuntimeError wird
-nicht als getötet gezählt. Das ist **kein vollständiger Gate-Score**;
-getestet wurden nur die latenten Unit-Dateien. Unter den Überlebenden
-liegt beispielsweise auch die Öffnung der Prüfung für numerische Fits,
-die dieser begrenzte Testsatz nicht ausführt.
+Der erste Fall erwartet die exakte numerische Diagnose für einen auch
+latent konfundierten Plan. Der vierte verwendet aufgespannte
+Wechselwirkungen mit unbeobachteten Kombinationen. Weitere neue Tests
+prüfen die exakte Nullmatrix bei gesättigtem festen Design, einen minimalen
+internen Ein-Spalten-Datenrahmen und verschiedene ungültige Gewichte.
 
-`MUT-EQUIV.json` enthält genau drei einzeln begründete Builder-Anträge aus
-diesem ausgeführten Lauf: `fixed = FALSE` beim Literal-Doppelpunkt in
-`strsplit` (Zeile 398) sowie beide Änderungen des vollständig vor jedem
-Lesen überschriebenen Initialwerts der Gram-Matrix (Zeile 405). Die
-Anträge nennen den allgemeinen Äquivalenzbeweis. Keine Eigenwert- oder
-Grenzfallbehauptung wird pauschal als Äquivalenz beansprucht. Es gibt keine
-Builder-Freigabe und keine `MUT-EQUIV-APPROVED.json`.
+P5 erzeugt mit den neun Gate-Mutatorfamilien 163 Mutanten der betroffenen
+Prüfblöcke. Nach den gezielten Ergänzungen: **154 Killed, 7 Survived,
+2 RuntimeError**. Die beiden RuntimeErrors sind syntaktisch ungültige
+Mutanten, keine getöteten Mutanten. Von den sieben Überlebenden sind sechs
+begründet äquivalent. Der siebte, `R/fit.R:323:74`, `>` → `>=` allein an der
+Namensdiagnoseschwelle, bleibt **ungeclaimt**: Die Tests unterscheiden den
+exakten Gleichheitsfall k · eps nicht; allgemeine Äquivalenz ist nicht
+bewiesen. Dieser Grenzfall ändert nicht die Annahme-/Ablehnungsentscheidung.
+Es wird kein vollständiger Gate-Score aus dem Teillauf abgeleitet.
 
-### E28 — umgesetzt
+`MUT-EQUIV.json` enthält **17 einzeln begründete Anträge mit endgültigen
+Zeilen**, einschließlich der M1a-Neubindungen und der drei bisherigen
+latenten Äquivalente. Strukturbeweise und ausgeführte Gegenprüfungen stehen
+in jedem Antrag und P5. Drei Aggregationsmutanten teilen denselben
+Gate-Schlüssel; alle drei Spalten sind einzeln geprüft. Der problematische
+Schlüssel `R/grr.R:99`, `<n> - 1`, wird nach ADR-032 Nr. 2 nicht beantragt.
+Die bestehende Freigabe `R/grr.R:99`, `>` → `>=`, braucht keine Zeilenänderung.
+`MUT-EQUIV-APPROVED.json` wurde nicht geändert. Neubindung und Freigabe der
+Anträge anhand des nächsten vollständigen Berichts bleiben beim Reviewer.
 
-Ref: NEWS.md, BL-97. Der Kopf von `NEWS.md` nennt jetzt Identifizierbarkeit,
-Zeilenargumente und Gewichte, Labelvorrang und Labelprüfung, erneut
-auswertbare Engine-Aufrufe, `data$.msa_offset` sowie die Bedeutung der
-ordinalen Singularität. Die öffentliche Hilfe enthält die neue
-Identifizierbarkeitsprüfung. Paketbau und installierter Check: P6.
+### E32 — OUT-OF-TERRITORY für diesen M1b-Auftrag
+
+Ref: ADR-032 Nr. 3; REVIEW E32; BL-100.
+
+Wörtliche Direktive: „Kein Builder-Auftrag in M1b.“ Der explizite numerische
+Durchreichweg wird deshalb nicht angepasst. Die Entscheidung gehört in
+die Betreiberplanung von M1c. Numerische Helfer, numerischer Engine-Aufruf,
+Refit-Aufruf und `R/grr.R` sind bytegleich zum Rundenbeginn; die unveränderte
+M1a-Abnahme besteht mit 722 Erwartungen (P2, P7). Kein Scheinfix.
 
 ### Fortführung der älteren IDs aus REVIEW
 
 | ID | Stand dieser Runde |
 | --- | --- |
-| E12 | Laut REVIEW erledigt; bestehende Refit-/Bootstrap-Tests und QA-M1b-001 bestehen, gespeicherter binärer Aufruf zusätzlich durch E27 geprüft. |
-| E13 | Laut REVIEW erledigt; Zeilenauswahl-/Gewichts-/Offset-Tests und QA-M1b-002 bestehen. |
-| E14 | Die bisherigen Prüfungen bleiben; die darüber hinausgehende Klasse behandelt E24. QA-M1b-003 besteht. |
-| E15 | Bestehender Dokumentationshelfer unverändert; QA-M1b-004 selbst besteht. Sein Namespace-Seiteneffekt ist E26. |
-| E16 | Bestehende Labelprüfungen und QA-M1b-005 bestehen; E27 ergänzt zwei weitere zulässige Eingaben. |
-| E17 | Bestehende Datei-/Bereichsprüfungen und QA-M1b-006 bestehen; keine Lockerung für E25. |
-| E18 | Gate Runde 2 bereits pass. Neuer vollständiger Score bleibt beim Orchestrator; P5 und MUT-EQUIV sind Vorschläge/Diagnosen. |
-| E19 | Im Review und Gate Runde 2 erledigt; R/acmg.R und das Reviewer-Orakel bleiben unverändert. Aktueller M2-Lauf: P8. |
-| E20 | Dokumentierter Invarianzvorbehalt und Vorgabe-Optimierer bleiben unverändert (BL-91). |
-| E21 | Kurzlaufbefund bleibt durch bytegleiche CSVs unverändert; quantitative Volllaufbewertung bleibt Betreiber/M1d (BL-92). |
-| E22 | Gate Runde 2 bestätigt HTTP-Replay und Zeitprüfung. Kein neuer HTTP-Replay-Lauf in dieser Runde; lokale Zeit-NOTE siehe P6. |
-| E23 | OUT-OF-TERRITORY, nonblocking: unveränderte `nobars`-/`findbars`-Deprecation-Warnungen im Abnahmehelfer, P2, BL-93. |
+| E12 | Laut REVIEW erledigt; bestehende Refit-/Bootstrap-Tests und QA-M1b-001 bestehen (P1/P2). |
+| E13 | Laut REVIEW erledigt; Zeilenauswahl, Gewichte, Offsets und QA-M1b-002 bestehen; E29 ergänzt Nullgewichte (P1/P2). |
+| E14 | Laut REVIEW erledigt; die Identifizierbarkeitsklasse wird durch E29 vervollständigt, QA-M1b-003 bleibt grün (P1/P2). |
+| E15 | Dokumentations-/Reproduktionsprüfungen und QA-M1b-004 bestehen; der frühere Namespace-Seiteneffekt E26 ist erledigt (P1/P2). |
+| E16 | Bestehende Label- und Call-Prüfungen sowie QA-M1b-005 bestehen (P1). |
+| E17 | Unveränderte Datei-/Bereichsvalidatoren und QA-M1b-006 bestehen; Volllauf-Fixture 204 Erwartungen grün (P1/P2). |
+| E18 | Gate Runde 3 pass. P5 ist eine lokale Diagnose, keine neue Gate-Freigabe. |
+| E19 | Laut REVIEW erledigt. `R/acmg.R` bleibt bytegleich; AP1-Regressionen P8. |
+| E20 | Builder-Teil erledigt; Reviewer-Fortsetzung M1c/M1d gemäß BL-91 bleibt. |
+| E21 | Unverändert spec-gemäß; sechs Kurzlauf-CSVs bytegleich (P4). Volllaufbewertung bleibt Betreiber/M1d, BL-92. |
+| E22 | Gate Runde 3 bestätigt; keine Änderung der HTTP-Replay- oder Zeitprüfungen. Lokale Zeit-NOTE siehe P6. |
+| E23 | OUT-OF-TERRITORY [INFRA], nonblocking: zwei unveränderte Deprecation-Warnungen aus dem Reviewer-Abnahmehelfer, P2/BL-93. |
+| E24 | Bisheriges Kriterium beibehalten und gemäß E29 um Restvarianz/Gewichte erweitert. Bestehende Identifizierbarkeitstests bleiben grün. |
+| E25 | Laut REVIEW/Gate erledigt. Unveränderte Volllauf-Fixture erneut grün, 204 Erwartungen in P2. |
+| E26 | Laut REVIEW/Gate durch QA erledigt. Gemeinsamer E2E-Lauf nach M1b weiter grün einschließlich M2, P1. Kein offenes [QA-PENDING]. |
+| E27 | Laut REVIEW/Gate erledigt. Bestehende Call-/Labeltests bleiben grün. |
+| E28 | Erledigt; NEWS jetzt um die Restvarianz- und Gewichtsprüfung ergänzt. |
 
 ## Ausgeführte Prüfungen und echter Output
 
-Die Befehle sind nachstehend mit diesen identischen Pfaden verkürzt:
+Alle Befehle liefen mit R 4.6.1, lme4 2.0.6, ordinal 2026.7.26 und
+muttest 0.3.0. Für die folgenden Kurzschreibweisen gilt:
 
 ```sh
-R3_ROOT=/mnt/c/Users/Danie/dev/Llmsa/llmsa
-R3_WORK=/tmp/llmsa-m1b-r3-2ug3odnl
-export REPO_ROOT="$R3_ROOT" NOT_CRAN=true TZ=Europe/Berlin
+rework_dir=/tmp/llmsa-m1b-r4-3lho07s_
+repo_dir=/mnt/c/Users/Danie/dev/Llmsa/llmsa
 ```
 
-Für P1, P2, P3, den frischen Prozess in P7 und P8 wurde der folgende
-Runner unter `$R3_WORK/run-tests.R` tatsächlich ausgeführt. Fehler werden
-vollständig gesammelt und liefern anschließend Exit 1:
+`run-tests.R` führt `testthat::test_dir(..., load_package="source",
+stop_on_failure=FALSE)` aus, speichert die Ergebnisse, berichtet echte
+Zähler und beendet den Prozess bei Fehlern mit Exit 1. Es ändert keine
+Tests. Seine Grafikdatei liegt im temporären Verzeichnis.
 
-```r
-args <- commandArgs(trailingOnly = TRUE)
-root <- normalizePath(args[1L], mustWork = TRUE)
-pkgload::load_all(root, quiet = TRUE, helpers = FALSE)
-grDevices::pdf(tempfile(fileext = ".pdf"))
-elapsed <- system.time(result <- testthat::test_dir(file.path(root, args[2L]),
-  filter = args[3L], load_package = "none", stop_on_failure = FALSE,
-  reporter = testthat::ProgressReporter$new(show_praise = FALSE)))
-d <- as.data.frame(result)
-cat(sprintf("Blocks: %d; failed expectations: %d; error blocks: %d; skipped: %d; elapsed: %.3f s\n",
-  nrow(d), sum(d$failed), sum(d$error), sum(d$skipped), elapsed[["elapsed"]]))
-quit(status = as.integer(any(d$failed > 0L | d$error)))
-```
-
-### P1 — abschließende vollständige Unit-Suite, Exit 0
+### P1 — vollständige Units und unveränderte QA; gezielte latente Tests
 
 ```sh
-Rscript --vanilla "$R3_WORK/run-tests.R" "$R3_ROOT" tests/testthat ''
+REPO_ROOT="$repo_dir" Rscript --vanilla orchestrator/lib/r-tests.R \
+  tests/testthat tests/e2e tests/fuzz
 ```
 
-`unit-final.log`:
+`unit-qa-final.log`, Exit 0:
 
 ```text
-✔ |         17 | fit-latent-calls-labels
-✔ |        204 | fit-latent-identifiability [6.9s]
-[ FAIL 0 | WARN 0 | SKIP 1 | PASS 3621 ]
-Blocks: 247; failed expectations: 0; error blocks: 0; skipped: 1; elapsed: 128.133 s
+tests/testthat: [ FAIL 0 | WARN 0 | SKIP 1 | PASS 4709 ]
+tests/e2e:      [ FAIL 0 | WARN 0 | SKIP 0 | PASS 49 ]
+tests/fuzz:     [ FAIL 0 | WARN 0 | SKIP 0 | PASS 25 ]
+r-tests: pass — 275 Tests in tests/testthat, tests/e2e, tests/fuzz; 0 fehlgeschlagen, 0 Fehler, 1 übersprungen
 ```
 
-Die zehn neuen Blöcke liefern 221 Erwartungen. Der einzige Skip ist der
-unveränderte ellmer-Negativtest. Ein früherer vollständiger Lauf bestand
-bereits mit 3601 Erwartungen; die zusätzlichen Erwartungen danach sind
-im hier genannten abschließenden Lauf enthalten.
+Der vorhandene Skip in `test-backends.R:32:3` prüft den Fall eines fehlenden
+ellmer-Pakets; ellmer ist installiert. Keine neue Skip-Regel.
 
-### P2 — unveränderte M1b-Abnahme und M1a-Regression, jeweils Exit 0
+Unmutierter Schlusslauf der Mutations-Testauswahl in der temporären
+Paketkopie `mutation-source/`:
 
 ```sh
-Rscript --vanilla "$R3_WORK/run-tests.R" "$R3_ROOT" tests/acceptance '^m1b-'
-Rscript --vanilla "$R3_WORK/run-tests.R" "$R3_ROOT" tests/acceptance '^m1a-'
+REPO_ROOT="$repo_dir" NOT_CRAN=true Rscript --vanilla "$rework_dir/run-tests.R" \
+  tests/testthat '^fit-latent-(residual-weights|identifiability|design-grid|rework)$' \
+  "$rework_dir/mutation-baseline-final.rds"
 ```
 
-`acceptance-m1b.log`, Auszug:
+`mutation-baseline-final.log`, Exit 0:
 
 ```text
-✔ |         34 | m1b-1-engine-ordinal [2.8s]
-✔ |        2155 | m1b-2-recovery-scripts [143.7s]
-✔ |        687 | m1b-3-two-level-script [16.1s]
-✔ |   2     37 | m1b-4-two-levels [3.1s]
-✔ |          9 | m1b-5-binary-rptr
-✔ |        108 | m1b-6-edge-cases [11.4s]
-✔ |        204 | m1b-7-vignette-full-results [36.9s]
-✔ |        240 | m1b-7-vignette [34.2s]
+[ FAIL 0 | WARN 0 | SKIP 0 | PASS 1412 ]
+Blocks: 25; failed expectations: 0; error blocks: 0; skipped: 0; elapsed: 16.697 s
+```
+
+### P2 — unveränderte Abnahme M1b und M1a
+
+Jeweils vom Repository aus:
+
+```sh
+REPO_ROOT="$repo_dir" NOT_CRAN=true Rscript --vanilla "$rework_dir/run-tests.R" \
+  tests/acceptance '^m1b-' "$rework_dir/acceptance-m1b.rds"
+REPO_ROOT="$repo_dir" NOT_CRAN=true Rscript --vanilla "$rework_dir/run-tests.R" \
+  tests/acceptance '^m1a-' "$rework_dir/acceptance-m1a.rds"
+```
+
+Beide Exit 0. `acceptance-m1b.log`:
+
+```text
 [ FAIL 0 | WARN 2 | SKIP 0 | PASS 3474 ]
-Blocks: 74; failed expectations: 0; error blocks: 0; skipped: 0; elapsed: 248.955 s
+Blocks: 74; failed expectations: 0; error blocks: 0; skipped: 0; elapsed: 236.385 s
 ```
-
-Die beiden Warnungen stehen in `acceptance-m1b.log:89–114`: Der
-unveränderte Abnahmetest ruft `lme4::nobars()` und `lme4::findbars()` auf.
-Sie gehören zum bekannten E23/BL-93, nicht zum Produktfix.
-K-M1b-2/-3 reproduzieren die Kurzläufe und ihre Präfixe und bestehen die
-unveränderten Schema-, Formel- und Laufzeitprüfungen.
 
 `acceptance-m1a.log`:
 
 ```text
 [ FAIL 0 | WARN 0 | SKIP 0 | PASS 722 ]
-Blocks: 54; failed expectations: 0; error blocks: 0; skipped: 0; elapsed: 38.258 s
+Blocks: 54; failed expectations: 0; error blocks: 0; skipped: 0; elapsed: 74.888 s
 ```
 
-M0-Prüfwege, die Git aufrufen, wurden nicht gestartet.
-
-### P3 — negative Gegenprobe mit dem bisherigen Fit, erwartet Exit 1
-
-In `$R3_WORK/before-source` wurde allein die Definition von `msa_fit()`
-aus der vor dieser Runde gesicherten `fit-before.R` übernommen. Die
-übrigen Funktionen und der neue Helfer für die unabhängige Gram-Prüfung
-blieben erhalten. Der Arbeitsbaum wurde nicht zurückgesetzt.
-
-```sh
-Rscript --vanilla "$R3_WORK/restore-before-fit.R"
-Rscript --vanilla "$R3_WORK/run-tests.R" "$R3_WORK/before-source" tests/testthat 'fit-latent-identifiability$'
-```
-
-Die endgültige neue Testdatei wurde auch in diese Kopie übernommen.
-`before-final.log`, unveränderte Standardgrenze der Testausgabe:
+**E23 — OUT-OF-TERRITORY [INFRA].** Die zwei Warnungen stammen aus dem
+unveränderten Reviewer-Test `test-m1b-4-two-levels.R:41:5` und `:42:5`:
 
 ```text
-Maximum number of failures exceeded; quitting.
-Blocks: 7; failed expectations: 93; error blocks: 0; skipped: 0; elapsed: 8.258 s
+the 'nobars' function has moved to the reformulas package. Please update your imports, or ask an upstream package maintainer to do so.
+the 'findbars' function has moved to the reformulas package. Please update your imports, or ask an upstream package maintainer to do so.
 ```
 
-Es wurde keine Fehlergrenze verändert. Das ist eine Gegenprobe zur
-Regressionserkennung, kein Gate-Score und kein Produktfehler am Endstand.
+Kein Produkt-Workaround, keine Warnungsunterdrückung im Abnahmetest.
+M0-Tests und der Git aufrufende Lint-Wrapper wurden wegen des ausdrücklichen
+Git-Verbots nicht ausgeführt. Der direkte Paketcheck steht in P6.
 
-### P4 — installierter aktueller Stand und echte Kurzläufe, jeweils Exit 0
-
-Die Paketkopie `install-source` enthält ausschließlich DESCRIPTION,
-NAMESPACE, LICENSE, R, man, data und inst. Keine Abhängigkeit wurde
-installiert; die Installation des Pakets selbst liegt in einer temporären
-Bibliothek für den vorgeschriebenen Skriptlauf.
+### P3 — unabhängiges Raster und negative Produktgegenprobe
 
 ```sh
-TZ=Europe/Berlin R CMD INSTALL --no-docs --library="$R3_WORK/library" "$R3_WORK/install-source"
-python3 "$R3_WORK/generate-checks.py"
+Rscript --vanilla "$rework_dir/design-grid.R"
 ```
 
-Installation: `install.log`, `* DONE (llmsa)`. Der Generator liest
-`ANK-TOL.n_check$n_sim` und `ANK-TOL.sim_runtime$cores`, setzt `R_LIBS`
-auf die temporäre Bibliothek und startet aus einem fremden Arbeitsordner:
+`design-grid.log`, Exit 0:
+
+```text
+Seeds: 20261103 through 20261198; RNG: Mersenne-Twister/Inversion/Rejection
+Plans: 384 (96 designs x 2 outcome types x 2 links)
+              implementation
+reference      identifiable precheck rejected
+  identifiable          168        0        0
+  precheck                0       18        0
+  rejected                0        0      198
+Mismatches: 0
+Accepted minimum singular-value ratio: 0.1673327
+Rejected maximum singular-value ratio: 1.969743e-14
+Elapsed: 1.605 s
+```
+
+Die berichteten Verhältnisse sind Beobachtungen, keine neuen Toleranzen.
+Dasselbe Raster liegt dauerhaft in der neuen Unit-Datei. Die Referenz
+expandiert ganzzahlige Gewichte und bildet die Kovarianzen direkt aus
+Beobachtungspaaren; sie ruft den Produkt-Gram-Helfer nicht auf.
+
+Für die Gegenprobe wurde ausschließlich in `negative-control/` die
+ursprüngliche `R/fit.R` vom Rundenbeginn eingesetzt; der Arbeitsbaum blieb
+unverändert. Aus dieser Paketkopie:
 
 ```sh
-Rscript --vanilla "$R3_WORK/library/llmsa/validation/sim/ordinal_recovery.R" --n-sim 20 --out "$R3_WORK/checks/ordinal_recovery"
-Rscript --vanilla "$R3_WORK/library/llmsa/validation/sim/binary_recovery.R" --n-sim 20 --out "$R3_WORK/checks/binary_recovery"
-Rscript --vanilla "$R3_WORK/library/llmsa/validation/sim/two_level.R" --n-sim 20 --out "$R3_WORK/checks/two_level"
+REPO_ROOT="$repo_dir" NOT_CRAN=true Rscript --vanilla "$rework_dir/run-tests.R" \
+  tests/testthat '^fit-latent-(residual-weights|design-grid)$' \
+  "$rework_dir/negative-control.rds"
 ```
 
+`negative-control.log`, erwarteter Exit 1:
+
+```text
+[ FAIL 191 | WARN 0 | SKIP 0 | PASS 848 ]
+Blocks: 12; failed expectations: 188; error blocks: 3; skipped: 0; elapsed: 26.657 s
+```
+
+Die alte Fassung erreicht unter anderem die gesperrten Engines und
+entscheidet im Raster falsch. Drei Testfehler entstehen, weil der alte
+interne Helfer die neuen Argumente weights/residual noch nicht besitzt.
+Der aktuelle Code besteht dieselben zwölf Blöcke mit 1088 Erwartungen
+innerhalb von P1. Die negative Gegenprobe ist kein rotes aktuelles Gate.
+
+### P4 — echte Regeneration der neun Kurzlaufdateien
+
+```sh
+R CMD INSTALL --no-docs --library="$rework_dir/library" "$rework_dir/package/src"
+python3 "$rework_dir/generate-checks.py"
+```
+
+Die Erzeugung lädt das installierte Paket über `R_LIBS`; sie liest
+`n_sim = ANK-TOL.n_check` (20) und die 14 Worker aus ANK-TOL. Die drei
+installierten Studienprogramme werden mit `--n-sim 20 --out <tmp>` und
+unveränderten Szenario-Seeds ausgeführt. Erst nach erfolgreicher Erzeugung
+und Bytevergleich werden die neun `_check_`-Dateien übernommen.
 `generate-checks.log`:
 
 ```text
-ordinal_recovery: 4 scenarios x 20 repetitions; 100 result rows; elapsed 108.138 s; workers 14
-ordinal_recovery: exit=0; wall_seconds=108.985
-binary_recovery: 2 scenarios x 20 repetitions; 40 result rows; elapsed 0.905 s; workers 14
-binary_recovery: exit=0; wall_seconds=1.560
-two_level: 2 scenarios x 20 repetitions; 42 result rows; elapsed 10.037 s; workers 14
-two_level: exit=0; wall_seconds=10.713
+ordinal_recovery: 4 scenarios x 20 repetitions; 100 result rows; elapsed 110.598 s; workers 14
+ordinal_recovery: exit=0; wall_seconds=111.392
+binary_recovery: 2 scenarios x 20 repetitions; 40 result rows; elapsed 0.909 s; workers 14
+binary_recovery: exit=0; wall_seconds=1.569
+two_level: 2 scenarios x 20 repetitions; 42 result rows; elapsed 12.002 s; workers 14
+two_level: exit=0; wall_seconds=12.659
 Nine genuine short-run files copied byte-identically; no full-run files written in the repository.
 ```
 
-Erst nach Erfolg aller drei Studien wurden deren neun Dateien bytegleich
-auf die `_check_`-Namen kopiert. Der Generator bestätigt für alle sechs
-CSVs `same_bytes_as_before=True`; für die drei Sessiondateien FALSE.
-Es wurde kein Ergebniswert manuell eingetragen.
-
-Der zusätzliche Abgleich lädt die aktuellen Quellen mit
-`pkgload::load_all(helpers = FALSE)`, sourced den installierbaren
-Studienhelfer und vergleicht `sim_implementation()` mit den drei
-Sessionköpfen. `session-hashes.log`, Exit 0:
+Alle sechs CSVs melden `same_bytes_as_before=True`; nur die drei
+Sessiondateien ändern sich. `session-hashes.log`:
 
 ```text
-Current implementation: c2045c7c594adda23b5ecd516fcedf0ed28a52df00180c79f9cbea9ea0238c9d
+Current implementation: 815a3da5b543b3301f28c72da167f1ec1621410dac74e1298e00d822889a15ba
 ordinal_recovery session matches current code
 binary_recovery session matches current code
 two_level session matches current code
 ```
 
-### P5 — echte gezielte Mutationsproben; kein vollständiges Mutationsgate
+**M1B-R4-INFRA-TIMEZONE — OUT-OF-TERRITORY [INFRA].** In allen drei
+Erzeugungsprozessen meldet die unveränderte Sessionerfassung:
+
+```text
+Failed to connect to system scope bus via local transport: Operation not permitted
+Warning message:
+In system("timedatectl", intern = TRUE) :
+  running command 'timedatectl' had status 1
+```
+
+Alle drei Prozesse enden mit Exit 0 und echten Ergebnisdateien. Kein
+Scheinfix, keine künstliche Sessiondatei und keine abgeschaltete Prüfung.
+
+### P5 — Mutation und Äquivalenzbelege
 
 ```sh
-Rscript --vanilla "$R3_WORK/prepare-mutations.R"
-Rscript --vanilla "$R3_WORK/run-mutations.R"
-python3 "$R3_WORK/run-mutations-final.py"
+Rscript --vanilla "$rework_dir/prepare-mutations.R"
+Rscript --vanilla "$rework_dir/native-mutations.R"
+python3 "$rework_dir/run-mutations.py"
+python3 "$rework_dir/rerun-survivors.py"
+Rscript --vanilla "$rework_dir/equivalence-proofs.R"
+Rscript --vanilla "$rework_dir/validate-claims.R"
 ```
 
-Der Plan verwendet dieselben neun `muttest`-Mutatorfamilien wie der
-Betreiberadapter und selektiert die neue Prüfung, ihren Helfer und die
-E27-Stellen. Er enthält 80 Mutanten. Die temporäre Paketkopie enthält
-sämtliche latenten Unit-Dateien und die benötigten unveränderten Helfer.
-Der unmutierte Vorlauf war grün:
+**M1B-R4-INFRA-MUTTEST — OUT-OF-TERRITORY [INFRA].** Der native Versuch
+mit unverändertem muttest scheitert an der lokalen IPC-Berechtigung;
+`native-mutations.log`, Exit 1:
 
 ```text
-Unmutated targeted suite: 24 blocks; failed expectations 0; errors 0; skips 0
-```
-
-**M1B-R3-INFRA-MUTTEST — OUT-OF-TERRITORY [INFRA].** Der native parallele
-Start scheiterte danach vor dem ersten Mutanten (`mutations.log`, Exit 1):
-
-```text
+Unmutated targeted suite: 18 blocks; failed expectations 0; errors 0; skips 0
 Error in .dispatcher_start(url, urld, tls_cfg, serial, envir[["stream"]],  :
   16 | Permission denied
 Calls: <Anonymous> ... <Anonymous> -> launch_dispatcher -> .dispatcher_start
+Execution halted
 ```
 
-Keine Sandbox-/Berechtigungsänderung, kein Gate-Eingriff. Als lokale
-Diagnose wurden dieselben von `muttest` erzeugten mutierten Quellen in
-je einer neuen Paketkopie mit einem frischen R-Prozess geprüft (14
-gleichzeitige Prozesse). Der Runner lädt ausschließlich die jeweilige
-Kopie. Er erfasst echte `testthat`-Ergebnisse und verwendet dieselbe
-Klassifikation wie `muttest:::.record_result`: fehlgeschlagene Erwartung
-→ Killed, ausschließlich Testfehler → RuntimeError, sonst Survived.
-Der vollständige Mutationsbericht ist
-`targeted-subprocess-mutation-final.json`; je Mutant liegen Ergebnis und
-R-Output unter `mutation-runs-final/`.
+Als zusätzliche Diagnose wurden die **von muttest erzeugten** 163 Mutanten
+in isolierten Paketkopien mit 14 gewöhnlichen R-Prozessen geprüft. Die neun
+Mutatorfamilien entsprechen dem Gate: arithmetic_operators,
+comparison_operators, logical_operators, boolean_literals,
+condition_mutations, numeric_literals, na_literals, string_literals,
+index_mutations. Abgedeckt sind die Gewichtsprüfung, der gesamte ordinale/
+latente Prüfblock und `msa_latent_information()`.
 
-Abschließender Output, Exit 0 des Diagnoserunners:
+Der erste Lauf dauerte 226,932 s: 148 Killed, 13 Survived, 2 RuntimeError.
+Die 13 Überlebenden wurden nach gezielten neuen Tests und Einbeziehung der
+bereits vorhandenen Kontrastprüfung erneut geprüft. Echte Auszüge aus
+`rerun-survivors.log`:
 
 ```text
-Counts: {"Killed": 65, "RuntimeError": 4, "Survived": 11}
-Elapsed seconds: 87.444
+41: Killed 317:16 <= → <
+45: Killed 263:58 || → &&
+64: Killed 420:33 FALSE → TRUE
+82: Killed 264:53 <n> + 1 → <n> + 1
+97: Killed 263:75 <n> - 1 → <n> - 1
+119: Killed 306:60 <non-empty string> → ""
+Previously surviving mutants rechecked: 13
+Combined counts: {'Killed': 154, 'Survived': 7, 'RuntimeError': 2}
+Rerun elapsed seconds: 30.762
+Previous Killed results remain from unchanged expectations; no gate score or approval.
 ```
 
-Exit 0 bedeutet hier, dass alle 80 Proben ausgeführt wurden; er erklärt
-keine Mutationsschwelle für bestanden. Der reguläre vollständige Lauf
-und die Entscheidung über die drei Claims bleiben ausstehend.
+Der Endbericht ist `targeted-mutations-final.json`; der abschließende
+unmutierte Vorlauf mit 25 Blöcken/1412 Erwartungen steht in P1. Die früher
+getöteten Mutanten behalten ihre Belege aus unveränderten Erwartungen;
+der Bericht behauptet keinen erneuten vollständigen Durchlauf aller 163.
 
-### P6 — öffentlicher Paketbau und installierter Check, jeweils Exit 0
+**M1B-R4-INFRA-MUTPARSE — OUT-OF-TERRITORY [INFRA].** Die Mutanten 67
+und 78 verändern die mehrzeilige Gewichtsbedingung syntaktisch ungültig:
 
-Eine Positivliste kopierte Paketdateien, Unit-Tests und Vignetten nach
-`$R3_WORK/package-source`, ohne Harness, Schlüssel, Betreiber-Fixtures
-oder geschützte Originalquellen. Aus `$R3_WORK` ausgeführt:
+```text
+Failed to load 'R/fit.R'
+Caused by error in `parse()`:
+! At 'R/fit.R:265:9': unexpected '!'
+```
+
+Sie sind als RuntimeError ausgewiesen und nicht als Killed gezählt.
+Produkt und Mutatorwerkzeug wurden dafür nicht angepasst.
+
+`equivalence-proofs.log` enthält die Gegenprüfungen zu allen 17 Anträgen:
+9837 positive Zählvektoren, 33 REML-Zustände einschließlich Grenzen,
+200 gewichtete Pläne mit und ohne Restterm (400 Matrixvergleiche),
+1400 Gruppierungsfaktoren, 200 exakt skalierte QR-Basen sowie die
+Strukturbelege für Formelgruppierung, Spaltentypen, Literaltrennung,
+REML-Design und den einzigen Exit-Handler. Schlussausgabe:
+
+```text
+Proved candidates: 17 ; no approvals written.
+17 explicit claims map to 17 distinct mutants across 15 gate keys.
+Every multiply matched key is wholly documented; no approvals written.
+```
+
+Sechs der sieben aktuellen Überlebenden sind diese belegten Äquivalente;
+der ungeclaimte siebte steht bei E31. Vollständiges mutgate und dessen
+Bewertung bleiben beim Orchestrator/Reviewer.
+
+### P6 — Roxygen, Paketbau und installierter Paketcheck
+
+Roxygen wurde ausschließlich in einer temporären Paketkopie ausgeführt.
+`roxygen.log`: `msa_fit.Rd matches roxygen generation exactly.` Nur die
+betroffene generierte Hilfeseite wurde ins Produkt übernommen; keine
+Roxygen-Metadatenänderung. Danach wurde die Paketkopie aus dem finalen
+Produktstand erneuert.
+
+Aus `$rework_dir/package`:
 
 ```sh
-TZ=Europe/Berlin R CMD build --no-manual package-source
-TZ=Europe/Berlin _R_CHECK_CRAN_INCOMING_REMOTE_=false R CMD check --as-cran --no-manual llmsa_0.1.0.tar.gz
+R CMD build --no-manual src
+_R_CHECK_CRAN_INCOMING_REMOTE_=false R CMD check --as-cran --no-manual llmsa_0.1.0.tar.gz
 ```
 
-`build.log` und `check.log`:
+Beide Exit 0. `build.log`: Vignettenbau OK, `llmsa_0.1.0.tar.gz` erzeugt.
+`check.log` und `package/llmsa.Rcheck/00check.log`:
 
 ```text
-* creating vignettes ... OK
-* building ‘llmsa_0.1.0.tar.gz’
-* checking R code for possible problems ... OK
-* checking tests ...
-  Running ‘testthat.R’ [90s/90s]
- [90s/90s] OK
+* checking examples ... OK
+* checking examples with --run-donttest ... [40s/40s] OK
+* checking tests ... [90s/90s] OK
 * checking package vignettes ... OK
+* checking re-building of vignette outputs ... [30s/30s] OK
 * DONE
 Status: 1 NOTE
 ```
 
-Installierter Testlauf (`llmsa.Rcheck/tests/testthat.Rout`):
+Installierte Tests (`package/llmsa.Rcheck/tests/testthat.Rout`):
 
 ```text
-[ FAIL 0 | WARN 0 | SKIP 9 | PASS 3545 ]
+[ FAIL 0 | WARN 0 | SKIP 9 | PASS 4633 ]
 ```
 
-Die neun bestehenden Skips: fünf Tests benötigen die nicht ausgelieferten
-API-Aufzeichnungen, zwei die lokalen Originalanker, ein Berichtstest ist
-On-CRAN markiert, einer ist der ellmer-Negativtest. Die neuen Tests laufen
-auch im installierten Paket; es wurde kein Skip ergänzt.
+Die neun vorhandenen Skips: fünf im öffentlichen Tarball nicht enthaltene
+API-Aufzeichnungen, zwei Vergleiche mit Repository-Ankern, der CRAN-Skip
+des Reporttests und der ellmer-Negativtest. Die neuen Tests überspringen
+nichts. Die Repository-Ausführung P1 prüft die dort verfügbaren Artefakte.
 
-**M1B-R3-INFRA-CLOCK — OUT-OF-TERRITORY [INFRA].** Einzige NOTE in
-`check.log:29–30`:
+**M1B-R4-INFRA-CLOCK — OUT-OF-TERRITORY [INFRA].** Einzige Check-NOTE:
 
 ```text
 * checking for future file timestamps ... NOTE
-Unable to verify current time.
+Unable to verify current time.  To disable remote verification,
+set environment variable _R_CHECK_SYSTEM_CLOCK_ to a false value.
 ```
 
-Die Zeitprüfung blieb aktiv. `_R_CHECK_CRAN_INCOMING_REMOTE_=false`
-entspricht unverändert `orchestrator/lib/r-check.sh:41`; keine weitere
-Prüfregel wurde abgeschaltet. Keine ERRORs oder WARNINGs.
+Die Zeitprüfung wurde nicht abgeschaltet. Im Konsolenlog ist außerdem
+der nicht erreichbare CRAN-Index sichtbar (`cannot open URL
+'https://cloud.r-project.org/src/contrib/PACKAGES'`); die Abhängigkeitsprüfung
+endet trotzdem mit OK. `_R_CHECK_CRAN_INCOMING_REMOTE_=false` entspricht
+dem bestehenden Harness-Aufruf. Keine neuen ERRORs oder WARNINGs im
+Check-Ergebnis und keine Regel- oder Schwellenlockerung.
 
-### P7 — vollständige QA-Verzeichnisse und frischer M2-Prozess
+### P7 — territoriale und numerische Integrität
 
 ```sh
-Rscript --vanilla -e 'grDevices::pdf(tempfile(fileext = ".pdf")); source("orchestrator/lib/r-tests.R")' tests/e2e tests/fuzz
-Rscript --vanilla "$R3_WORK/run-tests.R" "$R3_ROOT" tests/e2e '^m2-'
+python3 "$rework_dir/integrity.py"
 ```
 
-Zusammenhängender QA-Lauf: Exit 1, tatsächlicher Output bei E26.
-Frischer M2-Prozess (`qa-m2-fresh.log`), Exit 0:
+`integrity-final.log`, Exit 0, SHA-256-Vergleich gegen den zu Rundenbeginn
+gesicherten Bestand:
 
 ```text
-[ FAIL 0 | WARN 0 | SKIP 0 | PASS 9 ]
-Blocks: 4; failed expectations: 0; error blocks: 0; skipped: 0; elapsed: 5.169 s
+Baseline files: 325; changed existing files: 9; added files: 3; deleted files: 0.
+Existing test files unchanged: 93.
+All baseline files outside the explicit change list are byte-identical, including approvals, gates, anchors and criteria.
+Six short-run CSVs are byte-identical to the baseline; all nine files match the genuine regeneration.
+Checked package source matches the final repository inputs: 144 files.
 ```
 
-### P8 — M2-Auswertung auf dem unveränderten Anwendungsprodukt
+Die neun geänderten Bestandsdateien sind `R/fit.R`, `NEWS.md`,
+`man/msa_fit.Rd`, die drei `*_check_session.txt`, `PROGRESS.md` sowie die
+zugewiesenen Handoffs `REWORK-NOTES.md` und `MUT-EQUIV.json`. Neu sind nur
+die zwei oben genannten Unit-Dateien und Builder-ADR-033. Alle 93 alten
+Dateien unter `tests/`, einschließlich Abnahme/QA/Fixtures, bleiben bytegleich.
+Keine Golden-, Anker-, Spezifikations-, Gate-, Approval- oder
+Abhängigkeitsänderung. Keine Git-Kommandos.
 
 ```sh
-Rscript --vanilla "$R3_WORK/run-tests.R" "$R3_ROOT" tests/acceptance '^m2-6-'
+python3 "$rework_dir/numeric-integrity.py"
 ```
 
-Der erste Lauf endete mit einer durch den parallelen Arbeitsablauf
-verursachten Fehlmessung, nicht mit einem Produktfehler
-(`acceptance-m2-6.log`, Exit 1):
+`numeric-integrity.log`, Exit 0, ausgeführter Quellsegment-Bytevergleich:
 
 ```text
-Expected `m$new_files` to be identical to `character()`.
-`actual`:   "docs/decisions/ADR-030-m1b-latente-identifizierbarkeit.md"
-[ FAIL 1 | WARN 0 | SKIP 0 | PASS 382 ]
-Blocks: 11; failed expectations: 1; error blocks: 0; skipped: 0; elapsed: 276.136 s
+Numeric helpers, variance extraction and print methods: byte-identical to the baseline.
+Numeric engine dispatch and refit call construction: byte-identical to the baseline.
+R/grr.R: byte-identical to the baseline.
 ```
 
-Die Datei wurde vom Builder während der Dateiinventur des Tests angelegt.
-Nach Anlage aller neuen Dateien wurde derselbe unveränderte Test komplett
-wiederholt. Am Test und am Produktcode wurde dafür nichts geändert.
+### P8 — unveränderte AP1-Abnahme K-M2-6 und K-M2-7
 
-Der zweite Lauf (`acceptance-m2-6-final.log`) endete mit Exit 0:
+```sh
+REPO_ROOT="$repo_dir" NOT_CRAN=true Rscript --vanilla "$rework_dir/run-tests.R" \
+  tests/acceptance '^m2-6-' "$rework_dir/acceptance-m2-6.rds"
+REPO_ROOT="$repo_dir" NOT_CRAN=true Rscript --vanilla "$rework_dir/run-tests.R" \
+  tests/acceptance '^m2-7-' "$rework_dir/acceptance-m2-7.rds"
+```
+
+`acceptance-m2-6.log`, Exit 0:
 
 ```text
-✔ |        383 | m2-6-evaluate [269.7s]
 [ FAIL 0 | WARN 0 | SKIP 0 | PASS 383 ]
-Blocks: 11; failed expectations: 0; error blocks: 0; skipped: 0; elapsed: 269.902 s
+Blocks: 11; failed expectations: 0; error blocks: 0; skipped: 0; elapsed: 313.587 s
 ```
 
-## Integrität und Übergabe
-
-Die SHA-256-Inventur vergleicht die 306 zu Rundenbeginn erfassten Dateien
-und sucht neue Dateien in den betroffenen Verzeichnissen. Sie gleicht
-außerdem den abschließenden Paketstand mit der tatsächlich gebauten und
-geprüften Paketkopie sowie die Äquivalenzanträge mit den ausgeführten
-Mutationsproben ab. Befehl, Exit 0:
-
-```sh
-python3 "$R3_WORK/integrity.py"
-```
-
-Echter Output (`integrity-final.log`):
+`acceptance-m2-7.log`, Exit 1:
 
 ```text
-Inventory: 9 changed baseline files, 4 new files; assigned Builder paths only; no removed files
-Changed: NEWS.md, PROGRESS.md, R/fit.R, inst/validation/sim/binary_recovery_check_session.txt, inst/validation/sim/ordinal_recovery_check_session.txt, inst/validation/sim/simulation_helpers.R, inst/validation/sim/two_level_check_session.txt, man/msa_fit.Rd, orchestrator/handoff/M1b/REWORK-NOTES.md
-New: docs/decisions/ADR-030-m1b-latente-identifizierbarkeit.md, orchestrator/handoff/M1b/MUT-EQUIV.json, tests/testthat/test-fit-latent-calls-labels.R, tests/testthat/test-fit-latent-identifiability.R
-Protected baseline: 291/291 files byte-identical
-Existing tests and fixtures: 91/91 files byte-identical
-Final package source: R, man, inst, all unit tests, DESCRIPTION, NAMESPACE and NEWS byte-identical
-Source and new tests: ASCII; no package archive, Rcheck directory, root SQLite store or Rplots.pdf in workspace
-Equivalence claims: 3 distinct observed survivors; no approval file
-Gate facts unchanged: round 2, result fail
+[ FAIL 1 | WARN 0 | SKIP 0 | PASS 353 ]
+Blocks: 9; failed expectations: 0; error blocks: 1; skipped: 0; elapsed: 250.668 s
 ```
 
-Die Inventur ersetzt nicht das Territoriums-Gate. Keine Git-Kommandos,
-keine Abhängigkeitsinstallation, keine API-Aufrufe mit realen Schlüsseln,
-keine Änderung von Spezifikationen, bestehenden Tests, Abnahme, QA,
-Ankern, Golden-Daten, Gate-Fakten, Gates oder Schwellen. R/grr.R und
-R/acmg.R bleiben bytegleich. BACKLOG und Betreiberzustand bleiben
-unverändert. Territoriumsprüfung, Phasen-Commit, vollständiger Gate-Lauf,
-QA-Nachlauf und Reviewer-Entscheidung stehen dem Orchestrator und den
-zuständigen Rollen zu.
+**M1B-R4-INFRA-HTTP — OUT-OF-TERRITORY [INFRA].** Der einzige Testfehler
+ist die lokale Socket-Erzeugung des unveränderten HTTP-Replay-Helfers,
+vor einer Prüfung der Anfrage. Echter Stacktrace:
+
+```text
+Error ('test-m2-7-robustness-pilot.R:175:5'): K-M2-7: backend_openai_compatible() sends a non-empty design column system as system message before the user message, otherwise the argument system
+Error: System failure for: socket() (Operation not permitted)
+ 1. acc_m2_backend(s, system = cs$arg)(...)
+ 2. httr2::req_perform(req) at llmsa/R/backends.R:177:5
+ 3. mock(req)
+ 4. httr2::req_dry_run(req, quiet = TRUE) at ./setup-m2.R:787:5
+ 5. curl::curl_echo(handle, progress = FALSE)
+ 6. httpuv::startServer("0.0.0.0", port, list(call = echo_handler))
+ 9. curl::find_port()
+```
+
+Alle acht anderen Blöcke bestehen. Insbesondere liefert der abschließende
+Robustheits-/Auswertungsblock 165 bestandene Erwartungen und keinen
+Fehler, einschließlich der latenten Fits. Insgesamt sind 353 Erwartungen
+grün und keine Erwartung fachlich fehlgeschlagen. `R/backends.R`,
+`R/acmg.R` und der Abnahmehelfer sind bytegleich zum Rundenbeginn.
+Kein Eingriff in HTTP-Test, Produkt oder Socket-Berechtigungen; die
+vollständige HTTP-Replay-Bestätigung bleibt beim Betreiber-Gate.
+

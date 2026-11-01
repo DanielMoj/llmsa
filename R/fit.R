@@ -117,7 +117,13 @@
 #' with fewer than three observed levels produce named errors. Before either
 #' latent engine is called, random-effect variances must be separately
 #' identifiable after accounting for the fixed effects. Confounded grouping
-#' factors, including interactions, produce an error naming the random terms.
+#' factors, including interactions, produce an error naming the affected terms.
+#' This check includes the fixed latent residual variance: a random term with
+#' one observation per level, or a confounded linear combination of terms,
+#' cannot be separated from that residual. Frequency weights count as
+#' multiplicities, including binomial prior weights for zero/one responses;
+#' zero-weight rows contribute no information. Weights must be finite,
+#' non-negative numeric values with a finite positive sum.
 #' Ordinal singularity describes random effects only, not the derived components.
 #' Ordinal and binary estimates are invariant to row order and factor labels
 #' only up to the optimization tolerance of the underlying engines.
@@ -253,7 +259,12 @@ msa_fit <- function(runs, type = c("numeric", "ordinal", "binary"), levels = NUL
     }
     if (!nrow(dat)) stop("No valid response categories to analyse.", call. = FALSE)
     if (anyNA(dat)) stop("Ordinal and binary fitting data contain missing values after row selection.", call. = FALSE)
-    if (length(unique(dat$y)) < 2L) stop("Response is constant: at least two observed categories are needed.", call. = FALSE)
+    weights <- args[["weights"]] %||% rep(1, nrow(dat))
+    if (!is.numeric(weights) || any(!is.finite(weights)) || any(weights < 0) ||
+        !is.finite(sum(weights)) || sum(weights) <= 0) {
+      stop("Ordinal and binary weights must be finite, non-negative numeric values with a finite positive sum.", call. = FALSE)
+    }
+    if (length(unique(dat$y[weights > 0])) < 2L) stop("Response is constant: at least two observed categories are needed.", call. = FALSE)
   }
 
   if (is.null(interactions)) interactions <- type == "numeric"
@@ -286,14 +297,14 @@ msa_fit <- function(runs, type = c("numeric", "ordinal", "binary"), levels = NUL
   if (type == "ordinal") {
     for (group in random_groups) {
       columns <- strsplit(group, ":", fixed = TRUE)[[1L]]
-      if (nlevels(interaction(dat[columns], drop = TRUE)) <= 2L) {
+      if (nlevels(interaction(dat[weights > 0, columns, drop = FALSE], drop = TRUE)) <= 2L) {
         stop("Ordinal random-effect term ", group, " requires at least three observed levels.", call. = FALSE)
       }
     }
     if (length(fixed_two)) {
       design <- stats::model.matrix(stats::reformulate(fixed_two), data = dat,
                                      contrasts.arg = args[["contrasts"]])
-      if (qr(design)$rank < ncol(design)) {
+      if (qr(design * sqrt(weights))$rank < ncol(design)) {
         stop("Ordinal two-level factors ", paste(fixed_two, collapse = ", "),
              " are not identifiable: the fixed-effect design is rank deficient.", call. = FALSE)
       }
@@ -301,11 +312,19 @@ msa_fit <- function(runs, type = c("numeric", "ordinal", "binary"), levels = NUL
   }
   if (type != "numeric") {
     if (!length(fixed_two)) design <- matrix(1, nrow(dat), 1L)
-    information <- msa_latent_information(dat, random_groups, design)
+    information <- msa_latent_information(dat, random_groups, design, weights = weights, residual = TRUE)
     ev <- eigen(information, symmetric = TRUE, only.values = TRUE)$values
-    if (min(ev) <= length(random_groups) * .Machine$double.eps * max(ev)) {
+    null <- ev <= nrow(information) * .Machine$double.eps * max(ev)
+    if (any(null)) {
+      # The union over the null space names every involved component, even
+      # when more than one independent covariance relation is present. Keep
+      # the eigenvalue-only rank decision; vectors are only for diagnostics.
+      decomposition <- eigen(information, symmetric = TRUE)
+      affected <- rowSums(decomposition$vectors[, null, drop = FALSE]^2) > nrow(information) * .Machine$double.eps
+      reason <- if (affected[nrow(information)]) " cannot be separated from the fixed latent residual variance" else ""
       stop("Latent variance components are not identifiable: random-effect terms ",
-           paste(random_groups, collapse = ", "), " after accounting for fixed effects.", call. = FALSE)
+           paste(random_groups[affected[seq_along(random_groups)]], collapse = ", "), reason,
+           " after accounting for fixed effects.", call. = FALSE)
     }
   }
   rhs <- c("1", fixed_two)
@@ -390,19 +409,26 @@ msa_fit <- function(runs, type = c("numeric", "ordinal", "binary"), levels = NUL
             class = "msa_fit")
 }
 
-# Gram matrix of the projected covariance components (ADR-029):
-# G[i,j] = ||Z_i' (I - Q Q') Z_j||_F^2. Work in grouping-level space;
-# neither the observation covariance matrices nor the projector are formed.
-msa_latent_information <- function(dat, groups, design) {
+# Gram matrix of projected covariance components (ADR-029, ADR-032).
+# Weighted indicators represent frequency-expanded observations without
+# allocating them. With Q spanning sqrt(W) X, G[i,j] = ||Z_i' P Z_j||_F^2.
+# The optional residual adds trace(P Z_j Z_j') and sum(weights) - rank(X).
+# Work in grouping-level space; never form observation covariance matrices.
+msa_latent_information <- function(dat, groups, design,
+                                   weights = rep(1, nrow(dat)), residual = FALSE) {
+  positive <- weights > 0
+  dat <- dat[positive, , drop = FALSE]
+  weights <- weights[positive]
+  design <- design[positive, , drop = FALSE] * sqrt(weights)
   Q <- qr.Q(qr(design))
   Z <- lapply(strsplit(groups, ":", fixed = TRUE), function(columns) {
     group <- interaction(dat[columns], drop = TRUE)
-    Matrix::sparseMatrix(i = seq_len(nrow(dat)), j = as.integer(group), x = 1,
+    Matrix::sparseMatrix(i = seq_len(nrow(dat)), j = as.integer(group), x = sqrt(weights),
                          dims = c(nrow(dat), nlevels(group)))
   })
   fixed <- lapply(Z, function(z) as.matrix(Matrix::crossprod(Q, z)))
   k <- length(Z)
-  gram <- matrix(0, k, k)
+  gram <- matrix(0, k + residual, k + residual)
   for (j in seq_len(k)) {
     for (i in seq_len(j)) {
       block <- as.matrix(Matrix::crossprod(Z[[i]], Z[[j]])) - crossprod(fixed[[i]], fixed[[j]])
@@ -416,6 +442,12 @@ msa_latent_information <- function(dat, groups, design) {
   spanned <- vapply(Z, function(z) {
     ncol(z) <= ncol(design) && qr(cbind(design, as.matrix(z)))$rank == ncol(design)
   }, logical(1))
+  if (residual) {
+    gram[k + 1L, seq_len(k)] <- gram[seq_len(k), k + 1L] <-
+      sum(weights) - vapply(fixed, function(x) sum(x^2), numeric(1))
+    gram[k + 1L, k + 1L] <- sum(weights) - ncol(design)
+    spanned <- c(spanned, FALSE)
+  }
   gram[spanned, ] <- 0
   gram[, spanned] <- 0
   gram

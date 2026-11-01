@@ -1,5 +1,112 @@
 # PROGRESS — Langzeitgedächtnis des Builders
 
+## M1b — REWORK Runde 4 (01.11.2026)
+
+Grundlage: REVIEW/verdict-code Runde 3 (E29–E32), gates.json und Gate-Logs,
+CRITERIA, ARBITER, LESSONS sowie ADR-032. Die vorhandenen acht Gates sind
+Runde 3, alle `pass`; kein `error`. Dieser Eintrag berichtet lokale
+Builder-Prüfungen und ersetzt weder Gate-Fakten noch Reviewer-Verdict.
+Vollständige Antworten, Befehle, Rohlogpfade und echte Outputs stehen in
+[REWORK-NOTES.md](orchestrator/handoff/M1b/REWORK-NOTES.md).
+
+- **E29 umgesetzt:** `R/fit.R` prüft die latente Identifizierbarkeit mit
+  fester Restvarianz und Häufigkeitsgewichten. Nullgewichte liefern keine
+  Ranginformation, Antwortkategorien oder beobachteten Zufallsstufen.
+  Das Gram-Kriterium enthält die Rest-Kreuzprodukte Σw − ‖Qᵀ√W Z_j‖²_F
+  und die Restdiagonale Σw − p. Gewichteter fester Rang und vollständig
+  aufgespannte Terme werden auf derselben Darstellung geprüft. Die
+  Eigenwertregel bleibt unverändert, k zählt den Restterm mit. Fehler
+  erfolgen vor beiden Engines; bei Restkonfundierung wird der Grund
+  benannt. Keine neue empirische Toleranz oder Engine-Vorgabe.
+- **E30 umgesetzt:** Die Fehlermeldung nennt über die Vereinigung aller
+  erkannten Nullraumrichtungen ausschließlich beteiligte Terme, auch
+  bei mehreren unabhängigen Relationen. Neue Tests prüfen die genaue
+  Namensliste, vollständige Meldung und `call. = FALSE`.
+- **E31 bearbeitet:** Alle vier konkret benannten nicht äquivalenten
+  Überlebenden aus REVIEW werden getötet. Der gezielte Lauf über 163 von
+  muttest erzeugte Mutanten ergibt nach Ergänzungen 154 Killed,
+  7 Survived, 2 RuntimeError. Sechs Überlebende sind begründet äquivalent;
+  `R/fit.R:323:74`, `>` → `>=` an der Namensdiagnoseschwelle, bleibt mangels
+  allgemeinem Beweis ungeclaimt. Die zwei RuntimeErrors sind syntaktisch
+  ungültige Mutanten und zählen nicht als Killed. `MUT-EQUIV.json` enthält
+  17 einzeln begründete Anträge mit endgültigen Zeilen, einschließlich
+  M1a-Neubindungen. Freigaben bleiben beim Reviewer; APPROVED unverändert.
+- **E32 OUT-OF-TERRITORY für M1b:** ADR-032 Nr. 3 verlangt ausdrücklich
+  keinen Builder-Fix; Betreiberentscheidung in M1c, BL-100. Numerischer
+  Rechenkern, numerische Engine-/Refit-Aufrufe und `R/grr.R` sind bytegleich.
+- **Ältere IDs:** E25 und E26 sind laut REVIEW/Gate erledigt und lokal
+  erneut bestätigt (Volllauf-Fixture 204 Erwartungen; gemeinsamer QA-Lauf
+  nach M1b einschließlich M2 grün). Kein offenes [QA-PENDING]. E23 bleibt
+  wegen zweier Reviewer-Abnahmehelfer-Warnungen OUT-OF-TERRITORY (BL-93).
+
+Zwei neue Unit-Dateien enthalten zwölf Blöcke mit 1088 Erwartungen:
+unabhängige expandierte Beobachtungspaarrechnung samt Restterm, exakte
+algebraische Rangfälle, Nullgewichte, Frequenzvielfachheiten, beide Links
+und Zielgrößen mit gesperrten Engines sowie gültige gewichtete Fits gegen
+direkte Engines. Das Raster über 96 Pläne/384 Aufrufe stimmt vollständig
+mit der unabhängigen SVD-Referenz überein (168 identifizierbar, 198
+konfundiert, 18 durch Eingabe-/Stufenprüfung abgewiesen). Die Gegenprobe
+mit ursprünglicher `R/fit.R` in einer isolierten Kopie ergibt erwartete
+188 fehlgeschlagene Erwartungen und drei Fehler wegen neuer interner
+Argumente. Bestehende Unit-, Abnahme- und QA-Dateien wurden nicht geändert.
+
+`man/msa_fit.Rd`, `NEWS.md` und Builder-ADR-033 dokumentieren den Rework.
+Die Hilfe stimmt exakt mit der Roxygen-Erzeugung überein. Alle neun
+Kurzlaufdateien wurden mit dem installierten aktuellen Paket, unveränderten
+Seeds, `n_sim = ANK-TOL.n_check` (20) und 14 Workern neu erzeugt. Echter Output:
+
+```text
+ordinal_recovery: 4 scenarios x 20 repetitions; 100 result rows; elapsed 110.598 s; workers 14
+binary_recovery: 2 scenarios x 20 repetitions; 40 result rows; elapsed 0.909 s; workers 14
+two_level: 2 scenarios x 20 repetitions; 42 result rows; elapsed 12.002 s; workers 14
+Nine genuine short-run files copied byte-identically; no full-run files written in the repository.
+```
+
+Alle Erzeugungsprozesse Exit 0; sechs CSVs bytegleich zum Rundenbeginn.
+Die drei Sessiondateien tragen den separat abgeglichenen Hash
+`815a3da5b543b3301f28c72da167f1ec1621410dac74e1298e00d822889a15ba`.
+Keine Volllaufdateien oder Betreiberartefakte geschrieben.
+
+Ausgeführte Schlussprüfungen, vollständige Befehle in REWORK-NOTES P1–P8:
+
+```text
+tests/testthat: [ FAIL 0 | WARN 0 | SKIP 1 | PASS 4709 ]
+tests/e2e:      [ FAIL 0 | WARN 0 | SKIP 0 | PASS 49 ]
+tests/fuzz:     [ FAIL 0 | WARN 0 | SKIP 0 | PASS 25 ]
+r-tests: pass — 275 Tests in tests/testthat, tests/e2e, tests/fuzz; 0 fehlgeschlagen, 0 Fehler, 1 übersprungen
+M1b: [ FAIL 0 | WARN 2 | SKIP 0 | PASS 3474 ]
+Blocks: 74; failed expectations: 0; error blocks: 0; skipped: 0; elapsed: 236.385 s
+M1a: [ FAIL 0 | WARN 0 | SKIP 0 | PASS 722 ]
+Blocks: 54; failed expectations: 0; error blocks: 0; skipped: 0; elapsed: 74.888 s
+K-M2-6: [ FAIL 0 | WARN 0 | SKIP 0 | PASS 383 ]
+Blocks: 11; failed expectations: 0; error blocks: 0; skipped: 0; elapsed: 313.587 s
+K-M2-7: [ FAIL 1 | WARN 0 | SKIP 0 | PASS 353 ]
+Blocks: 9; failed expectations: 0; error blocks: 1; skipped: 0; elapsed: 250.668 s
+```
+
+Der vorhandene Unit-Skip ist der ellmer-Negativtest. Die M1b-Warnungen
+sind die unveränderten `nobars`-/`findbars`-Deprecations im Abnahmehelfer.
+K-M2-7 hat genau einen Infrastrukturfehler im HTTP-Replay; alle acht
+anderen Blöcke, einschließlich der Robustheitsauswertung mit 165
+Erwartungen, bestehen. Die Socket-Erzeugung scheitert in
+`setup-m2.R:787` über `httr2::req_dry_run()`/`httpuv::startServer()` mit
+`System failure for: socket() (Operation not permitted)`.
+
+Paketbau und direkter `R CMD check --as-cran --no-manual` sind mit Exit 0
+abgeschlossen: keine ERRORs/WARNINGs, eine NOTE `Unable to verify current
+time.` Installierte Tests: `[ FAIL 0 | WARN 0 | SKIP 9 | PASS 4633 ]`;
+die neun bestehenden Skips betreffen nicht mitgelieferte API-Fixtures/
+Repository-Anker, den CRAN-Reporttest und ellmer. Beispiele einschließlich
+`--run-donttest`, Vignetten und Vignettenneubau sind OK.
+
+**OUT-OF-TERRITORY [INFRA], ohne Scheinfix:** nativer muttest-Dispatcher
+(`16 | Permission denied`), zwei syntaktisch ungültige Mutanten, lokale
+HTTP-Replay-Sockets, `timedatectl` ohne Systembus und externe Zeitprüfung.
+Log-Belege und stabile IDs stehen in REWORK-NOTES P2/P4/P5/P6/P8. Kein
+Eingriff in Berechtigungen, Tests, Gates, Schwellen oder Orchestrator-Zustand;
+keine Git-Kommandos. Der vollständige Mutationslauf und neue Gate-Fakten
+bleiben beim Orchestrator, Äquivalenzfreigaben beim Reviewer.
+
 ## M1b — REWORK Runde 3 (31.10.2026)
 
 Grundlage: REVIEW/verdict-code Runde 2 (E24–E28), gates.json samt roten

@@ -1,7 +1,7 @@
 format: llmsa-class-b-v1
 study: two_level
 n_sim: 20
-implementation: c2045c7c594adda23b5ecd516fcedf0ed28a52df00180c79f9cbea9ea0238c9d
+implementation: 815a3da5b543b3301f28c72da167f1ec1621410dac74e1298e00d822889a15ba
 R_version: 4.6.1
 package_llmsa: 0.1.0
 package_lme4: 2.0.6
@@ -12,9 +12,9 @@ RNG: Mersenne-Twister; normal.kind=Inversion; sample.kind=Rejection
 seed_rule: 20261031 + j(scenario) + 8 * (rep - 1); permanent j=1..8 in specification order
 scenarios: S-two-1,S-two-2
 start_seeds: S-two-1=20261038,S-two-2=20261039
-command: Rscript two_level.R '--n-sim' '20' '--out' '/tmp/llmsa-m1b-r3-2ug3odnl/checks/two_level'
+command: Rscript two_level.R '--n-sim' '20' '--out' '/tmp/llmsa-m1b-r4-3lho07s_/checks/two_level'
 workers: 14
-elapsed_seconds: 10.037000
+elapsed_seconds: 12.002000
 
 Per-repetition diagnostics (including every repetition seed):
 S-two-1 rep=1 seed=20261038 error=[(none)] warnings=[Two-level component(s) model use the range method (beta-hat^2/2), with positive bias: E[beta-hat^2/2] = sigma^2 + Var(beta-hat)/2; see ?msa_fit.] messages=[(none)]
