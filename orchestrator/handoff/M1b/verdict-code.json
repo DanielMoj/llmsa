@@ -1,34 +1,44 @@
 {
   "milestone": "M1b",
   "phase": "code",
-  "round": 7,
-  "verdict": "REWORK",
+  "round": 8,
+  "verdict": "PASS",
   "blocking": [],
   "nonblocking": [
     {
       "id": "E38",
       "ref": "[INFRA] Gate tests; BL-104",
-      "note": "In diesem Lauf ohne Wirkung: Alle 28 Abnahmedateien liefen ohne Fehlschlag ([ FAIL 0 | WARN 2 | SKIP 0 | PASS 6559 ], gate-tests.log Z. 982). orchestrator/lib/r-tests.R (Datei vom 27.10.) behält die Abbruchgrenze von zehn Fehlschlägen. Betreiber nach M1b: options(testthat.progress.max_fails = Inf)."
+      "note": "Auch in Runde 8 ohne Wirkung: Alle 28 Abnahmedateien liefen ohne Fehlschlag ([ FAIL 0 | WARN 2 | SKIP 0 | PASS 6559 ], gate-tests.log Z. 981). orchestrator/lib/r-tests.R (27.10.) behält die Abbruchgrenze von zehn Fehlschlägen. Betreiber vor M1c: options(testthat.progress.max_fails = Inf)."
     },
     {
       "id": "E39",
-      "ref": "Gate mutgate (pass, gate-mutgate.log Z. 1770); SCHEMA.md (MUT-EQUIV); ADR-035 Nr. 1; BL-102",
-      "note": "mutgate pass: Score 94,09 bei verlangten 90,83 (1456 Mutanten, Baseline jetzt 94,09). Nachgerechnet aus reports/mutation/mutation.json: entdeckt 1306 (Killed und Timeout), 99 Überlebende, davon 17 durch die 15 Freigaben gedeckt; jede Freigabe trifft genau die beantragten Mutanten nach Spalte, Ersetzung und Quellzeile (REVIEW r7 Neulauf, Prüflauf 1; BL-85). Ohne Freigaben 92,95. 82 Überlebende ohne Freigabe in 60 Zeilen (Liste in REVIEW.md): 34 in msa_fit() (12 call.-Schalter, 5 Meldungstexte, Logiklücken in R/fit.R:184, :331, :337, :338, :384, :387, :394 sowie wirkungsgleiche :225, :264 dreimal, :370, :398, :406–408), 43 im numerischen Kern aus M1a, vc_from_model() und print.msa_fit(), 5 in R/grr.R. Nicht blocking: Gate grün; kein Überlebender zeigt einen Verstoß gegen ein Kriterium oder ein still falsches Ergebnis (ADR-035 Nr. 1); der binäre Konvergenzpfad verhält sich wie dokumentiert (Prüflauf 2), :264 ist auf 600 Modellrahmen wirkungsgleich (Prüflauf 3). Nach dem 26.11.2026: Tests oder Äquivalenzanträge; in Runde 8 nichts davon (E42). Für M1c verlangt mutgate mit MUT_RATCHET_TOL=2 dann 92,09."
+      "ref": "Gate mutgate (Lauf r7: score=94.09 required=90.83; r8: kein geänderter Mutations-Scope); ADR-038 Nr. 1; ADR-035 Nr. 1; BL-102",
+      "note": "Mutationsbeleg für Runde 8 ist der Lauf der Runde 7 auf bytegleichem Quelltext. Nachgerechnet aus reports/mutation/mutation.json (08:47:01): 1456 Mutanten, entdeckt 1306 (Killed und Timeout), 99 Überlebende, davon 17 durch die 15 Freigaben gedeckt; 100 · 1306 / 1388 = 94,09, ohne Freigaben 92,95 (REVIEW r8, Prüflauf 2). Keine neuen Anträge, kein Antrag ohne Freigabe; MUT-EQUIV-APPROVED.json unverändert. 82 Überlebende ohne Freigabe in 60 Zeilen wie in REVIEW r7 (Neulauf); nicht blocking, weil das Gate grün ist und kein Überlebender einen Verstoß nach ADR-035 Nr. 1 zeigt. Nach dem 26.11.2026: Tests für die Logiklücken im M1b-Code (R/fit.R:184, :331, :337, :338, :384–389, :394) und Äquivalenzanträge für die wirkungsgleichen Mutanten. Für M1c verlangt mutgate mit MUT_RATCHET_TOL=2 dann 92,09."
     },
     {
       "id": "E40",
-      "ref": "[INFRA] Rundenbudget: orchestrate.sh:963–964, :1026–1050, :805–808; config.env Z. 215 und 217; orchestrate.log Z. 165; ADR-038 Nr. 3",
-      "note": "Der laufende Orchestrator hat beim Start (02.11., 00:35) MAX_ROUNDS_REWORK=6 gelesen („REWORK<=6“); mit arbiter-granted ist max_rounds = 8. Dieses Verdict REWORK führt ohne Arbiter zu Rework r8 (60-rework; LADDER_ENABLED leer), QA ist nicht fällig. Runde 8 ist max_rounds: Jedes Ergebnis außer PASS bei grünen Gates parkt M1b. Betreiber: vor M1c zurück auf MAX_ROUNDS_REWORK=5 (ADR-038 Nr. 3)."
+      "ref": "[INFRA] Rundenbudget; ADR-038 Nr. 3; BL-105",
+      "note": "Runde 8 ist max_rounds (6 + 2). Mit grünen Gates und PASS endet M1b regulär, ohne Parken. Betreiber: vor M1c MAX_ROUNDS_REWORK=5 (ADR-038 Nr. 3; AGENTS.md, Rundenbudget)."
     },
     {
       "id": "E41",
-      "ref": "[INFRA] Gate territory (gate-territory.log Z. 2: „Audit-Basis 6fdc42c… passt nicht zur Modellphase c80fb40…“); gates.d/82-territory.sh:11–14; orchestrator/state/M1b/territory-ok; ADR-038 (Kontext); BL-106",
-      "note": "Einziges rotes Gate. Die Audit-Datei stammt aus der letzten Modellphase (erster Review-Lauf r7, 00:11:32, Basis 6fdc42c). Das Gate verlangt audit_base = HEAD^; zur Gate-Zeit war HEAD der Entpark-Commit des Betreibers 8d1763e (gates.json env.sha), HEAD^ der Park-Commit des Orchestrators c80fb40. territory-ok entsteht nur nach sauberem Diff (orchestrate.sh:553–556); keine Rolle hat ihr Territorium verletzt. Für den Builder nicht blockierend: OUT-OF-TERRITORY. In Runde 8 folgen Rework-Commit und Gates direkt aufeinander, territory wird dann grün, sofern niemand dazwischen committet, parkt oder entparkt. Harness nach M1b: BL-106."
+      "ref": "[INFRA] Gate territory (gate-territory.log Z. 2: letzter Diff sauber, builder/60-rework, Runde 8, Basis 415857c…); BL-106",
+      "note": "Erledigt für M1b: Die Audit-Datei (territory-ok: Rework r8, 09:16:26, Basis 415857c) passt zu HEAD^ des Rework-Commits 20b32da (gates.json env.sha), weil zwischen Rework und Gates niemand committet hat. Harness-Korrektur offen: BL-106 Nr. 2 und 3."
     },
     {
       "id": "E42",
-      "ref": "ADR-038 Nr. 1 und 2",
-      "note": "Für Runde 8 trifft MUT_SCOPE_REGEX keine Datei; mutgate ist dann kein eigener Beleg, der Mutationsbeleg der Runde 7 gilt nur bei bytegleichen R/fit.R (SHA-256 acb4bac7680a9f3c2f4ac4a556b81cdf3bef0cd4a0f1535a5339a0111a64f180) und R/grr.R (004eedebd4e491fbecf043d695faa38b7dad39bd6f0ffd800dbd2d05c709512e) und ohne entfallenen oder abgeschwächten Test unter tests/. Der Score hängt auch vom übrigen Paketcode ab. Builder, Runde 8: nur PROGRESS.md und REWORK-NOTES.md schreiben; nichts an Produkt, Tests, Daten, Vignetten oder Dokumentation ändern; keine neuen MUT-EQUIV-Anträge. Reviewer r8 prüft ADR-038 Nr. 2; ein Verstoß ist blocking mit ref ADR-038."
+      "ref": "ADR-038 Nr. 2",
+      "note": "Erfüllt: mutgate r7 bestanden (94,09); R/fit.R (SHA-256 acb4bac7680a9f3c2f4ac4a556b81cdf3bef0cd4a0f1535a5339a0111a64f180) und R/grr.R (004eedebd4e491fbecf043d695faa38b7dad39bd6f0ffd800dbd2d05c709512e) bytegleich; unter tests/ 96 von 96 Dateien bytegleich mit dem Stand vor Rework r7, keine entfallen oder hinzugekommen, insgesamt 234 von 234 Paket-, Anker- und Regeldateien (REVIEW r8, Prüflauf 1). Das Phasenlog des Reworks r8 zeigt Patches nur für PROGRESS.md, REWORK-NOTES.md und Diagnoseskripte unter /tmp."
+    },
+    {
+      "id": "E43",
+      "ref": "[INFRA] orchestrator/config.env Z. 275–276; gates.d/86-mutgate.sh Z. 20–24; ADR-038 Nr. 3; BL-107",
+      "note": "MUT_SCOPE_REGEX=^ADR-038-kein-Mutationslauf-M1b-Runde-8$ trifft keine Datei; mutgate meldet dann ohne Lauf „pass (kein geänderter Mutations-Scope)“. Bleibt die Zeile stehen, ist mutgate in M1c und allen späteren Meilensteinen wirkungslos, ohne dass ein Log es als Ausnahme kennzeichnet; 88-mutfull.sh liest MUTFULL_FILES und ist nicht betroffen. Bis zur Rückstellung gelten außerdem MUT_RATCHET_TOL=3 (Z. 232) und MAX_ROUNDS_REWORK=6 (Z. 215). Betreiber: ADR-038 Nr. 3 vor dem Start von M1c umsetzen und die CONFIG-Zeile in orchestrate.log auf REWORK<=5 prüfen. Harness: mutgate meldet error, wenn MUT_SCOPE_REGEX keine versionierte Datei trifft."
+    },
+    {
+      "id": "E23",
+      "ref": "BL-93",
+      "note": "Unverändert: Die Abnahmehelfer in tests/acceptance/test-m1b-4-two-levels.R:30–33 lösen über lme4::nobars() und lme4::findbars() zwei Warnungen aus (gate-tests.log Z. 713–737), kein Fehlschlag. Nach der letzten Gate-Runde wird kein Abnahmetest mehr geändert; Umstellung bei der nächsten Abnahmepflege (Reviewer)."
     }
   ]
 }
