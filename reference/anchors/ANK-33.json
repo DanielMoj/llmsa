@@ -1,0 +1,36 @@
+{
+  "id": "ANK-33",
+  "title": "Ausgangsstand für die Bytegleichheit nach K-M1c-7: R/fit.R und R/grr.R im Tag done/M1b",
+  "criteria": ["K-M1c-7"],
+  "value": {
+    "ref": "done/M1b",
+    "files": {
+      "R/fit.R": {
+        "sha256": "acb4bac7680a9f3c2f4ac4a556b81cdf3bef0cd4a0f1535a5339a0111a64f180",
+        "bytes": 44239,
+        "git_blob": "e9609d0500ae0f0036a2cf203dd38ca8d4a072bd"
+      },
+      "R/grr.R": {
+        "sha256": "004eedebd4e491fbecf043d695faa38b7dad39bd6f0ffd800dbd2d05c709512e",
+        "bytes": 10489,
+        "git_blob": "a7ff059fbd357132c1f73a01d56d185cfbc13b0e"
+      }
+    }
+  },
+  "unit": "ref: unveränderlicher Git-Tag (Abschluss von M1b); je Datei sha256 = SHA-256 des Dateiinhalts (hexadezimal, Kleinbuchstaben), bytes = Dateigröße in Byte, git_blob = Git-Objekt-ID (SHA-1) des Blobs",
+  "tolerance": 0,
+  "tolerance_note": "Datenstand, exakt.",
+  "source_url": "docs/decisions/ADR-038-m1b-runde-8-territory-und-mutationsbefund.md, Abschnitt Kontext (Betreiber, 02.11.2026); docs/decisions/ADR-039-plattformtests-und-rollback.md, Abschnitt Konsequenzen (Betreiber, 02.11.2026); Tag done/M1b (orchestrator/state/M1b/8-done.done)",
+  "source": "Betreiber-ADRs zum Abschluss von M1b; eigene Nachrechnung der Dateien im Arbeitsbaum zu Beginn von M1c",
+  "quote": "Der Mutationslauf der Runde 7 misst `R/fit.R` (SHA-256 `acb4bac7680a9f3c2f4ac4a556b81cdf3bef0cd4a0f1535a5339a0111a64f180`) und `R/grr.R` (SHA-256 `004eedebd4e491fbecf043d695faa38b7dad39bd6f0ffd800dbd2d05c709512e`), rund acht Stunden.",
+  "quote_location": "ADR-038, Abschnitt Kontext, dritter Punkt",
+  "further_quotes": [
+    {"quote": "Bedingungen: mutgate der Runde 7 bestanden; `R/fit.R` und `R/grr.R` in Runde 8 bytegleich mit den Hashes oben", "location": "ADR-038, Abschnitt Entscheidung, Nr. 2"},
+    {"quote": "Die Hashes von `R/fit.R` und `R/grr.R` aus ADR-038 gelten weiter.", "location": "ADR-039, Abschnitt Konsequenzen, erster Punkt"},
+    {"quote": "`table`, `summary` und `verdict` von `msa_grr()` und die Ergebnisse von `msa_boot()` bleiben bytegleich.", "location": "docs/02-statistikkern.md, K-M1c-7"}
+  ],
+  "observations": "K-M1c-7 verlangt, dass table, summary und verdict von msa_grr() und die Ergebnisse von msa_boot() bytegleich bleiben; Bezug ist der Stand vor M1c. Das ist der Abschluss von M1b: der unveränderliche Tag done/M1b (orchestrate.sh, tag_once nach 8-done). Der Abnahmetest liest beide Dateien mit git cat-file aus diesem Tag (wie K-M0-4 aus done/M0), prüft ihre SHA-256 gegen diesen Anker und vergleicht die Ergebnisse des Pakets unter Test mit denen dieser Fassung (CRITERIA.json M1c, ACC-13). Der Tag plan/M1c entsteht erst nach der Planfreigabe und taugt deshalb nicht als Bezug in der ACCEPTANCE-Phase.",
+  "retrieved": "2026-11-02",
+  "method": "Ohne Git-Kommando: SHA-256 der Dateien im Arbeitsbaum mit sha256sum und tools::sha256sum(), Größe mit file.size(), Git-Blob-ID als SHA-1 über „blob <Größe>\\0<Inhalt>“ mit digest::digest(algo = \"sha1\", serialize = FALSE) berechnet. Der Arbeitsbaum zeigte zu Beginn der Phase unter R/ keine Änderung gegenüber HEAD (Git-Status der Sitzung: geändert nur STATUS.md und orchestrator/state/summary.json).",
+  "verification": "Beide SHA-256 gleichen ADR-038 Zeichen für Zeichen; ADR-039 bestätigt, dass sie nach dem Betreiber-Commit vor M1c weiter gelten. Den Inhalt des Tags prüft der Abnahmetest bei jedem Lauf gegen sha256."
+}

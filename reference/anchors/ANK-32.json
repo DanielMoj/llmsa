@@ -1,0 +1,33 @@
+{
+  "id": "ANK-32",
+  "title": "Mutationsscore Statistikkern: Schwelle, Floor und Ratchet-Toleranz",
+  "criteria": ["docs/01 §2 Nr. 7", "K-M1c-6"],
+  "value": {
+    "threshold_pct": 80,
+    "floor_pct": 80,
+    "ratchet_tol_points": 2,
+    "config": {
+      "MUT_SCORE_MIN": 80,
+      "MUT_SCORE_FLOOR": 80,
+      "MUT_RATCHET_TOL": 2
+    },
+    "scope": ["R/fit.R", "R/grr.R"]
+  },
+  "unit": "threshold_pct und floor_pct: Prozent entdeckter Mutanten (Score, gezählt wie in 86-mutgate: Killed und Timeout entdeckt, RuntimeError nicht gezählt, Äquivalenz nur nach Reviewer-Approval); ratchet_tol_points: Prozentpunkte unter dem gespeicherten Score (orchestrator/state/mut-baseline); scope: Dateien des Statistikkerns",
+  "tolerance": 0,
+  "tolerance_note": "Betreiberfestlegung, exakt; K-M1c-6 verlangt einen Score von mindestens threshold_pct.",
+  "source_url": "Betreiberunterlagen außerhalb des Repositorys: Intake-Destillat llmsa (unterlagen/02_Intake_Destillat_llmsa.md, SHA-256 63df6b940a0d5c1afcd5d806e1b567ba75bc8f4444d7c6912a34d345b712ff0a), Abschnitt 5 „Qualitätsmaßstab je Kernfeature“, Tabellenzeile „Testsuite“; Projektdokument llmsa (unterlagen/01_Projektdokument_llmsa.md, SHA-256 5129762d94cc00b031e9d8e7a083fd359d6645887af0dc8eb4ad7db9d635b689), Abschnitt „Offene Punkte“",
+  "source": "Betreiberfestlegung vom 24.10.2026 (Intake-Feld Mutationsscore); im Repository wiedergegeben in AGENTS.md (Projektblock, Domänenregeln und Budgets) und docs/gates-auswahl.md (Tabelle der Gates, Zeile mutgate); ANKER-TODO.md, Abschnitt „M1c — Bootstrap und Mutation“, Zeile ANK-32",
+  "quote": "Mutationsscore im Statistikkern (`R/fit.R`, `R/grr.R`: msa_fit, msa_grr, msa_boot) mindestens 80 %: `MUT_SCORE_MIN=80`, `MUT_SCORE_FLOOR=80`, `MUT_RATCHET_TOL=2`",
+  "quote_location": "Intake-Destillat llmsa, Abschnitt 5 „Qualitätsmaßstab je Kernfeature“, Tabellenzeile „Testsuite“, Spalte „Maßstab“ (Zeile 63 der Datei)",
+  "further_quotes": [
+    {"quote": "Mutationsscore im Statistikkern (entschieden 24.10.): 80 %, als `MUT_SCORE_MIN=80`, `MUT_SCORE_FLOOR=80`, `MUT_RATCHET_TOL=2`, Umfang `R/fit.R` und `R/grr.R` (msa_fit, msa_grr, msa_boot), die übrigen Dateien ab M3.", "location": "Projektdokument llmsa, Abschnitt „Offene Punkte“, Checklistenpunkt Mutationsscore (Zeile 380 der Datei)"},
+    {"quote": "Schwelle 80 %, Floor 80, Ratchet 2 (ANK-32)", "location": "AGENTS.md, Projektblock, „Domänenregeln und Budgets“, Punkt Mutationstests"},
+    {"quote": "Schwelle 80 % (`ANK-32`), Floor 80, Ratchet-Toleranz 2", "location": "docs/gates-auswahl.md, Tabelle der Gates, Zeile mutgate"},
+    {"quote": "Intake Abschnitt 5 und Projektdokument „Offene Punkte“ (24.10.2026: 80/80/2)", "location": "ANKER-TODO.md, Abschnitt „M1c — Bootstrap und Mutation“, Zeile ANK-32, Spalte „Vermutete Quelle und Fundstelle“"}
+  ],
+  "observations": "Die Datei fehlte, obwohl ANKER-TODO den Status „vorhanden“ nennt; sie wird in der ACCEPTANCE-Phase von M1c geerntet, wie ANKER-TODO es für den Abschnitt M1c vorsieht. Wirksam ist der Wert über orchestrator/config.env (Betreiber-Territorium): MUT_SCORE_MIN=80, MUT_SCORE_FLOOR=80 und, nach der Rücksetzung gemäß ADR-038 Nr. 3, MUT_RATCHET_TOL=2 (gelesen am 02.11.2026, Projektblock der Datei). Das Gate 88-mutfull vergleicht den Score mit MUT_SCORE_MIN; der Abnahmetest zu K-M1c-6 prüft, dass die wirksame Konfiguration diesem Anker gleicht.",
+  "retrieved": "2026-11-02",
+  "method": "Beide Betreiberunterlagen über Rscript gelesen (Lesen außerhalb des Repositorys nur über R möglich), SHA-256 mit tools::sha256sum() berechnet, Fundstellen mit grep nach „Mutation“, „Ratchet“ und „MUT_SCORE“ gesucht und die Abschnittsüberschriften bestimmt; AGENTS.md, docs/gates-auswahl.md, ANKER-TODO.md und orchestrator/config.env im Repository gelesen.",
+  "verification": "Vier Fundstellen nennen dieselben Werte 80/80/2 (Intake-Destillat §5, Projektdokument „Offene Punkte“, AGENTS.md, docs/gates-auswahl.md); das Intake-Destillat unter unterlagen/projekt_dateien/llmsa_Intake_Destillat.md (älterer Stand, SHA-256 3d072205119a3abb039cdb6963da9625da81ef834711ce4fd436cc36e8e85c59) enthält dieselbe Zeile wörtlich."
+}

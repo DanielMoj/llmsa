@@ -1,0 +1,194 @@
+{
+  "criteria": [
+    {
+      "id": "K-M1c-1",
+      "quote": "**K-M1c-1:** Für numerische und binäre Fits liefert `msa_boot(fit, nsim, level, seed)` dieselben Perzentilquantile wie `lme4::bootMer(fit$model, FUN, nsim, seed, type = \"parametric\")` mit einer im Abnahmetest unabhängig aus `lme4::VarCorr` nach Formelsammlung §3 implementierten `FUN` (Toleranz `ankerRef: ANK-TOL.engine_boot`), für `level` 0,90 und 0,95; außerdem enthält kein Skript unter `R/` einen der in `01` §5 untersagten Parallelisierungsaufrufe (`mclapply`, `mcmapply`, `mcparallel`, `pvec`, `parallel = \"multicore\"`; Suchmuster-Test). (Prüfweg: Test)",
+      "source": "docs/02-statistikkern.md"
+    },
+    {
+      "id": "K-M1c-2",
+      "quote": "**K-M1c-2:** `msa_boot()` zählt nicht endliche Wiederholungen (`n_failed`) und singuläre Wiederholungen (`n_singular`) getrennt als Attribute, behält singuläre Wiederholungen in den Quantilen, verwirft nur nicht endliche, und `print.msa_boot` nennt beide Zahlen mit zutreffendem Wortlaut (Formelsammlung Nr. 5). (Prüfweg: Test)",
+      "source": "docs/02-statistikkern.md"
+    },
+    {
+      "id": "K-M1c-3",
+      "quote": "**K-M1c-3:** Simulationsskript Überdeckung (Klasse B, erste Stufe): `inst/validation/sim/boot_coverage.R` setzt S-boot-1 bis S-boot-7 mit allen Schätzzielen und Kennzahlen nach Abschnitt 8 von `01-fachspezifikation.md` um (Parameter `--n-sim`, `--out`, `--scenarios`; Ergebnis-, Replikat- und Session-Datei), und der Builder committet den Kurzlauf mit `n_sim = ankerRef: ANK-TOL.n_check` für die Szenarien S-boot-1 und S-boot-7 (`boot_coverage_check_results.csv`, `boot_coverage_check_replicates.csv`, `boot_coverage_check_session.txt`); die Dokumentation von `msa_boot()` verweist auf die Überdeckungsstudie und die Tabelle in `vignettes/validation.Rmd` (die gemessenen Werte ergänzt K-M1d-7). Den vollen Lauf rechnet der Betreiber nach der Abnahme von M1c; seine Prüfung ist K-M1d-6. (Prüfweg: Test)",
+      "source": "docs/02-statistikkern.md"
+    },
+    {
+      "id": "K-M1c-4",
+      "quote": "**K-M1c-4:** Reproduzierbarkeit des Kurzlaufs: `Rscript inst/validation/sim/boot_coverage.R --n-sim <ANK-TOL.n_check> --scenarios S-boot-1,S-boot-7 --out <tmp>` erzeugt dieselben Einzelschätzer wie `boot_coverage_check_replicates.csv` (byte-identisch nach `format(x, digits = 15)`) und alle Kennzahlen mit `mcse`, bleibt unter `ankerRef: ANK-TOL.sim_runtime`, und `boot_coverage_check_session.txt` nennt Seed, RNG, R- und Paketversionen. (Prüfweg: Test)",
+      "source": "docs/02-statistikkern.md"
+    },
+    {
+      "id": "K-M1c-5",
+      "quote": "**K-M1c-5:** `vignettes/validation.Rmd` enthält den Abschnitt „Bootstrap intervals: coverage by scenario“, der `boot_coverage_results.csv` einliest, falls vorhanden, sonst `boot_coverage_check_results.csv` (kein numerisches Literal aus einer Ergebnisdatei im Rmd-Text; `n_sim` aus der Datei genannt) und Überdeckung mit MCSE je Szenario tabelliert; `R CMD check` baut sie ohne ERROR und WARNING. (Prüfweg: Test; Gate lint)",
+      "source": "docs/02-statistikkern.md"
+    },
+    {
+      "id": "K-M1c-6",
+      "quote": "**K-M1c-6:** Das Gate `88-mutfull` meldet `pass`: ein muttest-Lauf über `R/fit.R` und `R/grr.R` (unabhängig vom Diff, `MUT_WORKERS = 14`, Mutatoren und Testordner nach Preset) erreicht einen Score von mindestens `ankerRef: ANK-32`, gezählt wie in `86-mutgate` (Killed und Timeout erkannt, RuntimeError nicht gezählt, Äquivalenz nur nach Reviewer-Approval). (Prüfweg: Gate mutfull)",
+      "source": "docs/02-statistikkern.md"
+    },
+    {
+      "id": "K-M1c-7",
+      "quote": "**K-M1c-7:** Wiederholbarkeit auf der latenten Skala (ADR-040): Bei `type = \"ordinal\"` und `type = \"binary\"` schreiben `print.msa_grr` und `inst/templates/validation_report.Rmd` (unter der Zeile mit Repeatability und Reproducibility) den Hinweis „On the latent scale, Repeatability is the residual variance fixed by the link, not a measurement of disagreement between replicates; see the share of cells with identical replicates from `msa_agreement()`.“; bei `type = \"numeric\"` steht er nicht. `?msa_grr` sagt dasselbe. `table`, `summary` und `verdict` von `msa_grr()` und die Ergebnisse von `msa_boot()` bleiben bytegleich. (Prüfweg: Test)",
+      "source": "docs/02-statistikkern.md"
+    }
+  ],
+  "open": [
+    {
+      "id": "ACC-1",
+      "status": "Auslegung des Reviewers (Spec schweigt zu Quantildefinition, Toleranzbezug je Kennzahl und Suchmuster); ADR in 30-plan-review (ACC-15)",
+      "ref": "K-M1c-1 (ganzer Wortlaut, criteria); Formelsammlung §9, Status Code: „Perzentilintervall zum Niveau 1 − α aus den B Wiederholungen T*_b; fehlgeschlagene Anpassungen (nicht endliche Werte) werden verworfen und gezählt, singuläre Anpassungen bleiben enthalten“; docs/01 §2 Nr. 6: „abgeleitete Kennzahlen relativ, ndc und Verdikt gleich“; docs/01 §5, Parallelisierung",
+      "kind": "Prüfform K-M1c-1",
+      "owner": "Builder",
+      "blocking_builder": true,
+      "note": "(1) FUN der Gegenrechnung: acc_m1c_reference_fun() in tests/acceptance/setup-m1c.R, unabhängig vom Produktcode nach Formelsammlung §3 aus lme4::VarCorr: EV = Restvarianz (numerisch: Zeile Residual von VarCorr; binär: latente Restvarianz des Links aus ANK-28, Formelsammlung §4), AV = prompt + model + block + item:prompt + item:model + prompt:model, GRR = EV + AV, PV = item, TV = GRR + PV. Kennzahlen mit den Namen von msa_grr()$summary (?msa_grr): grr_pct_study_var, grr_pct_contribution, repeatability_pct_study_var, reproducibility_pct_study_var, ndc (Konstante und Untergrenze aus ANK-16), icc_items. Die Spalte statistic von msa_boot() nennt genau diese sechs. (2) Quantil: stats::quantile(type = 7) über die endlichen Wiederholungen je Kennzahl mit probs (1 − level)/2 und 1 − (1 − level)/2; das ist die Definition des Codestands, auf den Formelsammlung §9 verweist (v0.1.0: stats::quantile mit Vorgabe). (3) Vergleich je Kennzahl und Niveau: lower und upper gegen das Perzentilintervall der bootMer-Wiederholungen, estimate gegen t0 desselben bootMer-Aufrufs; Toleranz ANK-TOL.engine_boot (1e-10) relativ zum Referenzwert, weil alle sechs Größen abgeleitete Kennzahlen sind (docs/01 §2 Nr. 6); der Punktschätzer von ndc identisch. Die Testdaten halten den ungerundeten ndc jeder Wiederholung mehr als 1e-9 relativ von einer ganzen Zahl fern, damit das Abrunden zweier korrekter Rechnungen nicht am letzten Bit kippt. (4) Testdaten (Testparameter, keine Referenzwerte): numerisch 10 Items × 3 Prompts × 3 Modelle × 2 Replikate × 2 Blöcke mit allen sieben Komponenten (Seed 20261102), msa_fit(type = \"numeric\") mit Vorgaben; binär 30 × 4 × 4 × 2, Logit (Seed 20261103, Generator acc_m1b_binary_runs); nsim 20, Seeds 101 und 202, level 0,90 und 0,95; beide Aufrufe mit RNG Mersenne-Twister, Inversion, Rejection (docs/01 §5). Gemessen: in der numerischen Referenz sind 9 von 20 Refits singulär, in der binären 2 von 20. (5) Suchmuster-Test: jede Datei R/*.R (auch .r, .S, .s, .q) des Pakets unter Test wird geparst (utils::getParseData); Kommentare sind keine Aufrufe und werden nicht durchsucht. Treffer sind mclapply, mcmapply, mcparallel und pvec als Aufruf, Symbol, Name nach :: oder Zeichenkette (get(), match.fun()) sowie die Zeichenkette \"multicore\", die `parallel` zugewiesen wird (Argument `parallel = \"multicore\"`, Listenelement, `$parallel <-`, `[[\"parallel\"]] <-`). Eine Gegenprobe auf konstruiertem Code prüft den Scanner selbst (neun verbotene, vier erlaubte Formen)."
+    },
+    {
+      "id": "ACC-2",
+      "status": "Auslegung des Reviewers (Spec schweigt zu Auslösung, Singularitätsbegriff und Wortlaut); ADR in 30-plan-review (ACC-15)",
+      "ref": "K-M1c-2 (ganzer Wortlaut, criteria); Formelsammlung §12 Nr. 5: „Meldung „failed or singular dropped“; verworfen werden nur nicht endliche Werte | Meldung korrigieren, singuläre Wiederholungen zählen“; docs/01 §3 Nr. 5: „nicht endliche und singuläre Wiederholungen getrennt zählen und melden“; Formelsammlung §9 (wie ACC-1)",
+      "kind": "Prüfform K-M1c-2",
+      "owner": "Builder",
+      "blocking_builder": true,
+      "note": "(1) Nicht endliche Wiederholung: eine Wiederholung (Zeile des Bootstraps) mit mindestens einer nicht endlichen Kennzahl. Der Test erzeugt sie durch Fehlerinjektion: testthat::local_mocked_bindings(refit = …, .package = \"lme4\") ersetzt während des Aufrufs `refit` im Namensraum von lme4 durch eine Hülle, die beim 2., 7. und 15. von 20 Refits einen Fehler wirft und sonst das Original ruft; lme4::bootMer (2.0.6) macht daraus je eine Zeile NA (factory(…, errval = NA)) und warnt „some bootstrap runs failed (3/20)“. msa_boot() muss also über den Refit-Pfad von lme4::bootMer laufen, wie K-M1c-1 es verlangt. (2) Singuläre Wiederholung: ein gelungener Refit, für den lme4::isSingular() mit Vorgabetoleranz TRUE ist; so führt msa_fit() `singular` für lme4-Modelle (R/fit.R). Ein gescheiterter Refit ist nicht singulär. (3) Attribute `n_failed` und `n_singular` von msa_boot(): je eine endliche Zahl, gleich den Zählungen der Referenz (bootMer mit derselben Injektion und der FUN aus ACC-1, die zusätzlich isSingular() ausgibt): gemessen 3 und 7 (von 17 endlichen). (4) Quantile: gleich dem Perzentilintervall (ACC-1) über alle endlichen Wiederholungen einschließlich der singulären, Toleranz wie ACC-1; der Test prüft vorab, dass ein Weglassen der singulären mindestens ein Quantil ändern würde. (5) Druckausgabe, je Zahl eine eigene Zeile: eine Zeile nennt n_failed mit einem Wort für Scheitern (fail, non-finite, nonfinite, not finite) und einem für Verwerfen (drop, discard, exclud, remov, omit) und enthält nicht „singular“; eine Zeile nennt n_singular mit „singular“ und einem Wort für Behalten (retain, kept, keep, includ, remain) und ohne Wort für Verwerfen; keine Zeile enthält „singular“ zusammen mit einem Wort für Verwerfen (das ist die falsche Meldung von v0.1.0). Zahlen als eigene Zahl (nicht Teil einer längeren Zahl oder Dezimalzahl), Groß- und Kleinschreibung gleichgültig, Verneinungen wie „not dropped“ zählen als Verwerfen. „nennt beide Zahlen“ gilt immer, auch für 0: Fall ohne Fehler und ohne singuläre Refits (12 Items × 5 Prompts × 5 Modelle × 2 Replikate, interactions = FALSE, Seed 20261105, Bootstrap-Seed 404, gemessen 0 und 0). (6) Testparameter des Fehlerfalls: numerisches Testdesign aus ACC-1, nsim 20, Seed 303, level 0,90."
+    },
+    {
+      "id": "ACC-3",
+      "status": "Auslegung des Reviewers (wie ADR-023 Nr. 1 für M1b); ADR in 30-plan-review (ACC-15)",
+      "ref": "K-M1c-3: „(Parameter `--n-sim`, `--out`, `--scenarios`; Ergebnis-, Replikat- und Session-Datei)“; K-M1c-4: „`Rscript inst/validation/sim/boot_coverage.R --n-sim <ANK-TOL.n_check> --scenarios S-boot-1,S-boot-7 --out <tmp>`“; docs/01 §8; ADR-023 Nr. 1",
+      "kind": "Vertrag des Klasse-B-Skripts boot_coverage",
+      "owner": "Builder",
+      "blocking_builder": true,
+      "note": "Aufruf `Rscript inst/validation/sim/boot_coverage.R --n-sim <n> --scenarios <ID>[,<ID>…] --out <Verzeichnis>`; Wert durch Leerzeichen getrennt, Reihenfolge der Schalter frei (der Test ruft --n-sim, --scenarios, --out), Szenario-IDs S-boot-1 … S-boot-7 wie in der Tabelle in docs/02, kommagetrennt; `--out` ist ein Verzeichnis (wird angelegt) mit boot_coverage_results.csv, boot_coverage_replicates.csv und boot_coverage_session.txt; Exit-Status 0, Fehler benannt mit Status ungleich 0. Das Skript lädt das installierte Paket (library(llmsa)) und hängt nicht vom Arbeitsverzeichnis ab; der Test installiert das Paket unter Test wie in ADR-023 Nr. 1.3 (Kopie von DESCRIPTION, NAMESPACE, R/, inst/, data/, R CMD INSTALL --no-docs in eine temporäre Bibliothek, R_LIBS davor, Rscript aus einem temporären Arbeitsverzeichnis; die Bibliothek teilen sich die Tests von M1b und M1c). Seed fest im Skript, ausgewiesen in der Spalte seed. Kurzlauf im Repository: die drei Dateien eines Laufs mit `--n-sim <ANK-TOL.n_check> --scenarios S-boot-1,S-boot-7`, umbenannt in inst/validation/sim/boot_coverage_check_results.csv, boot_coverage_check_replicates.csv und boot_coverage_check_session.txt, erzeugt mit dem Paketstand, der in die Gates geht. Die Szenarien liest der Test zur Laufzeit aus der Tabelle in docs/02 (docs/01 §8: Spec, keine Anker)."
+    },
+    {
+      "id": "ACC-4",
+      "status": "Auslegung des Reviewers (die Szenariotabelle nennt nur für S-boot-7 die Zielgröße); ADR in 30-plan-review (ACC-15)",
+      "ref": "docs/02 M1c, Szenariotabelle und „Bootstrap-Wiederholungen je Fit nach Paketvorgabe von `msa_boot()`“, „Überdeckung und mittlere Breite der 95-%-Perzentilintervalle“; Formelsammlung §2, §4; ADR-023 Nr. 13.3",
+      "kind": "Datenerzeugung und Verfahren der Studie",
+      "owner": "Builder",
+      "blocking_builder": true,
+      "note": "(1) S-boot-1 bis S-boot-6 numerisch (nur S-boot-7 trägt „binär, Logit, μ = 0“): y = μ + unabhängige Normalverteilungen für jede Komponente der Tabelle (Item, Prompt, Modell, Block, Item×Prompt, Item×Modell, Prompt×Modell) + N(0, Rest) je Beobachtung (Formelsammlung §2); μ frei; Items, Prompts, Modelle, Replikate und Blöcke wie in der Tabelle. Verfahren: msa_fit(type = \"numeric\") mit Vorgaben (Wechselwirkungen an, Vorgabepfad ohne `...`) und msa_grr(fit) mit Vorgaben. (2) S-boot-7: Bernoulli-Antworten mit P = plogis(μ + η), μ = 0, η = Summe der Effekte von Item, Prompt und Modell, ohne weiteres Rauschen (wie ADR-023 Nr. 13.3); msa_fit(type = \"binary\", link = \"logit\") mit Vorgaben. Die latente Restvarianz π²/3 (ANK-28) geht in die wahren Werte von %GRR, % Contribution, ndc und ICC_items ein, ist aber kein Schätzziel. (3) Bootstrap je Wiederholung: msa_boot(fit, level = 0.95, seed = <Seed der Wiederholung>) ohne nsim-Argument, also mit der Paketvorgabe; der Test vergleicht die Spalte boot_nsim mit formals(msa_boot)$nsim des Pakets unter Test. Seeds nach ACC-7."
+    },
+    {
+      "id": "ACC-5",
+      "status": "Auslegung des Reviewers (Spec schweigt zu Bezeichnern und zu den MCSE von Breite und Anteilen); ADR in 30-plan-review (ACC-15)",
+      "ref": "docs/01 §8: „`<studie>_results.csv` (eine Zeile je Szenario und Kennzahl: `scenario`, `estimand`, `measure`, `value`, `mcse`, `n_sim`, `seed`)“ und „Kennzahlen (Performance measures: Bias, EmpSE, Coverage, MSE, je mit MCSE nach Formelsammlung §9)“; docs/02 M1c: „Schätzziele: %GRR (Studienvariation), % Contribution GRR, ndc, ICC_items, jede Varianzkomponente; Kennzahlen: Bias und EmpSE der Punktschätzer, Überdeckung und mittlere Breite der 95-%-Perzentilintervalle, Anteil singulärer und fehlgeschlagener Bootstrap-Fits, alle mit MCSE.“; K-M1d-7: „tabelliert je Szenario Bias, relative Verzerrung, EmpSE, Überdeckung und mittlere Intervallbreite mit MCSE“; ADR-023 Nr. 2, 3 und 5",
+      "kind": "Ergebnisdatei: Schätzziele, Kennzahlen, Formeln",
+      "owner": "Builder",
+      "blocking_builder": true,
+      "note": "(1) CSV wie utils::write.csv(row.names = FALSE) mit mindestens den sieben Spalten aus docs/01 §8; eine Zeile je Szenario × Schätzziel × Kennzahl; weitere Zeilen und Spalten zulässig. (2) Schätzziele: jede Komponente der Szenariotabelle, benannt wie msa_fit()$vc$source (item, prompt, model, block, item:prompt, item:model, prompt:model, Residual; bei S-boot-7 item, prompt, model ohne die latente Restvarianz), dazu grr_pct_study_var, grr_pct_contribution, ndc und icc_items (Namen wie msa_grr()$summary und msa_boot()$statistic). (3) Für jedes Schätzziel bias, rel_bias, empse und rmse mit den Formeln aus ADR-023 Nr. 5 (Formelsammlung §9; rel_bias = Bias/θ mit MCSE(Bias)/|θ|; RMSE = √MSE mit MCSE(MSE)/(2·RMSE)). Ist RMSE = 0 (etwa ndc gleich dem wahren Wert in jeder Wiederholung, gemessen bei S-boot-7 und S-boot-4), ist auch MCSE(MSE) = 0 und die Delta-Formel 0/0; dann gilt MCSE(RMSE) = 0, wie es der Builder in M1b umgesetzt hat (inst/validation/sim/README.md: „An exactly zero RMSE has zero MCSE.“). Begründung: docs/02 M1c nennt Bias und EmpSE; docs/01 §8 zusätzlich MSE, enthalten in rmse wie ADR-023 Nr. 3.2; K-M1d-7 tabelliert für alle vier Ergebnisdateien die relative Verzerrung, und ein fehlendes Maß im Vollauf hieße einen neuen Vollauf (BL-12). Alle wahren Werte der Tabelle sind > 0. (4) Für die vier Schätzziele mit Intervall aus msa_boot() zusätzlich coverage = Anteil der Wiederholungen mit lower ≤ θ ≤ upper (geschlossenes Intervall) über die Wiederholungen mit endlichen Grenzen, MCSE √(p(1 − p)/n) (Formelsammlung §9), und width = Mittel von upper − lower über dieselben Wiederholungen, MCSE eines Mittels √(Σ(w − w̄)²/(n(n − 1))) (Formel von MCSE(Bias)). (5) Je Szenario das Schätzziel `bootstrap` mit singular_share und failed_share: q_r = n_singular_r/B_r bzw. n_failed_r/B_r je Wiederholung r (Attribute von msa_boot() nach K-M1c-2, B_r = boot_nsim), Wert = Mittel der q_r über die Wiederholungen mit Bootstrap, MCSE eines Mittels wie bei width; nicht √(p(1 − p)/(n·B)), weil die Bootstrap-Fits einer Wiederholung nicht unabhängig sind. (6) Je Pflichtzeile: value endlich, mcse endlich und ≥ 0, n_sim = Zahl der Wiederholungen des Laufs, seed eine Zahl. Weniger als zwei endliche Werte führen zu einem benannten Abbruch, nie zu einem Ersatzwert. (7) Der Test rechnet jede Pflichtkennzahl aus der zugehörigen Replikatdatei nach (acc_m1b_performance(), acc_m1c_coverage(), acc_m1c_mean_mcse()), mit den wahren Werten der Tabelle, Toleranz ANK-TOL.arithmetic absolut."
+    },
+    {
+      "id": "ACC-6",
+      "status": "Auslegung des Reviewers (wie ADR-023 Nr. 4 für M1b); ADR in 30-plan-review (ACC-15)",
+      "ref": "docs/01 §8: „`<studie>_replicates.csv` (Einzelschätzer je Wiederholung)“; K-M1c-4: „erzeugt dieselben Einzelschätzer wie `boot_coverage_check_replicates.csv`“; ADR-023 Nr. 4",
+      "kind": "Replikatdatei: Langformat und Spalten",
+      "owner": "Builder",
+      "blocking_builder": true,
+      "note": "(1) Langformat: eine Zeile je Szenario × Wiederholung × Schätzziel (die Schätzziele aus ACC-5 (2), ohne `bootstrap`). (2) Spalten mindestens scenario, rep (1 … n_sim), estimand, estimate, true, lower, upper, items, prompts, models, blocks, observations, boot_nsim, boot_level, n_singular, n_failed. (3) true: Wert der Szenariotabelle; %GRR, % Contribution GRR, ICC_items und ndc nach Formelsammlung §3 mit GRR = alle Komponenten außer Item einschließlich Rest (S-boot-7: π²/3 nach ANK-28) und TV = GRR + Item, ndc mit Konstante und Untergrenze aus ANK-16. (4) lower und upper: das Intervall von msa_boot() für die vier Intervall-Schätzziele, endlich und lower ≤ upper, wenn der Bootstrap lief und nicht alle seine Fits scheiterten; bei Komponenten frei (NA zulässig). (5) items, prompts, models, blocks, observations aus fit$n des Fits dieser Wiederholung (wie ADR-023 Nr. 4.4); boot_nsim = Zahl der Bootstrap-Wiederholungen (gleich der Vorgabe von msa_boot()), boot_level = 0,95, n_singular und n_failed aus den Attributen von msa_boot(); diese vier Werte sind in allen Zeilen einer Wiederholung gleich und Zählungen in [0, boot_nsim] mit n_singular + n_failed ≤ boot_nsim. (6) Scheitert der Fit: estimate, lower, upper und alle Zählspalten NA, nie Werte aus dem Sollplan; scheitert nur msa_boot(): lower, upper und die vier Bootstrap-Spalten NA. (7) Jede Spalte ist deterministisch und hängt nicht von n_sim, Szenarioauswahl oder Workerzahl ab; Laufzeiten und Versionen nur in der Session-Datei; Einzelschätzer mit 15 signifikanten Stellen (write.csv)."
+    },
+    {
+      "id": "ACC-7",
+      "status": "Auslegung des Reviewers (wie ADR-023 Nr. 6 für M1b); ADR in 30-plan-review (ACC-15)",
+      "ref": "K-M1c-4: „erzeugt dieselben Einzelschätzer wie `boot_coverage_check_replicates.csv` (byte-identisch nach `format(x, digits = 15)`)“; docs/01 §8: „reproduziert die ersten `ANK-TOL.n_check` Wiederholungen mit demselben Seed byte-identisch (für `boot_coverage` die Szenarien S-boot-1 und S-boot-7)“; K-M1d-6; ADR-023 Nr. 6",
+      "kind": "Reproduktion, Präfix- und Teilmengenstabilität",
+      "owner": "Builder",
+      "blocking_builder": true,
+      "note": "(1) Neulauf gegen Kurzlauf: alle Spalten der Replikatdatei, Zahlen Element für Element nach format(x, digits = 15), Zeilen nach scenario, rep, estimand sortiert (acc_m1b_expect_same_replicates()). (2) Ein Lauf mit `--n-sim 2 --scenarios S-boot-7` enthält genau S-boot-7 und liefert in allen Spalten dieselben Zeilen wie die Wiederholungen 1 und 2 von S-boot-7 im Kurzlauf. Grund: K-M1d-6 vergleicht die ersten n_check Wiederholungen von S-boot-1 und S-boot-7 aus dem Vollauf des Betreibers (n_sim ≥ ANK-06, alle sieben Szenarien, auch szenarioweise über --scenarios) mit einem Neulauf. Das gelingt nur, wenn der Zufallsstrom der Daten und der des Bootstraps je Szenario und Wiederholung weder von n_sim noch von Auswahl oder Reihenfolge der Szenarien noch von der Workerzahl abhängen (etwa ein fester Seed je Szenario-ID und Wiederholung und ein daraus abgeleiteter Seed für msa_boot()). (3) RNG Mersenne-Twister, normal.kind Inversion, sample.kind Rejection (docs/01 §5)."
+    },
+    {
+      "id": "ACC-8",
+      "status": "Auslegung des Reviewers (wie ADR-023 Nr. 7 und 8 für M1b); ADR in 30-plan-review (ACC-15)",
+      "ref": "K-M1c-4: „bleibt unter `ankerRef: ANK-TOL.sim_runtime`, und `boot_coverage_check_session.txt` nennt Seed, RNG, R- und Paketversionen“; docs/01 §8: „`<studie>_session.txt` (`sessionInfo()`, Seed, RNG, Laufzeit)“; docs/01 §5",
+      "kind": "Session-Datei und Laufzeit",
+      "owner": "Builder",
+      "blocking_builder": true,
+      "note": "(1) Kurzlauf und Neulauf: eine Zeile „R version …“ aus sessionInfo(), die Versionsangaben llmsa_… und lme4_…, jeder Seed der Spalte seed als Zahl, die Wörter „Mersenne-Twister“ und „Rejection“ und eine Laufzeitangabe mit „runtime“ oder „elapsed“. (2) Laufzeit: Wanduhrzeit des Rscript-Neulaufs des Kurzlaufs (S-boot-1, S-boot-7, n_sim = ANK-TOL.n_check) ohne die Paketinstallation ≤ ANK-TOL.sim_runtime (20 Minuten). parallel::mclapply ist unter inst/validation/sim/ zulässig (docs/01 §5) mit höchstens ANK-TOL.sim_runtime.cores Prozessen; unter R/ bleibt es verboten (K-M1c-1)."
+    },
+    {
+      "id": "ACC-9",
+      "status": "Auslegung des Reviewers; ADR in 30-plan-review (ACC-15)",
+      "ref": "K-M1c-3: „setzt S-boot-1 bis S-boot-7 mit allen Schätzzielen und Kennzahlen nach Abschnitt 8 von `01-fachspezifikation.md` um“; der Kurzlauf deckt nur S-boot-1 und S-boot-7",
+      "kind": "Prüfung der Szenarien außerhalb des Kurzlaufs",
+      "owner": "Builder",
+      "blocking_builder": true,
+      "note": "Der Test ruft das Skript mit `--n-sim 2 --scenarios S-boot-2,S-boot-3,S-boot-4,S-boot-5,S-boot-6` auf und prüft Schema (ACC-5), Replikate gegen die Szenariotabelle (ACC-6), die Nachrechnung aller Kennzahlen und die Session-Datei. So fällt ein falsch umgesetztes Szenario (Stufenzahl, wahre Komponente, Kennzahl) vor dem Vollauf des Betreibers auf und nicht erst in M1d nach Tagen Rechenzeit (BL-12). Für diesen Lauf gilt keine Laufzeitgrenze; gemessen in ACC-16."
+    },
+    {
+      "id": "ACC-10",
+      "status": "Auslegung des Reviewers (wie ADR-023 Nr. 9.6 für msa_fit()); ADR in 30-plan-review (ACC-15)",
+      "ref": "K-M1c-3: „die Dokumentation von `msa_boot()` verweist auf die Überdeckungsstudie und die Tabelle in `vignettes/validation.Rmd` (die gemessenen Werte ergänzt K-M1d-7)“",
+      "kind": "Dokumentation von msa_boot()",
+      "owner": "Builder",
+      "blocking_builder": true,
+      "note": "Die Hilfeseite man/msa_boot.Rd, gelesen im Repository als Text über tools::Rd2txt, nennt „boot_coverage“ und die Vignette (`vignette(\"validation\"` … oder „validation.Rmd“)."
+    },
+    {
+      "id": "ACC-11",
+      "status": "Auslegung des Reviewers (wie ADR-023 Nr. 11 und ADR-029 Nr. 1 für K-M1b-7); ADR in 30-plan-review (ACC-15)",
+      "ref": "K-M1c-5 (ganzer Wortlaut, criteria); docs/01 §8: „solange nur Kurzlauf-Dateien vorliegen, liest die Vignette diese und nennt `n_sim` aus der Datei“",
+      "kind": "Prüfform K-M1c-5",
+      "owner": "Builder",
+      "blocking_builder": true,
+      "note": "(1) Eine Überschrift mit genau dem Text „Bootstrap intervals: coverage by scenario“, Ebene frei. (2) Die im Repository gestrickte Vignette (gemeinsamer Knit mit K-M1a-7 und K-M1b-7, REPO_ROOT gesetzt) zeigt den Abschnitt ohne Fehler. (3) Die Tabellen des Abschnitts enthalten die Wörter coverage und MCSE. Für jedes Szenario der gelesenen Datei steht die Szenario-ID im Abschnitt, und für jede Zeile mit measure = coverage (Szenario × Schätzziel) zeigt eine Tabellenzeile value und mcse, jeweils auf die gezeigte Stellenzahl (eine Einheit der letzten gezeigten Stelle, wie acc_m1b_shows()), als Anteil oder in Prozent, beide in derselben Skala. (4) n_sim aus der Datei steht im Abschnitt. (5) Im Rmd-Text steht kein Zahlenliteral mit mindestens drei signifikanten Stellen, das einem value oder mcse der gelesenen boot_coverage-Ergebnisdatei gleicht. (6) Dateiwahl: In einer temporären Paketkopie liegt neben dem Kurzlauf eine als Testattrappe gekennzeichnete boot_coverage_results.csv mit allen sieben Szenarien wie ein Vollauf: S-boot-2 bis S-boot-6 aus den Zeilen von S-boot-1 (gleiche Schätzziele), S-boot-7 aus seinen eigenen; je Szenario j beschränkte Kennzahlen (coverage, singular_share, failed_share) auf 0,1 + 0,85 · ((Wert + 0,5 + 0,13·j) mod 1), also in [0,1; 0,95] und mit mindestens zwei gezeigten signifikanten Stellen bei zwei Nachkommastellen, die übrigen auf Wert + 0,5 + j, mcse + 0,25 + 0,1·j, n_sim die Marke 1234 (≥ ANK-06), Seed aus dem Kurzlauf kopiert; Replikat- und Session-Datei des Kurzlaufs liegen unter den Namen des Vollaufs daneben. Die Vignette wird in einem eigenen R-Prozess mit pkgload::load_all() der Kopie und ohne REPO_ROOT gestrickt (öffentlicher Kontext wie R CMD check) und muss je Szenario und Schätzziel coverage und MCSE der Attrappe und n_sim 1234 zeigen. Die Vignette liest die Datei deshalb aus dem Paket (system.file(\"validation\", \"sim\", …)). Eine Prüfung der Ergebnisdatei in der Vignette (Schema, Wertebereiche, alle sieben Szenarien, n_sim) ist zulässig, die Attrappe besteht sie; K-M1c-5 verlangt das Einlesen der Ergebnisdatei, die Vignette braucht dafür keine Replikatdatei. (7) Bau durch R CMD check: Gate lint."
+    },
+    {
+      "id": "ACC-12",
+      "status": "Auslegung des Reviewers; Entscheidung durch das Gate mutfull",
+      "ref": "K-M1c-6 (ganzer Wortlaut, criteria); AGENTS.md, Projektblock: „`MUT_WORKERS=14`; `tests/simulation/` nie in `MUT_TEST_DIRS`. In M1c zusätzlich das Betreiber-Gate `88-mutfull` über beide Kerndateien.“; ANK-32",
+      "kind": "Prüfform K-M1c-6",
+      "owner": "Betreiber (Gate), Reviewer (Approval äquivalenter Mutanten)",
+      "blocking_builder": false,
+      "note": "Das Gate mutfull läuft nach dem Gate tests; kein Abnahmetest sieht sein Ergebnis. test-m1c-6-mutfull.R prüft die wirksame Konfiguration (orchestrator/config.env, letzte Zuweisung je Schlüssel; fehlt ein Schlüssel, die Vorgabe in 88-mutfull.sh): 88-mutfull.sh ist ausführbar; MUTFULL_MILESTONES enthält M1c; MUTFULL_FILES ist R/fit.R,R/grr.R (= ANK-32.scope); MUT_SCORE_MIN, MUT_SCORE_FLOOR und MUT_RATCHET_TOL gleichen ANK-32 (80, 80, 2); MUT_WORKERS = 14; MUT_TEST_DIRS enthält tests/testthat und tests/acceptance und nicht tests/simulation. Heute alle grün. Äquivalente Mutanten verlassen den Nenner nur nach Approval des Reviewers in orchestrator/handoff/M1c/MUT-EQUIV-APPROVED.json; ADR-039 nennt zwei Kandidaten in R/fit.R (BL-89: sparse = FALSE, perm = FALSE)."
+    },
+    {
+      "id": "ACC-13",
+      "status": "Auslegung des Reviewers (Spec schweigt zu Vergleichsform und Bezug der Bytegleichheit); ADR in 30-plan-review (ACC-15)",
+      "ref": "K-M1c-7 (ganzer Wortlaut, criteria); ADR-040, Entscheidung Nr. 1: „Keine neue Rechnung: `table`, `summary`, `verdict` und die Ergebnisse von `msa_boot()` bleiben bytegleich.“; docs/01 §4 (zusätzliche Attribute ohne ADR zulässig); IMPLEMENTATION-RULES: „Existiert ein Original, wird differentiell dagegen getestet.“",
+      "kind": "Prüfform K-M1c-7",
+      "owner": "Builder",
+      "blocking_builder": true,
+      "note": "(1) Hinweistext: zur Laufzeit aus docs/02 gelesen (Text zwischen „ und “ in der Zeile von K-M1c-7). Verglichen wird nach Normalisierung: Markdown-Escapes, Backticks, Sternchen und Anführungszeichen entfernt, ein Unterstrich nur außerhalb eines Wortes (msa_agreement bleibt), Leerraum zusammengefasst, Groß- und Kleinschreibung unverändert; der normalisierte Satz muss als Teilzeichenkette vorkommen, Zeilenumbrüche und ein Präfix wie „note:“ sind also zulässig. (2) print.msa_grr: Die Ausgabe für wine (ordinal, Probit) und BeetlesMale (binär, Logit) enthält den Hinweis, die für ic50_demo und das numerische Testdesign aus ACC-1 nicht. (3) Bericht: msa_report(grr, output_format = rmarkdown::md_document(variant = \"gfm\", pandoc_args = \"--wrap=none\")) rendert die Vorlage; in Abschnitt 3 (Überschrift „3. …“) gibt es genau eine Zeile außerhalb von Überschriften mit „Repeatability“ und „Reproducibility“ (Groß- und Kleinschreibung gleichgültig), und der Block unmittelbar darunter (nächste nichtleere Zeile samt Fortsetzungszeilen bis zu Leerzeile, Überschrift oder nächstem Listenpunkt) ist der Hinweis. „unter der Zeile“ heißt also direkt darunter, als eigener Listenpunkt, Unterpunkt oder Absatz. Für ic50_demo steht der Hinweis nirgends im Bericht. (4) ?msa_grr: der Text von man/msa_grr.Rd (tools::Rd2txt, im Repository) enthält den Hinweis. (5) Bytegleichheit: Bezug ist der Stand vor M1c, der unveränderliche Tag done/M1b (ANK-33). Der Test liest R/fit.R und R/grr.R mit git cat-file aus diesem Tag in temporäre Dateien (wie K-M0-4 aus done/M0), prüft die SHA-256 gegen ANK-33, lädt beide mit sys.source() in eine Umgebung mit dem Namensraum unter Test als Elternumgebung und vergleicht mit identical(): msa_grr()$table, $summary und $verdict für neun Fälle (ic50_demo mit Vorgaben und mit basis = \"contribution\", numerisches Testdesign mit und ohne Wechselwirkungen, wine mit Probit und Logit, ordinal mit zwei Modellen und abgeleiteter Komponente, BeetlesMale, binäres Testdesign mit threshold = c(5, 50)); msa_boot() auf dem numerischen (level 0,95) und dem binären Testdesign (level 0,90) aus ACC-1: names, class, row.names, jede Spalte, attr(, \"boot\") und attr(, \"level\"). Nicht verglichen werden n_failed und n_singular (K-M1c-2) und zusätzliche Attribute (docs/01 §4). Eine Zusatzspalte in den Bootstrap-Wiederholungen, etwa ein Singularitätskennzeichen, verletzte die Bytegleichheit; ein eigenes Attribut nicht. (6) Der Vergleich bleibt nach M1c bestehen; eine spätere, gewollte Änderung dieser Rechnungen braucht ein ADR und die Anpassung dieses Tests."
+    },
+    {
+      "id": "ACC-14",
+      "status": "[INFRA] offen – Betreiber (config.env)",
+      "ref": "orchestrator/config.env: MUT_TEST_EXCLUDE='^(m2-[0-9]|m0-testthat-count$|m1b-[23]-|m1b-7-vignette-full)'; orchestrator/lib/r-mutation.R führt je Mutant alle nicht ausgeschlossenen Abnahmetests aus; Intake §5: „langsame Simulationen bleiben außerhalb von `MUT_TEST_DIRS`, sonst laufen sie einmal je Mutant“",
+      "kind": "[INFRA] Testauswahl des Mutationslaufs",
+      "owner": "Betreiber",
+      "blocking_builder": false,
+      "note": "test-m1c-3-coverage-script.R und test-m1c-4-coverage-rerun.R installieren das Paket und rechnen den Lauf über S-boot-2 bis S-boot-6, den Neulauf des Kurzlaufs und den Präfixlauf; test-m1c-5-vignette-full-results.R strickt die Vignette in einem eigenen Prozess. Je Mutant liefen sie in mutgate und mutfull mit und vervielfachten den Vorlauf und damit MUT_TEST_TIMEOUT. Vorschlag: MUT_TEST_EXCLUDE='^(m2-[0-9]|m0-testthat-count$|m1b-[23]-|m1b-7-vignette-full|m1c-[34]-|m1c-5-vignette-full)'. Der Ausdruck trifft genau diese drei Dateien der Phase. Die schnellen Tests K-M1c-1, -2, -5 (Knit im Repository, mit K-M1a-7 geteilt), -6 und -7 bleiben im Mutationslauf; K-M1c-1, K-M1c-2 und die Bytegleichheit aus K-M1c-7 decken msa_boot(), grr_stats() und msa_grr() ab. Laufzeiten: ACC-16. Nur der Betreiber ändert config.env; ein Backlog-Eintrag liegt außerhalb des Territoriums dieser Phase."
+    },
+    {
+      "id": "ACC-15",
+      "status": "Hinweis an den Reviewer in 30-plan-review",
+      "ref": "AGENTS.md, Handoff-Disziplin: „Schweigt die Spec, bindet nach Ende der Planrunden das Reviewer-Urteil und wird als ADR dokumentiert.“; orchestrate.sh, path_allowed: reviewer:10-acceptance nur tests/acceptance/, reference/anchors/, orchestrator/handoff/M1c/ (dazu tests/simulation/); ANKER-TODO.md, Abschnitt M1c",
+      "kind": "Anker und ADR",
+      "owner": "Reviewer",
+      "blocking_builder": false,
+      "note": "Neu in dieser Phase: reference/anchors/ANK-32.json (geerntet nach ANKER-TODO, Abschnitt M1c; die Datei fehlte trotz Status „vorhanden“) und reference/anchors/ANK-33.json (Nachtrag des Reviewers, freie Nummer nach ANKER-TODO „Nicht vergeben“; Bezug der Bytegleichheit aus K-M1c-7). Keine bestehende Ankerdatei wurde geändert. Beide liegen vor dem Tag plan/M1c und damit nicht im Diff des Gates golden-adr. Weil 10-acceptance docs/decisions/ nicht schreiben darf, hält der Reviewer die Auslegungen ACC-1 bis ACC-13 und die beiden Anker in 30-plan-review in einem ADR fest."
+    },
+    {
+      "id": "ACC-16",
+      "status": "Stand vor der Implementierung",
+      "ref": "tests/acceptance/test-m1c-*.R",
+      "kind": "Testlauf",
+      "owner": "–",
+      "blocking_builder": false,
+      "note": "Lauf des Reviewers am 02.11.2026 auf dem Stand vor der Implementierung (HEAD ba4fea6, R 4.6.1, lme4 2.0.6, testthat 3.3.2, knitr 1.52, rmarkdown 2.32, pandoc 3.7.0.2; wie das Gate testthat::test_dir() mit REPO_ROOT, Filter ^m1c-). Ohne Git-Kommando: ein Proben-Setup las R/fit.R und R/grr.R aus dem Arbeitsbaum statt mit git cat-file aus done/M1b; die SHA-256-Prüfung gegen ANK-33 blieb aktiv, und der Arbeitsbaum ist unter R/ bytegleich mit ADR-038. Ergebnis: 48 Tests, 21 grün, 14 mit Fehlschlag, 13 mit Fehler, 0 übersprungen, 33,2 s. Grün: K-M1c-1 alle 8 (msa_boot() rechnet schon heute wie lme4::bootMer mit stats::quantile; Suchmuster-Test samt Gegenprobe, heute kein verbotener Aufruf unter R/); K-M1c-2 die Referenz mit Fehlerinjektion und die Quantile (heute werden schon nur nicht endliche Werte verworfen); K-M1c-3 die Szenariotabelle; K-M1c-6 alle 3; K-M1c-7 die Bytegleichheit (4 Tests; der Bezug ist heute der Code selbst), der zitierte Hinweistext und das Fehlen des Hinweises bei numerisch in Druck und Bericht. Rot, weil Produktcode fehlt: Attribut n_singular und Wortlaut von print.msa_boot (heute „(3 replicate fits failed or were singular and were dropped)“, im Fall ohne Fehler keine Zeile) in K-M1c-2; Skript, Kurzlauf und Rd-Verweis in K-M1c-3; alle Läufe in K-M1c-4; der Vignettenabschnitt in beiden Dateien von K-M1c-5; der Hinweis in print.msa_grr, im Bericht und in ?msa_grr in K-M1c-7. Laufzeit der schnellen Dateien: m1c-1 9,5 s, m1c-2 1,7 s, m1c-6 0,2 s, m1c-7 5 s, m1c-5 16 s (Knit, mit K-M1a-7 und K-M1b-7 geteilt). Gegenproben mit einer konformen Reviewer-Attrappe in einer temporären Repository-Kopie außerhalb des Arbeitsbaums (R/zzz-mock.R mit msa_boot(), print.msa_boot und print.msa_grr; Hinweiszeile der Vorlage direkt unter der Zeile mit Repeatability und Reproducibility; Abschnitte in man/msa_grr.Rd und man/msa_boot.Rd; Attrappe von boot_coverage.R nach ACC-3 bis ACC-8 mit parallel::mclapply auf höchstens 14 Kernen und daraus erzeugtem Kurzlauf; Vignettenabschnitt mit knitr::kable): 48 Tests, alle grün, 272 s. Gemessen: Kurzlauf S-boot-1 und S-boot-7 mit n_sim = 20 und B = 200 in 105 s (40 Aufgaben), Neulauf im Test 118 s (Grenze 20 min), Lauf S-boot-2 bis S-boot-6 mit n_sim = 2 in 73 s, Präfixlauf 32 s; Überdeckung im Kurzlauf 0,95 und bei ndc 1, singular_share 0,46 (S-boot-1) und 0,38 (S-boot-7), failed_share 0. Die Attrappe zeigte zwei Lücken des ersten Testentwurfs, beide vor dieser Übergabe behoben: RMSE = 0 bei ndc mit MCSE 0/0 (jetzt ACC-5 (3)) und Fixture-Werte, die mit zwei Nachkommastellen nur eine signifikante Stelle zeigen (jetzt ACC-11 (6)); dazu einen Fehler der Attrappe selbst (doppelter Backslash vor \\code in man/msa_grr.Rd), den der Test erkannte. Verfälschungen, jeweils genau die zugehörigen Tests rot und alle übrigen grün: Wortlaut von v0.1.0 in print.msa_boot → 2 Tests von K-M1c-2; singuläre Wiederholungen aus den Quantilen genommen → 7 (K-M1c-1 4, K-M1c-2 1, Bytegleichheit des Bootstraps 2); Block in grr_stats() weggelassen → 4 (K-M1c-1 numerisch 2, Bytegleichheit von msa_grr() und des numerischen Bootstraps); Hinweis auch bei numerisch und lme4::bootMer(parallel = \"multicore\") unter R/ → 2 (Druck numerisch, Suchmuster); Hinweis in der Vorlage unter der ndc-Zeile statt direkt unter Repeatability/Reproducibility → die 2 Berichtstests; Vignette liest immer den Kurzlauf → nur der Fixture-Test; Seed abhängig von n_sim → Neulauf (350 Zellen), Seed-Menge und Präfixlauf; ein Einzelschätzer um 1e-12 relativ, ein Ergebniswert um 1e-6 und S-boot-2 mit 3 statt 5 Prompts → Bytevergleich, Nachrechnung und Lauf über S-boot-2 bis S-boot-6. Regression: Abnahmetests von M1a und die schnellen von M1b (Filter m1a-|m1b-[1456]-|m1b-7-vignette$) mit der neuen setup-m1c.R: 96 Tests, alle grün, 51,8 s. Die Abnahmetests von M0 (git check-ignore) und M2 und die Skriptläufe von M1b liefen nicht. Proben, Attrappen und temporäre Kopien sind gelöscht."
+    },
+    {
+      "id": "ACC-17",
+      "status": "Hinweis, nicht blocking",
+      "ref": "docs/02, M1d: „M1d ändert `R/fit.R` und `R/boot.R` nur in der roxygen-Dokumentation.“; K-M1c-6: „ein muttest-Lauf über `R/fit.R` und `R/grr.R`“; orchestrator/config.env: MUT_SCOPE_REGEX='^R/(fit|grr)\\.R$'",
+      "kind": "Ort von msa_boot()",
+      "owner": "Builder, Betreiber",
+      "blocking_builder": false,
+      "note": "msa_boot() und print.msa_boot liegen heute in R/grr.R; eine Datei R/boot.R gibt es nicht. Zöge der Builder msa_boot() in M1c nach R/boot.R um, wie die Formulierung zu M1d nahelegt, fiele der Bootstrap aus dem Umfang von mutgate und mutfull (K-M1c-6). Empfehlung: msa_boot() in R/grr.R lassen; eine Verlegung nur mit Betreiberentscheidung über den Mutationsumfang. Die Abnahmetests hängen nicht vom Dateiort ab; der Bezug der Bytegleichheit (ANK-33) sind R/fit.R und R/grr.R in done/M1b."
+    }
+  ]
+}
