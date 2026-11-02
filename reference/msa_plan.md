@@ -6,7 +6,9 @@ or model levels the variance components of these factors are estimated
 with large uncertainty, and the fit is often singular. This function
 simulates studies of candidate sizes from assumed variance components,
 refits each one and summarises the distribution of the estimated %GRR
-(percent study variation) around its true value.
+(percent study variation) around its true value. A failed model fit
+stops the planning run and reports its diagnostic; failed simulations
+are not replaced or silently omitted.
 
 ## Usage
 
@@ -71,7 +73,7 @@ msa_plan(sc, vc = list(item = 1, prompt = 0.05, model = 0.05, residual = 0.1),
 #>       20         6        3      3        1 41.1 28.8   40.2  54.5  6.8
 #>       40         6        3      3        1 40.6 32.6   40.3  51.4  5.1
 #>  pct_singular pct_misclassified
-#>          85.0               5.0
+#>          90.0               5.0
 #>          80.0               0.0
 #>          85.0               5.0
 #>         100.0               0.0

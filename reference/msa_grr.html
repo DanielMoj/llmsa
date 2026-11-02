@@ -21,6 +21,10 @@ Measurement Systems Analysis manual:"></head><body>
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="nav-item"><a class="nav-link" href="../articles/llmsa.html">Get started</a></li>
 <li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/validation.html">Statistical validation of llmsa</a></li>
+  </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
@@ -59,7 +63,8 @@ a measurement-system analysis reports. The vocabulary follows the AIAG
 
 <dt id="arg-threshold">threshold<a class="anchor" aria-label="anchor" href="#arg-threshold"></a></dt>
 <dd><p>Length-two vector of thresholds (acceptable / marginal)
-on the chosen basis, in percent.</p></dd>
+on the chosen basis, in percent. Values must be numeric, finite,
+nonnegative and nondecreasing; <code>NULL</code> selects the defaults for <code>basis</code>.</p></dd>
 
 
 <dt id="arg-basis">basis<a class="anchor" aria-label="anchor" href="#arg-basis"></a></dt>
@@ -74,7 +79,8 @@ thresholds 10 and 30), <code>"contribution"</code> by percent contribution
 source), <code>summary</code> (named vector: <code>grr_pct_study_var</code>,
 <code>grr_pct_contribution</code>, <code>repeatability_pct_study_var</code>,
 <code>reproducibility_pct_study_var</code>, <code>ndc</code>, <code>icc_items</code>), <code>verdict</code>, the
-thresholds and the outcome type.</p>
+thresholds, the outcome type and <code>derived</code> (the sources named by
+<code>attr(fit$vc, "derived")</code>).</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -94,9 +100,17 @@ deviation / total standard deviation). The AIAG rule of thumb classifies
 a system by the percent study variation of total gauge R&amp;R: below 10 %
 acceptable, 10-30 % marginal (may be acceptable depending on the
 application, cost and risk), above 30 % unacceptable. The number of
-distinct categories (ndc) is <code>floor(1.41 * sd_items / sd_grr)</code>; a system
+distinct categories (ndc) is <code>max(1, floor(1.41 * sd_items / sd_grr))</code>; a system
 should resolve at least 5. Thresholds should be set from the model risk
 of the context of use, not taken as universal constants.</p>
+<p>If total variance is zero, percentages, ICC and ndc are <code>NA</code> and the
+verdict is <code>"undetermined"</code>. With positive item variance and zero gauge
+variance, ndc is <code>Inf</code>. With zero item variance and positive gauge
+variance, ndc is one. These conventions also apply to <code><a href="msa_boot.html">msa_boot()</a></code>.
+For latent outcomes these statistics use the link's fixed residual
+variance. Sources derived from two fixed ordinal levels are retained in
+<code>derived</code> and identified when printing; see <code><a href="msa_fit.html">msa_fit()</a></code> for their positive
+bias and the <code>two_level</code> study in <code><a href="../articles/validation.html">vignette("validation")</a></code>.</p>
     </div>
 
     <div class="section level2">
@@ -114,9 +128,9 @@ of the context of use, not taken as universal constants.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      block (time)     0.0010   0.0319 0.1 %          3.2 %      </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      prompt:model     0.0000   0.0046 0.0 %          0.5 %      </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      item:prompt      0.0001   0.0092 0.0 %          0.9 %      </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      item:model       0.0054   0.0731 0.5 %          7.3 %      </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Part-to-part (items) 0.9672   0.9834 95.8 %         97.9 %     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Total variation      1.0096   1.0048 100.0 %        100.0 %    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      item:model       0.0053   0.0731 0.5 %          7.3 %      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Part-to-part (items) 0.9672   0.9835 95.8 %         97.9 %     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Total variation      1.0097   1.0048 100.0 %        100.0 %    </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   total gauge R&amp;R: 20.5 % of study variation (4.2 % contribution)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   number of distinct categories (ndc): 6</span>
@@ -124,11 +138,11 @@ of the context of use, not taken as universal constants.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   verdict: MARGINAL  [basis: % study variation, thresholds 10 / 30]</span>
 <span class="r-in"><span><span class="va">g</span><span class="op">$</span><span class="va">summary</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>             grr_pct_study_var          grr_pct_contribution </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                    20.5120308                     4.2074341 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                    20.5115983                     4.2072567 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   repeatability_pct_study_var reproducibility_pct_study_var </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                    11.7799313                    16.7921597 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                    11.7795154                    16.7919231 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                           ndc                     icc_items </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                     6.0000000                     0.9579257 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                     6.0000000                     0.9579274 </span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

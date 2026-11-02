@@ -27,6 +27,10 @@ conditions)."></head><body>
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="nav-item"><a class="nav-link" href="../articles/llmsa.html">Get started</a></li>
 <li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/validation.html">Statistical validation of llmsa</a></li>
+  </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
@@ -78,9 +82,12 @@ conditions).</p>
 
 
 <dt id="arg-levels">levels<a class="anchor" aria-label="anchor" href="#arg-levels"></a></dt>
-<dd><p>For ordinal outcomes: the labels in scale order. For binary
-outcomes given as labels: a length-two vector whose second element is
-the event.</p></dd>
+<dd><p>For ordinal outcomes: at least two distinct, non-missing,
+non-empty labels in scale order. For binary outcomes: two such labels,
+whose second element is the event. When supplied, these labels determine
+the coding regardless of the response's storage type. Labels require
+this explicit argument; their order of occurrence or factor levels do
+not determine the event.</p></dd>
 
 
 <dt id="arg-interactions">interactions<a class="anchor" aria-label="anchor" href="#arg-interactions"></a></dt>
@@ -93,7 +100,16 @@ Default <code>TRUE</code> for numeric, <code>FALSE</code> otherwise.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
-<dd><p>Passed on to the model-fitting function.</p></dd>
+<dd><p>Passed on to the model-fitting function. For numeric outcomes,
+supplying any argument here selects a direct <code><a href="https://rdrr.io/pkg/lme4/man/lmer.html" class="external-link">lme4::lmer()</a></code> call on
+the original response, including when an argument is explicitly <code>NULL</code>.
+Expressions in <code>subset</code>, <code>weights</code> and <code>offset</code> can use the internal
+columns <code>item</code>, <code>prompt</code>, <code>model</code>, <code>block</code> and <code>y</code>. Row-based arguments
+refer to the rows remaining after missing or unreadable responses are
+removed. Other symbols in these expressions are looked up in the
+immediate caller of <code>msa_fit()</code>, as in a direct <code>lmer()</code> call; a wrapper
+forwarding <code>...</code> must make them available in that frame. Other arguments
+retain their original argument environments when forwarded.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -103,13 +119,16 @@ variance-component table <code>vc</code> (source, variance), the model <code>for
 the analysed <code>data</code>, counts <code>n</code>, the outcome <code>type</code>, and a <code>singular</code>
 flag (a variance estimated at zero, common with few prompt or model
 levels; the point estimate is still valid but its uncertainty is large,
-see <code><a href="msa_boot.html">msa_boot()</a></code> and <code><a href="msa_plan.html">msa_plan()</a></code>).</p>
+see <code><a href="msa_boot.html">msa_boot()</a></code> and <code><a href="msa_plan.html">msa_plan()</a></code>), plus numeric fitting diagnostics
+<code>numerics</code> (<code>NULL</code> for other outcome types), logical <code>converged</code>, and
+<code>derived</code> (sources estimated from two fixed levels, also in
+<code>attr(vc, "derived")</code>).</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
 
-<ul><li><p><code>type = "numeric"</code>: linear mixed model fitted by REML with
-<code><a href="https://rdrr.io/pkg/lme4/man/lmer.html" class="external-link">lme4::lmer()</a></code>.</p></li>
+<ul><li><p><code>type = "numeric"</code>: linear mixed model fitted by REML, returned as
+an <code><a href="https://rdrr.io/pkg/lme4/man/lmer.html" class="external-link">lme4::lmer()</a></code> model. See the numeric fitting details below.</p></li>
 <li><p><code>type = "ordinal"</code>: cumulative link mixed model with
 <code><a href="https://rdrr.io/pkg/ordinal/man/clmm.html" class="external-link">ordinal::clmm()</a></code>. Variance components live on the latent scale, where
 the residual variance is fixed (1 for the probit link, pi^2/3 for the
@@ -122,9 +141,110 @@ from the model automatically. For ordinal outcomes <code><a href="https://rdrr.i
 requires more than two levels per random-effect factor; a factor with
 exactly two levels (two models, two blocks) therefore enters as a fixed
 effect and its variance component is derived from the estimated
-difference <code>beta</code> by the range method (<code>beta^2 / 2</code>), which is how the
-AIAG X-bar/R procedure treats two appraisers. Ordinal outcomes need at
-least three items.</p>
+difference <code>beta</code> by the range method (<code>beta^2 / 2</code>). This substitute
+does not subtract the AIAG handbook correction <code>EV^2 / (n * r)</code>.
+It has positive bias: <code>E[beta-hat^2 / 2] = sigma^2 + Var(beta-hat) / 2</code>.
+Every such fit warns and both print methods identify the derived sources.
+The <code>two_level</code> simulation study and its table in
+<code><a href="../articles/validation.html">vignette("validation")</a></code> (<code>vignettes/validation.Rmd</code>) investigate that
+bias. Short runs establish reproducibility; quantitative findings require
+the full simulation runs. With fewer than three ordinal items the error is
+"At least three items are needed for ordinal outcomes."</p>
+<p>With no arguments in <code>...</code>, the numeric fit preserves the input doubles
+and conditions their differences before solving for variance ratios.
+Eligible balanced designs use a closed expected-mean-square solution.
+Unbalanced designs and multi-factor variance boundaries use an analytic
+profiled REML score and Hessian, initialized by <code>lmer</code>, with nonnegative
+variance constraints. A boundary solution re-estimates the remaining
+components. The resulting lme4 model retains the original response scale,
+row order and factor labels; <code>vc</code> is extracted from its <code>VarCorr()</code>.</p>
+<p>The <code>numerics</code> field records the method (<code>"closed_form"</code>,
+<code>"analytic_reml"</code> or <code>"lmer"</code>) and, for the default path, conditioning,
+initialization diagnostics, active zero constraints and convergence
+norms. Its <code>input_rows</code> maps the rows actually analysed by the model to
+the input, including exclusions by <code>subset</code> or <code>na.action</code>. The returned
+<code>data</code> and all counts in <code>n</code> describe those same rows. Initialization warnings are retained
+in <code>numerics$start$warnings</code> after successful analytic completion, and
+emitted if completion fails. Final-model convergence checks remain
+active. Explicit lme4 arguments retain lme4 warnings and errors.
+Initialization failures on the default path identify the fitting stage
+and retain the underlying engine's message.
+Numerical warnings or errors during original-scale model construction
+produce a named representability error.</p>
+<p>Default numeric models store ordinary <code>nloptwrap</code> refit control with no
+extra optimizer options. <code><a href="msa_boot.html">msa_boot()</a></code> and <code><a href="https://rdrr.io/pkg/lme4/man/refit.html" class="external-link">lme4::refit()</a></code> therefore use
+normal lme4 optimization; they do not repeat the initial analytic
+completion. The actual initial method is also recorded in the model's
+<code>optinfo$completion</code>.
+Both numeric paths store the fitting data and evaluated arguments in the
+model call so it remains usable outside the original caller's scope.
+Printing or deparsing that embedded lme4 call can therefore be lengthy;
+printing the <code>msa_fit</code> object gives the compact study summary.</p>
+<p>Constant numeric responses, non-finite values, non-identifiable
+components and a degenerate residual variance produce named errors.
+There is no absolute variance cutoff for small representable variation
+or tied scores. A positive residual variance does not guarantee a fit:
+with high repeatability, initialization, analytic completion or construction
+of the original-scale model can fail at working precision. Final convergence
+checks use the standard-deviation-ratio scale: a numerically singular Hessian
+warning can occur even for an identifiable balanced model with a closed-form
+solution. Numeric <code>NaN</code> and the string <code>"NaN"</code> are
+treated as missing responses, without a parsing warning. Missing numeric
+grouping values are rejected on both fitting paths. The default path
+rejects variances whose original-scale representation or model arithmetic
+loses working precision; conditioning cannot recover digits lost in the inputs.</p>
+<p>Ordinal and binary fits discard missing responses, and labels outside
+<code>levels</code>, with a warning giving the count. All returned data and study
+counts describe the retained observations. Missing grouping values are
+rejected. No remaining response, or a constant response category, produces
+a named error. Binary numeric values (including numeric strings without
+<code>levels</code>) must be finite and exactly zero or one; they are never rounded.
+Row selection, including missing weights or offsets handled by <code>na.action</code>,
+precedes the choice of random and two-level fixed effects. Ordinal offsets
+are retained in <code>data$.msa_offset</code> and included in the model formula.
+Counts in <code>n</code> describe data rows; with ordinal frequency weights,
+<code>stats::nobs(model)</code> follows <code>clmm</code> and reports the sum of those weights.
+Non-identifiable two-level fixed effects and ordinal random-effect terms
+with fewer than three observed levels produce named errors. Before either
+latent engine is called, random-effect variances must be separately
+identifiable after accounting for the fixed effects. Confounded grouping
+factors, including interactions, produce an error naming the affected terms.
+This check includes the fixed latent residual variance: a random term with
+one observation per level, or a confounded linear combination of terms,
+cannot be separated from that residual. If all retained weights are
+integers, they count as multiplicities, including binomial prior weights
+for zero/one responses. Otherwise each positive-weight row counts once
+in this check, including the fixed-effect rank check. Zero-weight rows
+contribute no information. The original weights are passed to the engine
+unchanged. Weights must be finite, non-negative numeric values with a
+finite positive sum. Sparse covariance cross-products avoid dense
+level-by-level projection blocks when checking large designs.
+Ordinal singularity describes random effects only, not the derived components.
+Ordinal and binary estimates are invariant to row order and factor labels
+only up to the optimization tolerance of the underlying engines.</p>
+<p><code>converged</code> records the final engine diagnosis, independently of
+<code>singular</code>. For <code>clmm</code>, success means code zero for <code>nlminb</code>, or code one
+or two for <code>ucminf</code>; the matrix fitting path uses <code>nlminb</code> even if
+<code>ucminf</code> was requested. For lme4 models, success requires optimizer code
+zero and no convergence message other than the singular-boundary note.
+Missing or unreadable codes do not confirm convergence. On both numeric
+paths the final model decides: initialization diagnostics do not, and a
+final Hessian or gradient diagnostic means <code>converged = FALSE</code> even after
+analytic completion. Numeric warning behavior remains that of lme4 and
+its final convergence check. Ordinal and binary non-convergence is warned,
+including a diagnosis stored by the engine without an emitted warning.
+A range-method warning alone does not indicate non-convergence.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="known-limitations">Known limitations<a class="anchor" aria-label="anchor" href="#known-limitations"></a></h2>
+
+
+<p>Zero-weight rows still contribute levels when selecting random versus
+two-level fixed effects. An ordinal fit can therefore reject a random
+factor with fewer than three levels among its positive-weight rows.
+Use <code>subset</code> to exclude those rows when that is the intended design.
+Numeric fits with explicit arguments in <code>...</code> use lme4's diagnostics;
+the default numeric path's identifiability check does not apply to them.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
@@ -140,9 +260,9 @@ statistics.</p></div>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   formula: y ~ 1 + (1 | item) + (1 | prompt) + (1 | model) + (1 | block) +     (1 | item:prompt) + (1 | item:model) + (1 | prompt:model)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   40 items x 3 prompts x 3 models x 2 block(s); 2152 observations; 2-3 valid replicates per cell</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        source variance     sd    pct</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    item:model   0.0054 0.0731  0.5 %</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    item:model   0.0053 0.0731  0.5 %</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   item:prompt   0.0001 0.0092  0.0 %</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>          item   0.9672 0.9834 95.8 %</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          item   0.9672 0.9835 95.8 %</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  prompt:model   0.0000 0.0046  0.0 %</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         model   0.0171 0.1309  1.7 %</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        prompt   0.0049 0.0697  0.5 %</span>
@@ -151,11 +271,12 @@ statistics.</p></div>
 <span class="r-in"><span><span class="co"># \donttest{</span></span></span>
 <span class="r-in"><span><span class="va">fit_ord</span> <span class="op">&lt;-</span> <span class="fu">msa_fit</span><span class="op">(</span><span class="va">acmg_demo</span>, type <span class="op">=</span> <span class="st">"ordinal"</span>,</span></span>
 <span class="r-in"><span>                   levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"B"</span>, <span class="st">"LB"</span>, <span class="st">"VUS"</span>, <span class="st">"LP"</span>, <span class="st">"P"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>12 missing response(s) were dropped.</span>
 <span class="r-in"><span><span class="va">fit_ord</span><span class="op">$</span><span class="va">vc</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     source   variance</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1     item 9.25608623</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2   prompt 0.03887272</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3    model 0.27811710</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1     item 9.25609132</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2   prompt 0.03887219</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3    model 0.27811382</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4 Residual 1.00000000</span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>

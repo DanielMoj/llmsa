@@ -76,7 +76,7 @@ verglichen, ndc und Verdikt müssen gleich sein.
 | ANK | Was | Kriterien | Vermutete Quelle und Fundstelle | Art | Status |
 |----|----|----|----|----|----|
 | ANK-21 | `wine`: σ²_judge aus `clmm2(rating ~ temp + contact, random = judge)` (Laplace und nAGQ = 10) | K-M1b-1 | Christensen-clmm2 (Vignette, Fassung 26.07.2026), PDF 2–3 | Literatur (frei) | vorhanden |
-| ANK-25 | `rptR::BeetlesMale`: Wiederholbarkeit Population auf Link- und Beobachtungsskala (Punktschätzer) | K-M1b-5 | rptR (Vignette, Fassung 29.04.2025), Abschnitt rptBinary; Stoffel2017 | Literatur (frei) | vorhanden |
+| ANK-25 | [`rptR::BeetlesMale`](https://rdrr.io/pkg/rptR/man/BeetlesMale.html): Wiederholbarkeit Population auf Link- und Beobachtungsskala (Punktschätzer) | K-M1b-5 | rptR (Vignette, Fassung 29.04.2025), Abschnitt rptBinary; Stoffel2017 | Literatur (frei) | vorhanden |
 | ANK-28 | Verteilungsvarianz der latenten Skala: 1 (Probit), π²/3 (Logit), π²/6 (cloglog) | 01 §5 | Nakagawa2010 Tab. 1 S. 942; Nakagawa2017 §7 S. 6–7 | Literatur | vorhanden |
 
 ## M1c — Bootstrap und Mutation

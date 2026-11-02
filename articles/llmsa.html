@@ -31,6 +31,12 @@
       <ul class="navbar-nav me-auto">
 <li class="active nav-item"><a class="nav-link" href="../articles/llmsa.html">Get started</a></li>
 <li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
+<li><a class="dropdown-item" href="../articles/validation.html">Statistical validation of llmsa</a></li>
+  </ul>
+</li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul>
 <ul class="navbar-nav">
@@ -177,18 +183,22 @@ counted as such; it does not silently disappear.</p>
 the variance components live on the latent (probit) scale.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/msa_fit.html">msa_fit</a></span><span class="op">(</span><span class="va">runs</span>, type <span class="op">=</span> <span class="st">"ordinal"</span>, levels <span class="op">=</span> <span class="va">tiers</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning: 16 missing response(s) were dropped.</span></span>
+<span><span class="co">#&gt; Warning: Two-level component(s) model, block use the range method</span></span>
+<span><span class="co">#&gt; (beta-hat^2/2), with positive bias: E[beta-hat^2/2] = sigma^2 +</span></span>
+<span><span class="co">#&gt; Var(beta-hat)/2; see ?msa_fit.</span></span>
 <span><span class="va">fit</span></span>
 <span><span class="co">#&gt; Variance components of an LLM measurement system (ordinal outcome, probit link, latent scale)</span></span>
 <span><span class="co">#&gt;   formula: y ~ 1 + model + block + (1 | item) + (1 | prompt)</span></span>
 <span><span class="co">#&gt;   24 items x 3 prompts x 2 models x 2 block(s); 848 observations; 2-3 valid replicates per cell</span></span>
 <span><span class="co">#&gt;    source variance     sd    pct</span></span>
-<span><span class="co">#&gt;      item  10.8200 3.2894 86.2 %</span></span>
+<span><span class="co">#&gt;      item  10.8201 3.2894 86.2 %</span></span>
 <span><span class="co">#&gt;    prompt   0.3957 0.6290  3.2 %</span></span>
 <span><span class="co">#&gt;     model   0.3351 0.5789  2.7 %</span></span>
 <span><span class="co">#&gt;     block   0.0002 0.0148  0.0 %</span></span>
 <span><span class="co">#&gt;  Residual   1.0000 1.0000  8.0 %</span></span>
-<span><span class="co">#&gt; note: model, block have only two levels and entered as fixed effect(s); the component is derived from the</span></span>
-<span><span class="co">#&gt;       estimated difference by the range method (beta^2 / 2), as in the AIAG X-bar/R procedure.</span></span>
+<span><span class="co">#&gt;   model: range method, see ?msa_fit</span></span>
+<span><span class="co">#&gt;   block: range method, see ?msa_fit</span></span>
 <span><span class="va">grr</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/msa_grr.html">msa_grr</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span>
 <span><span class="va">grr</span></span>
 <span><span class="co">#&gt; Gauge R&amp;R of an LLM measurement system</span></span>
@@ -200,13 +210,15 @@ the variance components live on the latent (probit) scale.</p>
 <span><span class="co">#&gt;      prompt           0.3957   0.6290 3.2 %          17.8 %     </span></span>
 <span><span class="co">#&gt;      model            0.3351   0.5789 2.7 %          16.3 %     </span></span>
 <span><span class="co">#&gt;      block (time)     0.0002   0.0148 0.0 %          0.4 %      </span></span>
-<span><span class="co">#&gt;  Part-to-part (items) 10.8200  3.2894 86.2 %         92.8 %     </span></span>
-<span><span class="co">#&gt;  Total variation      12.5510  3.5427 100.0 %        100.0 %    </span></span>
+<span><span class="co">#&gt;  Part-to-part (items) 10.8201  3.2894 86.2 %         92.8 %     </span></span>
+<span><span class="co">#&gt;  Total variation      12.5511  3.5428 100.0 %        100.0 %    </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;   total gauge R&amp;R: 37.1 % of study variation (13.8 % contribution)</span></span>
 <span><span class="co">#&gt;   number of distinct categories (ndc): 3</span></span>
 <span><span class="co">#&gt;   ICC (items): 0.862</span></span>
-<span><span class="co">#&gt;   verdict: UNACCEPTABLE  [basis: % study variation, thresholds 10 / 30]</span></span></code></pre></div>
+<span><span class="co">#&gt;   verdict: UNACCEPTABLE  [basis: % study variation, thresholds 10 / 30]</span></span>
+<span><span class="co">#&gt;   model: range method, see ?msa_fit</span></span>
+<span><span class="co">#&gt;   block: range method, see ?msa_fit</span></span></code></pre></div>
 <p>The table reads like any gauge R&amp;R report: how much of the
 variation the pipeline sees between items is its own noise (total gauge
 R&amp;R), split into replicate noise (repeatability) and the effect of
@@ -273,10 +285,10 @@ difficulty is addressed at the planning stage below.</p>
 <span><span class="fu"><a href="../reference/msa_boot.html">msa_boot</a></span><span class="op">(</span><span class="va">fit_num</span>, nsim <span class="op">=</span> <span class="fl">30</span>, seed <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Parametric bootstrap, 30 replicates, 95 % percentile intervals</span></span>
 <span><span class="co">#&gt;                      statistic estimate lower upper</span></span>
-<span><span class="co">#&gt;              grr_pct_study_var    41.24 35.20 53.54</span></span>
-<span><span class="co">#&gt;           grr_pct_contribution    17.01 12.40 28.67</span></span>
-<span><span class="co">#&gt;    repeatability_pct_study_var    36.85 31.49 45.80</span></span>
-<span><span class="co">#&gt;  reproducibility_pct_study_var    18.51  2.06 35.48</span></span>
+<span><span class="co">#&gt;              grr_pct_study_var    41.24 35.18 53.72</span></span>
+<span><span class="co">#&gt;           grr_pct_contribution    17.01 12.39 28.86</span></span>
+<span><span class="co">#&gt;    repeatability_pct_study_var    36.85 31.48 45.75</span></span>
+<span><span class="co">#&gt;  reproducibility_pct_study_var    18.51  2.39 35.56</span></span>
 <span><span class="co">#&gt;                            ndc     3.00  2.00  3.00</span></span>
 <span><span class="co">#&gt;                      icc_items     0.83  0.71  0.88</span></span></code></pre></div>
 </div>
@@ -385,7 +397,7 @@ variance components.</p>
 <span><span class="co">#&gt;       20         6        3      3        1 42.5 32.1   42.0  51.6  6.4</span></span>
 <span><span class="co">#&gt;       40         6        3      3        1 40.7 29.7   41.7  52.5  7.3</span></span>
 <span><span class="co">#&gt;  pct_singular pct_misclassified</span></span>
-<span><span class="co">#&gt;          90.0              10.0</span></span>
+<span><span class="co">#&gt;         100.0              10.0</span></span>
 <span><span class="co">#&gt;          90.0               0.0</span></span>
 <span><span class="co">#&gt;         100.0               0.0</span></span>
 <span><span class="co">#&gt;          90.0              10.0</span></span></code></pre></div>

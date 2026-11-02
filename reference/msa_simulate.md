@@ -61,8 +61,8 @@ msa_grr(msa_fit(r, type = "numeric"))
 #>      prompt:model     0.0000   0.0000 0.0 %          0.0 %      
 #>      item:prompt      0.0000   0.0000 0.0 %          0.0 %      
 #>      item:model       0.0000   0.0000 0.0 %          0.0 %      
-#>  Part-to-part (items) 0.8236   0.9075 89.0 %         94.3 %     
-#>  Total variation      0.9255   0.9621 100.0 %        100.0 %    
+#>  Part-to-part (items) 0.8235   0.9075 89.0 %         94.3 %     
+#>  Total variation      0.9255   0.9620 100.0 %        100.0 %    
 #> 
 #>   total gauge R&R: 33.2 % of study variation (11.0 % contribution)
 #>   number of distinct categories (ndc): 4

@@ -194,6 +194,16 @@ committen. `core.filemode` bleibt auf `/mnt/c` `false`.
 mit FATAL/Exit 2. Nach Sichtung die Datei gezielt entfernen und neu
 starten.
 
+STOP darf auch während einer Modellphase oder eines Gate-Laufs
+entstehen. Die Datei gilt nicht als Territoriumsverletzung, bleibt beim
+Rollback eines Versuchs liegen (`git clean -e orchestrator/STOP`) und
+wird nie committet. Der laufende Versuch wird nicht abgebrochen: Endet
+er regulär, wird die Phase committet und der Orchestrator hält danach;
+wird er verworfen (Abbruch, Transportfehler, Territoriumsverletzung),
+hält er vor dem nächsten Versuch. Sofort abbrechen: erst STOP anlegen,
+dann den Modellprozess beenden; der Versuch wird zurückgerollt, STOP
+bleibt liegen.
+
 ## Tunnel neu starten
 
 ``` bash

@@ -42,9 +42,9 @@ msa_grr(msa_fit(ic50_demo, type = "numeric"))
 #>      block (time)     0.0010   0.0319 0.1 %          3.2 %      
 #>      prompt:model     0.0000   0.0046 0.0 %          0.5 %      
 #>      item:prompt      0.0001   0.0092 0.0 %          0.9 %      
-#>      item:model       0.0054   0.0731 0.5 %          7.3 %      
-#>  Part-to-part (items) 0.9672   0.9834 95.8 %         97.9 %     
-#>  Total variation      1.0096   1.0048 100.0 %        100.0 %    
+#>      item:model       0.0053   0.0731 0.5 %          7.3 %      
+#>  Part-to-part (items) 0.9672   0.9835 95.8 %         97.9 %     
+#>  Total variation      1.0097   1.0048 100.0 %        100.0 %    
 #> 
 #>   total gauge R&R: 20.5 % of study variation (4.2 % contribution)
 #>   number of distinct categories (ndc): 6

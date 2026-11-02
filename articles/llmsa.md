@@ -133,18 +133,22 @@ variance components live on the latent (probit) scale.
 ``` r
 
 fit <- msa_fit(runs, type = "ordinal", levels = tiers)
+#> Warning: 16 missing response(s) were dropped.
+#> Warning: Two-level component(s) model, block use the range method
+#> (beta-hat^2/2), with positive bias: E[beta-hat^2/2] = sigma^2 +
+#> Var(beta-hat)/2; see ?msa_fit.
 fit
 #> Variance components of an LLM measurement system (ordinal outcome, probit link, latent scale)
 #>   formula: y ~ 1 + model + block + (1 | item) + (1 | prompt)
 #>   24 items x 3 prompts x 2 models x 2 block(s); 848 observations; 2-3 valid replicates per cell
 #>    source variance     sd    pct
-#>      item  10.8200 3.2894 86.2 %
+#>      item  10.8201 3.2894 86.2 %
 #>    prompt   0.3957 0.6290  3.2 %
 #>     model   0.3351 0.5789  2.7 %
 #>     block   0.0002 0.0148  0.0 %
 #>  Residual   1.0000 1.0000  8.0 %
-#> note: model, block have only two levels and entered as fixed effect(s); the component is derived from the
-#>       estimated difference by the range method (beta^2 / 2), as in the AIAG X-bar/R procedure.
+#>   model: range method, see ?msa_fit
+#>   block: range method, see ?msa_fit
 grr <- msa_grr(fit)
 grr
 #> Gauge R&R of an LLM measurement system
@@ -156,13 +160,15 @@ grr
 #>      prompt           0.3957   0.6290 3.2 %          17.8 %     
 #>      model            0.3351   0.5789 2.7 %          16.3 %     
 #>      block (time)     0.0002   0.0148 0.0 %          0.4 %      
-#>  Part-to-part (items) 10.8200  3.2894 86.2 %         92.8 %     
-#>  Total variation      12.5510  3.5427 100.0 %        100.0 %    
+#>  Part-to-part (items) 10.8201  3.2894 86.2 %         92.8 %     
+#>  Total variation      12.5511  3.5428 100.0 %        100.0 %    
 #> 
 #>   total gauge R&R: 37.1 % of study variation (13.8 % contribution)
 #>   number of distinct categories (ndc): 3
 #>   ICC (items): 0.862
 #>   verdict: UNACCEPTABLE  [basis: % study variation, thresholds 10 / 30]
+#>   model: range method, see ?msa_fit
+#>   block: range method, see ?msa_fit
 ```
 
 The table reads like any gauge R&R report: how much of the variation the
@@ -236,10 +242,10 @@ fit_num <- msa_fit(num, type = "numeric")
 msa_boot(fit_num, nsim = 30, seed = 1)
 #> Parametric bootstrap, 30 replicates, 95 % percentile intervals
 #>                      statistic estimate lower upper
-#>              grr_pct_study_var    41.24 35.20 53.54
-#>           grr_pct_contribution    17.01 12.40 28.67
-#>    repeatability_pct_study_var    36.85 31.49 45.80
-#>  reproducibility_pct_study_var    18.51  2.06 35.48
+#>              grr_pct_study_var    41.24 35.18 53.72
+#>           grr_pct_contribution    17.01 12.39 28.86
+#>    repeatability_pct_study_var    36.85 31.48 45.75
+#>  reproducibility_pct_study_var    18.51  2.39 35.56
 #>                            ndc     3.00  2.00  3.00
 #>                      icc_items     0.83  0.71  0.88
 ```
@@ -358,7 +364,7 @@ msa_plan(scenarios, vc = list(item = 1, prompt = 0.05, model = 0.05, residual = 
 #>       20         6        3      3        1 42.5 32.1   42.0  51.6  6.4
 #>       40         6        3      3        1 40.7 29.7   41.7  52.5  7.3
 #>  pct_singular pct_misclassified
-#>          90.0              10.0
+#>         100.0              10.0
 #>          90.0               0.0
 #>         100.0               0.0
 #>          90.0              10.0

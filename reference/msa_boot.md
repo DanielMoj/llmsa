@@ -37,7 +37,7 @@ msa_boot(fit, nsim = 200, level = 0.95, seed = NULL, ...)
 
   Passed to
   [`lme4::bootMer()`](https://rdrr.io/pkg/lme4/man/bootMer.html), e.g.
-  `parallel = "multicore"`.
+  `parallel = "snow"` with a caller-supplied cluster `cl`.
 
 ## Value
 
@@ -53,6 +53,13 @@ parametric bootstrap is not yet implemented; as a pragmatic alternative,
 score the categories numerically and fit `type = "numeric"`, or treat
 the top category as a binary outcome.
 
+Numeric default fits use ordinary lme4 REML refits with `nloptwrap` and
+its usual control settings; the analytical completion of the original
+fit is not repeated for each bootstrap sample. An explicit fitting
+control passed to
+[`msa_fit()`](https://danielmoj.github.io/llmsa/reference/msa_fit.md)
+remains the model's refit control.
+
 ## Examples
 
 ``` r
@@ -64,7 +71,7 @@ msa_boot(fit, nsim = 50, seed = 1)
 #>              grr_pct_study_var    20.51 13.82 32.02
 #>           grr_pct_contribution     4.21  1.91 10.25
 #>    repeatability_pct_study_var    11.78 10.17 15.78
-#>  reproducibility_pct_study_var    16.79  8.89 28.96
+#>  reproducibility_pct_study_var    16.79  8.89 28.95
 #>                            ndc     6.00  4.00 10.00
 #>                      icc_items     0.96  0.90  0.98
 # }
