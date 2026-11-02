@@ -90,6 +90,7 @@ knitr::kable(tab, align = "lrrrr",
 s <- grr$summary
 cat(sprintf("* Total gauge R&R: **%.1f %% of study variation** (%.1f %% contribution)\n", s[["grr_pct_study_var"]], s[["grr_pct_contribution"]]))
 cat(sprintf("* Repeatability %.1f %%, reproducibility %.1f %% of study variation\n", s[["repeatability_pct_study_var"]], s[["reproducibility_pct_study_var"]]))
+if (grr$type != "numeric") cat("* On the latent scale, Repeatability is the residual variance fixed by the link, not a measurement of disagreement between replicates; see the share of cells with identical replicates from `msa_agreement()`.\n")
 cat(sprintf("* Number of distinct categories (ndc): %s; ICC(items) = %.3f\n", if (is.finite(s[["ndc"]])) format(s[["ndc"]]) else "Inf", s[["icc_items"]]))
 cat(sprintf("* Classification: **%s** (basis %s, thresholds %g / %g)\n", toupper(grr$verdict),
             if (grr$basis == "study_var") "% study variation" else "% contribution", grr$threshold[1], grr$threshold[2]))

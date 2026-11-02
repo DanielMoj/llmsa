@@ -77,6 +77,8 @@
 #' and retain the underlying engine's message.
 #' Numerical warnings or errors during original-scale model construction
 #' produce a named representability error.
+#' Final `checkConv` warnings can precede that error when the model is not
+#' representable at working precision.
 #'
 #' Default numeric models store ordinary `nloptwrap` refit control with no
 #' extra optimizer options. [msa_boot()] and [lme4::refit()] therefore use
@@ -131,6 +133,13 @@
 #' Ordinal singularity describes random effects only, not the derived components.
 #' Ordinal and binary estimates are invariant to row order and factor labels
 #' only up to the optimization tolerance of the underlying engines.
+#'
+#' Without `control` in `...`, ordinal fits use
+#' `ordinal::clmm.control(iter.max = 2000, eval.max = 4000)`.
+#' An explicit `control` passed in `...` replaces both limits, including
+#' when it is an empty or partial list. Optimizer options given directly in
+#' `...`, such as `iter.max`, take precedence over the corresponding default
+#' limit, as in [ordinal::clmm()].
 #'
 #' `converged` records the final engine diagnosis, independently of
 #' `singular`. For `clmm`, success means code zero for `nlminb`, or code one
@@ -370,6 +379,9 @@ msa_fit <- function(runs, type = c("numeric", "ordinal", "binary"), levels = NUL
     dat <- droplevels(dat[analysed, , drop = FALSE])
     numerics <- list(method = "lmer")
   } else {
+    if (type == "ordinal" && !"control" %in% names(args)) {
+      args$control <- ordinal::clmm.control(iter.max = 2000, eval.max = 4000)
+    }
     model <- withCallingHandlers(switch(type,
       ordinal = do.call(ordinal::clmm, c(list(formula = form, data = dat, link = link), args)),
       binary = do.call(lme4::glmer, c(list(formula = form, data = dat, family = stats::binomial(link = link)), args))),

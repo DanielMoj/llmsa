@@ -1,7 +1,7 @@
 format: llmsa-class-b-v1
 study: ordinal_recovery
 n_sim: 20
-implementation: 477e84a5ad763c15cbcd4e12142b7ca02797fb96571f66ceb0b2a68368ae5c1e
+implementation: 203bc36478f5400b1db3ca42182e290451947f49a9e528d230c3ae0f574da3b8
 R_version: 4.6.1
 package_llmsa: 0.1.0
 package_lme4: 2.0.6
@@ -12,9 +12,9 @@ RNG: Mersenne-Twister; normal.kind=Inversion; sample.kind=Rejection
 seed_rule: 20261031 + j(scenario) + 8 * (rep - 1); permanent j=1..8 in specification order
 scenarios: S-ord-1,S-ord-2,S-ord-3,S-ord-4
 start_seeds: S-ord-1=20261032,S-ord-2=20261033,S-ord-3=20261034,S-ord-4=20261035
-command: Rscript ordinal_recovery.R '--n-sim' '20' '--out' '/tmp/llmsa-m1b-r5-VqXqW8/regenerated/ordinal_recovery'
+command: Rscript ordinal_recovery.R '--n-sim' '20' '--out' '/tmp/llmsa-m1c-build-_nxa5o1i/ordinal'
 workers: 14
-elapsed_seconds: 107.327000
+elapsed_seconds: 167.588000
 
 Per-repetition diagnostics (including every repetition seed):
 S-ord-1 rep=1 seed=20261032 error=[(none)] warnings=[(none)] messages=[(none)]
@@ -34,15 +34,15 @@ S-ord-1 rep=14 seed=20261136 error=[(none)] warnings=[(none)] messages=[(none)]
 S-ord-1 rep=15 seed=20261144 error=[(none)] warnings=[(none)] messages=[(none)]
 S-ord-1 rep=16 seed=20261152 error=[(none)] warnings=[(none)] messages=[(none)]
 S-ord-1 rep=17 seed=20261160 error=[(none)] warnings=[(none)] messages=[(none)]
-S-ord-1 rep=18 seed=20261168 error=[(none)] warnings=[Ordinal model did not converge: iteration limit reached without convergence (10)] messages=[(none)]
+S-ord-1 rep=18 seed=20261168 error=[(none)] warnings=[(none)] messages=[(none)]
 S-ord-1 rep=19 seed=20261176 error=[(none)] warnings=[(none)] messages=[(none)]
 S-ord-1 rep=20 seed=20261184 error=[(none)] warnings=[(none)] messages=[(none)]
-S-ord-2 rep=1 seed=20261033 error=[(none)] warnings=[Ordinal model did not converge: iteration limit reached without convergence (10)] messages=[(none)]
+S-ord-2 rep=1 seed=20261033 error=[(none)] warnings=[(none)] messages=[(none)]
 S-ord-2 rep=2 seed=20261041 error=[(none)] warnings=[(none)] messages=[(none)]
-S-ord-2 rep=3 seed=20261049 error=[(none)] warnings=[Ordinal model did not converge: iteration limit reached without convergence (10)] messages=[(none)]
+S-ord-2 rep=3 seed=20261049 error=[(none)] warnings=[(none)] messages=[(none)]
 S-ord-2 rep=4 seed=20261057 error=[(none)] warnings=[(none)] messages=[(none)]
 S-ord-2 rep=5 seed=20261065 error=[(none)] warnings=[(none)] messages=[(none)]
-S-ord-2 rep=6 seed=20261073 error=[(none)] warnings=[Ordinal model did not converge: iteration limit reached without convergence (10)] messages=[(none)]
+S-ord-2 rep=6 seed=20261073 error=[(none)] warnings=[(none)] messages=[(none)]
 S-ord-2 rep=7 seed=20261081 error=[(none)] warnings=[(none)] messages=[(none)]
 S-ord-2 rep=8 seed=20261089 error=[(none)] warnings=[(none)] messages=[(none)]
 S-ord-2 rep=9 seed=20261097 error=[(none)] warnings=[(none)] messages=[(none)]
@@ -51,12 +51,12 @@ S-ord-2 rep=11 seed=20261113 error=[(none)] warnings=[(none)] messages=[(none)]
 S-ord-2 rep=12 seed=20261121 error=[(none)] warnings=[(none)] messages=[(none)]
 S-ord-2 rep=13 seed=20261129 error=[(none)] warnings=[(none)] messages=[(none)]
 S-ord-2 rep=14 seed=20261137 error=[(none)] warnings=[(none)] messages=[(none)]
-S-ord-2 rep=15 seed=20261145 error=[(none)] warnings=[Ordinal model did not converge: iteration limit reached without convergence (10)] messages=[(none)]
+S-ord-2 rep=15 seed=20261145 error=[(none)] warnings=[(none)] messages=[(none)]
 S-ord-2 rep=16 seed=20261153 error=[(none)] warnings=[(none)] messages=[(none)]
 S-ord-2 rep=17 seed=20261161 error=[(none)] warnings=[(none)] messages=[(none)]
 S-ord-2 rep=18 seed=20261169 error=[(none)] warnings=[(none)] messages=[(none)]
 S-ord-2 rep=19 seed=20261177 error=[(none)] warnings=[(none)] messages=[(none)]
-S-ord-2 rep=20 seed=20261185 error=[(none)] warnings=[Ordinal model did not converge: iteration limit reached without convergence (10)] messages=[(none)]
+S-ord-2 rep=20 seed=20261185 error=[(none)] warnings=[(none)] messages=[(none)]
 S-ord-3 rep=1 seed=20261034 error=[(none)] warnings=[(none)] messages=[(none)]
 S-ord-3 rep=2 seed=20261042 error=[(none)] warnings=[(none)] messages=[(none)]
 S-ord-3 rep=3 seed=20261050 error=[(none)] warnings=[(none)] messages=[(none)]
@@ -65,7 +65,7 @@ S-ord-3 rep=5 seed=20261066 error=[(none)] warnings=[(none)] messages=[(none)]
 S-ord-3 rep=6 seed=20261074 error=[(none)] warnings=[(none)] messages=[(none)]
 S-ord-3 rep=7 seed=20261082 error=[(none)] warnings=[(none)] messages=[(none)]
 S-ord-3 rep=8 seed=20261090 error=[(none)] warnings=[(none)] messages=[(none)]
-S-ord-3 rep=9 seed=20261098 error=[(none)] warnings=[Ordinal model did not converge: iteration limit reached without convergence (10)] messages=[(none)]
+S-ord-3 rep=9 seed=20261098 error=[(none)] warnings=[(none)] messages=[(none)]
 S-ord-3 rep=10 seed=20261106 error=[(none)] warnings=[(none)] messages=[(none)]
 S-ord-3 rep=11 seed=20261114 error=[(none)] warnings=[(none)] messages=[(none)]
 S-ord-3 rep=12 seed=20261122 error=[(none)] warnings=[(none)] messages=[(none)]
@@ -74,28 +74,28 @@ S-ord-3 rep=14 seed=20261138 error=[(none)] warnings=[(none)] messages=[(none)]
 S-ord-3 rep=15 seed=20261146 error=[(none)] warnings=[(none)] messages=[(none)]
 S-ord-3 rep=16 seed=20261154 error=[(none)] warnings=[(none)] messages=[(none)]
 S-ord-3 rep=17 seed=20261162 error=[(none)] warnings=[(none)] messages=[(none)]
-S-ord-3 rep=18 seed=20261170 error=[(none)] warnings=[Ordinal model did not converge: iteration limit reached without convergence (10)] messages=[(none)]
+S-ord-3 rep=18 seed=20261170 error=[(none)] warnings=[(none)] messages=[(none)]
 S-ord-3 rep=19 seed=20261178 error=[(none)] warnings=[(none)] messages=[(none)]
 S-ord-3 rep=20 seed=20261186 error=[(none)] warnings=[(none)] messages=[(none)]
 S-ord-4 rep=1 seed=20261035 error=[(none)] warnings=[Two-level component(s) block use the range method (beta-hat^2/2), with positive bias: E[beta-hat^2/2] = sigma^2 + Var(beta-hat)/2; see ?msa_fit.] messages=[(none)]
 S-ord-4 rep=2 seed=20261043 error=[(none)] warnings=[Two-level component(s) block use the range method (beta-hat^2/2), with positive bias: E[beta-hat^2/2] = sigma^2 + Var(beta-hat)/2; see ?msa_fit.] messages=[(none)]
-S-ord-4 rep=3 seed=20261051 error=[(none)] warnings=[Ordinal model did not converge: iteration limit reached without convergence (10) | Two-level component(s) block use the range method (beta-hat^2/2), with positive bias: E[beta-hat^2/2] = sigma^2 + Var(beta-hat)/2; see ?msa_fit.] messages=[(none)]
+S-ord-4 rep=3 seed=20261051 error=[(none)] warnings=[Ordinal model did not converge: singular convergence (7) | Two-level component(s) block use the range method (beta-hat^2/2), with positive bias: E[beta-hat^2/2] = sigma^2 + Var(beta-hat)/2; see ?msa_fit.] messages=[(none)]
 S-ord-4 rep=4 seed=20261059 error=[(none)] warnings=[Two-level component(s) block use the range method (beta-hat^2/2), with positive bias: E[beta-hat^2/2] = sigma^2 + Var(beta-hat)/2; see ?msa_fit.] messages=[(none)]
 S-ord-4 rep=5 seed=20261067 error=[(none)] warnings=[Two-level component(s) block use the range method (beta-hat^2/2), with positive bias: E[beta-hat^2/2] = sigma^2 + Var(beta-hat)/2; see ?msa_fit.] messages=[(none)]
-S-ord-4 rep=6 seed=20261075 error=[(none)] warnings=[Ordinal model did not converge: iteration limit reached without convergence (10) | Two-level component(s) block use the range method (beta-hat^2/2), with positive bias: E[beta-hat^2/2] = sigma^2 + Var(beta-hat)/2; see ?msa_fit.] messages=[(none)]
+S-ord-4 rep=6 seed=20261075 error=[(none)] warnings=[Two-level component(s) block use the range method (beta-hat^2/2), with positive bias: E[beta-hat^2/2] = sigma^2 + Var(beta-hat)/2; see ?msa_fit.] messages=[(none)]
 S-ord-4 rep=7 seed=20261083 error=[(none)] warnings=[Ordinal model did not converge: singular convergence (7) | Two-level component(s) block use the range method (beta-hat^2/2), with positive bias: E[beta-hat^2/2] = sigma^2 + Var(beta-hat)/2; see ?msa_fit.] messages=[(none)]
-S-ord-4 rep=8 seed=20261091 error=[(none)] warnings=[Ordinal model did not converge: iteration limit reached without convergence (10) | Two-level component(s) block use the range method (beta-hat^2/2), with positive bias: E[beta-hat^2/2] = sigma^2 + Var(beta-hat)/2; see ?msa_fit.] messages=[(none)]
+S-ord-4 rep=8 seed=20261091 error=[(none)] warnings=[Two-level component(s) block use the range method (beta-hat^2/2), with positive bias: E[beta-hat^2/2] = sigma^2 + Var(beta-hat)/2; see ?msa_fit.] messages=[(none)]
 S-ord-4 rep=9 seed=20261099 error=[(none)] warnings=[Two-level component(s) block use the range method (beta-hat^2/2), with positive bias: E[beta-hat^2/2] = sigma^2 + Var(beta-hat)/2; see ?msa_fit.] messages=[(none)]
 S-ord-4 rep=10 seed=20261107 error=[(none)] warnings=[Two-level component(s) block use the range method (beta-hat^2/2), with positive bias: E[beta-hat^2/2] = sigma^2 + Var(beta-hat)/2; see ?msa_fit.] messages=[(none)]
-S-ord-4 rep=11 seed=20261115 error=[(none)] warnings=[Ordinal model did not converge: iteration limit reached without convergence (10) | Two-level component(s) block use the range method (beta-hat^2/2), with positive bias: E[beta-hat^2/2] = sigma^2 + Var(beta-hat)/2; see ?msa_fit.] messages=[(none)]
+S-ord-4 rep=11 seed=20261115 error=[(none)] warnings=[Two-level component(s) block use the range method (beta-hat^2/2), with positive bias: E[beta-hat^2/2] = sigma^2 + Var(beta-hat)/2; see ?msa_fit.] messages=[(none)]
 S-ord-4 rep=12 seed=20261123 error=[(none)] warnings=[Two-level component(s) block use the range method (beta-hat^2/2), with positive bias: E[beta-hat^2/2] = sigma^2 + Var(beta-hat)/2; see ?msa_fit.] messages=[(none)]
-S-ord-4 rep=13 seed=20261131 error=[(none)] warnings=[Ordinal model did not converge: iteration limit reached without convergence (10) | Two-level component(s) block use the range method (beta-hat^2/2), with positive bias: E[beta-hat^2/2] = sigma^2 + Var(beta-hat)/2; see ?msa_fit.] messages=[(none)]
-S-ord-4 rep=14 seed=20261139 error=[(none)] warnings=[Ordinal model did not converge: iteration limit reached without convergence (10) | Two-level component(s) block use the range method (beta-hat^2/2), with positive bias: E[beta-hat^2/2] = sigma^2 + Var(beta-hat)/2; see ?msa_fit.] messages=[(none)]
-S-ord-4 rep=15 seed=20261147 error=[(none)] warnings=[Ordinal model did not converge: iteration limit reached without convergence (10) | Two-level component(s) block use the range method (beta-hat^2/2), with positive bias: E[beta-hat^2/2] = sigma^2 + Var(beta-hat)/2; see ?msa_fit.] messages=[(none)]
-S-ord-4 rep=16 seed=20261155 error=[(none)] warnings=[Ordinal model did not converge: iteration limit reached without convergence (10) | Two-level component(s) block use the range method (beta-hat^2/2), with positive bias: E[beta-hat^2/2] = sigma^2 + Var(beta-hat)/2; see ?msa_fit.] messages=[(none)]
+S-ord-4 rep=13 seed=20261131 error=[(none)] warnings=[Two-level component(s) block use the range method (beta-hat^2/2), with positive bias: E[beta-hat^2/2] = sigma^2 + Var(beta-hat)/2; see ?msa_fit.] messages=[(none)]
+S-ord-4 rep=14 seed=20261139 error=[(none)] warnings=[Two-level component(s) block use the range method (beta-hat^2/2), with positive bias: E[beta-hat^2/2] = sigma^2 + Var(beta-hat)/2; see ?msa_fit.] messages=[(none)]
+S-ord-4 rep=15 seed=20261147 error=[(none)] warnings=[Two-level component(s) block use the range method (beta-hat^2/2), with positive bias: E[beta-hat^2/2] = sigma^2 + Var(beta-hat)/2; see ?msa_fit.] messages=[(none)]
+S-ord-4 rep=16 seed=20261155 error=[(none)] warnings=[Two-level component(s) block use the range method (beta-hat^2/2), with positive bias: E[beta-hat^2/2] = sigma^2 + Var(beta-hat)/2; see ?msa_fit.] messages=[(none)]
 S-ord-4 rep=17 seed=20261163 error=[(none)] warnings=[Two-level component(s) block use the range method (beta-hat^2/2), with positive bias: E[beta-hat^2/2] = sigma^2 + Var(beta-hat)/2; see ?msa_fit.] messages=[(none)]
 S-ord-4 rep=18 seed=20261171 error=[(none)] warnings=[Two-level component(s) block use the range method (beta-hat^2/2), with positive bias: E[beta-hat^2/2] = sigma^2 + Var(beta-hat)/2; see ?msa_fit.] messages=[(none)]
-S-ord-4 rep=19 seed=20261179 error=[(none)] warnings=[Ordinal model did not converge: iteration limit reached without convergence (10) | Two-level component(s) block use the range method (beta-hat^2/2), with positive bias: E[beta-hat^2/2] = sigma^2 + Var(beta-hat)/2; see ?msa_fit.] messages=[(none)]
+S-ord-4 rep=19 seed=20261179 error=[(none)] warnings=[Two-level component(s) block use the range method (beta-hat^2/2), with positive bias: E[beta-hat^2/2] = sigma^2 + Var(beta-hat)/2; see ?msa_fit.] messages=[(none)]
 S-ord-4 rep=20 seed=20261187 error=[(none)] warnings=[Two-level component(s) block use the range method (beta-hat^2/2), with positive bias: E[beta-hat^2/2] = sigma^2 + Var(beta-hat)/2; see ?msa_fit.] messages=[(none)]
 
 R version 4.6.1 (2026-06-24)

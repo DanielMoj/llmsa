@@ -145,16 +145,21 @@ test_that("bootstrap print retains intervals, confidence level and failure count
   attr(b, "boot") <- matrix(0, 4, 2)
   attr(b, "level") <- 0.8
   attr(b, "n_failed") <- 0L
+  attr(b, "n_singular") <- 0L
   class(b) <- c("msa_boot", "data.frame")
   expected <- c("Parametric bootstrap, 4 replicates, 80 % percentile intervals",
     "         statistic estimate lower upper", " grr_pct_study_var    33.33 25.00 50.00",
     "         icc_items     0.67  0.50  0.75")
   output <- capture.output(returned <- withVisible(print(b)))
-  expect_identical(output, expected)
+  expect_identical(output, c(expected,
+    "  0 failed or non-finite replicates (non-finite values dropped)",
+    "  0 singular replicates retained in the intervals"))
   expect_identical(returned, list(value = b, visible = FALSE))
   for (failed in c(1L, 2L)) {
     attr(b, "n_failed") <- failed
+    attr(b, "n_singular") <- 4L - failed
     expect_identical(capture.output(print(b)), c(expected,
-      sprintf("  (%d replicate fits failed or were singular and were dropped)", failed)))
+      sprintf("  %d failed or non-finite replicates (non-finite values dropped)", failed),
+      sprintf("  %d singular replicates retained in the intervals", 4L - failed)))
   }
 })

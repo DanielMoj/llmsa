@@ -232,3 +232,53 @@ for (study in names(latent_results)) {
   }
 }
 ```
+
+## Bootstrap intervals: coverage by scenario
+
+```{r coverage-setup, include=FALSE}
+coverage_validation <- new.env(parent = globalenv())
+sys.source(system.file("validation", "sim", "boot_coverage_results.R",
+                       package = "llmsa", mustWork = TRUE), envir = coverage_validation)
+coverage_results <- coverage_validation$boot_read_results()
+```
+
+This section reads **`r basename(coverage_results$path)`**
+(**`r coverage_results$mode`** run), with
+**n_sim = `r coverage_results$n_sim`** repetitions per scenario. The installed
+`boot_coverage_results.csv` takes precedence over
+`boot_coverage_check_results.csv`. An invalid existing full result stops the
+build. Knitting reads the results and starts neither simulations nor downloads.
+
+The study evaluates the existing 95% percentile intervals from `msa_boot()`
+for gauge R&R study variation and contribution, ndc and item ICC. Every outer
+repetition generates a new crossed study and uses the package's default number
+of parametric bootstrap refits. Numeric scenarios include all three pairwise
+interactions; the binary logit scenario uses item, prompt and model effects.
+The installed `validation/sim/README.md` specifies the designs, seeds,
+Monte Carlo standard errors (MCSE), diagnostics and reproduction commands.
+
+Coverage is the fraction of finite closed intervals containing the true value;
+width is their mean width. Their `n_finite` and `n_failed` count available and
+unavailable outer repetitions. For bootstrap diagnostics, the unit of analysis
+is also the outer repetition: each contributes its fraction of singular or
+failed refits, and MCSE is the standard error of the mean of those fractions.
+Singular refits with finite statistics remain in the intervals. Only
+non-finite values are omitted, separately for each statistic. The diagnostics
+count a replicate with any non-finite statistic as failed and do not also
+count it as singular.
+
+Short runs establish reproducibility and file structure. They do not establish
+nominal coverage. Full runs require at least
+`r coverage_results$n_min` repetitions per scenario
+(ANK-06) and follow code acceptance. Undercoverage or overcoverage in those
+runs is a finding to report, with MCSE, rather than a reason to alter intervals.
+
+```{r coverage-tables, echo=FALSE, results='asis'}
+for (scenario in unique(coverage_results$data$scenario)) {
+  cat("\n### ", scenario, "\n\n", sep = "")
+  rows <- coverage_results$data[coverage_results$data$scenario == scenario, , drop = FALSE]
+  names(rows)[names(rows) == "mcse"] <- "MCSE"
+  print(knitr::kable(coverage_validation$latent_display(rows), row.names = FALSE))
+  cat("\n\n")
+}
+```

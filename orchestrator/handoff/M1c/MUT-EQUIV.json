@@ -1,0 +1,194 @@
+{
+  "claims": [
+    {
+      "file": "R/fit.R",
+      "mutator": "TRUE → FALSE",
+      "line": 323,
+      "column": 47,
+      "code": "      columns <- strsplit(group, \":\", fixed = TRUE)[[1L]]",
+      "replacement": "FALSE",
+      "source_sha256": "e65c6b8119cae7ca4999ac83f76b7cacfd3d7646ce20c2a27ea85d22ee5af706",
+      "reason": "Der Suchtext für strsplit ist allein der Doppelpunkt. Er ist auch im regulären Ausdruck ein Literal. fixed = TRUE und FALSE zerlegen dieselben internen Gruppennamen in derselben Reihenfolge. Aktueller Beleg: 76 Prüfungen; maximale absolute Abweichung 0. Gebunden mit muttest::muttest_plan über die neun Mutatorfamilien des Adapters an den endgültigen Quelltext, Zeile, Spalte und Ersetzung. Befehle und echter Output in PROGRESS.md und REVIEW-INPUT.md; Proben unter /tmp/llmsa-m1c-build-_nxa5o1i/equivalence-proofs.R. Neuer Builder-Antrag, keine Übernahme einer Freigabe und keine eigene Approval."
+    },
+    {
+      "file": "R/fit.R",
+      "mutator": "FALSE → TRUE",
+      "line": 324,
+      "column": 64,
+      "code": "      if (nlevels(interaction(dat[weights > 0, columns, drop = FALSE], drop = TRUE)) <= 2L) {",
+      "replacement": "TRUE",
+      "source_sha256": "e65c6b8119cae7ca4999ac83f76b7cacfd3d7646ce20c2a27ea85d22ee5af706",
+      "reason": "Bei einer ausgewählten Spalte liefert drop = TRUE einen Faktor statt eines einspaltigen Datenrahmens. interaction entpackt den Datenrahmen ohnehin; sein unverändertes drop = TRUE entfernt dieselben unbenutzten Stufen. Bei zwei Spalten hat die Änderung keine Wirkung. Die positiv gewichteten Zeilen sind dieselben. Aktueller Beleg: 76 Prüfungen; maximale absolute Abweichung 0. Gebunden mit muttest::muttest_plan über die neun Mutatorfamilien des Adapters an den endgültigen Quelltext, Zeile, Spalte und Ersetzung. Befehle und echter Output in PROGRESS.md und REVIEW-INPUT.md; Proben unter /tmp/llmsa-m1c-build-_nxa5o1i/equivalence-proofs.R. Neuer Builder-Antrag, keine Übernahme einer Freigabe und keine eigene Approval."
+    },
+    {
+      "file": "R/fit.R",
+      "mutator": "<n> + 1 → <n> + 1",
+      "line": 338,
+      "column": 46,
+      "code": "    if (!length(fixed_two)) design <- matrix(1, nrow(dat), 1L)",
+      "replacement": "2",
+      "source_sha256": "e65c6b8119cae7ca4999ac83f76b7cacfd3d7646ce20c2a27ea85d22ee5af706",
+      "reason": "Ohne feste Zwei-Stufen-Terme besteht design aus der Interzeptspalte. Die Skalierung 1 auf 2 ändert weder ihren Spaltenraum noch Rang oder Spaltenzahl. Die QR-Basis der gewichteten Spalte bleibt bei der Skalierung um eine Zweierpotenz gleich; die Identifizierbarkeitsentscheidung bleibt erhalten. Aktueller Beleg: 76 Prüfungen; maximale absolute Abweichung 0. Gebunden mit muttest::muttest_plan über die neun Mutatorfamilien des Adapters an den endgültigen Quelltext, Zeile, Spalte und Ersetzung. Befehle und echter Output in PROGRESS.md und REVIEW-INPUT.md; Proben unter /tmp/llmsa-m1c-build-_nxa5o1i/equivalence-proofs.R. Neuer Builder-Antrag, keine Übernahme einer Freigabe und keine eigene Approval."
+    },
+    {
+      "file": "R/fit.R",
+      "mutator": "+ → -",
+      "line": 427,
+      "column": 37,
+      "code": "  cell <- stats::aggregate(y ~ item + prompt + model + block, data = dat, FUN = length)",
+      "replacement": "-",
+      "source_sha256": "e65c6b8119cae7ca4999ac83f76b7cacfd3d7646ce20c2a27ea85d22ee5af706",
+      "reason": "stats::aggregate.formula bildet model.frame aus allen in der Formel genannten Variablen und gruppiert nach dessen rechten Spalten. Die drei einzeln beantragten Plus-zu-Minus-Mutanten ändern weder Variablenmenge noch Reihenfolge. Der Gate-Schlüssel trifft drei Mutanten; alle drei Spalten sind einzeln gebunden und gegen balancierte, unbalancierte und Vier-Faktor-Fits geprüft. Aktueller Beleg: 7 Prüfungen; maximale absolute Abweichung 0. Gebunden mit muttest::muttest_plan über die neun Mutatorfamilien des Adapters an den endgültigen Quelltext, Zeile, Spalte und Ersetzung. Befehle und echter Output in PROGRESS.md und REVIEW-INPUT.md; Proben unter /tmp/llmsa-m1c-build-_nxa5o1i/equivalence-proofs.R. Neuer Builder-Antrag, keine Übernahme einer Freigabe und keine eigene Approval."
+    },
+    {
+      "file": "R/fit.R",
+      "mutator": "+ → -",
+      "line": 427,
+      "column": 46,
+      "code": "  cell <- stats::aggregate(y ~ item + prompt + model + block, data = dat, FUN = length)",
+      "replacement": "-",
+      "source_sha256": "e65c6b8119cae7ca4999ac83f76b7cacfd3d7646ce20c2a27ea85d22ee5af706",
+      "reason": "stats::aggregate.formula bildet model.frame aus allen in der Formel genannten Variablen und gruppiert nach dessen rechten Spalten. Die drei einzeln beantragten Plus-zu-Minus-Mutanten ändern weder Variablenmenge noch Reihenfolge. Der Gate-Schlüssel trifft drei Mutanten; alle drei Spalten sind einzeln gebunden und gegen balancierte, unbalancierte und Vier-Faktor-Fits geprüft. Aktueller Beleg: 7 Prüfungen; maximale absolute Abweichung 0. Gebunden mit muttest::muttest_plan über die neun Mutatorfamilien des Adapters an den endgültigen Quelltext, Zeile, Spalte und Ersetzung. Befehle und echter Output in PROGRESS.md und REVIEW-INPUT.md; Proben unter /tmp/llmsa-m1c-build-_nxa5o1i/equivalence-proofs.R. Neuer Builder-Antrag, keine Übernahme einer Freigabe und keine eigene Approval."
+    },
+    {
+      "file": "R/fit.R",
+      "mutator": "+ → -",
+      "line": 427,
+      "column": 54,
+      "code": "  cell <- stats::aggregate(y ~ item + prompt + model + block, data = dat, FUN = length)",
+      "replacement": "-",
+      "source_sha256": "e65c6b8119cae7ca4999ac83f76b7cacfd3d7646ce20c2a27ea85d22ee5af706",
+      "reason": "stats::aggregate.formula bildet model.frame aus allen in der Formel genannten Variablen und gruppiert nach dessen rechten Spalten. Die drei einzeln beantragten Plus-zu-Minus-Mutanten ändern weder Variablenmenge noch Reihenfolge. Der Gate-Schlüssel trifft drei Mutanten; alle drei Spalten sind einzeln gebunden und gegen balancierte, unbalancierte und Vier-Faktor-Fits geprüft. Aktueller Beleg: 7 Prüfungen; maximale absolute Abweichung 0. Gebunden mit muttest::muttest_plan über die neun Mutatorfamilien des Adapters an den endgültigen Quelltext, Zeile, Spalte und Ersetzung. Befehle und echter Output in PROGRESS.md und REVIEW-INPUT.md; Proben unter /tmp/llmsa-m1c-build-_nxa5o1i/equivalence-proofs.R. Neuer Builder-Antrag, keine Übernahme einer Freigabe und keine eigene Approval."
+    },
+    {
+      "file": "R/fit.R",
+      "mutator": "TRUE → FALSE",
+      "line": 452,
+      "column": 45,
+      "code": "  Z <- lapply(strsplit(groups, \":\", fixed = TRUE), function(columns) {",
+      "replacement": "FALSE",
+      "source_sha256": "e65c6b8119cae7ca4999ac83f76b7cacfd3d7646ce20c2a27ea85d22ee5af706",
+      "reason": "Der Doppelpunkt ist sowohl bei fester als auch bei regulärer Suche ein Literal. Die Gruppenzerlegung und damit alle Indikatormatrizen bleiben gleich. Aktueller Beleg: 48 Prüfungen; maximale absolute Abweichung 0. Gebunden mit muttest::muttest_plan über die neun Mutatorfamilien des Adapters an den endgültigen Quelltext, Zeile, Spalte und Ersetzung. Befehle und echter Output in PROGRESS.md und REVIEW-INPUT.md; Proben unter /tmp/llmsa-m1c-build-_nxa5o1i/equivalence-proofs.R. Neuer Builder-Antrag, keine Übernahme einer Freigabe und keine eigene Approval."
+    },
+    {
+      "file": "R/fit.R",
+      "mutator": "<n> + 1 → <n> + 1",
+      "line": 460,
+      "column": 18,
+      "code": "  gram <- matrix(0, k + residual, k + residual)",
+      "replacement": "1",
+      "source_sha256": "e65c6b8119cae7ca4999ac83f76b7cacfd3d7646ce20c2a27ea85d22ee5af706",
+      "reason": "Die symmetrische Doppelschleife überschreibt jede der k mal k Zellen vor dem ersten Lesen. Mit residual = TRUE werden anschließend beide Restränder und die Restdiagonale gesetzt. Die späteren Nullsetzungen sind unverändert. Die Anfangswerte 1 beziehungsweise -1 sind unbeobachtbar. Aktueller Beleg: 48 Prüfungen; maximale absolute Abweichung 0. Gebunden mit muttest::muttest_plan über die neun Mutatorfamilien des Adapters an den endgültigen Quelltext, Zeile, Spalte und Ersetzung. Befehle und echter Output in PROGRESS.md und REVIEW-INPUT.md; Proben unter /tmp/llmsa-m1c-build-_nxa5o1i/equivalence-proofs.R. Neuer Builder-Antrag, keine Übernahme einer Freigabe und keine eigene Approval."
+    },
+    {
+      "file": "R/fit.R",
+      "mutator": "<n> - 1 → <n> - 1",
+      "line": 460,
+      "column": 18,
+      "code": "  gram <- matrix(0, k + residual, k + residual)",
+      "replacement": "-1",
+      "source_sha256": "e65c6b8119cae7ca4999ac83f76b7cacfd3d7646ce20c2a27ea85d22ee5af706",
+      "reason": "Die symmetrische Doppelschleife überschreibt jede der k mal k Zellen vor dem ersten Lesen. Mit residual = TRUE werden anschließend beide Restränder und die Restdiagonale gesetzt. Die späteren Nullsetzungen sind unverändert. Die Anfangswerte 1 beziehungsweise -1 sind unbeobachtbar. Aktueller Beleg: 48 Prüfungen; maximale absolute Abweichung 0. Gebunden mit muttest::muttest_plan über die neun Mutatorfamilien des Adapters an den endgültigen Quelltext, Zeile, Spalte und Ersetzung. Befehle und echter Output in PROGRESS.md und REVIEW-INPUT.md; Proben unter /tmp/llmsa-m1c-build-_nxa5o1i/equivalence-proofs.R. Neuer Builder-Antrag, keine Übernahme einer Freigabe und keine eigene Approval."
+    },
+    {
+      "file": "R/fit.R",
+      "mutator": "<n> + 1 → <n> + 1",
+      "line": 535,
+      "column": 61,
+      "code": "  if (length(counts) != prod(sizes) || any(counts != counts[1])) {",
+      "replacement": "2",
+      "source_sha256": "e65c6b8119cae7ca4999ac83f76b7cacfd3d7646ce20c2a27ea85d22ee5af706",
+      "reason": "Die rechte Seite des || wird nur bei length(counts) == prod(sizes) ausgewertet. Im erreichbaren Fit-Pfad hat jeder numerische Zufallsterm mindestens zwei Stufen; counts hat dann mindestens zwei Elemente. Beide Prädikate prüfen genau, ob nicht alle positiven Zellzahlen gleich sind. Zusätzlich zu sieben vollständigen Fits wurden alle 9837 Vektoren der Längen 2 bis 8 mit Einträgen 1 bis 3 enumeriert. Aktueller Beleg: 9844 Prüfungen; maximale absolute Abweichung 0. Gebunden mit muttest::muttest_plan über die neun Mutatorfamilien des Adapters an den endgültigen Quelltext, Zeile, Spalte und Ersetzung. Befehle und echter Output in PROGRESS.md und REVIEW-INPUT.md; Proben unter /tmp/llmsa-m1c-build-_nxa5o1i/equivalence-proofs.R. Neuer Builder-Antrag, keine Übernahme einer Freigabe und keine eigene Approval."
+    },
+    {
+      "file": "R/fit.R",
+      "mutator": "x[<i>] → x[<i> + 1L]",
+      "line": 535,
+      "column": 61,
+      "code": "  if (length(counts) != prod(sizes) || any(counts != counts[1])) {",
+      "replacement": "1 + 1L",
+      "source_sha256": "e65c6b8119cae7ca4999ac83f76b7cacfd3d7646ce20c2a27ea85d22ee5af706",
+      "reason": "Die rechte Seite des || wird nur bei length(counts) == prod(sizes) ausgewertet. Im erreichbaren Fit-Pfad hat jeder numerische Zufallsterm mindestens zwei Stufen; counts hat dann mindestens zwei Elemente. Beide Prädikate prüfen genau, ob nicht alle positiven Zellzahlen gleich sind. Zusätzlich zu sieben vollständigen Fits wurden alle 9837 Vektoren der Längen 2 bis 8 mit Einträgen 1 bis 3 enumeriert. Aktueller Beleg: 9844 Prüfungen; maximale absolute Abweichung 0. Gebunden mit muttest::muttest_plan über die neun Mutatorfamilien des Adapters an den endgültigen Quelltext, Zeile, Spalte und Ersetzung. Befehle und echter Output in PROGRESS.md und REVIEW-INPUT.md; Proben unter /tmp/llmsa-m1c-build-_nxa5o1i/equivalence-proofs.R. Neuer Builder-Antrag, keine Übernahme einer Freigabe und keine eigene Approval."
+    },
+    {
+      "file": "R/fit.R",
+      "mutator": "<n> + 1 → <n> + 1",
+      "line": 620,
+      "column": 33,
+      "code": "    gram <- curvature <- matrix(0, k, k)",
+      "replacement": "1",
+      "source_sha256": "e65c6b8119cae7ca4999ac83f76b7cacfd3d7646ce20c2a27ea85d22ee5af706",
+      "reason": "Die Schleifen schreiben jede symmetrische Zelle von gram und curvature, bevor die jeweilige Zelle gelesen wird. Insbesondere liest die Krümmungsformel gram erst nach dessen Zuweisung. Eine andere gemeinsame Initialisierung bleibt unbeobachtbar; 27 REML-Zustände einschließlich Nullgrenzen sind exakt gleich. Aktueller Beleg: 27 Prüfungen; maximale absolute Abweichung 0. Gebunden mit muttest::muttest_plan über die neun Mutatorfamilien des Adapters an den endgültigen Quelltext, Zeile, Spalte und Ersetzung. Befehle und echter Output in PROGRESS.md und REVIEW-INPUT.md; Proben unter /tmp/llmsa-m1c-build-_nxa5o1i/equivalence-proofs.R. Neuer Builder-Antrag, keine Übernahme einer Freigabe und keine eigene Approval."
+    },
+    {
+      "file": "R/fit.R",
+      "mutator": "<n> - 1 → <n> - 1",
+      "line": 620,
+      "column": 33,
+      "code": "    gram <- curvature <- matrix(0, k, k)",
+      "replacement": "-1",
+      "source_sha256": "e65c6b8119cae7ca4999ac83f76b7cacfd3d7646ce20c2a27ea85d22ee5af706",
+      "reason": "Die Schleifen schreiben jede symmetrische Zelle von gram und curvature, bevor die jeweilige Zelle gelesen wird. Insbesondere liest die Krümmungsformel gram erst nach dessen Zuweisung. Eine andere gemeinsame Initialisierung bleibt unbeobachtbar; 27 REML-Zustände einschließlich Nullgrenzen sind exakt gleich. Aktueller Beleg: 27 Prüfungen; maximale absolute Abweichung 0. Gebunden mit muttest::muttest_plan über die neun Mutatorfamilien des Adapters an den endgültigen Quelltext, Zeile, Spalte und Ersetzung. Befehle und echter Output in PROGRESS.md und REVIEW-INPUT.md; Proben unter /tmp/llmsa-m1c-build-_nxa5o1i/equivalence-proofs.R. Neuer Builder-Antrag, keine Übernahme einer Freigabe und keine eigene Approval."
+    },
+    {
+      "file": "R/fit.R",
+      "mutator": "TRUE → FALSE",
+      "line": 721,
+      "column": 52,
+      "code": "  lf <- lme4::lFormula(form, data = scaled, REML = TRUE, control = control)",
+      "replacement": "FALSE",
+      "source_sha256": "e65c6b8119cae7ca4999ac83f76b7cacfd3d7646ce20c2a27ea85d22ee5af706",
+      "reason": "Von diesem lFormula-Aufruf verwendet msa_numeric_fit ausschließlich reTrms$cnms, reTrms$Gp und reTrms$Zt. Diese Designmatrizen hängen nicht von REML ab. Der analytische REML-Kern sowie der Start- und Abschlussfit behalten ihre eigenen unveränderten REML-Vorgaben. Aktueller Beleg: 7 Prüfungen; maximale absolute Abweichung 0. Gebunden mit muttest::muttest_plan über die neun Mutatorfamilien des Adapters an den endgültigen Quelltext, Zeile, Spalte und Ersetzung. Befehle und echter Output in PROGRESS.md und REVIEW-INPUT.md; Proben unter /tmp/llmsa-m1c-build-_nxa5o1i/equivalence-proofs.R. Neuer Builder-Antrag, keine Übernahme einer Freigabe und keine eigene Approval."
+    },
+    {
+      "file": "R/fit.R",
+      "mutator": "TRUE → FALSE",
+      "line": 723,
+      "column": 41,
+      "code": "  terms <- strsplit(names, \":\", fixed = TRUE)",
+      "replacement": "FALSE",
+      "source_sha256": "e65c6b8119cae7ca4999ac83f76b7cacfd3d7646ce20c2a27ea85d22ee5af706",
+      "reason": "Der unveränderte Suchtext ist allein der Doppelpunkt; auch als regulärer Ausdruck ist er ein Literal. Die von lFormula gelieferten Gruppennamen werden identisch zerlegt. Aktueller Beleg: 7 Prüfungen; maximale absolute Abweichung 0. Gebunden mit muttest::muttest_plan über die neun Mutatorfamilien des Adapters an den endgültigen Quelltext, Zeile, Spalte und Ersetzung. Befehle und echter Output in PROGRESS.md und REVIEW-INPUT.md; Proben unter /tmp/llmsa-m1c-build-_nxa5o1i/equivalence-proofs.R. Neuer Builder-Antrag, keine Übernahme einer Freigabe und keine eigene Approval."
+    },
+    {
+      "file": "R/fit.R",
+      "mutator": "TRUE → FALSE",
+      "line": 729,
+      "column": 86,
+      "code": "  on.exit(if (!completed) for (w in start$warnings) warning(w, call. = FALSE), add = TRUE)",
+      "replacement": "FALSE",
+      "source_sha256": "e65c6b8119cae7ca4999ac83f76b7cacfd3d7646ce20c2a27ea85d22ee5af706",
+      "reason": "msa_numeric_fit enthält genau einen on.exit-Aufruf, durch die Syntaxprüfung am tatsächlichen Mutanten bestätigt. Vor ihm ist kein Exit-Handler derselben Funktion registriert. add = FALSE und add = TRUE registrieren deshalb denselben Handler. Sieben vollständige Fit-/Fehlerfälle behalten Werte, Warnungen und Meldungen. Aktueller Beleg: 7 Prüfungen; maximale absolute Abweichung 0. Gebunden mit muttest::muttest_plan über die neun Mutatorfamilien des Adapters an den endgültigen Quelltext, Zeile, Spalte und Ersetzung. Befehle und echter Output in PROGRESS.md und REVIEW-INPUT.md; Proben unter /tmp/llmsa-m1c-build-_nxa5o1i/equivalence-proofs.R. Neuer Builder-Antrag, keine Übernahme einer Freigabe und keine eigene Approval."
+    },
+    {
+      "file": "R/grr.R",
+      "mutator": "> → >=",
+      "line": 102,
+      "column": 52,
+      "code": "  ndc <- if (total_v == 0) NA_real_ else if (grr_v > 0) max(1, floor(1.41 * sqrt(item_v) / sqrt(grr_v))) else Inf",
+      "replacement": ">=",
+      "source_sha256": "75bee6a200e031a4827270a013cfed28df2e10441a13c0472ff1a5419037a083",
+      "reason": "Der einzige unterschiedliche Zweig hat grr_v = 0. Bei total_v = 0 greift bereits der unveränderte NA-Zweig. Andernfalls gilt bei nichtnegativen Komponenten item_v > 0, sodass max(1, floor(1.41 * sqrt(item_v) / sqrt(0))) = Inf wie im bisherigen else-Zweig. 196 nichtnegative Komponentensätze einschließlich beider Nullfälle sind exakt gleich. Kein Anspruch für negative Varianzen. Aktueller Beleg: 196 Prüfungen; maximale absolute Abweichung 0. Gebunden mit muttest::muttest_plan über die neun Mutatorfamilien des Adapters an den endgültigen Quelltext, Zeile, Spalte und Ersetzung. Befehle und echter Output in PROGRESS.md und REVIEW-INPUT.md; Proben unter /tmp/llmsa-m1c-build-_nxa5o1i/equivalence-proofs.R. Neuer Builder-Antrag, keine Übernahme einer Freigabe und keine eigene Approval."
+    },
+    {
+      "file": "R/fit.R",
+      "mutator": "TRUE → FALSE",
+      "line": 592,
+      "column": 43,
+      "code": "  cross <- Matrix::Matrix(cross, sparse = TRUE)",
+      "replacement": "FALSE",
+      "source_sha256": "e65c6b8119cae7ca4999ac83f76b7cacfd3d7646ce20c2a27ea85d22ee5af706",
+      "reason": "Antrag nach ADR-039, Konsequenzen, und BL-89: sparse = FALSE ändert die Darstellung der zentrierten Kreuzproduktmatrix, nicht deren mathematische Einträge. Cholesky, Rücklösung, Determinante und REML-Formeln bleiben dieselben. Die Rundung und der Rechenaufwand können sich unterscheiden; keine Bitgleichheit behauptet. 27 tatsächliche Mutanten-Gegenrechnungen liegen innerhalb ANK-TOL.arithmetic.abs_tol = 1e-10. Die beiden benannten Präzisionsabbruchwege bleiben gemäß ADR-039 zulässig. Aktueller Beleg: 27 Prüfungen; maximale absolute Abweichung 1.8189894035458601e-12. Gebunden mit muttest::muttest_plan über die neun Mutatorfamilien des Adapters an den endgültigen Quelltext, Zeile, Spalte und Ersetzung. Befehle und echter Output in PROGRESS.md und REVIEW-INPUT.md; Proben unter /tmp/llmsa-m1c-build-_nxa5o1i/equivalence-proofs.R. Neuer Builder-Antrag, keine Übernahme einer Freigabe und keine eigene Approval."
+    },
+    {
+      "file": "R/fit.R",
+      "mutator": "TRUE → FALSE",
+      "line": 603,
+      "column": 57,
+      "code": "      factor <- Matrix::Cholesky(B, LDL = FALSE, perm = TRUE)",
+      "replacement": "FALSE",
+      "source_sha256": "e65c6b8119cae7ca4999ac83f76b7cacfd3d7646ce20c2a27ea85d22ee5af706",
+      "reason": "Antrag nach ADR-039, Konsequenzen, und BL-89: perm = FALSE ändert die Cholesky-Permutation. solve(..., system = \"A\") liefert in beiden Fällen die Lösung im ursprünglichen Koordinatensystem; die Determinante ist permutationsinvariant. Mathematisch dieselbe REML-Rechnung, mögliche Unterschiede in Rundung und Aufwand. 27 tatsächliche Mutanten-Gegenrechnungen liegen innerhalb ANK-TOL.arithmetic.abs_tol = 1e-10; keine Bitgleichheit behauptet. Die benannten Präzisionsabbruchwege bleiben gemäß ADR-039 zulässig. Aktueller Beleg: 27 Prüfungen; maximale absolute Abweichung 6.8212102632969598e-13. Gebunden mit muttest::muttest_plan über die neun Mutatorfamilien des Adapters an den endgültigen Quelltext, Zeile, Spalte und Ersetzung. Befehle und echter Output in PROGRESS.md und REVIEW-INPUT.md; Proben unter /tmp/llmsa-m1c-build-_nxa5o1i/equivalence-proofs.R. Neuer Builder-Antrag, keine Übernahme einer Freigabe und keine eigene Approval."
+    }
+  ]
+}

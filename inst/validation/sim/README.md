@@ -1,7 +1,7 @@
-# Latent-scale ADEMP studies
+# ADEMP simulation studies
 
-These scripts implement the M1b scenarios in `docs/02-statistikkern.md` and
-the contracts in ADR-023 and ADR-025. They load the installed `llmsa` and
+These scripts implement the M1b and M1c scenarios in `docs/02-statistikkern.md`
+and the contracts in ADR-023, ADR-025 and ADR-042. They load the installed `llmsa` and
 installed helpers through `system.file()`, independently of the working
 directory. Use a library containing the accepted package and frozen engines.
 
@@ -135,3 +135,126 @@ the first ANK-TOL.n_check repetitions again before relying on earlier full
 runs. Changes to fitting, generation, engines or seed rules may require new
 operator runs. M1d checks full-run completeness, reproduction and reported
 findings; a short run does not establish recovery or coverage.
+
+## Bootstrap interval coverage
+
+`boot_coverage.R` implements docs/02 M1c and ADR-042. It estimates coverage
+and width of the existing 95% percentile intervals, using `msa_fit()`,
+`msa_grr()` and `msa_boot()` from the installed package. It never supplies
+`nsim` to `msa_boot()`: the package default applies to short and full runs.
+Only outer repetitions are parallel; each bootstrap runs sequentially.
+
+The data-generating model draws independent centred normal effects for every
+component below and an independent normal residual per numeric observation.
+The intercept is zero. S-boot-7 draws Bernoulli observations with probability
+`plogis(item + prompt + model)`, with no added normal observation noise.
+The logit residual variance from ANK-28 is used only in the true latent
+statistics. All scenarios have three models and three replicates per cell.
+
+| Scenario | Outcome | Items | Prompts | Blocks | Components |
+| --- | --- | ---: | ---: | ---: | --- |
+| S-boot-1 | numeric | 20 | 3 | 2 | A |
+| S-boot-2 | numeric | 20 | 5 | 2 | A |
+| S-boot-3 | numeric | 50 | 3 | 2 | A |
+| S-boot-4 | numeric | 50 | 5 | 2 | A |
+| S-boot-5 | numeric | 20 | 3 | 2 | B |
+| S-boot-6 | numeric | 20 | 5 | 2 | B |
+| S-boot-7 | binary, logit | 60 | 3 | 1 | item 1, prompt 0.1, model 0.1 |
+
+A has item 1, prompt 0.05, model 0.05, block 0.01, item:prompt 0.01,
+item:model 0.05, prompt:model 0.005 and residual 0.1. B replaces only prompt
+with 0.3 and residual with 0.5. These are specification parameters.
+Numeric fits use default interactions; binary fits use the logit link and
+default absence of interactions. True GRR is the sum of every component
+except item, and total variance includes item. True ndc uses the factor,
+floor and minimum in the verified ANK-16 copy. The generator and truth
+calculation do not call `msa_simulate()` or `msa_grr()`.
+
+Every component is a point estimand, except the fixed binary residual, as
+are `grr_pct_study_var`, `grr_pct_contribution`, `ndc` and `icc_items`.
+The four derived statistics have intervals. The replicate file contains
+`scenario`, `rep`, `estimand`, `estimate`, `true`, `lower`, `upper`, the
+actual fitted `items`, `prompts`, `models`, `blocks`, `observations`, and
+the actual `boot_nsim`, `boot_level`, `n_singular`, `n_failed`. Component
+intervals are unavailable (`NA`). Separate columns retain both seeds,
+original-fit convergence and singularity, and the stage, error, warnings
+and messages of failed attempts. Absent diagnoses are `NA`.
+
+If fitting fails, estimates, intervals and fitted/bootstrap counts are `NA`.
+If only the bootstrap fails, point estimates and fit counts remain; intervals
+and bootstrap counts become `NA`. No repetition is replaced. Finite
+non-converged or singular original fits remain with their diagnoses.
+
+Point estimands have Bias, relative Bias, EmpSE and RMSE with the formulas
+described above. Coverage uses closed intervals with two finite endpoints;
+MCSE is `sqrt(p * (1 - p) / n)`. Width uses the same intervals and has MCSE
+`sd(width) / sqrt(n)`. Under estimand `bootstrap`, `singular_share` and
+`failed_share` first divide the actual count by `boot_nsim` per repetition,
+then average those fractions, with MCSE `sd(fraction) / sqrt(n)`. Bootstrap
+refits within one outer repetition are not treated as independent Bernoulli
+trials. Every result row reports its actual `n_finite` and `n_failed` outer
+repetitions; `n_sim` remains the requested run length. Fewer than two usable
+values of any required measure cause a named aggregation failure after saving
+replicates and session diagnostics, without publishing a result file.
+
+For S-boot-j and repetition r, the data seed is
+`20261102 + 2 * (j - 1) + 14 * (r - 1)` and the bootstrap seed is one larger.
+Both use Mersenne-Twister, Inversion and Rejection, restoring the caller's
+RNG state. Seeds are independent of selection, order, `n_sim` and workers;
+overflow is rejected before fitting. The result column `seed` is the data
+seed of repetition one of its scenario. The session records the rule and
+both sets of starting seeds, package versions, actual runtime and diagnoses.
+The implementation SHA-256 includes fitting, bootstrap, generation, truth,
+seeds and study helpers, including the reused M1b helpers.
+
+The same `--n-sim`, `--out`, `--scenarios` and `LLMSA_SIM_WORKERS` rules apply
+as above. Unknown or repeated options/scenarios and existing study outputs
+are rejected. Output names are `boot_coverage_results.csv`,
+`boot_coverage_replicates.csv` and `boot_coverage_session.txt`.
+For the committed short run, run exactly S-boot-1 and S-boot-7 with
+ANK-TOL.n_check; rename the genuine triplet to `boot_coverage_check_*`.
+
+```r
+library(llmsa)
+root <- system.file("validation", "sim", package = "llmsa", mustWork = TRUE)
+b <- new.env(parent = globalenv())
+sys.source(file.path(root, "boot_coverage_helpers.R"), b)
+run_coverage <- function(n, out, scenarios = NULL) {
+  args <- c(shQuote(file.path(root, "boot_coverage.R")), "--n-sim", n,
+            "--out", shQuote(out))
+  if (!is.null(scenarios)) args <- c(args, "--scenarios", paste(scenarios, collapse = ","))
+  status <- system2(file.path(R.home("bin"), "Rscript"), args)
+  if (status != 0L) stop("Coverage study failed; inspect the output diagnostics.")
+}
+run_coverage(b$boot_parameters()$n_check, "/path/outside/repository/coverage-check",
+             c("S-boot-1", "S-boot-7"))
+# Operator, after code acceptance: all seven scenarios and at least ANK-06.
+run_coverage(b$boot_parameters()$n_min, "/path/outside/repository/coverage-full")
+```
+
+For separate scenario runs, use fresh directories with the same `n_sim`,
+implementation and engines. `boot_merge()` checks the versions, seeds, truths,
+counts, complete disjoint scenarios and all summary calculations. It keeps
+the original estimates and result rows, and records each input's hashes and
+session. It does not refit or invent a combined runtime.
+
+```r
+b$boot_merge(paste0("/path/outside/repository/coverage-", seq_len(7L)),
+              "/path/outside/repository/coverage-merged")
+```
+
+Measure actual wall time with the intended workers before scheduling full
+runs. `elapsed_seconds` records the computation time of each run. Scale a
+complete scenario's observed time by the ratio of planned repetitions only
+as a planning estimate; optimizer costs vary across repetitions. Do not
+shorten the bootstrap or omit slow scenarios to meet a runtime estimate.
+After M1c, the operator must regenerate all three latent full runs as well
+as this full study with the accepted code (ADR-041). The updated ordinal
+limits change the implementation hash even for studies whose estimates stay
+the same. M1d evaluates completeness, first-repetition reproduction and the
+findings. Short-run coverage is not evidence of nominal coverage.
+
+The vignette reads coverage tables through `boot_coverage_results.R` without
+loading a simulation generator (ADR-043). It uses the full results file when
+present, otherwise the short results file; an invalid full file is an error.
+The displayed results and run size always come from the selected file.

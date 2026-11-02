@@ -1,0 +1,103 @@
+format: llmsa-class-b-v1
+study: boot_coverage
+n_sim: 20
+implementation: 2dcf076e648ab6d0a957db008a7853a952b33d4dc2bc037d7c0a290cc8bf9d79
+R_version: 4.6.1
+package_llmsa: 0.1.0
+package_lme4: 2.0.6
+package_ordinal: 2026.7.26
+package_Matrix: 1.7.4
+package_parallel: 4.6.1
+RNG: Mersenne-Twister; normal.kind=Inversion; sample.kind=Rejection
+seed_rule: data_seed = 20261102 + 2 * (j - 1) + 14 * (rep - 1); boot_seed = data_seed + 1; permanent j in S-boot-j
+scenarios: S-boot-1,S-boot-7
+start_seeds: S-boot-1=20261102,S-boot-7=20261114
+boot_start_seeds: S-boot-1=20261103,S-boot-7=20261115
+command: Rscript boot_coverage.R '--n-sim' '20' '--scenarios' 'S-boot-1,S-boot-7' '--out' '/tmp/llmsa-m1c-build-_nxa5o1i/coverage-final'
+workers: 14
+elapsed_seconds: 176.562000
+
+Per-repetition diagnostics:
+S-boot-1 rep=1 data_seed=20261102 boot_seed=20261103 error_stage=[(none)] error=[(none)] warnings=[(none)] messages=[fit: boundary (singular) fit: see help('isSingular')
+]
+S-boot-1 rep=2 data_seed=20261116 boot_seed=20261117 error_stage=[(none)] error=[(none)] warnings=[(none)] messages=[fit: boundary (singular) fit: see help('isSingular')
+]
+S-boot-1 rep=3 data_seed=20261130 boot_seed=20261131 error_stage=[(none)] error=[(none)] warnings=[(none)] messages=[(none)]
+S-boot-1 rep=4 data_seed=20261144 boot_seed=20261145 error_stage=[(none)] error=[(none)] warnings=[(none)] messages=[fit: boundary (singular) fit: see help('isSingular')
+]
+S-boot-1 rep=5 data_seed=20261158 boot_seed=20261159 error_stage=[(none)] error=[(none)] warnings=[(none)] messages=[(none)]
+S-boot-1 rep=6 data_seed=20261172 boot_seed=20261173 error_stage=[(none)] error=[(none)] warnings=[(none)] messages=[(none)]
+S-boot-1 rep=7 data_seed=20261186 boot_seed=20261187 error_stage=[(none)] error=[(none)] warnings=[(none)] messages=[(none)]
+S-boot-1 rep=8 data_seed=20261200 boot_seed=20261201 error_stage=[(none)] error=[(none)] warnings=[(none)] messages=[(none)]
+S-boot-1 rep=9 data_seed=20261214 boot_seed=20261215 error_stage=[(none)] error=[(none)] warnings=[(none)] messages=[(none)]
+S-boot-1 rep=10 data_seed=20261228 boot_seed=20261229 error_stage=[(none)] error=[(none)] warnings=[(none)] messages=[(none)]
+S-boot-1 rep=11 data_seed=20261242 boot_seed=20261243 error_stage=[(none)] error=[(none)] warnings=[(none)] messages=[fit: boundary (singular) fit: see help('isSingular')
+]
+S-boot-1 rep=12 data_seed=20261256 boot_seed=20261257 error_stage=[(none)] error=[(none)] warnings=[(none)] messages=[(none)]
+S-boot-1 rep=13 data_seed=20261270 boot_seed=20261271 error_stage=[(none)] error=[(none)] warnings=[(none)] messages=[(none)]
+S-boot-1 rep=14 data_seed=20261284 boot_seed=20261285 error_stage=[(none)] error=[(none)] warnings=[(none)] messages=[(none)]
+S-boot-1 rep=15 data_seed=20261298 boot_seed=20261299 error_stage=[(none)] error=[(none)] warnings=[(none)] messages=[fit: boundary (singular) fit: see help('isSingular')
+]
+S-boot-1 rep=16 data_seed=20261312 boot_seed=20261313 error_stage=[(none)] error=[(none)] warnings=[(none)] messages=[fit: boundary (singular) fit: see help('isSingular')
+]
+S-boot-1 rep=17 data_seed=20261326 boot_seed=20261327 error_stage=[(none)] error=[(none)] warnings=[(none)] messages=[(none)]
+S-boot-1 rep=18 data_seed=20261340 boot_seed=20261341 error_stage=[(none)] error=[(none)] warnings=[(none)] messages=[(none)]
+S-boot-1 rep=19 data_seed=20261354 boot_seed=20261355 error_stage=[(none)] error=[(none)] warnings=[(none)] messages=[fit: boundary (singular) fit: see help('isSingular')
+]
+S-boot-1 rep=20 data_seed=20261368 boot_seed=20261369 error_stage=[(none)] error=[(none)] warnings=[(none)] messages=[fit: boundary (singular) fit: see help('isSingular')
+]
+S-boot-7 rep=1 data_seed=20261114 boot_seed=20261115 error_stage=[(none)] error=[(none)] warnings=[(none)] messages=[(none)]
+S-boot-7 rep=2 data_seed=20261128 boot_seed=20261129 error_stage=[(none)] error=[(none)] warnings=[(none)] messages=[(none)]
+S-boot-7 rep=3 data_seed=20261142 boot_seed=20261143 error_stage=[(none)] error=[(none)] warnings=[(none)] messages=[(none)]
+S-boot-7 rep=4 data_seed=20261156 boot_seed=20261157 error_stage=[(none)] error=[(none)] warnings=[(none)] messages=[(none)]
+S-boot-7 rep=5 data_seed=20261170 boot_seed=20261171 error_stage=[(none)] error=[(none)] warnings=[(none)] messages=[(none)]
+S-boot-7 rep=6 data_seed=20261184 boot_seed=20261185 error_stage=[(none)] error=[(none)] warnings=[(none)] messages=[(none)]
+S-boot-7 rep=7 data_seed=20261198 boot_seed=20261199 error_stage=[(none)] error=[(none)] warnings=[(none)] messages=[(none)]
+S-boot-7 rep=8 data_seed=20261212 boot_seed=20261213 error_stage=[(none)] error=[(none)] warnings=[(none)] messages=[(none)]
+S-boot-7 rep=9 data_seed=20261226 boot_seed=20261227 error_stage=[(none)] error=[(none)] warnings=[(none)] messages=[(none)]
+S-boot-7 rep=10 data_seed=20261240 boot_seed=20261241 error_stage=[(none)] error=[(none)] warnings=[(none)] messages=[(none)]
+S-boot-7 rep=11 data_seed=20261254 boot_seed=20261255 error_stage=[(none)] error=[(none)] warnings=[(none)] messages=[fit: boundary (singular) fit: see help('isSingular')
+]
+S-boot-7 rep=12 data_seed=20261268 boot_seed=20261269 error_stage=[(none)] error=[(none)] warnings=[(none)] messages=[(none)]
+S-boot-7 rep=13 data_seed=20261282 boot_seed=20261283 error_stage=[(none)] error=[(none)] warnings=[(none)] messages=[(none)]
+S-boot-7 rep=14 data_seed=20261296 boot_seed=20261297 error_stage=[(none)] error=[(none)] warnings=[(none)] messages=[fit: boundary (singular) fit: see help('isSingular')
+]
+S-boot-7 rep=15 data_seed=20261310 boot_seed=20261311 error_stage=[(none)] error=[(none)] warnings=[(none)] messages=[(none)]
+S-boot-7 rep=16 data_seed=20261324 boot_seed=20261325 error_stage=[(none)] error=[(none)] warnings=[(none)] messages=[(none)]
+S-boot-7 rep=17 data_seed=20261338 boot_seed=20261339 error_stage=[(none)] error=[(none)] warnings=[(none)] messages=[(none)]
+S-boot-7 rep=18 data_seed=20261352 boot_seed=20261353 error_stage=[(none)] error=[(none)] warnings=[(none)] messages=[(none)]
+S-boot-7 rep=19 data_seed=20261366 boot_seed=20261367 error_stage=[(none)] error=[(none)] warnings=[(none)] messages=[(none)]
+S-boot-7 rep=20 data_seed=20261380 boot_seed=20261381 error_stage=[(none)] error=[(none)] warnings=[(none)] messages=[(none)]
+
+R version 4.6.1 (2026-06-24)
+Platform: x86_64-pc-linux-gnu
+Running under: Ubuntu 26.04 LTS
+
+Matrix products: default
+BLAS:   /usr/lib/x86_64-linux-gnu/blas/libblas.so.3.12.1 
+LAPACK: /usr/lib/x86_64-linux-gnu/lapack/liblapack.so.3.12.1;  LAPACK version 3.12.0
+
+locale:
+ [1] LC_CTYPE=C.UTF-8       LC_NUMERIC=C           LC_TIME=C.UTF-8       
+ [4] LC_COLLATE=C.UTF-8     LC_MONETARY=C.UTF-8    LC_MESSAGES=C.UTF-8   
+ [7] LC_PAPER=C.UTF-8       LC_NAME=C              LC_ADDRESS=C          
+[10] LC_TELEPHONE=C         LC_MEASUREMENT=C.UTF-8 LC_IDENTIFICATION=C   
+
+time zone: Europe/Berlin
+tzcode source: system (glibc)
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+[1] llmsa_0.1.0
+
+loaded via a namespace (and not attached):
+ [1] lme4_2.0-6          digest_0.6.39       numDeriv_2016.8-1.1
+ [4] Matrix_1.7-4        lattice_0.22-9      splines_4.6.1      
+ [7] ordinal_2026.7-26   parallel_4.6.1      ucminf_1.2.3       
+[10] Rdpack_2.6.6        nloptr_2.2.1        grid_4.6.1         
+[13] reformulas_0.4.4    compiler_4.6.1      boot_1.3-32        
+[16] rbibutils_2.4.1     tools_4.6.1         nlme_3.1-168       
+[19] minqa_1.2.8         Rcpp_1.1.2          jsonlite_2.0.0     
+[22] MASS_7.3-65        

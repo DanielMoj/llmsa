@@ -20,7 +20,10 @@ a caller-supplied cluster \code{cl}.}
 }
 \value{
 A data.frame with the point estimate and interval for each
-statistic, plus the bootstrap replicates as attribute \code{boot}.
+statistic, plus the bootstrap replicates as attribute \code{boot}, the
+confidence \code{level}, and counts \code{n_failed} (replicates with at least one
+non-finite statistic) and \code{n_singular} (singular replicates with all
+statistics finite).
 }
 \description{
 Parametric bootstrap of the fitted mixed model (\code{\link[lme4:bootMer]{lme4::bootMer()}}):
@@ -40,6 +43,17 @@ Numeric default fits use ordinary lme4 REML refits with \code{nloptwrap} and
 its usual control settings; the analytical completion of the original
 fit is not repeated for each bootstrap sample. An explicit fitting
 control passed to \code{\link[=msa_fit]{msa_fit()}} remains the model's refit control.
+
+Singular refits with finite statistics are retained in the percentile
+intervals. Only non-finite values are removed, separately for each
+statistic. A replicate with any non-finite statistic counts as failed;
+it is not also counted as singular. The original fit is not a replicate.
+Both counts are reported by the print method, including when zero.
+
+The \code{boot_coverage} simulation study investigates interval coverage and
+width by scenario; see its table in \code{vignette("validation", package = "llmsa")}
+(\code{vignettes/validation.Rmd}). Short runs establish reproducibility;
+coverage findings require the full simulation runs.
 }
 \examples{
 \donttest{

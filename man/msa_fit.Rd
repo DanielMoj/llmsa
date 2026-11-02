@@ -110,6 +110,8 @@ Initialization failures on the default path identify the fitting stage
 and retain the underlying engine's message.
 Numerical warnings or errors during original-scale model construction
 produce a named representability error.
+Final \code{checkConv} warnings can precede that error when the model is not
+representable at working precision.
 
 Default numeric models store ordinary \code{nloptwrap} refit control with no
 extra optimizer options. \code{\link[=msa_boot]{msa_boot()}} and \code{\link[lme4:refit]{lme4::refit()}} therefore use
@@ -164,6 +166,13 @@ level-by-level projection blocks when checking large designs.
 Ordinal singularity describes random effects only, not the derived components.
 Ordinal and binary estimates are invariant to row order and factor labels
 only up to the optimization tolerance of the underlying engines.
+
+Without \code{control} in \code{...}, ordinal fits use
+\code{ordinal::clmm.control(iter.max = 2000, eval.max = 4000)}.
+An explicit \code{control} passed in \code{...} replaces both limits, including
+when it is an empty or partial list. Optimizer options given directly in
+\code{...}, such as \code{iter.max}, take precedence over the corresponding default
+limit, as in \code{\link[ordinal:clmm]{ordinal::clmm()}}.
 
 \code{converged} records the final engine diagnosis, independently of
 \code{singular}. For \code{clmm}, success means code zero for \code{nlminb}, or code one

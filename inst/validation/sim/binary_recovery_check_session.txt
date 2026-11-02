@@ -1,7 +1,7 @@
 format: llmsa-class-b-v1
 study: binary_recovery
 n_sim: 20
-implementation: 477e84a5ad763c15cbcd4e12142b7ca02797fb96571f66ceb0b2a68368ae5c1e
+implementation: 203bc36478f5400b1db3ca42182e290451947f49a9e528d230c3ae0f574da3b8
 R_version: 4.6.1
 package_llmsa: 0.1.0
 package_lme4: 2.0.6
@@ -12,9 +12,9 @@ RNG: Mersenne-Twister; normal.kind=Inversion; sample.kind=Rejection
 seed_rule: 20261031 + j(scenario) + 8 * (rep - 1); permanent j=1..8 in specification order
 scenarios: S-bin-1,S-bin-2
 start_seeds: S-bin-1=20261036,S-bin-2=20261037
-command: Rscript binary_recovery.R '--n-sim' '20' '--out' '/tmp/llmsa-m1b-r5-VqXqW8/regenerated/binary_recovery'
+command: Rscript binary_recovery.R '--n-sim' '20' '--out' '/tmp/llmsa-m1c-build-_nxa5o1i/binary'
 workers: 14
-elapsed_seconds: 0.964000
+elapsed_seconds: 0.937000
 
 Per-repetition diagnostics (including every repetition seed):
 S-bin-1 rep=1 seed=20261036 error=[(none)] warnings=[(none)] messages=[(none)]

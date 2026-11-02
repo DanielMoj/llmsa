@@ -32,6 +32,9 @@
 #' variance. Sources derived from two fixed ordinal levels are retained in
 #' `derived` and identified when printing; see [msa_fit()] for their positive
 #' bias and the `two_level` study in `vignette("validation")`.
+#' On the latent scale, Repeatability is the residual variance fixed by the
+#' link, not a measurement of disagreement between replicates; see the share
+#' of cells with identical replicates from [msa_agreement()].
 #'
 #' @param fit An `msa_fit`.
 #' @param threshold Length-two vector of thresholds (acceptable / marginal)
@@ -116,6 +119,11 @@ print.msa_grr <- function(x, digits = 4, ...) {
                     SD = fmt_num(tab$sd, digits), `% Contribution` = fmt_pct(tab$pct_contribution),
                     `% Study Var` = fmt_pct(tab$pct_study_var), check.names = FALSE)
   print(out, row.names = FALSE, right = FALSE)
+  if (x$type != "numeric") {
+    cat("  On the latent scale, Repeatability is the residual variance fixed by the link, ",
+        "not a measurement of disagreement between replicates; see the share of cells ",
+        "with identical replicates from msa_agreement().\n", sep = "")
+  }
   s <- x$summary
   cat(sprintf("\n  total gauge R&R: %.1f %% of study variation (%.1f %% contribution)\n",
               s[["grr_pct_study_var"]], s[["grr_pct_contribution"]]))
@@ -153,10 +161,24 @@ print.msa_grr <- function(x, digits = 4, ...) {
 #' fit is not repeated for each bootstrap sample. An explicit fitting
 #' control passed to [msa_fit()] remains the model's refit control.
 #'
+#' Singular refits with finite statistics are retained in the percentile
+#' intervals. Only non-finite values are removed, separately for each
+#' statistic. A replicate with any non-finite statistic counts as failed;
+#' it is not also counted as singular. The original fit is not a replicate.
+#' Both counts are reported by the print method, including when zero.
+#'
+#' The `boot_coverage` simulation study investigates interval coverage and
+#' width by scenario; see its table in `vignette("validation", package = "llmsa")`
+#' (`vignettes/validation.Rmd`). Short runs establish reproducibility;
+#' coverage findings require the full simulation runs.
+#'
 #' @param ... Passed to [lme4::bootMer()], e.g. `parallel = "snow"` with
 #'   a caller-supplied cluster `cl`.
 #' @return A data.frame with the point estimate and interval for each
-#'   statistic, plus the bootstrap replicates as attribute `boot`.
+#'   statistic, plus the bootstrap replicates as attribute `boot`, the
+#'   confidence `level`, and counts `n_failed` (replicates with at least one
+#'   non-finite statistic) and `n_singular` (singular replicates with all
+#'   statistics finite).
 #' @examples
 #' \donttest{
 #' fit <- msa_fit(ic50_demo, type = "numeric")
@@ -170,10 +192,11 @@ msa_boot <- function(fit, nsim = 200, level = 0.95, seed = NULL, ...) {
          call. = FALSE)
   }
   type <- fit$type; link <- fit$link
-  stat_fun <- function(m) grr_stats(vc_from_model(m, type, link))$summary
-  est <- stat_fun(fit$model)
+  stat_fun <- function(m) c(grr_stats(vc_from_model(m, type, link))$summary,
+                            .singular = as.numeric(lme4::isSingular(m)))
+  est <- grr_stats(vc_from_model(fit$model, type, link))$summary
   b <- lme4::bootMer(fit$model, FUN = stat_fun, nsim = nsim, seed = seed, type = "parametric", ...)
-  t <- b$t
+  t <- b$t[, seq_along(est), drop = FALSE]
   colnames(t) <- names(est)
   a <- (1 - level) / 2
   ci <- t(apply(t, 2, function(col) stats::quantile(col[is.finite(col)], c(a, 1 - a))))
@@ -182,7 +205,9 @@ msa_boot <- function(fit, nsim = 200, level = 0.95, seed = NULL, ...) {
   rownames(out) <- NULL
   attr(out, "boot") <- t
   attr(out, "level") <- level
-  attr(out, "n_failed") <- sum(!stats::complete.cases(t))
+  failed <- rowSums(!is.finite(t)) > 0L
+  attr(out, "n_failed") <- sum(failed)
+  attr(out, "n_singular") <- sum(b$t[!failed, length(est) + 1L] == 1)
   class(out) <- c("msa_boot", "data.frame")
   out
 }
@@ -194,6 +219,12 @@ print.msa_boot <- function(x, ...) {
   d <- as.data.frame(x)
   d$estimate <- fmt_num(d$estimate, 2); d$lower <- fmt_num(d$lower, 2); d$upper <- fmt_num(d$upper, 2)
   print(d, row.names = FALSE)
-  if (attr(x, "n_failed") > 0) cat(sprintf("  (%d replicate fits failed or were singular and were dropped)\n", attr(x, "n_failed")))
+  cat(sprintf("  %d failed or non-finite replicates (non-finite values dropped)\n", attr(x, "n_failed")))
+  singular <- attr(x, "n_singular")
+  if (is.null(singular)) {
+    cat("  singular replicates: not recorded for this object\n")
+  } else {
+    cat(sprintf("  %d singular replicates retained in the intervals\n", singular))
+  }
   invisible(x)
 }
