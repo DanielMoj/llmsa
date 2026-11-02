@@ -1,0 +1,39 @@
+{
+  "milestone": "M1c",
+  "phase": "plan",
+  "round": 1,
+  "verdict": "PASS",
+  "blocking": [],
+  "nonblocking": [
+    {
+      "id": "E1",
+      "ref": "orchestrator/orchestrate.sh, path_allowed (builder in 40-build: PROGRESS.md, docs/decisions/*, orchestrator/handoff/M1c/REVIEW-INPUT.md, REWORK-NOTES.md, MUT-EQUIV.json; BUILDER_EXTRA_PATHS_REGEX, config.env:200); AGENTS.md, Betreiber",
+      "note": "PLAN Z. 64 nennt einen „zugewiesenen BUILD-Handoff unter orchestrator/handoff/M1c/“ ohne Dateinamen. BUILD darf dort nur REVIEW-INPUT.md und MUT-EQUIV.json schreiben (Rework zusätzlich REWORK-NOTES.md); jede andere Datei verwirft der Orchestrator samt Versuch (PLAN-REVIEW Prüflauf 5). Nachweise in PROGRESS.md und REVIEW-INPUT.md."
+    },
+    {
+      "id": "E2",
+      "ref": "Gate mutgate (orchestrator/gates.d/86-mutgate.sh; Freigaben nur aus orchestrator/handoff/M1c/MUT-EQUIV-APPROVED.json); orchestrator/state/mut-baseline 94.09; config.env:229–232; ADR-035 Nr. 1 b; BL-85; BL-102",
+      "note": "Verlangt sind 92,09. Der letzte Bericht (M1b Runde 7) ergibt ohne die 15 M1b-Freigaben 92,95 (1306 erkannt, 99 überlebt), Reserve etwa 13 Überlebende; für M1c gibt es noch keine Freigabedatei. Jeder neue Zweig (Kennzeichen und Zählung, beide Druckzeilen bei 0 und > 0, control fehlt/list()/partiell/Hess, latenter Hinweis je Typ) erhält einen unterscheidenden Unit-Test; vor der Übergabe ein Teil-Mutationslauf über die geänderten Funktionen; Äquivalente (frühere M1b-Freigaben, BL-89) an den endgültigen Zeilen mit muttest_plan() in MUT-EQUIV.json beantragen."
+    },
+    {
+      "id": "E3",
+      "ref": "docs/01 §4 („zusätzliche Attribute; geänderte Druckausgabe“); K-M1c-2 („print.msa_boot nennt beide Zahlen“); IMPLEMENTATION-RULES, Fehler und Typen",
+      "note": "Objekte aus v0.1.0 bis M1b und das synthetische Objekt in tests/testthat/test-grr-rework.R:140–160 tragen kein n_singular; sprintf(\"%d\", NULL) ließe die zweite Zeile still verschwinden. Fehlt das Attribut, sagt die Zeile, dass die Zahl nicht erfasst ist (ohne Wort für Verwerfen), mit Unit-Test. NEWS.md fehlt in der Dateiliste: Bootstrap-Attribut und Druckzeilen, latenter Hinweis, ordinale Vorgabelimits (ADR-041)."
+    },
+    {
+      "id": "E4",
+      "ref": "K-M1c-8 („mit control gilt genau die Angabe des Aufrufs“; „?msa_fit nennt beide Limits und dass eine eigene control-Angabe sie ersetzt“); ACC-18 (4); ADR-042 Nr. 14.6",
+      "note": "ordinal::clmm stellt Optimierer-Optionen aus ... vor control (getCtrlArgs; PLAN-REVIEW Prüflauf 2): msa_fit(type = \"ordinal\", iter.max = 7) ohne control endet mit iter.max = 7, eval.max = 4000. Spec-konform, aber der geplante Rd-Satz nennt nur control. Ein Satz in ?msa_fit zu Optionen in ... und ein Unit-Test; keine eigene Mischregel."
+    },
+    {
+      "id": "E5",
+      "ref": "docs/01 §8 (Ergebnisdatei mit seed); ADR-023 Nr. 1.4; ADR-042 Nr. 5.1 und 5.4 bis 5.6; K-M1d-7; BL-12",
+      "note": "Der Plan legt nicht fest, welcher Seed in der Spalte seed steht, und weist nicht aus, über wie viele Wiederholungen coverage, width und die Anteile gerechnet sind. Vorschlag: seed = data_seed der Wiederholung 1 (wie sim_seed(s, 1L)), Regel und Start-Seeds von Daten und Bootstrap in der Session; je Ergebniszeile n_finite und n_failed wie in M1b. Nachrüsten nach dem Vollauf hieße neuer Vollauf."
+    },
+    {
+      "id": "E6",
+      "ref": "ACC-11 (6) („eine Prüfung der Ergebnisdatei in der Vignette … ist zulässig, die Attrappe besteht sie“); ADR-042 Nr. 11.6; tests/acceptance/test-m1c-5-vignette-full-results.R:21–37, 50–56",
+      "note": "Die Attrappe kopiert den Seed von S-boot-1 nach S-boot-2 bis S-boot-6, verschiebt nicht beschränkte Maße, setzt n_sim = 1234 und legt Replikat- und Session-Datei des Kurzlaufs daneben. Die Dateiprüfung der Vignette (PLAN Z. 281–284) prüft daher Wertebereiche nur für Anteile, MCSE, n_sim und Endlichkeit, Seeds nur als Zahl, und gleicht nicht mit Replikat-, Session-Datei oder Seed-Regel ab."
+    }
+  ]
+}

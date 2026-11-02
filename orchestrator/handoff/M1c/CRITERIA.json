@@ -44,7 +44,7 @@
   "open": [
     {
       "id": "ACC-1",
-      "status": "Auslegung des Reviewers (Spec schweigt zu Quantildefinition, Toleranzbezug je Kennzahl und Suchmuster); ADR in 30-plan-review (ACC-15)",
+      "status": "Auslegung des Reviewers (Spec schweigt zu Quantildefinition, Toleranzbezug je Kennzahl und Suchmuster); festgehalten in ADR-042 (30-plan-review M1c, Runde 1); Messwert in (4) berichtigt: in der binären Referenz sind 5 von 20 Refits singulär (ADR-042, Kontext)",
       "ref": "K-M1c-1 (ganzer Wortlaut, criteria); Formelsammlung §9, Status Code: „Perzentilintervall zum Niveau 1 − α aus den B Wiederholungen T*_b; fehlgeschlagene Anpassungen (nicht endliche Werte) werden verworfen und gezählt, singuläre Anpassungen bleiben enthalten“; docs/01 §2 Nr. 6: „abgeleitete Kennzahlen relativ, ndc und Verdikt gleich“; docs/01 §5, Parallelisierung",
       "kind": "Prüfform K-M1c-1",
       "owner": "Builder",
@@ -53,7 +53,7 @@
     },
     {
       "id": "ACC-2",
-      "status": "Auslegung des Reviewers (Spec schweigt zu Auslösung, Singularitätsbegriff und Wortlaut); ADR in 30-plan-review (ACC-15)",
+      "status": "Auslegung des Reviewers (Spec schweigt zu Auslösung, Singularitätsbegriff und Wortlaut); festgehalten in ADR-042 (30-plan-review M1c, Runde 1); Messwert in (3) berichtigt: 3 nicht endliche und 5 singuläre unter 17 endlichen Wiederholungen (ADR-042, Kontext)",
       "ref": "K-M1c-2 (ganzer Wortlaut, criteria); Formelsammlung §12 Nr. 5: „Meldung „failed or singular dropped“; verworfen werden nur nicht endliche Werte | Meldung korrigieren, singuläre Wiederholungen zählen“; docs/01 §3 Nr. 5: „nicht endliche und singuläre Wiederholungen getrennt zählen und melden“; Formelsammlung §9 (wie ACC-1)",
       "kind": "Prüfform K-M1c-2",
       "owner": "Builder",
@@ -62,7 +62,7 @@
     },
     {
       "id": "ACC-3",
-      "status": "Auslegung des Reviewers (wie ADR-023 Nr. 1 für M1b); ADR in 30-plan-review (ACC-15)",
+      "status": "Auslegung des Reviewers (wie ADR-023 Nr. 1 für M1b); festgehalten in ADR-042 (30-plan-review M1c, Runde 1)",
       "ref": "K-M1c-3: „(Parameter `--n-sim`, `--out`, `--scenarios`; Ergebnis-, Replikat- und Session-Datei)“; K-M1c-4: „`Rscript inst/validation/sim/boot_coverage.R --n-sim <ANK-TOL.n_check> --scenarios S-boot-1,S-boot-7 --out <tmp>`“; docs/01 §8; ADR-023 Nr. 1",
       "kind": "Vertrag des Klasse-B-Skripts boot_coverage",
       "owner": "Builder",
@@ -71,7 +71,7 @@
     },
     {
       "id": "ACC-4",
-      "status": "Auslegung des Reviewers (die Szenariotabelle nennt nur für S-boot-7 die Zielgröße); ADR in 30-plan-review (ACC-15)",
+      "status": "Auslegung des Reviewers (die Szenariotabelle nennt nur für S-boot-7 die Zielgröße); festgehalten in ADR-042 (30-plan-review M1c, Runde 1)",
       "ref": "docs/02 M1c, Szenariotabelle und „Bootstrap-Wiederholungen je Fit nach Paketvorgabe von `msa_boot()`“, „Überdeckung und mittlere Breite der 95-%-Perzentilintervalle“; Formelsammlung §2, §4; ADR-023 Nr. 13.3",
       "kind": "Datenerzeugung und Verfahren der Studie",
       "owner": "Builder",
@@ -80,7 +80,7 @@
     },
     {
       "id": "ACC-5",
-      "status": "Auslegung des Reviewers (Spec schweigt zu Bezeichnern und zu den MCSE von Breite und Anteilen); ADR in 30-plan-review (ACC-15)",
+      "status": "Auslegung des Reviewers (Spec schweigt zu Bezeichnern und zu den MCSE von Breite und Anteilen); festgehalten in ADR-042 (30-plan-review M1c, Runde 1)",
       "ref": "docs/01 §8: „`<studie>_results.csv` (eine Zeile je Szenario und Kennzahl: `scenario`, `estimand`, `measure`, `value`, `mcse`, `n_sim`, `seed`)“ und „Kennzahlen (Performance measures: Bias, EmpSE, Coverage, MSE, je mit MCSE nach Formelsammlung §9)“; docs/02 M1c: „Schätzziele: %GRR (Studienvariation), % Contribution GRR, ndc, ICC_items, jede Varianzkomponente; Kennzahlen: Bias und EmpSE der Punktschätzer, Überdeckung und mittlere Breite der 95-%-Perzentilintervalle, Anteil singulärer und fehlgeschlagener Bootstrap-Fits, alle mit MCSE.“; K-M1d-7: „tabelliert je Szenario Bias, relative Verzerrung, EmpSE, Überdeckung und mittlere Intervallbreite mit MCSE“; ADR-023 Nr. 2, 3 und 5",
       "kind": "Ergebnisdatei: Schätzziele, Kennzahlen, Formeln",
       "owner": "Builder",
@@ -89,7 +89,7 @@
     },
     {
       "id": "ACC-6",
-      "status": "Auslegung des Reviewers (wie ADR-023 Nr. 4 für M1b); ADR in 30-plan-review (ACC-15)",
+      "status": "Auslegung des Reviewers (wie ADR-023 Nr. 4 für M1b); festgehalten in ADR-042 (30-plan-review M1c, Runde 1)",
       "ref": "docs/01 §8: „`<studie>_replicates.csv` (Einzelschätzer je Wiederholung)“; K-M1c-4: „erzeugt dieselben Einzelschätzer wie `boot_coverage_check_replicates.csv`“; ADR-023 Nr. 4",
       "kind": "Replikatdatei: Langformat und Spalten",
       "owner": "Builder",
@@ -98,7 +98,7 @@
     },
     {
       "id": "ACC-7",
-      "status": "Auslegung des Reviewers (wie ADR-023 Nr. 6 für M1b); ADR in 30-plan-review (ACC-15)",
+      "status": "Auslegung des Reviewers (wie ADR-023 Nr. 6 für M1b); festgehalten in ADR-042 (30-plan-review M1c, Runde 1)",
       "ref": "K-M1c-4: „erzeugt dieselben Einzelschätzer wie `boot_coverage_check_replicates.csv` (byte-identisch nach `format(x, digits = 15)`)“; docs/01 §8: „reproduziert die ersten `ANK-TOL.n_check` Wiederholungen mit demselben Seed byte-identisch (für `boot_coverage` die Szenarien S-boot-1 und S-boot-7)“; K-M1d-6; ADR-023 Nr. 6",
       "kind": "Reproduktion, Präfix- und Teilmengenstabilität",
       "owner": "Builder",
@@ -107,7 +107,7 @@
     },
     {
       "id": "ACC-8",
-      "status": "Auslegung des Reviewers (wie ADR-023 Nr. 7 und 8 für M1b); ADR in 30-plan-review (ACC-15)",
+      "status": "Auslegung des Reviewers (wie ADR-023 Nr. 7 und 8 für M1b); festgehalten in ADR-042 (30-plan-review M1c, Runde 1)",
       "ref": "K-M1c-4: „bleibt unter `ankerRef: ANK-TOL.sim_runtime`, und `boot_coverage_check_session.txt` nennt Seed, RNG, R- und Paketversionen“; docs/01 §8: „`<studie>_session.txt` (`sessionInfo()`, Seed, RNG, Laufzeit)“; docs/01 §5",
       "kind": "Session-Datei und Laufzeit",
       "owner": "Builder",
@@ -116,7 +116,7 @@
     },
     {
       "id": "ACC-9",
-      "status": "Auslegung des Reviewers; ADR in 30-plan-review (ACC-15)",
+      "status": "Auslegung des Reviewers; festgehalten in ADR-042 (30-plan-review M1c, Runde 1)",
       "ref": "K-M1c-3: „setzt S-boot-1 bis S-boot-7 mit allen Schätzzielen und Kennzahlen nach Abschnitt 8 von `01-fachspezifikation.md` um“; der Kurzlauf deckt nur S-boot-1 und S-boot-7",
       "kind": "Prüfung der Szenarien außerhalb des Kurzlaufs",
       "owner": "Builder",
@@ -125,7 +125,7 @@
     },
     {
       "id": "ACC-10",
-      "status": "Auslegung des Reviewers (wie ADR-023 Nr. 9.6 für msa_fit()); ADR in 30-plan-review (ACC-15)",
+      "status": "Auslegung des Reviewers (wie ADR-023 Nr. 9.6 für msa_fit()); festgehalten in ADR-042 (30-plan-review M1c, Runde 1)",
       "ref": "K-M1c-3: „die Dokumentation von `msa_boot()` verweist auf die Überdeckungsstudie und die Tabelle in `vignettes/validation.Rmd` (die gemessenen Werte ergänzt K-M1d-7)“",
       "kind": "Dokumentation von msa_boot()",
       "owner": "Builder",
@@ -134,7 +134,7 @@
     },
     {
       "id": "ACC-11",
-      "status": "Auslegung des Reviewers (wie ADR-023 Nr. 11 und ADR-029 Nr. 1 für K-M1b-7); ADR in 30-plan-review (ACC-15)",
+      "status": "Auslegung des Reviewers (wie ADR-023 Nr. 11 und ADR-029 Nr. 1 für K-M1b-7); festgehalten in ADR-042 (30-plan-review M1c, Runde 1)",
       "ref": "K-M1c-5 (ganzer Wortlaut, criteria); docs/01 §8: „solange nur Kurzlauf-Dateien vorliegen, liest die Vignette diese und nennt `n_sim` aus der Datei“",
       "kind": "Prüfform K-M1c-5",
       "owner": "Builder",
@@ -143,7 +143,7 @@
     },
     {
       "id": "ACC-12",
-      "status": "Auslegung des Reviewers; Entscheidung durch das Gate mutfull",
+      "status": "Auslegung des Reviewers; Entscheidung durch das Gate mutfull; festgehalten in ADR-042 (30-plan-review M1c, Runde 1)",
       "ref": "K-M1c-6 (ganzer Wortlaut, criteria); AGENTS.md, Projektblock: „`MUT_WORKERS=14`; `tests/simulation/` nie in `MUT_TEST_DIRS`. In M1c zusätzlich das Betreiber-Gate `88-mutfull` über beide Kerndateien.“; ANK-32",
       "kind": "Prüfform K-M1c-6",
       "owner": "Betreiber (Gate), Reviewer (Approval äquivalenter Mutanten)",
@@ -152,7 +152,7 @@
     },
     {
       "id": "ACC-13",
-      "status": "Auslegung des Reviewers (Spec schweigt zu Vergleichsform und Bezug der Bytegleichheit); ADR in 30-plan-review (ACC-15)",
+      "status": "Auslegung des Reviewers (Spec schweigt zu Vergleichsform und Bezug der Bytegleichheit); festgehalten in ADR-042 (30-plan-review M1c, Runde 1)",
       "ref": "K-M1c-7 (ganzer Wortlaut, criteria); ADR-040, Entscheidung Nr. 1: „Keine neue Rechnung: `table`, `summary`, `verdict` und die Ergebnisse von `msa_boot()` bleiben bytegleich.“; docs/01 §4 (zusätzliche Attribute ohne ADR zulässig); IMPLEMENTATION-RULES: „Existiert ein Original, wird differentiell dagegen getestet.“",
       "kind": "Prüfform K-M1c-7",
       "owner": "Builder",
@@ -161,7 +161,7 @@
     },
     {
       "id": "ACC-14",
-      "status": "[INFRA] offen – Betreiber (config.env)",
+      "status": "[INFRA] umgesetzt vom Betreiber: orchestrator/config.env, letzte Zuweisung von MUT_TEST_EXCLUDE mit dem vorgeschlagenen Ausdruck (gelesen in 30-plan-review M1c, Runde 1)",
       "ref": "orchestrator/config.env: MUT_TEST_EXCLUDE='^(m2-[0-9]|m0-testthat-count$|m1b-[23]-|m1b-7-vignette-full)'; orchestrator/lib/r-mutation.R führt je Mutant alle nicht ausgeschlossenen Abnahmetests aus; Intake §5: „langsame Simulationen bleiben außerhalb von `MUT_TEST_DIRS`, sonst laufen sie einmal je Mutant“; tests/acceptance/test-m1c-8-check-runs.R (ACC-20)",
       "kind": "[INFRA] Testauswahl des Mutationslaufs",
       "owner": "Betreiber",
@@ -170,7 +170,7 @@
     },
     {
       "id": "ACC-15",
-      "status": "Hinweis an den Reviewer in 30-plan-review",
+      "status": "Hinweis an den Reviewer in 30-plan-review; erledigt in Runde 1: ADR-042 Nr. 1 bis 17",
       "ref": "AGENTS.md, Handoff-Disziplin: „Schweigt die Spec, bindet nach Ende der Planrunden das Reviewer-Urteil und wird als ADR dokumentiert.“; orchestrate.sh, path_allowed: reviewer:10-acceptance nur tests/acceptance/, reference/anchors/, orchestrator/handoff/M1c/ (dazu tests/simulation/); ANKER-TODO.md, Abschnitt M1c",
       "kind": "Anker und ADR",
       "owner": "Reviewer",
@@ -188,7 +188,7 @@
     },
     {
       "id": "ACC-17",
-      "status": "Hinweis, nicht blocking",
+      "status": "Hinweis, nicht blocking; PLAN.md lässt msa_boot() in R/grr.R, festgehalten in ADR-042 Nr. 18.3",
       "ref": "docs/02, M1d: „M1d ändert `R/fit.R` und `R/boot.R` nur in der roxygen-Dokumentation.“; K-M1c-6: „ein muttest-Lauf über `R/fit.R` und `R/grr.R`“; orchestrator/config.env: MUT_SCOPE_REGEX='^R/(fit|grr)\\.R$'",
       "kind": "Ort von msa_boot()",
       "owner": "Builder, Betreiber",
@@ -197,7 +197,7 @@
     },
     {
       "id": "ACC-18",
-      "status": "Auslegung des Reviewers (Spec schweigt zu Beobachtungsgröße, Vergleichsform und Fällen); ADR in 30-plan-review (ACC-15)",
+      "status": "Auslegung des Reviewers (Spec schweigt zu Beobachtungsgröße, Vergleichsform und Fällen); festgehalten in ADR-042 (30-plan-review M1c, Runde 1)",
       "ref": "K-M1c-8 (ganzer Wortlaut, criteria); ADR-041, Entscheidung Nr. 1: „K-M1c-8: `msa_fit(type = \"ordinal\")` ohne `control` ruft `ordinal::clmm` mit `iter.max = 2000` und `eval.max = 4000`. Eine eigene `control`-Angabe gilt unverändert.“ und Nr. 2; ANKER-TODO, ANK-TOL.engine_ordinal: „gleicher Aufruf, gleiche Daten, gleicher Optimierer; eine abweichende `control`-Einstellung läge zwischen 1e-8 und 1e-6 und soll auffallen“; docs/01 §2 Nr. 6",
       "kind": "Prüfform K-M1c-8: Steuerung des ordinalen Vorgabepfads, Komponenten auf wine",
       "owner": "Builder",
@@ -206,7 +206,7 @@
     },
     {
       "id": "ACC-19",
-      "status": "Auslegung des Reviewers (Spec schweigt zur Prüfform); ADR in 30-plan-review (ACC-15)",
+      "status": "Auslegung des Reviewers (Spec schweigt zur Prüfform); festgehalten in ADR-042 (30-plan-review M1c, Runde 1)",
       "ref": "K-M1c-8: „`?msa_fit` nennt beide Limits und dass eine eigene `control`-Angabe sie ersetzt.“",
       "kind": "Dokumentation von msa_fit()",
       "owner": "Builder",
@@ -215,7 +215,7 @@
     },
     {
       "id": "ACC-20",
-      "status": "Auslegung des Reviewers (Spec schweigt zur Prüfform von „neu erzeugt“); ADR in 30-plan-review (ACC-15)",
+      "status": "Auslegung des Reviewers (Spec schweigt zur Prüfform von „neu erzeugt“); festgehalten in ADR-042 (30-plan-review M1c, Runde 1)",
       "ref": "K-M1c-8: „Die Kurzläufe aller drei Studien (`ordinal_recovery_check_*`, `binary_recovery_check_*`, `two_level_check_*`) sind mit diesem Code neu erzeugt, weil ihr Implementierungshash `msa_fit` einschließt; K-M1b-2 und K-M1b-3 bleiben grün.“; ADR-041, Entscheidung Nr. 4: „weil der Implementierungshash `msa_fit` einschließt (`sim_implementation()`)“, Konsequenzen: „Der Builder erzeugt die Kurzläufe neu; bis dahin ist der Reproduktionstest aus K-M1b-2 rot“; inst/validation/sim/README.md: „The session records the R/package versions, implementation SHA-256, invocation, seeds, RNG, workers, elapsed time and all diagnoses.“",
       "kind": "Kurzläufe der Klasse-B-Studien aus M1b",
       "owner": "Builder",
