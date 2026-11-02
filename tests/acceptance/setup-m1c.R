@@ -1,14 +1,16 @@
 # Helpers for the M1c acceptance tests (docs/02-statistikkern.md, K-M1c-1 to
-# K-M1c-7); a setup file for the reason given in setup-acceptance.R.
+# K-M1c-8); a setup file for the reason given in setup-acceptance.R.
 #
 # Reference values come from reference/anchors/ (ANK-16, ANK-28, ANK-32,
-# ANK-33, ANK-TOL) or from the oracle the criteria name: lme4::bootMer with an
-# independently written FUN, called at test time on the same fit; no package
-# output is frozen. The scenarios of the coverage study are read at test time
-# from the table in docs/02-statistikkern.md (docs/01 §8: specification, not
-# anchors). The mini-references below are written independently of the package
-# code from Formelsammlung §3 (gauge R&R statistics), §4 (latent residual) and
-# §9 (percentile interval, performance measures of a simulation study).
+# ANK-33, ANK-TOL) or from the oracles the criteria name: lme4::bootMer with an
+# independently written FUN, called at test time on the same fit, and the
+# direct ordinal::clmm call of K-M1b-1 (K-M1c-8); no package output is frozen.
+# The scenarios of the coverage study and the iteration limits of K-M1c-8 are
+# read at test time from docs/02-statistikkern.md (docs/01 §8 and ADR-041:
+# specification, not anchors). The mini-references below are written
+# independently of the package code from Formelsammlung §3 (gauge R&R
+# statistics), §4 (latent residual) and §9 (percentile interval, performance
+# measures of a simulation study).
 # Interpretations of points on which the spec is silent are listed in
 # orchestrator/handoff/M1c/CRITERIA.json under "open" (ACC-n). Test designs,
 # seeds and the injected refit failures below are test parameters, not
@@ -785,4 +787,150 @@ acc_m1c_config_value <- function(key) {
   if (startsWith(v, "'")) return(sub("^'([^']*)'.*$", "\\1", v))
   if (startsWith(v, "\"")) return(sub("^\"([^\"]*)\".*$", "\\1", v))
   sub("[[:space:]].*$", "", v)
+}
+
+# K-M1c-8: iteration limit of the ordinal default path (ADR-041; ACC-18 to ACC-20) ---------------
+#
+# The limits are read at test time from the criterion in docs/02 (values of
+# the specification and of ADR-041 Nr. 1, not empirical anchors; like the note
+# of K-M1c-7). The oracle is ordinal::clmm itself: the control a fit stores
+# in `$control` (after clmm has processed its `control` and `...`) is compared
+# with the control stored by a direct clmm call with the argument the
+# criterion requires.
+
+# The line of a criterion in docs/02.
+acc_m1c_criterion_line <- function(id) {
+  path <- file.path(acc_repo_root(), "docs", "02-statistikkern.md")
+  if (!file.exists(path)) stop("acceptance: specification missing: ", path, call. = FALSE)
+  lines <- readLines(path, warn = FALSE, encoding = "UTF-8")
+  line <- lines[startsWith(lines, paste0("- **", id, ":**"))]
+  if (length(line) != 1L) stop("acceptance: criterion ", id, " not found in ", path, call. = FALSE)
+  line
+}
+
+# iter.max and eval.max of the code span `control = ordinal::clmm.control(
+# iter.max = <n>, eval.max = <m>)` in K-M1c-8; any other form stops the test.
+acc_m1c_8_limits <- function() {
+  if (!is.null(acc_m1c$limits)) return(acc_m1c$limits)
+  line <- acc_m1c_criterion_line("K-M1c-8")
+  spans <- gsub("`", "", regmatches(line, gregexpr("`[^`]+`", line))[[1]], fixed = TRUE)
+  form <- "^control = ordinal::clmm\\.control\\(iter\\.max = ([0-9]+), eval\\.max = ([0-9]+)\\)$"
+  hits <- Filter(length, regmatches(spans, regexec(form, spans)))
+  if (length(hits) != 1L) {
+    stop("acceptance: K-M1c-8 in docs/02 does not name exactly one ",
+         "`control = ordinal::clmm.control(iter.max = <n>, eval.max = <m>)`", call. = FALSE)
+  }
+  out <- c(iter.max = as.numeric(hits[[1]][2]), eval.max = as.numeric(hits[[1]][3]))
+  acc_m1c$limits <- out
+  out
+}
+
+# Mini-reference of the rule of K-M1c-8: the control argument ordinal::clmm
+# must receive. Without `control` among the arguments of msa_fit(), the
+# limits of docs/02; with `control`, exactly the value of the call.
+acc_m1c_8_required_control <- function(args) {
+  if ("control" %in% names(args)) return(args[["control"]])
+  l <- acc_m1c_8_limits()
+  ordinal::clmm.control(iter.max = l[["iter.max"]], eval.max = l[["eval.max"]])
+}
+
+# The control a clmm fit stores, with list elements and optimizer options
+# (optCtrl) ordered by name; expect_equal(tolerance = 0) then compares the
+# values regardless of option order and of integer or double storage.
+acc_m1c_8_control_form <- function(control) {
+  if (!is.list(control) || is.null(names(control))) return(control)
+  if (is.list(control$optCtrl) && length(control$optCtrl)) {
+    control$optCtrl <- control$optCtrl[order(names(control$optCtrl))]
+  }
+  control[order(names(control))]
+}
+
+# The direct call of K-M1b-1 on ordinal::wine, with a control argument if one
+# is given; used as the oracle.
+acc_m1c_8_direct_wine <- function(link, control = NULL) {
+  args <- list(rating ~ 1 + (1 | bottle) + (1 | judge), data = acc_m1b_wine(), link = link)
+  if (!is.null(control)) args["control"] <- list(control)
+  do.call(ordinal::clmm, args)
+}
+
+# Components of a direct wine fit in the roles of llmsa (item = bottle,
+# prompt = judge) with the latent residual of ANK-28.
+acc_m1c_8_wine_reference <- function(direct, link) {
+  v <- acc_m1b_clmm_components(direct)
+  c(item = v[["bottle"]], prompt = v[["judge"]], Residual = acc_m1b_latent_residual(link))
+}
+
+# `expr` evaluated while every call of ordinal::clmm is recorded: the binding
+# in the namespace of ordinal is replaced for the duration of this function by
+# a wrapper that evaluates the same call in the same calling frame with the
+# original function and records the control stored by each fit (ACC-18).
+# Returns list(value, warnings, controls).
+acc_m1c_8_record_clmm <- function(expr) {
+  original <- get("clmm", envir = asNamespace("ordinal"))
+  controls <- list()
+  recorder <- function(...) {
+    call <- sys.call()
+    call[[1L]] <- original
+    model <- eval(call, parent.frame())
+    controls[length(controls) + 1L] <<- list(model$control)
+    model
+  }
+  testthat::local_mocked_bindings(clmm = recorder, .package = "ordinal")
+  res <- acc_m1b_catch(expr)
+  c(res, list(controls = controls))
+}
+
+# msa_fit() on wine (item = bottle, prompt = judge, one replicate; K-M1b-1)
+# with the further arguments `args`, every call of ordinal::clmm recorded.
+acc_m1c_8_wine_fit <- function(link, args = list()) {
+  acc_m1c_8_record_clmm(do.call(msa_fit, c(list(acc_m1b_wine_runs(), type = "ordinal",
+                                                 levels = acc_m1b_wine_levels(), link = link), args)))
+}
+
+# Every recorded clmm call and the model of the returned fit store the
+# control `expected` (a stored control in the form of acc_m1c_8_control_form()).
+acc_m1c_8_expect_controls <- function(rec, expected, label) {
+  expect_false(inherits(rec$value, "error"),
+               label = sprintf("%s: msa_fit() runs (%s)", label,
+                               if (inherits(rec$value, "error")) conditionMessage(rec$value) else "ok"))
+  expect_gte(length(rec$controls), 1L, label = sprintf("%s: number of recorded calls of ordinal::clmm", label))
+  for (i in seq_along(rec$controls)) {
+    expect_equal(acc_m1c_8_control_form(rec$controls[[i]]), expected, tolerance = 0,
+                 label = sprintf("%s: control stored by call %d of ordinal::clmm", label, i),
+                 expected.label = "the control of the direct call with the required argument")
+  }
+  if (inherits(rec$value, "msa_fit")) {
+    expect_equal(acc_m1c_8_control_form(rec$value$model$control), expected, tolerance = 0,
+                 label = sprintf("%s: fit$model$control", label),
+                 expected.label = "the control of the direct call with the required argument")
+  }
+}
+
+# Plain text of a help page for the K-M1c-8 checks: acc_m1b_rd_text() without
+# quote characters, so that \code{iter.max = 2000} reads iter.max = 2000.
+acc_m1c_8_rd_plain <- function(name) {
+  x <- acc_m1b_rd_text(name)
+  for (ch in c("'", "\"", "`", "‘", "’", "“", "”")) x <- gsub(ch, "", x, fixed = TRUE)
+  x
+}
+
+# A limit named as `<name> = <value>` (spaces free; ":" or "of" also accepted).
+acc_m1c_8_limit_pattern <- function(name, value) {
+  paste0("(?<![[:alnum:]_.])", gsub(".", "\\.", name, fixed = TRUE), "\\s*(?:=|:|\\bof\\b)?\\s*",
+         format(value, scientific = FALSE), "(?![0-9])")
+}
+
+acc_m1c_8_word_replace <- "replac|overrid|supersed|instead|precedence"
+
+# Sentences of a plain text: split after ".", "!" or "?" before an upper-case
+# letter or an opening bracket.
+acc_m1c_8_sentences <- function(text) strsplit(text, "(?<=[.!?])\\s+(?=[[:upper:](])", perl = TRUE)[[1]]
+
+# The value of a field "key: value" of a session file of the class-B studies
+# (format llmsa-class-b-v1); NA unless exactly one line carries the key.
+acc_m1c_8_session_field <- function(path, key) {
+  lines <- readLines(path, warn = FALSE)
+  hit <- lines[startsWith(lines, paste0(key, ": "))]
+  if (length(hit) != 1L) return(NA_character_)
+  substring(hit, nchar(key) + 3L)
 }
