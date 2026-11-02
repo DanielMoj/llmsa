@@ -78,22 +78,37 @@ test_that("two-level contrasts retain the range component under ucminf recoding 
   r <- latent_test_runs(prompts = 2L, models = 2L, blocks = 2L)
   # One random term permits ucminf. Its standard settings resolve this
   # parameterization comparison; overly small gradient settings need not do so.
+  # The last line search depends on rounding: with OpenBLAS, ubuntu-latest ends
+  # with code 4 at this optimum (ADR-039). msa_fit() must then warn, as for any
+  # other unsuccessful code, and the range warning must stay separate.
   control <- ordinal::clmm.control(method = "ucminf")
+  expect_range_outcome <- function(captured) {
+    range <- grepl("E[beta-hat^2/2] = sigma^2 + Var(beta-hat)/2", captured$warnings, fixed = TRUE)
+    expect_identical(sum(range), 1L)
+    expected <- if (identical(as.integer(captured$value$model$optRes$convergence), 4L)) {
+      expect_false(captured$value$converged)
+      "Ordinal model did not converge: Stopped by zero step from line search"
+    } else {
+      expect_true(captured$value$converged)
+      character()
+    }
+    expect_identical(captured$warnings[!range], expected)
+  }
   fit <- latent_test_capture(msa_fit(r, type = "ordinal", control = control))
-  expect_true(fit$value$converged)
+  expect_range_outcome(fit)
   expect_identical(fit$value$derived, c("prompt", "model", "block"))
-  expect_length(fit$warnings, 1L)
-  expect_match(fit$warnings, "E[beta-hat^2/2] = sigma^2 + Var(beta-hat)/2", fixed = TRUE)
   for (source in fit$value$derived) {
     coefficient <- fit$value$model$beta[[paste0(source, levels(fit$value$data[[source]])[2L])]]
     expect_equal(fit$value$vc$variance[fit$value$vc$source == source], coefficient^2 / 2,
                  tolerance = numeric_tolerance("arithmetic", "abs_tol"))
   }
-  sum_fit <- local({
+  sum_captured <- local({
     old <- options(contrasts = c("contr.sum", "contr.poly"))
     on.exit(options(old))
-    latent_test_capture(msa_fit(r, type = "ordinal", control = control))$value
+    latent_test_capture(msa_fit(r, type = "ordinal", control = control))
   })
+  expect_range_outcome(sum_captured)
+  sum_fit <- sum_captured$value
   for (source in sum_fit$derived) {
     # Sum coding puts effects +b and -b on the two levels: Var(+b, -b) = 2b^2.
     coefficient <- sum_fit$model$beta[[paste0(source, "1")]]
@@ -101,13 +116,11 @@ test_that("two-level contrasts retain the range component under ucminf recoding 
                  tolerance = numeric_tolerance("arithmetic", "abs_tol"))
   }
   latent_test_same_components(sum_fit, fit$value)
-  expect_true(sum_fit$converged)
   renamed <- r[rev(seq_len(nrow(r))), ]
   for (source in c("prompt_id", "model_id", "block")) {
     renamed[[source]] <- ifelse(renamed[[source]] == unique(r[[source]])[1L], "z", "a")
   }
   again <- latent_test_capture(msa_fit(renamed, type = "ordinal", control = control))
-  expect_true(again$value$converged)
-  expect_length(again$warnings, 1L)
+  expect_range_outcome(again)
   latent_test_same_components(again$value, fit$value)
 })

@@ -36,15 +36,30 @@ for (case in c("removed", "missing", "balanced")) {
     d$y <- z - mean(z)
     engine <- rework_capture(lme4::lmer(y ~ 1 + (1 | item) + (1 | prompt) + (1 | item:prompt),
       data = d, REML = TRUE, control = lme4::lmerControl(optimizer = "nloptwrap")))
-    expect_s3_class(engine$value, "error")
-    if (!inherits(engine$value, "error")) return(invisible())
-    expect_length(engine$warnings, 0L)
-    # Only the diagnostic prefix is an own-output contract (no external
-    # oracle for wording); the cause is from the independent lme4 call.
-    out <- rework_error(msa_fit(runs, interactions = TRUE),
-      paste0("Numeric model initialization failed: ", conditionMessage(engine$value)))
-    expect_false(inherits(out$value, "Rcpp::exception"))
-    expect_length(out$warnings, 0L)
+    # Whether this direct start fails depends on rounding in the optimizer path;
+    # on macos-latest two of the three inputs fit (BL-89, ADR-039). The synthetic
+    # block below fixes the contract on every platform.
+    if (inherits(engine$value, "error")) {
+      expect_length(engine$warnings, 0L)
+      # Only the diagnostic prefix is an own-output contract (no external
+      # oracle for wording); the cause is from the independent lme4 call.
+      out <- rework_error(msa_fit(runs, interactions = TRUE),
+        paste0("Numeric model initialization failed: ", conditionMessage(engine$value)))
+      expect_false(inherits(out$value, "Rcpp::exception"))
+      expect_length(out$warnings, 0L)
+    } else {
+      out <- rework_capture(msa_fit(runs, interactions = TRUE))
+      expect_false(inherits(out$value, "Rcpp::exception"))
+      if (inherits(out$value, "error")) {
+        # Documented in ?msa_fit: high repeatability can end any stage of the
+        # default path at working precision, always under its own name.
+        expect_match(conditionMessage(out$value),
+                     "^(Numeric model |Degenerate numeric model: |Analytic REML did not converge )")
+        expect_null(conditionCall(out$value))
+      } else {
+        expect_s3_class(out$value, "msa_fit")
+      }
+    }
   })
 }
 

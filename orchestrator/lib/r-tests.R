@@ -21,6 +21,9 @@ Sys.setenv(NOT_CRAN = "true")
 dirs <- commandArgs(trailingOnly = TRUE)
 if (!length(dirs)) dirs <- c("tests/testthat", "tests/acceptance", "tests/e2e", "tests/fuzz")
 
+# BL-104: Sonst bricht der ProgressReporter einen Testordner nach zehn Fehlschlägen ab.
+options(testthat.progress.max_fails = Inf)
+
 totals <- c(tests = 0, failed = 0, errors = 0, skipped = 0)
 ran <- character()
 for (dir in dirs) {

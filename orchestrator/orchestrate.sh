@@ -106,7 +106,17 @@ release_lock() {
   fi
   LOCK_HELD=0
 }
-trap release_lock EXIT INT TERM
+# Ein Signal beendet den Lauf. Ohne exit liefe er nach dem Aufräumen ohne Sicherung weiter (BL-103).
+on_signal() {
+  local name="$1" code="$2"
+  trap - INT TERM
+  log "Abbruch durch Signal $name: kein Rollback; vor dem Neustart den Arbeitsbaum prüfen (git status)."
+  refresh_status "Abbruch durch Signal $name" "$code" true
+  exit "$code"
+}
+trap release_lock EXIT
+trap 'on_signal INT 130' INT
+trap 'on_signal TERM 143' TERM
 
 acquire_lock() {
   local lock="$ORCH/.lock" candidate oldpid="" foreign=""
@@ -448,8 +458,29 @@ snapshot_worktree() {
   done
 }
 
+# Rollback und Hash-Vergleich setzen eine vollständige Sicherung voraus. Fehlt sie,
+# wäre eine Territoriumsmeldung falsch und das Löschen ungesicherter Pfade endgültig (BL-103).
+require_snapshot() {
+  local path missing=""
+  if [ -z "$OWNERSHIP_SNAPSHOT" ] || [ ! -d "$OWNERSHIP_SNAPSHOT/files" ] \
+      || [ ! -f "$OWNERSHIP_SNAPSHOT/protected-logs.sha256" ]; then
+    missing="Sicherungsverzeichnis oder Log-Manifest"
+  else
+    for path in "${!OWNERSHIP_BEFORE[@]}"; do
+      [ "${OWNERSHIP_BEFORE[$path]}" != missing ] || continue
+      if [ ! -e "$OWNERSHIP_SNAPSHOT/files/$path" ] && [ ! -L "$OWNERSHIP_SNAPSHOT/files/$path" ]; then
+        missing="$path"
+        break
+      fi
+    done
+  fi
+  [ -n "$missing" ] || return 0
+  fatal "Sicherung der Modellphase unvollständig (${OWNERSHIP_SNAPSHOT:-kein Verzeichnis}, fehlt: $missing); nichts zurückgesetzt, nichts gelöscht. Arbeitsbaum prüfen."
+}
+
 restore_worktree() {
   local base="$1" path saved
+  require_snapshot
   rollback_attempt "$base"
   for path in "${OWNERSHIP_REMOVE[@]}"; do
     [ -n "$path" ] || continue
@@ -465,6 +496,7 @@ restore_worktree() {
       mkdir -p "$(dirname "$path")"
       cp -a -- "$saved" "$path"
     else
+      # Nach require_snapshot nur Pfade, die schon vor der Phase fehlten.
       rm -f -- "$path"
     fi
   done
@@ -619,6 +651,7 @@ run_model() {
       if env -i "${MODEL_ENV[@]}" bash -c "$cmd" > "$log_file" 2>&1; then rc=0; else rc=$?; fi
     fi
 
+    require_snapshot
     if ! phase_logs_intact; then
       OWNERSHIP_BAD="orchestrator/logs/** (Hash-Manifest)"
       restore_worktree "$base"

@@ -130,7 +130,8 @@ test_that("latent display retains significant digits and documentation traces ev
   if (!nzchar(rmd)) rmd <- file.path(test_path("..", ".."), "vignettes", "validation.Rmd")
   expect_true(file.exists(rmd))
   sources <- latent_test_documentation_sources(rmd)
-  expect_true(system.file("validation", "latent", "reference_checks.R", package = "llmsa", mustWork = TRUE) %in% sources)
+  expect_true(normalizePath(system.file("validation", "latent", "reference_checks.R", package = "llmsa", mustWork = TRUE),
+                            mustWork = TRUE) %in% sources)
   leaves <- function(x) if (is.list(x)) unlist(lapply(x, leaves), use.names = FALSE) else if (is.numeric(x)) x else numeric()
   anchors <- e$latent_anchors(e$latent_context(repo_root = ""))
   values <- leaves(lapply(anchors[c("ANK-21", "ANK-25", "ANK-28")], `[[`, "value"))

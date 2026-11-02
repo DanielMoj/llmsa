@@ -237,7 +237,8 @@ test_that("the vignette and every sourced helper read reference numbers from anc
   rmd <- if (is.null(root)) system.file("doc", "validation.Rmd", package = "llmsa", mustWork = TRUE) else
     file.path(root, "vignettes", "validation.Rmd")
   sources <- numeric_documentation_sources(rmd)
-  expect_true(system.file("validation", "numeric", "reference_checks.R", package = "llmsa", mustWork = TRUE) %in% sources)
+  expect_true(normalizePath(system.file("validation", "numeric", "reference_checks.R", package = "llmsa", mustWork = TRUE),
+                            mustWork = TRUE) %in% sources)
   anchors <- e$validation_anchors(e$validation_context(repo_root = ""))
   for (path in sources) expect_identical(numeric_literal_hits(readLines(path, warn = FALSE), anchors), character(), info = path)
   # The guard itself must recognize a copied empirical value and tolerance.

@@ -58,6 +58,19 @@ model_build_expect_failure <- function(out) {
   }
 }
 
+# Reproductions on real rounding: which documented working-precision error
+# arises depends on Matrix and CHOLMOD arithmetic (BL-89, ADR-039).
+model_build_expect_named_precision_failure <- function(out) {
+  expect_s3_class(out$value, "simpleError")
+  if (inherits(out$value, "error")) {
+    expect_true(conditionMessage(out$value) %in% c(
+      "Numeric model variance is not representable on the original scale at working precision.",
+      "Numeric model residual variance cannot be resolved at working precision."))
+    expect_identical(class(out$value), c("simpleError", "error", "condition"))
+    expect_null(conditionCall(out$value))
+  }
+}
+
 for (case in list(c(noise = 1e-7, seed = 1002L), c(noise = 1e-8, seed = 1001L),
                   c(noise = 1e-8, seed = 1005L))) {
   test_that(sprintf("high repeatability gives ANOVA components or a named construction error (seed 11/%d, noise %g)",
@@ -67,7 +80,7 @@ for (case in list(c(noise = 1e-7, seed = 1002L), c(noise = 1e-8, seed = 1001L),
     out <- rework_capture(msa_fit(runs))
     # A platform may resolve the model arithmetic; success must then agree
     # with the independent EMS result. A raw engine failure is never allowed.
-    if (inherits(out$value, "error")) model_build_expect_failure(out)
+    if (inherits(out$value, "error")) model_build_expect_named_precision_failure(out)
     else model_build_expect_components(out$value, reference)
     expect_false(any(grepl("CHOLMOD|Matrix|Cholesky|not positive definite",
                             vapply(out$warnings, conditionMessage, ""), ignore.case = TRUE)))
@@ -189,7 +202,9 @@ test_that("explicit fitting control preserves original engine construction condi
     warning("Synthetic direct model warning", call. = FALSE)
     stop(cause)
   }, .package = "lme4")
-  out <- rework_capture(msa_fit(model_build_runs(), control = lme4::lmerControl(optimizer = "bobyqa")))
+  # noise = 1 keeps the input away from lme4's convergence checks: at the default
+  # noise = 1e-3, macos-latest also warns about the Hessian (ADR-039).
+  out <- rework_capture(msa_fit(model_build_runs(noise = 1), control = lme4::lmerControl(optimizer = "bobyqa")))
   expect_identical(out$value, cause)
   expect_identical(vapply(out$warnings, conditionMessage, ""), "Synthetic direct model warning")
 })

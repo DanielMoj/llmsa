@@ -106,7 +106,9 @@ test_that("vanishing residual variance has a named diagnostic and omitted effect
   rework_error(msa_numeric_balanced(d, list("item")),
                "Degenerate numeric model: residual variance is zero at working precision.")
   # Positive relative variation is supported at two very different scales.
-  one$value <- one$value + rep(c(-1, 1, 0), 3) / 100
+  # /10 keeps a distance to the documented working-precision limit: /100 ends with
+  # "Analytic REML did not converge" on macos-latest, /1000 also on Linux (ADR-039).
+  one$value <- one$value + rep(c(-1, 1, 0), 3) / 10
   reference <- suppressMessages(msa_fit(as_msa_runs(one)))
   for (scale in c(1e-150, 1e-100, 1e100)) {
     scaled <- one
