@@ -1,5 +1,76 @@
 # PROGRESS — Langzeitgedächtnis des Builders
 
+## M1b — REWORK Runde 8 (02.11.2026)
+
+REVIEW/verdict-code Runde 7 nach dem Entparken enthält `blocking: []`.
+Die aktuellen Gate-Fakten (`2026-11-02T08:47:04+01:00`,
+`env.sha = 8d1763ef6329a7408975b6004000f9e9e7efd94e`) sind weiterhin
+Runde 7: sieben Gates `pass`, allein territory `fail`, `result: fail`.
+Kein Status `error`, kein aktueller `[QA-PENDING]`-Befund. Die vorherigen
+AIAG-Fehler sind durch den Gate-Neulauf überholt. M1b bleibt bis zu neuen
+grünen Gates und Reviewer-Verdict nicht abgenommen.
+
+- **E37:** AIAG-Datenblatt vom Betreiber wiederhergestellt; sein SHA-256
+  stimmt mit ANK-10 überein, QUELLE.txt ist vorhanden. lint, tests und
+  mutgate sind grün. Harness-Nacharbeit BL-103 Nr. 3 bleibt
+  OUT-OF-TERRITORY [INFRA].
+- **E38 — OUT-OF-TERRITORY [INFRA]:** Die Abbruchgrenze des
+  Testtreibers bleibt Betreiberarbeit BL-104. Im aktuellen Gate wurden
+  alle 28 Abnahmedateien abgeschlossen, ohne Fehlschlag.
+- **E39:** Mutgate der Runde 7 besteht mit 94,09 bei verlangten 90,83.
+  Nachrechnung des Berichts: 1306 erkannt, 82 nicht erkannt,
+  17 Überlebende durch 15 bestehende Freigaben gedeckt. Weitere Arbeit
+  an BL-102 nach dem 26.11.2026; keine neuen Tests, Claims oder Approvals.
+- **E40 — OUT-OF-TERRITORY [INFRA]:** Der Start-Log bestätigt
+  `REWORK<=6` und `ARBITER+2`; Runde 8 ist die letzte. Rückstellung der
+  Konfiguration vor M1c nach ADR-038 Nr. 3 bleibt Betreiberarbeit.
+- **E41 — OUT-OF-TERRITORY [INFRA]:** Einziges rotes Gate ist territory.
+  `gate-territory.log:2` nennt die unpassenden Audit-Basen `6fdc42c…`
+  und `c80fb40…`; Zeile 5: `exit=1 status=fail`. Ursache laut REVIEW und
+  ADR-038: Park-/Entpark-Commits zwischen Modellphase und Gates.
+  Neuer Audit und Commit erfolgen durch den Orchestrator; BL-106 bleibt
+  Betreiberarbeit. Kein Gate-Erfolg für Runde 8 wird vorweggenommen.
+- **E42:** Nur PROGRESS.md und REWORK-NOTES.md ergänzt. Beide Hashes
+  aus ADR-038 stimmen; alle 198 erfassten Paketdateien einschließlich
+  aller 96 Tests/Fixtures sind bytegleich zur Inventur vor Rework r7.
+  Mutationsbeleg bleibt der bestandene Lauf der Runde 7, gemäß ADR-038.
+
+Gezielte lesende Prüfungen dieser Runde, jeweils zuletzt Exit 0;
+vollständige Kommandos, Befundantworten und echte Outputs in
+[REWORK-NOTES.md](orchestrator/handoff/M1b/REWORK-NOTES.md), R8-P1/R8-P2.
+Rohlogs und Diagnoseskripte: `/tmp/llmsa-m1b-r8-tbm5gjjf/`.
+
+```text
+acb4bac7680a9f3c2f4ac4a556b81cdf3bef0cd4a0f1535a5339a0111a64f180  R/fit.R
+004eedebd4e491fbecf043d695faa38b7dad39bd6f0ffd800dbd2d05c709512e  R/grr.R
+Acceptance contexts completed in r7 log: 28/28
+Package files vs r7 pre-check inventory: 198/198 byte-identical; 0 added, 0 removed
+Tests and fixtures vs r7 pre-check inventory: 96/96 byte-identical
+Recomputed r7 score: 94.09; detected 1306; denominator 1388; no mutation run or approval written
+```
+
+Gelesene Gate-Belege aus Runde 7: Paketcheck `Status: OK`;
+testthat `[ FAIL 0 | WARN 0 | SKIP 1 | PASS 5254 ]`,
+Abnahme `[ FAIL 0 | WARN 2 | SKIP 0 | PASS 6559 ]`, e2e 49 und fuzz 25
+bestandene Erwartungen. Die Warnungen bleiben E23/BL-93.
+Keine erneuten Test-, Simulations-, Paketcheck- oder Mutationsläufe
+und keine Git-Kommandos. Arbiter-Direktive und die bisherigen
+Produkt-/Kurzlaufbelege gelten fort. Neue Gates, Territoriumsprüfung
+und Commit bleiben beim Orchestrator, Abnahme beim Reviewer.
+
+Abschließender Inventurvergleich R8-P3, Exit 0, echter Output:
+
+```text
+Inventory: 2 changed, 0 added, 0 removed files
+Changed: PROGRESS.md
+Changed: orchestrator/handoff/M1b/REWORK-NOTES.md
+Unchanged inventory files: 1059/1059
+Tests and fixtures unchanged: 96/96
+Prior REWORK-NOTES and PROGRESS history: byte-identical
+Claims, approvals, gate facts and inventoried state: unchanged
+Gate facts unchanged: round 7, result fail
+```
+
 ## M1b — REWORK Runde 7 (01.11.2026)
 
 REVIEW/verdict-code Runde 6 enthalten `blocking: []`; REVIEW und ADR-037

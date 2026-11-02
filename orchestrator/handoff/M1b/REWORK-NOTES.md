@@ -1,3 +1,244 @@
+# M1b — REWORK, Runde 8
+
+Rolle: Builder · Stand: 02.11.2026 · Keine Git-Kommandos.
+
+## Ergebnis und Grundlage
+
+**Kein offener blocking-Befund und kein fachlich rotes Gate.** Das aktuelle
+REVIEW/verdict-code.json der Runde 7 nach dem Entparken enthält
+`blocking: []`. Einzig `territory` ist rot, als [INFRA] eingeordnet (E41).
+Nach E42 und ADR-038 werden ausschließlich dieser zugewiesene Handoff und
+PROGRESS.md ergänzt. M1b bleibt bis zu neuen grünen Gates und dem
+Reviewer-Verdict **nicht abgenommen**.
+
+Gelesen: AGENTS.md, IMPLEMENTATION-RULES.md, contracts/PROTOCOLS.md,
+Handoff-Schema, REVIEW/verdict-code Runde 7, gates.json samt rotem
+territory-Log und den übrigen Gate-Belegen, CRITERIA.json, ARBITER.md,
+LESSONS.md, aktueller M1b-Stand in PROGRESS.md und REWORK-NOTES.md,
+docs/01, M1b in docs/02, die M1b-Abnahmetests mit setup-m1b.R und
+ADR-035/037/038. Die Arbiter-Direktive zu K-M1b-5 gilt unverändert:
+π²/3, rptR auf der Liability-Skala, ANK-25 als Installationsprüfung.
+
+Die gelesenen Gate-Fakten stammen aus **Runde 7**,
+`2026-11-02T08:47:04+01:00`,
+`env.sha = 8d1763ef6329a7408975b6004000f9e9e7efd94e`:
+deps, lint, tests, trace, mutgate, golden-adr und mutfull `pass`;
+territory `fail`; `result: fail`. Kein Status `error` und kein aktueller
+`[QA-PENDING]`-Befund. Die Diagnosen dieser Runde lesen und prüfen diese
+Belege; sie erzeugen keine neuen Gate-Fakten.
+
+## Antworten auf jede aktuelle Befund-ID
+
+### E37 — Datenverlust behoben; Harness-Nacharbeit OUT-OF-TERRITORY [INFRA]
+
+Ref: REVIEW E37; ANK-10; BL-103; ADR-037 Nr. 2.
+
+Das vom Betreiber wiederhergestellte Datenblatt
+`reference/quellen/data/aiag/anova_example.csv` hat den SHA-256 aus
+ANK-10; `QUELLE.txt` liegt daneben (R8-P2). Die zuvor betroffenen Gates
+lint, tests und mutgate bestehen in Runde 7, siehe ihre Logzeilen unten.
+Die historischen Fehlbelege der Runden 5–7 bleiben erhalten, sind aber
+durch diesen Gate-Neulauf überholt. Der noch offene Schutz von Sicherung
+und Restore bei Signalen (BL-103 Nr. 3, REVIEW „An den Betreiber“ Nr. 3)
+bleibt OUT-OF-TERRITORY; keine Ersatzdaten oder Eingriffe unter reference/.
+
+### E38 — OUT-OF-TERRITORY [INFRA], im aktuellen Lauf ohne Wirkung
+
+Ref: REVIEW E38; Gate tests; BL-104;
+`orchestrator/lib/r-tests.R:36`.
+
+Der Testtreiber verwendet weiterhin den ProgressReporter ohne Aufhebung
+der Abbruchgrenze. Das aktuelle tests-Gate ist grün; alle 28 Abnahmedateien
+sind als abgeschlossen im Log nachgewiesen (R8-P2), Abnahme
+`[ FAIL 0 | WARN 2 | SKIP 0 | PASS 6559 ]`. Die zwei Warnungen bleiben
+Reviewer-Nacharbeit BL-93/E23. Die Abbruchgrenze hat diesmal keine Datei
+verhindert. Die Korrektur des Testtreibers nach BL-104 gehört dem Betreiber
+nach M1b und wird hier nicht vorgenommen.
+
+### E39 — mutgate pass; weitere Mutationsarbeit zurückgestellt
+
+Ref: REVIEW E39; `gate-mutgate.log:1770`; ADR-035 Nr. 1;
+ADR-038 Nr. 1–2; SCHEMA.md (MUT-EQUIV); BL-102.
+
+Der vorhandene vollständige Bericht `reports/mutation/mutation.json`
+enthält 1456 Mutanten: 1278 Killed, 28 Timeout, 99 Survived,
+51 RuntimeError, keine NoCoverage. Nach der Gate-Formel werden
+1306 entdeckt und 82 nicht entdeckt; 17 Überlebende sind durch die
+15 bestehenden Reviewer-Freigaben gedeckt. Nachgerechnet:
+100 × 1306 / 1388 = **94,09**, wie im Gate (verlangt 90,83).
+Die 16 Builder-Anträge treffen ihre einzelnen Mutanten einschließlich
+Spalte, Ersetzung und Quellzeile; die Freigabe zu R/grr.R stammt aus M1a.
+Die Freigabe R/fit.R:415 umfasst laut ihrer Begründung und REVIEW die
+drei einzeln beantragten Spalten 37, 46 und 54 (R8-P2).
+
+Die 82 nicht freigegebenen Überlebenden bleiben gemäß REVIEW/BL-102
+nach dem 26.11.2026 zu bearbeiten. In dieser Runde kein Mutationslauf,
+kein neuer Test und kein neuer Claim. MUT-EQUIV.json und
+MUT-EQUIV-APPROVED.json bleiben unverändert; keine eigene Freigabe.
+
+### E40 — OUT-OF-TERRITORY [INFRA], letzte Runde bestätigt
+
+Ref: REVIEW E40; `orchestrator/logs/orchestrate.log:165,169`;
+`orchestrator/orchestrate.sh:963–964`; ADR-038 Nr. 3; BL-105.
+
+Der Start-Log nennt `REWORK<=6` und `ARBITER+2`, der folgende
+Builder-Aufruf ausdrücklich M1b r8 (R8-P2). Mit vorhandenem
+`arbiter-granted` ist dies die letzte Runde (6 + 2). Ein fehlendes PASS
+bei grünen Gates würde laut gelesener Steuerlogik wieder zum Parken
+führen; ein Runde-8-Ergebnis wird hier nicht vorweggenommen.
+Vor M1c setzt der Betreiber gemäß ADR-038 Nr. 3
+`MAX_ROUNDS_REWORK=5`, `MUT_RATCHET_TOL=2` und entfernt die beiden
+ADR-038-Zeilen. Konfiguration und Zustandsmarker bleiben unverändert.
+
+### E41 — OUT-OF-TERRITORY [INFRA], einziges rotes Gate
+
+Ref: REVIEW E41; `orchestrator/state/M1b/gate-territory.log:2,5`;
+`orchestrator/gates.d/82-territory.sh:11–14`; ADR-038 (Kontext); BL-106.
+
+Der Log nennt die unpassenden Audit-Basen `6fdc42c…` und `c80fb40…`
+und `exit=1 status=fail` (R8-P2). Laut REVIEW/ADR-038 entstanden sie
+durch Park- und Entpark-Commits zwischen Modellphase und Gates; kein
+Produktfehler und keine Territoriumsverletzung einer Modellrolle.
+Das Gate verlangt die Audit-Basis der unmittelbar vorherigen Modellphase.
+
+Der aktuelle territory-ok-Marker stammt bereits aus dem nachfolgenden
+Review r7 (09:09:33, Basis `61f49c2…`); er ersetzt den roten Gate-Beleg
+nicht. Der Orchestrator prüft nach dieser Phase den neuen Diff, erzeugt
+den Phasen-Commit und lässt die Gates folgen. Zwischen Rework-Commit
+und Gates sollen nach REVIEW keine weiteren Betreiber-Commits oder
+Park-/Entpark-Vorgänge liegen. Die dauerhafte Harness-Korrektur bleibt
+BL-106. Keine Änderung von Audit-Markern, Gates oder gates.json.
+
+### E42 — Vorgaben für Runde 8 eingehalten
+
+Ref: REVIEW E42; ADR-038 Nr. 1–2.
+
+R8-P1 bestätigt die beiden vorgeschriebenen Datei-Hashes. R8-P2
+vergleicht zusätzlich mit der erhaltenen Inventur vor Rework r7:
+alle 198 erfassten Paketdateien einschließlich aller 96 Dateien unter
+tests/ sind bytegleich, ohne hinzugekommene oder entfernte Datei.
+Der Bericht enthält denselben Quelltext; sein Erzeuger
+`orchestrator/lib/r-mutation.R:99` lässt beim Zusammenfügen der Zeilen
+genau das letzte LF weg. Der Abgleich berücksichtigt ausschließlich
+dieses belegte Formatdetail; die Datei-Hashes werden unverändert gegen
+ADR-038 geprüft.
+
+Damit bleiben die lokalen Voraussetzungen für den Mutationsbeleg aus
+Runde 7 erhalten. Das in ADR-038 angeordnete mutgate der Runde 8 ohne
+Mutations-Scope ist selbst kein neuer Mutationsbeleg. Geändert werden
+nur PROGRESS.md und dieser Handoff; der Schlussvergleich steht in R8-P3.
+
+Frühere Befunde laut REVIEW: E33/E34/E36 erledigt; E32/BL-100 und
+E35/BL-101 nach ADR-035 zurückgestellt; E20 Builder-Teil erledigt,
+Reviewer-Teil BL-91 offen; E21 Kurzläufe im Gate reproduziert (BL-92);
+E22 unverändert (BL-86); E23 Reviewer-Helferwarnungen (BL-93).
+Die bisherigen Antworten bleiben unten bytegleich erhalten.
+
+## Ausgeführte gezielte Prüfkommandos
+
+Arbeitsverzeichnis: `/mnt/c/Users/Danie/dev/Llmsa/llmsa`.
+Diagnoseskripte und Rohlogs liegen unter
+`/tmp/llmsa-m1b-r8-tbm5gjjf/`; Befehle und Output außerdem im
+Orchestrator-Phasenlog. Alle Prüfungen sind lesend für das Repository.
+Keine erneute Ausführung von Abnahmetests, Simulationen, Paketcheck
+oder Mutationstest: E42 begrenzt diese Runde auf Dokumentation und
+Integritätsnachweis am bereits geprüften Stand.
+
+### R8-P1 — Hashes nach ADR-038, Exit 0
+
+```sh
+sha256sum R/fit.R R/grr.R
+```
+
+```text
+acb4bac7680a9f3c2f4ac4a556b81cdf3bef0cd4a0f1535a5339a0111a64f180  R/fit.R
+004eedebd4e491fbecf043d695faa38b7dad39bd6f0ffd800dbd2d05c709512e  R/grr.R
+```
+
+### R8-P2 — Gate-Belege, Bericht und Bestand abgleichen, Exit 0
+
+```sh
+set -o pipefail
+python3 /tmp/llmsa-m1b-r8-tbm5gjjf/verify_evidence.py 2>&1 | tee /tmp/llmsa-m1b-r8-tbm5gjjf/evidence.log
+```
+
+Echter Output, Auszug; die ausgegebenen R7-Logzeilen sind gelesene
+Gate-Belege, keine Testausführung dieser Runde:
+
+```text
+Input verdict: round 7, REWORK, blocking 0
+Gate facts: round 7, 2026-11-02T08:47:04+01:00, sha 8d1763ef6329a7408975b6004000f9e9e7efd94e
+Gates: deps=pass, lint=pass, tests=pass, trace=pass, territory=fail, mutgate=pass, golden-adr=pass, mutfull=pass
+Overall result: fail
+Status error: none; current verdict QA-PENDING: none
+orchestrator/state/M1b/gate-lint.log:86: Status: OK
+orchestrator/state/M1b/gate-tests.log:524: [ FAIL 0 | WARN 0 | SKIP 1 | PASS 5254 ]
+orchestrator/state/M1b/gate-tests.log:982: [ FAIL 0 | WARN 2 | SKIP 0 | PASS 6559 ]
+orchestrator/state/M1b/gate-tests.log:1010: [ FAIL 0 | WARN 0 | SKIP 0 | PASS 49 ]
+orchestrator/state/M1b/gate-tests.log:1031: [ FAIL 0 | WARN 0 | SKIP 0 | PASS 25 ]
+orchestrator/state/M1b/gate-tests.log:1032: r-tests: pass — 488 Tests in tests/testthat, tests/acceptance, tests/e2e, tests/fuzz; 0 fehlgeschlagen, 0 Fehler, 1 übersprungen
+orchestrator/state/M1b/gate-territory.log:2: territory: Audit-Basis 6fdc42cfad4176a097fe58198800902c4b409d33 passt nicht zur Modellphase c80fb4099d6dde76f0b3929820a9d36c02c60d70
+orchestrator/state/M1b/gate-territory.log:5: exit=1 status=fail script=82-territory.sh
+orchestrator/state/M1b/gate-mutgate.log:1770: mutgate: pass (score=94.09 required=90.83 baseline=94.09 floor=80)
+orchestrator/state/M1b/gate-mutfull.log:2: mutfull: pass (nicht fällig in M1b)
+Acceptance contexts completed in r7 log: 28/28
+AIAG SHA-256 matches ANK-10: 3161a373027b7e61d4818659d3897f8d516ba2776ae145ab5544d26e4acbff16; QUELLE.txt present
+Mutation report sources match both files after restoring the final LF omitted by r-mutation.R:99; file hashes match ADR-038
+Package files vs r7 pre-check inventory: 198/198 byte-identical; 0 added, 0 removed
+Tests and fixtures vs r7 pre-check inventory: 96/96 byte-identical
+Mutation report statuses: Killed=1278, RuntimeError=51, Survived=99, Timeout=28
+Grouped approval R/fit.R:415: columns 37, 46, 54 all match individual claims
+Existing claims: 16; existing approvals: 15; approved survivors: 17; unapproved survivors: 82
+Recomputed r7 score: 94.09; detected 1306; denominator 1388; no mutation run or approval written
+```
+
+Zwei erste Läufe der eigenen Diagnose endeten mit Exit 1, ohne
+Produktbefund: `evidence-first.log` enthält `AssertionError: R/fit.R`
+beim zunächst roh angesetzten Bericht-Datei-Vergleich (fehlendes letztes
+LF); `evidence-second.log` enthält `AssertionError` beim zunächst als
+Einzelspalte behandelten Freigabeschlüssel R/fit.R:415. Die Korrekturen
+betreffen nur das temporäre Diagnoseskript: Format nach r-mutation.R:99
+und Gruppenbindung nach Gate-Schlüssel, Reviewer-Begründung und den
+drei einzelnen Claims. Keine Prüfung, Freigabe oder Quelldatei im
+Repository wurde dafür geändert. Der abschließende Lauf oben ist Exit 0.
+
+### R8-P3 — Integrität nach der Dokumentänderung, Exit 0
+
+Die SHA-256-Inventur vor der Änderung umfasst 1061 Dateien: Produkt,
+Tests/Fixtures, Dokumentation, Referenzen, Verträge, Handoffs,
+Gate-Skripte und M1b-Zustand sowie ausgewählte Regel- und Paketdateien.
+Git-Metadaten und Schlüsseldateien sind ausgenommen. Verglichen wird
+zusätzlich der erhaltene Text der beiden bisherigen Handoffs. Diese
+Inventur ersetzt nicht die Territoriumsprüfung des Orchestrators.
+
+```sh
+set -o pipefail
+python3 /tmp/llmsa-m1b-r8-tbm5gjjf/verify_integrity.py 2>&1 | tee /tmp/llmsa-m1b-r8-tbm5gjjf/integrity.log
+```
+
+```text
+Inventory: 2 changed, 0 added, 0 removed files
+Changed: PROGRESS.md
+Changed: orchestrator/handoff/M1b/REWORK-NOTES.md
+Unchanged inventory files: 1059/1059
+Tests and fixtures unchanged: 96/96
+Prior REWORK-NOTES and PROGRESS history: byte-identical
+sha256 R/fit.R: acb4bac7680a9f3c2f4ac4a556b81cdf3bef0cd4a0f1535a5339a0111a64f180
+sha256 R/grr.R: 004eedebd4e491fbecf043d695faa38b7dad39bd6f0ffd800dbd2d05c709512e
+Claims, approvals, gate facts and inventoried state: unchanged
+Gate facts unchanged: round 7, result fail
+```
+
+## Übergabe
+
+Neue Gates und Phasen-Commit folgen durch den Orchestrator, die
+Abnahme durch den Reviewer. Die Infrastrukturpunkte sind bereits in
+BL-103 bis BL-106 geführt; BACKLOG.md bleibt im zuständigen Territorium.
+Produkt, Tests, Daten, Vignetten, Anker, Schwellen, Konfiguration,
+Äquivalenzanträge und Reviewer-Freigaben bleiben unverändert.
+
+---
+
 # M1b — REWORK, Runde 7
 
 Rolle: Builder · Stand: 01.11.2026 · Keine Git-Kommandos.
