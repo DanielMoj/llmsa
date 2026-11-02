@@ -13,6 +13,9 @@ MUTFULL_FILES="${MUTFULL_FILES:-R/fit.R,R/grr.R}"
 MUT_REPORT="${MUT_REPORT:-reports/mutation/mutation.json}"
 # Rote Tests des unmutierten Vorlaufs; MUT_CMD schreibt sie neben MUT_REPORT und endet mit rc=3.
 MUT_UNMUTATED="$(dirname "$MUT_REPORT")/unmutated.json"
+# ADR-041: Hat 86-mutgate in dieser Gate-Runde genau diese Dateien mutiert, ist das derselbe Lauf.
+MUT_REPORT_KEY="$REPO_ROOT/$(dirname "$MUT_REPORT")/report.key"
+REUSE_REPORT=1
 MUT_SCORE_MIN="${MUT_SCORE_MIN:-80}"
 # Höchster Abstand des ersten Scores zur Schwelle, bei dem noch genau ein Flake-Rerun läuft.
 MUT_FLAKE_MARGIN="${MUT_FLAKE_MARGIN:-5}"
@@ -59,12 +62,20 @@ red_tests_from_report() {
 }
 
 run_mutation() {
-  rm -f "$REPO_ROOT/$MUT_REPORT" "$REPO_ROOT/$MUT_UNMUTATED"
-  export MUT_FILES="$MUTFULL_FILES"
-  set +e
-  bash -c "$MUT_CMD"
-  MUT_RC=$?
-  set -e
+  if [ "$REUSE_REPORT" = 1 ] && [ -f "$REPO_ROOT/$MUT_REPORT" ] && [ -f "$MUT_REPORT_KEY" ] \
+      && [ "$(cat "$MUT_REPORT_KEY")" = "$(gate_mut_report_key "$MUTFULL_FILES")" ]; then
+    echo "mutfull: Bericht von mutgate übernommen (gleicher Commit, gleiche Konfiguration, gleiche Dateien)"
+    MUT_RC=0
+  else
+    rm -f "$REPO_ROOT/$MUT_REPORT" "$REPO_ROOT/$MUT_UNMUTATED"
+    export MUT_FILES="$MUTFULL_FILES"
+    set +e
+    bash -c "$MUT_CMD"
+    MUT_RC=$?
+    set -e
+  fi
+  # Ein Flake-Rerun rechnet immer neu.
+  REUSE_REPORT=0
   # Über einem roten Vorlauf zählte jeder Mutant als entdeckt; deshalb fail und kein Flake-Rerun.
   if [ "$MUT_RC" = 3 ]; then
     if RED="$(red_tests_from_report 2>/dev/null)"; then

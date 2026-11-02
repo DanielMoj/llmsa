@@ -30,7 +30,7 @@
   {
     "id": "M1c",
     "title": "Bootstrap wie lme4::bootMer, Überdeckungsstudie als Skript mit reproduziertem Kurzlauf, Mutationslauf über R/fit.R und R/grr.R",
-    "criteriaRef": ["K-M1c-1", "K-M1c-2", "K-M1c-3", "K-M1c-4", "K-M1c-5", "K-M1c-6", "K-M1c-7"],
+    "criteriaRef": ["K-M1c-1", "K-M1c-2", "K-M1c-3", "K-M1c-4", "K-M1c-5", "K-M1c-6", "K-M1c-7", "K-M1c-8"],
     "deps": ["M1b"],
     "effort": "max"
   },

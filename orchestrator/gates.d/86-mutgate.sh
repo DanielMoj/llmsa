@@ -9,6 +9,8 @@ MUT_SCOPE_REGEX="${MUT_SCOPE_REGEX:-^src/.*\.(ts|js|py)$}"
 MUT_REPORT="${MUT_REPORT:-reports/mutation/mutation.json}"
 # Rote Tests des unmutierten Vorlaufs; MUT_CMD schreibt sie neben MUT_REPORT und endet mit rc=3.
 MUT_UNMUTATED="$(dirname "$MUT_REPORT")/unmutated.json"
+# ADR-041: Schlüssel neben dem Bericht; 88-mutfull übernimmt ihn nur bei gleichem Schlüssel.
+MUT_REPORT_KEY="$REPO_ROOT/$(dirname "$MUT_REPORT")/report.key"
 MUT_SCORE_MIN="${MUT_SCORE_MIN:-65}"
 MUT_SCORE_FLOOR="${MUT_SCORE_FLOOR:-50}"
 MUT_RATCHET_TOL="${MUT_RATCHET_TOL:-2}"
@@ -55,7 +57,7 @@ red_tests_from_report() {
 }
 
 run_mutation() {
-  rm -f "$REPO_ROOT/$MUT_REPORT" "$REPO_ROOT/$MUT_UNMUTATED"
+  rm -f "$REPO_ROOT/$MUT_REPORT" "$REPO_ROOT/$MUT_UNMUTATED" "$MUT_REPORT_KEY"
   export MUT_FILES="$CHANGED"
   set +e
   bash -c "$MUT_CMD"
@@ -78,6 +80,7 @@ run_mutation() {
     echo "mutgate: Report ist nicht im erwarteten Stryker-Format" >&2
     return 2
   }
+  gate_mut_report_key "$CHANGED" > "$MUT_REPORT_KEY"
   return 0
 }
 

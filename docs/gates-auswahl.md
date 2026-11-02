@@ -128,6 +128,8 @@ Gate-Kriterien erhalten im Abnahmetest einen ID-Verweis (`skip("K-M0-3: decided 
 
 ## 4. Betreiber-Gate `orchestrator/gates.d/88-mutfull.sh`
 
+Seit ADR-041 übernimmt das Gate den Bericht von `86-mutgate`, wenn dieses in derselben Gate-Runde auf demselben Commit mit derselben Konfiguration genau die Dateien aus `MUTFULL_FILES` mutiert hat; sonst rechnet es selbst, ein Flake-Rerun immer. Der Code unten zeigt den Stand vor ADR-041.
+
 ```bash
 #!/usr/bin/env bash
 # Projektgate llmsa: Mutationslauf über feste Kerndateien, unabhängig vom Diff.

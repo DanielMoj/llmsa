@@ -10,6 +10,13 @@ gate_load_config() {
   fi
 }
 
+# ADR-041: Schlüssel eines Mutationsberichts aus Commit, Konfiguration und sortierten Dateien.
+gate_mut_report_key() {
+  printf '%s %s %s\n' "$(git -C "$REPO_ROOT" rev-parse HEAD)" \
+    "$(sha256sum "$ORCH/config.env" | cut -d' ' -f1)" \
+    "$(tr ',' '\n' <<<"$1" | LC_ALL=C sort | paste -sd, -)"
+}
+
 gate_run_configured() {
   local variable="$1" label="$2" command_value
   command_value="${!variable:-}"
