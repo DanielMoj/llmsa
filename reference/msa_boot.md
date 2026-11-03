@@ -42,7 +42,10 @@ msa_boot(fit, nsim = 200, level = 0.95, seed = NULL, ...)
 ## Value
 
 A data.frame with the point estimate and interval for each statistic,
-plus the bootstrap replicates as attribute `boot`.
+plus the bootstrap replicates as attribute `boot`, the confidence
+`level`, and counts `n_failed` (replicates with at least one non-finite
+statistic) and `n_singular` (singular replicates with all statistics
+finite).
 
 ## Details
 
@@ -60,6 +63,18 @@ control passed to
 [`msa_fit()`](https://danielmoj.github.io/llmsa/reference/msa_fit.md)
 remains the model's refit control.
 
+Singular refits with finite statistics are retained in the percentile
+intervals. Only non-finite values are removed, separately for each
+statistic. A replicate with any non-finite statistic counts as failed;
+it is not also counted as singular. The original fit is not a replicate.
+Both counts are reported by the print method, including when zero.
+
+The `boot_coverage` simulation study investigates interval coverage and
+width by scenario; see its table in
+[`vignette("validation", package = "llmsa")`](https://danielmoj.github.io/llmsa/articles/validation.md)
+(`vignettes/validation.Rmd`). Short runs establish reproducibility;
+coverage findings require the full simulation runs.
+
 ## Examples
 
 ``` r
@@ -74,5 +89,7 @@ msa_boot(fit, nsim = 50, seed = 1)
 #>  reproducibility_pct_study_var    16.79  8.89 28.95
 #>                            ndc     6.00  4.00 10.00
 #>                      icc_items     0.96  0.90  0.98
+#>   0 failed or non-finite replicates (non-finite values dropped)
+#>   30 singular replicates retained in the intervals
 # }
 ```

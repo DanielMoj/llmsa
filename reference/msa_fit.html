@@ -170,7 +170,9 @@ active. Explicit lme4 arguments retain lme4 warnings and errors.
 Initialization failures on the default path identify the fitting stage
 and retain the underlying engine's message.
 Numerical warnings or errors during original-scale model construction
-produce a named representability error.</p>
+produce a named representability error.
+Final <code>checkConv</code> warnings can precede that error when the model is not
+representable at working precision.</p>
 <p>Default numeric models store ordinary <code>nloptwrap</code> refit control with no
 extra optimizer options. <code><a href="msa_boot.html">msa_boot()</a></code> and <code><a href="https://rdrr.io/pkg/lme4/man/refit.html" class="external-link">lme4::refit()</a></code> therefore use
 normal lme4 optimization; they do not repeat the initial analytic
@@ -222,6 +224,12 @@ level-by-level projection blocks when checking large designs.
 Ordinal singularity describes random effects only, not the derived components.
 Ordinal and binary estimates are invariant to row order and factor labels
 only up to the optimization tolerance of the underlying engines.</p>
+<p>Without <code>control</code> in <code>...</code>, ordinal fits use
+<code>ordinal::clmm.control(iter.max = 2000, eval.max = 4000)</code>.
+An explicit <code>control</code> passed in <code>...</code> replaces both limits, including
+when it is an empty or partial list. Optimizer options given directly in
+<code>...</code>, such as <code>iter.max</code>, take precedence over the corresponding default
+limit, as in <code><a href="https://rdrr.io/pkg/ordinal/man/clmm.html" class="external-link">ordinal::clmm()</a></code>.</p>
 <p><code>converged</code> records the final engine diagnosis, independently of
 <code>singular</code>. For <code>clmm</code>, success means code zero for <code>nlminb</code>, or code one
 or two for <code>ucminf</code>; the matrix fitting path uses <code>nlminb</code> even if
@@ -274,9 +282,9 @@ statistics.</p></div>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>12 missing response(s) were dropped.</span>
 <span class="r-in"><span><span class="va">fit_ord</span><span class="op">$</span><span class="va">vc</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     source   variance</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1     item 9.25609132</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1     item 9.25609129</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2   prompt 0.03887219</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3    model 0.27811382</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3    model 0.27811381</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4 Residual 1.00000000</span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>

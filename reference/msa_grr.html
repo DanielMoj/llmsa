@@ -110,7 +110,10 @@ variance, ndc is one. These conventions also apply to <code><a href="msa_boot.ht
 For latent outcomes these statistics use the link's fixed residual
 variance. Sources derived from two fixed ordinal levels are retained in
 <code>derived</code> and identified when printing; see <code><a href="msa_fit.html">msa_fit()</a></code> for their positive
-bias and the <code>two_level</code> study in <code><a href="../articles/validation.html">vignette("validation")</a></code>.</p>
+bias and the <code>two_level</code> study in <code><a href="../articles/validation.html">vignette("validation")</a></code>.
+On the latent scale, Repeatability is the residual variance fixed by the
+link, not a measurement of disagreement between replicates; see the share
+of cells with identical replicates from <code><a href="msa_agreement.html">msa_agreement()</a></code>.</p>
     </div>
 
     <div class="section level2">

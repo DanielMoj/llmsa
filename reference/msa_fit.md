@@ -136,7 +136,9 @@ convergence checks remain active. Explicit lme4 arguments retain lme4
 warnings and errors. Initialization failures on the default path
 identify the fitting stage and retain the underlying engine's message.
 Numerical warnings or errors during original-scale model construction
-produce a named representability error.
+produce a named representability error. Final `checkConv` warnings can
+precede that error when the model is not representable at working
+precision.
 
 Default numeric models store ordinary `nloptwrap` refit control with no
 extra optimizer options.
@@ -196,6 +198,13 @@ effects only, not the derived components. Ordinal and binary estimates
 are invariant to row order and factor labels only up to the optimization
 tolerance of the underlying engines.
 
+Without `control` in `...`, ordinal fits use
+`ordinal::clmm.control(iter.max = 2000, eval.max = 4000)`. An explicit
+`control` passed in `...` replaces both limits, including when it is an
+empty or partial list. Optimizer options given directly in `...`, such
+as `iter.max`, take precedence over the corresponding default limit, as
+in [`ordinal::clmm()`](https://rdrr.io/pkg/ordinal/man/clmm.html).
+
 `converged` records the final engine diagnosis, independently of
 `singular`. For `clmm`, success means code zero for `nlminb`, or code
 one or two for `ucminf`; the matrix fitting path uses `nlminb` even if
@@ -246,9 +255,9 @@ fit_ord <- msa_fit(acmg_demo, type = "ordinal",
 #> Warning: 12 missing response(s) were dropped.
 fit_ord$vc
 #>     source   variance
-#> 1     item 9.25609132
+#> 1     item 9.25609129
 #> 2   prompt 0.03887219
-#> 3    model 0.27811382
+#> 3    model 0.27811381
 #> 4 Residual 1.00000000
 # }
 ```

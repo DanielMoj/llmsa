@@ -2,6 +2,31 @@
 
 ## llmsa (development version)
 
+- [`msa_boot()`](https://danielmoj.github.io/llmsa/reference/msa_boot.md)
+  records failed and singular replicates separately as `n_failed` and
+  `n_singular`. Percentile intervals retain finite singular refits and
+  omit only non-finite values. Printing always reports both counts;
+  older objects identify singular counts as not recorded.
+
+- Latent gauge R&R summaries, reports and
+  [`?msa_grr`](https://danielmoj.github.io/llmsa/reference/msa_grr.md)
+  explain that Repeatability is the residual variance fixed by the link.
+  Observed agreement between replicates is available from
+  [`msa_agreement()`](https://danielmoj.github.io/llmsa/reference/msa_agreement.md).
+
+- Ordinal fits default to `iter.max = 2000` and `eval.max = 4000`.
+  Explicit `control` replaces these limits; direct optimizer options in
+  `...` follow
+  [`ordinal::clmm()`](https://rdrr.io/pkg/ordinal/man/clmm.html)
+  precedence. See
+  [`?msa_fit`](https://danielmoj.github.io/llmsa/reference/msa_fit.md).
+
+- The `boot_coverage` study and validation vignette report percentile
+  interval coverage, width and bootstrap diagnostics with MCSE. The
+  shipped short runs check reproducibility; full-run findings follow
+  separately. All three latent recovery short runs are regenerated with
+  the updated ordinal fitting limits.
+
 - Ordinal and binary fits reject confounded random-effect variances
   before calling the engine, including interactions and terms spanned by
   fixed effects. The check includes the fixed latent residual variance

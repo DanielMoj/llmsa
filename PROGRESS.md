@@ -1,5 +1,235 @@
 # PROGRESS — Langzeitgedächtnis des Builders
 
+## M1c — BUILD (02.11.2026)
+
+Der freigegebene PLAN und die Ergänzungen E1–E6 aus PLAN-REVIEW sind
+umgesetzt. Einzige zusätzliche Planabweichung: der eigenständige,
+generatorfreie Ergebnisleser nach
+[ADR-043](https://danielmoj.github.io/llmsa/docs/decisions/ADR-043-m1c-ergebnisleser-ohne-simulator.md).
+K-M1c-6 und die endgültige Abnahme bleiben bei Betreiber und Reviewer.
+Zugewiesener BUILD-Handoff:
+[REVIEW-INPUT.md](https://danielmoj.github.io/llmsa/orchestrator/handoff/M1c/REVIEW-INPUT.md).
+
+Aktualisierung des zuvor letzten Eintrags: M1b ist inzwischen
+abgenommen. Die gelesenen Gate-Fakten vom 02.11.2026, 09:43:15+01:00,
+melden acht `pass`; `verdict-code.json` M1b, Runde 8, enthält `PASS`,
+`blocking: []`. Der Mutationsbeleg dazu bleibt der Lauf r7 gemäß
+ADR-038; in r8 wurde kein neuer Score gemessen. Die folgenden
+historischen Einträge bleiben erhalten.
+
+### Umsetzung
+
+- [`msa_boot()`](https://danielmoj.github.io/llmsa/reference/msa_boot.md)
+  ergänzt `n_singular` für endliche singuläre Replikate und zählt Zeilen
+  mit nicht endlichen Kennzahlen separat als `n_failed`. Die sechs
+  bisherigen Bootstrap-Spalten und die spaltenweise gebildeten
+  Typ-7-Quantile bleiben erhalten. Beide Zahlen werden immer gedruckt;
+  ältere Objekte melden die nicht erfasste Singularitätszahl
+  ausdrücklich.
+- Die latente GRR-Druckausgabe, das Report-Template und
+  [`?msa_grr`](https://danielmoj.github.io/llmsa/reference/msa_grr.md)
+  enthalten den verlangten Hinweis. Numerische Ergebnisse ändern sich
+  dadurch nicht.
+- Ordinale Fits erhalten ohne benanntes `control` die Grenzen 2000/4000.
+  Eigene Steuerungen werden unverändert weitergereicht; direkte Optionen
+  in `...` haben die Vorrangregel von
+  [`ordinal::clmm()`](https://rdrr.io/pkg/ordinal/man/clmm.html). Rd und
+  NEWS nennen die Grenzen und die beobachtbaren Änderungen.
+- Die Klasse-B-Studie implementiert alle sieben spezifizierten
+  Szenarien, getrennte Daten-/Bootstrap-Seeds, tatsächliche
+  Fit-/Bootstrap-Zähler, Diagnosen, MCSE und einen geprüften
+  Zusammenführer vollständiger Szenarioläufe. Ergebniszeilen nennen
+  `n_finite`, `n_failed` und den ersten Daten-Seed. Die Vignette liest
+  Ergebnisse ohne Fits oder Simulationen; eine vorhandene ungültige
+  Volllaufdatei führt zum Fehler.
+- Vier neue Unit-/Property-Testdateien prüfen Randfälle und Invarianzen;
+  der bestehende Drucktest wurde an die angeforderten zwei Zeilen
+  angepasst. Abnahmetests und QA-Tests wurden nicht verändert.
+
+### Ausgeführte Nachweise
+
+Arbeits- und Rohlogverzeichnis: `/tmp/llmsa-m1c-build-_nxa5o1i/`
+(nachfolgend `$work`). Befehle liefen aus dem Repository, soweit kein
+anderes Arbeitsverzeichnis genannt ist. R 4.6.1, lme4 2.0.6, ordinal
+2026.7.26, Matrix 1.7.4; ausschließlich vorhandene Abhängigkeiten. Das
+eigene Paket wurde aus einer öffentlichen Paketkopie nach
+`$work/library` installiert.
+
+``` sh
+Rscript --vanilla orchestrator/lib/r-deps.R --check-only
+TZ=Europe/Berlin REPO_ROOT=/mnt/c/Users/Danie/dev/Llmsa/llmsa \
+  Rscript --vanilla -e 'grDevices::pdf(NULL); source("orchestrator/lib/r-tests.R")' \
+  tests/testthat tests/e2e tests/fuzz
+TZ=Europe/Berlin Rscript --vanilla "$work/acceptance.R"
+TZ=Europe/Berlin Rscript --vanilla "$work/acceptance-final.R"
+```
+
+Echter Output, aus `deps.log`, `unit-qa-final.log`, `acceptance.log` und
+`acceptance-final.log` (Fortschrittsanimationen ausgelassen):
+
+``` text
+r-deps: pass — 25 Anforderungen erfüllt (R 4.6.1)
+[ FAIL 0 | WARN 0 | SKIP 1 | PASS 5644 ]
+[ FAIL 0 | WARN 0 | SKIP 0 | PASS 49 ]
+[ FAIL 0 | WARN 0 | SKIP 0 | PASS 25 ]
+r-tests: pass — 299 Tests in tests/testthat, tests/e2e, tests/fuzz; 0 fehlgeschlagen, 0 Fehler, 1 übersprungen
+[ FAIL 0 | WARN 2 | SKIP 0 | PASS 8124 ]
+M1a/M1b/M1c acceptance without Git: 190 test blocks; 0 failed expectations; 0 error blocks; 0 skipped; elapsed 761.822 s
+[ FAIL 0 | WARN 0 | SKIP 0 | PASS 3525 ]
+Final M1c 3/4/5 acceptance: 20 test blocks; 0 failed expectations; 0 error blocks; 0 skipped; elapsed 258.471 s
+```
+
+Der Integrationsfilter umfasst alle M1a-/M1b-Tests sowie alle
+M1c-Dateien außer dem Git aufrufenden Bytevergleich. Die zwei Warnungen
+stammen aus den bestehenden M1b-Abnahmehelfern (`nobars`/`findbars`,
+BL-93). Während dieses Integrationslaufs wurde der Leser nach ADR-043
+getrennt; deshalb wurden **K-M1c-3/-4/-5 nach der endgültigen
+Neuberechnung nochmals vollständig** ausgeführt (`^m1c-[345]-`). Alle
+übrigen geprüften Produktfunktionen blieben seit Beginn des
+Integrationslaufs bytegleich. Der eine Unit-Skip ist die bestehende
+optionale `ellmer`-Prüfung (`test-backends.R:32:3`); das Paket ist in
+der eingefrorenen Umgebung nicht vorhanden.
+
+Weitere echte lokale Outputs (`core-unit-final.log`,
+`core-acceptance.log`, `reader-final.log`, `api-check-final.log`,
+`byte-equality.log`):
+
+``` text
+[ FAIL 0 | WARN 0 | SKIP 0 | PASS 180 ]
+[ FAIL 0 | WARN 0 | SKIP 0 | PASS 309 ]
+[ FAIL 0 | WARN 0 | SKIP 0 | PASS 371 ]
+API: 22 exports and 108 original arguments retain names, positions and defaults.
+Byte equality verified for 9 GRR cases and 3 bootstrap cases; no Git access.
+```
+
+Der Bytevergleich nutzt die vor dem ersten Edit gesicherten
+Quelldateien, deren SHA-256 gegen ANK-33 geprüft wurde. Er ersetzt nicht
+den offiziellen Git-basierten Abnahmetest. Keine Abnahmedatei wurde
+kopiert und umgeschrieben.
+
+### Echte Kurzläufe und Paketcheck
+
+Jeweils
+`R_LIBS=$work/library TZ=Europe/Berlin Rscript --vanilla inst/validation/sim/<study>.R --n-sim 20 --out <frisches Verzeichnis>`;
+für Bootstrap zusätzlich `--scenarios S-boot-1,S-boot-7`. Die 20 stammen
+aus ANK-TOL.n_check. Alle vier Aufrufe endeten mit Exit 0:
+
+``` text
+boot_coverage: 2 scenarios x 20 repetitions; 96 result rows; elapsed 176.562 s; workers 14
+ordinal_recovery: 4 scenarios x 20 repetitions; 100 result rows; elapsed 167.588 s; workers 14
+binary_recovery: 2 scenarios x 20 repetitions; 40 result rows; elapsed 0.937 s; workers 14
+two_level: 2 scenarios x 20 repetitions; 42 result rows; elapsed 9.007 s; workers 14
+Serial reverse-order run: all 38 rows and 24 replicate columns equal the 14-worker, 20-repetition prefix at 15 digits.
+```
+
+Alle zwölf Kurzlauf-Dateien stammen aus diesen Läufen. Die Bootstrap-CSV
+sind auch vor/nach ADR-043 bytegleich. Binary- und Two-Level-CSV stimmen
+mit M1b überein, ihre Sessiondateien stammen dennoch aus echten
+Neuläufen. Die vier aktuellen Implementierungshashes wurden gegen die
+Sessiondateien geprüft (`study-hashes.log`, Exit 0). Die
+Bootstrap-Studie hat 40 endliche, konvergierte Ausgangsfits, jeweils 200
+Refits, keinen nicht endlichen Refit; endliche singuläre Refits bleiben
+enthalten. Ordinal verbleiben 2/80 nicht konvergierte Fits
+(`singular convergence (7)`, beide S-ord-4), keiner am Iterationslimit.
+Alle Warnungen/Diagnosen bleiben gespeichert.
+
+Paketkopie mit den 158 öffentlichen Quelldateien unter
+`$work/package-check-final/src`, einschließlich der Unit-Tests und aller
+Vignetten; Abhängigkeiten nicht installiert oder aktualisiert:
+
+``` sh
+env -u REPO_ROOT TZ=Europe/Berlin R CMD build --no-manual src
+env -u REPO_ROOT TZ=Europe/Berlin _R_CHECK_CRAN_INCOMING_REMOTE_=false \
+  R CMD check --as-cran --no-manual llmsa_0.1.0.tar.gz
+```
+
+Beide Befehle endeten mit Exit 0. Echter Output aus dem finalen Check:
+
+``` text
+[ FAIL 0 | WARN 0 | SKIP 9 | PASS 5568 ]
+* checking re-building of vignette outputs ... [30s/30s] OK
+* DONE
+Status: 1 NOTE
+```
+
+Die NOTE lautet `Unable to verify current time`; kein ERROR oder
+WARNING. Die Systemzeitprüfung blieb aktiv. Die Archiv-Skips betreffen
+vorhandene Prüfungen mit nicht ausgelieferten Fixtures/Originalankern,
+den bestehenden CRAN-Report-Skip und das optionale `ellmer`.
+
+Der erste Unit-/QA-/Paketcheck fand einen echten Literalherkunftsfehler
+durch den von der Vignette transitiv geladenen M1b-Generator. ADR-043
+dokumentiert die behobene Ursache und die zusätzliche Leserdatei. Weder
+Szenarioparameter noch Herkunftstest wurden verändert. Die obigen
+finalen Läufe enthalten die Korrektur; die ersten roten Logs bleiben
+unter `$work`.
+
+### Mutationsbelege und Übergabe
+
+Der native Teil-Mutationslauf mit dem unveränderten
+`HarnessTestStrategy` des Adapters bestand seinen unmutierten Vorlauf
+(24 Testblöcke, 13,238 s), brach aber beim Dispatcher ab.
+`Rscript --vanilla "$work/mutation-native.R"` lieferte Exit 1 und
+`16 | Permission denied` aus `.dispatcher_start`. Keine Berechtigung
+wurde umgangen. Die zusätzliche Diagnose mit normalen frischen
+R-Prozessen (`python3 "$work/mutation-processes.py"`) lieferte:
+
+``` text
+Focused mutation diagnosis: 123 mutants; {'Killed': 93, 'RuntimeError': 24, 'Survived': 6}; elapsed 270.141 s
+```
+
+Das ist kein Gate-Score; RuntimeError zählt nicht als erkannt. Zwei
+überlebende Singularitätsmutanten deckten eine symmetrische Testbelegung
+auf. Nach ihrer Verstärkung scheitern beide tatsächlichen Mutanten mit
+`[ FAIL 1 | WARN 0 | SKIP 0 | PASS 30 ]`; der unveränderte Produktcode
+besteht die 180 Kern-Erwartungen. Drei weitere Überlebende ändern
+API-Vorgaben und werden vom Snapshotvergleich erkannt. Der verbleibende
+Teillauf-Überlebende ändert eine ältere Druckeinrückung.
+
+`Rscript --vanilla "$work/equivalence-bind.R"` und
+`R_LIBS=$work/library Rscript --vanilla "$work/equivalence-proofs.R"`
+endeten mit Exit 0:
+
+``` text
+19 equivalence proposals checked against actual final-source mutants; reviewer approval remains open.
+```
+
+Die 19 konkreten Anträge auf 17 Gate-Schlüsseln stehen in
+`orchestrator/handoff/M1c/MUT-EQUIV.json`, gebunden an aktuelle
+Quellhashes, Zeilen, Spalten und Ersetzungen. Keine alte Approval wurde
+übernommen. Die beiden ADR-039-Fälle weisen Rundungsunterschiede bis
+1,819e-12 bzw. 6,822e-13 auf; dafür wird keine Bitgleichheit behauptet.
+
+Noch auszuführen sind `86-mutgate` und `88-mutfull` durch den Betreiber
+(Ratchet derzeit 92,09 bzw. K-M1c-6 mindestens ANK-32), der offizielle
+Bytevergleich und die Rollenabnahme. Der zusätzliche M2-Rückfalllauf
+bestand K-M2-6 (383 Erwartungen); ein M2-7-Test endet in der bestehenden
+Socket-Sperre, Gesamtoutput `[ FAIL 1 | WARN 0 | SKIP 0 | PASS 736 ]`.
+Der Handoff enthält stabile `[INFRA]`-IDs, die BL-87-Diagnose und die
+gemessenen Laufzeiten für die Betreiber-Vollläufe vor M1d. Keine
+Abnahmebehauptung für nicht ausgeführte Gates, keine Git-Kommandos.
+
+Abschließende Inventur ohne Git (`python3 "$work/integrity-final.py"`,
+Exit 0):
+
+``` text
+Inventory: 16 changed, 13 added, 0 removed files
+Unchanged baseline files: 323/339
+Inventoried protected files unchanged: 214/214
+Final checked public package sources unchanged: 158/158
+Repository short-run files match genuine generated files: 12/12
+Equivalence claims bound to current source: 19 mutants, 17 gate keys
+Prior PROGRESS history: byte-identical
+No unexpected files in inventoried path groups; no package-check artifacts in repository root
+```
+
+Die 29 geänderten/neuen Dateien liegen ausschließlich im zugewiesenen
+Builder-Territorium. Freigegebene Pläne, Verträge, Spezifikationen,
+Abnahmetests, QA-Tests, `tests/simulation/`, Fixtures, Anker und
+Golden-Daten aus der Startinventur sind unverändert. Gate-Fakten,
+Orchestrator-Zustand und Approval-Dateien wurden nicht geschrieben.
+Commit und formale Territoriumsprüfung erfolgen durch den Orchestrator.
+
 ## M1b — REWORK Runde 8 (02.11.2026)
 
 REVIEW/verdict-code Runde 7 nach dem Entparken enthält `blocking: []`.

@@ -87,7 +87,10 @@ a caller-supplied cluster <code>cl</code>.</p></dd>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>A data.frame with the point estimate and interval for each
-statistic, plus the bootstrap replicates as attribute <code>boot</code>.</p>
+statistic, plus the bootstrap replicates as attribute <code>boot</code>, the
+confidence <code>level</code>, and counts <code>n_failed</code> (replicates with at least one
+non-finite statistic) and <code>n_singular</code> (singular replicates with all
+statistics finite).</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -100,6 +103,15 @@ outcome.</p>
 its usual control settings; the analytical completion of the original
 fit is not repeated for each bootstrap sample. An explicit fitting
 control passed to <code><a href="msa_fit.html">msa_fit()</a></code> remains the model's refit control.</p>
+<p>Singular refits with finite statistics are retained in the percentile
+intervals. Only non-finite values are removed, separately for each
+statistic. A replicate with any non-finite statistic counts as failed;
+it is not also counted as singular. The original fit is not a replicate.
+Both counts are reported by the print method, including when zero.</p>
+<p>The <code>boot_coverage</code> simulation study investigates interval coverage and
+width by scenario; see its table in <code><a href="../articles/validation.html">vignette("validation", package = "llmsa")</a></code>
+(<code>vignettes/validation.Rmd</code>). Short runs establish reproducibility;
+coverage findings require the full simulation runs.</p>
     </div>
 
     <div class="section level2">
@@ -115,6 +127,8 @@ control passed to <code><a href="msa_fit.html">msa_fit()</a></code> remains the 
 <span class="r-out co"><span class="r-pr">#&gt;</span>  reproducibility_pct_study_var    16.79  8.89 28.95</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                            ndc     6.00  4.00 10.00</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                      icc_items     0.96  0.90  0.98</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   0 failed or non-finite replicates (non-finite values dropped)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   30 singular replicates retained in the intervals</span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>

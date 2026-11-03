@@ -162,6 +162,7 @@ grr
 #>      block (time)     0.0002   0.0148 0.0 %          0.4 %      
 #>  Part-to-part (items) 10.8201  3.2894 86.2 %         92.8 %     
 #>  Total variation      12.5511  3.5428 100.0 %        100.0 %    
+#>   On the latent scale, Repeatability is the residual variance fixed by the link, not a measurement of disagreement between replicates; see the share of cells with identical replicates from msa_agreement().
 #> 
 #>   total gauge R&R: 37.1 % of study variation (13.8 % contribution)
 #>   number of distinct categories (ndc): 3
@@ -248,6 +249,8 @@ msa_boot(fit_num, nsim = 30, seed = 1)
 #>  reproducibility_pct_study_var    18.51  2.39 35.56
 #>                            ndc     3.00  2.00  3.00
 #>                      icc_items     0.83  0.71  0.88
+#>   0 failed or non-finite replicates (non-finite values dropped)
+#>   27 singular replicates retained in the intervals
 ```
 
 ## 6. Bias and linearity (numeric outcomes)

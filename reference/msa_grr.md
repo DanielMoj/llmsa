@@ -73,6 +73,10 @@ variance. Sources derived from two fixed ordinal levels are retained in
 [`msa_fit()`](https://danielmoj.github.io/llmsa/reference/msa_fit.md)
 for their positive bias and the `two_level` study in
 [`vignette("validation")`](https://danielmoj.github.io/llmsa/articles/validation.md).
+On the latent scale, Repeatability is the residual variance fixed by the
+link, not a measurement of disagreement between replicates; see the
+share of cells with identical replicates from
+[`msa_agreement()`](https://danielmoj.github.io/llmsa/reference/msa_agreement.md).
 
 ## Examples
 

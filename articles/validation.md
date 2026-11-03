@@ -50,7 +50,7 @@ unrounded standard deviations.
 | Anchor | Source | Quantity | Expected | Observed | Tolerance | Result |
 |:---|:---|:---|:---|:---|:---|:---|
 | ANK-TOL.reml_anova | Independent stats::aov EMS solution | Synthetic design 1 (seed 1) item | 0.835101910404327 | 0.835102313122942 | 0.000112176345654644 absolute | PASS |
-| ANK-TOL.reml_anova | Independent stats::aov EMS solution | Synthetic design 1 (seed 1) prompt | 0.168794312318087 | 0.168794416682278 | 0.000112176345654644 absolute | PASS |
+| ANK-TOL.reml_anova | Independent stats::aov EMS solution | Synthetic design 1 (seed 1) prompt | 0.168794312318088 | 0.168794416682278 | 0.000112176345654644 absolute | PASS |
 | ANK-TOL.reml_anova | Independent stats::aov EMS solution | Synthetic design 1 (seed 1) model | 0.0123698579800859 | 0.0123698382273596 | 0.000112176345654644 absolute | PASS |
 | ANK-TOL.reml_anova | Independent stats::aov EMS solution | Synthetic design 1 (seed 1) Residual | 0.105497375843937 | 0.10549737464579 | 0.000112176345654644 absolute | PASS |
 | ANK-TOL.reml_anova | Independent GRR formulas | Synthetic design 1 (seed 1) grr_pct_study_var | 50.5515033377568 | 50.5514997389425 | 0.00505515033377568 absolute | PASS |
@@ -58,14 +58,14 @@ unrounded standard deviations.
 | ANK-TOL.reml_anova | Independent GRR formulas | Synthetic design 1 (seed 1) icc_items | 0.744454551029276 | 0.744454587414369 | 7.44454551029276e-05 absolute | PASS |
 | ANK-TOL.reml_anova | Independent GRR formulas | Synthetic design 1 (seed 1) ndc | 2 | 2 | 0 absolute | PASS |
 | ANK-TOL.reml_anova | Independent stats::aov EMS solution | Synthetic design 2 (seed 1) item | 0.896356056977856 | 0.896355885245044 | 0.000119652855913307 absolute | PASS |
-| ANK-TOL.reml_anova | Independent stats::aov EMS solution | Synthetic design 2 (seed 1) prompt | 0.099234985232256 | 0.0992349351431396 | 0.000119652855913307 absolute | PASS |
+| ANK-TOL.reml_anova | Independent stats::aov EMS solution | Synthetic design 2 (seed 1) prompt | 0.0992349852322559 | 0.0992349351431396 | 0.000119652855913307 absolute | PASS |
 | ANK-TOL.reml_anova | Independent stats::aov EMS solution | Synthetic design 2 (seed 1) model | 0.00163326075749219 | 0.00163326845691075 | 0.000119652855913307 absolute | PASS |
 | ANK-TOL.reml_anova | Independent stats::aov EMS solution | Synthetic design 2 (seed 1) item:prompt | 0.0332467620444283 | 0.0332467584284754 | 0.000119652855913307 absolute | PASS |
 | ANK-TOL.reml_anova | Independent stats::aov EMS solution | Synthetic design 2 (seed 1) item:model | 0.0292096365532243 | 0.0292096391073928 | 0.000119652855913307 absolute | PASS |
 | ANK-TOL.reml_anova | Independent stats::aov EMS solution | Synthetic design 2 (seed 1) prompt:model | 0.0207364731002638 | 0.0207364810060388 | 0.000119652855913307 absolute | PASS |
 | ANK-TOL.reml_anova | Independent stats::aov EMS solution | Synthetic design 2 (seed 1) Residual | 0.116111384467547 | 0.116111384938424 | 0.000119652855913307 absolute | PASS |
 | ANK-TOL.reml_anova | Independent GRR formulas | Synthetic design 2 (seed 1) grr_pct_study_var | 50.086872925452 | 50.086874327654 | 0.0050086872925452 absolute | PASS |
-| ANK-TOL.reml_anova | Independent GRR formulas | Synthetic design 2 (seed 1) grr_pct_contribution | 25.0869483945038 | 25.0869497991421 | 0.00250869483945038 absolute | PASS |
+| ANK-TOL.reml_anova | Independent GRR formulas | Synthetic design 2 (seed 1) grr_pct_contribution | 25.0869483945037 | 25.0869497991421 | 0.00250869483945037 absolute | PASS |
 | ANK-TOL.reml_anova | Independent GRR formulas | Synthetic design 2 (seed 1) icc_items | 0.749130516054963 | 0.749130502008579 | 7.49130516054962e-05 absolute | PASS |
 | ANK-TOL.reml_anova | Independent GRR formulas | Synthetic design 2 (seed 1) ndc | 2 | 2 | 0 absolute | PASS |
 | ANK-TOL.reml_anova | Independent stats::aov EMS solution | Synthetic design 3 (seed 1) item | 0.831776303543049 | 0.831777146976174 | 0.000116858157865115 absolute | PASS |
@@ -79,13 +79,13 @@ unrounded standard deviations.
 | ANK-TOL.reml_anova | Independent GRR formulas | Synthetic design 3 (seed 1) ndc | 2 | 2 | 0 absolute | PASS |
 | ANK-TOL.reml_anova | Independent stats::aov EMS solution | Synthetic design 4 (seed 1) item | 0.812907930868241 | 0.812903011877827 | 0.000127510045272807 absolute | PASS |
 | ANK-TOL.reml_anova | Independent stats::aov EMS solution | Synthetic design 4 (seed 1) prompt | 0.19014246243158 | 0.190140990142518 | 0.000127510045272807 absolute | PASS |
-| ANK-TOL.reml_anova | Independent stats::aov EMS solution | Synthetic design 4 (seed 1) model | 0.00493987696115859 | 0.00493990642879696 | 0.000127510045272807 absolute | PASS |
+| ANK-TOL.reml_anova | Independent stats::aov EMS solution | Synthetic design 4 (seed 1) model | 0.00493987696115858 | 0.00493990642879696 | 0.000127510045272807 absolute | PASS |
 | ANK-TOL.reml_anova | Independent stats::aov EMS solution | Synthetic design 4 (seed 1) block | 0.0447175071996804 | 0.0447173774568431 | 0.000127510045272807 absolute | PASS |
 | ANK-TOL.reml_anova | Independent stats::aov EMS solution | Synthetic design 4 (seed 1) item:prompt | 0.0445888629217295 | 0.0445888568476236 | 0.000127510045272807 absolute | PASS |
 | ANK-TOL.reml_anova | Independent stats::aov EMS solution | Synthetic design 4 (seed 1) item:model | 0.0365928277418786 | 0.0365928295480705 | 0.000127510045272807 absolute | PASS |
 | ANK-TOL.reml_anova | Independent stats::aov EMS solution | Synthetic design 4 (seed 1) prompt:model | 0.0312833167960641 | 0.031283375422539 | 0.000127510045272807 absolute | PASS |
 | ANK-TOL.reml_anova | Independent stats::aov EMS solution | Synthetic design 4 (seed 1) Residual | 0.109927667807743 | 0.109927674665773 | 0.000127510045272807 absolute | PASS |
-| ANK-TOL.reml_anova | Independent GRR formulas | Synthetic design 4 (seed 1) grr_pct_study_var | 60.2059283263633 | 60.2059817007425 | 0.00602059283263633 absolute | PASS |
+| ANK-TOL.reml_anova | Independent GRR formulas | Synthetic design 4 (seed 1) grr_pct_study_var | 60.2059283263632 | 60.2059817007425 | 0.00602059283263632 absolute | PASS |
 | ANK-TOL.reml_anova | Independent GRR formulas | Synthetic design 4 (seed 1) grr_pct_contribution | 36.2475380563919 | 36.2476023255014 | 0.00362475380563919 absolute | PASS |
 | ANK-TOL.reml_anova | Independent GRR formulas | Synthetic design 4 (seed 1) icc_items | 0.637524619436081 | 0.637523976744986 | 6.37524619436081e-05 absolute | PASS |
 | ANK-TOL.reml_anova | Independent GRR formulas | Synthetic design 4 (seed 1) ndc | 1 | 1 | 0 absolute | PASS |
@@ -139,23 +139,23 @@ unrounded standard deviations.
 | ANK-TOL.oracle | VCA::anovaVCA | ic50_demo (unbalanced) prompt | 0.00488367383776392 | 0.00486224064145486 | not a criterion: unbalanced ANOVA | REPORT |
 | ANK-TOL.oracle | VCA::anovaVCA | ic50_demo (unbalanced) model | 0.0171099342884023 | 0.0171354046279492 | not a criterion: unbalanced ANOVA | REPORT |
 | ANK-TOL.oracle | VCA::anovaVCA | ic50_demo (unbalanced) block | 0.00100892168736979 | 0.00101739985692395 | not a criterion: unbalanced ANOVA | REPORT |
-| ANK-TOL.oracle | VCA::anovaVCA | ic50_demo (unbalanced) item:prompt | 9.42738421534943e-05 | 8.42408728729267e-05 | not a criterion: unbalanced ANOVA | REPORT |
-| ANK-TOL.oracle | VCA::anovaVCA | ic50_demo (unbalanced) item:model | 0.00534173250038118 | 0.00534983731012706 | not a criterion: unbalanced ANOVA | REPORT |
-| ANK-TOL.oracle | VCA::anovaVCA | ic50_demo (unbalanced) prompt:model | 2.15882253347061e-05 | 2.12809485421782e-05 | not a criterion: unbalanced ANOVA | REPORT |
-| ANK-TOL.oracle | VCA::anovaVCA | ic50_demo (unbalanced) Residual | 0.0140107037401431 | 0.0140103056395663 | not a criterion: unbalanced ANOVA | REPORT |
+| ANK-TOL.oracle | VCA::anovaVCA | ic50_demo (unbalanced) item:prompt | 9.42738421534421e-05 | 8.42408728729267e-05 | not a criterion: unbalanced ANOVA | REPORT |
+| ANK-TOL.oracle | VCA::anovaVCA | ic50_demo (unbalanced) item:model | 0.00534173250038113 | 0.00534983731012706 | not a criterion: unbalanced ANOVA | REPORT |
+| ANK-TOL.oracle | VCA::anovaVCA | ic50_demo (unbalanced) prompt:model | 2.15882253347022e-05 | 2.12809485421782e-05 | not a criterion: unbalanced ANOVA | REPORT |
+| ANK-TOL.oracle | VCA::anovaVCA | ic50_demo (unbalanced) Residual | 0.014010703740144 | 0.0140103056395663 | not a criterion: unbalanced ANOVA | REPORT |
 
 ### SixSigma oracle
 
 | Anchor | Source | Quantity | Expected | Observed | Tolerance | Result |
 |:---|:---|:---|:---|:---|:---|:---|
 | ANK-TOL.oracle | SixSigma::ss.rr, default pooling | Residual | 0.0213087542087542 | 0.0213087542223815 | 8.62212121212121e-06 absolute | PASS |
-| ANK-TOL.oracle | SixSigma::ss.rr, default pooling | prompt | 0.000573512906846233 | 0.000573512905820389 | 8.62212121212121e-06 absolute | PASS |
+| ANK-TOL.oracle | SixSigma::ss.rr, default pooling | prompt | 0.000573512906846247 | 0.000573512905820389 | 8.62212121212121e-06 absolute | PASS |
 | ANK-TOL.oracle | SixSigma::ss.rr, default pooling | item:prompt | 0 | 0 | 8.62212121212121e-06 absolute | PASS |
 | ANK-TOL.oracle | SixSigma::ss.rr, default pooling | item | 0.0643389450056117 | 0.0643389445237618 | 8.62212121212121e-06 absolute | PASS |
 | ANK-TOL.oracle | SixSigma::ss.rr, unrounded StdDev | Total gauge R&R % study variation | 50.3777881275185 | 50.3777882791117 | 0.00503777881275185 absolute | PASS |
 | ANK-TOL.oracle | SixSigma::ss.rr, unrounded StdDev | Repeatability % study variation | 49.7132284728041 | 49.7132286239795 | 0.00497132284728041 absolute | PASS |
-| ANK-TOL.oracle | SixSigma::ss.rr, unrounded StdDev | Reproducibility % study variation | 8.15576185478249 | 8.15576186968176 | 0.000815576185478249 absolute | PASS |
-| ANK-TOL.oracle | SixSigma::ss.rr, unrounded StdDev | prompt % study variation | 8.15576185478249 | 8.15576186968176 | 0.000815576185478249 absolute | PASS |
+| ANK-TOL.oracle | SixSigma::ss.rr, unrounded StdDev | Reproducibility % study variation | 8.1557618547826 | 8.15576186968176 | 0.00081557618547826 absolute | PASS |
+| ANK-TOL.oracle | SixSigma::ss.rr, unrounded StdDev | prompt % study variation | 8.1557618547826 | 8.15576186968176 | 0.00081557618547826 absolute | PASS |
 | ANK-TOL.oracle | SixSigma::ss.rr, unrounded StdDev | Part-to-part (items) % study variation | 86.3833228313131 | 86.3833227429056 | 0.00863833228313131 absolute | PASS |
 | ANK-TOL.oracle | SixSigma::ss.rr | ndc | 2 | 2 | 0 absolute | PASS |
 
@@ -242,12 +242,12 @@ rounded input values are never repaired.
 
 | Dataset | LRE msa_fit residual | LRE msa_fit item | LRE aov residual | LRE aov item |
 |:--------|---------------------:|-----------------:|-----------------:|-------------:|
-| SmLs04  |             10.81152 |        10.265686 |        10.265517 |     9.895248 |
-| SmLs05  |             10.24344 |         9.923803 |        10.286648 |     9.943994 |
-| SmLs06  |             10.29010 |         9.936698 |        10.286163 |     9.934862 |
-| SmLs07  |                   NA |               NA |         4.284250 |     4.464968 |
-| SmLs08  |                   NA |               NA |         3.670185 |     3.921781 |
-| SmLs09  |                   NA |               NA |         3.224904 |     3.918561 |
+| SmLs04  |             10.81152 |        10.265686 |        10.286173 |    10.043134 |
+| SmLs05  |             10.24344 |         9.923803 |        10.286173 |     9.943752 |
+| SmLs06  |             10.29010 |         9.936698 |        10.286172 |     9.934953 |
+| SmLs07  |                   NA |               NA |         4.250358 |     4.022777 |
+| SmLs08  |                   NA |               NA |         4.085552 |     3.922826 |
+| SmLs09  |                   NA |               NA |         3.351163 |     3.914627 |
 
 Fit diagnostics:
 
@@ -403,26 +403,26 @@ S-ord-1
 
 | scenario | estimand | measure | value | mcse | n_sim | seed | n_finite | n_failed |
 |:---|:---|:---|:---|:---|:---|:---|:---|:---|
-| S-ord-1 | grr_pct_study_var | bias | -1.6 | 0.711644 | 20 | 20261032 | 20 | 0 |
-| S-ord-1 | grr_pct_study_var | empse | 3.18257 | 0.516281 | 20 | 20261032 | 20 | 0 |
-| S-ord-1 | grr_pct_study_var | rel_bias | -0.021495 | 0.00956051 | 20 | 20261032 | 20 | 0 |
-| S-ord-1 | grr_pct_study_var | rmse | 3.49031 | 0.355922 | 20 | 20261032 | 20 | 0 |
-| S-ord-1 | icc_items | bias | 0.0226012 | 0.010513 | 20 | 20261032 | 20 | 0 |
-| S-ord-1 | icc_items | empse | 0.0470158 | 0.00762696 | 20 | 20261032 | 20 | 0 |
-| S-ord-1 | icc_items | rel_bias | 0.0506831 | 0.0235755 | 20 | 20261032 | 20 | 0 |
-| S-ord-1 | icc_items | rmse | 0.0510957 | 0.00504124 | 20 | 20261032 | 20 | 0 |
-| S-ord-1 | item | bias | 0.0754339 | 0.0393139 | 20 | 20261032 | 20 | 0 |
-| S-ord-1 | item | empse | 0.175817 | 0.0285213 | 20 | 20261032 | 20 | 0 |
-| S-ord-1 | item | rel_bias | 0.0754339 | 0.0393139 | 20 | 20261032 | 20 | 0 |
-| S-ord-1 | item | rmse | 0.187233 | 0.0186604 | 20 | 20261032 | 20 | 0 |
-| S-ord-1 | item:model | bias | -0.00174026 | 0.00664732 | 20 | 20261032 | 20 | 0 |
-| S-ord-1 | item:model | empse | 0.0297277 | 0.00482248 | 20 | 20261032 | 20 | 0 |
-| S-ord-1 | item:model | rel_bias | -0.0193363 | 0.0738591 | 20 | 20261032 | 20 | 0 |
-| S-ord-1 | item:model | rmse | 0.0290272 | 0.00409704 | 20 | 20261032 | 20 | 0 |
-| S-ord-1 | model | bias | -0.0296064 | 0.010379 | 20 | 20261032 | 20 | 0 |
-| S-ord-1 | model | empse | 0.0464162 | 0.00752971 | 20 | 20261032 | 20 | 0 |
-| S-ord-1 | model | rel_bias | -0.32896 | 0.115322 | 20 | 20261032 | 20 | 0 |
-| S-ord-1 | model | rmse | 0.0540674 | 0.0058992 | 20 | 20261032 | 20 | 0 |
+| S-ord-1 | grr_pct_study_var | bias | -1.60014 | 0.711695 | 20 | 20261032 | 20 | 0 |
+| S-ord-1 | grr_pct_study_var | empse | 3.1828 | 0.516318 | 20 | 20261032 | 20 | 0 |
+| S-ord-1 | grr_pct_study_var | rel_bias | -0.0214969 | 0.00956119 | 20 | 20261032 | 20 | 0 |
+| S-ord-1 | grr_pct_study_var | rmse | 3.49058 | 0.356059 | 20 | 20261032 | 20 | 0 |
+| S-ord-1 | icc_items | bias | 0.0226031 | 0.0105137 | 20 | 20261032 | 20 | 0 |
+| S-ord-1 | icc_items | empse | 0.0470188 | 0.00762745 | 20 | 20261032 | 20 | 0 |
+| S-ord-1 | icc_items | rel_bias | 0.0506875 | 0.023577 | 20 | 20261032 | 20 | 0 |
+| S-ord-1 | icc_items | rmse | 0.0510992 | 0.00504297 | 20 | 20261032 | 20 | 0 |
+| S-ord-1 | item | bias | 0.0754422 | 0.0393165 | 20 | 20261032 | 20 | 0 |
+| S-ord-1 | item | empse | 0.175829 | 0.0285232 | 20 | 20261032 | 20 | 0 |
+| S-ord-1 | item | rel_bias | 0.0754422 | 0.0393165 | 20 | 20261032 | 20 | 0 |
+| S-ord-1 | item | rmse | 0.187247 | 0.0186655 | 20 | 20261032 | 20 | 0 |
+| S-ord-1 | item:model | bias | -0.00174148 | 0.00664729 | 20 | 20261032 | 20 | 0 |
+| S-ord-1 | item:model | empse | 0.0297276 | 0.00482245 | 20 | 20261032 | 20 | 0 |
+| S-ord-1 | item:model | rel_bias | -0.0193498 | 0.0738588 | 20 | 20261032 | 20 | 0 |
+| S-ord-1 | item:model | rmse | 0.0290272 | 0.00409706 | 20 | 20261032 | 20 | 0 |
+| S-ord-1 | model | bias | -0.0296065 | 0.010379 | 20 | 20261032 | 20 | 0 |
+| S-ord-1 | model | empse | 0.0464164 | 0.00752973 | 20 | 20261032 | 20 | 0 |
+| S-ord-1 | model | rel_bias | -0.328962 | 0.115322 | 20 | 20261032 | 20 | 0 |
+| S-ord-1 | model | rmse | 0.0540676 | 0.00589925 | 20 | 20261032 | 20 | 0 |
 | S-ord-1 | prompt | bias | -0.0123624 | 0.0120677 | 20 | 20261032 | 20 | 0 |
 | S-ord-1 | prompt | empse | 0.0539686 | 0.00875486 | 20 | 20261032 | 20 | 0 |
 | S-ord-1 | prompt | rel_bias | -0.197799 | 0.193084 | 20 | 20261032 | 20 | 0 |
@@ -432,92 +432,92 @@ S-ord-2
 
 | scenario | estimand | measure | value | mcse | n_sim | seed | n_finite | n_failed |
 |:---|:---|:---|:---|:---|:---|:---|:---|:---|
-| S-ord-2 | grr_pct_study_var | bias | -0.0940904 | 0.684905 | 20 | 20261033 | 20 | 0 |
-| S-ord-2 | grr_pct_study_var | empse | 3.06299 | 0.496882 | 20 | 20261033 | 20 | 0 |
-| S-ord-2 | grr_pct_study_var | rel_bias | -0.00126405 | 0.00920128 | 20 | 20261033 | 20 | 0 |
-| S-ord-2 | grr_pct_study_var | rmse | 2.98691 | 0.382945 | 20 | 20261033 | 20 | 0 |
-| S-ord-2 | icc_items | bias | 0.000508574 | 0.0102228 | 20 | 20261033 | 20 | 0 |
-| S-ord-2 | icc_items | empse | 0.0457177 | 0.00741639 | 20 | 20261033 | 20 | 0 |
-| S-ord-2 | icc_items | rel_bias | 0.00114048 | 0.0229246 | 20 | 20261033 | 20 | 0 |
-| S-ord-2 | icc_items | rmse | 0.044563 | 0.0058517 | 20 | 20261033 | 20 | 0 |
-| S-ord-2 | item | bias | 0.0140441 | 0.0380265 | 20 | 20261033 | 20 | 0 |
-| S-ord-2 | item | empse | 0.17006 | 0.0275874 | 20 | 20261033 | 20 | 0 |
-| S-ord-2 | item | rel_bias | 0.0140441 | 0.0380265 | 20 | 20261033 | 20 | 0 |
-| S-ord-2 | item | rmse | 0.166348 | 0.0250785 | 20 | 20261033 | 20 | 0 |
-| S-ord-2 | item:model | bias | 0.00939372 | 0.00562246 | 20 | 20261033 | 20 | 0 |
-| S-ord-2 | item:model | empse | 0.0251444 | 0.00407896 | 20 | 20261033 | 20 | 0 |
-| S-ord-2 | item:model | rel_bias | 0.104375 | 0.0624718 | 20 | 20261033 | 20 | 0 |
-| S-ord-2 | item:model | rmse | 0.0262463 | 0.00349634 | 20 | 20261033 | 20 | 0 |
-| S-ord-2 | model | bias | -0.0148087 | 0.0158949 | 20 | 20261033 | 20 | 0 |
-| S-ord-2 | model | empse | 0.0710841 | 0.0115314 | 20 | 20261033 | 20 | 0 |
-| S-ord-2 | model | rel_bias | -0.164541 | 0.17661 | 20 | 20261033 | 20 | 0 |
-| S-ord-2 | model | rmse | 0.0708492 | 0.0176279 | 20 | 20261033 | 20 | 0 |
-| S-ord-2 | prompt | bias | 0.00161546 | 0.00814081 | 20 | 20261033 | 20 | 0 |
-| S-ord-2 | prompt | empse | 0.0364068 | 0.00590596 | 20 | 20261033 | 20 | 0 |
-| S-ord-2 | prompt | rel_bias | 0.0258474 | 0.130253 | 20 | 20261033 | 20 | 0 |
-| S-ord-2 | prompt | rmse | 0.0355217 | 0.00518877 | 20 | 20261033 | 20 | 0 |
+| S-ord-2 | grr_pct_study_var | bias | -0.0944099 | 0.685094 | 20 | 20261033 | 20 | 0 |
+| S-ord-2 | grr_pct_study_var | empse | 3.06384 | 0.49702 | 20 | 20261033 | 20 | 0 |
+| S-ord-2 | grr_pct_study_var | rel_bias | -0.00126834 | 0.00920383 | 20 | 20261033 | 20 | 0 |
+| S-ord-2 | grr_pct_study_var | rmse | 2.98775 | 0.382961 | 20 | 20261033 | 20 | 0 |
+| S-ord-2 | icc_items | bias | 0.000512831 | 0.0102256 | 20 | 20261033 | 20 | 0 |
+| S-ord-2 | icc_items | empse | 0.0457301 | 0.00741841 | 20 | 20261033 | 20 | 0 |
+| S-ord-2 | icc_items | rel_bias | 0.00115002 | 0.0229308 | 20 | 20261033 | 20 | 0 |
+| S-ord-2 | icc_items | rmse | 0.0445752 | 0.00585203 | 20 | 20261033 | 20 | 0 |
+| S-ord-2 | item | bias | 0.0140555 | 0.0380336 | 20 | 20261033 | 20 | 0 |
+| S-ord-2 | item | empse | 0.170092 | 0.0275925 | 20 | 20261033 | 20 | 0 |
+| S-ord-2 | item | rel_bias | 0.0140555 | 0.0380336 | 20 | 20261033 | 20 | 0 |
+| S-ord-2 | item | rmse | 0.166379 | 0.0250801 | 20 | 20261033 | 20 | 0 |
+| S-ord-2 | item:model | bias | 0.00939742 | 0.00562271 | 20 | 20261033 | 20 | 0 |
+| S-ord-2 | item:model | empse | 0.0251455 | 0.00407914 | 20 | 20261033 | 20 | 0 |
+| S-ord-2 | item:model | rel_bias | 0.104416 | 0.0624746 | 20 | 20261033 | 20 | 0 |
+| S-ord-2 | item:model | rmse | 0.0262487 | 0.00349605 | 20 | 20261033 | 20 | 0 |
+| S-ord-2 | model | bias | -0.0148265 | 0.0158959 | 20 | 20261033 | 20 | 0 |
+| S-ord-2 | model | empse | 0.0710886 | 0.0115321 | 20 | 20261033 | 20 | 0 |
+| S-ord-2 | model | rel_bias | -0.164738 | 0.176621 | 20 | 20261033 | 20 | 0 |
+| S-ord-2 | model | rmse | 0.0708571 | 0.0176252 | 20 | 20261033 | 20 | 0 |
+| S-ord-2 | prompt | bias | 0.00162025 | 0.00814046 | 20 | 20261033 | 20 | 0 |
+| S-ord-2 | prompt | empse | 0.0364052 | 0.00590571 | 20 | 20261033 | 20 | 0 |
+| S-ord-2 | prompt | rel_bias | 0.0259241 | 0.130247 | 20 | 20261033 | 20 | 0 |
+| S-ord-2 | prompt | rmse | 0.0355204 | 0.00518874 | 20 | 20261033 | 20 | 0 |
 
 S-ord-3
 
 | scenario | estimand | measure | value | mcse | n_sim | seed | n_finite | n_failed |
 |:---|:---|:---|:---|:---|:---|:---|:---|:---|
-| S-ord-3 | grr_pct_study_var | bias | -1.02511 | 1.03594 | 20 | 20261034 | 20 | 0 |
-| S-ord-3 | grr_pct_study_var | empse | 4.63286 | 0.751549 | 20 | 20261034 | 20 | 0 |
-| S-ord-3 | grr_pct_study_var | rel_bias | -0.0179332 | 0.0181226 | 20 | 20261034 | 20 | 0 |
-| S-ord-3 | grr_pct_study_var | rmse | 4.63045 | 0.790191 | 20 | 20261034 | 20 | 0 |
-| S-ord-3 | icc_items | bias | 0.00957557 | 0.0116918 | 20 | 20261034 | 20 | 0 |
-| S-ord-3 | icc_items | empse | 0.0522874 | 0.00848214 | 20 | 20261034 | 20 | 0 |
-| S-ord-3 | icc_items | rel_bias | 0.0142231 | 0.0173665 | 20 | 20261034 | 20 | 0 |
-| S-ord-3 | icc_items | rmse | 0.0518552 | 0.00843024 | 20 | 20261034 | 20 | 0 |
-| S-ord-3 | item | bias | 0.151276 | 0.130086 | 20 | 20261034 | 20 | 0 |
-| S-ord-3 | item | empse | 0.581764 | 0.0943746 | 20 | 20261034 | 20 | 0 |
-| S-ord-3 | item | rel_bias | 0.0590923 | 0.050815 | 20 | 20261034 | 20 | 0 |
-| S-ord-3 | item | rmse | 0.586866 | 0.129228 | 20 | 20261034 | 20 | 0 |
-| S-ord-3 | item:model | bias | 0.00923217 | 0.00716198 | 20 | 20261034 | 20 | 0 |
-| S-ord-3 | item:model | empse | 0.0320293 | 0.00519584 | 20 | 20261034 | 20 | 0 |
-| S-ord-3 | item:model | rel_bias | 0.10258 | 0.0795775 | 20 | 20261034 | 20 | 0 |
-| S-ord-3 | item:model | rmse | 0.0325548 | 0.00710481 | 20 | 20261034 | 20 | 0 |
-| S-ord-3 | model | bias | -0.024633 | 0.0107355 | 20 | 20261034 | 20 | 0 |
-| S-ord-3 | model | empse | 0.0480108 | 0.00778838 | 20 | 20261034 | 20 | 0 |
-| S-ord-3 | model | rel_bias | -0.2737 | 0.119284 | 20 | 20261034 | 20 | 0 |
-| S-ord-3 | model | rmse | 0.0528826 | 0.00580118 | 20 | 20261034 | 20 | 0 |
-| S-ord-3 | prompt | bias | -0.0102073 | 0.0178953 | 20 | 20261034 | 20 | 0 |
-| S-ord-3 | prompt | empse | 0.0800301 | 0.0129826 | 20 | 20261034 | 20 | 0 |
-| S-ord-3 | prompt | rel_bias | -0.163317 | 0.286325 | 20 | 20261034 | 20 | 0 |
-| S-ord-3 | prompt | rmse | 0.0786687 | 0.0240567 | 20 | 20261034 | 20 | 0 |
+| S-ord-3 | grr_pct_study_var | bias | -1.02627 | 1.0359 | 20 | 20261034 | 20 | 0 |
+| S-ord-3 | grr_pct_study_var | empse | 4.63269 | 0.751521 | 20 | 20261034 | 20 | 0 |
+| S-ord-3 | grr_pct_study_var | rel_bias | -0.0179535 | 0.0181219 | 20 | 20261034 | 20 | 0 |
+| S-ord-3 | grr_pct_study_var | rmse | 4.63055 | 0.790158 | 20 | 20261034 | 20 | 0 |
+| S-ord-3 | icc_items | bias | 0.00958872 | 0.0116915 | 20 | 20261034 | 20 | 0 |
+| S-ord-3 | icc_items | empse | 0.0522861 | 0.00848192 | 20 | 20261034 | 20 | 0 |
+| S-ord-3 | icc_items | rel_bias | 0.0142426 | 0.017366 | 20 | 20261034 | 20 | 0 |
+| S-ord-3 | icc_items | rmse | 0.0518564 | 0.00842987 | 20 | 20261034 | 20 | 0 |
+| S-ord-3 | item | bias | 0.151376 | 0.13008 | 20 | 20261034 | 20 | 0 |
+| S-ord-3 | item | empse | 0.581734 | 0.0943696 | 20 | 20261034 | 20 | 0 |
+| S-ord-3 | item | rel_bias | 0.0591312 | 0.0508123 | 20 | 20261034 | 20 | 0 |
+| S-ord-3 | item | rmse | 0.586863 | 0.129229 | 20 | 20261034 | 20 | 0 |
+| S-ord-3 | item:model | bias | 0.00923075 | 0.00716217 | 20 | 20261034 | 20 | 0 |
+| S-ord-3 | item:model | empse | 0.0320302 | 0.00519598 | 20 | 20261034 | 20 | 0 |
+| S-ord-3 | item:model | rel_bias | 0.102564 | 0.0795796 | 20 | 20261034 | 20 | 0 |
+| S-ord-3 | item:model | rmse | 0.0325552 | 0.00710468 | 20 | 20261034 | 20 | 0 |
+| S-ord-3 | model | bias | -0.0246332 | 0.0107356 | 20 | 20261034 | 20 | 0 |
+| S-ord-3 | model | empse | 0.0480112 | 0.00778845 | 20 | 20261034 | 20 | 0 |
+| S-ord-3 | model | rel_bias | -0.273702 | 0.119285 | 20 | 20261034 | 20 | 0 |
+| S-ord-3 | model | rmse | 0.0528831 | 0.00580126 | 20 | 20261034 | 20 | 0 |
+| S-ord-3 | prompt | bias | -0.010234 | 0.0178925 | 20 | 20261034 | 20 | 0 |
+| S-ord-3 | prompt | empse | 0.0800177 | 0.0129806 | 20 | 20261034 | 20 | 0 |
+| S-ord-3 | prompt | rel_bias | -0.163743 | 0.28628 | 20 | 20261034 | 20 | 0 |
+| S-ord-3 | prompt | rmse | 0.0786602 | 0.0240599 | 20 | 20261034 | 20 | 0 |
 
 S-ord-4
 
 | scenario | estimand | measure | value | mcse | n_sim | seed | n_finite | n_failed |
 |:---|:---|:---|:---|:---|:---|:---|:---|:---|
-| S-ord-4 | block | bias | -0.00421962 | 0.00192414 | 20 | 20261035 | 20 | 0 |
-| S-ord-4 | block | empse | 0.008605 | 0.00139591 | 20 | 20261035 | 20 | 0 |
-| S-ord-4 | block | rel_bias | -0.421962 | 0.192414 | 20 | 20261035 | 20 | 0 |
-| S-ord-4 | block | rmse | 0.00938876 | 0.0010461 | 20 | 20261035 | 20 | 0 |
-| S-ord-4 | grr_pct_study_var | bias | 0.268141 | 0.726166 | 20 | 20261035 | 20 | 0 |
-| S-ord-4 | grr_pct_study_var | empse | 3.24751 | 0.526816 | 20 | 20261035 | 20 | 0 |
-| S-ord-4 | grr_pct_study_var | rel_bias | 0.0035959 | 0.00973821 | 20 | 20261035 | 20 | 0 |
-| S-ord-4 | grr_pct_study_var | rmse | 3.17662 | 0.858744 | 20 | 20261035 | 20 | 0 |
-| S-ord-4 | icc_items | bias | -0.00500808 | 0.0111779 | 20 | 20261035 | 20 | 0 |
-| S-ord-4 | icc_items | empse | 0.0499891 | 0.00810931 | 20 | 20261035 | 20 | 0 |
-| S-ord-4 | icc_items | rel_bias | -0.0112807 | 0.0251782 | 20 | 20261035 | 20 | 0 |
-| S-ord-4 | icc_items | rmse | 0.0489801 | 0.0141729 | 20 | 20261035 | 20 | 0 |
-| S-ord-4 | item | bias | 0.00075078 | 0.0316083 | 20 | 20261035 | 20 | 0 |
-| S-ord-4 | item | empse | 0.141357 | 0.0229311 | 20 | 20261035 | 20 | 0 |
-| S-ord-4 | item | rel_bias | 0.00075078 | 0.0316083 | 20 | 20261035 | 20 | 0 |
-| S-ord-4 | item | rmse | 0.137779 | 0.0116703 | 20 | 20261035 | 20 | 0 |
-| S-ord-4 | item:model | bias | 0.00597646 | 0.00444521 | 20 | 20261035 | 20 | 0 |
-| S-ord-4 | item:model | empse | 0.0198796 | 0.00322489 | 20 | 20261035 | 20 | 0 |
-| S-ord-4 | item:model | rel_bias | 0.0664051 | 0.0493912 | 20 | 20261035 | 20 | 0 |
-| S-ord-4 | item:model | rmse | 0.020277 | 0.00317391 | 20 | 20261035 | 20 | 0 |
-| S-ord-4 | model | bias | -0.000811174 | 0.0314421 | 20 | 20261035 | 20 | 0 |
-| S-ord-4 | model | empse | 0.140613 | 0.0228105 | 20 | 20261035 | 20 | 0 |
-| S-ord-4 | model | rel_bias | -0.00901304 | 0.349356 | 20 | 20261035 | 20 | 0 |
-| S-ord-4 | model | rmse | 0.137055 | 0.056819 | 20 | 20261035 | 20 | 0 |
-| S-ord-4 | prompt | bias | 0.0333582 | 0.0275023 | 20 | 20261035 | 20 | 0 |
-| S-ord-4 | prompt | empse | 0.122994 | 0.0199522 | 20 | 20261035 | 20 | 0 |
-| S-ord-4 | prompt | rel_bias | 0.533731 | 0.440036 | 20 | 20261035 | 20 | 0 |
-| S-ord-4 | prompt | rmse | 0.124434 | 0.0500166 | 20 | 20261035 | 20 | 0 |
+| S-ord-4 | block | bias | -0.0042175 | 0.00192327 | 20 | 20261035 | 20 | 0 |
+| S-ord-4 | block | empse | 0.00860111 | 0.00139529 | 20 | 20261035 | 20 | 0 |
+| S-ord-4 | block | rel_bias | -0.42175 | 0.192327 | 20 | 20261035 | 20 | 0 |
+| S-ord-4 | block | rmse | 0.00938443 | 0.00104742 | 20 | 20261035 | 20 | 0 |
+| S-ord-4 | grr_pct_study_var | bias | -0.423974 | 0.474589 | 20 | 20261035 | 20 | 0 |
+| S-ord-4 | grr_pct_study_var | empse | 2.12242 | 0.344303 | 20 | 20261035 | 20 | 0 |
+| S-ord-4 | grr_pct_study_var | rel_bias | -0.00568569 | 0.00636445 | 20 | 20261035 | 20 | 0 |
+| S-ord-4 | grr_pct_study_var | rmse | 2.11168 | 0.301264 | 20 | 20261035 | 20 | 0 |
+| S-ord-4 | icc_items | bias | 0.00587712 | 0.00699567 | 20 | 20261035 | 20 | 0 |
+| S-ord-4 | icc_items | empse | 0.0312856 | 0.00507519 | 20 | 20261035 | 20 | 0 |
+| S-ord-4 | icc_items | rel_bias | 0.0132382 | 0.0157577 | 20 | 20261035 | 20 | 0 |
+| S-ord-4 | icc_items | rmse | 0.0310546 | 0.00429559 | 20 | 20261035 | 20 | 0 |
+| S-ord-4 | item | bias | 0.00296626 | 0.0317555 | 20 | 20261035 | 20 | 0 |
+| S-ord-4 | item | empse | 0.142015 | 0.0230378 | 20 | 20261035 | 20 | 0 |
+| S-ord-4 | item | rel_bias | 0.00296626 | 0.0317555 | 20 | 20261035 | 20 | 0 |
+| S-ord-4 | item | rmse | 0.138451 | 0.0116007 | 20 | 20261035 | 20 | 0 |
+| S-ord-4 | item:model | bias | 0.00605085 | 0.00444423 | 20 | 20261035 | 20 | 0 |
+| S-ord-4 | item:model | empse | 0.0198752 | 0.00322418 | 20 | 20261035 | 20 | 0 |
+| S-ord-4 | item:model | rel_bias | 0.0672317 | 0.0493803 | 20 | 20261035 | 20 | 0 |
+| S-ord-4 | item:model | rmse | 0.020295 | 0.00316686 | 20 | 20261035 | 20 | 0 |
+| S-ord-4 | model | bias | -0.0310599 | 0.0122835 | 20 | 20261035 | 20 | 0 |
+| S-ord-4 | model | empse | 0.0549337 | 0.00891141 | 20 | 20261035 | 20 | 0 |
+| S-ord-4 | model | rel_bias | -0.34511 | 0.136484 | 20 | 20261035 | 20 | 0 |
+| S-ord-4 | model | rmse | 0.0618994 | 0.0051961 | 20 | 20261035 | 20 | 0 |
+| S-ord-4 | prompt | bias | -0.00597937 | 0.0117696 | 20 | 20261035 | 20 | 0 |
+| S-ord-4 | prompt | empse | 0.0526352 | 0.00853856 | 20 | 20261035 | 20 | 0 |
+| S-ord-4 | prompt | rel_bias | -0.0956699 | 0.188314 | 20 | 20261035 | 20 | 0 |
+| S-ord-4 | prompt | rmse | 0.0516498 | 0.0111695 | 20 | 20261035 | 20 | 0 |
 
 ### binary_recovery
 
@@ -629,3 +629,144 @@ S-two-2
 | S-two-2 | prompt | empse | 0.0274821 | 0.00445818 | 20 | 20261039 | 20 | 0 |
 | S-two-2 | prompt | rel_bias | -0.376358 | 0.0983228 | 20 | 20261039 | 20 | 0 |
 | S-two-2 | prompt | rmse | 0.0356483 | 0.00382582 | 20 | 20261039 | 20 | 0 |
+
+## Bootstrap intervals: coverage by scenario
+
+This section reads **boot_coverage_check_results.csv** (**check** run),
+with **n_sim = 20** repetitions per scenario. The installed
+`boot_coverage_results.csv` takes precedence over
+`boot_coverage_check_results.csv`. An invalid existing full result stops
+the build. Knitting reads the results and starts neither simulations nor
+downloads.
+
+The study evaluates the existing 95% percentile intervals from
+[`msa_boot()`](https://danielmoj.github.io/llmsa/reference/msa_boot.md)
+for gauge R&R study variation and contribution, ndc and item ICC. Every
+outer repetition generates a new crossed study and uses the package’s
+default number of parametric bootstrap refits. Numeric scenarios include
+all three pairwise interactions; the binary logit scenario uses item,
+prompt and model effects. The installed `validation/sim/README.md`
+specifies the designs, seeds, Monte Carlo standard errors (MCSE),
+diagnostics and reproduction commands.
+
+Coverage is the fraction of finite closed intervals containing the true
+value; width is their mean width. Their `n_finite` and `n_failed` count
+available and unavailable outer repetitions. For bootstrap diagnostics,
+the unit of analysis is also the outer repetition: each contributes its
+fraction of singular or failed refits, and MCSE is the standard error of
+the mean of those fractions. Singular refits with finite statistics
+remain in the intervals. Only non-finite values are omitted, separately
+for each statistic. The diagnostics count a replicate with any
+non-finite statistic as failed and do not also count it as singular.
+
+Short runs establish reproducibility and file structure. They do not
+establish nominal coverage. Full runs require at least 1000 repetitions
+per scenario (ANK-06) and follow code acceptance. Undercoverage or
+overcoverage in those runs is a finding to report, with MCSE, rather
+than a reason to alter intervals.
+
+### S-boot-1
+
+| scenario | estimand | measure | value | MCSE | n_sim | seed | n_finite | n_failed |
+|:---|:---|:---|:---|:---|:---|:---|:---|:---|
+| S-boot-1 | block | bias | -0.00243875 | 0.00245516 | 20 | 20261102 | 20 | 0 |
+| S-boot-1 | block | empse | 0.0109798 | 0.00178116 | 20 | 20261102 | 20 | 0 |
+| S-boot-1 | block | rel_bias | -0.243875 | 0.245516 | 20 | 20261102 | 20 | 0 |
+| S-boot-1 | block | rmse | 0.0109762 | 0.00223694 | 20 | 20261102 | 20 | 0 |
+| S-boot-1 | bootstrap | failed_share | 0 | 0 | 20 | 20261102 | 20 | 0 |
+| S-boot-1 | bootstrap | singular_share | 0.54275 | 0.0461169 | 20 | 20261102 | 20 | 0 |
+| S-boot-1 | grr_pct_contribution | bias | 2.47055 | 1.56201 | 20 | 20261102 | 20 | 0 |
+| S-boot-1 | grr_pct_contribution | coverage | 1 | 0 | 20 | 20261102 | 20 | 0 |
+| S-boot-1 | grr_pct_contribution | empse | 6.98552 | 1.1332 | 20 | 20261102 | 20 | 0 |
+| S-boot-1 | grr_pct_contribution | rel_bias | 0.114544 | 0.0724204 | 20 | 20261102 | 20 | 0 |
+| S-boot-1 | grr_pct_contribution | rmse | 7.24301 | 0.957301 | 20 | 20261102 | 20 | 0 |
+| S-boot-1 | grr_pct_contribution | width | 32.5402 | 2.15083 | 20 | 20261102 | 20 | 0 |
+| S-boot-1 | grr_pct_study_var | bias | 2.0487 | 1.66332 | 20 | 20261102 | 20 | 0 |
+| S-boot-1 | grr_pct_study_var | coverage | 1 | 0 | 20 | 20261102 | 20 | 0 |
+| S-boot-1 | grr_pct_study_var | empse | 7.43862 | 1.2067 | 20 | 20261102 | 20 | 0 |
+| S-boot-1 | grr_pct_study_var | rel_bias | 0.044113 | 0.0358151 | 20 | 20261102 | 20 | 0 |
+| S-boot-1 | grr_pct_study_var | rmse | 7.53416 | 0.955832 | 20 | 20261102 | 20 | 0 |
+| S-boot-1 | grr_pct_study_var | width | 31.7426 | 1.3029 | 20 | 20261102 | 20 | 0 |
+| S-boot-1 | icc_items | bias | -0.0247055 | 0.0156201 | 20 | 20261102 | 20 | 0 |
+| S-boot-1 | icc_items | coverage | 1 | 0 | 20 | 20261102 | 20 | 0 |
+| S-boot-1 | icc_items | empse | 0.0698552 | 0.011332 | 20 | 20261102 | 20 | 0 |
+| S-boot-1 | icc_items | rel_bias | -0.0314995 | 0.0199156 | 20 | 20261102 | 20 | 0 |
+| S-boot-1 | icc_items | rmse | 0.0724301 | 0.00957301 | 20 | 20261102 | 20 | 0 |
+| S-boot-1 | icc_items | width | 0.325402 | 0.0215083 | 20 | 20261102 | 20 | 0 |
+| S-boot-1 | item | bias | -0.0116218 | 0.0849496 | 20 | 20261102 | 20 | 0 |
+| S-boot-1 | item | empse | 0.379906 | 0.0616289 | 20 | 20261102 | 20 | 0 |
+| S-boot-1 | item | rel_bias | -0.0116218 | 0.0849496 | 20 | 20261102 | 20 | 0 |
+| S-boot-1 | item | rmse | 0.370469 | 0.0607066 | 20 | 20261102 | 20 | 0 |
+| S-boot-1 | item:model | bias | -0.00167901 | 0.00182315 | 20 | 20261102 | 20 | 0 |
+| S-boot-1 | item:model | empse | 0.00815339 | 0.00132265 | 20 | 20261102 | 20 | 0 |
+| S-boot-1 | item:model | rel_bias | -0.0335803 | 0.0364631 | 20 | 20261102 | 20 | 0 |
+| S-boot-1 | item:model | rmse | 0.00812238 | 0.00127238 | 20 | 20261102 | 20 | 0 |
+| S-boot-1 | item:prompt | bias | 0.00151534 | 0.000769449 | 20 | 20261102 | 20 | 0 |
+| S-boot-1 | item:prompt | empse | 0.00344108 | 0.000558217 | 20 | 20261102 | 20 | 0 |
+| S-boot-1 | item:prompt | rel_bias | 0.151534 | 0.0769449 | 20 | 20261102 | 20 | 0 |
+| S-boot-1 | item:prompt | rmse | 0.00368039 | 0.000599867 | 20 | 20261102 | 20 | 0 |
+| S-boot-1 | model | bias | 0.0156247 | 0.0125608 | 20 | 20261102 | 20 | 0 |
+| S-boot-1 | model | empse | 0.0561736 | 0.00911255 | 20 | 20261102 | 20 | 0 |
+| S-boot-1 | model | rel_bias | 0.312495 | 0.251216 | 20 | 20261102 | 20 | 0 |
+| S-boot-1 | model | rmse | 0.0569371 | 0.0133628 | 20 | 20261102 | 20 | 0 |
+| S-boot-1 | ndc | bias | 0.2 | 0.155597 | 20 | 20261102 | 20 | 0 |
+| S-boot-1 | ndc | coverage | 1 | 0 | 20 | 20261102 | 20 | 0 |
+| S-boot-1 | ndc | empse | 0.695852 | 0.112882 | 20 | 20261102 | 20 | 0 |
+| S-boot-1 | ndc | rel_bias | 0.1 | 0.0777987 | 20 | 20261102 | 20 | 0 |
+| S-boot-1 | ndc | rmse | 0.707107 | 0.149561 | 20 | 20261102 | 20 | 0 |
+| S-boot-1 | ndc | width | 2.45 | 0.135239 | 20 | 20261102 | 20 | 0 |
+| S-boot-1 | prompt | bias | 0.00398593 | 0.0155439 | 20 | 20261102 | 20 | 0 |
+| S-boot-1 | prompt | empse | 0.0695143 | 0.0112767 | 20 | 20261102 | 20 | 0 |
+| S-boot-1 | prompt | rel_bias | 0.0797186 | 0.310877 | 20 | 20261102 | 20 | 0 |
+| S-boot-1 | prompt | rmse | 0.0678713 | 0.0228476 | 20 | 20261102 | 20 | 0 |
+| S-boot-1 | prompt:model | bias | -0.000431477 | 0.000559923 | 20 | 20261102 | 20 | 0 |
+| S-boot-1 | prompt:model | empse | 0.00250405 | 0.000406211 | 20 | 20261102 | 20 | 0 |
+| S-boot-1 | prompt:model | rel_bias | -0.0862954 | 0.111985 | 20 | 20261102 | 20 | 0 |
+| S-boot-1 | prompt:model | rmse | 0.0024785 | 0.000273847 | 20 | 20261102 | 20 | 0 |
+| S-boot-1 | Residual | bias | -0.00119011 | 0.0010499 | 20 | 20261102 | 20 | 0 |
+| S-boot-1 | Residual | empse | 0.0046953 | 0.000761678 | 20 | 20261102 | 20 | 0 |
+| S-boot-1 | Residual | rel_bias | -0.0119011 | 0.010499 | 20 | 20261102 | 20 | 0 |
+| S-boot-1 | Residual | rmse | 0.00472863 | 0.000752154 | 20 | 20261102 | 20 | 0 |
+
+### S-boot-7
+
+| scenario | estimand | measure | value | MCSE | n_sim | seed | n_finite | n_failed |
+|:---|:---|:---|:---|:---|:---|:---|:---|:---|
+| S-boot-7 | bootstrap | failed_share | 0 | 0 | 20 | 20261114 | 20 | 0 |
+| S-boot-7 | bootstrap | singular_share | 0.40525 | 0.0452107 | 20 | 20261114 | 20 | 0 |
+| S-boot-7 | grr_pct_contribution | bias | -1.30443 | 0.574513 | 20 | 20261114 | 20 | 0 |
+| S-boot-7 | grr_pct_contribution | coverage | 1 | 0 | 20 | 20261114 | 20 | 0 |
+| S-boot-7 | grr_pct_contribution | empse | 2.5693 | 0.416795 | 20 | 20261114 | 20 | 0 |
+| S-boot-7 | grr_pct_contribution | rel_bias | -0.016782 | 0.00739136 | 20 | 20261114 | 20 | 0 |
+| S-boot-7 | grr_pct_contribution | rmse | 2.82361 | 0.353205 | 20 | 20261114 | 20 | 0 |
+| S-boot-7 | grr_pct_contribution | width | 15.8579 | 0.309403 | 20 | 20261114 | 20 | 0 |
+| S-boot-7 | grr_pct_study_var | bias | -0.754533 | 0.327053 | 20 | 20261114 | 20 | 0 |
+| S-boot-7 | grr_pct_study_var | coverage | 1 | 0 | 20 | 20261114 | 20 | 0 |
+| S-boot-7 | grr_pct_study_var | empse | 1.46262 | 0.237269 | 20 | 20261114 | 20 | 0 |
+| S-boot-7 | grr_pct_study_var | rel_bias | -0.00855836 | 0.00370963 | 20 | 20261114 | 20 | 0 |
+| S-boot-7 | grr_pct_study_var | rmse | 1.61296 | 0.203601 | 20 | 20261114 | 20 | 0 |
+| S-boot-7 | grr_pct_study_var | width | 9.11023 | 0.206417 | 20 | 20261114 | 20 | 0 |
+| S-boot-7 | icc_items | bias | 0.0130443 | 0.00574513 | 20 | 20261114 | 20 | 0 |
+| S-boot-7 | icc_items | coverage | 1 | 0 | 20 | 20261114 | 20 | 0 |
+| S-boot-7 | icc_items | empse | 0.025693 | 0.00416795 | 20 | 20261114 | 20 | 0 |
+| S-boot-7 | icc_items | rel_bias | 0.058567 | 0.0257949 | 20 | 20261114 | 20 | 0 |
+| S-boot-7 | icc_items | rmse | 0.0282361 | 0.00353205 | 20 | 20261114 | 20 | 0 |
+| S-boot-7 | icc_items | width | 0.158579 | 0.00309403 | 20 | 20261114 | 20 | 0 |
+| S-boot-7 | item | bias | 0.0600002 | 0.0345138 | 20 | 20261114 | 20 | 0 |
+| S-boot-7 | item | empse | 0.15435 | 0.0250389 | 20 | 20261114 | 20 | 0 |
+| S-boot-7 | item | rel_bias | 0.0600002 | 0.0345138 | 20 | 20261114 | 20 | 0 |
+| S-boot-7 | item | rmse | 0.161966 | 0.0262237 | 20 | 20261114 | 20 | 0 |
+| S-boot-7 | model | bias | -0.0353384 | 0.0155519 | 20 | 20261114 | 20 | 0 |
+| S-boot-7 | model | empse | 0.0695503 | 0.0112825 | 20 | 20261114 | 20 | 0 |
+| S-boot-7 | model | rel_bias | -0.353384 | 0.155519 | 20 | 20261114 | 20 | 0 |
+| S-boot-7 | model | rmse | 0.0764473 | 0.00823782 | 20 | 20261114 | 20 | 0 |
+| S-boot-7 | ndc | bias | 0 | 0 | 20 | 20261114 | 20 | 0 |
+| S-boot-7 | ndc | coverage | 1 | 0 | 20 | 20261114 | 20 | 0 |
+| S-boot-7 | ndc | empse | 0 | 0 | 20 | 20261114 | 20 | 0 |
+| S-boot-7 | ndc | rel_bias | 0 | 0 | 20 | 20261114 | 20 | 0 |
+| S-boot-7 | ndc | rmse | 0 | 0 | 20 | 20261114 | 20 | 0 |
+| S-boot-7 | ndc | width | 0 | 0 | 20 | 20261114 | 20 | 0 |
+| S-boot-7 | prompt | bias | -0.0347613 | 0.0132451 | 20 | 20261114 | 20 | 0 |
+| S-boot-7 | prompt | empse | 0.059234 | 0.00960903 | 20 | 20261114 | 20 | 0 |
+| S-boot-7 | prompt | rel_bias | -0.347613 | 0.132451 | 20 | 20261114 | 20 | 0 |
+| S-boot-7 | prompt | rmse | 0.0673913 | 0.00774171 | 20 | 20261114 | 20 | 0 |
