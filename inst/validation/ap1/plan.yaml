@@ -1,3 +1,5 @@
+# Language follow-up of AP1 (docs/decisions/ADR-AP1-DE-sprachvergleich.md). Compared with
+# the plan at f948105 only templates, language_control and pb_design.fold_over differ.
 cou: Preclassification of germline sequence variants in c. notation on an NM transcript,
   in genes with a ClinGen expert panel and in MEFV, MVK, NLRP3 and TNFRSF1A, on the
   five-tier ACMG/AMP scale to prepare expert review. Input is gene and variant notation
@@ -221,6 +223,7 @@ robustness:
   pb_design:
     call: pb_design(8, n_runs = 12)
     seed: ANK-59
+    fold_over: F8
     prompt_ids:
     - pb01
     - pb02
@@ -312,17 +315,23 @@ aliases:
   - P
   - pathogenic
 templates:
-  concise: 'Classify the germline variant {gene} {hgvs} according to the ACMG/AMP
+  concise: 'Klassifiziere die Keimbahnvariante {gene} {hgvs} entsprechend dem fünfstufigen
+    ACMG/AMP-Schema von 2015. Antworte mit genau einer der folgenden Klassen und sonst
+    nichts: Benign, Likely benign, Uncertain significance, Likely pathogenic, Pathogenic.'
+  role: 'Du bist klinischer Genetiker in einem Expertengremium für die Kuratierung von
+    Varianten. Weise der Keimbahnvariante {gene} {hgvs} nach den ACMG/AMP-Standards
+    und -Leitlinien von 2015 die fünfstufige Klassifikation zu. Antworte nur mit der Klassifikation,
+    als eine von: Benign; Likely benign; Uncertain significance; Likely pathogenic; Pathogenic.'
+  json: 'Gib ein JSON-Objekt der Form {"classification": "<tier>"} für die Keimbahnvariante
+    {gene} {hgvs} zurück, wobei <tier> die fünfstufige ACMG/AMP-Klassifikation von 2015
+    ist: eine von "Benign", "Likely benign", "Uncertain significance", "Likely pathogenic",
+    "Pathogenic". Gib nur das JSON-Objekt aus.'
+language_control:
+  prompt_id: control_en
+  template: 'Classify the germline variant {gene} {hgvs} according to the ACMG/AMP
     2015 five-tier scheme. Answer with exactly one of the following and nothing else:
     Benign, Likely benign, Uncertain significance, Likely pathogenic, Pathogenic.'
-  role: 'You are a clinical geneticist on a variant curation expert panel. Using the
-    ACMG/AMP 2015 standards and guidelines, assign the five-tier classification for
-    the germline variant {gene} {hgvs}. Reply with the classification only, as one
-    of: Benign; Likely benign; Uncertain significance; Likely pathogenic; Pathogenic.'
-  json: 'Return a JSON object of the form {"classification": "<tier>"} for the germline
-    variant {gene} {hgvs}, where <tier> is the ACMG/AMP 2015 five-tier classification:
-    one of "Benign", "Likely benign", "Uncertain significance", "Likely pathogenic",
-    "Pathogenic". Output the JSON object only.'
+  source: English concise template of the main plan at f948105
 reporting:
   provisional: Statistics are provisional until M1 is accepted. Re-evaluate the same
     store after M1 (BL-52).

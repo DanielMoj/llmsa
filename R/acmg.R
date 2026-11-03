@@ -228,7 +228,17 @@ acmg_items <- function(insaid_path = NULL, pilot = FALSE) {
 }
 
 acmg_pb <- function(plan) {
-  pb_design(length(plan$robustness$factors), n_runs = plan$robustness$runs, seed = plan$design$seed)
+  design <- pb_design(length(plan$robustness$factors), n_runs = plan$robustness$runs, seed = plan$design$seed)
+  # Language follow-up: the same twelve runs with one factor reversed (fold-over).
+  fold <- plan$robustness$pb_design$fold_over
+  if (!is.null(fold)) {
+    coded <- attr(design, "coded")
+    if (!acmg_scalar(fold) || !fold %in% colnames(coded)) stop("Invalid AP1 plan field: fold_over", call. = FALSE)
+    coded[, fold] <- -coded[, fold]
+    attr(design, "coded") <- coded
+    design[[fold]] <- -design[[fold]]
+  }
+  design
 }
 
 acmg_prompt_table <- function(plan) {

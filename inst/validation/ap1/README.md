@@ -131,6 +131,21 @@ aborts before any request. References and protein notation are joined only in
 memory. F2 uses the available protein notation; INSAID reference classes are
 never persisted by this pipeline. The source TSV remains outside the repository.
 
+## Language follow-up (branch `ap1-de`)
+
+This branch collects the follow-up in `docs/decisions/ADR-AP1-DE-sprachvergleich.md`
+from its own clone into its own stores. `plan.yaml` holds the German main-plan
+templates and reverses F8 in the twelve PB runs; everything else equals `f948105`.
+Order: pilot, block 1, control, block 2 on another day, robustness.
+
+```sh
+Rscript --vanilla inst/validation/ap1/run.R --part pilot --backend api --store /absolute/studies/ap1-de.sqlite
+Rscript --vanilla inst/validation/ap1/run.R --part main --block 1 --backend api --store /absolute/studies/ap1-de.sqlite
+Rscript --vanilla inst/validation/ap1/run_control.R --backend api --store /absolute/studies/ap1-de-control.sqlite
+Rscript --vanilla inst/validation/ap1/run.R --part main --block 2 --backend api --store /absolute/studies/ap1-de.sqlite
+Rscript --vanilla inst/validation/ap1/run.R --part robustness --backend api --store /absolute/studies/ap1-de.sqlite --insaid-path /absolute/local/insaid_vangijn2018.tsv
+```
+
 ## Evaluation and interpretation
 
 ```sh
