@@ -1,0 +1,37 @@
+{
+  "milestone": "M1c",
+  "round": 1,
+  "base": "ddba246b103310db0c7802aeda10adc888877dc5",
+  "baseRef": "plan/M1c",
+  "env": {
+    "ts": "2026-11-03T02:29:14+01:00",
+    "sha": "565841bc553f2939c0c47151a628e445ad901206",
+    "bash": "5.3.9(1)-release",
+    "git": "2.53.0",
+    "toolchain": {
+      "R": "Rscript (R) version 4.6.1 (2026-06-24)",
+      "pandoc": "pandoc 3.7.0.2"
+    }
+  },
+  "gates": {
+    "deps": "pass",
+    "lint": "pass",
+    "tests": "pass",
+    "trace": "pass",
+    "territory": "pass",
+    "mutgate": "pass",
+    "golden-adr": "pass",
+    "mutfull": "pass"
+  },
+  "summaries": {
+    "deps": "deps: Kommando erfolgreich",
+    "lint": "lint: Kommando erfolgreich",
+    "tests": "tests: Kommando erfolgreich",
+    "trace": "trace: alle Kriterien sind wörtlich und beidseitig verknüpft",
+    "territory": "territory: letzter Diff sauber (builder/40-build, Runde 1, Basis ddba246b103310db0c7802aeda10adc888877dc5, 2026-11-02T16:38:35+01:00)",
+    "mutgate": "mutgate: pass (score=92.8 required=92.09 baseline=94.09 floor=80)",
+    "golden-adr": "golden-adr: keine Golden-/Ankeränderung",
+    "mutfull": "mutfull: pass (score=92.8 required=80 files=R/fit.R,R/grr.R)"
+  },
+  "result": "pass"
+}

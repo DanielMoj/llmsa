@@ -1,0 +1,6 @@
+# stdout
+mutfull: Bericht von mutgate übernommen (gleicher Commit, gleiche Konfiguration, gleiche Dateien)
+mutfull: pass (score=92.8 required=80 files=R/fit.R,R/grr.R)
+
+# runner
+exit=0 status=pass script=88-mutfull.sh
