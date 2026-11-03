@@ -255,9 +255,9 @@ fit_ord <- msa_fit(acmg_demo, type = "ordinal",
 #> Warning: 12 missing response(s) were dropped.
 fit_ord$vc
 #>     source   variance
-#> 1     item 9.25609129
+#> 1     item 9.25609132
 #> 2   prompt 0.03887219
-#> 3    model 0.27811381
+#> 3    model 0.27811382
 #> 4 Residual 1.00000000
 # }
 ```

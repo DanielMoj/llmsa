@@ -683,6 +683,11 @@
 <td>Läufe und Gates unter UTF-8-Locale (Betreiberlauf und Gates: C.UTF-8). Nach dem 26.11.2026 den Hash ohne Textfelder bilden oder die Locale festlegen</td>
 <td>M1c; <code>inst/validation/sim/boot_coverage_helpers.R:242</code>
 </td>
+</tr><tr><td>BL-116</td>
+<td>B</td>
+<td>Ein M1c-Test war plattformabhängig (R-CMD-check, Lauf 41649109574 zu <code>2498dcd</code>, 03.11.2026: ubuntu-latest und macos-latest grün, windows-latest rot): <code>test-validation-bootstrap.R:238</code> verlangte auch für <code>LLMSA_SIM_WORKERS=""</code> den Abbruch. Unter Windows entfernt <code>Sys.setenv(FOO = "")</code> die Variable (<code><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">?Sys.setenv</a></code>), <code>boot_workers()</code> nimmt richtig die Vorgabe. Die Gates laufen nur unter Linux</td>
+<td>Stand 03.11. (Betreiber, ADR-046): Unter Windows verlangt der Test die ungesetzte Variable und <code>1L</code>, sonst unverändert den Abbruch. <code>R/</code> und <code>inst/</code> unverändert, die Vollläufe bleiben gültig. Windows belegt der nächste CI-Lauf. Hinweis für M1d und M3: leere Umgebungsvariablen nicht als plattformübergreifenden Testwert verwenden</td>
+<td>ADR-046; ADR-012; AGENTS.md, Projektblock („Windows-CI ist Release-Bedingung“)</td>
 </tr></tbody></table></div>
 
   </main></div>
