@@ -37,7 +37,7 @@
   {
     "id": "M1d",
     "title": "Vignetten auf echten Daten ohne Modellaufruf (llm-stability, ClinVar-Einreichungen) und Abnahme der Klasse-B-Simulationsergebnisse aus M1b und M1c",
-    "criteriaRef": ["K-M1d-1", "K-M1d-2", "K-M1d-3", "K-M1d-4", "K-M1d-5", "K-M1d-6", "K-M1d-7"],
+    "criteriaRef": ["K-M1d-1", "K-M1d-2", "K-M1d-3", "K-M1d-4", "K-M1d-5", "K-M1d-6", "K-M1d-7", "K-M1d-8"],
     "deps": ["M1c"],
     "effort": "max"
   },

@@ -119,7 +119,7 @@ Wechsel je Phase (Betreiber-Commits zwischen Meilensteinen):
 | --- | --- |
 | Gate deps | K-M0-1 |
 | Gate lint | K-M0-3; Bauanteil von K-M1a-7, K-M1b-7, K-M1c-5, K-M1d-2, K-M1d-4, K-M1d-5 |
-| Gate tests (Abnahmetests, Klasse-A-Simulationen, Kurzläufe der Klasse B) | K-M0-2, K-M0-4, K-M0-5, K-M0-7; K-M1a-1 bis K-M1a-7; K-M1b-1 bis K-M1b-7; K-M1c-1 bis K-M1c-5; K-M1d-1 bis K-M1d-7; K-M2-1 bis K-M2-7; K-M3a-1 bis K-M3a-7; K-M3b-1 bis K-M3b-6; K-M3c-1 bis K-M3c-6; K-M3d-1 bis K-M3d-6 |
+| Gate tests (Abnahmetests, Klasse-A-Simulationen, Kurzläufe der Klasse B) | K-M0-2, K-M0-4, K-M0-5, K-M0-7; K-M1a-1 bis K-M1a-7; K-M1b-1 bis K-M1b-7; K-M1c-1 bis K-M1c-5, K-M1c-7, K-M1c-8; K-M1d-1 bis K-M1d-8; K-M2-1 bis K-M2-7; K-M3a-1 bis K-M3a-7; K-M3b-1 bis K-M3b-6; K-M3c-1 bis K-M3c-6; K-M3d-1 bis K-M3d-6 |
 | Gate trace, territory, golden-adr, mutgate | K-M0-6 (Aggregat); Querschnitt aller Meilensteine |
 | Gate mutfull | K-M1c-6 |
 | Judge | keines; alle Kriterien sind maschinell entscheidbar |
