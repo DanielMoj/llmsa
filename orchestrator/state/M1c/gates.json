@@ -4,8 +4,8 @@
   "base": "ddba246b103310db0c7802aeda10adc888877dc5",
   "baseRef": "plan/M1c",
   "env": {
-    "ts": "2026-11-03T02:29:14+01:00",
-    "sha": "565841bc553f2939c0c47151a628e445ad901206",
+    "ts": "2026-11-03T13:25:55+01:00",
+    "sha": "001026cf34126314a1aa61a8a027ef24ba9f2642",
     "bash": "5.3.9(1)-release",
     "git": "2.53.0",
     "toolchain": {
@@ -28,7 +28,7 @@
     "lint": "lint: Kommando erfolgreich",
     "tests": "tests: Kommando erfolgreich",
     "trace": "trace: alle Kriterien sind wörtlich und beidseitig verknüpft",
-    "territory": "territory: letzter Diff sauber (builder/40-build, Runde 1, Basis ddba246b103310db0c7802aeda10adc888877dc5, 2026-11-02T16:38:35+01:00)",
+    "territory": "territory: letzter Diff sauber (qa/45-qa, Runde 1, Basis 73e6cff451009c45558aad9470c359ad2e799a88, 2026-11-03T02:49:07+01:00)",
     "mutgate": "mutgate: pass (score=92.8 required=92.09 baseline=94.09 floor=80)",
     "golden-adr": "golden-adr: keine Golden-/Ankeränderung",
     "mutfull": "mutfull: pass (score=92.8 required=80 files=R/fit.R,R/grr.R)"

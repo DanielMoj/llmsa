@@ -1,7 +1,7 @@
 # stdout
 r-mutation: 1478 Mutanten in R/fit.R, R/grr.R; Tests: tests/testthat, tests/acceptance, tests/e2e, tests/fuzz; ausgelassen nach MUT_TEST_EXCLUDE='^(m2-[0-9]|m0-testthat-count$|m1b-[23]-|m1b-7-vignette-full|m1c-[34]-|m1c-5-vignette-full|m1c-8-check-runs)': tests/acceptance/test-m0-testthat-count.R, tests/acceptance/test-m1b-2-recovery-scripts.R, tests/acceptance/test-m1b-3-two-level-script.R, tests/acceptance/test-m1b-7-vignette-full-results.R, tests/acceptance/test-m1c-3-coverage-script.R, tests/acceptance/test-m1c-4-coverage-rerun.R, tests/acceptance/test-m1c-5-vignette-full-results.R, tests/acceptance/test-m1c-8-check-runs.R, tests/acceptance/test-m2-1-items.R, tests/acceptance/test-m2-2-memorisation.R, tests/acceptance/test-m2-3-prompts-parser.R, tests/acceptance/test-m2-4-backends.R, tests/acceptance/test-m2-5-plan.R, tests/acceptance/test-m2-6-evaluate.R, tests/acceptance/test-m2-7-robustness-pilot.R
-r-mutation: unmutierter Testlauf: 171.2 s; 452 Tests, davon 0 fehlgeschlagen, 0 abgebrochen
-r-mutation: Zeitlimit je Mutant: 857 s (MUT_TEST_TIMEOUT=353 s, 5 × unmutierter Lauf = 857 s)
+r-mutation: unmutierter Testlauf: 179.5 s; 458 Tests, davon 0 fehlgeschlagen, 0 abgebrochen
+r-mutation: Zeitlimit je Mutant: 898 s (MUT_TEST_TIMEOUT=353 s, 5 × unmutierter Lauf = 898 s)
 ℹ Mutation Testing
   |   K |   S |   N |   E |   T |   % | Mutator  | File 
 ✔ |   1 |   0 |   0 |   0 |   1 | 100 | - → +    | fit.R 
@@ -1483,7 +1483,7 @@ x | 213 |   6 |   0 |  16 | 235 |  92 | NA_real_ | grr.R
 ✔ | 236 |   6 |   0 |  16 | 258 |  93 | x[<i>] → | grr.R 
 ✔ | 237 |   6 |   0 |  16 | 259 |  93 | x[<i>] → | grr.R 
 
-Duration: 33297.92 s
+Duration: 36092.63 s
 
 ── Survived Mutants ────────────────────────────────────────────────────────────
 fit.R  - → +
