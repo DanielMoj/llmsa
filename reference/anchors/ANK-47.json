@@ -1,0 +1,33 @@
+{
+  "id": "ANK-47",
+  "title": "Umfang, Seed und Auswahlreihenfolge der genomweiten ClinVar-Stichprobe (sample_submissions.csv.gz)",
+  "criteria": ["K-M1d-3"],
+  "value": {
+    "n_variants": 1000,
+    "seed": 20261024,
+    "min_distinct_submitters": 3,
+    "classes": ["Benign", "Likely benign", "Uncertain significance", "Likely pathogenic", "Pathogenic"],
+    "order": [
+      "Filter auf Einreichungen mit einer der fünf Klassen",
+      "Varianten mit mindestens drei verbliebenen verschiedenen Einreichern",
+      "Ziehung mit set.seed(20261024) und sample() über die nach variation_id sortierte Liste"
+    ],
+    "call": "set.seed(20261024); sample(sort(eligible_variation_ids), 1000)"
+  },
+  "unit": "Anzahl Varianten; Seed (ganze Zahl); Mindestzahl verschiedener Einreicher",
+  "tolerance": 0,
+  "tolerance_note": "Betreiberfestlegung, exakt.",
+  "source_url": "ANKER-TODO.md, Abschnitt „M1d — echte Daten“, Zeile ANK-47; projektierung_llmsa/OFFENE-PUNKTE.md §5c (Betreiberunterlage außerhalb des Repos, SHA-256 1633a24efcd0f69bddb9ce911a628380fcbd8dfc8473bc7ad3e9acf00b7d7a12)",
+  "source": "Betreiberfestlegung 24.10.2026 (Projektierung Frage 7: 1.000 Varianten, Seed 20261024; Reihenfolge Revision 22:20), bestätigt am 24.10.2026, 22:20",
+  "quote": "zuerst Filter auf Einreichungen mit einer der fünf Klassen, dann Varianten mit mindestens drei verbliebenen verschiedenen Einreichern, dann Ziehung von 1.000 Varianten mit `set.seed(20261024)` und `sample()` über die nach `variation_id` sortierte Liste",
+  "quote_location": "ANKER-TODO.md, Abschnitt „M1d — echte Daten“, Zeile ANK-47, Spalte „Was“",
+  "further_quotes": [
+    {"quote": "ANK-47: 1.000 Varianten, Seed 20261024 bleiben; neu die Auswahlreihenfolge (Filter auf fünf Klassen, dann ≥ 3 verbliebene Einreicher, dann Ziehung über die nach `variation_id` sortierte Liste), damit die Stichprobe nicht davon abhängt, wann gefiltert wird (K-M1d-3).", "location": "projektierung_llmsa/OFFENE-PUNKTE.md, §5c, Nachtrag 24.10., 22:20"},
+    {"quote": "Auf die Frage, ob `ANK-TOL` und ANK-47 sinnvoll gewählt sind: neun Änderungen, von dir freigegeben („Ok!“); damit sind beide bestätigt.", "location": "projektierung_llmsa/OFFENE-PUNKTE.md, §5c"},
+    {"quote": "(b) `sample_submissions.csv.gz`: eine Zufallsstichprobe von Varianten über alle Gene nach `ankerRef: ANK-47` (Reihenfolge: zuerst Filter auf die fünf Klassen, dann Varianten mit mindestens drei verbliebenen Einreichern, dann Ziehung mit dem dort festgelegten Seed und Umfang)", "location": "docs/02-statistikkern.md, K-M1d-3"}
+  ],
+  "observations": "Die Festlegung nennt den Zufallsgenerator nicht; R verwendet seit 3.6.0 als Vorgabe Mersenne-Twister, Inversion und sample.kind = \"Rejection\", und docs/01 §5 schreibt für Simulationen genau diese Angabe vor. Der Abnahmetest zieht mit RNGkind(\"Mersenne-Twister\", \"Inversion\", \"Rejection\"). Die Fünf-Klassen-Begriffe sind die Werte von ClinicalSignificance in submission_summary.txt.gz (ANK-63, Beobachtung). Beobachtet am Stand ANK-41 (Probe des Reviewers, 03.11.2026): 6.853.790 Einreichungen, davon 6.809.904 mit einer der fünf Klassen (43.886 ausgeschlossen); 4.434.169 Varianten mit Fünf-Klassen-Einreichungen, davon 450.290 mit mindestens drei verschiedenen Einreichern; die Ziehung ergibt 1.000 Varianten mit 5.010 Fünf-Klassen-Einreichungen von 266 Einreichern.",
+  "retrieved": "2026-11-03",
+  "method": "ANKER-TODO.md im Repository und OFFENE-PUNKTE.md der Projektierung mit Rscript gelesen; Ziehung als Probe aus den Rohdateien von ANK-41 nachvollzogen (awk-Filter auf die fünf Klassen, verschiedene Einreicher je VariationID, sort(), set.seed(20261024), sample(…, 1000)).",
+  "verification": "ANKER-TODO und OFFENE-PUNKTE §5c nennen dieselben Werte (1.000, 20261024, Reihenfolge); Status in ANKER-TODO „Betreiber bestätigt 24.10., 22:20“."
+}

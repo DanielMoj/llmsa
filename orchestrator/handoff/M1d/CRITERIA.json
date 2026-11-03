@@ -1,0 +1,226 @@
+{
+  "criteria": [
+    {
+      "id": "K-M1d-1",
+      "quote": "**K-M1d-1:** `inst/extdata/llm-stability_2026-10-22/` enthält die eingefrorene Teilmenge auf Item-Ebene als `items.csv.gz` (gzip; Spalten `task`, `model`, `run`, `item_id`, `answer`, `correct`; keine Rohtexte der Modellausgaben), `SHA256SUMS`, `QUELLE.txt` mit Commit `ankerRef: ANK-40` und Lizenz, und `data-raw/make_llm_stability.R` erzeugt sie aus `../quellen/daten/llm-stability_2026-10-22/` byte-identisch; `as_msa_runs()` importiert sie und `msa_counts()` zeigt die in `ANK-40` belegte Struktur (5 Modelle, 8 Aufgaben, 10 Läufe, Itemzahl je Aufgabe). (Prüfweg: Test)",
+      "source": "docs/02-statistikkern.md"
+    },
+    {
+      "id": "K-M1d-2",
+      "quote": "**K-M1d-2:** Die Vignette `vignettes/llm-stability.Rmd` berechnet je Aufgabe und Modell die Attribut-Wiederholbarkeit (Anteil der Item×Modell-Zellen mit identischer Antwort über alle Läufe), die Trefferquote und einen binären Fit mit Item und Modell als Zufallseffekten (`msa_fit(type = \"binary\")`, `msa_grr()`), liest die Daten über `system.file(\"extdata\", …)` ein, enthält kein abgetipptes Ergebnis, und `R CMD check` baut sie ohne ERROR und WARNING. (Prüfweg: Test für Einlesen und Aufrufe; Gate lint)",
+      "source": "docs/02-statistikkern.md"
+    },
+    {
+      "id": "K-M1d-3",
+      "quote": "**K-M1d-3:** `inst/extdata/clinvar_2026-10-19/` enthält zwei eingefrorene Teilmengen mit `SHA256SUMS` und `QUELLE.txt` (Stand `ankerRef: ANK-41`, Lizenz gemeinfrei): (a) `hrf_submissions.csv.gz`: alle Einreichungen mit einer der fünf Klassen zu Varianten in MEFV, MVK, NLRP3 und TNFRSF1A mit mindestens zwei Einreichern; (b) `sample_submissions.csv.gz`: eine Zufallsstichprobe von Varianten über alle Gene nach `ankerRef: ANK-47` (Reihenfolge: zuerst Filter auf die fünf Klassen, dann Varianten mit mindestens drei verbliebenen Einreichern, dann Ziehung mit dem dort festgelegten Seed und Umfang); Spalten `variation_id`, `gene`, `submitter_id`, `classification`, `date_last_evaluated`, `review_status`; `data-raw/make_clinvar_subsets.R` erzeugt beide aus `../quellen/daten/clinvar_2026-10-22/` byte-identisch. (Prüfweg: Test)",
+      "source": "docs/02-statistikkern.md"
+    },
+    {
+      "id": "K-M1d-4",
+      "quote": "**K-M1d-4:** Die Vignette `vignettes/clinvar-raters.Rmd` berechnet für beide Teilmengen Krippendorffs Alpha (nominal und ordinal) mit `msa_agreement()`, den Anteil der Varianten mit vollständig übereinstimmenden Einreichungen (Attribut-Reproduzierbarkeit), den Anteil der Varianten mit Konflikt, einen ordinalen Fit mit Variante und Einreicher als Zufallseffekten (`msa_fit(type = \"ordinal\")`, `msa_grr()`) und eine Sensitivitätsrechnung nur mit `review_status` „criteria provided“; sie stellt die Ergebnisse den Literaturwerten `ankerRef: ANK-42` (Yang et al. 2017), `ankerRef: ANK-43` (Amendola et al. 2016), `ankerRef: ANK-44` (Harrison et al. 2017), `ankerRef: ANK-46` (Lazareva et al. 2024) und für die HRF-Teilmenge `ankerRef: ANK-45` (Van Gijn et al. 2018) als Vergleich gegenüber, ausdrücklich nicht als Akzeptanzkriterium, und `R CMD check` baut sie ohne ERROR und WARNING. (Prüfweg: Test für Aufrufe und Ankerbezug; Gate lint)",
+      "source": "docs/02-statistikkern.md"
+    },
+    {
+      "id": "K-M1d-5",
+      "quote": "**K-M1d-5:** Größe, Lizenz, Netz, Listung: jede Datei und jeder Ordner unter `inst/extdata/llm-stability_2026-10-22/` und `inst/extdata/clinvar_2026-10-19/` sowie `inst/extdata/` insgesamt halten `ankerRef: ANK-TOL.data_size` ein; `QUELLE.txt` nennt Lizenz und Auswahlregel; keine Datei im Repo enthält INSAID-Klassifikationen (Suchmuster: Spalte `classification` zusammen mit Quelle `insaid`); beide Vignetten sind in `_pkgdown.yml` unter `articles` gelistet, werden von `R CMD check` gebaut und laufen ohne Netzzugriff (kein `httr2`-, `curl`- oder `download.file`-Aufruf im Rmd-Code). (Prüfweg: Test; Gate lint)",
+      "source": "docs/02-statistikkern.md"
+    },
+    {
+      "id": "K-M1d-6",
+      "quote": "**K-M1d-6:** Klasse-B-Vollläufe vollständig und reproduzierbar: `inst/validation/sim/ordinal_recovery_results.csv`, `binary_recovery_results.csv`, `two_level_results.csv` und `boot_coverage_results.csv` liegen mit zugehörigen `*_replicates.csv` und `*_session.txt` vor, jede mit allen Szenarien ihrer Studie (S-ord-1 bis S-ord-4, S-bin-1 bis S-bin-2, S-two-1 bis S-two-2, S-boot-1 bis S-boot-7), allen Schätzzielen und Kennzahlen nach Abschnitt 8 von `01-fachspezifikation.md`, `n_sim` ≥ `ankerRef: ANK-06` und `mcse` je Kennzahl; der Abnahmetest reproduziert mit demselben Seed die ersten `ankerRef: ANK-TOL.n_check` Wiederholungen jeder Studie (für `boot_coverage` die Szenarien S-boot-1 und S-boot-7) byte-identisch nach `format(x, digits = 15)`, und jede `*_session.txt` nennt Seed, RNG, R- und Paketversionen; der Test überspringt nicht, wenn eine Datei fehlt. (Prüfweg: Test)",
+      "source": "docs/02-statistikkern.md"
+    },
+    {
+      "id": "K-M1d-7",
+      "quote": "**K-M1d-7:** Befunde der Klasse-B-Studien dokumentiert: `vignettes/validation.Rmd` liest alle vier Ergebnisdateien ein und tabelliert je Szenario Bias, relative Verzerrung, EmpSE, Überdeckung und mittlere Intervallbreite mit MCSE (kein numerisches Literal aus einer Ergebnisdatei im Rmd-Text); jede Komponente in `ordinal_recovery` und `binary_recovery`, deren relative Verzerrung `ankerRef: ANK-TOL.bias_report` überschreitet, die Verzerrung von β̂²/2 je Szenario aus `two_level` und jede Überdeckung aus `boot_coverage`, die vom Nominalwert um mehr als `ankerRef: ANK-TOL.mc_factor` MCSE (Berichtsschwelle) abweicht, werden in der Vignette als Befund benannt (Richtung und Szenario; kein Akzeptanzkriterium, BL-04); die Dokumentation von `msa_fit()` und `msa_boot()` nennt diese Befunde qualitativ (Über- oder Unterschätzung, Unter- oder Überdeckung, betroffene Szenarien) mit Verweis auf die Vignette, und der Abnahmetest prüft, dass jedes Szenario mit Befund in der Vignette und in der Rd-Datei vorkommt. (Prüfweg: Test)",
+      "source": "docs/02-statistikkern.md"
+    },
+    {
+      "id": "K-M1d-8",
+      "quote": "**K-M1d-8:** Wortlaut des Robustheitsergebnisses (ADR-045): Liegt kein Faktor über ME, schreiben `print.msa_robustness` und `inst/templates/validation_report.Rmd` „No factor exceeded the margin of error (ME = x). Smaller effects cannot be told apart from noise with this design, so this result does not show that the pipeline is robust.“, mit dem ME des Laufs an der Stelle von x, auf vier Nachkommastellen wie in der Zeile mit PSE, ME und SME; „robust to all screened perturbations“ kommt in `R/` und `inst/templates/` nicht mehr vor. Liegen Faktoren über ME, nennen beide Ausgaben jeden dieser Faktoren mit dem Zusatz „above ME only“ oder „also above SME“ (Spalte `active_simultaneous`). Das Objekt von `msa_robustness()` und die Bänder bleiben unverändert. (Prüfweg: Test)",
+      "source": "docs/02-statistikkern.md"
+    }
+  ],
+  "open": [
+    {
+      "id": "ACC-1",
+      "status": "Auslegung des Reviewers (Spec schweigt zu Version, Shot-Stufe und Laufordner); ADR folgt in 30-plan-review M1d",
+      "ref": "K-M1d-1 (criteria); docs/02 M1d, Abbildungen: „llm-stability: Item = Frage einer Aufgabe, Prompt = die eine feste Aufgabenformulierung (eine Stufe, entfällt), Modell = Modell (5 Stufen), Replikat = Lauf (10), Block = 1“; ANK-40",
+      "kind": "Datenauswahl llm-stability",
+      "owner": "Builder",
+      "blocking_builder": true,
+      "note": "(1) Rohdaten: llm-stability-main/experiments/v3/runs.tgz in ../quellen/daten/llm-stability_2026-10-22/ (README: „recreates the v2 data … but with 10 runs“; SHA-256 in ANK-40). Die v2-Daten haben fünf Läufe und kommen nicht in Frage. (2) Je Modell und Aufgabe genau der Laufordner, den die Autoren in experiments/v3/stability_eval.csv mit model_config top_p_k 1.0 und task_config shots 0 auswerten (Zero-shot); die 40 Ordner stehen in ANK-40 value.selection.folders. (3) Begründung: Die Abbildung kennt eine einzige Aufgabenformulierung; Zero-shot ist die Formulierung ohne aufgabenspezifische Beispiele. Die 40 Zero-shot-Ordner sind vollständig (zehn Dateien, run 0–9, alle Items) und einheitlich konfiguriert ({\"temperature\": 0.0, \"seed\": 12, \"top_p_k\": 1.0}); zwei Few-shot-Ordner von llama3-70b tragen eine abweichende model_config (rubric_counter). Ältere Läufe mit top_p_k 0.0 (Dezember 2024) und leere Ordner entfallen. (4) QUELLE.txt nennt diese Auswahlregel (ACC-8). Ein Wechsel auf Few-shot wäre eine Änderung von ANK-40 und braucht ein ADR."
+    },
+    {
+      "id": "ACC-2",
+      "status": "Auslegung des Reviewers (Spec nennt nur die Spaltennamen); ADR folgt in 30-plan-review M1d",
+      "ref": "K-M1d-1: „Spalten `task`, `model`, `run`, `item_id`, `answer`, `correct`; keine Rohtexte der Modellausgaben“; docs/02 M1d, Abbildungen: „Zielgröße binär (Antwort gleich Antwortschlüssel) und nominal (Antwort selbst)“; docs/01 §5: „Fehlende oder nicht parsbare Antworten bleiben fehlend und werden gezählt, nie ersetzt.“",
+      "kind": "Spalten und Werte von items.csv.gz",
+      "owner": "Builder",
+      "blocking_builder": true,
+      "note": "(1) CSV mit Kopfzeile genau task, model, run, item_id, answer, correct in dieser Reihenfolge, gzip-komprimiert; eine Zeile je Aufgabe × Modell × Lauf × Item, vollständiges Gitter (82.850 Zeilen bei den Items je Aufgabe aus ANK-40). (2) task und model wie die gleichnamigen Spalten der Rohdateien, run wie Spalte run (0–9), item_id = rubric_id der Rohdatei. (3) answer: aus der Spalte response geparste Antwort im Format des Antwortschlüssels gt, also ein Optionsetikett „(A)“, „(B)“, … aus der Frage oder bei navigate „Yes“/„No“; fehlend, wenn keine oder keine eindeutige Antwort gefunden wird (die Quelle nennt mehrdeutige Treffer „Blown UP“). Keine weiteren Spalten, kein Rohtext. (4) correct = TRUE bei answer gleich gt, FALSE bei vorhandener abweichender answer, fehlend bei fehlender answer. (5) Der Test prüft gegen die Rohdaten: Schlüssel vollständig; jede answer ist ein Etikett der Optionen ihres Items oder der Schlüssel; keine answer bei leerem response; das Etikett jeder answer kommt im zugehörigen response als Wort vor (Groß-/Kleinschreibung egal; notwendige Bedingung jedes Etikettenparsers, auch des Parsers der Quelle in helper_functions.py); correct gleich der Regel (4). Die Antworten der Quelle sind teils von Hand annotiert (evaluate.py, Cache); deshalb verlangt der Test keine Gleichheit mit den Zählungen in stability_eval.csv."
+    },
+    {
+      "id": "ACC-3",
+      "status": "Auslegung des Reviewers; ADR folgt in 30-plan-review M1d",
+      "ref": "K-M1d-1: „`as_msa_runs()` importiert sie und `msa_counts()` zeigt die in `ANK-40` belegte Struktur (5 Modelle, 8 Aufgaben, 10 Läufe, Itemzahl je Aufgabe)“; docs/02 M1d, Abbildungen (llm-stability)",
+      "kind": "Import mit as_msa_runs() und msa_counts()",
+      "owner": "Builder",
+      "blocking_builder": true,
+      "note": "Je Aufgabe: as_msa_runs() mit item = item_id, einer konstanten Prompt-Spalte (eine Stufe), model = model, rep = run, value = correct (binär) oder answer (nominal). msa_counts() liefert je Aufgabe fünf Zeilen (die Modelle aus ANK-40) mit n = Items der Aufgabe × 10; die Läufe sind 0–9; fehlende Antworten bleiben fehlend."
+    },
+    {
+      "id": "ACC-4",
+      "status": "Auslegung des Reviewers (wie K-M2-1 in M2); ADR folgt in 30-plan-review M1d",
+      "ref": "docs/01 §7: „Eingefrorene Teilmengen liegen unter `inst/extdata/<quelle>_<stand>/` mit `SHA256SUMS` (eine Zeile je Datei) und `QUELLE.txt` (Quelle, URL, Stand, Lizenz, Auswahlregel, Skript).“ und „Fehlt der Rohdatenordner, bricht das Skript benannt ab.“; K-M1d-1, K-M1d-3",
+      "kind": "Ordnerinhalt, SHA256SUMS, Neuerzeugung",
+      "owner": "Builder",
+      "blocking_builder": true,
+      "note": "(1) SHA256SUMS: je Datei des Ordners außer SHA256SUMS selbst genau eine Zeile im Format von sha256sum („<sha256 klein>  <Datei>“) mit der SHA-256 der gespeicherten Datei. (2) Neuerzeugung: Der Test kopiert DESCRIPTION, NAMESPACE, R/, inst/, data/, data-raw/ und reference/anchors/ in ein temporäres Verzeichnis <tmp>/llmsa, verlinkt <tmp>/quellen auf ../quellen, löscht dort die eingefrorenen Datendateien und ruft `Rscript data-raw/make_llm_stability.R` beziehungsweise `Rscript data-raw/make_clinvar_subsets.R` im Paketverzeichnis auf (Arbeitsverzeichnis = Paketwurzel, wie make_items_ap1.R in M2); die neu geschriebenen .csv.gz-Dateien gleichen den eingefrorenen byte für byte (gzip ohne Zeitstempel, etwa über gzfile()). Die Ausgabe darf nicht von der Locale abhängen (der Test läuft mit LC_COLLATE=C). (3) Ohne ../quellen bricht das Skript mit einer Meldung ab, die „quellen“ nennt, und lässt die Dateien unverändert."
+    },
+    {
+      "id": "ACC-5",
+      "status": "Auslegung des Reviewers (Spec schweigt zu fehlenden Antworten, Fit-Aufruf und Darstellung); ADR folgt in 30-plan-review M1d",
+      "ref": "K-M1d-2 (criteria): „berechnet je Aufgabe und Modell die Attribut-Wiederholbarkeit (Anteil der Item×Modell-Zellen mit identischer Antwort über alle Läufe), die Trefferquote und einen binären Fit mit Item und Modell als Zufallseffekten“; docs/01 §5 (fehlende Antworten); Atil2024, evaluate.py: „No answer will always fail TARa“",
+      "kind": "Prüfform K-M1d-2",
+      "owner": "Builder",
+      "blocking_builder": true,
+      "note": "(1) Attribut-Wiederholbarkeit je Aufgabe und Modell: Anteil der Items der Aufgabe, deren zehn Läufe alle eine nicht fehlende und dieselbe answer tragen; ein Lauf ohne Antwort bricht die Übereinstimmung (wörtlich „identische Antwort über alle Läufe“, wie TARa der Quelle); Nenner sind alle Items der Aufgabe. (2) Trefferquote je Aufgabe und Modell: Anteil der Aufrufe mit correct == TRUE an allen Aufrufen der Zelle (fehlende Antwort = kein Treffer, wie die Genauigkeit der Quelle). (3) Binärer Fit je Aufgabe: msa_fit(as_msa_runs(…, value = correct), type = \"binary\") mit den Vorgaben für interactions (FALSE) und link probit (Vorgabe) oder logit; msa_grr() auf dem Fit. (4) Einlesen im R-Code mit system.file(\"extdata\", …) unter Nennung von llm-stability_2026-10-22 und items.csv.gz; kein Pfad zu ../quellen, inst/extdata oder REPO_ROOT. (5) Darstellung: Die gestrickte Vignette zeigt in Tabellen je Aufgabe und Modell Wiederholbarkeit und Trefferquote (Anteil oder Prozent) und je Aufgabe die Komponenten item und model sowie %GRR (Studienvariation) des Fits; Zahlen mit mindestens zwei signifikanten Stellen (der Vergleich erlaubt eine Einheit der letzten gezeigten Stelle). Jede Aufgabe und jedes Modell wird mit dem Namen aus den Daten genannt. (6) Kein Ergebnis abgetippt: kein Literal mit mindestens drei signifikanten Stellen im Rmd gleicht einem berechneten Wert."
+    },
+    {
+      "id": "ACC-6",
+      "status": "Auslegung des Reviewers (Spec schweigt zu Genquelle, Einreicherkennung, Zählweise und Datumsformat); ADR folgt in 30-plan-review M1d",
+      "ref": "K-M1d-3 (criteria); docs/02 M1d, Abbildungen (ClinVar): „Einreichungen mit anderen Begriffen (kombinierte Klassen, `drug response`, `risk factor`, `other`) werden ausgeschlossen und gezählt“; ANK-41, ANK-47, ANK-63",
+      "kind": "Auswahlregeln und Spalten der ClinVar-Teilmengen",
+      "owner": "Builder",
+      "blocking_builder": true,
+      "note": "(1) Fünf Klassen: ClinicalSignificance (submission_summary.txt.gz, Spalte 2) gleich einem der Begriffe Benign, Likely benign, Uncertain significance, Likely pathogenic, Pathogenic, exakt (Groß-/Kleinschreibung). (2) Einreicher: Spalte Submitter (10); submitter_id ist dieser Wert unverändert (die Rohdaten haben keine Einreicher-ID). (3) „mindestens zwei/drei Einreicher“ heißt verschiedene Submitter unter den Fünf-Klassen-Einreichungen der Variante (Reihenfolge von ANK-47: erst filtern, dann zählen). (4) gene: GeneSymbol (Spalte 5) aus variant_summary.txt.gz zur VariationID (Spalte 31); der Wert ist über alle Assemblierungszeilen einer VariationID gleich (Probe des Reviewers: keine Ausnahme unter 4.690.277 VariationIDs); unverändert übernommen, auch Listen mit „;“; fehlt die VariationID dort, fehlt gene. (5) HRF-Teilmenge: Varianten, deren GeneSymbol-Liste (Trenner „;“) MEFV, MVK, NLRP3 oder TNFRSF1A enthält und die mindestens zwei verschiedene Einreicher haben; alle ihre Fünf-Klassen-Einreichungen (auch mehrere SCV desselben Einreichers). Am Stand ANK-41: 1.383 Varianten, 6.647 Einreichungen. (6) Stichprobe: VariationIDs mit mindestens drei verschiedenen Einreichern aufsteigend sortiert, set.seed(20261024) und sample(…, 1000) mit dem Vorgabe-RNG (Mersenne-Twister, Inversion, Rejection); alle Fünf-Klassen-Einreichungen der gezogenen Varianten. Am Stand ANK-41: 450.290 wählbare Varianten, 5.010 Einreichungen. (7) date_last_evaluated: DateLastEvaluated als ISO-Datum JJJJ-MM-TT oder im Rohformat „Mon DD, YYYY“; „-“ wird fehlend. review_status: ReviewStatus unverändert. (8) Gezählte Ausschlüsse: QUELLE.txt nennt die Zahl der Einreichungen mit einem Begriff außerhalb der fünf Klassen (a) unter allen Einreichungen zu Varianten der vier Gene (am Stand ANK-41: 501) und (b) in der ganzen Datei (43.886); Tausendertrennzeichen erlaubt. (9) Vergleich: Die Teilmengen gleichen der Mini-Referenz als Multimenge der Zeilen (Datum als Datum verglichen); die Zeilenreihenfolge ist frei, aber durch die Byte-Gleichheit der Neuerzeugung festgelegt."
+    },
+    {
+      "id": "ACC-7",
+      "status": "Auslegung des Reviewers (Spec schweigt zu Abbildung im Aufruf, Konfliktbegriff, Sensitivität und Darstellung); ADR folgt in 30-plan-review M1d",
+      "ref": "K-M1d-4 (criteria); docs/02 M1d, Abbildungen (ClinVar): „Item = Variante, Prompt = Einreicher (Prüfer), Modell und Block eine Stufe, Replikat 1; Zielgröße ordinal mit Klassen `Benign < Likely benign < Uncertain significance < Likely pathogenic < Pathogenic`“; ANK-46 (Konflikt seit 2018: „B/LB vs. VUS vs. P/LP“); ANK-TOL.package_compare",
+      "kind": "Prüfform K-M1d-4",
+      "owner": "Builder",
+      "blocking_builder": true,
+      "note": "(1) Abbildung: as_msa_runs() mit item = variation_id, prompt = submitter_id, eine Modell- und Blockstufe, rep 1, value = classification; levels in Skalenordnung. (2) Krippendorffs Alpha: msa_agreement(runs, levels, weights = \"unweighted\") für nominal und weights = \"linear\" für ordinal (Metrik ordinal in R/agreement.R), Zeile „all conditions“ (Einheit = Variante). Der Test vergleicht diese Werte mit einer eigenen Mini-Referenz nach Krippendorff (2011) auf ANK-TOL.package_compare (1e-8); die Mini-Referenz gleicht irr::kripp.alpha auf beiden Teilmengen auf 1e-14 (Probe des Reviewers). (3) Anteil vollständig übereinstimmender Varianten: alle Einreichungen der Variante in derselben Klasse; Anteil mit Konflikt: Einreichungen in mindestens zwei der Gruppen P/LP, VUS, LB/B (ClinVar-Definition wie ANK-46); Nenner sind die Varianten mit mindestens zwei Einreichungen. (4) Ordinaler Fit: msa_fit(runs, type = \"ordinal\", levels = fünf Klassen) mit den Vorgaben für interactions (FALSE) und link probit (Vorgabe) oder logit, msa_grr(); die Vignette zeigt je Teilmenge die Komponenten item und prompt und %GRR. (5) Sensitivität: Zeilen, deren review_status mit „criteria provided“ beginnt (nicht „no assertion criteria provided“); die Vignette zeigt dafür mindestens Alpha nominal und ordinal je Teilmenge und nennt „criteria provided“; die Schwellen der Teilmengenbildung werden nicht neu angewandt (Varianten mit weniger als zwei verbliebenen Einreichungen tragen zu Alpha nichts bei). (6) Literaturvergleich: Die gestrickte Vignette nennt ANK-42 bis ANK-46 mit ID und zeigt jeden Zahlenwert aus value dieser Anker (Prozent als Prozent oder Anteil, Zählungen mit oder ohne Tausendertrennzeichen); die Werte werden gelesen, nicht abgetippt (kein Literal mit mindestens drei signifikanten Stellen und keine ganze Zahl ab 100 aus den Ankern im Rmd); Kopien der Anker unter inst/ sind byte-gleich mit reference/anchors/. Der Satz „not an acceptance criterion“ steht wörtlich in der Vignette. (7) Darstellung wie ACC-5 (5): mindestens zwei signifikante Stellen."
+    },
+    {
+      "id": "ACC-8",
+      "status": "Auslegung des Reviewers; ADR folgt in 30-plan-review M1d",
+      "ref": "K-M1d-5 (criteria); ANK-TOL.data_size; docs/01 §7",
+      "kind": "Prüfform K-M1d-5",
+      "owner": "Builder",
+      "blocking_builder": true,
+      "note": "(1) Größe: jede Datei ≤ file_max_bytes, jede Datei über gzip_above_bytes ist eine gzip-Datei mit Endung .csv.gz, jeder der beiden Ordner ≤ folder_max_bytes, inst/extdata/ gesamt ≤ extdata_total_max_bytes (Byte nach ANK-TOL.data_size.byte_reading). (2) QUELLE.txt llm-stability: Lizenz Apache 2.0 und Auswahlregel mit den Zeichenketten experiments/v3/runs.tgz, stability_eval.csv, top_p_k und „zero-shot“. (3) QUELLE.txt ClinVar: „public domain“, die fünf Klassen, die vier Gene, Seed 20261024 und Umfang 1000 aus ANK-47, variant_summary als Quelle von gene, dazu die Zählungen aus ACC-6 (8). (4) INSAID-Suchmuster: Jede Tabellendatei (.csv, .tsv, .txt, auch .gz) und jedes R-Datenobjekt (.rda, .rds) des Arbeitsbaums außer .git/, reference/quellen/ und reference/privat/ (git-ignoriert) mit einer Spalte classification gilt als Treffer, wenn eine Zelle „insaid“ lautet oder der Pfad „insaid“ enthält. (5) _pkgdown.yml: articles enthält in contents die Einträge llm-stability und clinvar-raters. (6) Netz: der R-Code beider Vignetten (Chunks und Inline-Code) enthält weder httr2 noch curl noch download.file."
+    },
+    {
+      "id": "ACC-9",
+      "status": "Auslegung des Reviewers (wie ADR-023 und ADR-042 für die Kurzläufe); ADR folgt in 30-plan-review M1d",
+      "ref": "K-M1d-6 (criteria); docs/01 §8; ADR-023 Nr. 1–8; ADR-042 Nr. 3–8; ANK-06; ANK-TOL.n_check",
+      "kind": "Prüfform K-M1d-6",
+      "owner": "Betreiber (Vollläufe), Builder (Skripte unverändert)",
+      "blocking_builder": true,
+      "note": "(1) Vollständigkeit: die drei Dateien je Studie unter inst/validation/sim/; Schema, Schätzziele, Kennzahlen und mcse wie in M1b und M1c (acc_m1b_expect_results_schema(), acc_m1c_expect_results_schema()); eine n_sim für alle Zeilen, n_sim ≥ ANK-06.n_sim_min; die Replikatdatei enthält jede Wiederholung 1 … n_sim je Szenario und Schätzziel, und die Kennzahlen folgen aus ihr (Nachrechnung auf ANK-TOL.arithmetic). (2) Reproduktion: Neulauf jedes Skripts mit --n-sim ANK-TOL.n_check über alle Szenarien der Studie (boot_coverage: S-boot-1 und S-boot-7) mit dem installierten Paket unter Test (die Neuläufe aus test-m1b-2, test-m1b-3 und test-m1c-4 werden im selben Testprozess wiederverwendet); die Einzelschätzer gleichen den Zeilen rep ≤ n_check der Vollauf-Replikatdatei in allen Spalten nach format(x, digits = 15), und der Seed je Szenario gleicht dem des Vollaufs. Die Präfixstabilität dafür sichern ADR-023 Nr. 6 und ADR-042 (ACC-7 in M1c); der Reviewer hat sie an den Vollläufen binary_recovery und two_level des Betreibers (../llmsa-sim/M1c, 03.11.2026) nachgeprüft: die ersten 20 Wiederholungen gleichen den Kurzläufen in allen Spalten. (3) Session-Datei: R-Version, Versionen von llmsa, lme4 (und ordinal), Mersenne-Twister, Rejection, jeder Seed der Ergebnisdatei und eine Laufzeitangabe (wie ACC-7 in M1b und ACC-8 in M1c)."
+    },
+    {
+      "id": "ACC-10",
+      "status": "Auslegung des Reviewers (Spec schweigt zu Komponentenbegriff, Richtungswörtern, Textform und Zuordnung der Hilfeseiten); ADR folgt in 30-plan-review M1d",
+      "ref": "K-M1d-7 (criteria); ANK-TOL.bias_report: „10 % oder 3 MCSE, was größer ist“; ANK-TOL.mc_factor: „Berichtsschwelle (K-M1d-7) 3“; docs/02 M1c: „95-%-Perzentilintervalle“; docs/01 §2 Nr. 3",
+      "kind": "Prüfform K-M1d-7",
+      "owner": "Builder",
+      "blocking_builder": true,
+      "note": "(1) Tabellen: validation.Rmd liest die vier Vollauf-Ergebnisdateien (nicht die Kurzläufe) und zeigt je Studie, Szenario und Schätzziel in einer Tabellenzeile Wert und MCSE von bias, rel_bias und empse, bei boot_coverage für die Intervall-Schätzziele (grr_pct_study_var, grr_pct_contribution, ndc, icc_items) zusätzlich coverage und width (Wert und MCSE in derselben Zeile, beide als Wert oder beide in Prozent; mindestens zwei signifikante Stellen); n_sim aus jeder Datei wird genannt; kein Literal mit mindestens drei signifikanten Stellen aus den Dateien im Rmd. (2) Befunde: (a) ordinal_recovery, binary_recovery: jede wahre Komponente (Schätzziele des Szenarios außer Residual, grr_pct_study_var und icc_items) mit |rel_bias| > max(0,10; 3 × MCSE(rel_bias)); (b) two_level: die Verzerrung (bias) der Komponente model (β̂²/2) in jedem Szenario; eine Richtung wird verlangt, sobald |bias| > 3 × MCSE; (c) boot_coverage: jede coverage eines Intervall-Schätzziels mit |coverage − 0,95| > 3 × MCSE. (3) Benennung in der Vignette: Für jeden Befund nennt eine Tabellenzeile oder ein Satz der gestrickten Vignette die Szenario-ID, das Schätzziel wie in der Spalte estimand der Ergebnisdatei und die Richtung mit einem dieser Wörter: Verzerrung „overestimation“/„underestimation“ (auch „over-estimat…“), Überdeckung „undercoverage“/„overcoverage“ (auch „under-cover…“) oder „below nominal“/„above nominal“. (4) Hilfeseiten: ?msa_fit nennt jedes Szenario mit Befund aus ordinal_recovery, binary_recovery und two_level, ?msa_boot jedes aus boot_coverage, jeweils mit den vorkommenden Richtungswörtern und einem Verweis auf die Vignette (vignette(\"validation\") oder validation.Rmd); gelesen als Text der Rd-Datei unter man/ (tools::Rd2txt). (5) Kein Akzeptanzkriterium: Ein Befund lässt keinen Test fehlschlagen; geprüft wird nur, dass er benannt ist (BL-04)."
+    },
+    {
+      "id": "ACC-11",
+      "status": "Auslegung des Reviewers (Spec schweigt zu Satzbau bei aktiven Faktoren und zum Bezug der Unverändertheit); ADR folgt in 30-plan-review M1d",
+      "ref": "K-M1d-8 (criteria); ADR-045 Nr. 2: „Keine neue Rechnung: `msa_robustness()`, PSE, ME, SME, `active`, `active_simultaneous` und die Bänder bleiben unverändert.“; ANK-34",
+      "kind": "Prüfform K-M1d-8",
+      "owner": "Builder",
+      "blocking_builder": true,
+      "note": "(1) Satz: zur Laufzeit aus docs/02 gelesen (Text zwischen „ und “ in der Zeile von K-M1d-8), x ersetzt durch formatC(ME, format = \"f\", digits = 4); verglichen nach Normalisierung (Markdown-Zeichen, Anführungszeichen, Leerraum und Zeilenumbrüche). Der ME-Wert der Zeile mit PSE, ME und SME ist dieselbe Zeichenkette. (2) Aktive Faktoren: Jeder Faktor mit active = TRUE steht vor seinem Zusatz („also above SME“ bei active_simultaneous = TRUE, sonst „above ME only“), ohne dass vorher ein anderer Faktorname oder der andere Zusatz folgt, etwa „F1 (also above SME), F2 (above ME only)“; kein inaktiver Faktor trägt einen Zusatz; ohne aktiven Faktor steht kein Zusatz, mit aktiven Faktoren nicht der Satz aus (1). (3) Bericht: Abschnitt „6. Robustness“ des mit msa_report(…, robustness = …) als GitHub-Markdown ohne Umbruch gerenderten Berichts. (4) Altphrase: keine Datei unter R/ und inst/templates/ enthält „robust to all screened perturbations“. (5) Unverändert: msa_robustness() des Pakets unter Test liefert auf fünf Aufrufen dasselbe Objekt (identical) wie R/robustness.R aus dem Tag done/M1c (ANK-34, gelesen mit git cat-file); acmg_robustness() liefert auf synthetischen PB-Läufen des AP1-Plans, die alle drei Bänder erzeugen, dasselbe Ergebnis wie R/acmg.R und R/robustness.R aus done/M1c."
+    },
+    {
+      "id": "ACC-12",
+      "status": "Prüfung einer Spec-Regel ohne eigenes Kriterium; im Test von K-M1d-7 geführt",
+      "ref": "docs/02 M1d, Voraussetzung: „M1d ändert `R/fit.R` und `R/grr.R` nur in der roxygen-Dokumentation.“; BACKLOG BL-111 (erledigt 03.11.2026); ANK-34",
+      "kind": "Kerndateien nur roxygen",
+      "owner": "Builder",
+      "blocking_builder": true,
+      "note": "R/fit.R und R/grr.R des Pakets unter Test gleichen ohne Zeilen, die mit #' beginnen, den Fassungen aus done/M1c (ANK-34) Zeile für Zeile. Grund: Die Vollläufe hängen über ihre Implementierungshashes an diesen Dateien, und beide liegen im Mutationsumfang (K-M1c-6)."
+    },
+    {
+      "id": "ACC-13",
+      "status": "[INFRA] Vorschlag an den Betreiber, nonblocking für den Builder",
+      "ref": "orchestrator/config.env: MUT_TEST_EXCLUDE='^(m2-[0-9]|m0-testthat-count$|m1b-[23]-|m1b-7-vignette-full|m1c-[34]-|m1c-5-vignette-full|m1c-8-check-runs)'; Intake §5 (langsame Tests nicht je Mutant); ACC-14 in M1c",
+      "kind": "[INFRA] Testauswahl des Mutationslaufs",
+      "owner": "Betreiber",
+      "blocking_builder": false,
+      "note": "Alle Abnahmetests von M1d lesen große Rohdaten (ClinVar rund 860 MB gzip, llm-stability-Archiv 87 MB), rufen data-raw-Skripte, stricken Vignetten, rendern den Bericht oder wiederholen Kurzläufe. Keiner prüft eine Rechnung in R/fit.R oder R/grr.R, die nicht schon ein schneller Test abdeckt. Vorschlag: MUT_TEST_EXCLUDE um „|m1d-“ ergänzen, bevor mutgate in M1d läuft (M1d ändert R/fit.R und R/grr.R in roxygen-Zeilen; mutgate sieht damit einen geänderten Scope)."
+    },
+    {
+      "id": "ACC-14",
+      "status": "Betreiber-Voraussetzung offen (Stand 03.11.2026, 15:56: Vollläufe nicht im Repository)",
+      "ref": "docs/02 M1d, Voraussetzung: „Die Vollläufe `ordinal_recovery`, `binary_recovery`, `two_level` (nach M1b) und `boot_coverage` (nach M1c) sind gerechnet und als `inst/validation/sim/<studie>_results.csv`, `<studie>_replicates.csv`, `<studie>_session.txt` committet, bevor M1d startet. Fehlen sie, scheitern K-M1d-6 und K-M1d-7; sie werden nicht übersprungen.“; BL-12",
+      "kind": "Voraussetzung Vollläufe",
+      "owner": "Betreiber",
+      "blocking_builder": false,
+      "note": "Zu Beginn dieser Phase fehlen alle zwölf Vollauf-Dateien unter inst/validation/sim/. Außerhalb des Repos liegen unter ../llmsa-sim/M1c/ die Vollläufe binary_recovery und two_level (n_sim = 1000, Implementierungshash 203bc364…); ordinal_recovery und boot_coverage fehlen dort. K-M1d-6 und K-M1d-7 sind bis zum Betreiber-Commit rot, wie die Spec es verlangt. Die Vollläufe gehören vor 20-plan committet, damit der Builder die Befunde (ACC-10) kennt."
+    },
+    {
+      "id": "ACC-15",
+      "status": "Anker geerntet in ACCEPTANCE M1d; ADR im selben Meilenstein (Gate golden-adr) folgt in 30-plan-review M1d",
+      "ref": "ANKER-TODO.md, Abschnitt „M1d — echte Daten“; docs/01 §6: „Jede spätere Änderung unter `reference/anchors/` braucht ein ADR im selben Meilenstein (Gate golden-adr).“; AGENTS.md, Territorien",
+      "kind": "Anker",
+      "owner": "Reviewer",
+      "blocking_builder": false,
+      "note": "Neu: ANK-40 (llm-stability, Struktur und Quellordner), ANK-42 (Yang 2017), ANK-43 (Amendola 2016), ANK-44 (Harrison 2017), ANK-45 (Van Gijn 2018), ANK-46 (Lazareva 2024), ANK-47 (Stichprobe), ANK-34 (Nachtrag des Reviewers, freie Nummer nach ANKER-TODO „Nicht vergeben“: Ausgangsstand done/M1c für K-M1d-8 und ACC-12). Unverändert genutzt: ANK-06, ANK-41, ANK-63, ANK-TOL (bias_report, mc_factor, n_check, data_size, package_compare, arithmetic). Literaturwerte am Original geprüft (pdftotext je Seite, SHA-256 der PDFs in den Ankern); geschützte Quellen (Amendola 2016, Van Gijn 2018) nur mit Kurzzitaten. ANK-58 verweist seit M2 auf ANK-44 als Vergleichswert; die Datei fehlte bis jetzt."
+    },
+    {
+      "id": "ACC-16",
+      "status": "Stand vor der Implementierung (Lauf des Reviewers am 03.11.2026 auf HEAD 9116ad7, Arbeitsbaum ohne Änderung unter R/, inst/, vignettes/, man/)",
+      "ref": "tests/acceptance/test-m1d-*.R; tests/acceptance/setup-m1d.R",
+      "kind": "Testlauf",
+      "owner": "–",
+      "blocking_builder": false,
+      "note": "(1) Lauf wie das Gate: testthat::test_dir(\"tests/acceptance\", filter = \"m1d\", load_package = \"source\"), NOT_CRAN=true, max_fails = Inf, R 4.6.1. Ohne Git-Kommando: ein Proben-Setup las die Blobs von done/M1c aus den losen Git-Objekten statt mit git cat-file (danach gelöscht). Ergebnis: 76 Tests (test_that-Blöcke), 7 grün, 69 rot (43 mit Fehlschlag, 26 mit Fehler), 0 übersprungen, 200 s. Rot wie erwartet: items.csv.gz, beide ClinVar-Teilmengen, beide data-raw-Skripte, beide Vignetten, die articles in _pkgdown.yml und alle zwölf Vollauf-Dateien fehlen; validation.Rmd und die Hilfeseiten nennen keine Befunde; print.msa_robustness und die Berichtsvorlage schreiben noch den alten Satz. Grün, weil der Stand schon stimmt: SHA-256 der ClinVar-Rohdateien (ANK-41), INSAID-Suche ohne Treffer, validation.Rmd strickt, R/fit.R und R/grr.R gleich done/M1c, Testfälle für K-M1d-8 vorhanden, msa_robustness() und acmg_robustness() (alle drei Bänder) gleich done/M1c. (2) Gegenprobe der Positivpfade in einer temporären Paketkopie mit Attrappen (danach gelöscht): items.csv.gz aus den Rohläufen mit einfachen Etiketten, beide ClinVar-Teilmengen aus der Mini-Referenz, QUELLE.txt und SHA256SUMS passend, die Vollläufe binary_recovery und two_level aus ../llmsa-sim/M1c. Grün: alle Struktur-, Rohdaten-, Import-, QUELLE-, Größen- und INSAID-Prüfungen von K-M1d-1, K-M1d-3 und K-M1d-5 sowie für binary_recovery und two_level alle fünf Prüfungen von K-M1d-6 einschließlich des bytegleichen Neulaufs (je 26 Erwartungen); rot nur fehlende Skripte, Vignetten, articles und die Vollläufe ordinal_recovery und boot_coverage. (3) Hilfsfunktionen einzeln geprüft (Positiv- und Negativfälle): Zahlen mit Tausendertrennzeichen, Zusätze bei aktiven Faktoren (vertauscht, fehlend, inaktiver Faktor mit Zusatz werden erkannt), Satz über Zeilenumbrüche, Befundbenennung in Tabellenzeile und Satz (falsche Richtung, item gegen item:model, falsches Szenario werden erkannt), Krippendorffs Alpha gegen irr::kripp.alpha. (4) Befundregeln auf den vorhandenen Vollläufen: binary_recovery S-bin-1 prompt und model sowie S-bin-2 model unterschätzt (relative Verzerrung −0,20 bis −0,22, MCSE 0,025); two_level S-two-1 und S-two-2 ohne nachweisbare Verzerrung von β̂²/2 (|bias| ≤ 3 MCSE). (5) Laufzeit im Gate: die Mini-Referenz der ClinVar-Teilmengen liest beide Rohdateien mit awk (etwa 3,5 Minuten), die Rohläufe von llm-stability etwa 15 s; dazu kommen die data-raw-Skripte des Builders, drei Vignetten, die eigenen Fits der Tests und zwei Berichte."
+    },
+    {
+      "id": "ACC-17",
+      "status": "Hinweis für den PLAN, nonblocking",
+      "ref": "BACKLOG BL-92: „M1d (K-M1d-7): Schätzer mit und ohne die nicht konvergierten Wiederholungen berichten, als Befund, nicht als Testfehler.“; AGENTS.md: „Jeder spätere PLAN adressiert offene Backlog-Einträge oder vertagt sie mit Begründung.“",
+      "kind": "Backlog-Bezug",
+      "owner": "Builder",
+      "blocking_builder": false,
+      "note": "Kein Abnahmetest verlangt die Zusatzauswertung ohne nicht konvergierte Wiederholungen; der PLAN beantwortet BL-92 (umsetzen oder mit Begründung vertagen). Ebenso BL-113 (Gleichstände im Modalwert von msa_agreement()), falls die Vignetten Kappa zeigen."
+    },
+    {
+      "id": "ACC-18",
+      "status": "Befund des Reviewers an der Quelle, nonblocking",
+      "ref": "ANK-42, observations; reference/privat/QUELLENKATALOG.md, Zeile Yang2017",
+      "kind": "Quellenkatalog Yang 2017",
+      "owner": "Betreiber (Katalog), Builder (Vignettentext)",
+      "blocking_builder": false,
+      "note": "Der Katalog nennt 81,0 % als „Fünf-Klassen vollständige Übereinstimmung“. In der Arbeit beziehen sich 81,0 % und 89,3 % auf drei Gruppen (P/LP, VUS, LB/B), die Werte der klinischen Teilmenge ab 2014 (97,2 %, 98,4 %) laut Legende von Figure 5 auf zwei Gruppen (Aktionabilität). Die Vignette sollte die Gruppierung beim Vergleich nennen; die vollständige Übereinstimmung nach K-M1d-4 (fünf Klassen) ist strenger."
+    },
+    {
+      "id": "ACC-19",
+      "status": "Befund des Reviewers an der Quelle, nonblocking",
+      "ref": "ANK-45, observations",
+      "kind": "Abweichung in Van Gijn et al. 2018",
+      "owner": "Builder (Vignettentext)",
+      "blocking_builder": false,
+      "note": "Abstract 804/858 (94 %) gegen Results 803/858 (93,6 %; 632 validiert + 171 vorläufig). Der Anker führt den Abstract-Wert wie ANKER-TODO; die Vignette kann den Unterschied nennen."
+    },
+    {
+      "id": "ACC-20",
+      "status": "Hinweis an den Betreiber, nonblocking",
+      "ref": "AGENTS.md, Projektblock: „Builder-Sandbox hat kein Netz: … Daten kommen aus `../quellen/daten/` über die `data-raw/`-Skripte, die der Betreiber vorab ausführen kann.“; docs/01 §7",
+      "kind": "Rohdaten außerhalb des Arbeitsbaums",
+      "owner": "Betreiber",
+      "blocking_builder": false,
+      "note": "K-M1d-1 und K-M1d-3 lesen ../quellen/daten/llm-stability_2026-10-22/ und ../quellen/daten/clinvar_2026-10-22/ im Gate. Kann die Builder-Sandbox den Ordner nicht lesen, muss der Betreiber die data-raw-Skripte nach BUILD selbst ausführen, oder der Builder liefert Skript und Daten ohne eigenen Lauf. Die Abnahme der ClinVar-Teilmengen liest rund 860 MB gzip mit awk und braucht im Gate einige Minuten."
+    }
+  ]
+}

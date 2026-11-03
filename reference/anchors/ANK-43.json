@@ -1,0 +1,35 @@
+{
+  "id": "ANK-43",
+  "title": "Amendola et al. 2016: Krippendorffs Alpha zwischen neun Laboren, vollständige Übereinstimmung vor und nach Konsens (99 Varianten)",
+  "criteria": ["K-M1d-4"],
+  "value": {
+    "laboratories": 9,
+    "variants": 99,
+    "variants_in_alpha": 97,
+    "k_alpha_interlab_acmg_amp": 0.72,
+    "k_alpha_interlab_lab_criteria": 0.76,
+    "identical_across_labs_initial": {"variants": 33, "of": 99, "pct": 34},
+    "consensus_after_discussion": {"variants": 70, "of": 99, "pct": 71},
+    "medically_relevant_differences": {"classifications": 43, "of": 194, "pct": 22}
+  },
+  "value_ci95_bootstrap": {"k_alpha_interlab_acmg_amp": [0.68, 0.76], "k_alpha_interlab_lab_criteria": [0.73, 0.80]},
+  "unit": "Anzahlen; Krippendorffs Alpha (dimensionslos); Anteile in Prozent",
+  "tolerance": {"alpha": 0.005, "pct": 0.5, "counts": 0},
+  "tolerance_note": "Halbe Einheit der letzten publizierten Stelle (docs/01 §2 Nr. 6): Alpha 0,005, Prozent 0,5 Punkte; Anzahlen exakt. Vergleichswert, kein Akzeptanzkriterium (K-M1d-4).",
+  "source_url": "https://doi.org/10.1016/j.ajhg.2016.03.024",
+  "source": "Amendola2016 (reference/privat/QUELLENKATALOG.md, Katalog E): Amendola LM, Jarvik GP, Leo MC et al. (2016). Performance of ACMG-AMP variant-interpretation guidelines among nine laboratories in the Clinical Sequencing Exploratory Research Consortium. Am J Hum Genet 98:1067–1076; PMC4908185. Verlags-PDF geschützt, bleibt lokal: quellen/literatur/E_anwendungsfall_acmg/Amendola_etal_2016_ACMG_AMP_Guidelines_Nine_Laboratories_CSER_AJHG98_1067.pdf (SHA-256 e63c381dc3cefa2dd7138b1d2ace61555e91f232f02a343476e90aa385518a20); nur Kurzzitate",
+  "quote": "lab K-alpha = 0.76, 95% CI = [0.73, 0.80]; ACMG-AMP K-alpha = 0.72, 95% CI = [0.68, 0.76]",
+  "quote_location": "Results, „Inter-laboratory Concordance in Classification“, Druckseite 1069 (PDF-Seite 3); im PDF steht „¼“ als Glyphe für „=“",
+  "further_quotes": [
+    {"quote": "Nine molecular diagnostic laboratories", "location": "Abstract, Druckseite 1067 (PDF-Seite 1)"},
+    {"quote": "piloted these guidelines on 99 variants", "location": "Abstract, Druckseite 1067 (PDF-Seite 1)"},
+    {"quote": "Considering the inter-laboratory classification for 97 variants", "location": "Druckseite 1069 (PDF-Seite 3)"},
+    {"quote": "The interpretation of 33/99 (34%) variants was identical across all sites that used the ACMG-AMP guidelines.", "location": "Abschnitt „Consensus Discussions“, Druckseite 1070 (PDF-Seite 4)"},
+    {"quote": "consensus on variant classifications based on the ACMG-AMP guidelines was achieved for 70/99 (71%) variants", "location": "Druckseite 1071 (PDF-Seite 5)"},
+    {"quote": "A total of 43/194 (22%) classifications had category differences that are more likely to influence medical decision making (P or LP versus VUS, LB, or B)", "location": "Druckseite 1070 (PDF-Seite 4)"}
+  ],
+  "observations": "Die Arbeit nennt die Metrik von Krippendorffs Alpha nicht ausdrücklich (nominal oder ordinal); sie ordnet die fünf Klassen B, LB, VUS, LP, P (Methods, Druckseite 1068). Zwei der 99 Varianten fehlen in den Alpha-Werten (97 Varianten). Neun Varianten gingen an alle Labore, 90 an je drei (Abstract). Die vollständige Übereinstimmung 34 % bezieht sich auf alle Labore, die eine Variante bewertet haben (drei bis neun).",
+  "retrieved": "2026-11-03",
+  "method": "Textspiegel reference/quellen/text/literatur/E_anwendungsfall_acmg/Amendola_etal_2016_…pdf.txt gelesen; am Original geprüft: SHA-256 der lokalen PDF mit tools::sha256sum(), pdftotext -layout der Seiten 1, 3, 4 und 5 und Suche aller zitierten Zahlen (Silbentrennung „vari- ants“ beachtet); pdfinfo: 10 Seiten, Creator Elsevier, Textschicht ohne OCR.",
+  "verification": "0.76, 0.72, 97 Varianten (PDF-Seite 3), 33/99 (34 %) und 43/194 (22 %) (PDF-Seite 4), 70/99 (71 %) (PDF-Seite 5), Nine laboratories und 99 variants (PDF-Seite 1) im Original gefunden."
+}

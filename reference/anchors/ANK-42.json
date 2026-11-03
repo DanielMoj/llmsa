@@ -1,0 +1,36 @@
+{
+  "id": "ANK-42",
+  "title": "Yang et al. 2017: Konkordanz der Einstufungen in ClinVar (vollständige Übereinstimmung und Mehrheitskonsens) und Datenbasis",
+  "criteria": ["K-M1d-4"],
+  "value": {
+    "dataset": {"variants": 27224, "genes": 1713, "classifications": 74065, "submitters": 429},
+    "pathogenicity_three_groups": {"complete_agreement_pct": 81.0, "majority_consensus_pct": 89.3},
+    "actionability_two_groups": {"complete_agreement_pct": 94.1, "majority_consensus_pct": 96.7},
+    "clinical_testing_2014_or_later_actionability": {"variants": 11535, "complete_agreement_pct": 97.2, "majority_consensus_pct": 98.4}
+  },
+  "value_ci95_wilson": {
+    "pathogenicity_three_groups": {"complete_agreement_pct": [80.5, 81.4], "majority_consensus_pct": [88.9, 89.6]},
+    "actionability_two_groups": {"complete_agreement_pct": [93.9, 94.4], "majority_consensus_pct": [96.5, 96.9]},
+    "clinical_testing_2014_or_later_actionability": {"complete_agreement_pct": [96.8, 97.5], "majority_consensus_pct": [98.2, 98.6]}
+  },
+  "unit": "Anzahlen; Anteile der Varianten in Prozent",
+  "tolerance": {"pct": 0.05, "counts": 0},
+  "tolerance_note": "Halbe Einheit der letzten publizierten Stelle (docs/01 §2 Nr. 6): 0,05 Prozentpunkte; Anzahlen exakt. Vergleichswert, kein Akzeptanzkriterium (K-M1d-4).",
+  "source_url": "https://doi.org/10.1038/gim.2017.60",
+  "source": "Yang2017 (reference/privat/QUELLENKATALOG.md, Katalog E): Yang S, Lincoln SE, Kobayashi Y, Nykamp K, Nussbaum RL, Topper S (2017). Sources of discordance among germ-line variant classifications in ClinVar. Genet Med 19:1118–1126. Open Access (CC BY-NC-ND); lokale Kopie quellen/literatur/E_anwendungsfall_acmg/Yang_etal_2017_Sources_of_Discordance_ClinVar_GenetMed19_1118.pdf (SHA-256 709250f596bf1df4bccc36a85f713f03f26d21098e82d9e5b33a5067bfca88a8)",
+  "quote": "Considering pathogenicity, 89.3% (CI: 88.9–89.6%) had majority consensus, and 81.0% (CI: 80.5–81.4%) had complete agreement.",
+  "quote_location": "Results, Abschnitt „Variant interpretations in ClinVar are highly concordant“, Druckseite 1119 (PDF-Seite 2)",
+  "further_quotes": [
+    {"quote": "Our data set included 27,224 variants classified by two or more ClinVar submitters. These spanned 1,713 genes and totaled 74,065 classifications from 429 ClinVar submitters.", "location": "Results, erster Absatz, Druckseite 1119 (PDF-Seite 2)"},
+    {"quote": "Considering actionability, 96.7% of variants (CI: 96.5–96.9%) reached majority consensus, and 94.1% (CI: 93.9–94.4%) had complete agreement among all submitters", "location": "Druckseite 1119 (PDF-Seite 2)"},
+    {"quote": "Our pathogenicity analysis considered three groups: positive (identical to the set defined above), uncertain (VUS), and negative (benign and likely benign).", "location": "Druckseite 1119 (PDF-Seite 2)"},
+    {"quote": "If at least two-thirds of the classifications were in the same group (i.e., 2 of 2, 2 of 3, 3 of 4, 4 of 5, 4 of 6, etc.), the variant was said to have majority consensus", "location": "Druckseite 1119 (PDF-Seite 2)"},
+    {"quote": "There were 20,160 variants with multiple classifications from clinical testing alone, and 57% of these (11,535) had multiple submissions from 2014 or later.", "location": "Abschnitt „Combined effect of interpretation source and age“, Druckseite 1122 (PDF-Seite 5)"},
+    {"quote": "with 98.4% (CI: 98.2–98.6%) of variants having majority consensus and 97.2% (CI: 96.8–97.5%) reaching complete agreement (Figure 5).", "location": "Druckseite 1122 (PDF-Seite 5)"},
+    {"quote": "Concordance is calculated on an actionability basis (see text).", "location": "Legende zu Figure 5, PDF-Seite 5"}
+  ],
+  "observations": "Die Werte 81,0 % und 89,3 % beziehen sich auf drei Gruppen (P/LP, VUS, LB/B), nicht auf die fünf Klassen; die Werte der klinischen Teilmenge ab 2014 (97,2 %, 98,4 %) auf zwei Gruppen (Aktionabilität: P/LP gegen VUS/LB/B, Legende Figure 5). Der Quellenkatalog nennt 81,0 % als „Fünf-Klassen vollständige Übereinstimmung“; das deckt sich nicht mit dem Text (Befund des Reviewers, CRITERIA.json M1d, ACC-18). Ein Fünf-Klassen-Wert steht in der Arbeit nicht. Die vollständige Übereinstimmung nach K-M1d-4 (alle Einreichungen dieselbe der fünf Klassen) ist strenger und deshalb nur bedingt vergleichbar; Yang et al. schließen benigne Polymorphismen aus (Methods).",
+  "retrieved": "2026-11-03",
+  "method": "Textspiegel reference/quellen/text/literatur/E_anwendungsfall_acmg/Yang_etal_2017_…pdf.txt gelesen; am Original geprüft: SHA-256 der lokalen PDF mit tools::sha256sum(), pdftotext -layout je Seite (Seiten 2 und 5) und Suche aller zitierten Zahlen; pdfinfo: 9 Seiten, Producer Acrobat Distiller 11.0.9, Textschicht ohne OCR.",
+  "verification": "Alle Zahlen im Text der PDF-Seiten 2 und 5 gefunden (27,224; 1,713; 74,065; 429; 89.3 %; 81.0 %; 96.7 %; 94.1 %; 11,535; 98.4 %; 97.2 %)."
+}

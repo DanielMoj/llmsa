@@ -1,0 +1,38 @@
+{
+  "id": "ANK-44",
+  "title": "Harrison et al. 2017: Konkordanz gemeinsamer Varianten von vier klinischen Laboren in ClinVar, medizinisch bedeutsame Unterschiede, Konkordanz nach Neubewertung, P/LP gegen LB/B",
+  "criteria": ["K-M1d-4", "docs/03 A.1"],
+  "value": {
+    "laboratories": 4,
+    "shared_variants": 6169,
+    "genes": 308,
+    "concordant_initial_pct": 88.3,
+    "exact_agreement": {"variants": 3845, "pct": 62.3},
+    "confidence_differences": {"variants": 1600, "pct": 26.0},
+    "discordant": {"variants": 724, "pct": 11.7},
+    "medically_significant_differences": {"variants": 216, "pct": 3.5},
+    "plp_vs_lbb_variants": 12,
+    "vus_vs_lbb": {"variants": 508, "pct": 8.2},
+    "concordant_after_reassessment_pct": 91.7
+  },
+  "unit": "Anzahlen (Varianten, Gene, Labore); Anteile der gemeinsamen Varianten in Prozent",
+  "tolerance": {"pct": 0.05, "counts": 0},
+  "tolerance_note": "Halbe Einheit der letzten publizierten Stelle (docs/01 §2 Nr. 6): 0,05 Prozentpunkte; Anzahlen exakt. Vergleichswert, kein Akzeptanzkriterium (K-M1d-4).",
+  "source_url": "https://doi.org/10.1038/gim.2017.14",
+  "source": "Harrison2017 (reference/privat/QUELLENKATALOG.md, Katalog E): Harrison SM, Dolinsky JS, Knight Johnson AE et al. (2017). Clinical laboratories collaborate to resolve differences in variant interpretations submitted to ClinVar. Genet Med 19:1096–1104. Autorenmanuskript (Harvard DASH, PMC), Seitenzahlen des Manuskripts; lokale Kopie quellen/literatur/E_anwendungsfall_acmg/Harrison_etal_2017_Clinical_Laboratories_Collaborate_ClinVar_GenetMed19_1096_DASH_Manuskript.pdf (SHA-256 49184dd6c41691c5a0ea1765d475e9f7d6ff619d12cc2ca3a64827c5222c2100)",
+  "quote": "Of the 6,169 shared variants (Figure 1A), 88.3% of interpretations between laboratories were concordant, with 62.3% (3,845 variants) in exact agreement and 26.0% (1,600 variants) differing only in confidence levels (P vs. LP and LB vs. B).",
+  "quote_location": "Results, „Initial Concordance Data“, Manuskript S. 4–5 (PDF-Seiten 5–6)",
+  "further_quotes": [
+    {"quote": "6,169 variants in ClinVar were interpreted by at least two of the participating laboratories, of which 88.3% were initially concordant.", "location": "Abstract, Results, Manuskript S. 2 (PDF-Seite 3)"},
+    {"quote": "Participating laboratories increased their overall concordance from 88.3% to 91.7%", "location": "Abstract, Conclusion, Manuskript S. 2 (PDF-Seite 3)"},
+    {"quote": "Comparison of data in ClinVar identified 6,169 variants from 308 genes interpreted by at least two of the four participating laboratories.", "location": "Results, Manuskript S. 4 (PDF-Seite 5)"},
+    {"quote": "The remaining 11.7% (724) of shared variants had discordant interpretations", "location": "Results, Manuskript S. 5 (PDF-Seite 6)"},
+    {"quote": "3.5% (216 variants) of all shared variants were medically significant differences (MSDs), pathogenic (P/LP) versus other (VUS/LB/B)", "location": "Results, Manuskript S. 5 (PDF-Seite 6)"},
+    {"quote": "and only 12 variants of this set (5.6%) had P/LP versus LB/B differences.", "location": "Results, Manuskript S. 5 (PDF-Seite 6)"},
+    {"quote": "The remaining 8.2% (508 variants) of all shared variants were VUS versus benign (LB/B) differences", "location": "Results, Manuskript S. 5 (PDF-Seite 6)"}
+  ],
+  "observations": "Konkordant heißt bei Harrison et al. einschließlich reiner Konfidenzunterschiede (P gegen LP, LB gegen B); exakte Übereinstimmung der fünf Klassen sind 62,3 %. Diskordant 11,7 % = medizinisch bedeutsam 3,5 % (P/LP gegen VUS/LB/B) + VUS gegen LB/B 8,2 %; das entspricht der ClinVar-Konfliktdefinition (Gruppen P/LP, VUS, LB/B). Die Neubewertung betraf 242 der 724 diskordanten Varianten. Der Wert 12 (P/LP gegen LB/B) ist der Vergleichswert für gefährliche Fehler in ANK-58 (docs/03 A.1).",
+  "retrieved": "2026-11-03",
+  "method": "Textspiegel reference/quellen/text/literatur/E_anwendungsfall_acmg/Harrison_etal_2017_…pdf.txt gelesen; am Original geprüft: SHA-256 der lokalen PDF mit tools::sha256sum(), pdftotext -layout der PDF-Seiten 3, 5 und 6 und Suche aller zitierten Zahlen; pdfinfo: 17 Seiten.",
+  "verification": "6,169; 88.3 %; 91.7 %; 242/724 (PDF-Seite 3); 6,169 variants from 308 genes; 62.3 % (3,845) (PDF-Seite 5); 11.7 % (724); 3.5 % (216); 12 variants; 8.2 % (508) (PDF-Seite 6) im Original gefunden."
+}

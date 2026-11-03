@@ -1,33 +1,24 @@
 {
   "contract": 1,
   "project": "llmsa",
-  "ts": "2026-11-03T13:51:29+01:00",
+  "ts": "2026-11-03T17:04:13+01:00",
   "milestone": {
-    "id": "M1c",
-    "index": 5,
+    "id": "M1d",
+    "index": 6,
     "total": 10
   },
-  "phase": "done",
+  "phase": "10-acceptance",
   "round": 1,
   "needs_human": false,
   "reason": "",
-  "gates": {
-    "deps": "pass",
-    "lint": "pass",
-    "tests": "pass",
-    "trace": "pass",
-    "territory": "pass",
-    "mutgate": "pass",
-    "golden-adr": "pass",
-    "mutfull": "pass"
-  },
+  "gates": {},
   "parked": [],
   "last_events": [
-    "[20261102-150232] RUN builder 20-plan (M1c r1, Versuch 1) -> /mnt/c/Users/Danie/dev/Llmsa/llmsa/orchestrator/logs/M1c-20-plan-r1-a1-20261102-150232.log",
-    "[20261102-152212] RUN reviewer 30-plan-review (M1c r1, Versuch 1) -> /mnt/c/Users/Danie/dev/Llmsa/llmsa/orchestrator/logs/M1c-30-plan-review-r1-a1-20261102-152212.log",
-    "[20261102-154843] RUN builder 40-build (M1c r1, Versuch 1) -> /mnt/c/Users/Danie/dev/Llmsa/llmsa/orchestrator/logs/M1c-40-build-r1-a1-20261102-154843.log",
-    "[20261103-022945] RUN qa 45-qa (M1c r1, Versuch 1) -> /mnt/c/Users/Danie/dev/Llmsa/llmsa/orchestrator/logs/M1c-45-qa-r1-a1-20261103-022945.log",
-    "[20261103-132627] RUN reviewer 50-code-review (M1c r1, Versuch 1) -> /mnt/c/Users/Danie/dev/Llmsa/llmsa/orchestrator/logs/M1c-50-code-review-r1-a1-20261103-132627.log"
+    "[20261103-135132] Lauf beendet.",
+    "[20261103-155603] CONFIG: AUTONOMY=0 PLAN<=2 REWORK<=5 REBUILD@r6 ARBITER+2 TIMEOUT=28800 RETRY=2x/120s GATE_ERROR_RETRIES=2 MAX_MS=1 QA=1(ab M2) ROLE_GUARDS=on NOTIFY=an BUILDER=codex REVIEWER=claude",
+    "[20261103-155610] QA-Routenprobe bestanden (gemini-4-argon); Ausgabe: orchestrator/logs/qa-probe-20261103-155603-1.log",
+    "[20261103-155610] === M1d start ===",
+    "[20261103-155656] RUN reviewer 10-acceptance (M1d r1, Versuch 1) -> /mnt/c/Users/Danie/dev/Llmsa/llmsa/orchestrator/logs/M1d-10-acceptance-r1-a1-20261103-155656.log"
   ],
   "exit": null,
   "role_guards": "on"

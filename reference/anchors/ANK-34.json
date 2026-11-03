@@ -1,0 +1,48 @@
+{
+  "id": "ANK-34",
+  "title": "Ausgangsstand für M1d: R/robustness.R, R/acmg.R, R/fit.R und R/grr.R im Tag done/M1c",
+  "criteria": ["K-M1d-8", "K-M1d-7", "docs/02 M1d, Voraussetzung"],
+  "value": {
+    "ref": "done/M1c",
+    "commit": "e0650a982626d3eba43af5bfaf63fb4718063ab3",
+    "files": {
+      "R/robustness.R": {
+        "sha256": "ced468dc9a6f9c0ae59cd8174fd9fba32ddbbe2dc18220a92ab1cb7c0a56cd5f",
+        "bytes": 8684,
+        "git_blob": "70c768acb1d806bd335bc55076481fc4e8687edf"
+      },
+      "R/acmg.R": {
+        "sha256": "bfb54917035787ca86a2c90f1781c9064f852fbfbf900ba8847427799863611f",
+        "bytes": 72517,
+        "git_blob": "a9bccc292d0f0227dfc1ed8bcdb31fe7c2398378"
+      },
+      "R/fit.R": {
+        "sha256": "e65c6b8119cae7ca4999ac83f76b7cacfd3d7646ce20c2a27ea85d22ee5af706",
+        "bytes": 44871,
+        "git_blob": "866c625e4936f86b42f8baba466d2aac481bbf74"
+      },
+      "R/grr.R": {
+        "sha256": "75bee6a200e031a4827270a013cfed28df2e10441a13c0472ff1a5419037a083",
+        "bytes": 12257,
+        "git_blob": "5344a0e5b1f37095858c72d5c458e49a80d879df"
+      }
+    }
+  },
+  "unit": "ref: unveränderlicher Git-Tag (Abschluss von M1c); commit: Objekt-ID des getaggten Commits; je Datei sha256 = SHA-256 des Inhalts (hexadezimal), bytes = Größe in Byte, git_blob = Git-Objekt-ID (SHA-1) des Blobs",
+  "tolerance": 0,
+  "tolerance_note": "Datenstand, exakt.",
+  "source_url": "Tag done/M1c (orchestrator/state/M1c, Abschluss 03.11.2026, 13:51); docs/decisions/ADR-045-robustheitsergebnis-wortlaut.md; docs/02-statistikkern.md, M1d",
+  "source": "Unveränderlicher Abschluss-Tag von M1c; eigene Nachrechnung aus den Git-Objekten ohne Git-Kommando",
+  "quote": "Das Objekt von `msa_robustness()` und die Bänder bleiben unverändert.",
+  "quote_location": "docs/02-statistikkern.md, K-M1d-8",
+  "further_quotes": [
+    {"quote": "Keine neue Rechnung: `msa_robustness()`, PSE, ME, SME, `active`, `active_simultaneous` und die Bänder bleiben unverändert.", "location": "docs/decisions/ADR-045-robustheitsergebnis-wortlaut.md, Entscheidung Nr. 2"},
+    {"quote": "M1d ändert `R/fit.R` und `R/grr.R` nur in der roxygen-Dokumentation.", "location": "docs/02-statistikkern.md, M1d, Absatz „Voraussetzung“"},
+    {"quote": "Der Code ändert sich nicht.", "location": "docs/decisions/ADR-044-backendfehler-robustheit-nachholen.md, Konsequenzen"},
+    {"quote": "`R/` und `inst/` bleiben unverändert", "location": "docs/decisions/ADR-046-windows-leere-umgebungsvariable.md, Konsequenzen"}
+  ],
+  "observations": "Bezug ist der Stand vor M1d. Nach dem Tag done/M1c folgten nur Betreiber-Commits (ADR-044, ADR-045, ADR-046), die R/ nicht ändern; die vier Dateien im Arbeitsbaum zu Beginn dieser Phase gleichen den Blobs des Tags byte für byte. Der Abnahmetest liest die Dateien mit git cat-file aus dem Tag (wie K-M1c-7 aus done/M1b, ANK-33), prüft sie gegen sha256 und vergleicht das Paket unter Test mit dieser Fassung: msa_robustness() und die Robustheitsbänder von acmg_robustness() (K-M1d-8), dazu die Regel, dass R/fit.R und R/grr.R sich nur in roxygen-Zeilen ändern. Der Tag plan/M1d entsteht erst nach der Planfreigabe.",
+  "retrieved": "2026-11-03",
+  "method": "Ohne Git-Kommando: .git/refs/tags/done/M1c gelesen (Tag-Objekt 1f2ded24d43f0134db6213c35e3debd94e6314e4), lose Git-Objekte mit memDecompress() entpackt, Tag → Commit e0650a98… → Baum → R/ → Blobs; Inhalt, Größe und SHA-256 (tools::sha256sum) je Blob berechnet und mit dem Arbeitsbaum verglichen.",
+  "verification": "SHA-256 der vier Blobs gleich den Dateien im Arbeitsbaum zu Beginn von ACCEPTANCE M1d; der Git-Status der Sitzung zeigte unter R/ keine Änderung."
+}

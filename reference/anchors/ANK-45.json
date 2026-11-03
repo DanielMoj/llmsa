@@ -1,0 +1,32 @@
+{
+  "id": "ANK-45",
+  "title": "Van Gijn et al. 2018: Konsensverfahren zu 858 Varianten der HRF-Gene (Runde 1 mit vier Experten, Konsens am Ende, Validierungsregel)",
+  "criteria": ["K-M1d-4"],
+  "value": {
+    "variants": 858,
+    "experts_round_1": 4,
+    "no_consensus_round_1_pct_above": 80,
+    "consensus_final": {"variants": 804, "of": 858, "pct": 94},
+    "validated_rule_min_pct": 75,
+    "validated": {"variants": 632, "pct": 74},
+    "provisional": {"variants": 171, "pct": 20}
+  },
+  "unit": "Anzahlen; Anteile in Prozent (no_consensus_round_1_pct_above ist eine untere Schranke: „>80%“)",
+  "tolerance": {"pct": 0.5, "counts": 0},
+  "tolerance_note": "Halbe Einheit der letzten publizierten Stelle (docs/01 §2 Nr. 6): 0,5 Prozentpunkte; Anzahlen exakt. Vergleichswert für die HRF-Teilmenge, kein Akzeptanzkriterium (K-M1d-4).",
+  "source_url": "https://doi.org/10.1136/jmedgenet-2017-105216",
+  "source": "VanGijn2018 (reference/privat/QUELLENKATALOG.md): Van Gijn ME, Ceccherini I, Shinar Y et al. (2018). New workflow for classification of genetic variants' pathogenicity applied to hereditary recurrent fevers by the International Study Group for Systemic Autoinflammatory Diseases (INSAID). J Med Genet 55(8):530–537. Geschützt, bleibt lokal: quellen/literatur/E_anwendungsfall_acmg/VanGijn_etal_2018_INSAID_Variant_Classification_Workflow_JMedGenet55_530.pdf (SHA-256 0c15584da22ff015ec162768040c089fce837c67cc07923b964249ab095c0659); nur Kurzzitate",
+  "quote": "Consensus classification was reached for 804/858 variants (94%).",
+  "quote_location": "Abstract, Results, PDF-Seite 1",
+  "further_quotes": [
+    {"quote": "Four experts in HRF genetics submitted independent classifications of 858 variants.", "location": "Abstract, Methods, PDF-Seite 1"},
+    {"quote": "As the percentage of variants without consensus was relatively high (>80%)", "location": "Methods, „Interpretation workflow“, PDF-Seite 3 (nach der ersten Runde mit vier Experten)"},
+    {"quote": "A classification was considered validated if ≥75% of the experts reached consistent votes.", "location": "Methods, „Consensus validation and classification rules“, PDF-Seite 3"},
+    {"quote": "A validated consensus classification was reached for 632 (74%) DNA variants.", "location": "Results, „Consensus classification“, PDF-Seite 3"},
+    {"quote": "Provisional consensus classification was reached for 171 DNA variants (20%).", "location": "Results, PDF-Seite 3"}
+  ],
+  "observations": "Abstract und Results weichen um eine Variante ab: Abstract 804/858 (94 %), Results „803/858 (93.6%)“ mit fünfklassiger Konsensklassifikation (PDF-Seite 3; 632 validiert + 171 vorläufig = 803). Der Anker führt den Abstract-Wert wie ANKER-TODO; die Vignette nennt den Unterschied, falls sie den Wert zeigt (CRITERIA.json M1d, ACC-19). Runde 1 bestand aus vier Experten; „>80%“ ist der Anteil ohne Konsens nach dieser Runde und nur als Schranke berichtet. Die INSAID-Klassen selbst bleiben außerhalb des Repos (docs/01 §7).",
+  "retrieved": "2026-11-03",
+  "method": "Textspiegel reference/quellen/text/literatur/E_anwendungsfall_acmg/VanGijn_etal_2018_…pdf.txt gelesen; am Original geprüft: SHA-256 der lokalen PDF mit tools::sha256sum(), pdftotext -layout der PDF-Seiten 1 und 3 und Suche aller zitierten Zahlen (Silbentrennung „vari- ants“ beachtet); pdfinfo: 9 Seiten, Creator Adobe InDesign CS6, Textschicht ohne OCR.",
+  "verification": "858 variants, 804/858 variants (94%), Four experts (PDF-Seite 1); ≥75%, >80%, 803/858 (93.6%), 632 (74%), 171 DNA variants (20%) (PDF-Seite 3) im Original gefunden."
+}
