@@ -233,8 +233,17 @@ test_that("coverage CLI and workers reject invalid selections and overflow", {
   old_workers <- Sys.getenv("LLMSA_SIM_WORKERS", unset = NA_character_)
   on.exit(if (is.na(old_workers)) Sys.unsetenv("LLMSA_SIM_WORKERS") else
     Sys.setenv(LLMSA_SIM_WORKERS = old_workers), add = TRUE)
-  for (workers in c("0", "-1", "1.5", "NA", "", as.character(params$cores + 1))) {
+  for (workers in c("0", "-1", "1.5", "NA", as.character(params$cores + 1))) {
     Sys.setenv(LLMSA_SIM_WORKERS = workers)
+    expect_error(e$boot_workers(params$cores, 4L), "LLMSA_SIM_WORKERS")
+  }
+  # ?Sys.setenv: Windows has no empty variables, Sys.setenv(FOO = "") unsets FOO.
+  # The default then applies and the study runs sequentially (ADR-046).
+  Sys.setenv(LLMSA_SIM_WORKERS = "")
+  if (.Platform$OS.type == "windows") {
+    expect_identical(Sys.getenv("LLMSA_SIM_WORKERS", unset = NA_character_), NA_character_)
+    expect_identical(e$boot_workers(params$cores, 4L), 1L)
+  } else {
     expect_error(e$boot_workers(params$cores, 4L), "LLMSA_SIM_WORKERS")
   }
 })
