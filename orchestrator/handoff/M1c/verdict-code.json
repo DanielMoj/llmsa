@@ -1,0 +1,34 @@
+{
+  "milestone": "M1c",
+  "phase": "code",
+  "round": 1,
+  "verdict": "PASS",
+  "blocking": [],
+  "nonblocking": [
+    {
+      "id": "E7",
+      "ref": "orchestrator/handoff/M1c/MUT-EQUIV.json, Anträge R/fit.R:592:43 und :603:57; ADR-039, Konsequenzen; orchestrator/handoff/SCHEMA.md, MUT-EQUIV",
+      "note": "sparse = FALSE und perm = FALSE sind rechnerisch gleichwertig, aber nicht bitgleich. Die Schranke des Antrags (1e-10, gemessen 1,82e-12 bzw. 6,82e-13 auf 27 Zuständen) gilt nicht allgemein: REML-Zustand bis 4,66e-10 bzw. 1,46e-11 absolut, msa_fit() bis 3,02e-9 bzw. 3,62e-9 · σ²_TV im nahezu singulären Plan, sonst höchstens 2,9e-13 · σ²_TV; Warnungen, Fehler und Konvergenz in allen Fällen gleich (REVIEW r1, Prüflauf 3). Nach ADR-039 freigegeben, ausdrücklich nicht bitgleich. Künftige Gleitkomma-Anträge nennen Prüfbereich und größte Abweichung. Stand in BL-85."
+    },
+    {
+      "id": "E8",
+      "ref": "orchestrator/handoff/M1c/QA.md, QA-M1c-001; BACKLOG.md BL-110; ADR-042 Nr. 11.6; PLAN-REVIEW E6",
+      "note": "Härtung von boot_read_results(), boot_summarize() und boot_merge() gegen manuell veränderte CSV-Dateien bleibt nonblocking: Der Studienschreiber erzeugt solche Zeilen nicht, die Leserprüfung der Vignette ist nach E6 absichtlich beschränkt, QA-M1c-FUZZ-2 ist grün und es gibt keinen roten reproduzierenden Test. Umsetzung nach BL-110 nach dem 26.11.2026."
+    },
+    {
+      "id": "E9",
+      "ref": "[Betreiber] docs/02, M1d: „M1d ändert `R/fit.R` und `R/boot.R` nur in der roxygen-Dokumentation.“; ADR-042 Nr. 18.3; CRITERIA.json ACC-17",
+      "note": "R/boot.R gibt es nicht; msa_boot() und print.msa_boot() liegen in R/grr.R und im Mutationsumfang von K-M1c-6. Vor M1d sollte die Spec R/grr.R nennen. Neu BL-111."
+    },
+    {
+      "id": "E10",
+      "ref": "[Betreiber] CRITERIA.json ACC-21; docs/gates-auswahl.md:122 („K-M1c-1 bis K-M1c-5“)",
+      "note": "K-M1c-7 und K-M1c-8 werden im tests-Gate entschieden (m1c-7-*, m1c-8-* grün), fehlen aber in der Zuordnung; trace ist nicht betroffen. Vorschlag: „K-M1c-1 bis K-M1c-5, K-M1c-7, K-M1c-8“. Stand in BL-48."
+    },
+    {
+      "id": "E11",
+      "ref": "[Betreiber] BL-12; BL-92; ADR-041 Nr. 4; docs/02 M1d, Voraussetzung; K-M1d-6",
+      "note": "Vollläufe aller vier Klasse-B-Studien mit dem abgenommenen Code vor M1d: ordinal, binary und two_level tragen jetzt den Implementierungshash 203bc364… (M1b-Vollläufe 477e84a5… ungültig), boot_coverage 2dcf076e…. Hochrechnung des Builders, keine Messung: Bootstrap rund 11,4 h bei 1000 Wiederholungen, ordinal rund 2,3 h. Befehle und boot_merge() in inst/validation/sim/README.md. Stand in BL-12 und BL-92."
+    }
+  ]
+}

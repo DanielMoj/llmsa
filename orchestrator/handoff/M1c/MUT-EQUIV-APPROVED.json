@@ -1,0 +1,141 @@
+{
+  "approved": [
+    {
+      "file": "R/fit.R",
+      "mutator": "TRUE → FALSE",
+      "line": 323,
+      "column": 47,
+      "code": "columns <- strsplit(group, \":\", fixed = TRUE)[[1L]]",
+      "reason": "msa_fit(): strsplit(group, \":\", fixed = FALSE). Der Doppelpunkt ist auch als regulärer Ausdruck ein Literal; die Zerlegung ist für jede Zeichenkette dieselbe. Tatsächlicher muttest-Mutant: Stufenzählung auf 300 zufälligen gewichteten Plänen und 8 latente msa_fit()-Läufe (darunter Gewichte 0 und nicht ganzzahlig, ein nicht identifizierbarer Plan) bitgleich (REVIEW r1, Prüflauf 3). Schlüssel trifft genau diesen Überlebenden (Prüflauf 2). Wie M1b-Freigabe R/fit.R:314."
+    },
+    {
+      "file": "R/fit.R",
+      "mutator": "FALSE → TRUE",
+      "line": 324,
+      "column": 64,
+      "code": "if (nlevels(interaction(dat[weights > 0, columns, drop = FALSE], drop = TRUE)) <= 2L) {",
+      "reason": "msa_fit(): dat[weights > 0, columns, drop = TRUE]. Bei einer Spalte entsteht ein Faktor statt eines einspaltigen Datenrahmens, bei einer Zeile eine Liste; interaction() entpackt Listen und Datenrahmen gleich, und sein drop = TRUE entfernt dieselben Stufen. 300/300 zufällige gewichtete Pläne und 8/8 latente Fits bitgleich (REVIEW r1, Prüflauf 3). Schlüssel trifft genau diesen Überlebenden. Wie M1b-Freigabe R/fit.R:315."
+    },
+    {
+      "file": "R/fit.R",
+      "mutator": "<n> + 1 → <n> + 1",
+      "line": 338,
+      "column": 46,
+      "code": "if (!length(fixed_two)) design <- matrix(1, nrow(dat), 1L)",
+      "reason": "msa_fit(): design <- matrix(2, nrow(dat), 1L). design speist nur msa_latent_information(); die Skalierung um die Zweierpotenz 2 ist exakt, QR-Basis, Rangentscheidung und ncol(design) bleiben gleich. Informationsmatrix auf 300/300 zufälligen gewichteten Plänen und 8/8 latente Fits bitgleich (REVIEW r1, Prüflauf 3). Der Schlüssel trifft nur diesen Mutanten (1L am Zeilenende ist kein Überlebender, Prüflauf 2). Wie M1b-Freigabe R/fit.R:329."
+    },
+    {
+      "file": "R/fit.R",
+      "mutator": "+ → -",
+      "line": 427,
+      "columns": [37, 46, 54],
+      "code": "cell <- stats::aggregate(y ~ item + prompt + model + block, data = dat, FUN = length)",
+      "reason": "msa_fit(): alle drei Mutanten der Zeile (Spalten 37, 46, 54). aggregate.formula() bildet model.frame() aus allen Variablen der Formel und gruppiert nach allen rechten Spalten; die Operatoren wählen keine Terme. Je Mutant aggregate() auf 11 Plänen und 11 numerische msa_fit()-Läufe (geschlossen, analytisch, Fehlerfälle, lmer-Pfad) bitgleich (REVIEW r1, Prüflauf 3). Der Schlüssel trifft genau diese drei Überlebenden. Wie M1b-Freigabe R/fit.R:415."
+    },
+    {
+      "file": "R/fit.R",
+      "mutator": "TRUE → FALSE",
+      "line": 452,
+      "column": 45,
+      "code": "Z <- lapply(strsplit(groups, \":\", fixed = TRUE), function(columns) {",
+      "reason": "msa_latent_information(): strsplit(groups, \":\", fixed = FALSE). Doppelpunkt als Literal. 300/300 zufällige gewichtete Eingaben (mit und ohne Restterm) und 8/8 latente Fits bitgleich (REVIEW r1, Prüflauf 3). Schlüssel trifft genau diesen Überlebenden. Wie M1b-Freigabe R/fit.R:440."
+    },
+    {
+      "file": "R/fit.R",
+      "mutator": "<n> + 1 → <n> + 1",
+      "line": 460,
+      "column": 18,
+      "code": "gram <- matrix(0, k + residual, k + residual)",
+      "reason": "msa_latent_information(): matrix(1, ...). Die Doppelschleife schreibt alle k × k Zellen vor dem ersten Lesen, mit residual = TRUE folgen beide Restränder und die Restdiagonale; der Anfangswert ist unbeobachtbar. 300/300 Eingaben und 8/8 latente Fits bitgleich (REVIEW r1, Prüflauf 3). Schlüssel trifft genau diesen Überlebenden. Wie M1b-Freigabe R/fit.R:448."
+    },
+    {
+      "file": "R/fit.R",
+      "mutator": "<n> - 1 → <n> - 1",
+      "line": 460,
+      "column": 18,
+      "code": "gram <- matrix(0, k + residual, k + residual)",
+      "reason": "msa_latent_information(): matrix(-1, ...). Begründung und Beleg wie beim Mutanten <n> + 1 derselben Zeile (REVIEW r1, Prüflauf 3). Schlüssel trifft genau diesen Überlebenden."
+    },
+    {
+      "file": "R/fit.R",
+      "mutator": "<n> + 1 → <n> + 1",
+      "line": 535,
+      "column": 61,
+      "code": "if (length(counts) != prod(sizes) || any(counts != counts[1])) {",
+      "reason": "msa_numeric_balanced(): counts[1] → counts[2]. Die rechte Seite des || wird nur bei length(counts) == prod(sizes) ausgewertet; msa_numeric_balanced() wird nur aus msa_numeric_fit() mit Termen aus lFormula() gerufen, jeder Faktor hat dort mindestens zwei Stufen, also prod(sizes) >= 2, und beide Prädikate fragen, ob alle Zellzahlen gleich sind. 300/300 zufällige Pläne und 11/11 numerische Fits bitgleich (REVIEW r1, Prüflauf 3). Schlüssel trifft genau diesen Überlebenden. Wie M1b-Freigabe R/fit.R:523."
+    },
+    {
+      "file": "R/fit.R",
+      "mutator": "x[<i>] → x[<i> + 1L]",
+      "line": 535,
+      "column": 61,
+      "code": "if (length(counts) != prod(sizes) || any(counts != counts[1])) {",
+      "reason": "msa_numeric_balanced(): counts[1] → counts[1 + 1L]. Begründung und Beleg wie beim Mutanten <n> + 1 derselben Zeile (REVIEW r1, Prüflauf 3). Schlüssel trifft genau diesen Überlebenden."
+    },
+    {
+      "file": "R/fit.R",
+      "mutator": "<n> + 1 → <n> + 1",
+      "line": 620,
+      "column": 33,
+      "code": "gram <- curvature <- matrix(0, k, k)",
+      "reason": "msa_numeric_reml(): matrix(1, k, k). Die Doppelschleife schreibt jede Zelle beider Matrizen vor dem ersten Lesen; curvature liest gram[i, j] erst nach dessen Zuweisung. REML-Zustand auf 60/60 Zufallszuständen und 11/11 numerische Fits bitgleich (REVIEW r1, Prüflauf 3). Schlüssel trifft genau diesen Überlebenden. Wie M1b-Freigabe R/fit.R:608."
+    },
+    {
+      "file": "R/fit.R",
+      "mutator": "<n> - 1 → <n> - 1",
+      "line": 620,
+      "column": 33,
+      "code": "gram <- curvature <- matrix(0, k, k)",
+      "reason": "msa_numeric_reml(): matrix(-1, k, k). Begründung und Beleg wie beim Mutanten <n> + 1 derselben Zeile (REVIEW r1, Prüflauf 3). Schlüssel trifft genau diesen Überlebenden."
+    },
+    {
+      "file": "R/fit.R",
+      "mutator": "TRUE → FALSE",
+      "line": 721,
+      "column": 52,
+      "code": "lf <- lme4::lFormula(form, data = scaled, REML = TRUE, control = control)",
+      "reason": "msa_numeric_fit(): lFormula(..., REML = FALSE). lme4 2.0.6 legt REML in lFormula() nur im Rückgabewert ab (c(res, list(REML = REML))); msa_numeric_fit() liest nur reTrms$cnms, reTrms$Gp und reTrms$Zt, Start- und Abschlussrechnung setzen REML = TRUE selbst. 11/11 numerische Fits bitgleich (REVIEW r1, Prüflauf 3). Schlüssel trifft genau diesen Überlebenden. Wie M1b-Freigabe R/fit.R:709."
+    },
+    {
+      "file": "R/fit.R",
+      "mutator": "TRUE → FALSE",
+      "line": 723,
+      "column": 41,
+      "code": "terms <- strsplit(names, \":\", fixed = TRUE)",
+      "reason": "msa_numeric_fit(): strsplit(names, \":\", fixed = FALSE). Doppelpunkt als Literal; Gruppennamen aus lFormula(). 11/11 numerische Fits mit und ohne Wechselwirkungen bitgleich (REVIEW r1, Prüflauf 3). Schlüssel trifft genau diesen Überlebenden. Wie M1b-Freigabe R/fit.R:711."
+    },
+    {
+      "file": "R/fit.R",
+      "mutator": "TRUE → FALSE",
+      "line": 729,
+      "column": 86,
+      "code": "on.exit(if (!completed) for (w in start$warnings) warning(w, call. = FALSE), add = TRUE)",
+      "reason": "msa_numeric_fit(): on.exit(..., add = FALSE). Die Funktion (R/fit.R:716–818) enthält genau einen on.exit()-Aufruf; add wirkt nur auf zuvor registrierte Handler derselben Funktion. 11/11 numerische Fits einschließlich zweier Fehlerfälle nach der Registrierung mit gleichen Werten, Warnungen und Meldungen (REVIEW r1, Prüflauf 3). Schlüssel trifft genau diesen Überlebenden. Wie M1b-Freigabe R/fit.R:717."
+    },
+    {
+      "file": "R/grr.R",
+      "mutator": "> → >=",
+      "line": 102,
+      "column": 52,
+      "code": "ndc <- if (total_v == 0) NA_real_ else if (grr_v > 0) max(1, floor(1.41 * sqrt(item_v) / sqrt(grr_v))) else Inf",
+      "reason": "grr_stats(): grr_v > 0 → grr_v >= 0. Unterschied nur bei grr_v = 0 (stets +0, weil repro_v aus sum() stammt); dann gilt wegen total_v != 0 und nichtnegativer Komponenten item_v > 0 und max(1, floor(Inf)) = Inf wie im else-Zweig. 403/403 nichtnegative Komponentensätze, davon 12 mit GRR = 0, bitgleich (REVIEW r1, Prüflauf 3). Kein Anspruch für negative Varianzen. Schlüssel trifft genau diesen Überlebenden. Wie M1b-Freigabe R/grr.R:99."
+    },
+    {
+      "file": "R/fit.R",
+      "mutator": "TRUE → FALSE",
+      "line": 592,
+      "column": 43,
+      "code": "cross <- Matrix::Matrix(cross, sparse = TRUE)",
+      "reason": "msa_numeric_reml(): Matrix::Matrix(cross, sparse = FALSE). Freigabe nach ADR-039, Konsequenzen („Sie sind äquivalent; der Reviewer kann sie in M1c einzeln freigeben“) und BL-89: dieselbe Matrix in dichter Darstellung, dieselbe Cholesky-Zerlegung, Rücklösung und Determinante; mathematisch gleich, nicht bitgleich. Gemessen (REVIEW r1, Prüflauf 3): REML-Zustand 12/60 bitgleich, größte absolute Abweichung 4,66e-10; msa_fit() 4/11 bitgleich, Komponenten höchstens 3,02e-9 · σ²_TV im nahezu singulären Plan (Rest 1e-6 · Item), sonst höchstens 2,9e-13 · σ²_TV; Warnungen, Fehler und Konvergenz in allen 11 Fällen gleich. Die Schranke 1e-10 des Antrags gilt nur für dessen 27 Zustände (E7). An der Präzisionsgrenze kann eine andere der beiden dokumentierten benannten Meldungen eintreten; ADR-039 Nr. 3 behandelt beide als vertragsgemäß. Schlüssel trifft genau diesen Überlebenden."
+    },
+    {
+      "file": "R/fit.R",
+      "mutator": "TRUE → FALSE",
+      "line": 603,
+      "column": 57,
+      "code": "factor <- Matrix::Cholesky(B, LDL = FALSE, perm = TRUE)",
+      "reason": "msa_numeric_reml(): Matrix::Cholesky(B, LDL = FALSE, perm = FALSE). Freigabe nach ADR-039, Konsequenzen, und BL-89: andere Pivotfolge derselben Zerlegung; solve(..., system = \"A\") liefert die Lösung im ursprünglichen Koordinatensystem, die Determinante ist permutationsinvariant; mathematisch gleich, nicht bitgleich. Gemessen (REVIEW r1, Prüflauf 3): REML-Zustand 25/60 bitgleich, größte absolute Abweichung 1,46e-11; msa_fit() 6/11 bitgleich, Komponenten höchstens 3,62e-9 · σ²_TV im nahezu singulären Plan, sonst höchstens 3,5e-15 · σ²_TV; Warnungen, Fehler und Konvergenz in allen 11 Fällen gleich (E7). Präzisionsgrenze wie beim Mutanten R/fit.R:592. Schlüssel trifft genau diesen Überlebenden."
+    }
+  ],
+  "approvedBy": "Reviewer, 50-code-review M1c Runde 1, 03.11.2026: alle 19 Anträge aus MUT-EQUIV.json (17 Gate-Schlüssel) einzeln am tatsächlichen muttest-Mutanten geprüft (neun Mutatorfamilien aus orchestrator/lib/r-mutation.R, muttest 0.3.0) und freigegeben. Gebunden an den Gate-Bericht reports/mutation/mutation.json der Runde 1 (Commit 001026c, report.key) mit R/fit.R SHA-256 e65c6b8119cae7ca4999ac83f76b7cacfd3d7646ce20c2a27ea85d22ee5af706 und R/grr.R SHA-256 75bee6a200e031a4827270a013cfed28df2e10441a13c0472ff1a5419037a083; der Quelltext im Bericht gleicht dem Arbeitsbaum. Jeder Schlüssel aus Datei, mutatorName und Anfangszeile trifft im Bericht genau die beantragten Überlebenden (REVIEW r1, Prüflauf 2). 17 Freigaben sind bitgleich belegt; R/fit.R:592 und :603 sind nach ADR-039 rechnerisch gleichwertig, aber nicht bitgleich (E7). Auf den Bericht angewandt: 1327 erkannt, 84 Überlebende, Score 94,05 (ohne Freigaben 92,80). Die Felder column(s), code und reason liest das Gate nicht (BL-85); ändert ein späterer Lauf R/fit.R oder R/grr.R, greifen die Freigaben nicht mehr."
+}
