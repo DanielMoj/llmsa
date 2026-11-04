@@ -1,0 +1,72 @@
+{
+  "schema": 1,
+  "generator": "data-raw/make_validation_m1d.R",
+  "anchors": {
+    "ANK-06": {
+      "original": "reference/anchors/ANK-06.json",
+      "copied": "inst/validation/m1d/anchors/ANK-06.json",
+      "original_sha256": "7d04a3080c869567bd97de7a61bcbaef062e78407268ec4492951220d218790f",
+      "copied_sha256": "7d04a3080c869567bd97de7a61bcbaef062e78407268ec4492951220d218790f"
+    },
+    "ANK-40": {
+      "original": "reference/anchors/ANK-40.json",
+      "copied": "inst/validation/m1d/anchors/ANK-40.json",
+      "original_sha256": "d384028d6799fedc7262c56a6680ddcc58b68ea00dfd0753ee00781e59212aae",
+      "copied_sha256": "d384028d6799fedc7262c56a6680ddcc58b68ea00dfd0753ee00781e59212aae"
+    },
+    "ANK-41": {
+      "original": "reference/anchors/ANK-41.json",
+      "copied": "inst/validation/m1d/anchors/ANK-41.json",
+      "original_sha256": "9d6626ff84e2482ed88766c731d959bb6a54a7737d603e0cae9e3e250bc81a94",
+      "copied_sha256": "9d6626ff84e2482ed88766c731d959bb6a54a7737d603e0cae9e3e250bc81a94"
+    },
+    "ANK-42": {
+      "original": "reference/anchors/ANK-42.json",
+      "copied": "inst/validation/m1d/anchors/ANK-42.json",
+      "original_sha256": "e9ba33f1509c429746014385b419897e154a0e3182a33af561b0c95a17e1da5e",
+      "copied_sha256": "e9ba33f1509c429746014385b419897e154a0e3182a33af561b0c95a17e1da5e"
+    },
+    "ANK-43": {
+      "original": "reference/anchors/ANK-43.json",
+      "copied": "inst/validation/m1d/anchors/ANK-43.json",
+      "original_sha256": "2ee18ad2d28a6341a42135b9eb29a10e56729b193594304d18684a40aa324695",
+      "copied_sha256": "2ee18ad2d28a6341a42135b9eb29a10e56729b193594304d18684a40aa324695"
+    },
+    "ANK-44": {
+      "original": "reference/anchors/ANK-44.json",
+      "copied": "inst/validation/m1d/anchors/ANK-44.json",
+      "original_sha256": "273ab0e6572e4f4c8b1ca9f8a7a71473be50899dfb03876693baaa6ead812f0a",
+      "copied_sha256": "273ab0e6572e4f4c8b1ca9f8a7a71473be50899dfb03876693baaa6ead812f0a"
+    },
+    "ANK-45": {
+      "original": "reference/anchors/ANK-45.json",
+      "copied": "inst/validation/m1d/anchors/ANK-45.json",
+      "original_sha256": "a4e33623cf5052495eeea3356ff613780657e30ae3ff958f43e8708dc8198bd3",
+      "copied_sha256": "a4e33623cf5052495eeea3356ff613780657e30ae3ff958f43e8708dc8198bd3"
+    },
+    "ANK-46": {
+      "original": "reference/anchors/ANK-46.json",
+      "copied": "inst/validation/m1d/anchors/ANK-46.json",
+      "original_sha256": "7c4f3509357d6095c1209ae6220bb3ef508e8d65974fdfd03ecbb577d3ac9fc4",
+      "copied_sha256": "7c4f3509357d6095c1209ae6220bb3ef508e8d65974fdfd03ecbb577d3ac9fc4"
+    },
+    "ANK-47": {
+      "original": "reference/anchors/ANK-47.json",
+      "copied": "inst/validation/m1d/anchors/ANK-47.json",
+      "original_sha256": "5a581d47ef747db42ef4837b79ac302b4f3f389d44e39d4e08dfed674a994d55",
+      "copied_sha256": "5a581d47ef747db42ef4837b79ac302b4f3f389d44e39d4e08dfed674a994d55"
+    },
+    "ANK-63": {
+      "original": "reference/anchors/ANK-63.json",
+      "copied": "inst/validation/m1d/anchors/ANK-63.json",
+      "original_sha256": "eb1a98a2af08bde7446c31cec9378eded853e54ffb6b41ed462cfc5c70a2eedb",
+      "copied_sha256": "eb1a98a2af08bde7446c31cec9378eded853e54ffb6b41ed462cfc5c70a2eedb"
+    },
+    "ANK-TOL": {
+      "original": "reference/anchors/ANK-TOL.json",
+      "copied": "inst/validation/m1d/anchors/ANK-TOL.json",
+      "original_sha256": "dfa241fe399a817e725091cafa6047e0054e0bd50f4b53813d48459a474451fd",
+      "copied_sha256": "dfa241fe399a817e725091cafa6047e0054e0bd50f4b53813d48459a474451fd"
+    }
+  }
+}

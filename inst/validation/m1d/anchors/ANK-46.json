@@ -1,0 +1,31 @@
+{
+  "id": "ANK-46",
+  "title": "Lazareva et al. 2024: Varianten mit widersprüchlichen Einstufungen (COI) in ClinVar, Gene mit Mendelscher Krankheitsassoziation, April 2018 bis April 2024",
+  "criteria": ["K-M1d-4"],
+  "value": {
+    "period": "2018-04 to 2024-04",
+    "variants": 2296245,
+    "genes": 4731,
+    "coi_variants": 131092,
+    "coi_genes": 3703,
+    "coi_variants_pct": 5.7,
+    "genes_with_coi_pct": 78
+  },
+  "unit": "Anzahlen; Anteile in Prozent",
+  "tolerance": {"pct": 0.05, "pct_integer": 0.5, "counts": 0},
+  "tolerance_note": "Halbe Einheit der letzten publizierten Stelle (docs/01 §2 Nr. 6): 5,7 % ± 0,05, 78 % ± 0,5; Anzahlen exakt. Vergleichswert, kein Akzeptanzkriterium (K-M1d-4).",
+  "source_url": "https://doi.org/10.3390/jpm14080864",
+  "source": "Lazareva2024 (reference/privat/QUELLENKATALOG.md, Katalog E): Lazareva TE, Barbitoff YA, Nasykhova YA et al. (2024). Conflicting interpretations of variant pathogenicity in ClinVar. J Pers Med 14(8):864; PMC11355203; CC BY. Volltext als HTML aus Europe PMC, keine Seitenzahlen: quellen/literatur/E_anwendungsfall_acmg/Lazareva_etal_2024_Conflicting_Interpretations_Variant_Pathogenicity_JPersMed14_864_PMC11355203.html (SHA-256 2680b75c3ffc4aa2156e3cd92ad33aa391f0bbd38a5f75dbb83c50a7ec800fe3)",
+  "quote": "In total, 2,296,245 variants in 4731 genes have been identified. Among them, 131,092 variants in 3703 genes had been assigned a COI tag at least once during the studied time period.",
+  "quote_location": "Results, Abschnitt 3.1 „Common Properties of Variants with Conflicting Interpretations of Pathogenicity“, erster Absatz",
+  "further_quotes": [
+    {"quote": "revealed over 2.2 million variants with about 5.7% of variants with COIs reported in the database.", "location": "Discussion (Abschnitt 4), erster Absatz"},
+    {"quote": "The study revealed that 78% of clinically relevant genes harbor variants with COIs.", "location": "Discussion (Abschnitt 4)"},
+    {"quote": "ClinVar variant classification data were obtained from ClinVar VCF files between April 2018 and April 2024", "location": "Materials and Methods, Abschnitt 2"},
+    {"quote": "Since 2018, conflicts are reported only for specific classifications (B/LB vs. VUS vs. P/LP).", "location": "Materials and Methods, Abschnitt 2"}
+  ],
+  "observations": "Der Anteil 5,7 % steht im Text der Discussion; er gleicht 131.092 / 2.296.245 = 5,709 % aus Results 3.1. 78 % gleicht 3.703 / 4.731 = 78,3 %. Die lokale HTML-Fassung enthält keinen Abstract-Abschnitt; ANKER-TODO nennt Abstract und Results 3.1. Konflikt heißt hier ClinVar-COI seit 2018: Einstufungen in mindestens zwei der Gruppen B/LB, VUS, P/LP (Methods); dieselbe Definition legt ACC-7 für den Konfliktanteil der Vignette fest. Bezug sind alle ClinVar-Varianten in Genen mit robuster Krankheitsassoziation, nicht nur Varianten mit mehreren Einreichern; der Wert ist deshalb nur bedingt vergleichbar.",
+  "retrieved": "2026-11-03",
+  "method": "Textspiegel reference/quellen/text/literatur/E_anwendungsfall_acmg/Lazareva_etal_2024_…html.txt gelesen; am Original geprüft: SHA-256 der lokalen HTML mit tools::sha256sum(), Text ohne Tags mit Rscript durchsucht (5.7, 131,092, 2,296,245, 4731, 3703, 78%).",
+  "verification": "Alle Zahlen im Original gefunden; Quotienten in R nachgerechnet: 131092/2296245 = 0,05709; 3703/4731 = 0,7827."
+}

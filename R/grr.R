@@ -169,8 +169,13 @@ print.msa_grr <- function(x, digits = 4, ...) {
 #'
 #' The `boot_coverage` simulation study investigates interval coverage and
 #' width by scenario; see its table in `vignette("validation", package = "llmsa")`
-#' (`vignettes/validation.Rmd`). Short runs establish reproducibility;
-#' coverage findings require the full simulation runs.
+#' (`vignettes/validation.Rmd`). The full runs report overcoverage of the
+#' integer-valued ndc intervals in S-boot-1, S-boot-2, S-boot-3, S-boot-4,
+#' S-boot-5, S-boot-6 and S-boot-7 beyond the anchored MCSE report threshold.
+#' No other interval estimand exceeds that report threshold in these runs.
+#' These are reported findings, not a reason to change the intervals.
+#' The vignette tabulates every scenario's coverage, width, bias, empirical
+#' standard error and MCSE, with bootstrap diagnostics shown separately.
 #'
 #' @param ... Passed to [lme4::bootMer()], e.g. `parallel = "snow"` with
 #'   a caller-supplied cluster `cl`.

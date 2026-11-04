@@ -132,6 +132,10 @@ latent_checks <- latent_validation$latent_reference_checks(latent_anchors)
 latent_results <- setNames(lapply(latent_validation$latent_studies,
                                 latent_validation$latent_read_results),
                            latent_validation$latent_studies)
+m1d_validation <- new.env(parent = globalenv())
+sys.source(system.file("validation", "m1d", "findings.R", package = "llmsa", mustWork = TRUE),
+           envir = m1d_validation)
+m1d_anchors <- m1d_validation$m1d_resources()
 ```
 
 Ordinal `msa_fit()` uses cumulative link mixed models and binary `msa_fit()`
@@ -215,8 +219,18 @@ Its bias is positive: `E[beta-hat^2 / 2] = sigma^2 + Var(beta-hat) / 2`.
 Every such fit warns, and printing names each derived component with
 `range method, see ?msa_fit`. The `two_level` study redraws both model effects
 in every repetition and reports `derived_share`, the fraction of repetitions
-with a derived model component. It measures this bias; quantitative
-conclusions await the full runs. Fewer than three ordinal items are rejected.
+with a derived model component. The full-run tables below report its measured
+bias and MCSE in each scenario. A bias that does not exceed the reporting
+threshold does not establish general unbiasedness. Fewer than three ordinal
+items are rejected.
+
+Component findings use ANK-TOL.bias_report: the absolute relative bias must
+exceed both `r m1d_anchors[["ANK-TOL"]]$value$bias_report$rel_bias` and
+`r m1d_anchors[["ANK-TOL"]]$value$bias_report$mcse_multiple` times its MCSE.
+The two-level model bias is always reported; its direction is resolved only
+beyond `r m1d_anchors[["ANK-TOL"]]$value$mc_factor$report` MCSE. These are
+reporting rules, not acceptance criteria for the estimates. Full-run findings
+are computed from the read tables, never selected by scenario name.
 
 ```{r latent-simulation-tables, echo=FALSE, results='asis'}
 for (study in names(latent_results)) {
@@ -227,10 +241,53 @@ for (study in names(latent_results)) {
   for (scenario in unique(entry$data$scenario)) {
     cat("\n", scenario, "\n\n", sep = "")
     rows <- entry$data[entry$data$scenario == scenario, , drop = FALSE]
-    print(knitr::kable(latent_validation$latent_display(rows), row.names = FALSE))
+    performance <- rows[rows$measure != "derived_share", , drop = FALSE]
+    print(knitr::kable(latent_validation$latent_display(performance), row.names = FALSE))
+    if (any(rows$measure == "derived_share")) {
+      cat("\n\nDerived-component diagnostic:\n\n")
+      print(knitr::kable(latent_validation$latent_display(rows[rows$measure == "derived_share", , drop = FALSE]),
+                         row.names = FALSE))
+    }
     cat("\n\n")
   }
+  if (entry$mode == "full") {
+    findings <- m1d_validation$m1d_findings(study, entry$data, m1d_anchors)
+    cat("\nReportable findings (values and MCSE on the stated measure's scale):\n\n")
+    if (nrow(findings)) {
+      print(knitr::kable(m1d_validation$m1d_display(findings, digits = 6L), row.names = FALSE))
+    } else cat("No component exceeds the anchored report threshold.\n")
+  } else cat("\nShort run: no full-run finding is claimed.\n")
+  cat("\n\n")
 }
+```
+
+### Ordinal convergence sensitivity
+
+The main summaries above retain finite estimates even when a fit did not
+converge. The following separate analysis compares all finite estimates with
+only those whose recorded `converged` flag is true. Singular fits are retained
+in both eligible groups. Each n comes from the replicate rows used by that
+group, independently of the result table's n_sim. Non-convergence, singularity
+and missing flags are counted separately per actual outer repetition.
+
+Bias MCSE is EmpSE divided by the square root of n; relative bias and its
+MCSE divide by the truth and its absolute value, respectively. EmpSE MCSE
+uses the ADEMP approximation in the formula collection, section 9. Selecting
+on convergence can itself introduce selection bias: this comparison is a
+descriptive sensitivity analysis, not a replacement estimator or a reason
+to discard inconvenient estimates from the main study.
+
+```{r convergence-sensitivity, echo=FALSE, results='asis'}
+sensitivity <- m1d_validation$m1d_convergence_sensitivity()
+if (sensitivity$available) {
+  print(knitr::kable(m1d_validation$m1d_display(sensitivity$diagnostics, digits = 6L), row.names = FALSE,
+                     caption = "Diagnostics over actual outer repetitions; unknown flags are shown separately."))
+  for (scenario in unique(sensitivity$tables$scenario)) {
+    cat("\n\n", scenario, "\n\n", sep = "")
+    rows <- sensitivity$tables[sensitivity$tables$scenario == scenario, , drop = FALSE]
+    print(knitr::kable(m1d_validation$m1d_display(rows, digits = 6L), row.names = FALSE))
+  }
+} else cat(sensitivity$reason, ". The full-run acceptance still requires the replicate file.\n", sep = "")
 ```
 
 ## Bootstrap intervals: coverage by scenario
@@ -272,13 +329,31 @@ nominal coverage. Full runs require at least
 `r coverage_results$n_min` repetitions per scenario
 (ANK-06) and follow code acceptance. Undercoverage or overcoverage in those
 runs is a finding to report, with MCSE, rather than a reason to alter intervals.
+The reporting threshold is ANK-TOL.mc_factor.report, or
+`r m1d_anchors[["ANK-TOL"]]$value$mc_factor$report` MCSE from the nominal
+level. A zero MCSE does not hide a deviation from nominal. The continuous
+GRR and ICC statistics are monotone functions of the same variance ratio;
+their percentile coverages coincide in these results. The integer-valued
+ndc has discrete steps, which can produce conservative intervals and
+overcoverage. The findings below identify every affected scenario and
+interval estimand individually.
 
 ```{r coverage-tables, echo=FALSE, results='asis'}
 for (scenario in unique(coverage_results$data$scenario)) {
   cat("\n### ", scenario, "\n\n", sep = "")
   rows <- coverage_results$data[coverage_results$data$scenario == scenario, , drop = FALSE]
   names(rows)[names(rows) == "mcse"] <- "MCSE"
-  print(knitr::kable(coverage_validation$latent_display(rows), row.names = FALSE))
+  performance <- rows[rows$estimand != "bootstrap", , drop = FALSE]
+  print(knitr::kable(coverage_validation$latent_display(performance), row.names = FALSE))
+  cat("\n\nBootstrap diagnostics:\n\n")
+  print(knitr::kable(coverage_validation$latent_display(rows[rows$estimand == "bootstrap", , drop = FALSE]),
+                     row.names = FALSE))
   cat("\n\n")
 }
+if (coverage_results$mode == "full") {
+  findings <- m1d_validation$m1d_findings("boot_coverage", coverage_results$data, m1d_anchors)
+  cat("\nReportable interval findings:\n\n")
+  if (nrow(findings)) print(knitr::kable(m1d_validation$m1d_display(findings, digits = 6L), row.names = FALSE)) else
+    cat("No interval estimand exceeds the anchored report threshold.\n")
+} else cat("\nShort run: no full-run coverage finding is claimed.\n")
 ```

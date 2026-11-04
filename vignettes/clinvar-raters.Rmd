@@ -1,0 +1,200 @@
+---
+title: "ClinVar submitters as a rater study"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{ClinVar submitters as a rater study}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>", error = FALSE, cache = FALSE)
+library(llmsa)
+documentation <- new.env(parent = globalenv())
+sys.source(system.file("validation", "m1d", "findings.R", package = "llmsa", mustWork = TRUE),
+           envir = documentation)
+anchors <- documentation$m1d_resources()
+classes <- unlist(anchors[["ANK-47"]]$value$classes, use.names = FALSE)
+read_submissions <- function(path) {
+  con <- gzfile(path, "rt")
+  on.exit(close(con), add = TRUE)
+  utils::read.csv(con, stringsAsFactors = FALSE, na.strings = "", encoding = "UTF-8")
+}
+datasets <- list(
+  hrf = read_submissions(system.file("extdata", "clinvar_2026-10-19", "hrf_submissions.csv.gz",
+                                    package = "llmsa", mustWork = TRUE)),
+  sample = read_submissions(system.file("extdata", "clinvar_2026-10-19", "sample_submissions.csv.gz",
+                                       package = "llmsa", mustWork = TRUE)))
+as_rater_runs <- function(d) {
+  as_msa_runs(data.frame(item_id = as.character(d$variation_id), prompt_id = d$submitter_id,
+                         model_id = "clinvar", rep = 1L, value = d$classification))
+}
+```
+
+These two public-domain subsets use ClinVar state **`r anchors[["ANK-41"]]$value$stand`**.
+The HRF subset includes variants in MEFV, MVK, NLRP3 and TNFRSF1A with at least
+two distinct submitters after the exact five-class filter. The genome-wide
+sample draws **`r anchors[["ANK-47"]]$value$n_variants` variants** with at least
+**`r anchors[["ANK-47"]]$value$min_distinct_submitters` distinct remaining submitters**,
+using seed **`r anchors[["ANK-47"]]$value$seed`** from a numerically sorted list.
+Filtering precedes both counting and sampling. Each selected variant retains
+all qualifying submissions, including multiple SCVs from the same submitter.
+
+The ordered scale is `r paste(classes, collapse = " < ")`. Other terms are
+excluded, with counts in the packaged provenance. Gene lists come unchanged
+from `variant_summary`; the submitter identifier is the original submitter
+text. `data-raw/make_clinvar_subsets.R` checks the anchored source hashes and
+reproduces the stored files. Their `SHA256SUMS` includes `QUELLE.txt`. This
+article reads only installed data and makes no model calls.
+
+## Agreement and ordinal components
+
+Variant maps to item and submitter to prompt, with a single model and block,
+and replicate one. Krippendorff's alpha uses all submissions without modal
+reduction: `weights = "unweighted"` gives nominal alpha and `weights = "linear"`
+selects the ordinal metric. The reported row is `all conditions`, whose unit
+is the variant. Only variants with at least two submissions contribute
+pairable ratings.
+
+Complete agreement means the same one of the five classes for every
+submission. Conflict means at least two of the three groups B/LB, VUS and
+P/LP, following ANK-46. Both proportions use variants with at least two
+submissions as denominator. Conflict is therefore not the complement of
+complete agreement: a B/LB or P/LP difference fails exact agreement without
+crossing a conflict boundary.
+
+```{r agreement-and-fits}
+alpha_values <- function(d) {
+  runs <- as_rater_runs(d)
+  nominal <- msa_agreement(runs, levels = classes, weights = "unweighted")
+  ordinal <- msa_agreement(runs, levels = classes, weights = "linear")
+  c(alpha_nominal = nominal$alpha$alpha[nominal$alpha$scope == "all conditions"],
+    alpha_ordinal = ordinal$alpha$alpha[ordinal$alpha$scope == "all conditions"])
+}
+pairable_counts <- function(d) {
+  sizes <- table(d$variation_id)
+  c(variants = length(sizes), submissions = nrow(d), pairable_variants = sum(sizes >= 2L),
+    pairable_submissions = sum(sizes[sizes >= 2L]))
+}
+groups <- setNames(c("B/LB", "B/LB", "VUS", "P/LP", "P/LP"), classes)
+analyses <- lapply(names(datasets), function(name) {
+  d <- datasets[[name]]
+  ratings <- split(d$classification, d$variation_id)
+  ratings <- ratings[lengths(ratings) >= 2L]
+  agreement <- mean(vapply(ratings, function(x) length(unique(x)) == 1L, logical(1)))
+  conflict <- mean(vapply(ratings, function(x) length(unique(groups[x])) >= 2L, logical(1)))
+  diagnostics <- character()
+  fit <- withCallingHandlers(msa_fit(as_rater_runs(d), type = "ordinal", levels = classes,
+                                    interactions = FALSE, link = "probit"),
+    warning = function(w) {
+      diagnostics <<- c(diagnostics, conditionMessage(w)); invokeRestart("muffleWarning")
+    }, message = function(m) {
+      diagnostics <<- c(diagnostics, conditionMessage(m)); invokeRestart("muffleMessage")
+    })
+  grr <- msa_grr(fit)
+  components <- setNames(fit$vc$variance, fit$vc$source)
+  list(agreement = data.frame(subset = name, as.list(pairable_counts(d)), as.list(alpha_values(d)),
+                              full_agreement = agreement, conflict = conflict),
+       fit = data.frame(subset = name, item = components[["item"]], prompt = components[["prompt"]],
+         grr_pct_study_var = grr$summary[["grr_pct_study_var"]], converged = fit$converged, singular = fit$singular),
+       diagnostics = data.frame(subset = name, diagnostic = if (length(diagnostics)) paste(unique(diagnostics), collapse = " | ") else "none"))
+})
+```
+
+```{r agreement-tables, echo=FALSE, results='asis'}
+for (part in c("agreement", "fit", "diagnostics")) {
+  print(knitr::kable(documentation$m1d_display(do.call(rbind, lapply(analyses, `[[`, part))), row.names = FALSE))
+  cat("\n\n")
+}
+```
+
+The fits use the default probit link without interactions. `item` is variant
+variance; `prompt` is submitter variance. Percent GRR uses study variation.
+The residual variance is fixed by the link, not an empirical estimate of
+repeatability between submissions. Unbalanced participation, correlated
+submissions from the same laboratory and differences in the assessed evidence
+limit an interpretation as independent random raters. This is an agreement
+study, not a clinical validation of individual classifications.
+
+## Sensitivity to review status
+
+The specified sensitivity keeps only statuses beginning literally with
+**"criteria provided"**. It does not match "no assertion criteria provided".
+It also excludes the higher status "reviewed by expert panel" and excludes
+"flagged submission". The following counts show which statuses are present
+and retained. The initial submitter thresholds are not applied again;
+variants with one remaining submission cannot contribute to alpha.
+
+```{r review-status-sensitivity}
+status_counts <- do.call(rbind, lapply(names(datasets), function(name) {
+  counts <- as.data.frame(table(review_status = datasets[[name]]$review_status), stringsAsFactors = FALSE)
+  data.frame(subset = name, counts, retained = startsWith(counts$review_status, "criteria provided"))
+}))
+sensitivity <- do.call(rbind, lapply(names(datasets), function(name) {
+  d <- datasets[[name]]
+  d <- d[!is.na(d$review_status) & startsWith(d$review_status, "criteria provided"), , drop = FALSE]
+  data.frame(subset = name, as.list(pairable_counts(d)), as.list(alpha_values(d)))
+}))
+```
+
+```{r sensitivity-tables, echo=FALSE, results='asis'}
+print(knitr::kable(status_counts, row.names = FALSE))
+cat("\n\n")
+print(knitr::kable(documentation$m1d_display(sensitivity), row.names = FALSE,
+                   caption = "Criteria-provided sensitivity: actual retained and pairable denominators."))
+```
+
+## Literature comparison
+
+This comparison is **not an acceptance criterion**. All values below are read
+from whole, hash-verified copies of ANK-42 through ANK-46. Counts, percentages,
+alpha and reported bounds retain their units. The labelled quantity paths
+identify each population and denominator; they should not be pooled into one
+agreement rate.
+
+Yang et al. (ANK-42) combine classes into three pathogenicity groups or two
+actionability groups. Their clinical-testing subset from the later submission
+period uses actionability, not exact five-class concordance. Their complete
+agreement and majority-consensus rates answer different questions from each
+other and from the stricter complete agreement computed here.
+
+Amendola et al. (ANK-43) compare laboratory criteria and ACMG-AMP criteria,
+then reassess agreement after consensus discussion. Their alpha population
+differs from the population of the initial and post-discussion counts, and
+the publication does not explicitly identify the alpha metric as nominal or
+ordinal. Harrison et al. (ANK-44) distinguish exact agreement, differences
+within B/LB or P/LP, and conflicts across those groups. Their reassessment
+changes the evidence and cannot be treated as a replicate of this snapshot.
+
+Lazareva et al. (ANK-46) study whether a variant was tagged with a conflict
+at least once over the period **`r anchors[["ANK-46"]]$value$period`**, across
+genes with disease associations. That cumulative proportion is not a
+cross-sectional conflict fraction among multiply submitted variants.
+
+Van Gijn et al. (ANK-45) provide the HRF comparison through a staged expert
+consensus workflow. The first-round no-consensus percentage is a lower bound,
+and the validation percentage is a voting rule. The abstract reports
+`r anchors[["ANK-45"]]$value$consensus_final$variants` consensus variants out of
+`r anchors[["ANK-45"]]$value$consensus_final$of`, while the Results counts sum to
+`r anchors[["ANK-45"]]$value$validated$variants + anchors[["ANK-45"]]$value$provisional$variants`
+from the validated and provisional groups. ANK-45 records this discrepancy;
+the table preserves the reported abstract value. No INSAID classification
+for an individual variant is distributed or used here.
+
+```{r literature-tables, echo=FALSE, results='asis'}
+authors <- c("ANK-42" = "Yang et al.", "ANK-43" = "Amendola et al.", "ANK-44" = "Harrison et al.",
+             "ANK-45" = "Van Gijn et al. (HRF)", "ANK-46" = "Lazareva et al.")
+for (id in names(authors)) {
+  a <- anchors[[id]]
+  cat("\n### ", id, ": ", authors[[id]], "\n\n", sep = "")
+  cat("Source: [", authors[[id]], "](", a$source_url, ").\n\n", sep = "")
+  print(knitr::kable(documentation$m1d_display(documentation$m1d_literature_table(a), digits = 15L), row.names = FALSE))
+  cat("\n\n")
+}
+```
+
+Agreement with other submitters is not a correctness label for a variant.
+The different populations, grouping rules and reassessment procedures explain
+why these literature results are contextual comparisons rather than target
+values for either frozen subset. See `vignette("validation")` for the
+statistical engine checks and the ordinal simulation findings.

@@ -1,0 +1,186 @@
+Source: llm-stability (Atil et al.), frozen v3 item-level subset.
+URL: https://github.com/breckbaldwin/llm-stability
+Commit (ANK-40): c089c02ecfdb2a7fee0b321069a2d19cb8f11ae0
+License: Apache-2.0 (Apache License 2.0).
+Raw folder: llm-stability_2026-10-22
+Archive: llm-stability-main/experiments/v3/runs.tgz SHA-256 baf1677f09abf9d4f79e39ee747fdb7569ca9d6df209a314bf3bd51252aa7af5
+Evaluation: llm-stability-main/experiments/v3/stability_eval.csv SHA-256 6747a37e80f26e942422951da079bb7c579863875d5b02b36c25153b2f441ce9
+Selection: experiments/v3/runs.tgz; the zero-shot folders in ANK-40 selected
+by stability_eval.csv with shots = 0 and top_p_k = 1.0; no few-shot or v2 runs.
+Generator: data-raw/make_llm_stability.R (offline; ADR-049).
+Answer rule: exactly one distinct valid parenthesized ASCII letter, (A) to (Z),
+case-insensitive, without internal spaces. Repeated occurrences of the same
+label count once. Bare letters and bare answer formulas are not accepted.
+Quoted labels count like other labels; no priority for a final answer.
+For navigate, exactly one of Yes/No as a whole word, case-insensitive.
+Empty responses, no valid label, or multiple distinct valid labels remain NA.
+The key gt never selects a label; correct is answer == gt, or NA if missing.
+Non-label answer keys: ruin_names item_id 99; ruin_names item_id 144.
+These items can only count as misses in the hit rate under literal label/key
+equality, even for a semantically correct labelled answer. No key repair is made.
+Rows: 82850
+Missing answers: 11070
+Parsing counts (task | model | reason | rows):
+college_mathematics | gpt-35-turbo | ambiguous |  159
+college_mathematics | gpt-35-turbo | empty |    0
+college_mathematics | gpt-35-turbo | no_label |   95
+college_mathematics | gpt-35-turbo | parsed |  746
+college_mathematics | gpt-4o | ambiguous |  226
+college_mathematics | gpt-4o | empty |    0
+college_mathematics | gpt-4o | no_label |  213
+college_mathematics | gpt-4o | parsed |  561
+college_mathematics | llama3-70b | ambiguous |  273
+college_mathematics | llama3-70b | empty |    0
+college_mathematics | llama3-70b | no_label |   65
+college_mathematics | llama3-70b | parsed |  662
+college_mathematics | llama3-8b | ambiguous |  244
+college_mathematics | llama3-8b | empty |    0
+college_mathematics | llama3-8b | no_label |  105
+college_mathematics | llama3-8b | parsed |  651
+college_mathematics | mixtral-8x7b | ambiguous |  212
+college_mathematics | mixtral-8x7b | empty |    0
+college_mathematics | mixtral-8x7b | no_label |  155
+college_mathematics | mixtral-8x7b | parsed |  633
+geometric_shapes | gpt-35-turbo | ambiguous |    0
+geometric_shapes | gpt-35-turbo | empty |    0
+geometric_shapes | gpt-35-turbo | no_label |    0
+geometric_shapes | gpt-35-turbo | parsed | 2500
+geometric_shapes | gpt-4o | ambiguous |    1
+geometric_shapes | gpt-4o | empty |    0
+geometric_shapes | gpt-4o | no_label |    3
+geometric_shapes | gpt-4o | parsed | 2496
+geometric_shapes | llama3-70b | ambiguous |   26
+geometric_shapes | llama3-70b | empty |    0
+geometric_shapes | llama3-70b | no_label |   29
+geometric_shapes | llama3-70b | parsed | 2445
+geometric_shapes | llama3-8b | ambiguous |  229
+geometric_shapes | llama3-8b | empty |    0
+geometric_shapes | llama3-8b | no_label |   50
+geometric_shapes | llama3-8b | parsed | 2221
+geometric_shapes | mixtral-8x7b | ambiguous |   13
+geometric_shapes | mixtral-8x7b | empty |    0
+geometric_shapes | mixtral-8x7b | no_label |  177
+geometric_shapes | mixtral-8x7b | parsed | 2310
+high_school_european_history | gpt-35-turbo | ambiguous |    0
+high_school_european_history | gpt-35-turbo | empty |   40
+high_school_european_history | gpt-35-turbo | no_label |   50
+high_school_european_history | gpt-35-turbo | parsed | 1560
+high_school_european_history | gpt-4o | ambiguous |   21
+high_school_european_history | gpt-4o | empty |   16
+high_school_european_history | gpt-4o | no_label |   64
+high_school_european_history | gpt-4o | parsed | 1549
+high_school_european_history | llama3-70b | ambiguous |  507
+high_school_european_history | llama3-70b | empty |    0
+high_school_european_history | llama3-70b | no_label |   21
+high_school_european_history | llama3-70b | parsed | 1122
+high_school_european_history | llama3-8b | ambiguous |  275
+high_school_european_history | llama3-8b | empty |    0
+high_school_european_history | llama3-8b | no_label |   30
+high_school_european_history | llama3-8b | parsed | 1345
+high_school_european_history | mixtral-8x7b | ambiguous |  158
+high_school_european_history | mixtral-8x7b | empty |    0
+high_school_european_history | mixtral-8x7b | no_label |  157
+high_school_european_history | mixtral-8x7b | parsed | 1335
+logical_deduction | gpt-35-turbo | ambiguous |    9
+logical_deduction | gpt-35-turbo | empty |   16
+logical_deduction | gpt-35-turbo | no_label |    0
+logical_deduction | gpt-35-turbo | parsed | 2475
+logical_deduction | gpt-4o | ambiguous |  120
+logical_deduction | gpt-4o | empty |    7
+logical_deduction | gpt-4o | no_label |    0
+logical_deduction | gpt-4o | parsed | 2373
+logical_deduction | llama3-70b | ambiguous |  143
+logical_deduction | llama3-70b | empty |    0
+logical_deduction | llama3-70b | no_label |    3
+logical_deduction | llama3-70b | parsed | 2354
+logical_deduction | llama3-8b | ambiguous |  177
+logical_deduction | llama3-8b | empty |    0
+logical_deduction | llama3-8b | no_label |    0
+logical_deduction | llama3-8b | parsed | 2323
+logical_deduction | mixtral-8x7b | ambiguous |  231
+logical_deduction | mixtral-8x7b | empty |    0
+logical_deduction | mixtral-8x7b | no_label |   10
+logical_deduction | mixtral-8x7b | parsed | 2259
+navigate | gpt-35-turbo | ambiguous |    0
+navigate | gpt-35-turbo | empty |    0
+navigate | gpt-35-turbo | no_label |    0
+navigate | gpt-35-turbo | parsed | 2500
+navigate | gpt-4o | ambiguous |   46
+navigate | gpt-4o | empty |    0
+navigate | gpt-4o | no_label |    1
+navigate | gpt-4o | parsed | 2453
+navigate | llama3-70b | ambiguous |   45
+navigate | llama3-70b | empty |    0
+navigate | llama3-70b | no_label |    0
+navigate | llama3-70b | parsed | 2455
+navigate | llama3-8b | ambiguous |    0
+navigate | llama3-8b | empty |    0
+navigate | llama3-8b | no_label |   13
+navigate | llama3-8b | parsed | 2487
+navigate | mixtral-8x7b | ambiguous |   98
+navigate | mixtral-8x7b | empty |    0
+navigate | mixtral-8x7b | no_label |   34
+navigate | mixtral-8x7b | parsed | 2368
+professional_accounting | gpt-35-turbo | ambiguous |    0
+professional_accounting | gpt-35-turbo | empty |   10
+professional_accounting | gpt-35-turbo | no_label |   74
+professional_accounting | gpt-35-turbo | parsed | 2736
+professional_accounting | gpt-4o | ambiguous |  125
+professional_accounting | gpt-4o | empty |    0
+professional_accounting | gpt-4o | no_label |   88
+professional_accounting | gpt-4o | parsed | 2607
+professional_accounting | llama3-70b | ambiguous | 1332
+professional_accounting | llama3-70b | empty |    0
+professional_accounting | llama3-70b | no_label |    3
+professional_accounting | llama3-70b | parsed | 1485
+professional_accounting | llama3-8b | ambiguous | 1321
+professional_accounting | llama3-8b | empty |    0
+professional_accounting | llama3-8b | no_label |   40
+professional_accounting | llama3-8b | parsed | 1459
+professional_accounting | mixtral-8x7b | ambiguous |  603
+professional_accounting | mixtral-8x7b | empty |    0
+professional_accounting | mixtral-8x7b | no_label |  274
+professional_accounting | mixtral-8x7b | parsed | 1943
+public_relations | gpt-35-turbo | ambiguous |   20
+public_relations | gpt-35-turbo | empty |   20
+public_relations | gpt-35-turbo | no_label |   30
+public_relations | gpt-35-turbo | parsed | 1030
+public_relations | gpt-4o | ambiguous |   41
+public_relations | gpt-4o | empty |    6
+public_relations | gpt-4o | no_label |   38
+public_relations | gpt-4o | parsed | 1015
+public_relations | llama3-70b | ambiguous |  617
+public_relations | llama3-70b | empty |    0
+public_relations | llama3-70b | no_label |   10
+public_relations | llama3-70b | parsed |  473
+public_relations | llama3-8b | ambiguous |  512
+public_relations | llama3-8b | empty |    0
+public_relations | llama3-8b | no_label |   10
+public_relations | llama3-8b | parsed |  578
+public_relations | mixtral-8x7b | ambiguous |  208
+public_relations | mixtral-8x7b | empty |    0
+public_relations | mixtral-8x7b | no_label |   68
+public_relations | mixtral-8x7b | parsed |  824
+ruin_names | gpt-35-turbo | ambiguous |    0
+ruin_names | gpt-35-turbo | empty |   40
+ruin_names | gpt-35-turbo | no_label |   10
+ruin_names | gpt-35-turbo | parsed | 2450
+ruin_names | gpt-4o | ambiguous |    0
+ruin_names | gpt-4o | empty |    0
+ruin_names | gpt-4o | no_label |   11
+ruin_names | gpt-4o | parsed | 2489
+ruin_names | llama3-70b | ambiguous |  345
+ruin_names | llama3-70b | empty |    0
+ruin_names | llama3-70b | no_label |    0
+ruin_names | llama3-70b | parsed | 2155
+ruin_names | llama3-8b | ambiguous |  482
+ruin_names | llama3-8b | empty |    0
+ruin_names | llama3-8b | no_label |    0
+ruin_names | llama3-8b | parsed | 2018
+ruin_names | mixtral-8x7b | ambiguous |  155
+ruin_names | mixtral-8x7b | empty |    0
+ruin_names | mixtral-8x7b | no_label |   10
+ruin_names | mixtral-8x7b | parsed | 2335
+Storage: UTF-8 CSV, quoted character fields, doubled internal quotes, LF,
+empty fields for NA; radix order task/model/run/item_id; gzip without timestamp.
+No response text is distributed. SHA256SUMS includes this file.

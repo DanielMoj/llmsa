@@ -84,8 +84,16 @@ It has positive bias: \code{E[beta-hat^2 / 2] = sigma^2 + Var(beta-hat) / 2}.
 Every such fit warns and both print methods identify the derived sources.
 The \code{two_level} simulation study and its table in
 \code{vignette("validation")} (\code{vignettes/validation.Rmd}) investigate that
-bias. Short runs establish reproducibility; quantitative findings require
-the full simulation runs. With fewer than three ordinal items the error is
+bias. In the full runs, model bias in S-two-1 and S-two-2 does not resolve
+a direction beyond the MCSE reporting threshold; this does not establish
+general unbiasedness. The ordinal recovery study reports underestimation
+of prompt and model in S-ord-1, model in S-ord-2, prompt and model in
+S-ord-3, and prompt and model in S-ord-4. The binary recovery study reports
+underestimation of prompt and model in S-bin-1 and model in S-bin-2.
+These are component findings under the anchored relative-bias/MCSE rule,
+not new acceptance thresholds. The vignette reports all estimates and MCSE,
+alongside a separate sensitivity to ordinal non-convergence.
+With fewer than three ordinal items the error is
 "At least three items are needed for ordinal outcomes."
 
 With no arguments in \code{...}, the numeric fit preserves the input doubles

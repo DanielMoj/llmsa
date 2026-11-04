@@ -1,5 +1,257 @@
 # PROGRESS — Langzeitgedächtnis des Builders
 
+## M1d — BUILD (04.11.2026)
+
+Der freigegebene PLAN mit den Präzisierungen E2–E15 aus PLAN-REVIEW ist
+umgesetzt. [ADR-049](docs/decisions/ADR-049-m1d-daten-und-validierungsressourcen.md)
+dokumentiert die Golden-Daten, die abschließende Parserregel, das
+Locale-unabhängige Dateiformat und die installierten Validierungsressourcen;
+keine fachliche Planabweichung. Zugewiesener Handoff mit Antworten auf alle
+Einwand-IDs und konkreten Vorschlägen für fremde Territorien:
+[REVIEW-INPUT.md](orchestrator/handoff/M1d/REVIEW-INPUT.md).
+
+Aktualisierung des zuvor letzten Eintrags: M1c ist abgenommen. Die gelesenen
+Gate-Fakten vom 03.11.2026, 13:25:55+01:00, enthalten acht `pass`;
+`verdict-code.json` meldet Runde 1, `PASS`, `blocking: []`. Der dort gemessene
+Mutationsscore beträgt 92,8 %, erforderlich waren 92,09 %. ADR-047 übernimmt
+diesen Beleg für M1d; hier wurde kein neuer Mutationsscore gemessen. Die
+historischen Einträge darunter bleiben unverändert.
+
+### Umsetzung
+
+- `data-raw/make_llm_stability.R` prüft die ANK-40-Quellen und das vollständige
+  Gitter. Der Parser hat keinen Lösungsschlüssel als Argument; fehlende und
+  mehrdeutige Antworten bleiben NA. QUELLE zählt die drei Fehlgründe und
+  erklärt die zwei Text-Schlüssel in `ruin_names` samt Auswirkung auf die
+  Trefferquote. Die Vignette berechnet Wiederholbarkeit, Trefferquote,
+  Fehlanteil und alle acht binären Probit-Fits einschließlich Diagnosen.
+- `make_clinvar_subsets.R` filtert vor Einreicherzählung und Stichprobe,
+  erhält alle SCVs, prüft Genzuordnungen und zählt ausgeschlossene Begriffe
+  vor den Schwellen. Die Vignette zeigt Alpha, exakte Übereinstimmung,
+  Konflikte, beide ordinalen Fits und die Status-Sensitivität mit ihren
+  tatsächlichen Nennern. Literaturzahlen kommen vollständig aus den
+  installierten, hashgeprüften ANK-42–ANK-46-Kopien.
+- `validation.Rmd` berichtet alle vier Betreiber-Vollläufe, 428 verlangte
+  Wert/MCSE-Paare und 19 dynamisch abgeleitete Befunde. BL-92 ergänzt eine
+  unabhängige Auswertung der ordinalen Replikate mit getrennten Nennern für
+  alle endlichen und konvergierte endliche Schätzungen: 50 Tabellenzeilen,
+  Bias/relativer Bias/EmpSE mit MCSE. Singuläre endliche Fits bleiben erhalten.
+- `R/fit.R` und `R/grr.R` ändern ausschließlich roxygen; die erzeugten Rd
+  nennen alle betreffenden Szenarien und die Vignette. Print und Report
+  verwenden den K-M1d-8-Wortlaut samt faktorbezogenen ME/SME-Zusätzen.
+  Robustheitsobjekte und AP1-Bänder bleiben unverändert.
+- Zwei neue Unit-Dateien prüfen allgemeine Parser-/Auswahlfälle,
+  Gitterfehler, RNG-/Reihenfolgeinvarianz, UTF-8/Quoting/Locale, Publikation,
+  Ankerintegrität, Befundgrenzen, MCSE und die Sensitivitätsnenner. Bestehende
+  Tests, Anker, Abhängigkeiten und sämtliche Betreiber-Studiendateien wurden
+  nicht geändert. NEWS und Ressourcen-README sind ergänzt.
+
+### Ausgeführte Daten- und Ressourcenaufbereitung
+
+Arbeits-/Rohlogverzeichnis: `/tmp/llmsa-m1d-build-w4061qzp/` (nachfolgend
+`$work`). R 4.6.1, lme4 2.0.6, ordinal 2026.7.26, Matrix 1.7.4,
+roxygen2 8.1.1; ausschließlich vorhandene eingefrorene Abhängigkeiten.
+Paketinstallation erfolgte nur für das eigene Paket in der öffentlichen
+temporären Baukopie. Keine Git-Kommandos und keine Modellaufrufe.
+
+```sh
+Rscript --vanilla orchestrator/lib/r-deps.R --check-only
+Rscript --vanilla data-raw/make_llm_stability.R
+Rscript --vanilla data-raw/make_clinvar_subsets.R
+Rscript --vanilla data-raw/make_validation_m1d.R
+Rscript --vanilla data-raw/make_validation_m1d.R --out "$work/resources-reproduction"
+```
+
+Echte Outputs; die ersten beiden Datenskripte wurden zusätzlich mit
+`/usr/bin/time` gemessen (`llm-data.log`, `clinvar-data.log`):
+
+```text
+r-deps: pass — 25 Anforderungen erfüllt (R 4.6.1)
+llm-stability: 82850 rows; 11070 missing answers; 2 non-label keys; 258865 bytes published
+ambiguous     empty  no_label    parsed
+     8974       155      1941     71780
+llm-stability preparation: 13.65 seconds; peak RSS 187196 KB; exit 0
+ClinVar: 450290 eligible variants; HRF 6647 rows / 1383 variants; sample 5010 rows / 1000 variants
+Excluded before thresholds: HRF 501; all 43886; 117822 bytes published
+ClinVar preparation: 277.61 seconds; peak RSS 1449860 KB; exit 0
+M1d validation inputs: 11 byte-identical anchors; SHA-256 provenance recorded
+M1d resources: 11 whole anchors and SOURCES.json reproduced byte for byte
+```
+
+Die Archivextraktion meldet ignorierte macOS-Extended-Header (`LIBARCHIVE.xattr`),
+endet aber mit Exit 0. Weder Zeilen noch Aufgaben werden deswegen ausgelassen.
+
+Unabhängige Reproduktion in `$work/locale-package/llmsa`, mit Kopien der
+Generatoren/Anker/Ressourcen und einem lesenden Link auf die Originalquellen:
+
+```sh
+LC_ALL=C Rscript --vanilla data-raw/make_llm_stability.R
+LC_ALL=C Rscript --vanilla data-raw/make_clinvar_subsets.R
+```
+
+Echter Output des vollständigen zweiten ClinVar-Laufs und des anschließenden
+SHA-256-Vergleichs (`locale-clinvar.log`, `locale-reproduction.log`):
+
+```text
+ClinVar: 450290 eligible variants; HRF 6647 rows / 1383 variants; sample 5010 rows / 1000 variants
+Excluded before thresholds: HRF 501; all 43886; 117822 bytes published
+C-locale ClinVar preparation: 408.75 seconds; peak RSS 1435424 KB; exit 0
+C-locale regeneration: all 7 frozen files (including QUELLE and SHA256SUMS) match
+```
+
+Die endgültige UTF-8-Korrektur ist zusätzlich durch einen synthetischen
+Regressionstest unter `LC_CTYPE=C` belegt. Textverbindungen mit expliziter
+Transkodierung verloren dort Zeichen; `write.table()` schrieb teils
+`<U+...>`. Der Generator liest TSV binär und serialisiert die drei
+verwendeten CSV-Typen mit `writeLines(useBytes=TRUE)`. Die CSV-Leser behalten
+Textverbindungen für `read.csv()` und markieren die Bytes über dessen
+`encoding`-Argument. Das eingefrorene Dateiformat änderte sich nicht.
+Gesamtgröße von `inst/extdata`: tatsächlich 627.618 Byte.
+
+### Unit-, Regressions- und Abnahmeprüfungen
+
+```sh
+TZ=Europe/Berlin Rscript --vanilla orchestrator/lib/r-tests.R tests/testthat tests/e2e tests/fuzz
+Rscript --vanilla -e 'testthat::test_dir("tests/testthat", filter="^m1d-", load_package="source", reporter="summary")'
+TZ=Europe/Berlin Rscript --vanilla "$work/run-vignette-contracts.R"
+LC_COLLATE=C TZ=Europe/Berlin Rscript --vanilla "$work/run-acceptance.R"
+TZ=Europe/Berlin Rscript --vanilla "$work/check-findings-and-baseline.R"
+```
+
+Die lokalen Abnahmeskripte setzen `REPO_ROOT` auf die Repository-Wurzel,
+`NOT_CRAN=true` und `testthat.progress.max_fails=Inf`. Der letzte vollständige
+M1d-Lauf wählt ausschließlich die unveränderten Dateien `^m1d-[1-6]-`,
+deren Ausführung kein Git benötigt. Der Vignetten-Regressionsfilter lautet
+`^m1[abc]-[57]-vignette|^m1d-[24]-`. K-M1d-7/-8 werden lokal unabhängig mit
+den unveränderten Reviewer-Helfern und den gesicherten Vorher-Dateien
+geprüft; die vollständigen Git-basierten Abnahmetests bleiben beim Orchestrator.
+
+Echte Outputs (`regression.log`, `m1d-unit-final.log`,
+`vignette-contracts.log`, `vignette-final.log`, `acceptance-1-6.log`):
+
+```text
+[ FAIL 0 | WARN 0 | SKIP 1 | PASS 5737 ]
+[ FAIL 2 | WARN 0 | SKIP 0 | PASS 90 ]
+[ FAIL 0 | WARN 0 | SKIP 0 | PASS 43 ]
+r-tests: fail — 319 Tests in tests/testthat, tests/e2e, tests/fuzz; 1 fehlgeschlagen, 0 Fehler, 1 übersprungen
+M1d unit tests: 15 test blocks; 0 failed expectations; 0 errors; 0 skips; 95 passed expectations
+Vignette contracts: 40 test blocks; 0 failed expectations; 0 errors; 0 skips; 915 passed expectations; 112.15 seconds
+Final M1d vignette contracts: 14 blocks; 0 failed expectations; 0 errors; 219 passed expectations
+M1d acceptance 1-6: 59 test blocks; 3 failed expectations; 0 errors; 0 skips; 4530 passed expectations; 902.26 seconds
+```
+
+Der gemeinsame Regressionstest lief vor der letzten UTF-8-Erweiterung.
+Danach wurden die endgültigen neuen Unit-Tests, beide neuen Vignetten und
+der vollständige öffentliche Paketcheck nochmals ausgeführt. Der eine
+Unit-Skip ist der bestehende **Negativtest für fehlendes ellmer**:
+`requireNamespace("ellmer")` ist hier TRUE. Die zwei E2E-Fehler betreffen
+die veraltete Kurzlaufannahme in einem unveränderten QA-Test (unten).
+Die ursprünglichen lokalen Abnahmefehler ohne exportiertes `REPO_ROOT`
+sind in `acceptance-initial-without-root.log` erhalten und durch den
+abschließenden vollständigen Lauf ersetzt. Ein vorübergehender CSV-Knit-
+Fehler bei binärer statt textueller CSV-Verbindung wurde im Produkt behoben;
+`vignette-before-reader-fix.log` bewahrt den tatsächlichen Vorläuferoutput.
+
+Git-freie numerische/inhaltliche Nachweise (`findings-baseline.log`):
+
+```text
+Baseline: four snapshots match ANK-34; fit.R and grr.R equal after removing only roxygen lines
+Findings: all 19 rows match the independent reviewer calculation, including MCSE and direction
+Validation: 428 required value/MCSE pairs displayed; 19 findings and all Rd references present; zero typed results or source-tree artifacts
+Ordinal convergence sensitivity: 50 summary rows with separate finite-estimate denominators
+Robustness: both print/report branches and invisible return checked; five msa_robustness and five acmg_robustness objects identical to ANK-34 snapshots; all three AP1 bands exercised
+Git-free findings and baseline verification: completed
+```
+
+Die Sensitivität liest je Szenario 1.000 tatsächlich vorhandene Wiederholungen:
+nicht konvergiert 9/18/20/16, singulär 812/797/812/789 für S-ord-1/-2/-3/-4;
+unbekannte Flags jeweils null. Ihre Anteile und MCSE werden aus diesen Zeilen
+gerechnet, nicht als Konstanten in Code oder Vignetten geschrieben.
+
+`implementation-hashes.log` enthält die echte Prüfung aller vier Sessiondateien:
+ordinal/binary/two_level `203bc36478f5400b1db3ca42182e290451947f49a9e528d230c3ae0f574da3b8`,
+Bootstrap `2dcf076e648ab6d0a957db008a7853a952b33d4dc2bc037d7c0a290cc8bf9d79`.
+Alle stimmen unter C.UTF-8 mit dem geladenen Code überein. Der C-Locale-
+Sonderlauf oben betrifft ausschließlich die Datenaufbereitung, nicht die
+Studienhashes (BL-115).
+
+### Öffentlicher Paketbau
+
+Eine explizite öffentliche Paketkopie unter `$work/package-final/src`
+enthält Paketquellen, `inst`, Daten, Vignetten, Handbuch und Unit-Tests.
+Geschützte Originalquellen, API-Fixtures und Harness-Dateien werden nicht
+kopiert. Befehle im Arbeitsverzeichnis `$work/package-final`:
+
+```sh
+env -u REPO_ROOT TZ=Europe/Berlin R CMD build --no-manual src
+env -u REPO_ROOT TZ=Europe/Berlin _R_CHECK_CRAN_INCOMING_REMOTE_=false \
+  R CMD check --as-cran --no-manual llmsa_0.1.0.tar.gz
+```
+
+Echte Auszüge aus `package-final/build.log` und `package-final/check.log`:
+
+```text
+* creating vignettes ... OK
+* building ‘llmsa_0.1.0.tar.gz’
+* checking installed package size ... INFO
+  installed size is 22.3Mb
+  sub-directories of 1Mb or more:
+    validation  20.6Mb
+* checking for future file timestamps ... NOTE
+Unable to verify current time.  To disable remote verification,
+set environment variable _R_CHECK_SYSTEM_CLOCK_ to a false value.
+* checking tests ...
+  Running ‘testthat.R’ [90s/90s]
+ [90s/90s] OK
+* checking re-building of vignette outputs ... [47s/47s] OK
+* DONE
+Status: 1 NOTE
+```
+
+Build und Check endeten mit Exit 0, ohne ERROR oder WARNING im Checkstatus.
+Die Unit-Ausgabe des gebauten Pakets lautet tatsächlich
+`[ FAIL 0 | WARN 0 | SKIP 9 | PASS 5665 ]`: fünf bestehende Skips für nicht
+mitgelieferte API-Aufzeichnungen, zwei für Originalanker außerhalb des
+Tarballs, einmal `skip_on_cran()` im Berichtstest und der ellmer-Negativtest.
+Die Repository-Prüfung oben führt die Quell-/Aufzeichnungstests sowie den
+Berichtstest aus; für Robustheit wurden beide Berichtsvarianten zusätzlich
+tatsächlich gerendert.
+Der Clock-Check wurde nicht abgeschaltet. Die lokale Offline-Einstellung
+für CRAN-Incoming entspricht `orchestrator/lib/r-check.sh`; dessen
+Git-Export wurde nicht aufgerufen. Der Check meldet zusätzlich den offline
+nicht erreichbaren CRAN-Paketindex und setzt die Abhängigkeitsprüfung auf OK.
+Die Paketgrößenmeldung ist in dieser R-Version INFO; BL-114 bleibt vor CRAN
+zu lösen. Der Tarball enthält nach tatsächlicher Inhaltsprüfung alle vier
+gerenderten Vignetten und sämtliche zwölf Volllaufdateien.
+
+### Offene Befunde und Integrität
+
+- **E1 / M1D-INFRA-01 [INFRA]**, ref K-M1d-5/ACC-8(5)/PLAN-REVIEW E1:
+  fehlendes `articles` in `_pkgdown.yml`, drei rote Erwartungen. Betreiber
+  ergänzt `validation`, `llm-stability`, `clinvar-raters`; konkretes YAML im
+  Handoff. Kein Builder-Schreibrecht auf diese Datei.
+- **M1D-QA-01 [QA-PENDING]**, ref `QA-M1c-E2E-4`,
+  `tests/e2e/test-m1c-qa-e2e.R:166–168`, ADR-043 und K-M1d-6:
+  Standardleser liefert seit den vorhandenen Vollläufen richtigerweise
+  `full`/1.000/sieben Szenarien; der QA-Test erwartet `check` und nur
+  S-boot-1/S-boot-7. Zwei Erwartungen in einem Testblock scheitern. Ein
+  gesondertes temporäres Kurzlaufverzeichnis liefert nach ausgeführtem
+  Kontextcheck unverändert `check`/20/S-boot-1,S-boot-7. Leser, Test und
+  Vollläufe sind seit vor BUILD bytegleich. QA soll den Kurzlauf explizit
+  isolieren und den Standardordner separat als Volllauf prüfen; kein
+  Produkt-Scheinfix, keine Entfernung der Pflichtdaten. BACKLOG liegt bei
+  QA/Reviewer; der Handoff enthält den Aufnahmevorschlag.
+- Alle ursprünglichen geschützten Dateien und alle zwölf Volllaufdateien
+  wurden abschließend gegen die vor BUILD erfassten SHA-256 geprüft.
+  Bestehende Tests wurden weder entfernt noch geändert. `R/fit.R` und
+  `R/grr.R` sind ohne roxygen-Zeilen identisch zur ANK-34-Basis.
+  Die Inventur umfasst 354 ursprüngliche Dateien, darunter 123 bestehende Testdateien; alle Änderungen liegen im zugewiesenen Builder-Umfang.
+- Offizielle Gates und Code-Review M1d stehen aus; diese lokalen Belege
+  behaupten keine Abnahme. ADR-047-Kontrolllauf nach done/M1d,
+  Scope-Rückstellung vor M3a und die übrigen im PLAN begründeten Vertagungen
+  bleiben Aufgaben der jeweils zuständigen Rolle.
+
+
 ## M1c — BUILD (02.11.2026)
 
 Der freigegebene PLAN und die Ergänzungen E1–E6 aus PLAN-REVIEW sind

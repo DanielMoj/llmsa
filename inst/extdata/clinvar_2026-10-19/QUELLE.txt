@@ -1,0 +1,27 @@
+Source: ClinVar submission-level public data (public domain).
+URL: https://ftp.ncbi.nlm.nih.gov/pub/clinvar/tab_delimited/
+State (ANK-41): 2026-10-19
+Raw folder: ../quellen/daten/clinvar_2026-10-22/.
+submission_summary.txt.gz SHA-256 43cc0145b65f5e06b94d7e788df6358a6b71860bcef8aa7063307a9c0539606e
+variant_summary.txt.gz SHA-256 b235cd5742ac615d55703672751fa3ea71c8222d5ff0547cd1e9b107fd8a647f
+Generator: data-raw/make_clinvar_subsets.R (offline; ADR-049).
+Exact ClinicalSignificance filter: Benign; Likely benign; Uncertain significance; Likely pathogenic; Pathogenic
+Filter first, then count distinct unchanged Submitter strings per VariationID.
+Keep every qualifying submission, including multiple SCVs from one submitter.
+HRF genes: MEFV, MVK, NLRP3, TNFRSF1A ; at least two distinct remaining submitters.
+gene is the unchanged GeneSymbol from variant_summary.txt.gz joined by VariationID;
+semicolon-separated gene lists are retained, missing joins remain NA, conflicting
+assembly mappings are errors. DateLastEvaluated uses ANK-63 and LC_TIME=C;
+'-' is missing, dates are ISO. Submitter and ReviewStatus text is unchanged.
+Sample: at least 3 distinct remaining submitters;
+numeric ascending VariationID order, sample size 1000 and seed 20261024 from ANK-47.
+RNG: Mersenne-Twister / Inversion / Rejection; draw without replacement.
+Source submissions: 6853790
+Eligible sample variants: 450290
+Excluded non-five-class submissions before thresholds, all HRF variants: 501
+Excluded non-five-class submissions before thresholds, whole source: 43886
+hrf : 1383 variants; 6647 submissions; 129 submitters.
+sample : 1000 variants; 5010 submissions; 266 submitters.
+Storage: UTF-8 CSV, quoted character fields, doubled internal quotes, LF,
+empty fields for NA, radix order by all six output columns (VariationID numeric);
+gzip without timestamp. SHA256SUMS includes this file.

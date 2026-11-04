@@ -157,15 +157,22 @@ msa_robustness <- function(design, response, factors = NULL, alpha = 0.05) {
 
 #' @export
 print.msa_robustness <- function(x, ...) {
+  me <- formatC(attr(x, "me"), format = "f", digits = 4)
   cat(sprintf("Robustness screening: %d runs, %d factors; response mean %.4f (sd %.4f)\n",
               attr(x, "n_runs"), nrow(x), attr(x, "response_mean"), attr(x, "response_sd")))
-  cat(sprintf("  Lenth PSE %.4f, ME %.4f, SME %.4f (alpha = %g)\n",
-              attr(x, "pse"), attr(x, "me"), attr(x, "sme"), attr(x, "alpha")))
+  cat(sprintf("  Lenth PSE %.4f, ME %s, SME %.4f (alpha = %g)\n",
+              attr(x, "pse"), me, attr(x, "sme"), attr(x, "alpha")))
   d <- as.data.frame(x)
   d$effect <- fmt_num(d$effect); d$t_lenth <- fmt_num(d$t_lenth, 2)
   print(d, row.names = FALSE)
-  if (any(x$active)) cat("  active factors (|effect| > ME): ", paste(x$factor[x$active], collapse = ", "), "\n", sep = "")
-  else cat("  no active factor: the pipeline is robust to all screened perturbations at this level\n")
+  if (any(x$active)) {
+    factors <- paste0(x$factor[x$active], " (",
+      ifelse(x$active_simultaneous[x$active], "also above SME", "above ME only"), ")")
+    cat("  active factors (|effect| > ME): ", paste(factors, collapse = ", "), "\n", sep = "")
+  } else {
+    cat("  No factor exceeded the margin of error (ME = ", me,
+        "). Smaller effects cannot be told apart from noise with this design, so this result does not show that the pipeline is robust.\n", sep = "")
+  }
   invisible(x)
 }
 

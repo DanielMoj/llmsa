@@ -152,13 +152,20 @@ if (!is.null(bi)) {
 ```{r robustness, results='asis'}
 ro <- params$robustness
 if (!is.null(ro)) {
-  cat(sprintf("Screening design with %d runs and %d factors; response mean %.4f (sd %.4f). Lenth PSE %.4f, ME %.4f, SME %.4f.\n\n",
+  me <- formatC(attr(ro, "me"), format = "f", digits = 4)
+  cat(sprintf("Screening design with %d runs and %d factors; response mean %.4f (sd %.4f). Lenth PSE %.4f, ME %s, SME %.4f.\n\n",
               attr(ro, "n_runs"), nrow(ro), attr(ro, "response_mean"), attr(ro, "response_sd"),
-              attr(ro, "pse"), attr(ro, "me"), attr(ro, "sme")))
+              attr(ro, "pse"), me, attr(ro, "sme")))
   d <- as.data.frame(ro); d$effect <- fmt(d$effect, 4); d$t_lenth <- fmt(d$t_lenth, 2)
   print(knitr::kable(d, caption = "Main effects of the screened perturbations."))
-  if (any(ro$active)) cat(sprintf("\nActive factors: **%s**. The pipeline is sensitive to these perturbations and the procedure must control them.\n", paste(ro$factor[ro$active], collapse = ", ")))
-  else cat("\nNo active factor: the pipeline is robust to all screened perturbations at this level.\n")
+  if (any(ro$active)) {
+    factors <- paste0(ro$factor[ro$active], " (",
+      ifelse(ro$active_simultaneous[ro$active], "also above SME", "above ME only"), ")")
+    cat(sprintf("\nActive factors: **%s**. The pipeline is sensitive to these perturbations and the procedure must control them.\n", paste(factors, collapse = ", ")))
+  } else {
+    cat("\nNo factor exceeded the margin of error (ME = ", me,
+        "). Smaller effects cannot be told apart from noise with this design, so this result does not show that the pipeline is robust.\n", sep = "")
+  }
 } else cat(na_text)
 ```
 

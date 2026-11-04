@@ -1,0 +1,143 @@
+---
+title: "Answer stability at temperature zero"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Answer stability at temperature zero}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>", error = FALSE, cache = FALSE)
+library(llmsa)
+documentation <- new.env(parent = globalenv())
+sys.source(system.file("validation", "m1d", "findings.R", package = "llmsa", mustWork = TRUE),
+           envir = documentation)
+anchors <- documentation$m1d_resources()
+source_contract <- anchors[["ANK-40"]]$value
+read_items <- function(path) {
+  con <- gzfile(path, "rt")
+  on.exit(close(con), add = TRUE)
+  utils::read.csv(con, stringsAsFactors = FALSE, na.strings = "", encoding = "UTF-8")
+}
+items <- read_items(system.file("extdata", "llm-stability_2026-10-22", "items.csv.gz",
+                               package = "llmsa", mustWork = TRUE))
+provenance <- readLines(system.file("extdata", "llm-stability_2026-10-22", "QUELLE.txt",
+                                   package = "llmsa", mustWork = TRUE), encoding = "UTF-8")
+```
+
+The frozen public data from [Atil et al.'s llm-stability repository](https://github.com/breckbaldwin/llm-stability)
+contain **`r nrow(items)` calls** across **`r length(source_contract$models)` models**,
+**`r length(source_contract$tasks)` tasks** and **`r source_contract$n_runs` runs**.
+ANK-40 fixes commit **`r source_contract$commit`**, the Apache 2.0 licence and
+the complete v3 zero-shot selection. The model configuration uses temperature
+`r source_contract$model_config$temperature` and top_p_k
+`r source_contract$model_config$top_p_k`. These are recorded historical calls;
+building this article makes no model calls and needs no external data.
+
+The preparation script `data-raw/make_llm_stability.R` verifies the source
+hashes and the complete item grid before publishing the subset. `SHA256SUMS`
+covers the stored gzip file and its provenance. The archive contains other
+configurations, which are outside this selection.
+
+## What counts as an answer
+
+The parser accepts exactly one distinct valid option label such as `(A)`
+in parentheses, ignoring letter case, with no spaces inside the parentheses.
+Bare letters, including the English words "A" and "I", do not count.
+Repeated occurrences of the same label count once; different labels anywhere
+in the response, including quoted alternatives, make the answer ambiguous.
+There is no priority for a final sentence. For `navigate`, exactly one of
+the whole words "Yes" or "No" is required. The key never selects an answer.
+An empty, unparseable or ambiguous response remains missing.
+
+`correct` compares the parsed label literally with the source key. A missing
+answer has missing correctness. The source also contains non-label keys:
+
+```{r key-format-note, echo=FALSE, results='asis'}
+cat(grep("^Non-label answer keys:", provenance, value = TRUE), "\n\n")
+```
+
+For these `ruin_names` items, every parsed option label counts as a miss under
+literal label/key equality, even when its meaning matches the intended answer.
+The data retain that limitation; the keys are not repaired. Thus the hit rate
+describes this extraction rule, not a human reassessment of the response text.
+The provenance records parsing failures by reason, task and model. Raw response
+texts are not distributed.
+
+## Observed repeatability and hit rate
+
+For each task and model, attribute repeatability is the fraction of items
+with a present, identical answer in every run. A missing answer breaks
+agreement. The hit rate divides the number of `correct == TRUE` calls by
+**all** calls, including missing answers. The missing-answer share is shown
+alongside both quantities. None of these denominators depends on a fit.
+
+```{r observed-rates}
+cells <- split(items, list(items$task, items$model), drop = TRUE)
+rates <- do.call(rbind, lapply(cells, function(d) {
+  answers <- split(d$answer, d$item_id)
+  identical_answers <- vapply(answers, function(x) !anyNA(x) && length(unique(x)) == 1L, logical(1))
+  data.frame(task = d$task[1L], model = d$model[1L], items = length(answers), calls = nrow(d),
+    answer_repeatability = mean(identical_answers), hit_rate = mean(d$correct %in% TRUE),
+    missing_answer_share = mean(is.na(d$answer)))
+}))
+rownames(rates) <- NULL
+```
+
+```{r rates-table, echo=FALSE, results='asis'}
+print(knitr::kable(documentation$m1d_display(rates), row.names = FALSE,
+                   caption = "Observed proportions, with all items or calls in the denominator."))
+```
+
+## Binary variance components
+
+Each task gets its own binary fit. Item is the question, model is the source
+model, and replicate is the original run number. The one prompt and one block
+level are constant. `msa_counts()` counts all imported calls, including those
+whose correctness is missing. The fit drops those missing responses, with its
+warning recorded below; it does not recode them as false. Fits use the default
+probit link and no interactions. Each fit and `msa_grr()` is recomputed here.
+
+```{r binary-fits}
+analyses <- lapply(unique(items$task), function(task) {
+  d <- items[items$task == task, , drop = FALSE]
+  runs <- as_msa_runs(data.frame(item_id = as.character(d$item_id), prompt_id = "task",
+                                 model_id = d$model, rep = d$run, value = as.integer(d$correct)))
+  counts <- msa_counts(runs)
+  diagnostics <- character()
+  fit <- withCallingHandlers(msa_fit(runs, type = "binary", interactions = FALSE, link = "probit"),
+    warning = function(w) {
+      diagnostics <<- c(diagnostics, conditionMessage(w)); invokeRestart("muffleWarning")
+    }, message = function(m) {
+      diagnostics <<- c(diagnostics, conditionMessage(m)); invokeRestart("muffleMessage")
+    })
+  grr <- msa_grr(fit)
+  components <- setNames(fit$vc$variance, fit$vc$source)
+  list(counts = data.frame(task = task, counts),
+    summary = data.frame(task = task, item = components[["item"]], model = components[["model"]],
+      grr_pct_study_var = grr$summary[["grr_pct_study_var"]], observations = fit$n$observations,
+      converged = fit$converged, singular = fit$singular),
+    diagnostics = data.frame(task = task, diagnostic = if (length(diagnostics)) paste(unique(diagnostics), collapse = " | ") else "none"))
+})
+```
+
+```{r binary-tables, echo=FALSE, results='asis'}
+print(knitr::kable(do.call(rbind, lapply(analyses, `[[`, "counts")), row.names = FALSE,
+                   caption = "Imported counts from msa_counts(); missing responses are included."))
+cat("\n\n")
+print(knitr::kable(documentation$m1d_display(do.call(rbind, lapply(analyses, `[[`, "summary"))),
+                   row.names = FALSE, caption = "Latent variance components and percent GRR study variation."))
+cat("\n\n")
+print(knitr::kable(do.call(rbind, lapply(analyses, `[[`, "diagnostics")), row.names = FALSE,
+                   caption = "Recorded fit warnings and messages."))
+```
+
+The latent residual variance is fixed by the link. It is not a measurement
+of observed disagreement between repeated calls; use the answer-repeatability
+table for that question. Large latent item components can accompany a flat
+likelihood, and missing responses can select which calls enter the model.
+The convergence and singularity flags describe the actual fit. AIAG bands
+on this scale are conventions, not evidence of correctness or suitability
+for another use. See `vignette("validation")` for engine comparisons and
+the simulation findings, including bias with few prompt or model levels.
