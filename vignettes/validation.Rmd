@@ -282,7 +282,7 @@ sensitivity <- m1d_validation$m1d_convergence_sensitivity()
 if (sensitivity$available) {
   print(knitr::kable(m1d_validation$m1d_display(sensitivity$diagnostics, digits = 6L), row.names = FALSE,
                      caption = "Diagnostics over actual outer repetitions; unknown flags are shown separately."))
-  for (scenario in unique(sensitivity$tables$scenario)) {
+  for (scenario in sort(unique(sensitivity$tables$scenario))) {
     cat("\n\n", scenario, "\n\n", sep = "")
     rows <- sensitivity$tables[sensitivity$tables$scenario == scenario, , drop = FALSE]
     print(knitr::kable(m1d_validation$m1d_display(rows, digits = 6L), row.names = FALSE))

@@ -1,5 +1,62 @@
 # PROGRESS — Langzeitgedächtnis des Builders
 
+## M1d — REWORK, Runde 2 (04.11.2026)
+
+REVIEW Runde 1 enthält keine blocking-Befunde. Die gelesenen Gate-Fakten
+bleiben Runde 1, `result: fail`; ausschließlich `tests` ist rot, wegen
+E1 in der Betreiberdatei `_pkgdown.yml`. Kein Status `error`.
+Der optionale Darstellungspunkt **E17 / BL-120** ist umgesetzt:
+
+- `vignettes/validation.Rmd` gibt die Szenarien der
+  Konvergenz-Sensitivität sortiert aus (S-ord-1 bis S-ord-4).
+- `vignettes/clinvar-raters.Rmd` nennt die Häufigkeitsspalte der
+  Statustabelle `submissions` statt `Freq`.
+
+Antworten auf alle aktuellen Befund-IDs, Referenzen, vollständige
+Prüfkommandos und echte Outputs stehen in
+[REWORK-NOTES.md](orchestrator/handoff/M1d/REWORK-NOTES.md).
+**E1 / M1D-INFRA-01 / BL-118 bleibt OUT-OF-TERRITORY [INFRA]**;
+der Betreiber muss die Artikelliste ergänzen. E16 / BL-119 bleibt wie
+verlangt außerhalb dieser M1d-Änderung; E18 / QA-M1d-001 / BL-117 bleibt
+nach ADR-035 bis nach dem 26.11.2026 zurückgestellt. E2–E15 sind laut
+REVIEW erledigt. Der historische M1D-QA-01 ist durch `45-qa` erledigt;
+kein offener QA-PENDING-Auftrag. Eine ARBITER.md zu M1d liegt nicht vor.
+
+Gezielte Prüfungen auf den endgültigen Vignetten (Logs unter
+`/tmp/llmsa-m1d-r2-cdsfmtsl/`):
+
+```text
+Vignette acceptance: 87.28 seconds; exit 0
+SummaryReporter: 6 files; 802 passes; 0 failures; 0 warnings; 0 skips
+K-M1d-5 acceptance: 5.10 seconds; exit 1
+SummaryReporter: 1 files; 42 passes; 3 failures; 0 warnings; 0 skips
+HTML render: validation completed in public context
+HTML render: clinvar-raters completed in public context
+Review-status columns: subset, review_status, submissions, retained
+Public rendering: 28.64 seconds; exit 0
+```
+
+Die SummaryReporter-Zahlen stammen aus der ausgeführten Logauswertung
+`summarize.py`. Der Vignettenfilter lautet
+`^m1[abc]-[57]-vignette|^m1d-4-`; die drei Fehler von K-M1d-5 sind
+erneut genau die fehlende Artikelsektion und ihre beiden Vignetteneinträge
+(`gate-tests.log` Runde 1, Zeilen 1193–1213; aktuelles lokales Log
+`pkgdown-acceptance.log`). Das öffentliche HTML-Rendering und die Kontrolle
+des erzeugten Markdown belegen die Reihenfolge und Spaltenbeschriftung.
+
+Keine fachliche Rechenänderung, keine neuen Tests, kein neuer ADR und kein
+Mutationslauf; mutgate/mutfull sind laut bestehenden Gate-Logs grün
+(ADR-047). Keine MUT-EQUIV-Claims. Die vollständigen Gates und
+Git-verwendenden Abnahmepfade führt der Orchestrator aus; hier keine
+Abnahme oder neuer Gate-Score behauptet. Keine Git-Kommandos.
+
+Die abschließende SHA-256-Inventur (`integrity.py`, Exit 0) erfasst 430
+Ausgangsdateien: drei geändert (beide Vignetten und PROGRESS), ein neuer
+zugewiesener Handoff, keine entfernte Datei. Alle 127 Testdateien,
+R-Code, Rd-Hilfen, Datenskripte, Golden-Daten, Anker, Studiendateien,
+Gates und die geprüften Gate-Fakten sind bytegleich. Details und echter
+Output stehen in REWORK-NOTES; die Inventur ersetzt kein Gate.
+
 ## M1d — BUILD (04.11.2026)
 
 Der freigegebene PLAN mit den Präzisierungen E2–E15 aus PLAN-REVIEW ist

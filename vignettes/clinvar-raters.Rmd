@@ -127,7 +127,8 @@ variants with one remaining submission cannot contribute to alpha.
 
 ```{r review-status-sensitivity}
 status_counts <- do.call(rbind, lapply(names(datasets), function(name) {
-  counts <- as.data.frame(table(review_status = datasets[[name]]$review_status), stringsAsFactors = FALSE)
+  counts <- as.data.frame(table(review_status = datasets[[name]]$review_status),
+                          responseName = "submissions", stringsAsFactors = FALSE)
   data.frame(subset = name, counts, retained = startsWith(counts$review_status, "criteria provided"))
 }))
 sensitivity <- do.call(rbind, lapply(names(datasets), function(name) {
