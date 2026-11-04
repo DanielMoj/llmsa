@@ -1,17 +1,26 @@
 {
   "contract": 1,
   "project": "llmsa",
-  "ts": "2026-11-04T17:53:59+01:00",
+  "ts": "2026-11-04T23:59:49+01:00",
   "milestone": {
     "id": "M3b",
     "index": 8,
     "total": 10
   },
-  "phase": "40-build",
+  "phase": "gates",
   "round": 1,
   "needs_human": false,
   "reason": "",
-  "gates": {},
+  "gates": {
+    "deps": "pass",
+    "lint": "pass",
+    "tests": "pass",
+    "trace": "pass",
+    "territory": "pass",
+    "mutgate": "pass",
+    "golden-adr": "pass",
+    "mutfull": "pass"
+  },
   "parked": [],
   "last_events": [
     "[20261104-154436] QA-Routenprobe bestanden (gemini-4-argon); Ausgabe: orchestrator/logs/qa-probe-20261104-154426-1.log",
