@@ -52,13 +52,104 @@
 </h1></div>
 <!-- badges: start -->
 
-<p><code>llmsa</code> treats a pipeline built on a large language model (LLM) as what it is: a measurement procedure with unknown measurement uncertainty. It validates the pipeline with the methods that analytical and clinical laboratories have used for decades: a crossed precision study with variance components (gauge R&amp;R), attribute agreement, bias against a reference, Plackett-Burman screening of robustness, simulation-based planning of the study size, Westgard-rule control charts for ongoing system suitability, and a validation report in the structure a reviewer or an auditor expects.</p>
+<p><code>llmsa</code> treats a pipeline built on a large language model (LLM) as what it is: a measurement procedure with unknown measurement uncertainty. It validates the pipeline with the methods that analytical and clinical laboratories have used for decades: a crossed precision study with variance components (gauge R&amp;R), attribute agreement, bias against a reference, Plackett-Burman screening of robustness, simulation-based planning of the study size, Westgard-rule control charts for ongoing system suitability, and a validation report in the structure a reviewer or an auditor expects. It produces the evidence that a quality unit, an inspector, a notified body or a model-risk function asks for before the output of an LLM step may count.</p>
 <p>The object of the validation is always a concrete pipeline (model, prompt, settings) for a stated task and risk, never “the LLM” in general. Any pipeline qualifies whose output is a number, an ordered class or a yes/no answer; results produced outside R can be imported.</p>
 <div class="section level2">
 <h2 id="why">Why<a class="anchor" aria-label="anchor" href="#why"></a>
 </h2>
-<p>Benchmarks report how often a model is right. A laboratory needs to know something else before it acts on a result: how much the result changes when the same question is asked again (repeatability), when it is asked in other words or of another model (reproducibility), whether it is systematically off (bias), whether a typo or a different number format changes it (robustness), and whether it still behaves the same way next month (system suitability). None of this is new. Measurement system analysis (AIAG MSA), CLSI EP05, ICH Q2(R2) and the Westgard rules answer exactly these questions for instruments. <code>llmsa</code> applies them to pipelines built on LLMs, whose answers vary even at temperature 0 and whose models can change without notice.</p>
+<p>Benchmarks report how often a model is right. A laboratory needs to know something else before it acts on a result: how much the result changes when the same question is asked again (repeatability), when it is asked in other words or of another model (reproducibility), whether it is systematically off (bias), whether a typo or a different number format changes it (robustness), and whether it still behaves the same way next month (system suitability). None of this is new. Measurement system analysis (AIAG MSA), CLSI EP05 for quantitative and CLSI EP12 for binary qualitative results, ICH Q2(R2) and the Westgard rules answer exactly these questions for instruments and laboratory tests. <code>llmsa</code> applies them to pipelines built on LLMs, whose answers vary even at temperature 0 and whose models can change without notice.</p>
 <p>The validation report ties the evidence to a stated context of use, a model risk and acceptance criteria fixed in advance. This is the structure of the credibility assessment in the FDA’s 2025 draft guidance on AI in regulatory decision-making.</p>
+</div>
+<div class="section level2">
+<h2 id="who-needs-this">Who needs this<a class="anchor" aria-label="anchor" href="#who-needs-this"></a>
+</h2>
+<p>Classic computer system validation assumes that the same input gives the same output. A step built on a language model breaks that assumption. Its answer can change with the wording of the prompt, with the day, and with model updates the provider makes without notice, so a single test run proves little. Wherever such a step sorts, extracts or calculates inside a regulated process, the organisation running it is expected to show three things: what the step gets wrong, how often, and whether that still holds after the next update. A benchmark score or a vendor certificate describes a model on someone else’s data, not this pipeline on this task.</p>
+<p><code>llmsa</code> produces that evidence. Laboratories, quality units and notified bodies know its methods from instruments. Insurers and banks ask the same questions in the terms of model risk management: stability on re-run, sensitivity analysis, ongoing monitoring, revalidation after a change.</p>
+<p>The following constructed examples show the kind of error a study is designed to catch:</p>
+<ul>
+<li>
+<em>“Admitted to hospital for syncope, discharged after two days, fully recovered.”</em> The pipeline reads “fully recovered” and classifies the adverse event report as non-serious. The hospital admission makes it serious, and the 15-day reporting clock is running.</li>
+<li>
+<em>“The meter showed 95 mg/dl, shortly afterwards my mother was unconscious; the paramedics measured 32 mg/dl.”</em> The complaint is filed as a usage question instead of a reportable incident.</li>
+<li>
+<em>“eGFR 28 in March, now 41”</em>, against an exclusion criterion of eGFR below 30. The pipeline takes the old value and excludes the patient from a trial, and nobody sees a false exclusion again.</li>
+<li>An article reports a clearance of 4.2 mL/min/kg. The extraction returns 4.2 L/h, and the value enters a pharmacokinetic model.</li>
+</ul>
+<p>The examples are invented to show plausible failure modes, not documented incidents.</p>
+<div class="section level3">
+<h3 id="where-it-applies">Where it applies<a class="anchor" aria-label="anchor" href="#where-it-applies"></a>
+</h3>
+<table class="table">
+<colgroup>
+<col width="25%">
+<col width="25%">
+<col width="25%">
+<col width="25%">
+</colgroup>
+<thead><tr>
+<th>Field</th>
+<th>Pipeline output</th>
+<th>Why evidence is required</th>
+<th>Key figure</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>Clinical genetics, laboratory diagnostics</td>
+<td>ACMG/AMP tier of a variant, pre-classified for expert review</td>
+<td>The tier enters a clinical report under ISO 15189 accreditation; CLSI EP12 covers binary qualitative results.</td>
+<td>Agreement with expert classifications; precision across prompts, models and days</td>
+</tr>
+<tr>
+<td>Pharmacovigilance</td>
+<td>Seriousness of an adverse event report; adverse reaction mentioned in a publication</td>
+<td>GVP Module VI: serious reports within 15 days, non-serious within 90; literature screened at least weekly</td>
+<td>Missed serious cases, missed reports</td>
+</tr>
+<tr>
+<td>Clinical trials</td>
+<td>Eligibility in pre-screening</td>
+<td>ICH E6(R3): computerised systems fit for purpose through risk-based validation; the sponsor keeps the ultimate responsibility when a service provider runs them</td>
+<td>False exclusions</td>
+</tr>
+<tr>
+<td>Model-informed drug development</td>
+<td>PK parameters extracted from publications</td>
+<td>ICH M15: model evaluation commensurate with model risk; extracted values become model inputs.</td>
+<td>%GRR, bias and linearity; unit errors</td>
+</tr>
+<tr>
+<td>Medical devices</td>
+<td>Reportability of a complaint; results of calculation functions in medical software</td>
+<td>MDR Annex I 17: repeatability and reliability of software; MDR Art. 87 reporting deadlines; ISO 13485 §4.1.6: validation of QMS software before use and after changes</td>
+<td>Missed incidents with injury or death; results outside tolerance</td>
+</tr>
+<tr>
+<td>Insurance</td>
+<td>Status of each diagnosis in medical reports for underwriting</td>
+<td>AI Act Annex III 5(c), high-risk from 2 December 2027; Art. 15: accuracy and robustness maintained over the lifecycle</td>
+<td>Both error directions; underwriters and model in the same gauge study</td>
+</tr>
+<tr>
+<td>Banking</td>
+<td>Disposable income from bank statements; risk class and costs from product documents</td>
+<td>AI Act Annex III 5(b), high-risk from 2 December 2027; MiFID II suitability; DORA third-party ICT risk</td>
+<td>Deviation in euros; stability after each vendor model update</td>
+</tr>
+</tbody>
+</table>
+<p>Apart from the ACMG/AMP study under way, none of these applications has been measured with llmsa yet. Several of them need two measures that are still on the roadmap: a sensitivity per class with a lower confidence bound for the critical error direction, and the comparison of model versions.</p>
+</div>
+<div class="section level3">
+<h3 id="what-a-validation-with-llmsa-produces">What a validation with llmsa produces<a class="anchor" aria-label="anchor" href="#what-a-validation-with-llmsa-produces"></a>
+</h3>
+<ol style="list-style-type: decimal">
+<li>The intended use, the worst plausible error and the regulatory context, written down first.</li>
+<li>Reference, statistics and acceptance criteria, fixed before the first call.</li>
+<li>A measurement on the actual pipeline, in its own environment or API account.</li>
+<li>A report in the structure of a credibility assessment, including what was not tested.</li>
+<li>A control set and Westgard rules for every later change of model or prompt.</li>
+</ol>
+</div>
 </div>
 <div class="section level2">
 <h2 id="when-to-use-it">When to use it<a class="anchor" aria-label="anchor" href="#when-to-use-it"></a>
@@ -419,6 +510,8 @@
 <li>
 <strong>Acceptance criteria follow model risk.</strong> The AIAG thresholds (10 % and 30 % of study variation) are defaults, not laws. Set them from the consequence of a wrong decision in the stated context of use.</li>
 <li>
+<strong>Deterministic classifiers.</strong> The same design applies to fine-tuned encoder models and other classifiers. Their repeated calls agree, so the replicate has to be a factor that really varies, such as hardware, numeric precision or inference runtime; with identical replicates a numeric <code><a href="reference/msa_fit.html">msa_fit()</a></code> stops with a named error. The variation then moves to input preprocessing and training seeds. The score (logit or probability) is analysed as a numeric outcome, and the decision threshold sets the critical error direction. In its July 2025 draft, EU GMP Annex 22 covers only static models with deterministic output and keeps generative AI and LLMs out of critical GMP applications; the final text is still pending. A study of this kind documents how reproducible a model’s output actually is.</li>
+<li>
 <strong>Free-text outcomes</strong> judged by a second model are a second measurement system that needs its own validation (a nested MSA). This release covers numeric, ordinal and binary outcomes.</li>
 </ul>
 </div>
@@ -438,7 +531,7 @@
 <ul>
 <li>Validation of the remaining components (agreement, bias and linearity, robustness, control charts, planning, execution and report) to the standard above.</li>
 <li>Comparison of model versions as fixed levels, for revalidation after a change.</li>
-<li>Sensitivity per class with a lower confidence bound, for decisions where one error direction matters more.</li>
+<li>Measures for binary results after CLSI EP12: sensitivity and specificity, or positive and negative percent agreement, with confidence bounds for the critical error direction; the imprecision of a classifier score near its threshold, estimated as C5 and C95.</li>
 <li>Bootstrap intervals for ordinal fits; modified-large-sample intervals for variance components (Burdick, Borror and Montgomery, 2003).</li>
 <li>Batched multi-item prompts: position and carry-over effects analysed as in a crossover study (Williams designs).</li>
 <li>Nested validation of LLM-as-judge scoring for free-text outcomes.</li>
@@ -468,13 +561,37 @@ https://github.com/DanielMoj/llmsa</code></pre>
 <li>Christensen, R. H. B. (2026). <em>ordinal: Regression Models for Ordinal Data</em>. R package version 2026.7-26. <a href="https://doi.org/10.32614/CRAN.package.ordinal" class="external-link uri">https://doi.org/10.32614/CRAN.package.ordinal</a>
 </li>
 <li>Clinical and Laboratory Standards Institute (2025). <em>CLSI EP05: Evaluation of Precision of Quantitative Measurement Procedures</em>, 4th ed. ISBN 978-1-68440-304-2 (PDF). Supersedes EP05-A3 (2014).</li>
+<li>Clinical and Laboratory Standards Institute (2023). <em>CLSI EP12: Evaluation of Qualitative, Binary Output Examination Performance</em>, 3rd ed. ISBN 978-1-68440-177-2 (PDF). Supersedes EP12-A2 (2008). <a href="https://clsi.org/shop/standards/ep12/" class="external-link uri">https://clsi.org/shop/standards/ep12/</a>
+</li>
 <li>Cohen, J. (1960). A coefficient of agreement for nominal scales. <em>Educational and Psychological Measurement</em> 20(1), 37–46. <a href="https://doi.org/10.1177/001316446002000104" class="external-link uri">https://doi.org/10.1177/001316446002000104</a>
 </li>
 <li>Cohen, J. (1968). Weighted kappa: nominal scale agreement with provision for scaled disagreement or partial credit. <em>Psychological Bulletin</em> 70(4), 213–220. <a href="https://doi.org/10.1037/h0026256" class="external-link uri">https://doi.org/10.1037/h0026256</a>
 </li>
+<li>European Commission, PIC/S (2025). <em>EudraLex Volume 4, Good Manufacturing Practice Guidelines, Annex 22: Artificial Intelligence</em>. Draft for stakeholder consultation, 7 July to 7 October 2025. <a href="https://health.ec.europa.eu/consultations/stakeholders-consultation-eudralex-volume-4-good-manufacturing-practice-guidelines-chapter-4-annex_en" class="external-link uri">https://health.ec.europa.eu/consultations/stakeholders-consultation-eudralex-volume-4-good-manufacturing-practice-guidelines-chapter-4-annex_en</a>
+</li>
+<li>European Medicines Agency (2017). <em>Guideline on good pharmacovigilance practices (GVP), Module VI: Collection, management and submission of reports of suspected adverse reactions to medicinal products (Rev 2)</em>. EMA/873138/2011 Rev 2, in effect since 22 November 2017. <a href="https://www.ema.europa.eu/en/documents/regulatory-procedural-guideline/guideline-good-pharmacovigilance-practices-gvp-module-vi-collection-management-submission-reports_en.pdf" class="external-link uri">https://www.ema.europa.eu/en/documents/regulatory-procedural-guideline/guideline-good-pharmacovigilance-practices-gvp-module-vi-collection-management-submission-reports_en.pdf</a>
+</li>
+<li>European Parliament, Council of the European Union (2014). Directive 2014/65/EU of 15 May 2014 on markets in financial instruments (MiFID II). OJ L 173, 12.6.2014, p. 349. <a href="http://data.europa.eu/eli/dir/2014/65/oj" class="external-link uri">http://data.europa.eu/eli/dir/2014/65/oj</a>
+</li>
+<li>European Parliament, Council of the European Union (2017). Regulation (EU) 2017/745 of 5 April 2017 on medical devices (MDR). OJ L 117, 5.5.2017, p. 1. <a href="http://data.europa.eu/eli/reg/2017/745/oj" class="external-link uri">http://data.europa.eu/eli/reg/2017/745/oj</a>
+</li>
+<li>European Parliament, Council of the European Union (2022). Regulation (EU) 2022/2554 of 14 December 2022 on digital operational resilience for the financial sector (DORA). OJ L 333, 27.12.2022, p. 1. <a href="http://data.europa.eu/eli/reg/2022/2554/oj" class="external-link uri">http://data.europa.eu/eli/reg/2022/2554/oj</a>
+</li>
+<li>European Parliament, Council of the European Union (2024). Regulation (EU) 2024/1689 of 13 June 2024 laying down harmonised rules on artificial intelligence (Artificial Intelligence Act). OJ L, 2024/1689, 12.7.2024. <a href="http://data.europa.eu/eli/reg/2024/1689/oj" class="external-link uri">http://data.europa.eu/eli/reg/2024/1689/oj</a>
+</li>
+<li>European Parliament, Council of the European Union (2026). Regulation (EU) 2026/1744 of 8 July 2026 amending Regulations (EU) 2024/1689, (EU) 2018/1139 and (EU) 2023/1230 (Digital Omnibus on AI). OJ L, 2026/1744, 24.7.2026. <a href="http://data.europa.eu/eli/reg/2026/1744/oj" class="external-link uri">http://data.europa.eu/eli/reg/2026/1744/oj</a>
+</li>
 <li>He, H., Thinking Machines Lab (2025). Defeating nondeterminism in LLM inference. <em>Thinking Machines Lab: Connectionism</em>, 10 September 2025. <a href="https://doi.org/10.64434/tml.20250910" class="external-link uri">https://doi.org/10.64434/tml.20250910</a>
 </li>
 <li>International Council for Harmonisation (2023). <em>ICH Harmonised Guideline Q2(R2): Validation of Analytical Procedures</em>. Adopted 1 November 2023. <a href="https://database.ich.org/sites/default/files/ICH_Q2(R2)_Guideline_2023_1130.pdf" class="external-link uri">https://database.ich.org/sites/default/files/ICH_Q2(R2)_Guideline_2023_1130.pdf</a>
+</li>
+<li>International Council for Harmonisation (2025). <em>ICH Harmonised Guideline: Guideline for Good Clinical Practice E6(R3)</em>. Step 4, adopted 6 January 2025; in effect in the EU since 23 July 2025. <a href="https://database.ich.org/sites/default/files/ICH_E6(R3)_Step4_FinalGuideline_2025_0106.pdf" class="external-link uri">https://database.ich.org/sites/default/files/ICH_E6(R3)_Step4_FinalGuideline_2025_0106.pdf</a>
+</li>
+<li>International Council for Harmonisation (2026). <em>ICH Harmonised Guideline: General Principles for Model-Informed Drug Development M15</em>. Step 4, adopted 29 January 2026; EU Step 5 EMA/CHMP/ICH/496426/2024, in effect since 23 July 2026. <a href="https://www.ema.europa.eu/en/documents/scientific-guideline/ich-m15-guideline-general-principles-model-informed-drug-development-step-5_en.pdf" class="external-link uri">https://www.ema.europa.eu/en/documents/scientific-guideline/ich-m15-guideline-general-principles-model-informed-drug-development-step-5_en.pdf</a>
+</li>
+<li>International Organization for Standardization (2016). <em>ISO 13485:2016 Medical devices — Quality management systems — Requirements for regulatory purposes</em>, 3rd ed. <a href="https://www.iso.org/standard/59752.html" class="external-link uri">https://www.iso.org/standard/59752.html</a>
+</li>
+<li>International Organization for Standardization (2022). <em>ISO 15189:2022 Medical laboratories — Requirements for quality and competence</em>, 4th ed. <a href="https://www.iso.org/standard/76677.html" class="external-link uri">https://www.iso.org/standard/76677.html</a>
 </li>
 <li>Krippendorff, K. (2011). <em>Computing Krippendorff’s Alpha-Reliability</em>. Departmental Papers (ASC), Annenberg School for Communication, University of Pennsylvania. <a href="https://repository.upenn.edu/asc_papers/43" class="external-link uri">https://repository.upenn.edu/asc_papers/43</a>
 </li>
