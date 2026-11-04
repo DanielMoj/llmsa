@@ -1,13 +1,13 @@
 {
   "contract": 1,
   "project": "llmsa",
-  "ts": "2026-11-04T08:58:55+01:00",
+  "ts": "2026-11-04T09:18:04+01:00",
   "milestone": {
     "id": "M1d",
     "index": 6,
     "total": 10
   },
-  "phase": "gates",
+  "phase": "50-code-review",
   "round": 5,
   "needs_human": false,
   "reason": "",
@@ -23,11 +23,11 @@
   },
   "parked": [],
   "last_events": [
-    "notify: sent event=FATAL",
     "[20261104-080748] CONFIG: AUTONOMY=1 PLAN<=2 REWORK<=5 REBUILD@r6 ARBITER+2 TIMEOUT=28800 RETRY=2x/120s GATE_ERROR_RETRIES=2 MAX_MS=1 QA=1(ab M2) ROLE_GUARDS=on NOTIFY=an BUILDER=codex REVIEWER=claude",
     "[20261104-080752] QA-Routenprobe bestanden (gemini-4-argon); Ausgabe: orchestrator/logs/qa-probe-20261104-080748-1.log",
     "[20261104-080752] === M1d start ===",
-    "[20261104-080818] RUN builder 60-rework (M1d r5, Versuch 1) -> /mnt/c/Users/Danie/dev/Llmsa/llmsa/orchestrator/logs/M1d-60-rework-r5-a1-20261104-080818.log"
+    "[20261104-080818] RUN builder 60-rework (M1d r5, Versuch 1) -> /mnt/c/Users/Danie/dev/Llmsa/llmsa/orchestrator/logs/M1d-60-rework-r5-a1-20261104-080818.log",
+    "[20261104-085923] RUN reviewer 50-code-review (M1d r5, Versuch 1) -> /mnt/c/Users/Danie/dev/Llmsa/llmsa/orchestrator/logs/M1d-50-code-review-r5-a1-20261104-085923.log"
   ],
   "exit": null,
   "role_guards": "on"
