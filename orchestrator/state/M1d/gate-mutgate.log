@@ -1,0 +1,5 @@
+# stdout
+mutgate: pass (kein geänderter Mutations-Scope)
+
+# runner
+exit=0 status=pass script=86-mutgate.sh
