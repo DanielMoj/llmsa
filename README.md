@@ -13,6 +13,9 @@ components (gauge R&R), attribute agreement, bias against a reference,
 Plackett-Burman screening of robustness, simulation-based planning of the
 study size, Westgard-rule control charts for ongoing system suitability,
 and a validation report in the structure a reviewer or an auditor expects.
+It produces the evidence that a quality unit, an inspector, a notified body
+or a model-risk function asks for before the output of an LLM step may
+count.
 
 The object of the validation is always a concrete pipeline (model, prompt,
 settings) for a stated task and risk, never "the LLM" in general. Any
@@ -28,15 +31,82 @@ other words or of another model (reproducibility), whether it is
 systematically off (bias), whether a typo or a different number format
 changes it (robustness), and whether it still behaves the same way next
 month (system suitability). None of this is new. Measurement system
-analysis (AIAG MSA), CLSI EP05, ICH Q2(R2) and the Westgard rules answer
-exactly these questions for instruments. `llmsa` applies them to pipelines
-built on LLMs, whose answers vary even at temperature 0 and whose models
-can change without notice.
+analysis (AIAG MSA), CLSI EP05 for quantitative and CLSI EP12 for binary
+qualitative results, ICH Q2(R2) and the Westgard rules answer exactly these
+questions for instruments and laboratory tests. `llmsa` applies them to
+pipelines built on LLMs, whose answers vary even at temperature 0 and whose
+models can change without notice.
 
 The validation report ties the evidence to a stated context of use, a model
 risk and acceptance criteria fixed in advance. This is the structure of the
 credibility assessment in the FDA's 2025 draft guidance on AI in regulatory
 decision-making.
+
+## Who needs this
+
+Classic computer system validation assumes that the same input gives the
+same output. A step built on a language model breaks that assumption. Its
+answer can change with the wording of the prompt, with the day, and with
+model updates the provider makes without notice, so a single test run
+proves little. Wherever such a step sorts, extracts or calculates inside a
+regulated process, the organisation running it is expected to show three
+things: what the step gets wrong, how often, and whether that still holds
+after the next update. A benchmark score or a vendor certificate describes
+a model on someone else's data, not this pipeline on this task.
+
+`llmsa` produces that evidence. Laboratories, quality units and notified
+bodies know its methods from instruments. Insurers and banks ask the same
+questions in the terms of model risk management: stability on re-run,
+sensitivity analysis, ongoing monitoring, revalidation after a change.
+
+The following constructed examples show the kind of error a study is
+designed to catch:
+
+* *"Admitted to hospital for syncope, discharged after two days, fully
+  recovered."* The pipeline reads "fully recovered" and classifies the
+  adverse event report as non-serious. The hospital admission makes it
+  serious, and the 15-day reporting clock is running.
+* *"The meter showed 95 mg/dl, shortly afterwards my mother was
+  unconscious; the paramedics measured 32 mg/dl."* The complaint is filed
+  as a usage question instead of a reportable incident.
+* *"eGFR 28 in March, now 41"*, against an exclusion criterion of eGFR
+  below 30. The pipeline takes the old value and excludes the patient from
+  a trial, and nobody sees a false exclusion again.
+* An article reports a clearance of 4.2 mL/min/kg. The extraction returns
+  4.2 L/h, and the value enters a pharmacokinetic model.
+
+The examples are invented to show plausible failure modes, not documented
+incidents.
+
+### Where it applies
+
+| Field | Pipeline output | Why evidence is required | Key figure |
+|---|---|---|---|
+| Clinical genetics, laboratory diagnostics | ACMG/AMP tier of a variant, pre-classified for expert review | The tier enters a clinical report under ISO 15189 accreditation; CLSI EP12 covers binary qualitative results. | Agreement with expert classifications; precision across prompts, models and days |
+| Pharmacovigilance | Seriousness of an adverse event report; adverse reaction mentioned in a publication | GVP Module VI: serious reports within 15 days, non-serious within 90; literature screened at least weekly | Missed serious cases, missed reports |
+| Clinical trials | Eligibility in pre-screening | ICH E6(R3): computerised systems fit for purpose through risk-based validation; the sponsor keeps the ultimate responsibility when a service provider runs them | False exclusions |
+| Model-informed drug development | PK parameters extracted from publications | ICH M15: model evaluation commensurate with model risk; extracted values become model inputs. | %GRR, bias and linearity; unit errors |
+| Medical devices | Reportability of a complaint; results of calculation functions in medical software | MDR Annex I 17: repeatability and reliability of software; MDR Art. 87 reporting deadlines; ISO 13485 §4.1.6: validation of QMS software before use and after changes | Missed incidents with injury or death; results outside tolerance |
+| Insurance | Status of each diagnosis in medical reports for underwriting | AI Act Annex III 5(c), high-risk from 2 December 2027; Art. 15: accuracy and robustness maintained over the lifecycle | Both error directions; underwriters and model in the same gauge study |
+| Banking | Disposable income from bank statements; risk class and costs from product documents | AI Act Annex III 5(b), high-risk from 2 December 2027; MiFID II suitability; DORA third-party ICT risk | Deviation in euros; stability after each vendor model update |
+
+Apart from the ACMG/AMP study under way, none of these applications has
+been measured with llmsa yet. Several of them need two measures that are
+still on the roadmap: a sensitivity per class with a lower confidence bound
+for the critical error direction, and the comparison of model versions.
+
+### What a validation with llmsa produces
+
+1. The intended use, the worst plausible error and the regulatory context,
+   written down first.
+2. Reference, statistics and acceptance criteria, fixed before the first
+   call.
+3. A measurement on the actual pipeline, in its own environment or API
+   account.
+4. A report in the structure of a credibility assessment, including what
+   was not tested.
+5. A control set and Westgard rules for every later change of model or
+   prompt.
 
 ## When to use it
 
@@ -333,6 +403,18 @@ components as an attribute.
 * **Acceptance criteria follow model risk.** The AIAG thresholds (10 % and
   30 % of study variation) are defaults, not laws. Set them from the
   consequence of a wrong decision in the stated context of use.
+* **Deterministic classifiers.** The same design applies to fine-tuned
+  encoder models and other classifiers. Their repeated calls agree, so the
+  replicate has to be a factor that really varies, such as hardware,
+  numeric precision or inference runtime; with identical replicates a
+  numeric `msa_fit()` stops with a named error. The variation then moves to input
+  preprocessing and training seeds. The score (logit or probability) is
+  analysed as a numeric outcome, and the decision threshold sets the
+  critical error direction. In its July 2025 draft, EU GMP Annex 22
+  covers only static models with deterministic output and keeps generative
+  AI and LLMs out of critical GMP applications; the final text is still
+  pending. A study of this kind documents how reproducible a model's output
+  actually is.
 * **Free-text outcomes** judged by a second model are a second measurement
   system that needs its own validation (a nested MSA). This release covers
   numeric, ordinal and binary outcomes.
@@ -370,8 +452,10 @@ period.
   standard above.
 * Comparison of model versions as fixed levels, for revalidation after a
   change.
-* Sensitivity per class with a lower confidence bound, for decisions where
-  one error direction matters more.
+* Measures for binary results after CLSI EP12: sensitivity and
+  specificity, or positive and negative percent agreement, with confidence
+  bounds for the critical error direction; the imprecision of a classifier
+  score near its threshold, estimated as C5 and C95.
 * Bootstrap intervals for ordinal fits; modified-large-sample intervals for
   variance components (Burdick, Borror and Montgomery, 2003).
 * Batched multi-item prompts: position and carry-over effects analysed as
@@ -414,12 +498,43 @@ A Zenodo DOI will be added with the first release.
 * Clinical and Laboratory Standards Institute (2025). *CLSI EP05:
   Evaluation of Precision of Quantitative Measurement Procedures*, 4th ed.
   ISBN 978-1-68440-304-2 (PDF). Supersedes EP05-A3 (2014).
+* Clinical and Laboratory Standards Institute (2023). *CLSI EP12:
+  Evaluation of Qualitative, Binary Output Examination Performance*, 3rd ed.
+  ISBN 978-1-68440-177-2 (PDF). Supersedes EP12-A2 (2008).
+  https://clsi.org/shop/standards/ep12/
 * Cohen, J. (1960). A coefficient of agreement for nominal scales.
   *Educational and Psychological Measurement* 20(1), 37–46.
   https://doi.org/10.1177/001316446002000104
 * Cohen, J. (1968). Weighted kappa: nominal scale agreement with provision
   for scaled disagreement or partial credit. *Psychological Bulletin* 70(4),
   213–220. https://doi.org/10.1037/h0026256
+* European Commission, PIC/S (2025). *EudraLex Volume 4, Good
+  Manufacturing Practice Guidelines, Annex 22: Artificial Intelligence*.
+  Draft for stakeholder consultation, 7 July to 7 October 2025.
+  https://health.ec.europa.eu/consultations/stakeholders-consultation-eudralex-volume-4-good-manufacturing-practice-guidelines-chapter-4-annex_en
+* European Medicines Agency (2017). *Guideline on good pharmacovigilance
+  practices (GVP), Module VI: Collection, management and submission of
+  reports of suspected adverse reactions to medicinal products (Rev 2)*.
+  EMA/873138/2011 Rev 2, in effect since 22 November 2017.
+  https://www.ema.europa.eu/en/documents/regulatory-procedural-guideline/guideline-good-pharmacovigilance-practices-gvp-module-vi-collection-management-submission-reports_en.pdf
+* European Parliament, Council of the European Union (2014). Directive
+  2014/65/EU of 15 May 2014 on markets in financial instruments (MiFID II).
+  OJ L 173, 12.6.2014, p. 349. http://data.europa.eu/eli/dir/2014/65/oj
+* European Parliament, Council of the European Union (2017). Regulation
+  (EU) 2017/745 of 5 April 2017 on medical devices (MDR). OJ L 117,
+  5.5.2017, p. 1. http://data.europa.eu/eli/reg/2017/745/oj
+* European Parliament, Council of the European Union (2022). Regulation
+  (EU) 2022/2554 of 14 December 2022 on digital operational resilience for
+  the financial sector (DORA). OJ L 333, 27.12.2022, p. 1.
+  http://data.europa.eu/eli/reg/2022/2554/oj
+* European Parliament, Council of the European Union (2024). Regulation
+  (EU) 2024/1689 of 13 June 2024 laying down harmonised rules on artificial
+  intelligence (Artificial Intelligence Act). OJ L, 2024/1689, 12.7.2024.
+  http://data.europa.eu/eli/reg/2024/1689/oj
+* European Parliament, Council of the European Union (2026). Regulation
+  (EU) 2026/1744 of 8 July 2026 amending Regulations (EU) 2024/1689,
+  (EU) 2018/1139 and (EU) 2023/1230 (Digital Omnibus on AI). OJ L,
+  2026/1744, 24.7.2026. http://data.europa.eu/eli/reg/2026/1744/oj
 * He, H., Thinking Machines Lab (2025). Defeating nondeterminism in LLM
   inference. *Thinking Machines Lab: Connectionism*, 10 September 2025.
   https://doi.org/10.64434/tml.20250910
@@ -427,6 +542,21 @@ A Zenodo DOI will be added with the first release.
   Guideline Q2(R2): Validation of Analytical Procedures*. Adopted
   1 November 2023.
   <https://database.ich.org/sites/default/files/ICH_Q2(R2)_Guideline_2023_1130.pdf>
+* International Council for Harmonisation (2025). *ICH Harmonised
+  Guideline: Guideline for Good Clinical Practice E6(R3)*. Step 4, adopted
+  6 January 2025; in effect in the EU since 23 July 2025.
+  <https://database.ich.org/sites/default/files/ICH_E6(R3)_Step4_FinalGuideline_2025_0106.pdf>
+* International Council for Harmonisation (2026). *ICH Harmonised
+  Guideline: General Principles for Model-Informed Drug Development M15*.
+  Step 4, adopted 29 January 2026; EU Step 5 EMA/CHMP/ICH/496426/2024, in
+  effect since 23 July 2026.
+  https://www.ema.europa.eu/en/documents/scientific-guideline/ich-m15-guideline-general-principles-model-informed-drug-development-step-5_en.pdf
+* International Organization for Standardization (2016). *ISO 13485:2016
+  Medical devices — Quality management systems — Requirements for
+  regulatory purposes*, 3rd ed. https://www.iso.org/standard/59752.html
+* International Organization for Standardization (2022). *ISO 15189:2022
+  Medical laboratories — Requirements for quality and competence*, 4th ed.
+  https://www.iso.org/standard/76677.html
 * Krippendorff, K. (2011). *Computing Krippendorff's Alpha-Reliability*.
   Departmental Papers (ASC), Annenberg School for Communication, University
   of Pennsylvania. https://repository.upenn.edu/asc_papers/43
