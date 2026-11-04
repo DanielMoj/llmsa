@@ -44,7 +44,7 @@
   "open": [
     {
       "id": "ACC-1",
-      "status": "Auslegung des Reviewers (Spec schweigt zu Version, Shot-Stufe und Laufordner); ADR folgt in 30-plan-review M1d",
+      "status": "Auslegung des Reviewers (Spec schweigt zu Version, Shot-Stufe und Laufordner); festgehalten in ADR-048 Nr. 1 (30-plan-review M1d, Runde 1)",
       "ref": "K-M1d-1 (criteria); docs/02 M1d, Abbildungen: „llm-stability: Item = Frage einer Aufgabe, Prompt = die eine feste Aufgabenformulierung (eine Stufe, entfällt), Modell = Modell (5 Stufen), Replikat = Lauf (10), Block = 1“; ANK-40",
       "kind": "Datenauswahl llm-stability",
       "owner": "Builder",
@@ -53,7 +53,7 @@
     },
     {
       "id": "ACC-2",
-      "status": "Auslegung des Reviewers (Spec nennt nur die Spaltennamen); ADR folgt in 30-plan-review M1d",
+      "status": "Auslegung des Reviewers (Spec nennt nur die Spaltennamen); festgehalten in ADR-048 Nr. 2 (30-plan-review M1d, Runde 1)",
       "ref": "K-M1d-1: „Spalten `task`, `model`, `run`, `item_id`, `answer`, `correct`; keine Rohtexte der Modellausgaben“; docs/02 M1d, Abbildungen: „Zielgröße binär (Antwort gleich Antwortschlüssel) und nominal (Antwort selbst)“; docs/01 §5: „Fehlende oder nicht parsbare Antworten bleiben fehlend und werden gezählt, nie ersetzt.“",
       "kind": "Spalten und Werte von items.csv.gz",
       "owner": "Builder",
@@ -62,7 +62,7 @@
     },
     {
       "id": "ACC-3",
-      "status": "Auslegung des Reviewers; ADR folgt in 30-plan-review M1d",
+      "status": "Auslegung des Reviewers; festgehalten in ADR-048 Nr. 3 (30-plan-review M1d, Runde 1)",
       "ref": "K-M1d-1: „`as_msa_runs()` importiert sie und `msa_counts()` zeigt die in `ANK-40` belegte Struktur (5 Modelle, 8 Aufgaben, 10 Läufe, Itemzahl je Aufgabe)“; docs/02 M1d, Abbildungen (llm-stability)",
       "kind": "Import mit as_msa_runs() und msa_counts()",
       "owner": "Builder",
@@ -71,7 +71,7 @@
     },
     {
       "id": "ACC-4",
-      "status": "Auslegung des Reviewers (wie K-M2-1 in M2); ADR folgt in 30-plan-review M1d",
+      "status": "Auslegung des Reviewers (wie K-M2-1 in M2); festgehalten in ADR-048 Nr. 4 (30-plan-review M1d, Runde 1)",
       "ref": "docs/01 §7: „Eingefrorene Teilmengen liegen unter `inst/extdata/<quelle>_<stand>/` mit `SHA256SUMS` (eine Zeile je Datei) und `QUELLE.txt` (Quelle, URL, Stand, Lizenz, Auswahlregel, Skript).“ und „Fehlt der Rohdatenordner, bricht das Skript benannt ab.“; K-M1d-1, K-M1d-3",
       "kind": "Ordnerinhalt, SHA256SUMS, Neuerzeugung",
       "owner": "Builder",
@@ -80,7 +80,7 @@
     },
     {
       "id": "ACC-5",
-      "status": "Auslegung des Reviewers (Spec schweigt zu fehlenden Antworten, Fit-Aufruf und Darstellung); ADR folgt in 30-plan-review M1d",
+      "status": "Auslegung des Reviewers (Spec schweigt zu fehlenden Antworten, Fit-Aufruf und Darstellung); festgehalten in ADR-048 Nr. 5 (30-plan-review M1d, Runde 1)",
       "ref": "K-M1d-2 (criteria): „berechnet je Aufgabe und Modell die Attribut-Wiederholbarkeit (Anteil der Item×Modell-Zellen mit identischer Antwort über alle Läufe), die Trefferquote und einen binären Fit mit Item und Modell als Zufallseffekten“; docs/01 §5 (fehlende Antworten); Atil2024, evaluate.py: „No answer will always fail TARa“",
       "kind": "Prüfform K-M1d-2",
       "owner": "Builder",
@@ -89,7 +89,7 @@
     },
     {
       "id": "ACC-6",
-      "status": "Auslegung des Reviewers (Spec schweigt zu Genquelle, Einreicherkennung, Zählweise und Datumsformat); ADR folgt in 30-plan-review M1d",
+      "status": "Auslegung des Reviewers (Spec schweigt zu Genquelle, Einreicherkennung, Zählweise und Datumsformat); festgehalten in ADR-048 Nr. 6 (30-plan-review M1d, Runde 1)",
       "ref": "K-M1d-3 (criteria); docs/02 M1d, Abbildungen (ClinVar): „Einreichungen mit anderen Begriffen (kombinierte Klassen, `drug response`, `risk factor`, `other`) werden ausgeschlossen und gezählt“; ANK-41, ANK-47, ANK-63",
       "kind": "Auswahlregeln und Spalten der ClinVar-Teilmengen",
       "owner": "Builder",
@@ -98,7 +98,7 @@
     },
     {
       "id": "ACC-7",
-      "status": "Auslegung des Reviewers (Spec schweigt zu Abbildung im Aufruf, Konfliktbegriff, Sensitivität und Darstellung); ADR folgt in 30-plan-review M1d",
+      "status": "Auslegung des Reviewers (Spec schweigt zu Abbildung im Aufruf, Konfliktbegriff, Sensitivität und Darstellung); festgehalten in ADR-048 Nr. 7 (30-plan-review M1d, Runde 1)",
       "ref": "K-M1d-4 (criteria); docs/02 M1d, Abbildungen (ClinVar): „Item = Variante, Prompt = Einreicher (Prüfer), Modell und Block eine Stufe, Replikat 1; Zielgröße ordinal mit Klassen `Benign < Likely benign < Uncertain significance < Likely pathogenic < Pathogenic`“; ANK-46 (Konflikt seit 2018: „B/LB vs. VUS vs. P/LP“); ANK-TOL.package_compare",
       "kind": "Prüfform K-M1d-4",
       "owner": "Builder",
@@ -107,7 +107,7 @@
     },
     {
       "id": "ACC-8",
-      "status": "Auslegung des Reviewers; ADR folgt in 30-plan-review M1d",
+      "status": "Auslegung des Reviewers; festgehalten in ADR-048 Nr. 8 (30-plan-review M1d, Runde 1)",
       "ref": "K-M1d-5 (criteria); ANK-TOL.data_size; docs/01 §7",
       "kind": "Prüfform K-M1d-5",
       "owner": "Builder",
@@ -116,7 +116,7 @@
     },
     {
       "id": "ACC-9",
-      "status": "Auslegung des Reviewers (wie ADR-023 und ADR-042 für die Kurzläufe); ADR folgt in 30-plan-review M1d",
+      "status": "Auslegung des Reviewers (wie ADR-023 und ADR-042 für die Kurzläufe); festgehalten in ADR-048 Nr. 9 (30-plan-review M1d, Runde 1)",
       "ref": "K-M1d-6 (criteria); docs/01 §8; ADR-023 Nr. 1–8; ADR-042 Nr. 3–8; ANK-06; ANK-TOL.n_check",
       "kind": "Prüfform K-M1d-6",
       "owner": "Betreiber (Vollläufe), Builder (Skripte unverändert)",
@@ -125,7 +125,7 @@
     },
     {
       "id": "ACC-10",
-      "status": "Auslegung des Reviewers (Spec schweigt zu Komponentenbegriff, Richtungswörtern, Textform und Zuordnung der Hilfeseiten); ADR folgt in 30-plan-review M1d",
+      "status": "Auslegung des Reviewers (Spec schweigt zu Komponentenbegriff, Richtungswörtern, Textform und Zuordnung der Hilfeseiten); festgehalten in ADR-048 Nr. 10 (30-plan-review M1d, Runde 1)",
       "ref": "K-M1d-7 (criteria); ANK-TOL.bias_report: „10 % oder 3 MCSE, was größer ist“; ANK-TOL.mc_factor: „Berichtsschwelle (K-M1d-7) 3“; docs/02 M1c: „95-%-Perzentilintervalle“; docs/01 §2 Nr. 3",
       "kind": "Prüfform K-M1d-7",
       "owner": "Builder",
@@ -134,7 +134,7 @@
     },
     {
       "id": "ACC-11",
-      "status": "Auslegung des Reviewers (Spec schweigt zu Satzbau bei aktiven Faktoren und zum Bezug der Unverändertheit); ADR folgt in 30-plan-review M1d",
+      "status": "Auslegung des Reviewers (Spec schweigt zu Satzbau bei aktiven Faktoren und zum Bezug der Unverändertheit); festgehalten in ADR-048 Nr. 11 (30-plan-review M1d, Runde 1)",
       "ref": "K-M1d-8 (criteria); ADR-045 Nr. 2: „Keine neue Rechnung: `msa_robustness()`, PSE, ME, SME, `active`, `active_simultaneous` und die Bänder bleiben unverändert.“; ANK-34",
       "kind": "Prüfform K-M1d-8",
       "owner": "Builder",
@@ -143,7 +143,7 @@
     },
     {
       "id": "ACC-12",
-      "status": "Prüfung einer Spec-Regel ohne eigenes Kriterium; im Test von K-M1d-7 geführt",
+      "status": "Prüfung einer Spec-Regel ohne eigenes Kriterium; im Test von K-M1d-7 geführt; festgehalten in ADR-048 Nr. 12 (30-plan-review M1d, Runde 1)",
       "ref": "docs/02 M1d, Voraussetzung: „M1d ändert `R/fit.R` und `R/grr.R` nur in der roxygen-Dokumentation.“; BACKLOG BL-111 (erledigt 03.11.2026); ANK-34",
       "kind": "Kerndateien nur roxygen",
       "owner": "Builder",
@@ -152,7 +152,7 @@
     },
     {
       "id": "ACC-13",
-      "status": "[INFRA] Vorschlag an den Betreiber, nonblocking für den Builder",
+      "status": "[INFRA] umgesetzt vom Betreiber: orchestrator/config.env:267, MUT_TEST_EXCLUDE endet auf |m1d-); dazu ADR-047 (gelesen in 30-plan-review M1d, Runde 1)",
       "ref": "orchestrator/config.env: MUT_TEST_EXCLUDE='^(m2-[0-9]|m0-testthat-count$|m1b-[23]-|m1b-7-vignette-full|m1c-[34]-|m1c-5-vignette-full|m1c-8-check-runs)'; Intake §5 (langsame Tests nicht je Mutant); ACC-14 in M1c",
       "kind": "[INFRA] Testauswahl des Mutationslaufs",
       "owner": "Betreiber",
@@ -161,7 +161,7 @@
     },
     {
       "id": "ACC-14",
-      "status": "Betreiber-Voraussetzung offen (Stand 03.11.2026, 15:56: Vollläufe nicht im Repository)",
+      "status": "Betreiber-Voraussetzung erledigt: alle zwölf Vollauf-Dateien liegen unter inst/validation/sim/ (Betreiber-Commit 13b2cc0, 04.11.2026, BL-12; gelesen in 30-plan-review M1d, Runde 1)",
       "ref": "docs/02 M1d, Voraussetzung: „Die Vollläufe `ordinal_recovery`, `binary_recovery`, `two_level` (nach M1b) und `boot_coverage` (nach M1c) sind gerechnet und als `inst/validation/sim/<studie>_results.csv`, `<studie>_replicates.csv`, `<studie>_session.txt` committet, bevor M1d startet. Fehlen sie, scheitern K-M1d-6 und K-M1d-7; sie werden nicht übersprungen.“; BL-12",
       "kind": "Voraussetzung Vollläufe",
       "owner": "Betreiber",
@@ -170,7 +170,7 @@
     },
     {
       "id": "ACC-15",
-      "status": "Anker geerntet in ACCEPTANCE M1d; ADR im selben Meilenstein (Gate golden-adr) folgt in 30-plan-review M1d",
+      "status": "Anker geerntet in ACCEPTANCE M1d; festgehalten in ADR-048 Nr. 13 (30-plan-review M1d, Runde 1)",
       "ref": "ANKER-TODO.md, Abschnitt „M1d — echte Daten“; docs/01 §6: „Jede spätere Änderung unter `reference/anchors/` braucht ein ADR im selben Meilenstein (Gate golden-adr).“; AGENTS.md, Territorien",
       "kind": "Anker",
       "owner": "Reviewer",
@@ -188,7 +188,7 @@
     },
     {
       "id": "ACC-17",
-      "status": "Hinweis für den PLAN, nonblocking",
+      "status": "Hinweis für den PLAN, nonblocking; beantwortet in PLAN.md Runde 1 (BL-92 umgesetzt, BL-113 mit Grund vertagt), festgehalten in ADR-048 Nr. 14.4",
       "ref": "BACKLOG BL-92: „M1d (K-M1d-7): Schätzer mit und ohne die nicht konvergierten Wiederholungen berichten, als Befund, nicht als Testfehler.“; AGENTS.md: „Jeder spätere PLAN adressiert offene Backlog-Einträge oder vertagt sie mit Begründung.“",
       "kind": "Backlog-Bezug",
       "owner": "Builder",
@@ -215,7 +215,7 @@
     },
     {
       "id": "ACC-20",
-      "status": "Hinweis an den Betreiber, nonblocking",
+      "status": "Hinweis an den Betreiber, nonblocking; laut PLAN.md Runde 1 sind die Rohdaten aus der Builder-Sandbox lesbar, kein Betreiberlauf nötig (gelesen in 30-plan-review M1d, Runde 1)",
       "ref": "AGENTS.md, Projektblock: „Builder-Sandbox hat kein Netz: … Daten kommen aus `../quellen/daten/` über die `data-raw/`-Skripte, die der Betreiber vorab ausführen kann.“; docs/01 §7",
       "kind": "Rohdaten außerhalb des Arbeitsbaums",
       "owner": "Betreiber",
