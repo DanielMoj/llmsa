@@ -1,29 +1,29 @@
 {
   "milestone": "M1d",
   "phase": "code",
-  "round": 1,
+  "round": 2,
   "verdict": "REWORK",
   "blocking": [],
   "nonblocking": [
     {
       "id": "E1",
-      "ref": "[INFRA] K-M1d-5 („beide Vignetten sind in `_pkgdown.yml` unter `articles` gelistet“); ACC-8 (5); Gate tests (gate-tests.log Z. 1193–1213); PLAN-REVIEW E1; ADR-048 Nr. 15",
-      "note": "_pkgdown.yml hat keinen Abschnitt articles; die drei roten Erwartungen in test-m1d-5-size-licence-network.R:97–99 sind der einzige Grund für gates.result = fail. Betreiber-Territorium (config.env:200, orchestrate.sh:515–544), für den Builder nicht blockierend. Betreiber ergänzt articles mit validation, llm-stability und clinvar-raters (YAML in REVIEW.md, An den Betreiber Nr. 1; geprüft mit pkgdown 2.2.1) und committet, während der Lauf nach dem Review-Commit steht (STOP noch während der Review-Phase), nicht zwischen Rework und Gates (BL-106). Neu BL-118."
+      "ref": "[INFRA] K-M1d-5 („beide Vignetten sind in `_pkgdown.yml` unter `articles` gelistet“, docs/02-statistikkern.md:89); ACC-8 (5); Gate tests (gate-tests.log M1d r2 Z. 1188–1208, 1823–1845); ADR-048 Nr. 15; BL-118",
+      "note": "Unverändert seit Runde 1: _pkgdown.yml gleicht plan/M1d und hat keinen Abschnitt articles; die drei Erwartungen in test-m1d-5-size-licence-network.R:97–99 sind der einzige Grund für gates.result = fail. Betreiber-Territorium (config.env:200, orchestrate.sh:515–544); für ACC-8 Nr. 5 gilt ADR-048 Nr. 15. Für den Builder nicht blockierend, Rework r3 ohne Pflichtpunkt. Betreiber: articles mit validation, llm-stability und clinvar-raters ergänzen (YAML in REVIEW.md, An den Betreiber Nr. 1); orchestrator/STOP während einer Review-Phase anlegen, nach dem Review-Commit committen, STOP entfernen, neu starten. Hält der Lauf erst in run_model des Reworks, state/M1d/round auf den versionierten Stand 2 zurücknehmen. Nie während einer Modellphase und nicht zwischen Rework und Gates committen (BL-106). Ohne den Eintrag folgen die Runden 3 bis 5 ohne Builder-Befund (REWORK<=5, orchestrate.log Z. 200), danach der Arbiter."
     },
     {
       "id": "E16",
-      "ref": "ACC-2 (3); ADR-049 Nr. 2; PLAN-REVIEW E2; docs/01 §5",
-      "note": "Die Etikettenregel zählt jedes Etikett im ganzen Antworttext gleich: 8.974 von 82.850 Aufrufen (10,8 %) sind mehrdeutig und fehlen, in professional_accounting mit llama3-70b 1.332 von 2.820. Nach der Salienzfolge der Quelle (helper_functions.py:110–153) ohne nackte Buchstaben wären 6.913 davon eindeutig, 2.076 gleich dem Schlüssel (REVIEW r1, Prüflauf 4). Spec-konform und offengelegt; keine Änderung in M1d. Der Betreiber entscheidet vor einer Verwendung der Zahlen im Paper (Builder-ADR, neue Golden-Daten, Neuabnahme K-M1d-1/-2). Neu BL-119."
+      "ref": "ACC-2 (3); ADR-049 Nr. 2; PLAN-REVIEW E2; BL-119",
+      "note": "Unverändert: items.csv.gz, prepare.R, make_llm_stability.R und llm-stability.Rmd sind blobgleich zu Runde 1. Etikettenregel spec-konform und offengelegt; 10,8 % der Aufrufe mehrdeutig (M1d REVIEW r1, Prüflauf 4). Keine Änderung in M1d; der Betreiber entscheidet vor einer Verwendung der Zahlen im Paper."
     },
     {
       "id": "E17",
-      "ref": "K-M1d-7 (BL-92, ADR-048 Nr. 14.4); K-M1d-4 (E15); inst/validation/m1d/findings.R:126; vignettes/validation.Rmd:285",
-      "note": "Darstellung: Die Konvergenz-Sensitivität zeigt S-ord-4 vor S-ord-1 bis S-ord-3 (split nach Szenario und Schätzziel, nur S-ord-4 hat block); die Statustabelle in clinvar-raters.Rmd heißt in der Zählspalte Freq. Inhalt richtig. Optional im Rework r2 (sortiert ausgeben, Spalte etwa submissions), sonst nach dem 26.11.2026. Neu BL-120."
+      "ref": "K-M1d-7 (BL-92, ADR-048 Nr. 14.4); K-M1d-4 (PLAN-REVIEW E15); BL-120",
+      "note": "Erledigt in Rework r2: vignettes/validation.Rmd:285 gibt die Szenarien der Konvergenz-Sensitivität sortiert aus (S-ord-1 bis S-ord-4, dieselben 109 Zeilen wie in Runde 1, übriges Dokument zeilengleich); vignettes/clinvar-raters.Rmd:130–131 nennt die Zählspalte submissions, Zählungen unverändert (REVIEW r2, Prüfläufe 1 und 2). Gate tests: m1d-4-clinvar-vignette 106 und m1d-7-findings 512 Erwartungen grün; lint baut beide Vignetten. BL-120 gestrichen."
     },
     {
       "id": "E18",
       "ref": "orchestrator/handoff/M1d/QA.md QA-M1d-001; BACKLOG.md BL-117; ADR-035 Nr. 1",
-      "note": "Nonblocking bestätigt: kein roter reproduzierender Test, QA-M1d-FUZZ-2 grün. In der Vignette erreichen m1d_findings() nur von latent_read_results() und boot_read_results() vollständig geprüfte Tabellen (inst/validation/latent/reference_checks.R:211–222, inst/validation/sim/boot_coverage_results.R:43–47). Die Sensitivität bricht bei einer reinen NA-Spalte benannt ab, ohne stille falsche Zahl. Härtung nach dem 26.11.2026."
+      "note": "Unverändert nonblocking: kein roter reproduzierender Test, QA-M1d-FUZZ-2 grün (m1d-qa-fuzz 51 Erwartungen, gate-tests.log M1d r2 Z. 1934); inst/validation/m1d/findings.R blobgleich zu Runde 1. Begründung der Herabstufung wie M1d REVIEW r1 E18. Härtung nach dem 26.11.2026."
     }
   ]
 }
