@@ -1,0 +1,29 @@
+{
+  "milestone": "M1d",
+  "phase": "code",
+  "round": 1,
+  "verdict": "REWORK",
+  "blocking": [],
+  "nonblocking": [
+    {
+      "id": "E1",
+      "ref": "[INFRA] K-M1d-5 („beide Vignetten sind in `_pkgdown.yml` unter `articles` gelistet“); ACC-8 (5); Gate tests (gate-tests.log Z. 1193–1213); PLAN-REVIEW E1; ADR-048 Nr. 15",
+      "note": "_pkgdown.yml hat keinen Abschnitt articles; die drei roten Erwartungen in test-m1d-5-size-licence-network.R:97–99 sind der einzige Grund für gates.result = fail. Betreiber-Territorium (config.env:200, orchestrate.sh:515–544), für den Builder nicht blockierend. Betreiber ergänzt articles mit validation, llm-stability und clinvar-raters (YAML in REVIEW.md, An den Betreiber Nr. 1; geprüft mit pkgdown 2.2.1) und committet, während der Lauf nach dem Review-Commit steht (STOP noch während der Review-Phase), nicht zwischen Rework und Gates (BL-106). Neu BL-118."
+    },
+    {
+      "id": "E16",
+      "ref": "ACC-2 (3); ADR-049 Nr. 2; PLAN-REVIEW E2; docs/01 §5",
+      "note": "Die Etikettenregel zählt jedes Etikett im ganzen Antworttext gleich: 8.974 von 82.850 Aufrufen (10,8 %) sind mehrdeutig und fehlen, in professional_accounting mit llama3-70b 1.332 von 2.820. Nach der Salienzfolge der Quelle (helper_functions.py:110–153) ohne nackte Buchstaben wären 6.913 davon eindeutig, 2.076 gleich dem Schlüssel (REVIEW r1, Prüflauf 4). Spec-konform und offengelegt; keine Änderung in M1d. Der Betreiber entscheidet vor einer Verwendung der Zahlen im Paper (Builder-ADR, neue Golden-Daten, Neuabnahme K-M1d-1/-2). Neu BL-119."
+    },
+    {
+      "id": "E17",
+      "ref": "K-M1d-7 (BL-92, ADR-048 Nr. 14.4); K-M1d-4 (E15); inst/validation/m1d/findings.R:126; vignettes/validation.Rmd:285",
+      "note": "Darstellung: Die Konvergenz-Sensitivität zeigt S-ord-4 vor S-ord-1 bis S-ord-3 (split nach Szenario und Schätzziel, nur S-ord-4 hat block); die Statustabelle in clinvar-raters.Rmd heißt in der Zählspalte Freq. Inhalt richtig. Optional im Rework r2 (sortiert ausgeben, Spalte etwa submissions), sonst nach dem 26.11.2026. Neu BL-120."
+    },
+    {
+      "id": "E18",
+      "ref": "orchestrator/handoff/M1d/QA.md QA-M1d-001; BACKLOG.md BL-117; ADR-035 Nr. 1",
+      "note": "Nonblocking bestätigt: kein roter reproduzierender Test, QA-M1d-FUZZ-2 grün. In der Vignette erreichen m1d_findings() nur von latent_read_results() und boot_read_results() vollständig geprüfte Tabellen (inst/validation/latent/reference_checks.R:211–222, inst/validation/sim/boot_coverage_results.R:43–47). Die Sensitivität bricht bei einer reinen NA-Spalte benannt ab, ohne stille falsche Zahl. Härtung nach dem 26.11.2026."
+    }
+  ]
+}
