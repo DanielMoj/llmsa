@@ -1,5 +1,52 @@
 # PROGRESS — Langzeitgedächtnis des Builders
 
+## M1d — REWORK, Runde 3 (04.11.2026)
+
+REVIEW und Verdict der Runde 2 enthalten `blocking: []` und nennen
+keinen Pflichtpunkt für den Builder. Die gelesenen Gate-Fakten bleiben
+Runde 2, `result: fail`: ausschließlich `tests` ist rot, wegen der
+fehlenden Artikelliste in der Betreiberdatei `_pkgdown.yml` (E1);
+sieben Gates sind `pass`, kein Status `error`.
+
+**E1 / M1D-INFRA-01 / BL-118 bleibt OUT-OF-TERRITORY [INFRA]**
+nach ADR-048 Nr. 15. Der unveränderte Abnahmetest K-M1d-5 wurde gezielt
+erneut ausgeführt und reproduziert genau die drei Listungsfehler.
+Befehl und vollständige Zuordnung stehen in
+[REWORK-NOTES.md](orchestrator/handoff/M1d/REWORK-NOTES.md);
+lokales Log: `/tmp/llmsa-m1d-r3-56fg7bcz/pkgdown-acceptance.log`.
+Echter Output:
+
+```text
+Expected _pkgdown.yml has an articles section to be TRUE.
+Expected llm-stability is listed under articles to be TRUE.
+Expected clinvar-raters is listed under articles to be TRUE.
+[ FAIL 3 | WARN 0 | SKIP 0 | PASS 42 ]
+K-M1d-5 acceptance: 5.77 seconds; exit 1
+```
+
+E16 / BL-119 bleibt wie verlangt bis zur Betreiberentscheidung vor der
+Paper-Verwendung zurückgestellt. E17 / BL-120 ist laut REVIEW Runde 2
+erledigt. E18 / QA-M1d-001 / BL-117 bleibt nach ADR-035 auf nach dem
+26.11.2026 vertagt. E2–E15 und M1D-QA-01 sind laut REVIEW erledigt;
+kein offener QA-PENDING-Auftrag. BL-93 bleibt mit den beiden Warnungen
+in `gate-tests.log:780–805` OUT-OF-TERRITORY (Reviewer).
+ARBITER.md zu M1d ist nicht vorhanden.
+
+Diese Runde ändert ausschließlich PROGRESS und den zugewiesenen Handoff.
+Kein neuer ADR, Test, Mutationslauf oder vollständiger Gate-Lauf;
+mutgate/mutfull sind laut Gate-Fakten der Runde 2 grün (ADR-047).
+Keine MUT-EQUIV-Claims und keine Git-Kommandos. Die konkrete
+Betreiberergänzung für `articles` mit `validation`, `llm-stability`
+und `clinvar-raters` sowie der Verweis auf den zulässigen Zeitpunkt
+stehen im Handoff. Eine Abnahme wird nicht behauptet.
+
+Die SHA-256-Inventur dieser Runde (`integrity.py`, Exit 0) bestätigt
+440 Ausgangsdateien: ausschließlich PROGRESS und REWORK-NOTES geändert,
+keine neuen oder entfernten Dateien, alle übrigen 438 bytegleich,
+darunter alle 127 Testdateien. Die bisherigen PROGRESS-Einträge sind
+bytegleich erhalten. Echter Output und Prüfbefehl stehen im Handoff;
+die Inventur ersetzt kein Territoriums-Gate.
+
 ## M1d — REWORK, Runde 2 (04.11.2026)
 
 REVIEW Runde 1 enthält keine blocking-Befunde. Die gelesenen Gate-Fakten
