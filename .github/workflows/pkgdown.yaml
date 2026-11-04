@@ -28,6 +28,8 @@ jobs:
         with:
           extra-packages: any::pkgdown, local::.
           needs: website
+      - name: Keep process files off the site
+        run: find . -maxdepth 1 -name '*.md' ! -name README.md ! -name NEWS.md ! -name LICENSE.md ! -name CONTRIBUTING.md -delete
       - name: Build site
         run: pkgdown::build_site_github_pages(dest_dir = "pkgdown-site", new_process = FALSE, install = FALSE)
         shell: Rscript {0}
@@ -35,6 +37,6 @@ jobs:
         if: github.event_name != 'pull_request'
         uses: JamesIves/github-pages-deploy-action@v4.5.0
         with:
-          clean: false
+          clean: true
           branch: gh-pages
           folder: pkgdown-site
