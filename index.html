@@ -52,12 +52,25 @@
 </h1></div>
 <!-- badges: start -->
 
-<p><strong>Kurzfassung.</strong> <code>llmsa</code> behandelt eine Auswertungspipeline, die auf einem Sprachmodell aufsetzt, als das, was sie ist: ein Messverfahren mit unbekannter Messunsicherheit. Das Paket validiert sie mit den Methoden, die analytische und klinische Labore seit Jahrzehnten verwenden: gekreuzte Präzisionsstudie mit Varianzkomponenten (Gage R&amp;R), Attribut-Übereinstimmung mit Kappa-Statistiken, Richtigkeit gegen eine Referenz, Plackett-Burman-Screening der Robustheit, Fallzahlplanung per Simulation, Regelkarten mit Westgard-Regeln für die laufende Systemeignung und ein prüffähiger Validierungsbericht. Es ist unabhängig vom verwendeten Modell und von der Pipeline selbst.</p>
+<p><code>llmsa</code> treats a pipeline built on a large language model (LLM) as what it is: a measurement procedure with unknown measurement uncertainty. It validates the pipeline with the methods that analytical and clinical laboratories have used for decades: a crossed precision study with variance components (gauge R&amp;R), attribute agreement, bias against a reference, Plackett-Burman screening of robustness, simulation-based planning of the study size, Westgard-rule control charts for ongoing system suitability, and a validation report in the structure a reviewer or an auditor expects.</p>
+<p>The object of the validation is always a concrete pipeline (model, prompt, settings) for a stated task and risk, never “the LLM” in general. Any pipeline qualifies whose output is a number, an ordered class or a yes/no answer; results produced outside R can be imported.</p>
 <div class="section level2">
 <h2 id="why">Why<a class="anchor" aria-label="anchor" href="#why"></a>
 </h2>
-<p>Benchmarks report how often a model is right. A laboratory needs to know something else before it acts on a result: how much the result changes when the same question is asked again (repeatability), when it is asked differently or of another model (reproducibility), whether it is systematically off (bias), whether a typo or a different number format changes it (robustness), and whether it is still behaving the same way next month (system suitability). None of this is new. Measurement system analysis (AIAG MSA), CLSI EP05, ICH Q2(R2) and Westgard rules answer exactly these questions for instruments. <code>llmsa</code> applies them to pipelines built on large language models, whose endpoints are not deterministic even at temperature 0 and whose models change silently.</p>
-<p>The result is a validation report in the structure a reviewer or an auditor expects, which is also what the FDA’s 2025 draft guidance on AI in regulatory decision-making asks for: a credibility assessment tied to a stated context of use and model risk.</p>
+<p>Benchmarks report how often a model is right. A laboratory needs to know something else before it acts on a result: how much the result changes when the same question is asked again (repeatability), when it is asked in other words or of another model (reproducibility), whether it is systematically off (bias), whether a typo or a different number format changes it (robustness), and whether it still behaves the same way next month (system suitability). None of this is new. Measurement system analysis (AIAG MSA), CLSI EP05, ICH Q2(R2) and the Westgard rules answer exactly these questions for instruments. <code>llmsa</code> applies them to pipelines built on LLMs, whose answers vary even at temperature 0 and whose models can change without notice.</p>
+<p>The validation report ties the evidence to a stated context of use, a model risk and acceptance criteria fixed in advance. This is the structure of the credibility assessment in the FDA’s 2025 draft guidance on AI in regulatory decision-making.</p>
+</div>
+<div class="section level2">
+<h2 id="when-to-use-it">When to use it<a class="anchor" aria-label="anchor" href="#when-to-use-it"></a>
+</h2>
+<ul>
+<li>
+<strong>Before deployment.</strong> A crossed study (items × prompt variants × models × replicates × blocks) shows where the variation comes from and whether the pipeline separates the items it has to separate.</li>
+<li>
+<strong>After a change.</strong> A new model version, a reworded prompt, another provider or quantisation: repeat the study with the changed component and compare the result with the validated state.</li>
+<li>
+<strong>In routine use.</strong> A small control set with known answers runs before each batch, and <code><a href="reference/msa_control_chart.html">msa_control_chart()</a></code> applies the Westgard rules to catch drift, for example after a silent model update.</li>
+</ul>
 </div>
 <div class="section level2">
 <h2 id="what-maps-to-what">What maps to what<a class="anchor" aria-label="anchor" href="#what-maps-to-what"></a>
@@ -72,6 +85,10 @@
 <th>LLM pipeline</th>
 </tr></thead>
 <tbody>
+<tr>
+<td>Measurand</td>
+<td>What the pipeline reports: a number (IC50), an ordered class (ACMG/AMP tier), a yes/no finding</td>
+</tr>
 <tr>
 <td>Part</td>
 <td>Item (variant, document, assay record)</td>
@@ -120,44 +137,82 @@
 </table>
 </div>
 <div class="section level2">
+<h2 id="how-llmsa-itself-is-validated">How llmsa itself is validated<a class="anchor" aria-label="anchor" href="#how-llmsa-itself-is-validated"></a>
+</h2>
+<p>A statistics package for validation has to be validated itself. In <code>llmsa</code>, a passing test is not enough for a statistic to count as verified. Each one needs two independent pieces of evidence: a published value, a recalculation by a different route, or a live comparison with an established package. Where no closed-form answer exists, a simulation study decides; it is planned with the ADEMP scheme (Morris, White and Crowther, 2019) and reported with Monte Carlo standard errors (MCSE). Reference values are stored in <code>reference/anchors/</code> with source, page, value and tolerance and are never estimated. Edge cases and invariances are tested explicitly.</p>
+<table class="table">
+<colgroup>
+<col width="33%">
+<col width="33%">
+<col width="33%">
+</colgroup>
+<thead><tr>
+<th>Component</th>
+<th>Status</th>
+<th>Evidence</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>Variance components, %GRR, % contribution, ndc and verdict (numeric)</td>
+<td>verified</td>
+<td>equal to the ANOVA estimators on balanced designs; AIAG worked example; published REML estimates for lme4’s <code>Penicillin</code> data; NIST StRD ANOVA datasets with certified values; live comparison with VCA, SixSigma and lme4</td>
+</tr>
+<tr>
+<td>Ordinal and binary outcomes (latent scale)</td>
+<td>verified</td>
+<td>equal to direct fits with <code><a href="https://rdrr.io/pkg/ordinal/man/clmm.html" class="external-link">ordinal::clmm()</a></code> and <code><a href="https://rdrr.io/pkg/lme4/man/glmer.html" class="external-link">lme4::glmer()</a></code>; latent ICC against rptR and performance; recovery of simulated components with MCSE</td>
+</tr>
+<tr>
+<td>Bootstrap intervals (<code><a href="reference/msa_boot.html">msa_boot()</a></code>)</td>
+<td>verified</td>
+<td>quantiles equal to <code><a href="https://rdrr.io/pkg/lme4/man/bootMer.html" class="external-link">lme4::bootMer()</a></code>; coverage measured in seven scenarios with MCSE</td>
+</tr>
+<tr>
+<td>Robustness screening (Plackett-Burman, Lenth)</td>
+<td>implemented; validation in progress</td>
+<td>planned: generator rows of Plackett and Burman (1946), comparison with FrF2, the worked examples of Lenth (1989), false-alarm rate at the nominal level</td>
+</tr>
+<tr>
+<td>Agreement (Cohen, Krippendorff), bias and linearity</td>
+<td>implemented; not yet validated</td>
+<td>planned: published values for every weighting and scale level, established packages, AIAG examples, simulated coverage</td>
+</tr>
+<tr>
+<td>Westgard rules, simulator, study planning</td>
+<td>implemented; not yet validated</td>
+<td>planned: each rule exactly at its limit, false-alarm rates against Westgard et al. (1981), recovery of simulated components</td>
+</tr>
+<tr>
+<td>Execution, parsers, backends, report</td>
+<td>implemented; not yet validated</td>
+<td>planned: an interrupted and resumed run gives the same store, parsers on random input, recorded real API responses, every number in the report equal to the object value</td>
+</tr>
+</tbody>
+</table>
+<p>The test suite of the statistical core detects 92.8 % of 1,478 deliberately injected faults (mutation testing of <code>R/fit.R</code> and <code>R/grr.R</code>, threshold 80 %).</p>
+<p>The article <code><a href="articles/validation.html">vignette("validation", package = "llmsa")</a></code> reruns the reference comparisons when it is built and reads the simulation results from the stored runs. It needs no network, and no number in it is typed in by hand. The AIAG handbook data are protected and not distributed: the public build marks those rows as <em>not rerun</em>, and the complete comparison runs locally.</p>
+<p>The simulation studies also produced findings that matter in practice. For ordinal and binary outcomes, the latent prompt and model components were underestimated in several scenarios. Percentile intervals for the integer-valued ndc cover more often than their nominal level. The validation article reports every scenario with its MCSE, and the help pages of <code><a href="reference/msa_fit.html">msa_fit()</a></code> and <code><a href="reference/msa_boot.html">msa_boot()</a></code> name the affected scenarios.</p>
+</div>
+<div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># install.packages("remotes")</span></span>
-<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"DanielMoj/llmsa"</span>, build_vignettes <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<p>Dependencies are <code>lme4</code> and <code>ordinal</code>. Reports need <code>rmarkdown</code> and pandoc; backends need <code>httr2</code> or <code>ellmer</code>.</p>
+<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"DanielMoj/llmsa"</span>, dependencies <span class="op">=</span> <span class="cn">TRUE</span>, build_vignettes <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<p><code>llmsa</code> needs R 4.1 or later. The fitting engines are <code>lme4</code> (Bates et al., 2015) and <code>ordinal</code> (Christensen, 2026). Optional packages add features: <code>httr2</code> (API backend), <code>ellmer</code> (chat objects), <code>DBI</code> and <code>RSQLite</code> (SQLite store), <code>jsonlite</code> (response metadata), <code>rmarkdown</code> with pandoc (report). The validation article uses VCA, SixSigma, rptR and performance as live comparisons, so building the vignettes needs <code>dependencies = TRUE</code>. Continuous integration runs <code>R CMD check</code> on Linux, macOS and Windows.</p>
 </div>
 <div class="section level2">
 <h2 id="quick-start">Quick start<a class="anchor" aria-label="anchor" href="#quick-start"></a>
 </h2>
+<div class="section level3">
+<h3 id="analyse-a-study">Analyse a study<a class="anchor" aria-label="anchor" href="#analyse-a-study"></a>
+</h3>
+<p><code>ic50_demo</code> is a simulated numeric extraction with known variance components: 40 compounds, 3 prompt variants, 3 models, 3 replicates in each of 2 blocks.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/DanielMoj/llmsa" class="external-link">llmsa</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># 1. items (parts), prompt variants (appraisers), models (instruments)</span></span>
-<span><span class="va">items</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>item_id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"v1"</span>, <span class="st">"v2"</span>, <span class="st">"v3"</span><span class="op">)</span>,</span>
-<span>                    text <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"NM_000059.4:c.1813dupA"</span>, <span class="st">"NM_000059.4:c.7397T&gt;C"</span>, <span class="st">"NM_000059.4:c.68-7T&gt;A"</span><span class="op">)</span>,</span>
-<span>                    reference <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Pathogenic"</span>, <span class="st">"Benign"</span>, <span class="st">"VUS"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">tiers</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Benign"</span>, <span class="st">"Likely benign"</span>, <span class="st">"VUS"</span>, <span class="st">"Likely pathogenic"</span>, <span class="st">"Pathogenic"</span><span class="op">)</span></span>
-<span><span class="va">prompts</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>concise <span class="op">=</span> <span class="st">"Classify {text} (ACMG/AMP five tiers). Answer with the tier only."</span>,</span>
-<span>             role    <span class="op">=</span> <span class="st">"You are a clinical geneticist. Give the ACMG/AMP tier of {text}."</span><span class="op">)</span></span>
-<span><span class="va">design</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/msa_design.html">msa_design</a></span><span class="op">(</span><span class="va">items</span>, <span class="va">prompts</span>, models <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"gpt-4.1"</span>, <span class="st">"qwen3:8b"</span><span class="op">)</span>, reps <span class="op">=</span> <span class="fl">3</span>, blocks <span class="op">=</span> <span class="fl">2</span>, seed <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># 2. run against any backend, with an audit trail</span></span>
-<span><span class="va">backend</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/backends.html">backend_openai_compatible</a></span><span class="op">(</span><span class="st">"http://localhost:11434/v1"</span>, api_key <span class="op">=</span> <span class="st">""</span><span class="op">)</span>   <span class="co"># Ollama</span></span>
-<span><span class="va">runs</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/msa_run.html">msa_run</a></span><span class="op">(</span><span class="va">design</span>, <span class="va">backend</span>, parse <span class="op">=</span> <span class="fu"><a href="reference/parsers.html">parse_choice</a></span><span class="op">(</span><span class="va">tiers</span><span class="op">)</span>, store <span class="op">=</span> <span class="st">"runs.sqlite"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># 3. precision, agreement, robustness, report</span></span>
-<span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/msa_fit.html">msa_fit</a></span><span class="op">(</span><span class="va">runs</span>, type <span class="op">=</span> <span class="st">"ordinal"</span>, levels <span class="op">=</span> <span class="va">tiers</span><span class="op">)</span></span>
-<span><span class="va">grr</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/msa_grr.html">msa_grr</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span>                      <span class="co"># %GRR, ndc, verdict</span></span>
-<span><span class="va">ag</span>  <span class="op">&lt;-</span> <span class="fu"><a href="reference/msa_agreement.html">msa_agreement</a></span><span class="op">(</span><span class="va">runs</span>, levels <span class="op">=</span> <span class="va">tiers</span>, reference <span class="op">=</span> <span class="st">"reference"</span>, weights <span class="op">=</span> <span class="st">"linear"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="reference/msa_report.html">msa_report</a></span><span class="op">(</span><span class="va">grr</span>, runs <span class="op">=</span> <span class="va">runs</span>, agreement <span class="op">=</span> <span class="va">ag</span>,</span>
-<span>           cou <span class="op">=</span> <span class="st">"Pre-classification of sequence variants for expert review"</span>,</span>
-<span>           risk <span class="op">=</span> <span class="st">"medium"</span>, acceptance <span class="op">=</span> <span class="st">"%GRR &lt; 30 %; kappa (modal) &gt;= 0.8"</span>,</span>
-<span>           output_file <span class="op">=</span> <span class="st">"validation_report.html"</span><span class="op">)</span></span></code></pre></div>
-<p>Results produced by another pipeline (Python, a workflow engine, a spreadsheet) are analysed the same way after <code><a href="reference/as_msa_runs.html">as_msa_runs()</a></code>.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">g</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/msa_grr.html">msa_grr</a></span><span class="op">(</span><span class="fu"><a href="reference/msa_fit.html">msa_fit</a></span><span class="op">(</span><span class="va">ic50_demo</span>, type <span class="op">=</span> <span class="st">"numeric"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">g</span></span>
+<span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/msa_fit.html">msa_fit</a></span><span class="op">(</span><span class="va">ic50_demo</span>, type <span class="op">=</span> <span class="st">"numeric"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/msa_grr.html">msa_grr</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Gauge R&amp;R of an LLM measurement system</span></span>
 <span><span class="co">#&gt;   outcome: numeric; 40 items x 3 prompts x 3 models x 2 block(s), 2152 observations</span></span>
 <span><span class="co">#&gt;  Source               Variance SD     % Contribution % Study Var</span></span>
@@ -169,14 +224,84 @@
 <span><span class="co">#&gt;      block (time)     0.0010   0.0319 0.1 %          3.2 %</span></span>
 <span><span class="co">#&gt;      prompt:model     0.0000   0.0046 0.0 %          0.5 %</span></span>
 <span><span class="co">#&gt;      item:prompt      0.0001   0.0092 0.0 %          0.9 %</span></span>
-<span><span class="co">#&gt;      item:model       0.0054   0.0731 0.5 %          7.3 %</span></span>
-<span><span class="co">#&gt;  Part-to-part (items) 0.9672   0.9834 95.8 %         97.9 %</span></span>
-<span><span class="co">#&gt;  Total variation      1.0096   1.0048 100.0 %        100.0 %</span></span>
+<span><span class="co">#&gt;      item:model       0.0053   0.0731 0.5 %          7.3 %</span></span>
+<span><span class="co">#&gt;  Part-to-part (items) 0.9672   0.9835 95.8 %         97.9 %</span></span>
+<span><span class="co">#&gt;  Total variation      1.0097   1.0048 100.0 %        100.0 %</span></span>
 <span><span class="co">#&gt;</span></span>
 <span><span class="co">#&gt;   total gauge R&amp;R: 20.5 % of study variation (4.2 % contribution)</span></span>
 <span><span class="co">#&gt;   number of distinct categories (ndc): 6</span></span>
 <span><span class="co">#&gt;   ICC (items): 0.958</span></span>
 <span><span class="co">#&gt;   verdict: MARGINAL  [basis: % study variation, thresholds 10 / 30]</span></span></code></pre></div>
+<p>The measurement system takes up 20.5 % of the study variation, between the AIAG thresholds of 10 % and 30 %, hence <em>marginal</em>. The model is the largest single source of reproducibility variance, and the pipeline still resolves six distinct categories of compounds.</p>
+</div>
+<div class="section level3">
+<h3 id="plan-and-run-a-study">Plan and run a study<a class="anchor" aria-label="anchor" href="#plan-and-run-a-study"></a>
+</h3>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">tiers</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Benign"</span>, <span class="st">"Likely benign"</span>, <span class="st">"VUS"</span>, <span class="st">"Likely pathogenic"</span>, <span class="st">"Pathogenic"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># items are the parts, prompt variants the appraisers, models the instruments</span></span>
+<span><span class="va">items</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>item_id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"v%02d"</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span>,</span>
+<span>                    text    <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"variant %02d"</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">prompts</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>concise <span class="op">=</span> <span class="st">"Classify {text} into the five ACMG/AMP tiers. Answer with the tier only."</span>,</span>
+<span>             role    <span class="op">=</span> <span class="st">"You are a clinical variant scientist. Give the ACMG/AMP tier of {text}."</span>,</span>
+<span>             terse   <span class="op">=</span> <span class="st">"ACMG/AMP tier of {text}?"</span><span class="op">)</span></span>
+<span><span class="va">design</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/msa_design.html">msa_design</a></span><span class="op">(</span><span class="va">items</span>, <span class="va">prompts</span>, models <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model-a"</span>, <span class="st">"model-b"</span>, <span class="st">"model-c"</span><span class="op">)</span>,</span>
+<span>                     reps <span class="op">=</span> <span class="fl">3</span>, blocks <span class="op">=</span> <span class="fl">2</span>, seed <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># offline: a mock backend with known variance components</span></span>
+<span><span class="va">truth</span>   <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/setNames.html" class="external-link">setNames</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">2.5</span>, <span class="fl">2.5</span>, length.out <span class="op">=</span> <span class="fl">30</span><span class="op">)</span>, <span class="va">items</span><span class="op">$</span><span class="va">item_id</span><span class="op">)</span></span>
+<span><span class="va">backend</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/backends.html">backend_mock</a></span><span class="op">(</span><span class="va">truth</span>, levels <span class="op">=</span> <span class="va">tiers</span>, thresholds <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">1.5</span>, <span class="op">-</span><span class="fl">0.5</span>, <span class="fl">0.5</span>, <span class="fl">1.5</span><span class="op">)</span>, seed <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span><span class="va">runs</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/msa_run.html">msa_run</a></span><span class="op">(</span><span class="va">design</span>, <span class="va">backend</span>, parse <span class="op">=</span> <span class="fu"><a href="reference/parsers.html">parse_choice</a></span><span class="op">(</span><span class="va">tiers</span>, whole_word <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>                store <span class="op">=</span> <span class="st">"runs.sqlite"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/msa_fit.html">msa_fit</a></span><span class="op">(</span><span class="va">runs</span>, type <span class="op">=</span> <span class="st">"ordinal"</span>, levels <span class="op">=</span> <span class="va">tiers</span><span class="op">)</span>  <span class="co"># warns: two blocks, see Design notes</span></span>
+<span><span class="va">grr</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/msa_grr.html">msa_grr</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span>
+<span><span class="va">ag</span>  <span class="op">&lt;-</span> <span class="fu"><a href="reference/msa_agreement.html">msa_agreement</a></span><span class="op">(</span><span class="va">runs</span>, levels <span class="op">=</span> <span class="va">tiers</span>, weights <span class="op">=</span> <span class="st">"linear"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/msa_report.html">msa_report</a></span><span class="op">(</span><span class="va">grr</span>, runs <span class="op">=</span> <span class="va">runs</span>, agreement <span class="op">=</span> <span class="va">ag</span>,</span>
+<span>           cou <span class="op">=</span> <span class="st">"Pre-classification of sequence variants for expert review"</span>,</span>
+<span>           risk <span class="op">=</span> <span class="st">"medium"</span>, acceptance <span class="op">=</span> <span class="st">"%GRR &lt; 30 %; Krippendorff's alpha &gt;= 0.8"</span>,</span>
+<span>           output_file <span class="op">=</span> <span class="st">"validation_report.html"</span><span class="op">)</span></span></code></pre></div>
+<p><code>parse_choice(whole_word = TRUE)</code> matches whole phrases, prefers “Likely benign” over “Benign” and returns <code>NA</code> for an answer that names two classes. It does not read negations (“not pathogenic” parses as “Pathogenic”), so prompts should ask for the label alone. The store keeps every call as it arrives; <code>resume = TRUE</code> continues an interrupted study without repeating a call.</p>
+</div>
+<div class="section level3">
+<h3 id="run-against-real-models">Run against real models<a class="anchor" aria-label="anchor" href="#run-against-real-models"></a>
+</h3>
+<p><code><a href="reference/backends.html">backend_openai_compatible()</a></code> talks to any server with the OpenAI chat-completions API. Behind a router such as OpenRouter, the same model name can be served by different providers and quantisations, which would change the instrument between calls. Pin both and disallow fallbacks:</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">pinned</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">endpoint</span>, <span class="va">quantisation</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu"><a href="reference/backends.html">backend_openai_compatible</a></span><span class="op">(</span><span class="st">"https://openrouter.ai/api/v1"</span>,</span>
+<span>                            api_key <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"OPENROUTER_API_KEY"</span><span class="op">)</span>,</span>
+<span>                            temperature <span class="op">=</span> <span class="fl">0</span>, seed <span class="op">=</span> <span class="fl">20261024</span>,</span>
+<span>                            provider <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>order <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">endpoint</span><span class="op">)</span>,</span>
+<span>                                            allow_fallbacks <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>                                            quantizations <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">quantisation</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span><span class="va">backends</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>llama <span class="op">=</span> <span class="fu">pinned</span><span class="op">(</span><span class="st">"coreweave/fp16"</span>, <span class="st">"fp16"</span><span class="op">)</span>,</span>
+<span>                 qwen  <span class="op">=</span> <span class="fu">pinned</span><span class="op">(</span><span class="st">"deepinfra/fp8"</span>, <span class="st">"fp8"</span><span class="op">)</span>,</span>
+<span>                 sol   <span class="op">=</span> <span class="fu"><a href="reference/backends.html">backend_openai_compatible</a></span><span class="op">(</span>temperature <span class="op">=</span> <span class="cn">NULL</span>,  <span class="co"># model rejects temperature</span></span>
+<span>                                                   reasoning_effort <span class="op">=</span> <span class="st">"medium"</span>, seed <span class="op">=</span> <span class="fl">20261024</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">backend</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">prompt</span>, <span class="va">model</span>, <span class="va">row</span><span class="op">)</span> <span class="va">backends</span><span class="op">[[</span><span class="va">row</span><span class="op">$</span><span class="va">model_id</span><span class="op">]</span><span class="op">]</span><span class="op">(</span><span class="va">prompt</span>, <span class="va">model</span>, <span class="va">row</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">design</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/msa_design.html">msa_design</a></span><span class="op">(</span><span class="va">items</span>, <span class="va">prompts</span>,</span>
+<span>                     models <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>llama <span class="op">=</span> <span class="st">"meta-llama/llama-3.3-70b-instruct"</span>,</span>
+<span>                                qwen  <span class="op">=</span> <span class="st">"qwen/qwen3-32b"</span>, sol <span class="op">=</span> <span class="st">"gpt-6.1-sol"</span><span class="op">)</span>,</span>
+<span>                     reps <span class="op">=</span> <span class="fl">3</span>, blocks <span class="op">=</span> <span class="fl">2</span>, seed <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/msa_run.html">msa_run</a></span><span class="op">(</span><span class="va">design</span>, <span class="va">backend</span>, parse <span class="op">=</span> <span class="fu"><a href="reference/parsers.html">parse_choice</a></span><span class="op">(</span><span class="va">tiers</span>, whole_word <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>        block <span class="op">=</span> <span class="fl">1</span>, store <span class="op">=</span> <span class="st">"study.sqlite"</span><span class="op">)</span>                     <span class="co"># day 1</span></span>
+<span><span class="va">runs</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/msa_run.html">msa_run</a></span><span class="op">(</span><span class="va">design</span>, <span class="va">backend</span>, parse <span class="op">=</span> <span class="fu"><a href="reference/parsers.html">parse_choice</a></span><span class="op">(</span><span class="va">tiers</span>, whole_word <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>                store <span class="op">=</span> <span class="st">"study.sqlite"</span>, resume <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>         <span class="co"># day 2: runs block 2, returns all</span></span></code></pre></div>
+<p>Each call is stored with its timestamp, block and run position, the model identifier, a hash of the rendered prompt, the raw response, the parsed value, latency and any error. From the API response the store keeps the response ID, the reported model snapshot, token usage, the system fingerprint, the finish reason and, where the endpoint returns them, the serving provider and the reasoning text; from the request, the provider order, quantisations, the fallback setting, seed, temperature, reasoning effort and timeout. Credentials and headers are never stored. <code>msa_run(parse_by_prompt = ...)</code> sets a parser per prompt variant, for example <code><a href="reference/parsers.html">parse_json_field()</a></code> for a prompt that asks for JSON.</p>
+</div>
+<div class="section level3">
+<h3 id="results-from-another-pipeline">Results from another pipeline<a class="anchor" aria-label="anchor" href="#results-from-another-pipeline"></a>
+</h3>
+<p>Results from Python, a workflow engine or a spreadsheet are analysed the same way once they have one row per call:</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">runs</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/as_msa_runs.html">as_msa_runs</a></span><span class="op">(</span><span class="va">results</span>, item <span class="op">=</span> <span class="st">"doc_id"</span>, prompt <span class="op">=</span> <span class="st">"prompt"</span>, model <span class="op">=</span> <span class="st">"model"</span>,</span>
+<span>                    rep <span class="op">=</span> <span class="st">"replicate"</span>, value <span class="op">=</span> <span class="st">"answer"</span><span class="op">)</span></span></code></pre></div>
+<p>The ClinVar article takes this route, with ClinVar submitters as appraisers.</p>
+</div>
 </div>
 <div class="section level2">
 <h2 id="functions">Functions<a class="anchor" aria-label="anchor" href="#functions"></a>
@@ -188,7 +313,7 @@
 </colgroup>
 <thead><tr>
 <th>Step</th>
-<th>Function</th>
+<th>Functions</th>
 </tr></thead>
 <tbody>
 <tr>
@@ -196,51 +321,62 @@
 <td><code><a href="reference/msa_design.html">msa_design()</a></code></td>
 </tr>
 <tr>
-<td>Run it with an audit trail, resume after interruption</td>
+<td>Plan the study size by simulation</td>
 <td>
-<code><a href="reference/msa_run.html">msa_run()</a></code>, <code><a href="reference/backends.html">backend_mock()</a></code>, <code><a href="reference/backends.html">backend_ellmer()</a></code>, <code><a href="reference/backends.html">backend_openai_compatible()</a></code>, <code><a href="reference/parsers.html">parse_number()</a></code>, <code><a href="reference/parsers.html">parse_choice()</a></code>, <code><a href="reference/parsers.html">parse_json_field()</a></code>
+<code><a href="reference/msa_simulate.html">msa_simulate()</a></code>, <code><a href="reference/msa_plan.html">msa_plan()</a></code>
+</td>
+</tr>
+<tr>
+<td>Run it with an audit trail, resume after interruption</td>
+<td><code><a href="reference/msa_run.html">msa_run()</a></code></td>
+</tr>
+<tr>
+<td>Backends</td>
+<td>
+<code><a href="reference/backends.html">backend_openai_compatible()</a></code>, <code><a href="reference/backends.html">backend_ellmer()</a></code>, <code><a href="reference/backends.html">backend_mock()</a></code>
+</td>
+</tr>
+<tr>
+<td>Parsers</td>
+<td>
+<code><a href="reference/parsers.html">parse_choice()</a></code>, <code><a href="reference/parsers.html">parse_number()</a></code>, <code><a href="reference/parsers.html">parse_json_field()</a></code>, <code><a href="reference/parsers.html">parse_identity()</a></code>
 </td>
 </tr>
 <tr>
 <td>Import results from elsewhere</td>
-<td>
-<code><a href="reference/as_msa_runs.html">as_msa_runs()</a></code>, <code><a href="reference/msa_counts.html">msa_counts()</a></code>
-</td>
+<td><code><a href="reference/as_msa_runs.html">as_msa_runs()</a></code></td>
+</tr>
+<tr>
+<td>Realised cell counts of a study</td>
+<td><code><a href="reference/msa_counts.html">msa_counts()</a></code></td>
 </tr>
 <tr>
 <td>Variance components, numeric / ordinal / binary</td>
 <td><code><a href="reference/msa_fit.html">msa_fit()</a></code></td>
 </tr>
 <tr>
-<td>Gauge R&amp;R statistics and verdict</td>
+<td>Gauge R&amp;R statistics, verdict, bootstrap intervals</td>
 <td>
 <code><a href="reference/msa_grr.html">msa_grr()</a></code>, <code><a href="reference/msa_boot.html">msa_boot()</a></code>
 </td>
 </tr>
 <tr>
-<td>Attribute agreement, accuracy</td>
-<td>
-<code><a href="reference/msa_agreement.html">msa_agreement()</a></code> (Krippendorff’s alpha, Cohen’s kappa)</td>
+<td>Attribute agreement and accuracy (Krippendorff, 2011; Cohen, 1960, 1968)</td>
+<td><code><a href="reference/msa_agreement.html">msa_agreement()</a></code></td>
 </tr>
 <tr>
 <td>Bias and linearity</td>
 <td><code><a href="reference/msa_bias.html">msa_bias()</a></code></td>
 </tr>
 <tr>
-<td>Robustness screening</td>
+<td>Robustness screening (Lenth’s method)</td>
 <td>
-<code><a href="reference/pb_design.html">pb_design()</a></code>, <code><a href="reference/msa_robustness.html">msa_robustness()</a></code> (Lenth’s PSE)</td>
-</tr>
-<tr>
-<td>Study size by simulation</td>
-<td>
-<code><a href="reference/msa_simulate.html">msa_simulate()</a></code>, <code><a href="reference/msa_plan.html">msa_plan()</a></code>
+<code><a href="reference/pb_design.html">pb_design()</a></code>, <code><a href="reference/msa_robustness.html">msa_robustness()</a></code>
 </td>
 </tr>
 <tr>
-<td>Ongoing system suitability</td>
-<td>
-<code><a href="reference/msa_control_chart.html">msa_control_chart()</a></code> (Westgard rules)</td>
+<td>Ongoing system suitability (Westgard rules)</td>
+<td><code><a href="reference/msa_control_chart.html">msa_control_chart()</a></code></td>
 </tr>
 <tr>
 <td>Validation report</td>
@@ -248,18 +384,38 @@
 </tr>
 </tbody>
 </table>
-<p>The vignette (<code><a href="articles/llmsa.html">vignette("llmsa")</a></code>) runs a complete validation offline with the mock backend.</p>
+</div>
+<div class="section level2">
+<h2 id="articles">Articles<a class="anchor" aria-label="anchor" href="#articles"></a>
+</h2>
+<ul>
+<li>
+<code><a href="articles/llmsa.html">vignette("llmsa")</a></code>, <em>Validating an LLM pipeline as a measurement system</em>: a complete validation, offline with the mock backend.</li>
+<li>
+<code><a href="articles/validation.html">vignette("validation")</a></code>, <em>Statistical validation of llmsa</em>: every comparison with published values, NIST certified values, package oracles and the simulation studies.</li>
+<li>
+<code><a href="articles/llm-stability.html">vignette("llm-stability")</a></code>, <em>Answer stability at temperature zero</em>: 82,850 recorded calls of five models on eight tasks in ten runs, from the public llm-stability data of Atıl et al. (2025, Apache-2.0); attribute repeatability, hit rate and the share of missing answers per task and model.</li>
+<li>
+<code><a href="articles/clinvar-raters.html">vignette("clinvar-raters")</a></code>, <em>ClinVar submitters as a rater study</em>: submitters as appraisers, with Krippendorff’s alpha and ordinal variance components for 1,383 variants in four genes of hereditary recurrent fevers (MEFV, MVK, NLRP3, TNFRSF1A) and a genome-wide sample of 1,000 variants, from public-domain ClinVar data (Landrum et al., 2025).</li>
+</ul>
+<p>None of the articles calls a model. The real-data subsets they read are frozen under <code>inst/extdata/</code> with SHA-256 checksums and their provenance; the scripts in <code>data-raw/</code> rebuild them from the original sources. The simulated datasets <code>ic50_demo</code> and <code>acmg_demo</code> carry their true variance components as an attribute.</p>
 </div>
 <div class="section level2">
 <h2 id="design-notes">Design notes<a class="anchor" aria-label="anchor" href="#design-notes"></a>
 </h2>
 <ul>
 <li>
-<strong>Replicates must be spread in time.</strong> Thinking Machines Lab showed in 2025 that identical prompts at temperature 0 return different completions because batch composition on the server changes the arithmetic. Five calls within one second underestimate repeatability; use <code>blocks</code> and run them on different days.</li>
+<strong>Replicates must be spread in time.</strong> Identical requests at temperature 0 can return different completions because the load on the server, and with it the batch size, changes the order of floating-point operations (He and Thinking Machines Lab, 2025). Five calls within one second underestimate repeatability; use <code>blocks</code> and run them on different days.</li>
 <li>
-<strong>Few levels, wide intervals.</strong> Three models and four prompt variants are three and four levels of a random effect. Their variance components are estimated with large uncertainty and fits are often singular. Report bootstrap intervals (<code><a href="reference/msa_boot.html">msa_boot()</a></code>) and plan the study (<code><a href="reference/msa_plan.html">msa_plan()</a></code>); the number of prompt variants, not the number of items, drives the precision of the reproducibility estimate.</li>
+<strong>Pin the instrument.</strong> Fix provider, quantisation and model snapshot, and record what the endpoint reports. A model name alone does not identify an instrument.</li>
 <li>
-<strong>Memorisation confounds accuracy, not precision.</strong> Reference answers that are public (ClinVar, textbooks) may be in the training data. Use items added after the model’s cut-off for the accuracy question; the precision statistics are unaffected.</li>
+<strong>Few levels, wide intervals.</strong> Three models and four prompt variants are three and four levels of a random effect. Their variance components are estimated with large uncertainty, fits are often singular, and for ordinal and binary outcomes the simulation studies found these components underestimated in several scenarios. Report bootstrap intervals (<code><a href="reference/msa_boot.html">msa_boot()</a></code>) and plan the study (<code><a href="reference/msa_plan.html">msa_plan()</a></code>); the number of prompt variants, not the number of items, drives the precision of the reproducibility estimate.</li>
+<li>
+<strong>Two levels are not enough for a variance.</strong> In an ordinal fit, a prompt, model or block factor with exactly two levels enters as a fixed effect, and its component is estimated by the range method <code>beta-hat^2 / 2</code>, which is biased upwards. <code><a href="reference/msa_fit.html">msa_fit()</a></code> warns and marks the component.</li>
+<li>
+<strong>On the latent scale, repeatability is fixed, not measured.</strong> For ordinal and binary outcomes the residual variance is set by the link (1 for probit, pi^2/3 for logit; Nakagawa, Johnson and Schielzeth, 2017). The observed agreement between replicates comes from <code><a href="reference/msa_agreement.html">msa_agreement()</a></code>.</li>
+<li>
+<strong>Memorisation confounds accuracy, not precision.</strong> Reference answers that are public (ClinVar, textbooks) may be in the training data. Use items added after the model’s knowledge cut-off for the accuracy question; the precision statistics are unaffected.</li>
 <li>
 <strong>Acceptance criteria follow model risk.</strong> The AIAG thresholds (10 % and 30 % of study variation) are defaults, not laws. Set them from the consequence of a wrong decision in the stated context of use.</li>
 <li>
@@ -267,13 +423,27 @@
 </ul>
 </div>
 <div class="section level2">
+<h2 id="application-study">Application study<a class="anchor" aria-label="anchor" href="#application-study"></a>
+</h2>
+<p>The first application under way is the five-tier ACMG/AMP classification of sequence variants (Richards et al., 2015) against expert classifications: 100 variants, 3 prompt variants, 3 models via APIs (one proprietary, two open-weight with pinned provider and quantisation), 3 replicates in each of 2 blocks, 5,400 calls in the main study, plus a pilot and a robustness screen. The plan, the frozen item set and the runner are in <code>inst/validation/ap1/</code>. The plan was approved before the first call, and every later change is documented in a decision record. Results will be reported when the analysis is complete.</p>
+</div>
+<div class="section level2">
+<h2 id="how-llmsa-is-developed">How llmsa is developed<a class="anchor" aria-label="anchor" href="#how-llmsa-is-developed"></a>
+</h2>
+<p>Changes are built in milestones from written specifications. One model implements, a second reviews and owns the acceptance tests and reference values, a third writes adversarial end-to-end and fuzz tests, and only deterministic gates (<code>R CMD check</code>, the test suites, mutation testing) decide whether a milestone passes. The maintainer approves the specifications and every decision record. Specifications and decision records are in <code>docs/</code> (in German); <code>AGENTS.md</code>, <code>BACKLOG.md</code>, <code>PROGRESS.md</code>, <code>orchestrator/</code> and the other process files are excluded from the package build. The 22 exported functions of version 0.1.0 keep their interfaces; a change requires a decision record and a deprecation period.</p>
+</div>
+<div class="section level2">
 <h2 id="roadmap">Roadmap<a class="anchor" aria-label="anchor" href="#roadmap"></a>
 </h2>
 <ul>
+<li>Validation of the remaining components (agreement, bias and linearity, robustness, control charts, planning, execution and report) to the standard above.</li>
+<li>Comparison of model versions as fixed levels, for revalidation after a change.</li>
+<li>Sensitivity per class with a lower confidence bound, for decisions where one error direction matters more.</li>
+<li>Bootstrap intervals for ordinal fits; modified-large-sample intervals for variance components (Burdick, Borror and Montgomery, 2003).</li>
 <li>Batched multi-item prompts: position and carry-over effects analysed as in a crossover study (Williams designs).</li>
 <li>Nested validation of LLM-as-judge scoring for free-text outcomes.</li>
-<li>Bootstrap intervals for ordinal fits; modified-large-sample intervals for variance components.</li>
-<li>Detection-limit style experiments: how much evidence must a document contain before a finding is extracted reliably.</li>
+<li>Detection-limit style experiments: how much evidence a document must contain before a finding is extracted reliably.</li>
+<li>First release with a Zenodo DOI, then CRAN.</li>
 </ul>
 </div>
 <div class="section level2">
@@ -282,22 +452,49 @@
 <pre><code>Moj, D. A. (2026). llmsa: Measurement System Analysis for Pipelines Built on
 Large Language Models. R package version 0.1.0.
 https://github.com/DanielMoj/llmsa</code></pre>
-<p>A <code>CITATION.cff</code> is included; a Zenodo DOI will be added with the first release.</p>
+<p><code>citation("llmsa")</code> returns the same entry; a <code>CITATION.cff</code> is included. A Zenodo DOI will be added with the first release.</p>
 </div>
 <div class="section level2">
 <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h2>
 <ul>
-<li>AIAG (2010). <em>Measurement Systems Analysis</em>, 4th ed. Automotive Industry Action Group.</li>
-<li>Burdick, R. K., Borror, C. M., Montgomery, D. C. (2003). A review of methods for measurement systems capability analysis. <em>Journal of Quality Technology</em> 35, 342-354.</li>
-<li>CLSI (2014). <em>EP05-A3: Evaluation of Precision of Quantitative Measurement Procedures</em>.</li>
-<li>ICH (2023). <em>Q2(R2): Validation of Analytical Procedures</em>.</li>
-<li>Krippendorff, K. (2011). <em>Computing Krippendorff’s Alpha-Reliability</em>. University of Pennsylvania.</li>
-<li>Lenth, R. V. (1989). Quick and easy analysis of unreplicated factorials. <em>Technometrics</em> 31, 469-473.</li>
-<li>Plackett, R. L., Burman, J. P. (1946). The design of optimum multifactorial experiments. <em>Biometrika</em> 33, 305-325.</li>
-<li>Westgard, J. O., Barry, P. L., Hunt, M. R., Groth, T. (1981). A multi-rule Shewhart chart for quality control in clinical chemistry. <em>Clinical Chemistry</em> 27, 493-501.</li>
-<li>U.S. Food and Drug Administration (2025). <em>Considerations for the Use of Artificial Intelligence to Support Regulatory Decision-Making for Drug and Biological Products</em>. Draft guidance.</li>
-<li>He, H., Thinking Machines Lab (2025). <em>Defeating Nondeterminism in LLM Inference</em>.</li>
+<li>Atıl, B., Aykent, S., Chittams, A., et al. (2025). Non-determinism of “deterministic” LLM system settings in hosted environments. In <em>Proceedings of the 5th Workshop on Evaluation and Comparison of NLP Systems (Eval4NLP)</em>, 135–148. Association for Computational Linguistics. <a href="https://doi.org/10.18653/v1/2025.eval4nlp-1.12" class="external-link uri">https://doi.org/10.18653/v1/2025.eval4nlp-1.12</a>
+</li>
+<li>Automotive Industry Action Group (2010). <em>Measurement Systems Analysis (MSA): Reference Manual</em>, 4th ed. Southfield, MI: AIAG. ISBN 978-1-60534-211-5.</li>
+<li>Bates, D., Mächler, M., Bolker, B., Walker, S. (2015). Fitting linear mixed-effects models using lme4. <em>Journal of Statistical Software</em> 67(1), 1–48. <a href="https://doi.org/10.18637/jss.v067.i01" class="external-link uri">https://doi.org/10.18637/jss.v067.i01</a>
+</li>
+<li>Burdick, R. K., Borror, C. M., Montgomery, D. C. (2003). A review of methods for measurement systems capability analysis. <em>Journal of Quality Technology</em> 35(4), 342–354. <a href="https://doi.org/10.1080/00224065.2003.11980232" class="external-link uri">https://doi.org/10.1080/00224065.2003.11980232</a>
+</li>
+<li>Christensen, R. H. B. (2026). <em>ordinal: Regression Models for Ordinal Data</em>. R package version 2026.7-26. <a href="https://doi.org/10.32614/CRAN.package.ordinal" class="external-link uri">https://doi.org/10.32614/CRAN.package.ordinal</a>
+</li>
+<li>Clinical and Laboratory Standards Institute (2025). <em>CLSI EP05: Evaluation of Precision of Quantitative Measurement Procedures</em>, 4th ed. ISBN 978-1-68440-304-2 (PDF). Supersedes EP05-A3 (2014).</li>
+<li>Cohen, J. (1960). A coefficient of agreement for nominal scales. <em>Educational and Psychological Measurement</em> 20(1), 37–46. <a href="https://doi.org/10.1177/001316446002000104" class="external-link uri">https://doi.org/10.1177/001316446002000104</a>
+</li>
+<li>Cohen, J. (1968). Weighted kappa: nominal scale agreement with provision for scaled disagreement or partial credit. <em>Psychological Bulletin</em> 70(4), 213–220. <a href="https://doi.org/10.1037/h0026256" class="external-link uri">https://doi.org/10.1037/h0026256</a>
+</li>
+<li>He, H., Thinking Machines Lab (2025). Defeating nondeterminism in LLM inference. <em>Thinking Machines Lab: Connectionism</em>, 10 September 2025. <a href="https://doi.org/10.64434/tml.20250910" class="external-link uri">https://doi.org/10.64434/tml.20250910</a>
+</li>
+<li>International Council for Harmonisation (2023). <em>ICH Harmonised Guideline Q2(R2): Validation of Analytical Procedures</em>. Adopted 1 November 2023. <a href="https://database.ich.org/sites/default/files/ICH_Q2(R2)_Guideline_2023_1130.pdf" class="external-link uri">https://database.ich.org/sites/default/files/ICH_Q2(R2)_Guideline_2023_1130.pdf</a>
+</li>
+<li>Krippendorff, K. (2011). <em>Computing Krippendorff’s Alpha-Reliability</em>. Departmental Papers (ASC), Annenberg School for Communication, University of Pennsylvania. <a href="https://repository.upenn.edu/asc_papers/43" class="external-link uri">https://repository.upenn.edu/asc_papers/43</a>
+</li>
+<li>Landrum, M. J., Chitipiralla, S., Kaur, K., et al. (2025). ClinVar: updates to support classifications of both germline and somatic variants. <em>Nucleic Acids Research</em> 53(D1), D1313–D1321. <a href="https://doi.org/10.1093/nar/gkae1090" class="external-link uri">https://doi.org/10.1093/nar/gkae1090</a>
+</li>
+<li>Lenth, R. V. (1989). Quick and easy analysis of unreplicated factorials. <em>Technometrics</em> 31(4), 469–473. <a href="https://doi.org/10.1080/00401706.1989.10488595" class="external-link uri">https://doi.org/10.1080/00401706.1989.10488595</a>
+</li>
+<li>Morris, T. P., White, I. R., Crowther, M. J. (2019). Using simulation studies to evaluate statistical methods. <em>Statistics in Medicine</em> 38(11), 2074–2102. <a href="https://doi.org/10.1002/sim.8086" class="external-link uri">https://doi.org/10.1002/sim.8086</a>
+</li>
+<li>Nakagawa, S., Johnson, P. C. D., Schielzeth, H. (2017). The coefficient of determination R² and intra-class correlation coefficient from generalized linear mixed-effects models revisited and expanded. <em>Journal of the Royal Society Interface</em> 14(134), 20170213. <a href="https://doi.org/10.1098/rsif.2017.0213" class="external-link uri">https://doi.org/10.1098/rsif.2017.0213</a>
+</li>
+<li>National Institute of Standards and Technology, Statistical Engineering Division. <em>Statistical Reference Datasets (StRD): Analysis of Variance</em>. <a href="https://itl.nist.gov/div898/strd/anova/anova.html" class="external-link uri">https://itl.nist.gov/div898/strd/anova/anova.html</a> (retrieved 22 October 2026).</li>
+<li>Plackett, R. L., Burman, J. P. (1946). The design of optimum multifactorial experiments. <em>Biometrika</em> 33(4), 305–325. <a href="https://doi.org/10.1093/biomet/33.4.305" class="external-link uri">https://doi.org/10.1093/biomet/33.4.305</a>
+</li>
+<li>Richards, S., Aziz, N., Bale, S., et al. (2015). Standards and guidelines for the interpretation of sequence variants: a joint consensus recommendation of the American College of Medical Genetics and Genomics and the Association for Molecular Pathology. <em>Genetics in Medicine</em> 17(5), 405–424. <a href="https://doi.org/10.1038/gim.2015.30" class="external-link uri">https://doi.org/10.1038/gim.2015.30</a>
+</li>
+<li>U.S. Food and Drug Administration (2025). <em>Considerations for the Use of Artificial Intelligence to Support Regulatory Decision-Making for Drug and Biological Products: Guidance for Industry and Other Interested Parties</em>. Draft guidance, January 2025, docket FDA-2024-D-4689. <a href="https://www.fda.gov/media/184830/download" class="external-link uri">https://www.fda.gov/media/184830/download</a>
+</li>
+<li>Westgard, J. O., Barry, P. L., Hunt, M. R., Groth, T. (1981). A multi-rule Shewhart chart for quality control in clinical chemistry. <em>Clinical Chemistry</em> 27(3), 493–501. <a href="https://doi.org/10.1093/clinchem/27.3.493" class="external-link uri">https://doi.org/10.1093/clinchem/27.3.493</a>
+</li>
 </ul>
 </div>
 <div class="section level2">
