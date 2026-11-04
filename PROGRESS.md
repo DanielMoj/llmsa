@@ -1,5 +1,56 @@
 # PROGRESS — Langzeitgedächtnis des Builders
 
+## M1d — REWORK, Runde 5 (04.11.2026)
+
+**K-M1d-5 besteht im gezielten Lauf mit 45 Erwartungen**, ohne Fehler,
+Warnungen oder Skips (Exit 0). Die Betreiberergänzung war bereits beim
+Beginn dieser Phase in `_pkgdown.yml:36–43` vorhanden: `validation`,
+`llm-stability` und `clinvar-raters` stehen unter `articles`.
+Die Datei hat 703 Byte und SHA-256
+`7e465e038e78aa7b5cd90c2caebd909c74ab588298a1a765a594c00c12c3b671`,
+wie vom Reviewer in Runde 4 angegeben. Der Builder hat sie nicht geändert.
+
+**E1 / M1D-INFRA-01 / BL-118: OUT-OF-TERRITORY [INFRA],
+Betreiberergänzung vorhanden und lokal erfolgreich geprüft.** Das alte
+Gate-Log der Runde 4 belegt noch die drei Listungsfehler
+(`gate-tests.log:1189–1207`, `:1831–1849`). Der aktuelle Lauf der
+vollständigen unveränderten Abnahmedatei endet dagegen mit:
+
+```text
+[ FAIL 0 | WARN 0 | SKIP 0 | PASS 45 ]
+K-M1d-5 acceptance: 5.77 seconds; exit 0
+```
+
+Prüfbefehl, Dateizuordnungen und Antworten auf sämtliche aktuellen
+Befund-IDs stehen in
+[REWORK-NOTES.md](orchestrator/handoff/M1d/REWORK-NOTES.md).
+Lokales Log: `/tmp/llmsa-m1d-r5-3pltfgx8/pkgdown-acceptance.log`.
+Die Gate-Fakten bleiben unverändert **Runde 4, `result: fail`**:
+sieben Gates grün, nur `tests` rot, kein Status `error`. Ein Gate-Ergebnis
+der Runde 5 oder eine Abnahme wird nicht vorweggenommen.
+
+REVIEW und Verdict Runde 4 enthalten `blocking: []` und verlangen keine
+Produktänderung. E16 / BL-119 bleibt bis zur Betreiberentscheidung vor
+der Paper-Verwendung zurückgestellt; E18 / QA-M1d-001 / BL-117 und
+E19 / BL-121 bleiben bis nach dem 26.11.2026 vertagt. E17, E2–E15 und
+M1D-QA-01 sind laut REVIEW erledigt; kein offener QA-PENDING-Auftrag.
+BL-93 bleibt mit den beiden Warnungen aus `gate-tests.log:778–803`
+OUT-OF-TERRITORY (Reviewer). Eine ARBITER.md zu M1d liegt nicht vor.
+
+Geändert werden nur dieser Nachtrag und der zugewiesene Handoff.
+Keine Produkt-, Test-, Daten-, Gate- oder Schwellenänderung, kein neuer
+ADR. mutgate/mutfull sind laut Gate-Fakten Runde 4 grün (ADR-047);
+kein eigener Mutationslauf, keine MUT-EQUIV-Claims oder Approvals.
+Keine Git-Kommandos. Vollständige Gates, Territoriumsprüfung,
+Phasen-Commit und Abnahme bleiben bei Orchestrator und Reviewer.
+
+Die SHA-256-Inventur (`python3 /tmp/llmsa-m1d-r5-3pltfgx8/integrity.py`,
+Exit 0) bestätigt: `462 baseline files; 2 changed; 0 new; 0 removed`.
+Alle übrigen 460 inventarisierten Dateien sind bytegleich, darunter alle
+127 Testdateien, `_pkgdown.yml` und die Gate-Fakten. Die früheren
+PROGRESS-Einträge sind bytegleich erhalten. Vollständiger Output im
+Handoff; die Inventur ersetzt kein Territoriums-Gate.
+
 ## M1d — REWORK, Runde 4 (04.11.2026)
 
 REVIEW und Verdict der Runde 3 enthalten `blocking: []`. Für Runde 4
