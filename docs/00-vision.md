@@ -70,7 +70,7 @@ Messbare Maßstäbe je Kernfeature (Kriterien in `docs/02` bis `docs/04`):
 | Testsuite | Mutationsscore über `R/fit.R` und `R/grr.R` mindestens `ANK-32` | K-M1c-6 |
 | Kappa (Cohen, gewichtet, Fleiss), Krippendorffs Alpha | Originalwerte aller Gewichtungen und Skalenniveaus; gleich den etablierten Paketen | K-M3a-1 bis K-M3a-4 |
 | Bias, Linearität | AIAG-Beispiele; Überdeckung simuliert | K-M3a-5 bis K-M3a-7 |
-| Plackett-Burman, Lenth | Generatorzeilen 1946; Hadamard; `FrF2::pb` bis auf Tausch und Vorzeichen; Lenth 1989; Fehlalarmrate am Nominalniveau | K-M3b-1 bis K-M3b-6 |
+| Plackett-Burman, Lenth | Generatorzeilen 1946; Hadamard; `FrF2::pb` bis auf Tausch und Vorzeichen; Lenth 1989; Fehlalarmrate nicht über dem Nominalniveau | K-M3b-1 bis K-M3b-6 |
 | Westgard-Regeln, Simulator, Planung | Regeln genau an der Grenze; Fehlalarm gegen Westgard 1981/Parvin 1992; Komponenten wiedergefunden; Satterthwaite-Näherung | K-M3c-1 bis K-M3c-6 |
 | Ausführung, Parser, Backends, Bericht | Abbruch und Fortsetzen ergeben denselben Speicher; Parser bestehen Zufallseingaben; aufgezeichnete echte Antworten; jede Zahl im Bericht gleich dem Objektwert; SHA-256 | K-M3d-1 bis K-M3d-6 |
 | Paket gesamt | `R CMD check --as-cran` lokal ohne ERROR und WARNING (lint-Gate); drei Betriebssysteme als Release-Bedingung in AP2 (GitHub Actions, kein Harness-Kriterium) | K-M0-3 |
