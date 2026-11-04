@@ -163,7 +163,18 @@ test_that("QA-M1c-E2E-4: boot_coverage helpers and offline reader preserve deter
   sys.source(system.file("validation", "sim", "boot_coverage_results.R", package = "llmsa", mustWork = TRUE), envir = reader_env)
   expect_false(exists("boot_generate", envir = reader_env, inherits = FALSE))
   expect_false(exists("sim_generate", envir = reader_env, inherits = FALSE))
-  checked <- reader_env$boot_read_results()
+  default_res <- reader_env$boot_read_results()
+  expect_identical(default_res$mode, "full")
+  expect_setequal(unique(default_res$data$scenario), paste0("S-boot-", 1:7))
+
+  short_dir <- tempfile("qa-m1c-boot-short-")
+  dir.create(short_dir, recursive = TRUE)
+  on.exit(unlink(short_dir, recursive = TRUE), add = TRUE)
+  expect_true(file.copy(
+    system.file("validation", "sim", "boot_coverage_check_results.csv", package = "llmsa", mustWork = TRUE),
+    file.path(short_dir, "boot_coverage_check_results.csv")
+  ))
+  checked <- reader_env$boot_read_results(short_dir)
   expect_identical(checked$mode, "check")
   expect_setequal(unique(checked$data$scenario), c("S-boot-1", "S-boot-7"))
 
