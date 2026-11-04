@@ -1,16 +1,17 @@
 # K-M3b-3: main effects are differences of the level means and twice the
 # regression coefficient with +-1 coding; Lenth's PSE, ME and SME with the
 # constants 1.5 and 2.5 and d = m/3 reproduce examples II and IV of Lenth (1989)
-# (ankerRef: ANK-81) and agree with unrepx::PSE and unrepx::ME
-# (ANK-TOL.frf2_unrepx); a factor is active when |E| > ME, simultaneously
-# active when |E| > SME. Two independent pieces of evidence (docs/01 §2 Nr. 2):
-# the printed values of the source and a mini-reference of Gl. (1)-(5)
-# (setup-m3b.R); unrepx runs as oracle at test time. Lenth's examples enter
-# msa_robustness() as plain data.frame designs with all 15 contrast columns,
-# because the PSE of the source is taken over all m = 15 contrasts (ACC-6).
-# unrepx::ME() derives ME from a simulated reference distribution, not from
-# t quantiles with d = m/3; the agreement in ME contradicts the reproduction of
-# the examples (ACC-7).
+# (ankerRef: ANK-81); the PSE agrees with unrepx::PSE, and PSE, ME and SME
+# agree with DoE.base::ME.Lenth(simulated = FALSE) (ANK-TOL.frf2_unrepx); a
+# factor is active when |E| > ME, simultaneously active when |E| > SME. Two
+# independent pieces of evidence (docs/01 §2 Nr. 2): the printed values of the
+# source and a mini-reference of Gl. (1)-(5) (setup-m3b.R); unrepx and DoE.base
+# run as oracles at test time. Lenth's examples enter msa_robustness() as plain
+# data.frame designs with all 15 contrast columns, because the PSE of the
+# source is taken over all m = 15 contrasts (ACC-6). unrepx::ME() derives ME
+# from a simulated reference distribution, not from t quantiles with d = m/3;
+# ADR-050 Nr. 2 replaced it as oracle by DoE.base::ME.Lenth(simulated = FALSE)
+# (ACC-7).
 
 acc_m3b_3_alpha <- function() as.numeric(acc_m3b_value("ANK-81", "method", "nominal_alpha"))
 
@@ -174,16 +175,57 @@ test_that("K-M3b-3: the PSE agrees with unrepx::PSE(method = \"Lenth\") (ANK-TOL
   }
 })
 
-test_that("K-M3b-3: ME agrees with unrepx::ME(method = \"Lenth\") (ANK-TOL.frf2_unrepx; contradiction ACC-7)", {
+test_that("K-M3b-3: PSE, ME and SME agree with DoE.base::ME.Lenth(simulated = FALSE) (ANK-TOL.frf2_unrepx)", {
+  # pse_me_tol holds for SME as well (ADR-050 Nr. 2). The oracle gets the
+  # effects computed here from the data, except in the case with a contrast on
+  # the trimming bound, where it gets the effects the product reports, for the
+  # reason given in the test of Gl. (2) above.
   tol <- as.numeric(acc_m3b_tol("frf2_unrepx", "pse_me_tol"))
   alpha <- acc_m3b_3_alpha()
-  for (ex in c("II", "IV")) {
+  cases <- lapply(c("II", "IV"), function(ex) {
     L <- acc_m3b_lenth_example(ex)
-    r <- msa_robustness(L$design, L$y, factors = L$labels, alpha = alpha)
-    oracle <- acc_m3b_unrepx_me(acc_m3b_mean_differences(L$X, L$y), alpha)
-    expect_match(names(oracle)[1], "^ME")
-    expect_lte(abs(acc_m3b_attr(r, "me") - unname(oracle[1])), tol,
-               label = sprintf("example %s: ME %.6f (Lenth, printed %s), unrepx::ME %.6f (simulated reference distribution, seed %d)",
-                               ex, acc_m3b_attr(r, "me"), format(L$meta$me), unname(oracle[1]), acc_m3b_unrepx_seed))
+    list(label = paste("example", ex), design = L$design, y = L$y, factors = L$labels,
+         effects = acc_m3b_mean_differences(L$X, L$y))
+  })
+  for (k in c(11L, 8L)) {
+    for (seed in 1:3) {
+      case <- acc_m3b_3_pb_case(k, seed = seed)
+      cases[[length(cases) + 1L]] <- list(label = sprintf("pb_design(%d) in 12 runs, seed %d", k, seed), design = case$d,
+                                          y = case$y, factors = case$labels,
+                                          effects = acc_m3b_mean_differences(case$X, case$y))
+    }
+  }
+  for (k in 3:6) {
+    X <- acc_m3b_full_contrasts(k)
+    y <- acc_m3b_with_seed(200L + k, stats::rnorm(nrow(X)))
+    cases[[length(cases) + 1L]] <- list(label = sprintf("m = %d contrasts of the 2^%d factorial", ncol(X), k),
+                                        design = as.data.frame(X), y = y, factors = colnames(X),
+                                        effects = acc_m3b_mean_differences(X, y))
+  }
+  for (cs in cases) {
+    r <- msa_robustness(cs$design, cs$y, factors = cs$factors, alpha = alpha)
+    oracle <- acc_m3b_doe_lenth(cs$effects, alpha)
+    ref <- acc_m3b_lenth_reference(cs$effects, alpha)
+    for (key in names(oracle)) {
+      expect_lte(abs(acc_m3b_attr(r, key) - oracle[[key]]), tol,
+                 label = sprintf("%s: %s %.10f, DoE.base::ME.Lenth %.10f", cs$label, toupper(key), acc_m3b_attr(r, key), oracle[[key]]))
+      expect_lte(abs(oracle[[key]] - ref[[key]]), acc_m3b_arith(),
+                 label = sprintf("%s: %s of DoE.base::ME.Lenth %.10f equals the mini-reference %.10f", cs$label, toupper(key),
+                                 oracle[[key]], ref[[key]]))
+    }
+  }
+  # Effects 1, 1, 2, 2, 7.5, 30, 40: DoE.base trims strictly as Gl. (2) does,
+  # so the contrast on 2.5 s0 stays out of the PSE there as well.
+  target <- c(2, 40, 1, 7.5, 2, 30, 1)
+  expect_identical(acc_m3b_doe_lenth(target, alpha)[["pse"]], acc_m3b_lenth_reference(target, alpha)$pse)
+  d <- pb_design(7L, n_runs = 8L, randomize = FALSE)
+  X <- acc_m3b_coded(d)
+  y <- as.numeric(X %*% target) / 2
+  r <- msa_robustness(d, y, alpha = alpha)
+  oracle <- acc_m3b_doe_lenth(acc_m3b_by_factor(r, colnames(attr(d, "coded")), "effect"), alpha)
+  for (key in names(oracle)) {
+    expect_lte(abs(acc_m3b_attr(r, key) - oracle[[key]]), tol,
+               label = sprintf("contrast on the trimming bound: %s %.10f, DoE.base::ME.Lenth %.10f", toupper(key),
+                               acc_m3b_attr(r, key), oracle[[key]]))
   }
 })

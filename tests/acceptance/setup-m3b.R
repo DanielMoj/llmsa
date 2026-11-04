@@ -3,17 +3,20 @@
 #
 # Reference values come from reference/anchors/ (ANK-80 Plackett & Burman 1946,
 # ANK-81 Lenth 1989, ANK-82 Daniel 1959, ANK-06, ANK-TOL) or from the oracles
-# the criteria name (FrF2::pb, unrepx::PSE, unrepx::ME, stats::lm), called at
-# test time on the same data; no package output is frozen. Local data: Tab. 2
-# and Tab. 3 of Lenth (1989) under reference/quellen/data/lenth/ (protected,
-# git-ignored, docs/01 §6); a missing or altered file fails the test, it never
-# skips it (AGENTS.md).
+# the criteria name (FrF2::pb with boxtyssedal = FALSE, unrepx::PSE,
+# DoE.base::ME.Lenth with simulated = FALSE, stats::lm), called at test time on
+# the same data; no package output is frozen. Local data: Tab. 2 and Tab. 3 of
+# Lenth (1989) under reference/quellen/data/lenth/ (protected, git-ignored,
+# docs/01 §6); a missing or altered file fails the test, it never skips it
+# (AGENTS.md).
 # The mini-references below are written from the sources (pages in the
 # anchors) and Formelsammlung §7, independently of R/robustness.R.
-# K-M3b-5 is a class A simulation and lives in tests/simulation/test-lenth-h0.R
-# (docs/01 §8). Interpretations of points on which the spec is silent, and the
-# contradictions found between the criteria and their sources or oracles, are
-# listed in orchestrator/handoff/M3b/CRITERIA.json under "open" (ACC-n).
+# The false alarm rate of K-M3b-5 is a class A simulation and lives in
+# tests/simulation/test-lenth-h0.R (docs/01 §8); the help page part of K-M3b-5
+# is tested in test-m3b-5-help-page.R. Interpretations of points on which the
+# spec is silent, and the contradictions found between the criteria and their
+# sources or oracles (decided in ADR-050), are listed in
+# orchestrator/handoff/M3b/CRITERIA.json under "open" (ACC-n).
 
 acc_m3b <- new.env(parent = emptyenv())   # cache for one test run
 
@@ -185,20 +188,23 @@ acc_m3b_equivalence <- function(A, B, budget = 1e6) {
   list(found = FALSE, verified = FALSE, nodes = nodes, reason = "no row, column and sign mapping exists")
 }
 
-# FrF2::pb() as oracle (docs/01 §6): nruns = N, every other argument at its
-# default except randomize = FALSE, which only fixes the row order that
-# K-M3b-2 leaves free (ACC-4). FrF2's notes on aliasing (warnings and printed
-# text) are no part of the comparison and are muffled.
-acc_m3b_frf2 <- function(N) {
+# FrF2::pb() as oracle (docs/01 §6) with nruns = N and boxtyssedal = FALSE as
+# K-M3b-2 names them (ADR-050 Nr. 1; with the default TRUE, FrF2 returns the
+# Box-Tyssedal design for N = 16, ACC-5); randomize = FALSE only fixes the row
+# order that K-M3b-2 leaves free, every other argument stays at its default
+# (ACC-4). FrF2's notes on aliasing (warnings and printed text) are no part of
+# the comparison and are muffled.
+acc_m3b_frf2 <- function(N, boxtyssedal = FALSE) {
   d <- NULL
   utils::capture.output(d <- withCallingHandlers(
-    FrF2::pb(nruns = N, randomize = FALSE),
+    FrF2::pb(nruns = N, boxtyssedal = boxtyssedal, randomize = FALSE),
     warning = function(w) invokeRestart("muffleWarning"),
     message = function(m) invokeRestart("muffleMessage")
   ))
   X <- as.matrix(attr(d, "desnum"))
   if (is.null(X) || !identical(dim(X), c(as.integer(N), as.integer(N) - 1L))) {
-    stop("acceptance: FrF2::pb(nruns = ", N, ") gave no ", N, " x ", N - 1, " design matrix", call. = FALSE)
+    stop("acceptance: FrF2::pb(nruns = ", N, ", boxtyssedal = ", boxtyssedal, ") gave no ", N, " x ", N - 1,
+         " design matrix", call. = FALSE)
   }
   storage.mode(X) <- "double"
   dimnames(X) <- NULL
@@ -305,17 +311,19 @@ acc_m3b_full_contrasts <- function(k) {
   X
 }
 
-# unrepx as oracle (docs/01 §6) with Lenth's PSE (method = "Lenth"; the package
-# default is "Zahn"). unrepx::ME() simulates its reference distribution from
-# the current random stream and caches it in options(unrepx.lastrefdist); the
-# call runs with a fixed seed and an empty cache, both restored afterwards
-# (ACC-7).
-acc_m3b_unrepx_seed <- 20261104L
-
-acc_m3b_unrepx_me <- function(effects, alpha) {
-  old <- options(unrepx.lastrefdist = NULL)
-  on.exit(options(old), add = TRUE)
-  acc_m3b_with_seed(acc_m3b_unrepx_seed, unrepx::ME(effects, method = "Lenth", alpha = alpha))
+# DoE.base::ME.Lenth() as oracle for PSE, ME and SME (K-M3b-3, ADR-050 Nr. 2):
+# simulated = FALSE selects Lenth's t quantiles with d = m/3 instead of the
+# stored simulated critical values, alpha is the nominal level of the test.
+# unrepx::ME() is no oracle (it draws ME and SME from a simulated reference
+# distribution, ACC-7); unrepx::PSE() still is, for the PSE. A missing or
+# non-finite value stops the test instead of an empty comparison.
+acc_m3b_doe_lenth <- function(effects, alpha) {
+  o <- DoE.base::ME.Lenth(unname(effects), simulated = FALSE, alpha = alpha)
+  out <- c(pse = unname(o$PSE), me = unname(o$ME), sme = unname(o$SME))
+  if (length(out) != 3L || !all(is.finite(out))) {
+    stop("acceptance: DoE.base::ME.Lenth(simulated = FALSE) gave no finite PSE, ME and SME", call. = FALSE)
+  }
+  out
 }
 
 # Half-normal plot (ANK-82) -------------------------------------------------------------
