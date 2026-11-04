@@ -1,13 +1,13 @@
 {
   "contract": 1,
   "project": "llmsa",
-  "ts": "2026-11-04T03:44:17+01:00",
+  "ts": "2026-11-04T04:30:03+01:00",
   "milestone": {
     "id": "M1d",
     "index": 6,
     "total": 10
   },
-  "phase": "45-qa",
+  "phase": "gates",
   "round": 1,
   "needs_human": false,
   "reason": "",
