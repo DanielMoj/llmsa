@@ -4,7 +4,13 @@
 \alias{msa_robustness}
 \title{Analyse a robustness screening experiment}
 \usage{
-msa_robustness(design, response, factors = NULL, alpha = 0.05)
+msa_robustness(
+  design,
+  response,
+  factors = NULL,
+  alpha = 0.05,
+  transform = "none"
+)
 }
 \arguments{
 \item{design}{A \code{pb_design} (or a data.frame with coded \code{-1}/\code{+1}
@@ -15,22 +21,33 @@ columns named in \code{factors}).}
 
 \item{factors}{Factor columns to analyse; default: all coded columns.}
 
-\item{alpha}{Significance level for ME and SME.}
+\item{alpha}{Nominal significance level for ME and SME.}
+
+\item{transform}{Either \code{"none"} (default) or \code{"logit"}. The latter requires
+a real numeric vector of finite proportions strictly between 0 and 1
+and applies \code{log(p / (1 - p))} before estimating effects. No boundary
+correction is applied. Proportions of exactly 0 or 1 require a prior
+correction, such as computing an empirical logit and passing those
+logits with \code{transform = "none"}.}
 }
 \value{
 An object of class \code{msa_robustness}: a data.frame of effects
 (\code{effect} = mean at high level minus mean at low level, \code{t_lenth} =
 effect / PSE, \code{active} flag) with attributes \code{pse}, \code{me}, \code{sme},
-plus the response summary.
+plus the response summary. With \code{transform = "logit"}, effects, PSE, ME,
+SME and the attributes \code{response_mean} and \code{response_sd} are on the
+logit scale.
 }
 \description{
 Estimates the main effect of every factor in a Plackett-Burman (or any
 two-level orthogonal) design on a response such as accuracy, agreement
 with the reference, or the mean parsed value, and judges which effects
 are active with Lenth's pseudo standard error, which needs no replicate
-runs. Effects beyond the margin of error (ME) are flagged as active at
-the 5 \% level per effect; the simultaneous margin (SME) controls the
-family-wise error.
+runs. Effects beyond the margin of error (ME) are flagged as active;
+effects beyond the simultaneous margin (SME) are flagged as simultaneously
+active. Lenth's ME and SME are conservative: with normal noise and all
+effects zero, actual false alarm rates per effect (ME) and per experiment
+(SME) are below the nominal \code{alpha}.
 }
 \examples{
 d <- pb_design(list(format = c("plain", "sci"), units = c("nM", "ng/mL"),
@@ -43,4 +60,7 @@ msa_robustness(d, acc)
 \references{
 Lenth, R. V. (1989). Quick and easy analysis of unreplicated
 factorials. \emph{Technometrics} 31, 469-473.
+
+Daniel, C. (1959). Use of half-normal plots in interpreting factorial
+two-level experiments. \emph{Technometrics} 1, 311-341.
 }

@@ -357,3 +357,35 @@ if (coverage_results$mode == "full") {
     cat("No interval estimand exceeds the anchored report threshold.\n")
 } else cat("\nShort run: no full-run coverage finding is claimed.\n")
 ```
+
+## Robustness screening: Plackett-Burman and Lenth
+
+The harness validates `pb_design()` against the published generator rows
+in ANK-80 and `FrF2::pb(boxtyssedal = FALSE)`, allowing row and column
+permutations and column sign changes. ANK-81 supplies Lenth's published
+examples and method constants. The protected example tables are checked
+locally against their anchored hashes. Main effects are compared with
+differences of level means and regression coefficients; PSE is checked
+against `unrepx::PSE(method = "Lenth")`, and PSE, ME and SME against
+`DoE.base::ME.Lenth(simulated = FALSE)`. These are live oracle calculations
+in the acceptance suite under `tests/acceptance/`, with tolerances from
+ANK-TOL.arithmetic and ANK-TOL.frf2_unrepx. ANK-82 specifies Daniel's
+half-normal plotting positions, which are checked in the recorded plot.
+
+The class A study `tests/simulation/test-lenth-h0.R` uses seeded normal
+noise under the null hypothesis of zero effects. It checks every ME and
+SME decision against an independent Lenth calculation and reports the
+per-effect and per-experiment false alarm rates, their Monte Carlo standard
+errors and their distance from the nominal `alpha`. The sample size comes
+from ANK-06 and the allowance from ANK-TOL.mc_factor. The method is
+conservative: rates below nominal do not justify recalibrating the margins,
+and no factor exceeding ME does not establish pipeline robustness. This
+study runs in the harness; building this vignette does not rerun it.
+
+With `transform = "logit"`, `msa_robustness()` analyses finite proportions
+strictly between zero and one on the logit scale, including the response
+mean and standard deviation. Boundary proportions require a prior
+correction; finite empirical logits can be supplied with `transform = "none"`.
+The default analyses the supplied response without transformation. Unit
+tests check the transformation against regression, input errors, invariance
+to relabelling and row order, and reproducibility of the randomised design.

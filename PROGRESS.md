@@ -1,5 +1,286 @@
 # PROGRESS — Langzeitgedächtnis des Builders
 
+## M3b — BUILD, Runde 1 (04.11.2026)
+
+Der freigegebene PLAN ist umgesetzt; Grundlage sind PLAN-REVIEW mit
+`verdict-plan.json: PASS`, ADR-050 und ADR-051. Keine PLAN-UPDATE- oder
+ARBITER-Datei vorhanden. Keine Planabweichung, kein neuer Builder-ADR,
+keine neue Vertragslücke. Die Antworten auf E1–E3 und ACC-1–ACC-15 stehen
+im zugewiesenen [REVIEW-INPUT.md](orchestrator/handoff/M3b/REVIEW-INPUT.md).
+Die Vertagungen des PLAN, insbesondere BL-125/BL-126, bleiben bestehen.
+
+**Nachtrag zu M1d:** Die inzwischen vorliegenden Betreiberfakten
+`orchestrator/state/M1d/gates.json` nennen Runde 5, `result: pass` und
+acht bestandene Gates (deps, lint, tests, trace, territory, mutgate,
+golden-adr, mutfull). `orchestrator/handoff/M1d/verdict-code.json` enthält
+Runde 5, `verdict: PASS`, `blocking: []`. Das aktualisiert den damaligen
+Kenntnisstand des unverändert erhaltenen Eintrags unten; es ist kein
+erneuter Gate-Lauf dieser BUILD-Phase. E16/BL-119, E18/BL-117 und
+E19/BL-121 bleiben nach diesem Verdict nonblocking.
+
+### Umsetzung und Prüfgrenzen
+
+`msa_robustness()` erhält als fünftes Argument `transform = "none"`.
+Nur die einzelnen Zeichenwerte `"none"` und `"logit"` sind zulässig.
+Der neue Logit-Pfad verlangt reelle, endliche numerische Vektoren strikt
+zwischen 0 und 1; Matrizen, Arrays, komplexe Werte, Grenzen und sonstige
+ungültige Werte scheitern benannt vor der Transformation. Bestehende
+Längen- und NA-Fehler bleiben erhalten. Danach wird genau einmal
+`stats::qlogis()` angewandt, ohne Randkorrektur. Der Standardpfad und
+das vollständige Ergebnisschema bleiben erhalten, ebenso PB-Konstruktion,
+Lenth-Rechenfolge und Druckmethoden. Der bestehende AP1-Aufruf verwendet
+weiterhin den Standardpfad für seine bereits transformierten Antworten.
+
+Die Half-Normal-Achse nennt Daniel (1959). Roxygen und erzeugte Hilfe
+erklären das konservative ME-/SME-Verfahren, nominales `alpha`, den
+zulässigen Logit-Bereich und die Skala einschließlich Antwortmittelwert
+und -standardabweichung. FrF2, DoE.base und unrepx stehen jetzt in
+Suggests; keine Imports, Exporte oder eingefrorenen Abhängigkeiten geändert.
+NEWS und ein kurzer englischer Methodenabschnitt in `validation.Rmd`
+dokumentieren M3b. Die Vignette erhält weder abgetippte Ergebnisse oder
+Toleranzen noch neue ausführbare Chunks oder `source()`-Aufrufe.
+
+Zwei neue Unit-Dateien ergänzen 19 Blöcke mit 489 Erwartungen:
+unabhängige Logit-/Regressionsgegenrechnung, ganze Standardobjekte,
+Fehlerklassen, RNG-Erhaltung, Faktor-Metadaten, Invarianzen,
+verschwindende/kleine PSE, komplette Druckausgaben und die tatsächlich
+aufgezeichnete Grafik. Der erste Lauf hatte eine falsche Erwartung im
+neuen Test: automatische data.frame-Zeilennamen wurden mit den fehlenden
+Matrix-Zeilennamen verglichen. Nur dieser neue Test normalisiert jetzt
+die Zeilennamen vor dem weiterhin vollständigen Matrixvergleich.
+`unit-initial.log` enthält den ursprünglichen Fehler; vorhandene Tests
+und Abnahmetests wurden nicht geändert.
+
+Alle folgenden Prüfungen sind lokale ausgeführte Befunde. Vollständige
+Git-basierte Prüfungen K-M1d-8/K-M0-7, reguläre Gates, QA, Commit und
+Abnahme bleiben beim Orchestrator beziehungsweise Reviewer. Kein eigener
+Gate-Status und kein Builder-Verdict. Keine Git-Kommandos ausgeführt.
+
+### Umgebung, Befehle und echte Outputs
+
+Rohlogs und Hilfsskripte: `/tmp/llmsa-m3b-build-22ktixdh/`.
+R 4.6.1 (2026-06-24), testthat 3.3.2, pkgload 1.5.3,
+roxygen2 8.1.1, FrF2 2.3.5, DoE.base 1.2.5, unrepx 1.0.2,
+muttest 0.3.0. Keine Installation oder Aktualisierung.
+`Rscript --vanilla orchestrator/lib/r-deps.R --check-only`, Exit 0:
+
+```text
+r-deps: pass — 28 Anforderungen erfüllt (R 4.6.1)
+```
+
+Die drei geschützten Lenth-Tabellen stimmen mit den SHA-256 aus ANK-81
+überein; `QUELLE.txt` ist vorhanden. Die installierbare numerische
+ANK-TOL-Kopie ist bytegleich mit dem Original. Die Mutations-Baseline
+`orchestrator/state/mut-baseline` fehlt wie im PLAN vorgesehen.
+
+Rd-Erzeugung in der temporären Paketkopie, Exit 0 (`roxygen.log`):
+
+```sh
+Rscript --vanilla -e 'roxygen2::roxygenise("/tmp/llmsa-m3b-build-22ktixdh/docs-src", roclets = "rd")'
+```
+
+```text
+ℹ Setting Config/roxygen2/version to "8.1.1"
+ℹ Loading llmsa
+Writing 'msa_robustness.Rd'
+Writing 'llmsa-package.Rd'
+```
+
+Übernommen wurde ausschließlich `man/msa_robustness.Rd`, bytegleich mit
+diesem Output. Andere Rd-Dateien und NAMESPACE bleiben unverändert.
+
+Der temporäre `run-suite.R` setzt `REPO_ROOT` und `NOT_CRAN=true`, öffnet
+ein Null-PDF-Gerät und ruft `testthat::test_dir(load_package = "source",
+reporter = "summary", stop_on_failure = FALSE)` mit dem angegebenen Filter
+auf. Seine Zusammenfassung zählt den echten testthat-Ergebnisrahmen;
+Fehler oder fehlgeschlagene Erwartungen führen zu Exit 1. Ausgeführt im
+Repository mit `TZ=Europe/Berlin`, jeweils Exit 0:
+
+```sh
+TZ=Europe/Berlin Rscript --vanilla /tmp/llmsa-m3b-build-22ktixdh/run-suite.R tests/testthat '^robustness-' 'M3b unit'
+TZ=Europe/Berlin Rscript --vanilla /tmp/llmsa-m3b-build-22ktixdh/run-suite.R tests/acceptance '^m3b-' 'M3b acceptance'
+TZ=Europe/Berlin Rscript --vanilla /tmp/llmsa-m3b-build-22ktixdh/run-suite.R tests/simulation '^lenth-h0$' 'Lenth H0'
+TZ=Europe/Berlin Rscript --vanilla /tmp/llmsa-m3b-build-22ktixdh/run-suite.R tests/acceptance '^m1[abc]-[57]-vignette' 'Vignette regressions'
+```
+
+Maßgebliche unveränderte Outputzeilen aus `unit-final.log`,
+`acceptance.log` und `vignette-regression.log`:
+
+```text
+M3b unit: 25 blocks; 0 failed expectations; 0 error blocks; 0 warnings; 0 skips; 538 passed expectations; elapsed 6.34 s
+test-robustness-plan-spc.R: 6 blocks; failed 0; errors 0; warnings 0; skips 0; passed 49
+test-robustness-properties.R: 12 blocks; failed 0; errors 0; warnings 0; skips 0; passed 188
+test-robustness-transform.R: 7 blocks; failed 0; errors 0; warnings 0; skips 0; passed 301
+M3b acceptance: 27 blocks; 0 failed expectations; 0 error blocks; 0 warnings; 0 skips; 437 passed expectations; elapsed 9.43 s
+test-m3b-1-pb-matrices.R: 4 blocks; failed 0; errors 0; warnings 0; skips 0; passed 101
+test-m3b-2-frf2.R: 2 blocks; failed 0; errors 0; warnings 0; skips 0; passed 11
+test-m3b-3-lenth.R: 7 blocks; failed 0; errors 0; warnings 0; skips 0; passed 183
+test-m3b-4-half-normal.R: 3 blocks; failed 0; errors 0; warnings 0; skips 0; passed 15
+test-m3b-5-help-page.R: 3 blocks; failed 0; errors 0; warnings 0; skips 0; passed 3
+test-m3b-6-design-transform.R: 8 blocks; failed 0; errors 0; warnings 0; skips 0; passed 124
+Vignette regressions: 26 blocks; 0 failed expectations; 0 error blocks; 0 warnings; 0 skips; 696 passed expectations; elapsed 137.64 s
+```
+
+Vollständige Studienausgabe aus `lenth-h0.log` (die erste Zeile folgt dort
+unmittelbar auf die sechs Fortschrittspunkte des Reporters):
+
+```text
+K-M3b-5 (tests/simulation/test-lenth-h0.R, 1.8 s):
+N = 12,  8 factors: per effect (ME) 0.02325 (MCSE 0.00222), distance to alpha 0.05: -0.02675 (-12.0 MCSE); per plan (SME) 0.01500 (MCSE 0.00384), distance to alpha 0.05: -0.03500 (-9.1 MCSE); n_sim 1000, seed 20261112, RNG Mersenne-Twister/Inversion/Rejection, R version 4.6.1 (2026-06-24), llmsa 0.1.0
+N = 12, 11 factors: per effect (ME) 0.02891 (MCSE 0.00231), distance to alpha 0.05: -0.02109 (-9.1 MCSE); per plan (SME) 0.02500 (MCSE 0.00494), distance to alpha 0.05: -0.02500 (-5.1 MCSE); n_sim 1000, seed 20261115, RNG Mersenne-Twister/Inversion/Rejection, R version 4.6.1 (2026-06-24), llmsa 0.1.0
+Lenth H0: 1 blocks; 0 failed expectations; 0 error blocks; 0 warnings; 0 skips; 6 passed expectations; elapsed 4.53 s
+```
+
+Alle einzelnen ME-/SME-Entscheidungen stimmen mit der unabhängigen
+Mini-Referenz. Die konservativen Raten werden offen berichtet; keine
+Nachkalibrierung, keine Änderung an Seeds, ANK-06 oder ANK-TOL.
+
+Vollständige Unit-/E2E-/Fuzz-Regression, Exit 0 (`regression.log`):
+
+```sh
+TZ=Europe/Berlin REPO_ROOT=/mnt/c/Users/Danie/dev/Llmsa/llmsa Rscript --vanilla -e 'grDevices::pdf(NULL); source("orchestrator/lib/r-tests.R")' --args tests/testthat tests/e2e tests/fuzz
+```
+
+```text
+[ FAIL 0 | WARN 0 | SKIP 1 | PASS 6230 ]
+[ FAIL 0 | WARN 0 | SKIP 0 | PASS 319 ]
+[ FAIL 0 | WARN 0 | SKIP 0 | PASS 94 ]
+r-tests: pass — 345 Tests in tests/testthat, tests/e2e, tests/fuzz; 0 fehlgeschlagen, 0 Fehler, 1 übersprungen
+```
+
+Der einzige Test-Skip ist der bestehende ellmer-Negativtest, weil ellmer
+installiert ist. Das zusätzlich übergebene `--args` wurde vom Runner als
+leerer Verzeichnisname gemeldet (`r-tests: --args: keine Testdateien,
+übersprungen`); alle drei tatsächlichen Testverzeichnisse wurden vollständig
+ausgeführt (52/5/5 Testdateien).
+
+Git-freie Zusatzprüfung gegen den vor BUILD gesicherten Funktionsstand
+und die vorhandenen Reviewer-Helfer, Exit 0 (`compatibility.log`):
+
+```sh
+TZ=Europe/Berlin Rscript --vanilla /tmp/llmsa-m3b-build-22ktixdh/check-compatibility.R
+```
+
+```text
+Compatibility: 7 full msa_robustness objects identical to the pre-BUILD functions, with default and explicit none
+Logit: 5 full objects identical to the pre-BUILD function on separately transformed responses
+AP1 compatibility: 5 full acmg_robustness objects identical; acceptable, marginal and unacceptable all exercised
+PB construction and both print methods: formals and function bodies unchanged
+API: all 22 exported signatures retain the ANK-02 prefix, checked by both reviewer helpers without Git
+Validation vignette: no typed numeric results from any of the four full studies
+```
+
+### Lokale Mutationsdiagnose
+
+Die neun Mutatorfamilien des vorhandenen `r-mutation.R` wurden mit
+`muttest::muttest_plan()` auf die vollständige endgültige `R/robustness.R`
+angewandt. Ausführung über
+`python3 /tmp/llmsa-m3b-build-22ktixdh/run-mutation-probe.py`, Exit 0,
+mit zwölf unabhängigen R-Prozessen und isolierten Paketkopien außerhalb
+des Arbeitsbaums. Jeder Mutant läuft gegen alle `^robustness-`-Unit- und
+`^m3b-`-Abnahmedateien. Der unmutierte Vorlauf besteht 975 Erwartungen
+ohne Fehler/Warnungen/Skips (12,471 s).
+
+```text
+Final diagnostic counts: {'Killed': 299, 'Survived': 9, 'CompileError': 9}
+Detected 299/308 parseable mutants (97.08%); no gate verdict
+Elapsed 459.11 s
+```
+
+Keine Timeouts oder Infrastrukturabbrüche. Die neun Syntaxfehler sind
+getrennt ausgewiesen; alle neun Überlebenden bleiben im Nenner. Acht
+entsprechen Kandidatentypen aus PLAN-REVIEW E1 Nr. 7. Die neunte Variante
+entfernt den letzten Druck-Zeilenumbruch, den `capture.output()` nicht
+unterscheidet. Keine MUT-EQUIV-Claims oder eigene Freigaben. Einzelbefunde
+und Funktionszuordnung stehen im Handoff und in `mutation-probe.log`,
+`mutation/diagnostic-results.json`, `mutation/by-function.log`.
+Nachträglich ergänzte Mutatorbezeichnungen ändern keine Quellvariante;
+alle 317 SHA-256 blieben gleich (`mutation/metadata.log`).
+Dies ersetzt weder den regulären Mutationslauf noch dessen Schwellen-,
+Floor- oder Ratchet-Entscheidung.
+
+### Öffentlicher Paketbau und Check
+
+Ausgeführt in `/tmp/llmsa-m3b-build-22ktixdh/public` auf einer Kopie der
+öffentlichen Paketdateien, ohne geschützte Originale, API-Aufzeichnungen
+oder Harness-Dateien; beide Kommandos Exit 0:
+
+```sh
+env -u REPO_ROOT TZ=Europe/Berlin R CMD build --no-manual src
+env -u REPO_ROOT TZ=Europe/Berlin _R_CHECK_CRAN_INCOMING_REMOTE_=false R CMD check --as-cran --no-manual llmsa_0.1.0.tar.gz
+```
+
+`_R_CHECK_CRAN_INCOMING_REMOTE_=false` entspricht der bestehenden
+Offline-Einstellung des Paket-Gates; die Systemzeitprüfung blieb aktiv.
+Auszüge aus `public/build.log` und `public/check.log`:
+
+```text
+* creating vignettes ... OK
+* building ‘llmsa_0.1.0.tar.gz’
+* checking for future file timestamps ... NOTE
+Unable to verify current time.  To disable remote verification,
+set environment variable _R_CHECK_SYSTEM_CLOCK_ to a false value.
+* checking examples ... [11s/11s] OK
+* checking examples with --run-donttest ... [105s/105s] OK
+* checking tests ...
+  Running ‘testthat.R’ [223s/223s]
+ [223s/223s] OK
+* checking package vignettes ... OK
+* checking re-building of vignette outputs ... [101s/101s] OK
+* DONE
+Status: 1 NOTE
+```
+
+Keine ERROR-/WARNING-Befunde des Checks; die eine NOTE betrifft die
+offline nicht überprüfbare Uhrzeit. Die Logzeile zur nicht erreichbaren
+CRAN-Paketliste endet mit bestandenem Abhängigkeiten-Check. Die bekannte
+Paketgröße erscheint als INFO (22,3 Mb, davon 20,6 Mb validation; BL-114).
+Alle vier gebauten Vignetten und alle vier Vollstudien-Ergebnisdateien
+sind im Tarball, ebenso beide neuen Tests und die erzeugte Hilfeseite.
+Installierter Testlauf (`public/llmsa.Rcheck/tests/testthat.Rout`):
+
+```text
+[ FAIL 0 | WARN 0 | SKIP 9 | PASS 6154 ]
+```
+
+Die neun bestehenden Skips betreffen fünf nicht mitgelieferte
+API-Aufzeichnungen, einen CRAN-ausgenommenen Berichtstest, zwei Vergleiche
+mit den nur im Repository vorhandenen Originalankern sowie den
+ellmer-Negativtest. Im Repo-Lauf wurden alle davon bis auf den
+ellmer-Negativtest ausgeführt. Keine Skip-Regel geändert.
+
+### Abschlussintegrität
+
+`python3 /tmp/llmsa-m3b-build-22ktixdh/integrity.py`, Exit 0:
+
+```text
+Inventory: 445 baseline files; 6 changed; 3 new; 0 removed
+Changed: DESCRIPTION
+Changed: NEWS.md
+Changed: PROGRESS.md
+Changed: R/robustness.R
+Changed: man/msa_robustness.Rd
+Changed: vignettes/validation.Rmd
+New: orchestrator/handoff/M3b/REVIEW-INPUT.md
+New: tests/testthat/test-robustness-properties.R
+New: tests/testthat/test-robustness-transform.R
+All 136 pre-existing test files are byte-identical
+reference/anchors/: 49 original files byte-identical
+reference/quellen/data/: 6 original files byte-identical
+inst/extdata/: 24 original files byte-identical
+inst/validation/sim/: 32 original files byte-identical
+msa_robustness.Rd equals the staged roxygen output byte for byte
+Earlier PROGRESS entries preserved byte for byte
+All three protected Lenth tables still match ANK-81
+Integrity check completed; no territory-gate verdict
+```
+
+Alle übrigen 439 inventarisierten Dateien sind bytegleich. Keine
+Änderung außerhalb der neun im PLAN genannten Dateien, keine gelöschte
+Datei, keine Änderung an Gate-Fakten oder Regeln. Alle Test-, Build- und
+Mutationsartefakte liegen außerhalb des Arbeitsbaums. Die Inventur
+ersetzt das Territoriums-Gate nicht.
+
 ## M1d — REWORK, Runde 5 (04.11.2026)
 
 **K-M1d-5 besteht im gezielten Lauf mit 45 Erwartungen**, ohne Fehler,

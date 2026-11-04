@@ -36,7 +36,9 @@ Suggests:
     curl,
     DBI,
     digest,
+    DoE.base,
     ellmer,
+    FrF2,
     httr2,
     jsonlite,
     knitr,
@@ -48,6 +50,7 @@ Suggests:
     RSQLite,
     SixSigma,
     testthat (>= 3.0.0),
+    unrepx,
     VCA,
     yaml
 VignetteBuilder: knitr

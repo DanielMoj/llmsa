@@ -1,5 +1,12 @@
 # llmsa (development version)
 
+* `msa_robustness()` accepts `transform = "logit"` for finite proportions
+  strictly between zero and one. Effects and response summaries then use
+  the logit scale; the default `transform = "none"` preserves existing results.
+* The robustness half-normal plot names Daniel's plotting convention.
+  The help page explains that Lenth's ME and SME are conservative and
+  `alpha` is a nominal significance level.
+
 * New offline `llm-stability` and `clinvar-raters` vignettes recompute
   agreement and latent variance components from reproducible, licensed
   frozen subsets. Data preparation records parsing failures, exclusions,
