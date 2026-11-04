@@ -1,0 +1,48 @@
+# QA — M3b (Red Team)
+
+Rolle: QA / Red Team (keine Verdict-Macht; Schweregrade sind Vorschläge für den Reviewer) · Meilenstein: `M3b` · Stand: 05.11.2026 · Fester, geloggter Seed aller neuen QA-Tests: `20261105` (`set.seed(20261105L)`).
+
+## Geprüfter Kontext
+
+- **Rahmen, Regeln und Verträge:** `AGENTS.md`, `IMPLEMENTATION-RULES.md`, `contracts/PROTOCOLS.md`, `orchestrator/handoff/SCHEMA.md`.
+- **Meilenstein-Spezifikation und Entscheidungen:** `orchestrator/handoff/M3b/CRITERIA.json` (`K-M3b-1` bis `K-M3b-6`, `ACC-1` bis `ACC-15`), `docs/04-weitere-bausteine.md` (Abschnitt M3b), `docs/01-fachspezifikation.md` (§2, §4, §5, §6, §8), `docs/decisions/ADR-050-m3b-widersprueche-der-spec.md`, `docs/decisions/ADR-051-m3b-reviewer-auslegungen.md`, `orchestrator/handoff/M3b/PLAN.md`, `orchestrator/handoff/M3b/PLAN-REVIEW.md`, `orchestrator/handoff/M3b/verdict-plan.json`, `orchestrator/handoff/M3b/REVIEW-INPUT.md`, `PROGRESS.md`, `BACKLOG.md`.
+- **Anker:** `reference/anchors/ANK-80.json` (Plackett & Burman 1946), `reference/anchors/ANK-81.json` (Lenth 1989), `reference/anchors/ANK-82.json` (Daniel 1959), `reference/anchors/ANK-02.json` (API-Snapshot), `reference/anchors/ANK-06.json`, `reference/anchors/ANK-32.json`, `reference/anchors/ANK-TOL.json`.
+- **Gate-Stand und Logs (Runde 1):** `orchestrator/state/M3b/gates.json` (`result: "pass"`, alle 8 Gates grün: `deps`, `lint`, `tests`, `trace`, `territory`, `mutgate` mit `score = 96.53` bei `required = 80`, `golden-adr`, `mutfull`), `gate-deps.log`, `gate-lint.log`, `gate-tests.log`, `gate-trace.log`, `gate-territory.log`, `gate-mutgate.log`, `gate-golden-adr.log`, `gate-mutfull.log`. Visuelle Artefakte unter `orchestrator/state/M3b/shots/` (leer).
+- **Geänderte und neue Dateien seit `plan/M3b`:** `R/robustness.R`, `man/msa_robustness.Rd`, `DESCRIPTION`, `vignettes/validation.Rmd`, `NEWS.md`, `PROGRESS.md`, `orchestrator/handoff/M3b/REVIEW-INPUT.md`, `tests/testthat/test-robustness-transform.R`, `tests/testthat/test-robustness-properties.R`.
+
+---
+
+## Ergebnis der Red-Team-Prüfung
+
+- **Keine blockierenden Gegenbeispiele:** An Nutzerflüssen, Protokollgrenzen, Extremwerten, Seeds, RNG-Zustandsisolierung und Kombinationen wurden keine Verstöße gegen `K-M3b-1` bis `K-M3b-6`, `ADR-050` oder `ADR-051`, keine roten Gates und keine Rückschritte gegenüber `M0`/`M1a`/`M1b`/`M1c`/`M1d`/`M2` gefunden:
+  - **Plackett-Burman-Matrizen & Design (`K-M3b-1`, `K-M3b-2`, `K-M3b-6`):** Für alle fünf Plangrößen $N \in \{8, 12, 16, 20, 24\}$ entstehen die Matrizen exakt aus den Generatorzeilen von Plackett & Burman (1946) (`ANK-80`) durch $N - 2$ zyklische Verschiebungen und eine abschließende Zeile aus $-1$, erfüllen $H^	op H = N \cdot I_N$ mit vorangestellter Einsspalte sowie $\sum_i X_{ij} = 0$, sind bis auf Zeilen-/Spaltenpermutation und Spaltenvorzeichenwechsel isomorph zu `FrF2::pb(nruns = N, boxtyssedal = FALSE)`, wählen ohne `n_runs` für $k = 1, \dots, 23$ die kleinste Plangröße mit $N - 1 \ge k$, beschriften gegebene Stufen korrekt in `<faktor>_level` und lassen bei gesetztem `seed` den globalen `.Random.seed` unverändert.
+  - **Lenth-Verfahren & Orakel (`K-M3b-3`):** Haupteffekte stimmen exakt mit den Differenzen der Stufenmittel und $2 \cdot \hat{\beta}_j$ aus `stats::lm(y ~ X)` überein; PSE, ME und SME mit den Konstanten $1{,}5$ und $2{,}5$ (strikte Trimmung $|c_j| < 2{,}5 \, s_0$) sowie $d = m / 3$ stimmen mit `unrepx::PSE(method = "Lenth")` und `DoE.base::ME.Lenth(simulated = FALSE, alpha = alpha)` innerhalb von `ANK-TOL.frf2_unrepx` überein.
+  - **Half-Normal-Plot (`K-M3b-4`):** `plot.msa_robustness()` zeichnet die geordneten Effektbeträge gegen $q_{(i)} = \Phi^{-1}(1/2 + (i - 1/2)/(2m))$ nach Daniel (1959) (`ANK-82`), zeichnet Referenzlinien bei `ME` (`lty = 2`) und `SME` (`lty = 3`) und nennt `"Half-normal quantile (Daniel, 1959)"` im x-Achsentitel.
+  - **Konservatives Verfahren & Hilfeseite (`K-M3b-5`, `ADR-050` Nr. 3, `ADR-051` Nr. 7):** `man/msa_robustness.Rd` nennt das Verfahren ausdrücklich `conservative` und `alpha` einen `nominal`-Wert, enthält die gestrichene Wendung `"at the 5 % level per effect"` nicht mehr und dokumentiert `transform = c("none", "logit")` sowie die Ergebnisskala.
+  - **Logit-Transformation & Rückwärtskompatibilität (`K-M3b-6`, `K-M1d-8`, `ADR-050` Nr. 4):** `msa_robustness(..., transform = "logit")` weist `0`, `1`, Werte außerhalb von $(0, 1)$, `NA`, `NaN`, `Inf`, `-Inf`, nicht-reelle/nicht-numerische und mehrdimensionale Eingaben vor der Berechnung mit klarer Fehlermeldung zurück, transformiert gültige Anteile exakt einmal über `stats::qlogis()` und lässt den Standardpfad `transform = "none"` (einschließlich aller Attribute und `acmg_robustness()`) bit-identisch.
+- **Ausführbare QA-Testsuiten (`Seed = 20261105`):**
+  - `tests/e2e/test-m3b-qa-e2e.R` (`QA-M3b-E2E-1` bis `QA-M3b-E2E-3`): Prüft End-to-End alle fünf PB-Matrizen gegen `ANK-80` und `FrF2::pb(..., boxtyssedal = FALSE)`, die Kleinstgrößenauswahl für $k = 1..23$, Stufenbeschriftung und `.Random.seed`-Wiederherstellung, die Übereinstimmung von `msa_robustness()` mit `stats::lm()`, `unrepx::PSE()` und `DoE.base::ME.Lenth(simulated = FALSE)` einschließlich des Trimmungsgrenzfalls $|c_j| = 2{,}5 \, s_0$, die Display-Liste von `plot.msa_robustness()` (`C_plotXY`, `C_title`, `C_abline`, `C_text`), den Logit-Pfad auf `pb_design` und einfachem `data.frame` mit Faktoruntermenge und abweichendem `alpha`, den gerenderten Hilfetext von `man/msa_robustness.Rd` sowie die Einbettung eines Logit-Robustheitsobjekts in `msa_report()`.
+  - `tests/fuzz/test-m3b-qa-fuzz.R` (`QA-M3b-FUZZ-1` bis `QA-M3b-FUZZ-2`): Prüft ungültige `transform`-Angaben, ungültige Logit-Antworten an den Grenzen `0` und `1`, außerhalb von $(0, 1)$, nicht-endliche/komplexe/dimensionierte Eingaben, extreme IEEE-754-Gleitkommawerte in $(0, 1)$ (`p` ab `.Machine$double.xmin` bis `1 - .Machine$double.eps / 2`), die Komplementinvarianz $p \mapsto 1 - p$, 20 randomisierte metamorphe Invarianzläufe (gemeinsame Zeilenpermutation, Spaltenumordnung, Vorzeichenwechsel, Log-Odds-Verschiebung sowie affine Transformation im Pfad `transform = "none"`) sowie die Randfälle konstanter Antworten (`PSE = 0`, `t_lenth = NA`), eines einzelnen Faktors ($m = 1$, $d = 1/3$) mit nicht-syntaktischem Namen und fehlerhafter `pb_design()`-Aufrufe.
+  - Sowohl der isolierte Lauf (`5 blocks, 656 passed, 0 failed, 0 errors, 0 skipped`) als auch der gemeinsame Lauf über alle Dateien in `tests/e2e` (`22 blocks, 575 passed, 0 failed, 0 errors`) und `tests/fuzz` (`11 blocks, 494 passed, 0 failed, 0 errors`) enden fehlerfrei.
+
+---
+
+## Zurückgestellte Beobachtungen (`nonblocking`, in `BACKLOG.md` als `BL-127` erfasst)
+
+### QA-M3b-001 (Backlog `BL-127`) — Defensive Eingabevalidierung im unveränderten Bestandscode von `pb_design()` und `msa_robustness(..., transform = "none")`
+
+- **ID:** `QA-M3b-001` (`BL-127`)
+- **Testpfad:** `tests/fuzz/test-m3b-qa-fuzz.R` (`QA-M3b-FUZZ-1` und `QA-M3b-FUZZ-2`, prüfen die aktiven Validierungsregeln mit `Seed = 20261105`; die weitergehende Härtung des unveränderten Bestandscodes ist gemäß `ADR-050` Konsequenzen und `ADR-051` Nr. 9.3, 9.6, 10.4 in `BACKLOG.md` unter `BL-127` für nach dem `26.11.2026` / nach der ersten Veröffentlichung dokumentiert)
+- **Seed:** `20261105`
+- **Spezifikations-/ADR-Bezug:** `docs/01-fachspezifikation.md` §2 Nr. 4; `docs/decisions/ADR-050-m3b-widersprueche-der-spec.md` (Konsequenzen: „`R/robustness.R` ändert nur den Hilfetext aus Nr. 3 zusätzlich zu dem, was K-M3b-4 und K-M3b-6 verlangen“); `docs/decisions/ADR-051-m3b-reviewer-auslegungen.md` Nr. 9.3, Nr. 9.6 und Nr. 10.4 („Für `transform = "none"` bleibt die bisherige Prüfung erhalten“; „Bestehender Code in `R/robustness.R` wird dafür nicht umgebaut oder entfernt“).
+- **Beobachtetes Verhalten:**
+  1. **`pb_design()` (`R/robustness.R`, Zeilen 36–68):**
+     - Bei numerischem `factors` wird `k <- as.integer(factors)` ohne Vorprüfung auf `k >= 1` und Endlichkeit gebildet: `pb_design(0)` liefert einen 0-Faktor-Plan mit 8 Läufen, `pb_design(-1)` oder `pb_design(NA_real_)` bricht in `seq_len(k)` mit `argument must be coercible to non-negative integer` ab.
+     - Enthält `names(factors)` ein `NA_character_`, bricht `if (!is.list(factors) || is.null(names(factors)) || any(names(factors) == ""))` mit `missing value where TRUE/FALSE needed` ab; doppelte Faktornamen oder der Faktorname `"run"` erzeugen doppelte Spaltennamen im Rückgabe-`data.frame`.
+     - Ein mehrwertiges `n_runs` (z. B. `n_runs = c(8, 12)`) führt in `is.na(n_runs) || !n_runs %in% sizes` zu `'length = 2' in coercion to 'logical(1)'`.
+  2. **`msa_robustness()` (`R/robustness.R`, Zeilen 145–176):**
+     - `alpha` wird nicht vorab auf einen einzelnen endlichen Wert in $(0, 1)$ geprüft (für `alpha <= 0` oder `alpha >= 1` liefert `stats::qt()` `Inf` bzw. `NaN` mit Warnung).
+     - Im unveränderten Pfad `transform = "none"` prüft `anyNA(response)` zwar auf `NA`/`NaN`, weist aber `Inf`/`-Inf` oder Zeichenketten nicht vorab mit benanntem Fehler ab; ebenso werden `factors = character(0)`, unbekannte Spaltennamen in `factors` sowie nicht als $\pm 1$ kodierte Spalten eines einfachen `data.frame` nicht vorab abgewiesen.
+- **Erwartetes Verhalten (nach 26.11.2026 / nach erster Veröffentlichung, `BL-127`):**
+  Ergänzung benannter Vorprüfungen für `factors` und `n_runs` in `pb_design()` sowie für `alpha`, `factors`, `response` (`transform = "none"`) und die $\pm 1$-Kodierung einfacher `data.frame`-Designs in `msa_robustness()`, sobald die Änderungsbeschränkung aus `ADR-050`/`ADR-051` entfällt.
+- **Vorgeschlagene Schwere:** `nonblocking` (`ADR-050` Konsequenzen, `ADR-051` Nr. 9.3, 9.6, 10.4; Vorschlag, Entscheidung beim Reviewer)
