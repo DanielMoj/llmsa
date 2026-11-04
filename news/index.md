@@ -2,6 +2,24 @@
 
 ## llmsa (development version)
 
+- New offline `llm-stability` and `clinvar-raters` vignettes recompute
+  agreement and latent variance components from reproducible, licensed
+  frozen subsets. Data preparation records parsing failures, exclusions,
+  selection rules and SHA-256 provenance. Missing answers stay missing;
+  the stability article explains the source’s two non-label answer keys.
+
+- The validation vignette reports all four full simulation studies with
+  MCSE, dynamically identified component-bias and interval-coverage
+  findings, and a separate ordinal convergence sensitivity. Help pages
+  describe the observed underestimation of some prompt/model components
+  and overcoverage of integer-valued ndc intervals. Core calculations
+  and the operator’s simulation files are unchanged.
+
+- Robustness printing and reports now state that no factor exceeding ME
+  does not establish pipeline robustness. Every active factor is
+  labelled `above ME only` or `also above SME`; results and AP1 bands
+  are unchanged.
+
 - [`msa_boot()`](https://danielmoj.github.io/llmsa/reference/msa_boot.md)
   records failed and singular replicates separately as `n_failed` and
   `n_singular`. Percentile intervals retain finite singular refits and

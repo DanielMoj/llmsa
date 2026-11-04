@@ -337,7 +337,7 @@ res
 #>          order -0.5594   -1.14  FALSE               FALSE
 #>  system_prompt -0.0952   -0.19  FALSE               FALSE
 #>  number_format -0.0869   -0.18  FALSE               FALSE
-#>   active factors (|effect| > ME): typos, temperature
+#>   active factors (|effect| > ME): typos (also above SME), temperature (above ME only)
 plot(res)
 ```
 

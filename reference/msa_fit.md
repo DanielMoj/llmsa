@@ -109,10 +109,18 @@ the AIAG handbook correction `EV^2 / (n * r)`. It has positive bias:
 and both print methods identify the derived sources. The `two_level`
 simulation study and its table in
 [`vignette("validation")`](https://danielmoj.github.io/llmsa/articles/validation.md)
-(`vignettes/validation.Rmd`) investigate that bias. Short runs establish
-reproducibility; quantitative findings require the full simulation runs.
-With fewer than three ordinal items the error is "At least three items
-are needed for ordinal outcomes."
+(`vignettes/validation.Rmd`) investigate that bias. In the full runs,
+model bias in S-two-1 and S-two-2 does not resolve a direction beyond
+the MCSE reporting threshold; this does not establish general
+unbiasedness. The ordinal recovery study reports underestimation of
+prompt and model in S-ord-1, model in S-ord-2, prompt and model in
+S-ord-3, and prompt and model in S-ord-4. The binary recovery study
+reports underestimation of prompt and model in S-bin-1 and model in
+S-bin-2. These are component findings under the anchored
+relative-bias/MCSE rule, not new acceptance thresholds. The vignette
+reports all estimates and MCSE, alongside a separate sensitivity to
+ordinal non-convergence. With fewer than three ordinal items the error
+is "At least three items are needed for ordinal outcomes."
 
 With no arguments in `...`, the numeric fit preserves the input doubles
 and conditions their differences before solving for variance ratios.
@@ -255,9 +263,9 @@ fit_ord <- msa_fit(acmg_demo, type = "ordinal",
 #> Warning: 12 missing response(s) were dropped.
 fit_ord$vc
 #>     source   variance
-#> 1     item 9.25609129
+#> 1     item 9.25609132
 #> 2   prompt 0.03887219
-#> 3    model 0.27811381
+#> 3    model 0.27811382
 #> 4 Residual 1.00000000
 # }
 ```

@@ -50,7 +50,7 @@ unrounded standard deviations.
 | Anchor | Source | Quantity | Expected | Observed | Tolerance | Result |
 |:---|:---|:---|:---|:---|:---|:---|
 | ANK-TOL.reml_anova | Independent stats::aov EMS solution | Synthetic design 1 (seed 1) item | 0.835101910404327 | 0.835102313122942 | 0.000112176345654644 absolute | PASS |
-| ANK-TOL.reml_anova | Independent stats::aov EMS solution | Synthetic design 1 (seed 1) prompt | 0.168794312318088 | 0.168794416682278 | 0.000112176345654644 absolute | PASS |
+| ANK-TOL.reml_anova | Independent stats::aov EMS solution | Synthetic design 1 (seed 1) prompt | 0.168794312318087 | 0.168794416682278 | 0.000112176345654644 absolute | PASS |
 | ANK-TOL.reml_anova | Independent stats::aov EMS solution | Synthetic design 1 (seed 1) model | 0.0123698579800859 | 0.0123698382273596 | 0.000112176345654644 absolute | PASS |
 | ANK-TOL.reml_anova | Independent stats::aov EMS solution | Synthetic design 1 (seed 1) Residual | 0.105497375843937 | 0.10549737464579 | 0.000112176345654644 absolute | PASS |
 | ANK-TOL.reml_anova | Independent GRR formulas | Synthetic design 1 (seed 1) grr_pct_study_var | 50.5515033377568 | 50.5514997389425 | 0.00505515033377568 absolute | PASS |
@@ -58,14 +58,14 @@ unrounded standard deviations.
 | ANK-TOL.reml_anova | Independent GRR formulas | Synthetic design 1 (seed 1) icc_items | 0.744454551029276 | 0.744454587414369 | 7.44454551029276e-05 absolute | PASS |
 | ANK-TOL.reml_anova | Independent GRR formulas | Synthetic design 1 (seed 1) ndc | 2 | 2 | 0 absolute | PASS |
 | ANK-TOL.reml_anova | Independent stats::aov EMS solution | Synthetic design 2 (seed 1) item | 0.896356056977856 | 0.896355885245044 | 0.000119652855913307 absolute | PASS |
-| ANK-TOL.reml_anova | Independent stats::aov EMS solution | Synthetic design 2 (seed 1) prompt | 0.0992349852322559 | 0.0992349351431396 | 0.000119652855913307 absolute | PASS |
-| ANK-TOL.reml_anova | Independent stats::aov EMS solution | Synthetic design 2 (seed 1) model | 0.00163326075749219 | 0.00163326845691075 | 0.000119652855913307 absolute | PASS |
+| ANK-TOL.reml_anova | Independent stats::aov EMS solution | Synthetic design 2 (seed 1) prompt | 0.099234985232256 | 0.0992349351431396 | 0.000119652855913307 absolute | PASS |
+| ANK-TOL.reml_anova | Independent stats::aov EMS solution | Synthetic design 2 (seed 1) model | 0.00163326075749218 | 0.00163326845691075 | 0.000119652855913307 absolute | PASS |
 | ANK-TOL.reml_anova | Independent stats::aov EMS solution | Synthetic design 2 (seed 1) item:prompt | 0.0332467620444283 | 0.0332467584284754 | 0.000119652855913307 absolute | PASS |
 | ANK-TOL.reml_anova | Independent stats::aov EMS solution | Synthetic design 2 (seed 1) item:model | 0.0292096365532243 | 0.0292096391073928 | 0.000119652855913307 absolute | PASS |
 | ANK-TOL.reml_anova | Independent stats::aov EMS solution | Synthetic design 2 (seed 1) prompt:model | 0.0207364731002638 | 0.0207364810060388 | 0.000119652855913307 absolute | PASS |
 | ANK-TOL.reml_anova | Independent stats::aov EMS solution | Synthetic design 2 (seed 1) Residual | 0.116111384467547 | 0.116111384938424 | 0.000119652855913307 absolute | PASS |
 | ANK-TOL.reml_anova | Independent GRR formulas | Synthetic design 2 (seed 1) grr_pct_study_var | 50.086872925452 | 50.086874327654 | 0.0050086872925452 absolute | PASS |
-| ANK-TOL.reml_anova | Independent GRR formulas | Synthetic design 2 (seed 1) grr_pct_contribution | 25.0869483945037 | 25.0869497991421 | 0.00250869483945037 absolute | PASS |
+| ANK-TOL.reml_anova | Independent GRR formulas | Synthetic design 2 (seed 1) grr_pct_contribution | 25.0869483945038 | 25.0869497991421 | 0.00250869483945038 absolute | PASS |
 | ANK-TOL.reml_anova | Independent GRR formulas | Synthetic design 2 (seed 1) icc_items | 0.749130516054963 | 0.749130502008579 | 7.49130516054962e-05 absolute | PASS |
 | ANK-TOL.reml_anova | Independent GRR formulas | Synthetic design 2 (seed 1) ndc | 2 | 2 | 0 absolute | PASS |
 | ANK-TOL.reml_anova | Independent stats::aov EMS solution | Synthetic design 3 (seed 1) item | 0.831776303543049 | 0.831777146976174 | 0.000116858157865115 absolute | PASS |
@@ -79,13 +79,13 @@ unrounded standard deviations.
 | ANK-TOL.reml_anova | Independent GRR formulas | Synthetic design 3 (seed 1) ndc | 2 | 2 | 0 absolute | PASS |
 | ANK-TOL.reml_anova | Independent stats::aov EMS solution | Synthetic design 4 (seed 1) item | 0.812907930868241 | 0.812903011877827 | 0.000127510045272807 absolute | PASS |
 | ANK-TOL.reml_anova | Independent stats::aov EMS solution | Synthetic design 4 (seed 1) prompt | 0.19014246243158 | 0.190140990142518 | 0.000127510045272807 absolute | PASS |
-| ANK-TOL.reml_anova | Independent stats::aov EMS solution | Synthetic design 4 (seed 1) model | 0.00493987696115858 | 0.00493990642879696 | 0.000127510045272807 absolute | PASS |
+| ANK-TOL.reml_anova | Independent stats::aov EMS solution | Synthetic design 4 (seed 1) model | 0.00493987696115859 | 0.00493990642879696 | 0.000127510045272807 absolute | PASS |
 | ANK-TOL.reml_anova | Independent stats::aov EMS solution | Synthetic design 4 (seed 1) block | 0.0447175071996804 | 0.0447173774568431 | 0.000127510045272807 absolute | PASS |
 | ANK-TOL.reml_anova | Independent stats::aov EMS solution | Synthetic design 4 (seed 1) item:prompt | 0.0445888629217295 | 0.0445888568476236 | 0.000127510045272807 absolute | PASS |
 | ANK-TOL.reml_anova | Independent stats::aov EMS solution | Synthetic design 4 (seed 1) item:model | 0.0365928277418786 | 0.0365928295480705 | 0.000127510045272807 absolute | PASS |
 | ANK-TOL.reml_anova | Independent stats::aov EMS solution | Synthetic design 4 (seed 1) prompt:model | 0.0312833167960641 | 0.031283375422539 | 0.000127510045272807 absolute | PASS |
 | ANK-TOL.reml_anova | Independent stats::aov EMS solution | Synthetic design 4 (seed 1) Residual | 0.109927667807743 | 0.109927674665773 | 0.000127510045272807 absolute | PASS |
-| ANK-TOL.reml_anova | Independent GRR formulas | Synthetic design 4 (seed 1) grr_pct_study_var | 60.2059283263632 | 60.2059817007425 | 0.00602059283263632 absolute | PASS |
+| ANK-TOL.reml_anova | Independent GRR formulas | Synthetic design 4 (seed 1) grr_pct_study_var | 60.2059283263633 | 60.2059817007425 | 0.00602059283263633 absolute | PASS |
 | ANK-TOL.reml_anova | Independent GRR formulas | Synthetic design 4 (seed 1) grr_pct_contribution | 36.2475380563919 | 36.2476023255014 | 0.00362475380563919 absolute | PASS |
 | ANK-TOL.reml_anova | Independent GRR formulas | Synthetic design 4 (seed 1) icc_items | 0.637524619436081 | 0.637523976744986 | 6.37524619436081e-05 absolute | PASS |
 | ANK-TOL.reml_anova | Independent GRR formulas | Synthetic design 4 (seed 1) ndc | 1 | 1 | 0 absolute | PASS |
@@ -139,23 +139,23 @@ unrounded standard deviations.
 | ANK-TOL.oracle | VCA::anovaVCA | ic50_demo (unbalanced) prompt | 0.00488367383776392 | 0.00486224064145486 | not a criterion: unbalanced ANOVA | REPORT |
 | ANK-TOL.oracle | VCA::anovaVCA | ic50_demo (unbalanced) model | 0.0171099342884023 | 0.0171354046279492 | not a criterion: unbalanced ANOVA | REPORT |
 | ANK-TOL.oracle | VCA::anovaVCA | ic50_demo (unbalanced) block | 0.00100892168736979 | 0.00101739985692395 | not a criterion: unbalanced ANOVA | REPORT |
-| ANK-TOL.oracle | VCA::anovaVCA | ic50_demo (unbalanced) item:prompt | 9.42738421534421e-05 | 8.42408728729267e-05 | not a criterion: unbalanced ANOVA | REPORT |
-| ANK-TOL.oracle | VCA::anovaVCA | ic50_demo (unbalanced) item:model | 0.00534173250038113 | 0.00534983731012706 | not a criterion: unbalanced ANOVA | REPORT |
-| ANK-TOL.oracle | VCA::anovaVCA | ic50_demo (unbalanced) prompt:model | 2.15882253347022e-05 | 2.12809485421782e-05 | not a criterion: unbalanced ANOVA | REPORT |
-| ANK-TOL.oracle | VCA::anovaVCA | ic50_demo (unbalanced) Residual | 0.014010703740144 | 0.0140103056395663 | not a criterion: unbalanced ANOVA | REPORT |
+| ANK-TOL.oracle | VCA::anovaVCA | ic50_demo (unbalanced) item:prompt | 9.42738421534943e-05 | 8.42408728729267e-05 | not a criterion: unbalanced ANOVA | REPORT |
+| ANK-TOL.oracle | VCA::anovaVCA | ic50_demo (unbalanced) item:model | 0.00534173250038118 | 0.00534983731012706 | not a criterion: unbalanced ANOVA | REPORT |
+| ANK-TOL.oracle | VCA::anovaVCA | ic50_demo (unbalanced) prompt:model | 2.15882253347061e-05 | 2.12809485421782e-05 | not a criterion: unbalanced ANOVA | REPORT |
+| ANK-TOL.oracle | VCA::anovaVCA | ic50_demo (unbalanced) Residual | 0.0140107037401431 | 0.0140103056395663 | not a criterion: unbalanced ANOVA | REPORT |
 
 ### SixSigma oracle
 
 | Anchor | Source | Quantity | Expected | Observed | Tolerance | Result |
 |:---|:---|:---|:---|:---|:---|:---|
 | ANK-TOL.oracle | SixSigma::ss.rr, default pooling | Residual | 0.0213087542087542 | 0.0213087542223815 | 8.62212121212121e-06 absolute | PASS |
-| ANK-TOL.oracle | SixSigma::ss.rr, default pooling | prompt | 0.000573512906846247 | 0.000573512905820389 | 8.62212121212121e-06 absolute | PASS |
+| ANK-TOL.oracle | SixSigma::ss.rr, default pooling | prompt | 0.000573512906846233 | 0.000573512905820389 | 8.62212121212121e-06 absolute | PASS |
 | ANK-TOL.oracle | SixSigma::ss.rr, default pooling | item:prompt | 0 | 0 | 8.62212121212121e-06 absolute | PASS |
 | ANK-TOL.oracle | SixSigma::ss.rr, default pooling | item | 0.0643389450056117 | 0.0643389445237618 | 8.62212121212121e-06 absolute | PASS |
 | ANK-TOL.oracle | SixSigma::ss.rr, unrounded StdDev | Total gauge R&R % study variation | 50.3777881275185 | 50.3777882791117 | 0.00503777881275185 absolute | PASS |
 | ANK-TOL.oracle | SixSigma::ss.rr, unrounded StdDev | Repeatability % study variation | 49.7132284728041 | 49.7132286239795 | 0.00497132284728041 absolute | PASS |
-| ANK-TOL.oracle | SixSigma::ss.rr, unrounded StdDev | Reproducibility % study variation | 8.1557618547826 | 8.15576186968176 | 0.00081557618547826 absolute | PASS |
-| ANK-TOL.oracle | SixSigma::ss.rr, unrounded StdDev | prompt % study variation | 8.1557618547826 | 8.15576186968176 | 0.00081557618547826 absolute | PASS |
+| ANK-TOL.oracle | SixSigma::ss.rr, unrounded StdDev | Reproducibility % study variation | 8.1557618547825 | 8.15576186968176 | 0.00081557618547825 absolute | PASS |
+| ANK-TOL.oracle | SixSigma::ss.rr, unrounded StdDev | prompt % study variation | 8.1557618547825 | 8.15576186968176 | 0.00081557618547825 absolute | PASS |
 | ANK-TOL.oracle | SixSigma::ss.rr, unrounded StdDev | Part-to-part (items) % study variation | 86.3833228313131 | 86.3833227429056 | 0.00863833228313131 absolute | PASS |
 | ANK-TOL.oracle | SixSigma::ss.rr | ndc | 2 | 2 | 0 absolute | PASS |
 
@@ -243,11 +243,11 @@ rounded input values are never repaired.
 | Dataset | LRE msa_fit residual | LRE msa_fit item | LRE aov residual | LRE aov item |
 |:--------|---------------------:|-----------------:|-----------------:|-------------:|
 | SmLs04  |             10.81152 |        10.265686 |        10.286173 |    10.043134 |
-| SmLs05  |             10.24344 |         9.923803 |        10.286173 |     9.943752 |
-| SmLs06  |             10.29010 |         9.936698 |        10.286172 |     9.934953 |
+| SmLs05  |             10.24344 |         9.923803 |        10.286173 |     9.943746 |
+| SmLs06  |             10.29010 |         9.936698 |        10.286172 |     9.934948 |
 | SmLs07  |                   NA |               NA |         4.250358 |     4.022777 |
-| SmLs08  |                   NA |               NA |         4.085552 |     3.922826 |
-| SmLs09  |                   NA |               NA |         3.351163 |     3.914627 |
+| SmLs08  |                   NA |               NA |         3.670512 |     3.922443 |
+| SmLs09  |                   NA |               NA |         3.224860 |     3.914684 |
 
 Fit diagnostics:
 
@@ -390,9 +390,17 @@ This range method does not subtract the AIAG correction
 and printing names each derived component with
 `range method, see ?msa_fit`. The `two_level` study redraws both model
 effects in every repetition and reports `derived_share`, the fraction of
-repetitions with a derived model component. It measures this bias;
-quantitative conclusions await the full runs. Fewer than three ordinal
-items are rejected.
+repetitions with a derived model component. The full-run tables below
+report its measured bias and MCSE in each scenario. A bias that does not
+exceed the reporting threshold does not establish general unbiasedness.
+Fewer than three ordinal items are rejected.
+
+Component findings use ANK-TOL.bias_report: the absolute relative bias
+must exceed both 0.1 and 3 times its MCSE. The two-level model bias is
+always reported; its direction is resolved only beyond 3 MCSE. These are
+reporting rules, not acceptance criteria for the estimates. Full-run
+findings are computed from the read tables, never selected by scenario
+name.
 
 ### ordinal_recovery
 
@@ -518,6 +526,18 @@ S-ord-4
 | S-ord-4 | prompt | rel_bias | -0.198667 | 0.0240749 | 1000 | 20261035 | 1000 | 0 |
 | S-ord-4 | prompt | rmse | 0.0491526 | 0.00138499 | 1000 | 20261035 | 1000 | 0 |
 
+Reportable findings (values and MCSE on the stated measure’s scale):
+
+| scenario | estimand | measure  | value     | mcse      | direction       |
+|:---------|:---------|:---------|:----------|:----------|:----------------|
+| S-ord-1  | model    | rel_bias | -0.202203 | 0.0252466 | underestimation |
+| S-ord-1  | prompt   | rel_bias | -0.152411 | 0.0264989 | underestimation |
+| S-ord-2  | model    | rel_bias | -0.187283 | 0.0256346 | underestimation |
+| S-ord-3  | model    | rel_bias | -0.170727 | 0.0249279 | underestimation |
+| S-ord-3  | prompt   | rel_bias | -0.109419 | 0.0287322 | underestimation |
+| S-ord-4  | model    | rel_bias | -0.233699 | 0.0241164 | underestimation |
+| S-ord-4  | prompt   | rel_bias | -0.198667 | 0.0240749 | underestimation |
+
 ### binary_recovery
 
 Read `binary_recovery_results.csv` (full); n_sim = 1000 per scenario.
@@ -572,6 +592,14 @@ S-bin-2
 | S-bin-2 | prompt | rel_bias | -0.0772928 | 0.0236007 | 1000 | 20261037 | 1000 | 0 |
 | S-bin-2 | prompt | rmse | 0.0749942 | 0.00265563 | 1000 | 20261037 | 1000 | 0 |
 
+Reportable findings (values and MCSE on the stated measure’s scale):
+
+| scenario | estimand | measure  | value     | mcse      | direction       |
+|:---------|:---------|:---------|:----------|:----------|:----------------|
+| S-bin-1  | model    | rel_bias | -0.223711 | 0.0254839 | underestimation |
+| S-bin-1  | prompt   | rel_bias | -0.213736 | 0.0268401 | underestimation |
+| S-bin-2  | model    | rel_bias | -0.204216 | 0.0246023 | underestimation |
+
 ### two_level
 
 Read `two_level_results.csv` (full); n_sim = 1000 per scenario.
@@ -593,7 +621,6 @@ S-two-1
 | S-two-1 | item | rel_bias | -0.00228672 | 0.0064614 | 1000 | 20261038 | 1000 | 0 |
 | S-two-1 | item | rmse | 0.204238 | 0.00455895 | 1000 | 20261038 | 1000 | 0 |
 | S-two-1 | model | bias | -0.000353299 | 0.002273 | 1000 | 20261038 | 1000 | 0 |
-| S-two-1 | model | derived_share | 1 | 0 | 1000 | 20261038 | 1000 | 0 |
 | S-two-1 | model | empse | 0.0718787 | 0.00160806 | 1000 | 20261038 | 1000 | 0 |
 | S-two-1 | model | rel_bias | -0.00706598 | 0.0454601 | 1000 | 20261038 | 1000 | 0 |
 | S-two-1 | model | rmse | 0.0718436 | 0.0038696 | 1000 | 20261038 | 1000 | 0 |
@@ -601,6 +628,12 @@ S-two-1
 | S-two-1 | prompt | empse | 0.0475425 | 0.00106361 | 1000 | 20261038 | 1000 | 0 |
 | S-two-1 | prompt | rel_bias | -0.211399 | 0.0240548 | 1000 | 20261038 | 1000 | 0 |
 | S-two-1 | prompt | rmse | 0.0493214 | 0.00169582 | 1000 | 20261038 | 1000 | 0 |
+
+Derived-component diagnostic:
+
+| scenario | estimand | measure       | value | mcse | n_sim | seed     | n_finite | n_failed |
+|:---------|:---------|:--------------|:------|:-----|:------|:---------|:---------|:---------|
+| S-two-1  | model    | derived_share | 1     | 0    | 1000  | 20261038 | 1000     | 0        |
 
 S-two-2
 
@@ -619,7 +652,6 @@ S-two-2
 | S-two-2 | item | rel_bias | 0.00245465 | 0.00623866 | 1000 | 20261039 | 1000 | 0 |
 | S-two-2 | item | rmse | 0.1972 | 0.00516144 | 1000 | 20261039 | 1000 | 0 |
 | S-two-2 | model | bias | -0.00168061 | 0.0116002 | 1000 | 20261039 | 1000 | 0 |
-| S-two-2 | model | derived_share | 1 | 0 | 1000 | 20261039 | 1000 | 0 |
 | S-two-2 | model | empse | 0.366831 | 0.00820668 | 1000 | 20261039 | 1000 | 0 |
 | S-two-2 | model | rel_bias | -0.00672243 | 0.0464008 | 1000 | 20261039 | 1000 | 0 |
 | S-two-2 | model | rmse | 0.366651 | 0.0235318 | 1000 | 20261039 | 1000 | 0 |
@@ -627,6 +659,117 @@ S-two-2
 | S-two-2 | prompt | empse | 0.0422472 | 0.00094515 | 1000 | 20261039 | 1000 | 0 |
 | S-two-2 | prompt | rel_bias | -0.188728 | 0.0213756 | 1000 | 20261039 | 1000 | 0 |
 | S-two-2 | prompt | rmse | 0.0438427 | 0.00164755 | 1000 | 20261039 | 1000 | 0 |
+
+Derived-component diagnostic:
+
+| scenario | estimand | measure       | value | mcse | n_sim | seed     | n_finite | n_failed |
+|:---------|:---------|:--------------|:------|:-----|:------|:---------|:---------|:---------|
+| S-two-2  | model    | derived_share | 1     | 0    | 1000  | 20261039 | 1000     | 0        |
+
+Reportable findings (values and MCSE on the stated measure’s scale):
+
+| scenario | estimand | measure | value | mcse | direction |
+|:---|:---|:---|:---|:---|:---|
+| S-two-1 | model | bias | -0.000353299 | 0.002273 | no direction resolved at the report threshold |
+| S-two-2 | model | bias | -0.00168061 | 0.0116002 | no direction resolved at the report threshold |
+
+### Ordinal convergence sensitivity
+
+The main summaries above retain finite estimates even when a fit did not
+converge. The following separate analysis compares all finite estimates
+with only those whose recorded `converged` flag is true. Singular fits
+are retained in both eligible groups. Each n comes from the replicate
+rows used by that group, independently of the result table’s n_sim.
+Non-convergence, singularity and missing flags are counted separately
+per actual outer repetition.
+
+Bias MCSE is EmpSE divided by the square root of n; relative bias and
+its MCSE divide by the truth and its absolute value, respectively. EmpSE
+MCSE uses the ADEMP approximation in the formula collection, section 9.
+Selecting on convergence can itself introduce selection bias: this
+comparison is a descriptive sensitivity analysis, not a replacement
+estimator or a reason to discard inconvenient estimates from the main
+study.
+
+| scenario | n | nonconverged | convergence_unknown | nonconverged_share | nonconverged_mcse | singular | singular_unknown | singular_share | singular_mcse |
+|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|
+| S-ord-1 | 1000 | 9 | 0 | 0.009 | 0.00298647 | 812 | 0 | 0.812 | 0.0123554 |
+| S-ord-2 | 1000 | 18 | 0 | 0.018 | 0.00420428 | 797 | 0 | 0.797 | 0.0127197 |
+| S-ord-3 | 1000 | 20 | 0 | 0.02 | 0.00442719 | 812 | 0 | 0.812 | 0.0123554 |
+| S-ord-4 | 1000 | 16 | 0 | 0.016 | 0.00396787 | 789 | 0 | 0.789 | 0.0129027 |
+
+Diagnostics over actual outer repetitions; unknown flags are shown
+separately. {.table}
+
+S-ord-1
+
+| scenario | estimand | selection | n | bias | bias_mcse | rel_bias | rel_bias_mcse | empse | empse_mcse | status |
+|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|
+| S-ord-1 | grr_pct_study_var | all finite estimates | 1000 | -0.125273 | 0.110754 | -0.00168297 | 0.00148791 | 3.50234 | 0.0783538 | available |
+| S-ord-1 | grr_pct_study_var | converged finite estimates | 991 | -0.117658 | 0.111316 | -0.00158067 | 0.00149546 | 3.50425 | 0.0787521 | available |
+| S-ord-1 | icc_items | all finite estimates | 1000 | 0.000637983 | 0.00165117 | 0.00143068 | 0.00370276 | 0.0522147 | 0.00116814 | available |
+| S-ord-1 | icc_items | converged finite estimates | 991 | 0.000523478 | 0.00165959 | 0.0011739 | 0.00372162 | 0.052244 | 0.0011741 | available |
+| S-ord-1 | item | all finite estimates | 1000 | 0.00395243 | 0.00635032 | 0.00395243 | 0.00635032 | 0.200815 | 0.0044926 | available |
+| S-ord-1 | item | converged finite estimates | 991 | 0.00390423 | 0.00638922 | 0.00390423 | 0.00638922 | 0.201134 | 0.00452014 | available |
+| S-ord-1 | item:model | all finite estimates | 1000 | 0.00211939 | 0.000972256 | 0.0235487 | 0.0108028 | 0.0307454 | 0.000687833 | available |
+| S-ord-1 | item:model | converged finite estimates | 991 | 0.0021756 | 0.0009794 | 0.0241734 | 0.0108822 | 0.0308317 | 0.00069289 | available |
+| S-ord-1 | model | all finite estimates | 1000 | -0.0181983 | 0.00227219 | -0.202203 | 0.0252466 | 0.0718531 | 0.00160749 | available |
+| S-ord-1 | model | converged finite estimates | 991 | -0.0181243 | 0.0022806 | -0.201382 | 0.0253399 | 0.0717935 | 0.00161344 | available |
+| S-ord-1 | prompt | all finite estimates | 1000 | -0.00952569 | 0.00165618 | -0.152411 | 0.0264989 | 0.052373 | 0.00117168 | available |
+| S-ord-1 | prompt | converged finite estimates | 991 | -0.00926904 | 0.00166774 | -0.148305 | 0.0266839 | 0.0525008 | 0.00117987 | available |
+
+S-ord-2
+
+| scenario | estimand | selection | n | bias | bias_mcse | rel_bias | rel_bias_mcse | empse | empse_mcse | status |
+|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|
+| S-ord-2 | grr_pct_study_var | all finite estimates | 1000 | 0.0347232 | 0.113032 | 0.000466485 | 0.00151851 | 3.57438 | 0.0799656 | available |
+| S-ord-2 | grr_pct_study_var | converged finite estimates | 982 | 0.0355778 | 0.114488 | 0.000477966 | 0.00153808 | 3.5877 | 0.0809965 | available |
+| S-ord-2 | icc_items | all finite estimates | 1000 | -0.00179339 | 0.00168449 | -0.00402168 | 0.00377748 | 0.0532684 | 0.00119171 | available |
+| S-ord-2 | icc_items | converged finite estimates | 982 | -0.00181562 | 0.00170576 | -0.00407154 | 0.00382517 | 0.0534532 | 0.00120677 | available |
+| S-ord-2 | item | all finite estimates | 1000 | -0.0016251 | 0.0064879 | -0.0016251 | 0.0064879 | 0.205165 | 0.00458993 | available |
+| S-ord-2 | item | converged finite estimates | 982 | -0.00151254 | 0.00657985 | -0.00151254 | 0.00657985 | 0.206192 | 0.00465503 | available |
+| S-ord-2 | item:model | all finite estimates | 1000 | 0.00160385 | 0.000717591 | 0.0178205 | 0.00797323 | 0.0226922 | 0.000507667 | available |
+| S-ord-2 | item:model | converged finite estimates | 982 | 0.00150289 | 0.000727319 | 0.0166987 | 0.00808132 | 0.0227919 | 0.000514554 | available |
+| S-ord-2 | model | all finite estimates | 1000 | -0.0168554 | 0.00230711 | -0.187283 | 0.0256346 | 0.0729573 | 0.00163219 | available |
+| S-ord-2 | model | converged finite estimates | 982 | -0.0167918 | 0.00233361 | -0.186575 | 0.025929 | 0.0731281 | 0.00165095 | available |
+| S-ord-2 | prompt | all finite estimates | 1000 | -0.00435936 | 0.0012259 | -0.0697498 | 0.0196144 | 0.0387663 | 0.000867275 | available |
+| S-ord-2 | prompt | converged finite estimates | 982 | -0.00439241 | 0.00123293 | -0.0702786 | 0.0197269 | 0.0386362 | 0.000872258 | available |
+
+S-ord-3
+
+| scenario | estimand | selection | n | bias | bias_mcse | rel_bias | rel_bias_mcse | empse | empse_mcse | status |
+|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|
+| S-ord-3 | grr_pct_study_var | all finite estimates | 1000 | 0.168115 | 0.129819 | 0.00294099 | 0.00227104 | 4.10523 | 0.0918417 | available |
+| S-ord-3 | grr_pct_study_var | converged finite estimates | 980 | 0.163064 | 0.130847 | 0.00285263 | 0.00228901 | 4.09614 | 0.0925697 | available |
+| S-ord-3 | icc_items | all finite estimates | 1000 | -0.00360842 | 0.00150216 | -0.00535977 | 0.00223124 | 0.0475026 | 0.00106272 | available |
+| S-ord-3 | icc_items | converged finite estimates | 980 | -0.00354303 | 0.00151343 | -0.00526264 | 0.00224798 | 0.0473779 | 0.0010707 | available |
+| S-ord-3 | item | all finite estimates | 1000 | -0.000680181 | 0.0161926 | -0.000265696 | 0.00632523 | 0.512054 | 0.0114556 | available |
+| S-ord-3 | item | converged finite estimates | 980 | -0.000357753 | 0.016346 | -0.000139747 | 0.00638515 | 0.51171 | 0.0115643 | available |
+| S-ord-3 | item:model | all finite estimates | 1000 | 0.00179274 | 0.00103592 | 0.0199194 | 0.0115102 | 0.0327587 | 0.000732873 | available |
+| S-ord-3 | item:model | converged finite estimates | 980 | 0.0017884 | 0.00105051 | 0.0198711 | 0.0116724 | 0.0328863 | 0.000743205 | available |
+| S-ord-3 | model | all finite estimates | 1000 | -0.0153654 | 0.00224351 | -0.170727 | 0.0249279 | 0.0709461 | 0.0015872 | available |
+| S-ord-3 | model | converged finite estimates | 980 | -0.0156277 | 0.00226048 | -0.173641 | 0.0251165 | 0.0707643 | 0.00159922 | available |
+| S-ord-3 | prompt | all finite estimates | 1000 | -0.0068387 | 0.00179576 | -0.109419 | 0.0287322 | 0.056787 | 0.00127043 | available |
+| S-ord-3 | prompt | converged finite estimates | 980 | -0.00682311 | 0.00181755 | -0.10917 | 0.0290809 | 0.0568984 | 0.00128586 | available |
+
+S-ord-4
+
+| scenario | estimand | selection | n | bias | bias_mcse | rel_bias | rel_bias_mcse | empse | empse_mcse | status |
+|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|
+| S-ord-4 | block | all finite estimates | 1000 | 0.000995367 | 0.000451907 | 0.0995367 | 0.0451907 | 0.0142906 | 0.000319707 | available |
+| S-ord-4 | block | converged finite estimates | 984 | 0.000979918 | 0.000455505 | 0.0979918 | 0.0455505 | 0.0142886 | 0.000322254 | available |
+| S-ord-4 | grr_pct_study_var | all finite estimates | 1000 | -0.286697 | 0.0879519 | -0.00384474 | 0.00117947 | 2.78128 | 0.0622225 | available |
+| S-ord-4 | grr_pct_study_var | converged finite estimates | 984 | -0.298257 | 0.0888445 | -0.00399976 | 0.00119144 | 2.78694 | 0.0628545 | available |
+| S-ord-4 | icc_items | all finite estimates | 1000 | 0.00349472 | 0.00130511 | 0.00787186 | 0.00293977 | 0.0412713 | 0.000923317 | available |
+| S-ord-4 | icc_items | converged finite estimates | 984 | 0.00366331 | 0.00131824 | 0.00825161 | 0.00296933 | 0.0413515 | 0.000932608 | available |
+| S-ord-4 | item | all finite estimates | 1000 | -0.00139942 | 0.00487517 | -0.00139942 | 0.00487517 | 0.154166 | 0.00344899 | available |
+| S-ord-4 | item | converged finite estimates | 984 | -0.000412487 | 0.00492568 | -0.000412487 | 0.00492568 | 0.154512 | 0.00348475 | available |
+| S-ord-4 | item:model | all finite estimates | 1000 | 6.53399e-05 | 0.0005059 | 0.000725999 | 0.00562112 | 0.015998 | 0.000357905 | available |
+| S-ord-4 | item:model | converged finite estimates | 984 | 0.000112316 | 0.000512275 | 0.00124796 | 0.00569195 | 0.0160695 | 0.000362418 | available |
+| S-ord-4 | model | all finite estimates | 1000 | -0.0210329 | 0.00217048 | -0.233699 | 0.0241164 | 0.0686366 | 0.00153553 | available |
+| S-ord-4 | model | converged finite estimates | 984 | -0.0208426 | 0.00218585 | -0.231585 | 0.0242872 | 0.0685675 | 0.00154642 | available |
+| S-ord-4 | prompt | all finite estimates | 1000 | -0.0124167 | 0.00150468 | -0.198667 | 0.0240749 | 0.0475823 | 0.0010645 | available |
+| S-ord-4 | prompt | converged finite estimates | 984 | -0.0123292 | 0.00152227 | -0.197267 | 0.0243563 | 0.0477516 | 0.00107695 | available |
 
 ## Bootstrap intervals: coverage by scenario
 
@@ -661,7 +804,14 @@ Short runs establish reproducibility and file structure. They do not
 establish nominal coverage. Full runs require at least 1000 repetitions
 per scenario (ANK-06) and follow code acceptance. Undercoverage or
 overcoverage in those runs is a finding to report, with MCSE, rather
-than a reason to alter intervals.
+than a reason to alter intervals. The reporting threshold is
+ANK-TOL.mc_factor.report, or 3 MCSE from the nominal level. A zero MCSE
+does not hide a deviation from nominal. The continuous GRR and ICC
+statistics are monotone functions of the same variance ratio; their
+percentile coverages coincide in these results. The integer-valued ndc
+has discrete steps, which can produce conservative intervals and
+overcoverage. The findings below identify every affected scenario and
+interval estimand individually.
 
 ### S-boot-1
 
@@ -671,8 +821,6 @@ than a reason to alter intervals.
 | S-boot-1 | block | empse | 0.0141468 | 0.000316489 | 1000 | 20261102 | 1000 | 0 |
 | S-boot-1 | block | rel_bias | -0.0179057 | 0.044736 | 1000 | 20261102 | 1000 | 0 |
 | S-boot-1 | block | rmse | 0.0141408 | 0.000754699 | 1000 | 20261102 | 1000 | 0 |
-| S-boot-1 | bootstrap | failed_share | 0 | 0 | 1000 | 20261102 | 1000 | 0 |
-| S-boot-1 | bootstrap | singular_share | 0.494705 | 0.00627041 | 1000 | 20261102 | 1000 | 0 |
 | S-boot-1 | grr_pct_contribution | bias | 0.915966 | 0.245928 | 1000 | 20261102 | 1000 | 0 |
 | S-boot-1 | grr_pct_contribution | coverage | 0.949 | 0.00695694 | 1000 | 20261102 | 1000 | 0 |
 | S-boot-1 | grr_pct_contribution | empse | 7.77691 | 0.173984 | 1000 | 20261102 | 1000 | 0 |
@@ -726,6 +874,13 @@ than a reason to alter intervals.
 | S-boot-1 | Residual | rel_bias | -0.00159097 | 0.00141341 | 1000 | 20261102 | 1000 | 0 |
 | S-boot-1 | Residual | rmse | 0.0044702 | 9.9621e-05 | 1000 | 20261102 | 1000 | 0 |
 
+Bootstrap diagnostics:
+
+| scenario | estimand | measure | value | MCSE | n_sim | seed | n_finite | n_failed |
+|:---|:---|:---|:---|:---|:---|:---|:---|:---|
+| S-boot-1 | bootstrap | failed_share | 0 | 0 | 1000 | 20261102 | 1000 | 0 |
+| S-boot-1 | bootstrap | singular_share | 0.494705 | 0.00627041 | 1000 | 20261102 | 1000 | 0 |
+
 ### S-boot-2
 
 | scenario | estimand | measure | value | MCSE | n_sim | seed | n_finite | n_failed |
@@ -734,8 +889,6 @@ than a reason to alter intervals.
 | S-boot-2 | block | empse | 0.0142701 | 0.00031925 | 1000 | 20261104 | 1000 | 0 |
 | S-boot-2 | block | rel_bias | 0.0220631 | 0.0451261 | 1000 | 20261104 | 1000 | 0 |
 | S-boot-2 | block | rmse | 0.0142647 | 0.000812554 | 1000 | 20261104 | 1000 | 0 |
-| S-boot-2 | bootstrap | failed_share | 0 | 0 | 1000 | 20261104 | 1000 | 0 |
-| S-boot-2 | bootstrap | singular_share | 0.349435 | 0.00656497 | 1000 | 20261104 | 1000 | 0 |
 | S-boot-2 | grr_pct_contribution | bias | 1.24046 | 0.221046 | 1000 | 20261104 | 1000 | 0 |
 | S-boot-2 | grr_pct_contribution | coverage | 0.951 | 0.00682635 | 1000 | 20261104 | 1000 | 0 |
 | S-boot-2 | grr_pct_contribution | empse | 6.9901 | 0.156382 | 1000 | 20261104 | 1000 | 0 |
@@ -789,6 +942,13 @@ than a reason to alter intervals.
 | S-boot-2 | Residual | rel_bias | 0.000487301 | 0.00109439 | 1000 | 20261104 | 1000 | 0 |
 | S-boot-2 | Residual | rmse | 0.00345937 | 7.35628e-05 | 1000 | 20261104 | 1000 | 0 |
 
+Bootstrap diagnostics:
+
+| scenario | estimand | measure | value | MCSE | n_sim | seed | n_finite | n_failed |
+|:---|:---|:---|:---|:---|:---|:---|:---|:---|
+| S-boot-2 | bootstrap | failed_share | 0 | 0 | 1000 | 20261104 | 1000 | 0 |
+| S-boot-2 | bootstrap | singular_share | 0.349435 | 0.00656497 | 1000 | 20261104 | 1000 | 0 |
+
 ### S-boot-3
 
 | scenario | estimand | measure | value | MCSE | n_sim | seed | n_finite | n_failed |
@@ -797,8 +957,6 @@ than a reason to alter intervals.
 | S-boot-3 | block | empse | 0.0137665 | 0.000307982 | 1000 | 20261106 | 1000 | 0 |
 | S-boot-3 | block | rel_bias | -0.0172993 | 0.0435335 | 1000 | 20261106 | 1000 | 0 |
 | S-boot-3 | block | rmse | 0.0137607 | 0.000634914 | 1000 | 20261106 | 1000 | 0 |
-| S-boot-3 | bootstrap | failed_share | 0 | 0 | 1000 | 20261106 | 1000 | 0 |
-| S-boot-3 | bootstrap | singular_share | 0.356445 | 0.00633671 | 1000 | 20261106 | 1000 | 0 |
 | S-boot-3 | grr_pct_contribution | bias | 0.387751 | 0.18443 | 1000 | 20261106 | 1000 | 0 |
 | S-boot-3 | grr_pct_contribution | coverage | 0.946 | 0.00714731 | 1000 | 20261106 | 1000 | 0 |
 | S-boot-3 | grr_pct_contribution | empse | 5.83219 | 0.130477 | 1000 | 20261106 | 1000 | 0 |
@@ -852,6 +1010,13 @@ than a reason to alter intervals.
 | S-boot-3 | Residual | rel_bias | 0.00222021 | 0.000912617 | 1000 | 20261106 | 1000 | 0 |
 | S-boot-3 | Residual | rmse | 0.00289304 | 6.69745e-05 | 1000 | 20261106 | 1000 | 0 |
 
+Bootstrap diagnostics:
+
+| scenario | estimand | measure | value | MCSE | n_sim | seed | n_finite | n_failed |
+|:---|:---|:---|:---|:---|:---|:---|:---|:---|
+| S-boot-3 | bootstrap | failed_share | 0 | 0 | 1000 | 20261106 | 1000 | 0 |
+| S-boot-3 | bootstrap | singular_share | 0.356445 | 0.00633671 | 1000 | 20261106 | 1000 | 0 |
+
 ### S-boot-4
 
 | scenario | estimand | measure | value | MCSE | n_sim | seed | n_finite | n_failed |
@@ -860,8 +1025,6 @@ than a reason to alter intervals.
 | S-boot-4 | block | empse | 0.0136479 | 0.00030533 | 1000 | 20261108 | 1000 | 0 |
 | S-boot-4 | block | rel_bias | 0.010448 | 0.0431586 | 1000 | 20261108 | 1000 | 0 |
 | S-boot-4 | block | rmse | 0.0136415 | 0.000735005 | 1000 | 20261108 | 1000 | 0 |
-| S-boot-4 | bootstrap | failed_share | 0 | 0 | 1000 | 20261108 | 1000 | 0 |
-| S-boot-4 | bootstrap | singular_share | 0.23507 | 0.0057105 | 1000 | 20261108 | 1000 | 0 |
 | S-boot-4 | grr_pct_contribution | bias | 0.122506 | 0.162809 | 1000 | 20261108 | 1000 | 0 |
 | S-boot-4 | grr_pct_contribution | coverage | 0.953 | 0.00669261 | 1000 | 20261108 | 1000 | 0 |
 | S-boot-4 | grr_pct_contribution | empse | 5.14848 | 0.115181 | 1000 | 20261108 | 1000 | 0 |
@@ -915,6 +1078,13 @@ than a reason to alter intervals.
 | S-boot-4 | Residual | rel_bias | 0.000593742 | 0.000710002 | 1000 | 20261108 | 1000 | 0 |
 | S-boot-4 | Residual | rmse | 0.00224489 | 5.07284e-05 | 1000 | 20261108 | 1000 | 0 |
 
+Bootstrap diagnostics:
+
+| scenario | estimand | measure | value | MCSE | n_sim | seed | n_finite | n_failed |
+|:---|:---|:---|:---|:---|:---|:---|:---|:---|
+| S-boot-4 | bootstrap | failed_share | 0 | 0 | 1000 | 20261108 | 1000 | 0 |
+| S-boot-4 | bootstrap | singular_share | 0.23507 | 0.0057105 | 1000 | 20261108 | 1000 | 0 |
+
 ### S-boot-5
 
 | scenario | estimand | measure | value | MCSE | n_sim | seed | n_finite | n_failed |
@@ -923,8 +1093,6 @@ than a reason to alter intervals.
 | S-boot-5 | block | empse | 0.0145386 | 0.000325256 | 1000 | 20261110 | 1000 | 0 |
 | S-boot-5 | block | rel_bias | -0.0256022 | 0.0459752 | 1000 | 20261110 | 1000 | 0 |
 | S-boot-5 | block | rmse | 0.0145336 | 0.000856827 | 1000 | 20261110 | 1000 | 0 |
-| S-boot-5 | bootstrap | failed_share | 0 | 0 | 1000 | 20261110 | 1000 | 0 |
-| S-boot-5 | bootstrap | singular_share | 0.73465 | 0.00448964 | 1000 | 20261110 | 1000 | 0 |
 | S-boot-5 | grr_pct_contribution | bias | 0.382877 | 0.333661 | 1000 | 20261110 | 1000 | 0 |
 | S-boot-5 | grr_pct_contribution | coverage | 0.953 | 0.00669261 | 1000 | 20261110 | 1000 | 0 |
 | S-boot-5 | grr_pct_contribution | empse | 10.5513 | 0.236052 | 1000 | 20261110 | 1000 | 0 |
@@ -978,6 +1146,13 @@ than a reason to alter intervals.
 | S-boot-5 | Residual | rel_bias | -0.00152436 | 0.00137771 | 1000 | 20261110 | 1000 | 0 |
 | S-boot-5 | Residual | rmse | 0.021786 | 0.000454697 | 1000 | 20261110 | 1000 | 0 |
 
+Bootstrap diagnostics:
+
+| scenario | estimand | measure | value | MCSE | n_sim | seed | n_finite | n_failed |
+|:---|:---|:---|:---|:---|:---|:---|:---|:---|
+| S-boot-5 | bootstrap | failed_share | 0 | 0 | 1000 | 20261110 | 1000 | 0 |
+| S-boot-5 | bootstrap | singular_share | 0.73465 | 0.00448964 | 1000 | 20261110 | 1000 | 0 |
+
 ### S-boot-6
 
 | scenario | estimand | measure | value | MCSE | n_sim | seed | n_finite | n_failed |
@@ -986,8 +1161,6 @@ than a reason to alter intervals.
 | S-boot-6 | block | empse | 0.0154382 | 0.000345381 | 1000 | 20261112 | 1000 | 0 |
 | S-boot-6 | block | rel_bias | -0.035723 | 0.0488198 | 1000 | 20261112 | 1000 | 0 |
 | S-boot-6 | block | rmse | 0.0154346 | 0.000928394 | 1000 | 20261112 | 1000 | 0 |
-| S-boot-6 | bootstrap | failed_share | 0 | 0 | 1000 | 20261112 | 1000 | 0 |
-| S-boot-6 | bootstrap | singular_share | 0.607905 | 0.00580555 | 1000 | 20261112 | 1000 | 0 |
 | S-boot-6 | grr_pct_contribution | bias | 0.835364 | 0.307717 | 1000 | 20261112 | 1000 | 0 |
 | S-boot-6 | grr_pct_contribution | coverage | 0.933 | 0.00790639 | 1000 | 20261112 | 1000 | 0 |
 | S-boot-6 | grr_pct_contribution | empse | 9.73086 | 0.217698 | 1000 | 20261112 | 1000 | 0 |
@@ -1041,12 +1214,17 @@ than a reason to alter intervals.
 | S-boot-6 | Residual | rel_bias | 0.0009549 | 0.00112111 | 1000 | 20261112 | 1000 | 0 |
 | S-boot-6 | Residual | rmse | 0.0177239 | 0.000407437 | 1000 | 20261112 | 1000 | 0 |
 
+Bootstrap diagnostics:
+
+| scenario | estimand | measure | value | MCSE | n_sim | seed | n_finite | n_failed |
+|:---|:---|:---|:---|:---|:---|:---|:---|:---|
+| S-boot-6 | bootstrap | failed_share | 0 | 0 | 1000 | 20261112 | 1000 | 0 |
+| S-boot-6 | bootstrap | singular_share | 0.607905 | 0.00580555 | 1000 | 20261112 | 1000 | 0 |
+
 ### S-boot-7
 
 | scenario | estimand | measure | value | MCSE | n_sim | seed | n_finite | n_failed |
 |:---|:---|:---|:---|:---|:---|:---|:---|:---|
-| S-boot-7 | bootstrap | failed_share | 0 | 0 | 1000 | 20261114 | 1000 | 0 |
-| S-boot-7 | bootstrap | singular_share | 0.37961 | 0.00665147 | 1000 | 20261114 | 1000 | 0 |
 | S-boot-7 | grr_pct_contribution | bias | 0.382422 | 0.126935 | 1000 | 20261114 | 1000 | 0 |
 | S-boot-7 | grr_pct_contribution | coverage | 0.928 | 0.00817411 | 1000 | 20261114 | 1000 | 0 |
 | S-boot-7 | grr_pct_contribution | empse | 4.01403 | 0.0898014 | 1000 | 20261114 | 1000 | 0 |
@@ -1083,3 +1261,22 @@ than a reason to alter intervals.
 | S-boot-7 | prompt | empse | 0.0824599 | 0.00184478 | 1000 | 20261114 | 1000 | 0 |
 | S-boot-7 | prompt | rel_bias | -0.204982 | 0.0260761 | 1000 | 20261114 | 1000 | 0 |
 | S-boot-7 | prompt | rmse | 0.0849294 | 0.00322761 | 1000 | 20261114 | 1000 | 0 |
+
+Bootstrap diagnostics:
+
+| scenario | estimand | measure | value | MCSE | n_sim | seed | n_finite | n_failed |
+|:---|:---|:---|:---|:---|:---|:---|:---|:---|
+| S-boot-7 | bootstrap | failed_share | 0 | 0 | 1000 | 20261114 | 1000 | 0 |
+| S-boot-7 | bootstrap | singular_share | 0.37961 | 0.00665147 | 1000 | 20261114 | 1000 | 0 |
+
+Reportable interval findings:
+
+| scenario | estimand | measure  | value | mcse       | direction    |
+|:---------|:---------|:---------|:------|:-----------|:-------------|
+| S-boot-1 | ndc      | coverage | 0.998 | 0.0014128  | overcoverage |
+| S-boot-2 | ndc      | coverage | 1     | 0          | overcoverage |
+| S-boot-3 | ndc      | coverage | 0.991 | 0.00298647 | overcoverage |
+| S-boot-4 | ndc      | coverage | 0.996 | 0.001996   | overcoverage |
+| S-boot-5 | ndc      | coverage | 1     | 0          | overcoverage |
+| S-boot-6 | ndc      | coverage | 1     | 0          | overcoverage |
+| S-boot-7 | ndc      | coverage | 1     | 0          | overcoverage |

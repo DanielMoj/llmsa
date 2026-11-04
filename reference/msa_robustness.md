@@ -63,5 +63,5 @@ msa_robustness(d, acc)
 #>   format  0.0076    0.76  FALSE               FALSE
 #>  context -0.0058   -0.58  FALSE               FALSE
 #>   system  0.0034    0.34  FALSE               FALSE
-#>   active factors (|effect| > ME): typos, temp
+#>   active factors (|effect| > ME): typos (above ME only), temp (above ME only)
 ```
