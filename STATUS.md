@@ -1,8 +1,8 @@
 # STATUS — llmsa
 
-Stand: 2026-11-04T09:18:07+01:00 · Fortschritt: **6/10 fertig**
+Stand: 2026-11-04T11:47:10+01:00 · Fortschritt: **6/10 fertig**
 
-`▓▓▓▓▓▓░░░░`  (▓ fertig · ▒ in Arbeit · ░ offen · ✖ geparkt)
+`▓▓▓▓▓▓░▒░░`  (▓ fertig · ▒ in Arbeit · ░ offen · ✖ geparkt)
 
 | Paket | Inhalt | Status | Detail |
 |---|---|---|---|
@@ -13,7 +13,7 @@ Stand: 2026-11-04T09:18:07+01:00 · Fortschritt: **6/10 fertig**
 | M1c | Bootstrap wie lme4::bootMer, Überdeckungsstudie als Skript mit reproduziertem Kurzlauf, Mutationslauf über R/fit.R und R/grr.R | ✅ | fertig |
 | M1d | Vignetten auf echten Daten ohne Modellaufruf (llm-stability, ClinVar-Einreichungen) und Abnahme der Klasse-B-Simulationsergebnisse aus M1b und M1c | ✅ | fertig |
 | M3a | Übereinstimmung (Cohen, Fleiss, Krippendorff, Attributkennzahlen), Bias und Linearität nach Prüfstandard | ⬜ | offen |
-| M3b | Robustheit: Plackett-Burman-Pläne, Lenth, Half-Normal-Plot, Fehlalarmrate | ⬜ | offen |
+| M3b | Robustheit: Plackett-Burman-Pläne, Lenth, Half-Normal-Plot, Fehlalarmrate | 🔨 | Phase 10-acceptance · Runde 1 |
 | M3c | Systemeignung: Westgard-Regelkarte, Simulator und Fallzahlplanung | ⬜ | offen |
 | M3d | Ausführung mit Fortsetzen, Parser, Backends gegen Aufzeichnungen, zahlentreuer Bericht mit SHA-256 | ⬜ | offen |
 

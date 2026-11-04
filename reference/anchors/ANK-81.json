@@ -1,0 +1,119 @@
+{
+  "id": "ANK-81",
+  "title": "Lenth (1989): s0, PSE, ME und SME mit den Konstanten 1,5 und 2,5, d = m/3 und γ = (1 + 0,95^(1/m))/2; Tab. 1 (t-Quantile); Beispiele II und IV (Daten Tab. 2, Kontraste Tab. 3, PSE, ME, SME, aktive Kontraste); Nominalniveau",
+  "criteria": ["K-M3b-3", "K-M3b-5"],
+  "value": {
+    "method": {
+      "s0_factor": 1.5,
+      "pse_factor": 1.5,
+      "trim_factor": 2.5,
+      "trim_rule": "strikt: der Median in Gl. (2) läuft über |c_j| < 2,5 · s0",
+      "df_rule": "d = m/3, nicht auf eine ganze Zahl gerundet",
+      "df_divisor": 3,
+      "me_quantile": 0.975,
+      "sme_gamma": "(1 + 0.95^(1/m)) / 2",
+      "nominal_alpha": 0.05,
+      "contrast": "Differenz der Mittelwerte bei hoher und niedriger Stufe („high-minus-low differences as contrasts“)"
+    },
+    "table1": {
+      "m": [7, 15, 31, 63, 127, 255],
+      "t_975": [3.76, 2.57, 2.22, 2.08, 2.02, 1.99],
+      "t_gamma": [9.01, 5.22, 4.22, 3.91, 3.84, 3.89],
+      "decimals": 2
+    },
+    "contrasts_file": {
+      "path": "reference/quellen/data/lenth/table3_contrasts.csv",
+      "sha256": "b1be15583e896796699013260b446c73324a43d831bc00e5ad0dc35b83a25ff2",
+      "columns": ["example", "index", "contrast", "aliases_as_printed", "estimate_table3"],
+      "rows": 30,
+      "note": "Tab. 3 wie gedruckt (Schätzwerte und Aliase); Spalte contrast benennt den Kontrast als Produkt der vier Basisfaktoren in Yates-Standardordnung"
+    },
+    "example_II": {
+      "data_file": {
+        "path": "reference/quellen/data/lenth/example_II.csv",
+        "sha256": "5f8da70e98529d8f445a2bd091e0cbf17fecdbfe3b1d5537989e9093f63345d9",
+        "columns": ["T", "W", "C", "R", "P", "M", "A", "O", "H", "strength"],
+        "rows": 16
+      },
+      "response": "strength",
+      "base_factors": ["T", "W", "C", "R"],
+      "generators": "P = WCR, M = −TWCR, A = −TR, O = −TC, H = TCR",
+      "m": 15,
+      "estimates_decimals": 2,
+      "mean": 42.96,
+      "mean_decimals": 2,
+      "s0": 0.45,
+      "pse": 0.225,
+      "pse_decimals": 3,
+      "me": 0.58,
+      "sme": 1.17,
+      "me_sme_decimals": 2,
+      "active": ["WCR", "TWCR"],
+      "active_simultaneous": ["WCR", "TWCR"],
+      "active_note": "Text: aktiv sind P (period) und M (material); in Tab. 3 ist P der Kontrast 14 (WCR) und −M der Kontrast 15 (TWCR); beide liegen über SME („outside the outer limits … P and −M in example II“)"
+    },
+    "example_IV": {
+      "data_file": {
+        "path": "reference/quellen/data/lenth/example_IV.csv",
+        "sha256": "c51e017294c3a5dc387ecf59a1dcab7a82a460b3391687f9f2f8d2af1803de7f",
+        "columns": ["S", "t", "A", "T", "yield"],
+        "rows": 16
+      },
+      "response": "yield",
+      "base_factors": ["S", "t", "A", "T"],
+      "m": 15,
+      "estimates_decimals": 3,
+      "mean": 0.382,
+      "mean_decimals": 3,
+      "s0": 0.114,
+      "pse": 0.114,
+      "pse_decimals": 3,
+      "me": 0.29,
+      "sme": 0.60,
+      "me_sme_decimals": 2,
+      "active": [],
+      "active_simultaneous": [],
+      "active_note": "Text: T und tT liegen „fairly close to the ME“, keiner darüber; nachgerechnet |T| = 0,27375 < ME = 0,2940"
+    },
+    "not_used": {
+      "table3_note_me_example_II": 0.56,
+      "reason": "Die Fußnote zu Tab. 3 druckt „±.56 in example II“, der Text auf S. 470 „ME = 2.57 × .225 = .58“; nachgerechnet 2,5706 · 0,225 = 0,5784. Der Anker folgt dem Text (Gl. (3) und Tab. 1); die übrigen Werte der Fußnote (±.29, ±1.17, ±.60) stimmen mit dem Text."
+    },
+    "observations": {
+      "conservative": "Lenth nennt das Verfahren selbst konservativ (S. 472–473, further_quotes). Nachrechnung des Reviewers mit eigener Mini-Referenz (R 4.6.1, Seed 1, je 200 000 Sätze unabhängiger N(0, 1)-Kontraste, α = 0,05): Anteil |c| > ME je Effekt 0,02135 (m = 8) und 0,02675 (m = 11); Anteil der Sätze mit mindestens einem |c| > SME 0,01295 (m = 8) und 0,01848 (m = 11); m = 7, 15, 31: 0,0199/0,0288/0,0375 und 0,0120/0,0226/0,0323. Bedeutung für K-M3b-5: ACC-10 in orchestrator/handoff/M3b/CRITERIA.json.",
+      "unrepx": "unrepx 1.0.2: Lenth_pse rechnet den Median über |c| ≤ 2,5 · s0 (Lenth: <); auf den Beispielen gleich (kein |c| liegt auf 2,5 · s0). unrepx::ME(method = \"Lenth\") nimmt ME und SME nicht aus t-Quantilen mit d = m/3, sondern aus einer bei jedem Aufruf neu simulierten Referenzverteilung (ceiling(40000/m) Sätze, aktueller Zufallsstrom): Beispiel II ME 0,4838 (Seed 1) bzw. 0,4833 (Seed 2) statt 0,5784, Beispiel IV 0,2460 bzw. 0,2457 statt 0,2940 (ACC-7)."
+    }
+  },
+  "unit": "Kontraste, s0, PSE, ME, SME und Mittelwerte in Einheiten der Antwort (Beispiel II Zugfestigkeit, Beispiel IV Ausbeute, beide ohne Einheit gedruckt); t-Quantile dimensionslos; nominal_alpha als Anteil",
+  "tolerance": {
+    "published": "halbe Einheit der letzten gedruckten Stelle (0,5 · 10^-decimals) zuzüglich ANK-TOL.arithmetic.abs_tol als Spielraum der Gleitkommarechnung",
+    "estimates": "wie published mit estimates_decimals aus dem Beispiel; in Beispiel II liegen 7 der 15 exakten Kontraste (Vielfache von 0,0125) genau auf der Mitte zweier gedruckter Werte, die Druckabweichung erreicht dort genau die halbe Einheit",
+    "table1": "halbe Einheit der letzten gedruckten Stelle (0,005) für ME/PSE und SME/PSE",
+    "method": 0
+  },
+  "tolerance_note": "docs/01 §2 Nr. 6: halbe Einheit der letzten publizierten Stelle, sofern der Anker nichts anderes belegt. Der Zuschlag ANK-TOL.arithmetic deckt nur die Darstellung der Dezimalwerte im Rechner ab (|0,375 − 0,37| ist in double-Arithmetik nicht exakt 0,005). Gegenrechnung mit unrepx nach ANK-TOL.frf2_unrepx (PSE, ME 1e-8).",
+  "source_url": "Lenth1989 (reference/privat/QUELLENKATALOG.md): Lenth, R. V. (1989), Quick and easy analysis of unreplicated factorials, Technometrics 31(4), 469–473, doi:10.1080/00401706.1989.10488595; Gl. (1)–(5), Tab. 1 und Beispielrechnung Druckseite 470 (PDF-Seite 3); Tab. 2 und Tab. 3 Druckseite 471 (PDF-Seite 4); Konservativität Druckseiten 472–473 (PDF-Seiten 5–6); lokale Kopie quellen/literatur/B_bausteine/Lenth_1989_Unreplicated_Factorials_Technometrics31_469.pdf (SHA-256 105e621694f63b9a9b01d1cc89a75251f3cb381abe2d00bc894dee6348d9cc08)",
+  "source": "Literatur, geschützt (lokal; pdfinfo: Creator Acrobat Capture Server 2.01, OCR-Textschicht); Daten Tab. 2 und Kontraste Tab. 3 als CSV unter reference/quellen/data/lenth/ (Betreiber, 04.11.2026, git-ignoriert; QUELLE.txt SHA-256 b5084e01949ce444f3c5c9a4b09ae1aa648cb0e5c29c88a38259fda1a33603b7)",
+  "quote": "Example II. ME = 2.57 × .225 = .58; SME = 5.22 × .225 = 1.17.",
+  "quote_location": "Druckseite 470 (PDF-Seite 3), rechte Spalte, am Seitenbild gelesen (Textspiegel .layout.txt Zeile 193–195)",
+  "further_quotes": [
+    {"quote": "Example IV. ME = 2.57 × .114 = .29; SME = 5.22 × .114 = .60.", "location": "Druckseite 470, rechte Spalte (Zeile 196–197)"},
+    {"quote": "s0 = 1.5 × median |cj|", "location": "Druckseite 470, Gl. (1), Index j unter „median“ (Seitenbild)"},
+    {"quote": "PSE = 1.5 × median |cj|.", "location": "Druckseite 470, Gl. (2), Bedingung |cj| < 2.5s0 unter „median“ (Seitenbild; Textschicht unlesbar)"},
+    {"quote": "where t.975;d is the .975th quantile of a t distribution on d df. (For reasons described in Sec. 4, d = m/3 is suggested.)", "location": "Druckseite 470, unter Gl. (3)"},
+    {"quote": "ME is a margin of error for ci with approximately 95% confidence", "location": "Druckseite 470, linke Spalte"},
+    {"quote": "γ = (1 + .95^(1/m))/2.", "location": "Druckseite 470, Gl. (5) (Exponent 1/m hochgestellt)"},
+    {"quote": "This is derived from the fact that the estimates are independent. It is exact, not conservative.", "location": "Druckseite 470, unter Gl. (5)"},
+    {"quote": "s0 = 1.5 × .30 = .45. Then perform the identical calculation, only excluding the two contrasts that exceed 2.5s0 = 1.13, obtaining PSE = 1.5 × .15 = .225. In example IV, we obtain s0 = PSE = .114 (nothing is excluded in the second step).", "location": "Druckseite 470, rechte Spalte"},
+    {"quote": "Table 1. Quantiles of the t Distribution for Common Values of m and Degrees of Freedom d = m/3 (not rounded to an integer)", "location": "Druckseite 470, Tab. 1 (Zeilen m = 7, 15, 31, 63, 127, 255; Spalten t.975;d und tγ;d)"},
+    {"quote": "two contrasts emerge as active ones in example II—P (period) and M (material).", "location": "Druckseite 470, rechte Spalte unten"},
+    {"quote": "In example IV, two contrasts, T (temperature) and tT, (time × temperature) are fairly close to the ME.", "location": "Druckseiten 470–471 (Satz über den Seitenwechsel)"},
+    {"quote": "NOTE: Presentation is in standard order according to the first four factors.", "location": "Druckseite 471, Tab. 2"},
+    {"quote": "Margins of error for the estimates (see text) are ±.56 in example II and ±.29 in example IV. Simultaneous margins of error are ±1.17 and ±.60, respectively.", "location": "Druckseite 471, Fußnote zu Tab. 3 (siehe not_used)"},
+    {"quote": "suggesting that the method is conservative (i.e., the true confidence coefficient is deflated due to overestimating τ).", "location": "Druckseite 472, rechte Spalte unten, bis Druckseite 473 (Trennung „over-/estimating“)"},
+    {"quote": "Using a few too many degrees of freedom will not overbalance this conservatism, so it is recommended that d = m/3 df be used regardless of the number of active contrasts detected.", "location": "Druckseite 473, rechte Spalte, Ende von Abschnitt 4"}
+  ],
+  "retrieved": "2026-11-04",
+  "method": "Reviewer, ACCEPTANCE M3b (04.11.2026): SHA-256 der PDF mit tools::sha256sum() aus Rscript (gleich source_url und dem Präfix des Textspiegels); OCR-Scan, deshalb jede Zahl am Seitenbild gelesen (pdftoppm, Seiten 3–6, 100 bis 400 dpi). CSV-Dateien des Betreibers gegen Tab. 2 und Tab. 3 verglichen: 32 Antwortwerte und 30 Schätzwerte gleich dem Druck; Vorzeichen von Beispiel II gleich den Generatoren, Basisfaktoren beider Beispiele in Standardordnung.",
+  "verification": "Nachrechnung aus den CSV-Daten (R 4.6.1, eigene Mini-Referenz nach Gl. (1)–(5)): Beispiel II Kontraste 0,125 / −0,15 / 0,3 / 0,15 / 0,4 / −0,025 / 0,375 / 0,4 / −0,05 / 0,425 / 0,125 / 0,125 / −0,375 / 2,15 / 3,1, Mittel 42,9625, s0 0,45, PSE 0,225, ME 0,5783809, SME 1,1741965, aktiv WCR und TWCR (auch über SME); Beispiel IV Kontraste gleich Tab. 3 − 0,00025 je Wert, Mittel 0,381875, s0 = PSE 0,114375, ME 0,2940103, SME 0,5968832, kein Kontrast über ME. Kontraste gleich dem doppelten Koeffizienten von lm(y ~ Kontrastspalten) bis 3,7e-15. Tab. 1 aus qt(0,975; m/3) und qt(γ; m/3): 3,7641/9,0083, 2,5706/5,2187, 2,2184/4,2180, 2,0796/3,9057, 2,0176/3,8413, 1,9883/3,8862, gerundet gleich dem Druck. unrepx::PSE(method = \"Lenth\") gleich der PSE beider Beispiele."
+}

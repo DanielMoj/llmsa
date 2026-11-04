@@ -1,0 +1,162 @@
+{
+  "criteria": [
+    {
+      "id": "K-M3b-1",
+      "quote": "**K-M3b-1:** Die Plackett-Burman-Matrizen für N = 8, 12, 16, 20, 24 entstehen aus den Generatorzeilen von Plackett & Burman (1946) (`ankerRef: ANK-80`) durch N − 2 zyklische Verschiebungen und eine Zeile aus −1; mit vorangestellter Einsspalte gilt HᵀH = N·I, und jede Faktorspalte summiert zu 0. (Prüfweg: Test)",
+      "source": "docs/04-weitere-bausteine.md"
+    },
+    {
+      "id": "K-M3b-2",
+      "quote": "**K-M3b-2:** Jede Matrix aus K-M3b-1 ist mit `FrF2::pb(nruns = N)` bis auf Zeilenpermutation, Spaltenpermutation und Vorzeichenwechsel von Spalten identisch (`ankerRef: ANK-TOL.frf2_unrepx`). (Prüfweg: Test)",
+      "source": "docs/04-weitere-bausteine.md"
+    },
+    {
+      "id": "K-M3b-3",
+      "quote": "**K-M3b-3:** Haupteffekte sind Differenzen der Stufenmittel und gleich dem doppelten Regressionskoeffizienten bei ±1-Kodierung; Lenths PSE, ME und SME mit den Konstanten 1,5 und 2,5 und d = m/3 reproduzieren die Beispiele II und IV aus Lenth (1989) (`ankerRef: ANK-81`) und stimmen mit `unrepx::PSE` und `unrepx::ME` überein (`ANK-TOL.frf2_unrepx`); ein Faktor gilt als aktiv bei |Ê| > ME, simultan aktiv bei |Ê| > SME. (Prüfweg: Test)",
+      "source": "docs/04-weitere-bausteine.md"
+    },
+    {
+      "id": "K-M3b-4",
+      "quote": "**K-M3b-4:** Der Half-Normal-Plot von `plot.msa_robustness` verwendet die Positionen q_(i) = Φ⁻¹(½ + (i − ½)/(2m)) nach Daniel (1959) (`ankerRef: ANK-82`), nennt die Konvention in der Achsenbeschriftung oder Legende, und die Positionen stimmen für m = 31 mit dem Beispiel der Quelle überein. (Prüfweg: Test)",
+      "source": "docs/04-weitere-bausteine.md"
+    },
+    {
+      "id": "K-M3b-5",
+      "quote": "**K-M3b-5:** Fehlalarmrate (Klasse A, `tests/simulation/test-lenth-h0.R`): Unter der Nullhypothese (alle Effekte null, Rauschen normal) liegt der Anteil der als aktiv erklärten Effekte bei ME innerhalb von `ankerRef: ANK-TOL.mc_factor` (Bestehenskriterium) Monte-Carlo-Standardfehlern um α je Effekt und bei SME der Anteil der Pläne mit mindestens einem aktiven Effekt ebenso um α (Nominalniveau nach Lenth 1989, `ANK-81`), für N = 12 mit 8 und 11 Faktoren, `n_sim` ≥ `ANK-06`. (Prüfweg: Test)",
+      "source": "docs/04-weitere-bausteine.md"
+    },
+    {
+      "id": "K-M3b-6",
+      "quote": "**K-M3b-6:** `pb_design()` wählt ohne `n_runs` die kleinste Plangröße mit N − 1 ≥ Faktorzahl, randomisiert die Laufreihenfolge reproduzierbar mit `seed`, beschriftet Stufen mit den übergebenen Namen; `msa_robustness()` logit-transformiert Antworten im Intervall (0, 1), wenn `transform = \"logit\"` gesetzt ist (neues Argument mit Vorgabe `\"none\"`), und meldet Anteile von genau 0 oder 1 vor der Transformation als Fehler. (Prüfweg: Test)",
+      "source": "docs/04-weitere-bausteine.md"
+    }
+  ],
+  "open": [
+    {
+      "id": "ACC-1",
+      "status": "Anker geerntet in ACCEPTANCE M3b (04.11.2026), jede Zahl am Original geprüft",
+      "ref": "ANKER-TODO.md, Abschnitt „M3b — Robustheit“; docs/01 §6: „Anker erntet der Reviewer in der ACCEPTANCE-Phase nach `ANKER-TODO.md`.“",
+      "kind": "Anker",
+      "owner": "Reviewer",
+      "blocking_builder": false,
+      "note": "ANK-80: Generatorzeilen N = 8, 12, 16, 20, 24 am Seitenbild von Plackett & Burman 1946, Druckseite 323 (OCR-Scan von ABBYY FineReader, Textschicht an dieser Stelle unlesbar), Zeichen für Zeichen gelesen; Konstruktion Druckseiten 319 und 323 (Generatorfolge als erste Zeile oder erste Spalte, Verschiebung um eine Stelle, letzte Zeile aus Minuszeichen); Zweitquelle NIST 5.3.3.5 Tab. 3.18 und 3.19 nachgerechnet. ANK-81: Lenth 1989, Gl. (1)–(5), Tab. 1 und die Beispiele II und IV am Seitenbild (Druckseiten 470–473); Tab. 2 und Tab. 3 bleiben als lokale CSV, der Anker hält SHA-256, Spalten und Zeilenzahl fest; die Fußnote zu Tab. 3 druckt ME „±.56“ für Beispiel II, der Text „.58“ (2,5706 · 0,225 = 0,578); der Anker folgt dem Text (not_used). ANK-82: Daniel 1959, Druckseiten 314–315 am Seitenbild; „(22 − ½)/31 = 0.693“ ist im Druck abgeschnitten (exakt 0,69355), deshalb dort eine volle Einheit der dritten Stelle als Toleranz. Die Anker liegen vor dem Tag plan/M3b (Gate golden-adr unberührt); die Auslegungen ACC-3, ACC-4, ACC-6, ACC-8, ACC-9 und ACC-11 hält der Reviewer im 30-plan-review in einem ADR fest."
+    },
+    {
+      "id": "ACC-2",
+      "status": "erledigt: CSV-Dateien des Betreibers am Original abgeglichen (Reviewer, 04.11.2026)",
+      "ref": "docs/01 §6: „Geschützte Beispieldaten (AIAG-Datenblätter, Fleiss' Tabelle 1 außerhalb von `irr::diagnoses`, Lenth 1989 Tabellen) liegen als CSV unter `reference/quellen/data/<quelle>/` (git-ignoriert); der Betreiber legt sie an, der Reviewer gleicht sie am Original ab.“",
+      "kind": "Geschützte Daten",
+      "owner": "Betreiber (Dateien), Reviewer (Abgleich)",
+      "blocking_builder": false,
+      "note": "reference/quellen/data/lenth/example_II.csv (SHA-256 5f8da70e98529d8f445a2bd091e0cbf17fecdbfe3b1d5537989e9093f63345d9), example_IV.csv (c51e017294c3a5dc387ecf59a1dcab7a82a460b3391687f9f2f8d2af1803de7f), table3_contrasts.csv (b1be15583e896796699013260b446c73324a43d831bc00e5ad0dc35b83a25ff2), QUELLE.txt (b5084e01949ce444f3c5c9a4b09ae1aa648cb0e5c29c88a38259fda1a33603b7), angelegt 04.11.2026 10:59. Die 32 Antwortwerte und 30 Schätzwerte gleichen Tab. 2 und Tab. 3 (Seitenbild Druckseite 471, 220 dpi); die Vorzeichen von Beispiel II gleichen den Generatoren P = WCR, M = −TWCR, A = −TR, O = −TC, H = TCR; die Basisfaktoren beider Beispiele stehen in Standardordnung; Kontraste aus den Daten gleich Tab. 3 nach Rundung. Fehlt eine Datei oder weicht ihr SHA-256 ab, schlägt der Test fehl (kein skip). Die Dateien sind git-ignoriert; nach einem Rollback (BL-103) vor dem nächsten Lauf prüfen."
+    },
+    {
+      "id": "ACC-3",
+      "status": "Auslegung des Reviewers (Spec schweigt zu geprüftem Objekt, Verschiebungsrichtung sowie Zeilen- oder Spaltenform)",
+      "ref": "K-M3b-1 (criteria); ANK-80: Plackett & Burman 1946, S. 319: „The complete design is generated by taking this as the first column (or row), shifting it cyclically one place fourteen times and adding a final row of minus signs“; S. 323: „The first row of any cyclic design is given opposite N, the number of assemblies.“",
+      "kind": "Prüfform K-M3b-1",
+      "owner": "Builder",
+      "blocking_builder": true,
+      "note": "(1) Geprüft wird das dokumentierte Attribut `coded` von pb_design(N − 1, n_runs = N, randomize = FALSE) als N × (N − 1)-Matrix aus ±1. (2) Zulässig sind die drei Formen der Quelle: Generatorzeile aus ANK-80 als erste Zeile und jede weitere Zeile die vorige, um eine Stelle zyklisch nach rechts (Code vor M3b) oder nach links verschoben; oder die Generatorfolge als erste Spalte und jede weitere Spalte um eine Stelle nach unten verschoben (gedrucktes Beispiel S. 319); dazu die letzte Zeile aus −1. Verlangt ist eintragsweise Gleichheit mit einer dieser Formen (Mini-Referenz in setup-m3b.R). (3) cbind(1, X): crossprod = N · I exakt; colSums(X) = 0. (4) Die kodierten Spalten des zurückgegebenen data.frame gleichen `coded`. Testdatei tests/acceptance/test-m3b-1-pb-matrices.R; auf dem Code vor M3b grün."
+    },
+    {
+      "id": "ACC-4",
+      "status": "Auslegung des Reviewers (Spec schweigt zu Aufruf und Prüfverfahren)",
+      "ref": "K-M3b-2 (criteria); ANK-TOL.frf2_unrepx: „Matrizen exakt bis auf Permutation und Vorzeichen“; docs/01 §6: Orakel „FrF2 (`pb`)“",
+      "kind": "Prüfform K-M3b-2",
+      "owner": "Builder",
+      "blocking_builder": true,
+      "note": "(1) Orakel FrF2::pb(nruns = N, randomize = FALSE) zur Testlaufzeit, Matrix aus attr(, \"desnum\"); randomize = FALSE legt nur die Zeilenfolge fest, die das Kriterium freigibt; alle anderen Argumente bleiben auf ihrer Vorgabe (auch boxtyssedal = TRUE); Warnungen und gedruckte Hinweise von FrF2 zur Vermengung werden unterdrückt. (2) Gleich heißt: Es gibt eine Zeilenpermutation σ, eine Spaltenpermutation π und Spaltenvorzeichen s mit A[i, j] = s_j · B[σ(i), π(j)] für alle Einträge. Der Test sucht die Abbildung (Spaltenvorzeichen so, dass Zeile 1 von A und eine Kandidatenzeile von B +1 sind; Spalten einzeln zuordnen, solange die Multimengen der Zeilenmuster gleich bleiben) und prüft sie eintragsweise. (3) Vor der Suche vergleicht er die Multimengen der |J3|-Werte (Betrag der Summe der Produkte dreier Spalten; invariant unter allen drei Operationen) und nennt sie im Fehlerfall. (4) Positiv- und Negativkontrolle des Suchverfahrens in derselben Datei. Testdatei tests/acceptance/test-m3b-2-frf2.R."
+    },
+    {
+      "id": "ACC-5",
+      "status": "offen, blocking: Widerspruch bindender Spec-Stellen; Betreiberentscheidung vor 20-plan nötig (AGENTS.md: „Widersprüchliche Specs führen zu `ESCALATE`.“)",
+      "ref": "K-M3b-1: „entstehen aus den Generatorzeilen von Plackett & Burman (1946) (`ankerRef: ANK-80`) durch N − 2 zyklische Verschiebungen und eine Zeile aus −1“; K-M3b-2: „Jede Matrix aus K-M3b-1 ist mit `FrF2::pb(nruns = N)` bis auf Zeilenpermutation, Spaltenpermutation und Vorzeichenwechsel von Spalten identisch“",
+      "kind": "[ESCALATE] Spec-Widerspruch",
+      "owner": "Betreiber",
+      "blocking_builder": false,
+      "note": "FrF2::pb(nruns = 16) liefert in der Vorgabe (boxtyssedal = TRUE; FrF2 2.3.5, bei mehr als zwölf Faktoren die zweite Matrix von FrF2:::boxtyssedal) den nicht regulären Plan von Box & Tyssedal. Der zyklische Plan von Plackett & Burman für N = 16 ist regulär: Die Generatorfolge ist eine m-Folge der Länge 15. Die |J3|-Multimengen unterscheiden sich (Spaltentripel je Wert): zyklisch 0:420, 16:35; FrF2 0:336, 8:112, 16:7. |J3| bleibt unter Zeilen-, Spaltenpermutation und Spaltenvorzeichen gleich; also kann keine Implementierung, die K-M3b-1 erfüllt, K-M3b-2 für N = 16 erfüllen. Für N = 8, 12, 20, 24 findet der Test die Abbildung und bestätigt sie eintragsweise; mit FrF2::pb(nruns = 16, boxtyssedal = FALSE) ebenso für N = 16 (Probe des Reviewers). Der Abnahmetest folgt dem Wortlaut und ist für N = 16 rot. Möglichkeiten: (a) K-M3b-2 auf `FrF2::pb(nruns = N, boxtyssedal = FALSE)` ändern; (b) N = 16 aus K-M3b-2 nehmen. Bis zur Entscheidung sind das tests-Gate und der unmutierte Vorlauf des mutgate rot."
+    },
+    {
+      "id": "ACC-6",
+      "status": "Auslegung des Reviewers (Spec schweigt zu Datenform der Beispiele, Toleranzen außerhalb von unrepx und Prüffällen)",
+      "ref": "K-M3b-3 (criteria); ANK-81; ANK-TOL.arithmetic; ANK-TOL.frf2_unrepx; docs/01 §2 Nr. 2 und Nr. 6",
+      "kind": "Prüfform K-M3b-3",
+      "owner": "Builder",
+      "blocking_builder": true,
+      "note": "(1) Haupteffekte: msa_robustness()$effect je Faktor gleich der Differenz der Stufenmittel (Mini-Referenz) und gleich 2 · coef(lm(y ~ Spalten)) auf pb_design(11) und pb_design(8) in 12 Läufen sowie auf beiden Beispielen; Toleranz ANK-TOL.arithmetic. (2) Beispiele II und IV: Design als data.frame mit allen 15 Kontrastspalten (Produkte der Basisfaktoren, Namen wie Spalte contrast der Tab. 3), factors = diese Spalten, alpha = ANK-81 method.nominal_alpha. Effekte gegen Tab. 3, die Attribute response_mean, pse, me und sme gegen den Druck mit halber Einheit der letzten gedruckten Stelle zuzüglich ANK-TOL.arithmetic (ANK-81 tolerance); pse, me und sme zusätzlich gegen die Mini-Referenz von Gl. (1)–(5) mit ANK-TOL.arithmetic. (3) Tab. 1: me/pse und sme/pse für m = 7, 15, 31, 63, 127, 255 (volle 2^k-Kontrastmatrizen, Zufallsantwort) auf eine halbe Einheit der zweiten Stelle. (4) Gl. (2) streng: ein Fall mit einem Kontrast genau auf 2,5 · s0 (Effekte 1, 1, 2, 2, 7,5, 30, 40 in exakter Binärarithmetik; PSE 2,25, mit ≤ wäre sie 3); erwartet ist die Mini-Referenz auf den gemeldeten Effekten. (5) active = |Ê| > ME und active_simultaneous = |Ê| > SME: die Mengen der Beispiele (II: WCR und TWCR, also P und −M; IV: keine), ein konstruierter Fall zwischen ME und SME und die Übereinstimmung mit der Mini-Referenz auf drei Zufallsplänen. (6) PSE gegen unrepx::PSE(effects, method = \"Lenth\") (die Vorgabe von unrepx ist \"Zahn\") mit ANK-TOL.frf2_unrepx.pse_me_tol auf beiden Beispielen und drei Zufallsplänen. unrepx rechnet den Median über |c| ≤ 2,5 · s0 statt < und weicht nur im Grenzfall (4) ab; dieser läuft deshalb nicht gegen unrepx. (7) ME gegen unrepx::ME: ACC-7. Testdatei tests/acceptance/test-m3b-3-lenth.R."
+    },
+    {
+      "id": "ACC-7",
+      "status": "offen, blocking: Widerspruch innerhalb von K-M3b-3; Betreiberentscheidung vor 20-plan nötig",
+      "ref": "K-M3b-3: „Lenths PSE, ME und SME mit den Konstanten 1,5 und 2,5 und d = m/3 reproduzieren die Beispiele II und IV aus Lenth (1989) (`ankerRef: ANK-81`) und stimmen mit `unrepx::PSE` und `unrepx::ME` überein (`ANK-TOL.frf2_unrepx`)“; ANK-TOL.frf2_unrepx: „PSE, ME 1e-8“",
+      "kind": "[ESCALATE] Spec-Widerspruch",
+      "owner": "Betreiber",
+      "blocking_builder": false,
+      "note": "unrepx::ME (unrepx 1.0.2) rechnet ME = PSE · quantile(|c|/PSE, 1 − α) und SME = PSE · quantile(max |c|/PSE, 1 − α) aus einer bei jedem Aufruf neu simulierten Referenzverteilung (ceiling(40000/m) Sätze aus dem laufenden Zufallsstrom, zwischengespeichert in options(unrepx.lastrefdist)); Lenths ME ist t(0,975; m/3) · PSE. Beispiel II: Lenth 0,5784 (gedruckt .58), unrepx 0,4838 (Seed 1) bzw. 0,4833 (Seed 2); Beispiel IV: 0,2940 (gedruckt .29) gegen 0,2460 bzw. 0,2457. Eine Übereinstimmung auf 1e-8 schließt die Reproduktion der Beispiele aus und besteht nicht einmal zwischen zwei unrepx-Aufrufen mit verschiedenem Seed. Der Test folgt dem Wortlaut (Seed 20261104, leerer Zwischenspeicher) und ist rot; die PSE stimmt mit unrepx (ACC-6 (6)). Möglichkeiten: (a) unrepx::ME aus K-M3b-3 streichen, ME und SME bleiben gegen Lenths Beispiele und Tab. 1 geprüft; (b) unrepx::ME als berichteten Vergleich ohne Bestehenskriterium führen; (c) das simulierte Verfahren von unrepx übernehmen, was die Konstante d = m/3 und die Beispielwerte von K-M3b-3 aufgibt."
+    },
+    {
+      "id": "ACC-8",
+      "status": "Auslegung des Reviewers (Spec schweigt zu Achse, Prüfweg und Wortlaut der Konvention)",
+      "ref": "K-M3b-4 (criteria); ANK-82; Formelsammlung §7: „Die nach Größe geordneten |Ê|\\_(i) gegen die Quantile.“",
+      "kind": "Prüfform K-M3b-4",
+      "owner": "Builder",
+      "blocking_builder": true,
+      "note": "(1) plot() eines msa_robustness-Objekts wird auf einem pdf(NULL)-Gerät mit recordPlot() aufgezeichnet und aus der Display-Liste gelesen: Punktmengen (C_plotXY mit type p, b oder o und m Punkten), Achsentitel (C_title: xlab, ylab), Randtexte (C_mtext) und Texte (C_text, darin Legendeneinträge). Die Grafik bleibt Basisgrafik (Imports nur graphics). (2) Jede Punktmenge mit m Punkten trägt auf der x-Achse q_(i) = qnorm(1/2 + (i − 1/2)/(2m)) und auf der y-Achse die aufsteigend geordneten |Ê|_(i) (Toleranz ANK-TOL.arithmetic); geprüft für m = 11 (pb_design), 31, 26 und 7. (3) Beispiel der Quelle aus den gezeichneten Positionen mit P′ = 2Φ(q) − 1: bei m = 31 ist P′ des 22. Punkts 0,693 (Toleranz 0,001 nach ANK-82, Druck abgeschnitten), der 22. Punkt liegt am nächsten an 0,683, der oberste bei 0,984; bei m = 26 der oberste bei 0,981 (je halbe Einheit). (4) „Konvention genannt“ heißt: ein Achsentitel, Randtext oder Legendeneintrag enthält „Daniel“ und „1959“ im selben Text; der Haupttitel zählt nicht. Vor M3b rot (xlab „half-normal quantile“). Testdatei tests/acceptance/test-m3b-4-half-normal.R."
+    },
+    {
+      "id": "ACC-9",
+      "status": "Auslegung des Reviewers (Spec schweigt zu MCSE-Form, Seed und Datenerzeugung)",
+      "ref": "K-M3b-5 (criteria); docs/01 §2 Nr. 3, §5, §8; Formelsammlung §9; ANK-06; ANK-TOL.mc_factor; ANK-81",
+      "kind": "Prüfform K-M3b-5",
+      "owner": "Builder",
+      "blocking_builder": true,
+      "note": "Klasse-A-Test tests/simulation/test-lenth-h0.R mit den Hilfen in tests/simulation/setup-simulation.R (der Abnahmeordner verweist in setup-m3b.R auf ihn). Je Szenario pb_design(k, n_runs = 12, randomize = FALSE) mit k = 8 und 11, n_sim = ANK-06 n_sim_min = 1000 Pläne mit y ~ N(0, 1) unabhängig je Lauf, Seed 20261104 + k, RNG Mersenne-Twister/Inversion/Rejection; msa_robustness(alpha = ANK-81 method.nominal_alpha = 0,05). Kennzahl je Effekt: Mittel der Anteile aktiver Effekte je Plan, MCSE = sd/√n_sim (Formel MCSE(Bias) der Formelsammlung §9, weil die Effekte eines Plans dieselbe PSE teilen); Kennzahl je Plan: Anteil der Pläne mit mindestens einem |Ê| > SME, MCSE = √(p(1 − p)/n_sim) (Formel MCSE(Coverage)). Bestehen: |Kennzahl − α| ≤ ANK-TOL.mc_factor.pass · MCSE. Zusätzlich gleicht jede Entscheidung der Mini-Referenz von Lenth Gl. (1)–(5) auf denselben Daten. Laufzeit 2,2 s; die Meldung nennt Raten, MCSE, Seed, RNG, R- und Paketversion und Dauer."
+    },
+    {
+      "id": "ACC-10",
+      "status": "offen, blocking: Widerspruch zwischen K-M3b-5 einerseits und K-M3b-3 sowie der Quelle andererseits; Betreiberentscheidung vor 20-plan nötig",
+      "ref": "K-M3b-5: „liegt der Anteil der als aktiv erklärten Effekte bei ME innerhalb von `ankerRef: ANK-TOL.mc_factor` (Bestehenskriterium) Monte-Carlo-Standardfehlern um α je Effekt und bei SME der Anteil der Pläne mit mindestens einem aktiven Effekt ebenso um α (Nominalniveau nach Lenth 1989, `ANK-81`)“; K-M3b-3: „Lenths PSE, ME und SME mit den Konstanten 1,5 und 2,5 und d = m/3“; Lenth 1989, Druckseite 472 (ANK-81): „suggesting that the method is conservative“",
+      "kind": "[ESCALATE] Spec-Widerspruch",
+      "owner": "Betreiber",
+      "blocking_builder": false,
+      "note": "Mit Lenths Konstanten ist das Verfahren unter H0 deutlich konservativ. Test auf dem Code vor M3b (alle 2 × 1000 Entscheidungen gleich der Mini-Referenz): je Effekt 0,02325 (MCSE 0,00222; 12,0 MCSE unter α) bei 8 und 0,02891 (MCSE 0,00231; 9,1 MCSE) bei 11 Faktoren; je Plan 0,0150 (MCSE 0,00384; 9,1 MCSE) und 0,0250 (MCSE 0,00494; 5,1 MCSE). Mini-Referenz mit je 200 000 Sätzen unabhängiger N(0, 1)-Kontraste (Seed 1): 0,02135 und 0,02675 je Effekt, 0,01295 und 0,01848 je Plan (m = 8 und 11). Lenth selbst: „suggesting that the method is conservative“ (S. 472) und „Using a few too many degrees of freedom will not overbalance this conservatism“ (S. 473). Eine Implementierung nach K-M3b-3 besteht K-M3b-5 nicht; eine kalibrierte (etwa mit simulierten Quantilen wie unrepx) bestünde K-M3b-5, verlöre aber die Beispiele und Tab. 1 aus K-M3b-3. docs/01 §2 Nr. 3 („Berichtet wird, was herauskommt, nicht was herauskommen soll“) stützt eine Änderung des Kriteriums. Möglichkeiten: (a) Bestehen als Einhaltung des Niveaus, Kennzahl ≤ α + ANK-TOL.mc_factor.pass · MCSE, die Abweichung nach unten wird berichtet; (b) Vergleich mit dem Sollwert der Methode statt mit α: Kennzahl innerhalb von ANK-TOL.mc_factor.pass · MCSE um die mit der Mini-Referenz bei großem n_sim bestimmte Rate (neuer Anker mit Seed und n_sim, etwa ANK-83); (c) K-M3b-5 als berichtete Studie ohne Bestehenskriterium. Bis zur Entscheidung folgt der Test dem Wortlaut und ist rot."
+    },
+    {
+      "id": "ACC-11",
+      "status": "Auslegung des Reviewers (Spec schweigt zu Spaltennamen, Fehlermeldung, unbekanntem transform und mehr als 23 Faktoren)",
+      "ref": "K-M3b-6 (criteria); ANK-80 (Plangrößen); ANK-02 (Snapshot von msa_robustness: design, response, factors, alpha); docs/01 §4: „neue Argumente mit Vorgabewert am Ende der Argumentliste“; docs/01 §2 Nr. 4",
+      "kind": "Prüfform K-M3b-6",
+      "owner": "Builder",
+      "blocking_builder": true,
+      "note": "(1) Plangröße: Für k = 1 bis 23 Faktoren (als Zahl) und für benannte Listen mit 7, 8, 11, 12, 15, 16, 19, 20 und 23 Faktoren hat pb_design() ohne n_runs genau N Zeilen, N die kleinste Größe aus ANK-80 mit N − 1 ≥ k; 24 Faktoren ergeben einen Fehler; die kodierten Spalten bei weniger Faktoren sind Spalten der Matrix aus K-M3b-1 derselben Größe. (2) Reproduzierbar: gleicher seed ergibt identische Objekte unabhängig vom globalen Zufallszustand; die Zeilen sind eine Permutation der unrandomisierten; über die Seeds 1 bis 10 entstehen mehrere Reihenfolgen. (3) Stufen: Die Spalte <faktor>_level (dokumentierte Ausgabe seit v0.1.0) trägt bei +1 den zweiten und bei −1 den ersten übergebenen Wert (as.character); die kodierten Spalten heißen wie die Listennamen. (4) transform ist ein Formalargument hinter den vier Snapshot-Argumenten, eval(Vorgabe)[1] ist \"none\", und ein Aufruf ohne transform gleicht transform = \"none\". (5) Mit \"logit\" gleichen Effekte, pse, me und sme der Mini-Referenz auf log(p/(1 − p)) (Toleranz ANK-TOL.arithmetic). (6) Ein Anteil von genau 0 oder 1 ergibt mit \"logit\" einen Fehler, dessen Meldung 0 und 1 als eigene Zahlen nennt (etwa „strictly between 0 and 1“); mit \"none\" kein Fehler. (7) Ein anderer Wert von transform ist ein Fehler. Ein Seed-Attribut verlangt M3b nicht; die Seeds nennt der Bericht nach K-M3d-6. Testdatei tests/acceptance/test-m3b-6-design-transform.R."
+    },
+    {
+      "id": "ACC-12",
+      "status": "Hinweis an den Builder (docs/01 §5)",
+      "ref": "docs/01 §5: „Suggests dürfen ergänzt werden; die Validierungssuite nutzt `VCA`, `SixSigma`, `irr`, `psych`, `DescTools`, `rptR`, `performance`, `FrF2`, `unrepx`, `qcc`, `daewr`, `muttest`, `digest` als Suggests“",
+      "kind": "Suggests",
+      "owner": "Builder",
+      "blocking_builder": true,
+      "note": "Die Abnahmetests rufen FrF2::pb, unrepx::PSE und unrepx::ME. Beide Pakete stehen nicht in Suggests von DESCRIPTION (Stand vor M3b) und sind lokal installiert (FrF2 2.3.5 mit DoE.base 1.2.5, unrepx 1.0.2). Der Builder ergänzt FrF2 und unrepx in Suggests, damit das deps-Gate sie in jeder Umgebung installiert."
+    },
+    {
+      "id": "ACC-13",
+      "status": "Hinweis an den Betreiber",
+      "ref": "orchestrator/config.env: MUT_TEST_DIRS='tests/testthat tests/acceptance tests/e2e tests/fuzz' und MUT_SCOPE_REGEX='^R/.*\\.R$' (ADR-047 Nr. 4)",
+      "kind": "[INFRA] Testlaufzeit und Mutationslauf",
+      "owner": "Betreiber",
+      "blocking_builder": false,
+      "note": "Die fünf M3b-Abnahmedateien laufen zusammen in rund 12 s (24 Tests, Probe mit pkgload::load_all); sie lesen nur die drei kleinen Lenth-Dateien und brauchen keinen Eintrag in MUT_TEST_EXCLUDE. Solange ACC-5 und ACC-7 offen sind, bleiben drei Tests rot (N = 16 in K-M3b-2, ME gegen unrepx bei beiden Beispielen in K-M3b-3), und der unmutierte Vorlauf des mutgate scheitert. Der Klasse-A-Test unter tests/simulation läuft nur im tests-Gate (2,2 s)."
+    },
+    {
+      "id": "ACC-14",
+      "status": "erledigt (Reviewer-Probe, 04.11.2026)",
+      "ref": "docs/01 §2 Nr. 1: „Ein Test zählt erst, wenn er ein falsches Ergebnis erkennen würde.“",
+      "kind": "Nachweis der Trennschärfe",
+      "owner": "Reviewer",
+      "blocking_builder": false,
+      "note": "Paketkopie unter tempdir() mit einer Attrappe in R/zzz-mock.R, je Variante test_dir(filter = \"^m3b-\"). Korrekte Implementierung (transform mit match.arg und 0/1-Prüfung, xlab mit „Daniel (1959)“): 22 von 24 Tests grün, rot nur die Widersprüche ACC-5 und ACC-7. Jede Verfälschung macht den zuständigen Test rot: Trimmung mit ≤ (Grenzfall), d = m/2, Bonferroni-γ, PSE ohne Trimmung, halber Effekt, Blom-Positionen, xlab ohne Konvention, ein Vorzeichen der Generatorzeile N = 20, logit ohne 0/1-Prüfung, transform ohne match.arg, Vorgabe \"logit\", Größenwahl mit >, Seed ignoriert, Stufen vertauscht. Verschiebung nach links und Spaltenform bestehen K-M3b-1 wie vorgesehen. Auf dem Code vor M3b: K-M3b-1 grün; K-M3b-2 rot nur bei N = 16; K-M3b-3 rot nur bei ME gegen unrepx; K-M3b-4 rot nur bei der Benennung der Konvention; K-M3b-5 rot (ACC-10); K-M3b-6 rot in den vier Tests zu transform."
+    }
+  ]
+}

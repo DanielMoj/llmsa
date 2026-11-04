@@ -1,0 +1,41 @@
+{
+  "id": "ANK-82",
+  "title": "Daniel (1959): Plotting-Positionen des Half-Normal-Plots P′ = (i − ½)/n mit P′ = 2P − 100; Beispiel n = 31 (22. Kontrast bei P′ = 0,693, nächster Punkt zu 0,683; oberste Linie 0,984) und revidierte Darstellung mit n = 26 (oberste Linie 0,981)",
+  "criteria": ["K-M3b-4"],
+  "value": {
+    "plotting_position": "P' = (i - 1/2) / n, i = 1, ..., n (i aufsteigend nach |Kontrast|)",
+    "half_normal_scale": "P' = 2P - 100 (Prozent), also P = (1 + P')/2 und q(i) = qnorm(1/2 + (i - 1/2) / (2n))",
+    "example": {
+      "n": 31,
+      "i": 22,
+      "p_prime": 0.693,
+      "p_prime_nearest_target": 0.683,
+      "topmost_i": 31,
+      "topmost_p_prime": 0.984,
+      "revised_n": 26,
+      "revised_topmost_p_prime": 0.981,
+      "decimals": 3
+    },
+    "other_convention": "Blom-Positionen (i − 0,375)/(n + 0,25), wie in unrepx, sind eine andere Konvention (Formelsammlung §7)"
+  },
+  "unit": "P′ als Anteil (dimensionslos); q(i) als Quantil der Standardnormalverteilung",
+  "tolerance": {
+    "p_prime": 0.0005,
+    "p_prime_22": 0.001,
+    "formula": "ANK-TOL.arithmetic.abs_tol für q(i) aus der Formel"
+  },
+  "tolerance_note": "Halbe Einheit der dritten Stelle (docs/01 §2 Nr. 6) für 0,984 und 0,981 (exakt 30,5/31 = 0,98387 und 25,5/26 = 0,98077, korrekt gerundet). Für 0,693 belegt die Quelle selbst eine abweichende Druckweise: sie schreibt „(22 − ½)/31 = 0.693“, exakt 21,5/31 = 0,693548…, korrekt gerundet wäre 0,694; die Ziffer ist abgeschnitten, deshalb gilt dort eine volle Einheit der dritten Stelle (0,001). Zusätzlich prüft der Test jede Position gegen die Formel (Toleranz ANK-TOL.arithmetic).",
+  "source_url": "Daniel1959 (reference/privat/QUELLENKATALOG.md): Daniel, C. (1959), Use of half-normal plots in interpreting factorial two-level experiments, Technometrics 1(4), 311–341, doi:10.1080/00401706.1959.10489866; Plotting-Position Druckseite 314 (PDF-Seite 5), Beispiel Druckseite 315 (PDF-Seite 6); lokale Kopie quellen/literatur/B_bausteine/Daniel_1959_Half_Normal_Plots_Factorial_Experiments_Technometrics1_311.pdf (SHA-256 ddfcf08e548958b0404560a0d47821224db12135cc480a4190b044cd6fcc3465)",
+  "source": "Literatur, geschützt (lokal; pdfinfo: Creator Acrobat Capture Server 2.01, OCR-Textschicht; Brüche ½ in der Textschicht verloren)",
+  "quote": "This is the 22nd largest for n = 31, since (22 − ½)/31 = 0.693.",
+  "quote_location": "Druckseite 315 (PDF-Seite 6), zweiter Absatz unter Fig. 3, am Seitenbild gelesen (Textspiegel .layout.txt Zeile 280–281: „(22 - 4)/31“ ist ein OCR-Fehler)",
+  "further_quotes": [
+    {"quote": "For the range of P greater than 50% replace each value of P by the corresponding value P′ = 2P − 100.", "location": "Druckseite 314 (PDF-Seite 5), erster Absatz (Seitenbild)"},
+    {"quote": "P′ = (i − ½)/n; i = 1, 2, 3, ··· n,", "location": "Druckseite 314, abgesetzte Formel, gefolgt von „is used for plotting the empirical distribution. The abscissae are the absolute values of the contrasts.“ (Seitenbild; Textspiegel Zeile 238 „(i - g/n“ ist ein OCR-Fehler)"},
+    {"quote": "could be roughly estimated by that contrast for which P′ is most nearly 0.683, or 68.3%.", "location": "Druckseite 315, zweiter Absatz unter Fig. 3"},
+    {"quote": "the largest one remaining is still plotted nearly on the old topmost line (at 0.981 versus the former 0.984).", "location": "Druckseite 315, letzter Absatz (revidierte Darstellung mit „P′ = (i − ½)/26“)"}
+  ],
+  "retrieved": "2026-11-04",
+  "method": "Reviewer, ACCEPTANCE M3b (04.11.2026): SHA-256 der PDF mit tools::sha256sum() aus Rscript (gleich source_url und dem Präfix ddfcf08e548958b0 des Textspiegels); Seiten 5 und 6 mit pdftoppm -r 110 gerendert und gelesen, weil die OCR-Textschicht die Brüche ½ verliert.",
+  "verification": "Nachrechnung (R 4.6.1): (22 − 0,5)/31 = 0,6935484, (21 − 0,5)/31 = 0,6612903, also liegt der 22. Kontrast am nächsten an 0,683 (Abstand 0,0105 gegen 0,0217); 0,683 = 2·Φ(1) − 1 = 0,6827 (Kontrast nahe σ_c); (31 − 0,5)/31 = 0,9838710; (26 − 0,5)/26 = 0,9807692. Mit P = (1 + P′)/2 ist q(22) = qnorm(0,5 + 21,5/62) = 1,0227 für n = 31. Gleich der Formelsammlung §7 (geprüft 24.10. gegen Daniel 1959, S. 313–315) und der Formel in K-M3b-4."
+}
