@@ -32,3 +32,12 @@ reference:
   - acmg_demo
   - ic50_demo
   - llmsa-package
+
+articles:
+- title: Validation
+  contents:
+  - validation
+- title: Applications
+  contents:
+  - llm-stability
+  - clinvar-raters
