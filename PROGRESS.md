@@ -1,5 +1,68 @@
 # PROGRESS — Langzeitgedächtnis des Builders
 
+## M1d — REWORK, Runde 4 (04.11.2026)
+
+REVIEW und Verdict der Runde 3 enthalten `blocking: []`. Für Runde 4
+verlangt der Reviewer ausdrücklich ausschließlich die Antworten im Handoff;
+Produkt, DESCRIPTION, Vignetten, Daten und Tests werden nicht geändert.
+Die gelesenen Gate-Fakten bleiben Runde 3, `result: fail`: sieben Gates
+sind `pass`, ausschließlich `tests` ist rot, kein Status `error`.
+
+**E1 / M1D-INFRA-01 / BL-118 bleibt OUT-OF-TERRITORY [INFRA]**
+nach ADR-048 Nr. 15. `_pkgdown.yml` enthält weiterhin keinen Abschnitt
+`articles`. Das Gate-Log der Runde 3 belegt die drei Listungsfehler
+(`gate-tests.log:1192–1210`, `:1830–1851`). Die unveränderte vollständige
+Abnahmedatei K-M1d-5 wurde gezielt erneut ausgeführt. Echter Output:
+
+```text
+Expected _pkgdown.yml has an articles section to be TRUE.
+Expected llm-stability is listed under articles to be TRUE.
+Expected clinvar-raters is listed under articles to be TRUE.
+[ FAIL 3 | WARN 0 | SKIP 0 | PASS 42 ]
+K-M1d-5 acceptance: 5.76 seconds; exit 1
+```
+
+Prüfbefehl, Zuordnung zu den Dateien und konkrete Betreiberergänzung mit
+`validation`, `llm-stability` und `clinvar-raters` stehen in
+[REWORK-NOTES.md](orchestrator/handoff/M1d/REWORK-NOTES.md).
+Lokales Log: `/tmp/llmsa-m1d-r4-f1rjqj2b/pkgdown-acceptance.log`.
+Der Betreiber muss die Ergänzung außerhalb einer laufenden Modellphase
+als Basis einer folgenden Modellphase umsetzen (BL-106).
+
+E16 / BL-119 bleibt bis zur Betreiberentscheidung vor der Paper-Verwendung
+zurückgestellt. E18 / QA-M1d-001 / BL-117 bleibt nach ADR-035 auf nach dem
+26.11.2026 vertagt. **E19 / BL-121** bleibt ebenfalls ausdrücklich bis zur
+Release-Arbeit nach dem 26.11.2026 zurückgestellt: Die Seiten-URL fehlt
+im URL-Feld von DESCRIPTION; der Beleg stammt aus REVIEW Runde 3,
+Prüflauf 2. Kein eigener neuer pkgdown-Prüflauf. E17 ist laut Review
+erledigt; E2–E15 und M1D-QA-01 ebenfalls. Kein offener QA-PENDING-Auftrag.
+BL-93 bleibt mit den beiden Warnungen in `gate-tests.log:779–804`
+OUT-OF-TERRITORY (Reviewer). ARBITER.md zu M1d liegt nicht vor.
+
+Diese Runde aktualisiert nur PROGRESS und den zugewiesenen Handoff.
+Kein neuer ADR, Test, Mutationslauf oder vollständiger Gate-Lauf;
+mutgate und mutfull sind laut Gate-Fakten der Runde 3 grün (ADR-047),
+kein eigener Mutationsscore. Keine MUT-EQUIV-Claims, keine Approvals
+und keine Git-Kommandos. E1 ist reproduziert und weiter offen;
+eine Abnahme wird nicht behauptet.
+
+Die SHA-256-Inventur (`python3 /tmp/llmsa-m1d-r4-f1rjqj2b/integrity.py`,
+Exit 0) bestätigt den Umfang. Echter Output (Auszug):
+
+```text
+Inventory: 445 baseline files; 2 changed; 0 new; 0 removed
+Changed: PROGRESS.md
+Changed: orchestrator/handoff/M1d/REWORK-NOTES.md
+All 443 other inventoried files are byte-identical
+Preserved tests/: 127/127 byte-identical
+Gate facts unchanged: round 3; result fail; error statuses 0
+Current review IDs addressed: E1, E16, E18, E19
+Earlier PROGRESS entries preserved byte for byte
+```
+
+Der vollständige Output steht im Handoff; die Inventur ersetzt kein
+Territoriums-Gate.
+
 ## M1d — REWORK, Runde 3 (04.11.2026)
 
 REVIEW und Verdict der Runde 2 enthalten `blocking: []` und nennen
