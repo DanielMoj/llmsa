@@ -1,29 +1,29 @@
 {
   "milestone": "M1d",
   "phase": "code",
-  "round": 2,
+  "round": 3,
   "verdict": "REWORK",
   "blocking": [],
   "nonblocking": [
     {
       "id": "E1",
-      "ref": "[INFRA] K-M1d-5 („beide Vignetten sind in `_pkgdown.yml` unter `articles` gelistet“, docs/02-statistikkern.md:89); ACC-8 (5); Gate tests (gate-tests.log M1d r2 Z. 1188–1208, 1823–1845); ADR-048 Nr. 15; BL-118",
-      "note": "Unverändert seit Runde 1: _pkgdown.yml gleicht plan/M1d und hat keinen Abschnitt articles; die drei Erwartungen in test-m1d-5-size-licence-network.R:97–99 sind der einzige Grund für gates.result = fail. Betreiber-Territorium (config.env:200, orchestrate.sh:515–544); für ACC-8 Nr. 5 gilt ADR-048 Nr. 15. Für den Builder nicht blockierend, Rework r3 ohne Pflichtpunkt. Betreiber: articles mit validation, llm-stability und clinvar-raters ergänzen (YAML in REVIEW.md, An den Betreiber Nr. 1); orchestrator/STOP während einer Review-Phase anlegen, nach dem Review-Commit committen, STOP entfernen, neu starten. Hält der Lauf erst in run_model des Reworks, state/M1d/round auf den versionierten Stand 2 zurücknehmen. Nie während einer Modellphase und nicht zwischen Rework und Gates committen (BL-106). Ohne den Eintrag folgen die Runden 3 bis 5 ohne Builder-Befund (REWORK<=5, orchestrate.log Z. 200), danach der Arbiter."
+      "ref": "[INFRA] K-M1d-5 („beide Vignetten sind in `_pkgdown.yml` unter `articles` gelistet“, docs/02-statistikkern.md:89); ACC-8 (5); Gate tests (gate-tests.log M1d r3 Z. 1192–1210, 1829–1851); ADR-048 Nr. 15; BL-118",
+      "note": "Unverändert seit Runde 1: _pkgdown.yml gleicht plan/M1d und hat keinen Abschnitt articles; die drei Erwartungen in test-m1d-5-size-licence-network.R:97–99 sind der einzige Grund für gates.result = fail. Rework r3 änderte nur PROGRESS.md und REWORK-NOTES.md (REVIEW r3, Prüflauf 1). Betreiber-Territorium, außerhalb der Builder- und Reviewer-Pfade (config.env:200–201, orchestrate.sh:515–544); für ACC-8 Nr. 5 gilt ADR-048 Nr. 15. Für den Builder nicht blockierend, Rework r4 ohne Pflichtpunkt. Mit dem Betreiber-YAML (articles: Validation mit validation, Applications mit llm-stability und clinvar-raters) besteht K-M1d-5 auf einer Paketkopie vollständig (6 Blöcke, 45 Erwartungen, 0 rot) und pkgdown 2.2.1 baut den Artikelindex (REVIEW r3, Prüflauf 2). Betreiber: jetzt, während Review r3, orchestrator/STOP anlegen; nach dem Halt nur _pkgdown.yml stagen (git add _pkgdown.yml, kein git add -A) und committen, STOP entfernen, neu starten. Hält der Lauf erst in run_model des Reworks, state/M1d/round von 4 auf den versionierten Stand 3 zurücknehmen. Nie während einer Modellphase und nicht zwischen Rework und Gates committen (BL-106). Ohne den Eintrag folgen die Runden 4 und 5 ohne Builder-Befund (REWORK<=5, orchestrate.log Z. 200), danach der Arbiter (orchestrate.sh:1063–1071) bei leerem blocking."
     },
     {
       "id": "E16",
       "ref": "ACC-2 (3); ADR-049 Nr. 2; PLAN-REVIEW E2; BL-119",
-      "note": "Unverändert: items.csv.gz, prepare.R, make_llm_stability.R und llm-stability.Rmd sind blobgleich zu Runde 1. Etikettenregel spec-konform und offengelegt; 10,8 % der Aufrufe mehrdeutig (M1d REVIEW r1, Prüflauf 4). Keine Änderung in M1d; der Betreiber entscheidet vor einer Verwendung der Zahlen im Paper."
-    },
-    {
-      "id": "E17",
-      "ref": "K-M1d-7 (BL-92, ADR-048 Nr. 14.4); K-M1d-4 (PLAN-REVIEW E15); BL-120",
-      "note": "Erledigt in Rework r2: vignettes/validation.Rmd:285 gibt die Szenarien der Konvergenz-Sensitivität sortiert aus (S-ord-1 bis S-ord-4, dieselben 109 Zeilen wie in Runde 1, übriges Dokument zeilengleich); vignettes/clinvar-raters.Rmd:130–131 nennt die Zählspalte submissions, Zählungen unverändert (REVIEW r2, Prüfläufe 1 und 2). Gate tests: m1d-4-clinvar-vignette 106 und m1d-7-findings 512 Erwartungen grün; lint baut beide Vignetten. BL-120 gestrichen."
+      "note": "Unverändert: items.csv.gz, prepare.R, make_llm_stability.R und llm-stability.Rmd sind blobgleich zu Runde 1. Etikettenregel spec-konform und offengelegt. Keine Änderung in M1d; der Betreiber entscheidet vor einer Verwendung der Zahlen im Paper."
     },
     {
       "id": "E18",
       "ref": "orchestrator/handoff/M1d/QA.md QA-M1d-001; BACKLOG.md BL-117; ADR-035 Nr. 1",
-      "note": "Unverändert nonblocking: kein roter reproduzierender Test, QA-M1d-FUZZ-2 grün (m1d-qa-fuzz 51 Erwartungen, gate-tests.log M1d r2 Z. 1934); inst/validation/m1d/findings.R blobgleich zu Runde 1. Begründung der Herabstufung wie M1d REVIEW r1 E18. Härtung nach dem 26.11.2026."
+      "note": "Unverändert nonblocking: kein roter reproduzierender Test, QA-M1d-FUZZ-2 grün (m1d-qa-fuzz 51 Erwartungen, gate-tests.log M1d r3 Z. 1941); inst/validation/m1d/findings.R blobgleich zu Runde 1. Begründung der Herabstufung wie M1d REVIEW r1 E18. Härtung nach dem 26.11.2026."
+    },
+    {
+      "id": "E19",
+      "ref": "REVIEW r3 Prüflauf 2; _pkgdown.yml (url); DESCRIPTION (URL); .github/workflows/pkgdown.yaml:32; BL-121",
+      "note": "pkgdown::check_pkgdown() bricht ab mit „In DESCRIPTION, URL is missing package url (https://danielmoj.github.io/llmsa).“; beim Seitenbau (build_site_local → pkgdown_sitrep) nur „URLs not ok.“ ohne Abbruch (pkgdown 2.2.1). Kein M1d-Kriterium; DESCRIPTION und _pkgdown.yml seit plan/M1d unverändert. Keine Änderung in M1d, auch nicht im Rework r4. Nach dem 26.11.2026 mit der Release-Arbeit die Seiten-URL in DESCRIPTION unter URL ergänzen (Builder) und check_pkgdown() erneut laufen lassen."
     }
   ]
 }
