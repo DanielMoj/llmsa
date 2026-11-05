@@ -4,14 +4,22 @@ Estimates the main effect of every factor in a Plackett-Burman (or any
 two-level orthogonal) design on a response such as accuracy, agreement
 with the reference, or the mean parsed value, and judges which effects
 are active with Lenth's pseudo standard error, which needs no replicate
-runs. Effects beyond the margin of error (ME) are flagged as active at
-the 5 % level per effect; the simultaneous margin (SME) controls the
-family-wise error.
+runs. Effects beyond the margin of error (ME) are flagged as active;
+effects beyond the simultaneous margin (SME) are flagged as
+simultaneously active. Lenth's ME and SME are conservative: with normal
+noise and all effects zero, actual false alarm rates per effect (ME) and
+per experiment (SME) are below the nominal `alpha`.
 
 ## Usage
 
 ``` r
-msa_robustness(design, response, factors = NULL, alpha = 0.05)
+msa_robustness(
+  design,
+  response,
+  factors = NULL,
+  alpha = 0.05,
+  transform = "none"
+)
 ```
 
 ## Arguments
@@ -31,19 +39,32 @@ msa_robustness(design, response, factors = NULL, alpha = 0.05)
 
 - alpha:
 
-  Significance level for ME and SME.
+  Nominal significance level for ME and SME.
+
+- transform:
+
+  Either `"none"` (default) or `"logit"`. The latter requires a real
+  numeric vector of finite proportions strictly between 0 and 1 and
+  applies `log(p / (1 - p))` before estimating effects. No boundary
+  correction is applied. Proportions of exactly 0 or 1 require a prior
+  correction, such as computing an empirical logit and passing those
+  logits with `transform = "none"`.
 
 ## Value
 
 An object of class `msa_robustness`: a data.frame of effects (`effect` =
 mean at high level minus mean at low level, `t_lenth` = effect / PSE,
 `active` flag) with attributes `pse`, `me`, `sme`, plus the response
-summary.
+summary. With `transform = "logit"`, effects, PSE, ME, SME and the
+attributes `response_mean` and `response_sd` are on the logit scale.
 
 ## References
 
 Lenth, R. V. (1989). Quick and easy analysis of unreplicated factorials.
 *Technometrics* 31, 469-473.
+
+Daniel, C. (1959). Use of half-normal plots in interpreting factorial
+two-level experiments. *Technometrics* 1, 311-341.
 
 ## Examples
 
