@@ -1,0 +1,39 @@
+{
+  "milestone": "M3b",
+  "phase": "code",
+  "round": 1,
+  "verdict": "PASS",
+  "blocking": [],
+  "nonblocking": [
+    {
+      "id": "E4",
+      "ref": "IMPLEMENTATION-RULES.md, Tests (Snapshots ersetzen keine Logikprüfung); Prüfauftrag 50-code-review (Momentaufnahmen kennzeichnen); PLAN-REVIEW E1 Nr. 1 bis 4; BL-128",
+      "note": "Die neuen Unit-Tests belegen Verhalten gegen unabhängige Referenzen (lm auf Log-Odds, Effekte aus der Konstruktion, Daniels Formel, Invarianzen), frieren aber an einigen Stellen ohne Kennzeichnung die eigene Ausgabe ein: Meldungstexte (test-robustness-transform.R:2-9, :57-107; test-robustness-properties.R:60-77), Kopf und Formate der Druckmethoden (:213, :230-236), Plotgestaltung main/ylab/pch/lty/pos/cex (:290-304). Keine Spec verlangt die Kennzeichnung, keine Logikprüfung wird ersetzt. Beim nächsten Eingriff als Momentaufnahme kommentieren."
+    },
+    {
+      "id": "E5",
+      "ref": "Gate mutgate (pass, gate-mutgate.log Z. 327-360); reports/mutation/mutation.json; BL-128",
+      "note": "Score 256/265 = 96,6 bei verlangten 94,53; 52 RuntimeError aus dem Nenner, 0 NoCoverage, kein MUT-EQUIV.json, daher keine Freigabe. Überlebende: Z. 56 TRUE → FALSE, Z. 64 > → >= und <n> - 1 → <n> - 1, Z. 84 NA_real_ → NA gleichwertig (REVIEW r1 Prüflauf 3); Z. 163 < → <=, <n> - 1 → <n> - 1, <n> + 1 → <n> + 1, > → >= nur unter ±1-Kodierung gleich (BL-127 (2)); Z. 197 <non-empty string> → \"\" ist eine Testlücke (Ausgabe nach print() unterscheidet). Test für den Zeilenumbruch beim nächsten Eingriff."
+    },
+    {
+      "id": "E6",
+      "ref": "K-M3b-4 (erfüllt); ADR-050, Konsequenzen (Änderungsrahmen R/robustness.R); BL-129",
+      "note": "Sichtbare Mängel des Half-Normal-Plots seit v0.1.0, von M3b nicht berührt: Beschriftung des kleinsten |Ê| links abgeschnitten (m = 11: F11 als 11), ylim nur aus den Daten, deshalb SME-Linie oft außerhalb (m = 31 unsichtbar), keine Legende für ME (gestrichelt) und SME (gepunktet), überlagerte Beschriftungen bei m = 31 (REVIEW r1 Prüflauf 2). Nach dem 26.11.2026."
+    },
+    {
+      "id": "E7",
+      "ref": "K-M3b-6; ADR-051 Nr. 9.3; PLAN-REVIEW M3b, Architektur und Verträge; BL-130",
+      "note": "Mit transform = \"logit\" drucken print.msa_robustness() und msa_report() Logit-Werte ohne Skalenangabe (\"response mean -0.2747 (sd 1.1852)\"); nur die Hilfeseite nennt die Skala, wie ADR-051 Nr. 9.3 festlegt. In M3d (K-M3d-4, K-M3d-6) über ein Attribut nur im Logit-Pfad und eine Skalenangabe entscheiden."
+    },
+    {
+      "id": "E8",
+      "ref": "orchestrator/handoff/M3b/QA.md QA-M3b-001; BACKLOG.md BL-127; ADR-050, Konsequenzen; ADR-051 Nr. 10.4; docs/01 §2 Nr. 4",
+      "note": "Herabstufung begründet: kein roter reproduzierender Test (QA-Tests grün, m3b-qa-fuzz 400 Erwartungen, gate-tests.log Z. 2465), alle Verhalten seit v0.1.0 und außerhalb des M3b-Rahmens, kein K-M3b-Kriterium berührt; die Randfälle aus docs/01 §2 Nr. 4 sind richtig behandelt. Ergänzt in BL-127: pb_design(24) meldet n_runs, obwohl keins übergeben ist; ein 0/1-kodierter data.frame endet in einer rohen Meldung. Nach dem 26.11.2026."
+    },
+    {
+      "id": "E9",
+      "ref": "[QA-PENDING] AGENTS.md, Integrität Nr. 7; AGENTS.md, Projektblock, Orakel- und Ankerstrategie (alle Toleranzen in ANK-TOL.json); BL-131",
+      "note": "QA-Dateien M3b: Toleranzen als Literale (1e-8, 1e-11, 1e-12), Generatorzeilen als Literale statt aus ANK-80 (Werte gleich), set_max_fails(Inf) auf Dateiebene, Orakelvergleiche hinter if (requireNamespace()) ohne Skip, festgeschriebene irreführende Meldung für pb_design(24). Für den Builder nonblocking; QA bei der nächsten Phase, die diese Dateien berührt."
+    }
+  ]
+}
