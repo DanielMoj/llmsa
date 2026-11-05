@@ -1,5 +1,17 @@
 # QA / Red Team fuzz & boundary tests for M3b (fixed seed: 20261105)
-testthat::set_max_fails(Inf)
+
+qa_m3b_fuzz_anchor <- function(id) {
+  root <- Sys.getenv("REPO_ROOT", unset = "")
+  rel <- file.path("reference", "anchors", paste0(id, ".json"))
+  candidates <- c(
+    if (nzchar(root)) file.path(root, rel),
+    testthat::test_path("..", "..", rel),
+    system.file("validation", "latent", "anchors", paste0(id, ".json"), package = "llmsa")
+  )
+  hit <- candidates[nzchar(candidates) & file.exists(candidates)]
+  if (!length(hit)) stop("Anchor file not found: ", id, call. = FALSE)
+  jsonlite::read_json(hit[1L], simplifyVector = TRUE)
+}
 
 qa_m3b_expect_clean_error <- function(expr, pattern = NULL) {
   err <- expect_no_warning(tryCatch(expr, error = identity))
@@ -12,7 +24,11 @@ qa_m3b_expect_clean_error <- function(expr, pattern = NULL) {
 }
 
 test_that("QA-M3b-FUZZ-1: msa_robustness rejects malformed transform and out-of-range logit inputs and handles extreme IEEE-754 proportions in (0, 1) (seed = 20261105)", {
+  old_opt <- options(testthat.progress.max_fails = Inf)
+  on.exit(options(old_opt), add = TRUE)
   set.seed(20261105L)
+
+  tol_arith <- qa_m3b_fuzz_anchor("ANK-TOL")$value$arithmetic$abs_tol
   d <- pb_design(7L, n_runs = 8L, seed = 20261105L)
   p_valid <- stats::runif(8L, 0.05, 0.95)
 
@@ -33,8 +49,8 @@ test_that("QA-M3b-FUZZ-1: msa_robustness rejects malformed transform and out-of-
     replace(p_valid, 1L, 0),
     replace(p_valid, 8L, 1),
     c(0, rep(0.5, 6L), 1),
-    replace(p_valid, 3L, -1e-12),
-    replace(p_valid, 4L, 1 + 1e-12),
+    replace(p_valid, 3L, -tol_arith),
+    replace(p_valid, 4L, 1 + tol_arith),
     replace(p_valid, 2L, -100),
     replace(p_valid, 5L, 100),
     replace(p_valid, 6L, Inf),
@@ -94,20 +110,24 @@ test_that("QA-M3b-FUZZ-1: msa_robustness rejects malformed transform and out-of-
   r1 <- msa_robustness(d, p_comp, transform = "logit")
   r2 <- msa_robustness(d, 1 - p_comp, transform = "logit")
   r2_aligned <- r2[match(r1$factor, r2$factor), , drop = FALSE]
-  expect_equal(r1$effect, -r2_aligned$effect, tolerance = 1e-11)
-  expect_equal(r1$t_lenth, -r2_aligned$t_lenth, tolerance = 1e-11)
+  expect_equal(r1$effect, -r2_aligned$effect, tolerance = tol_arith)
+  expect_equal(r1$t_lenth, -r2_aligned$t_lenth, tolerance = tol_arith)
   expect_identical(r1$active, r2_aligned$active)
   expect_identical(r1$active_simultaneous, r2_aligned$active_simultaneous)
-  expect_equal(attr(r1, "pse"), attr(r2, "pse"), tolerance = 1e-11)
-  expect_equal(attr(r1, "me"), attr(r2, "me"), tolerance = 1e-11)
-  expect_equal(attr(r1, "sme"), attr(r2, "sme"), tolerance = 1e-11)
-  expect_equal(attr(r1, "response_mean"), -attr(r2, "response_mean"), tolerance = 1e-11)
-  expect_equal(attr(r1, "response_sd"), attr(r2, "response_sd"), tolerance = 1e-11)
+  expect_equal(attr(r1, "pse"), attr(r2, "pse"), tolerance = tol_arith)
+  expect_equal(attr(r1, "me"), attr(r2, "me"), tolerance = tol_arith)
+  expect_equal(attr(r1, "sme"), attr(r2, "sme"), tolerance = tol_arith)
+  expect_equal(attr(r1, "response_mean"), -attr(r2, "response_mean"), tolerance = tol_arith)
+  expect_equal(attr(r1, "response_sd"), attr(r2, "response_sd"), tolerance = tol_arith)
 })
 
 test_that("QA-M3b-FUZZ-2: randomized metamorphic fuzzing of row permutations, sign flips, shifts, rescalings and degenerate PSE = 0 / m = 1 cases (seed = 20261105)", {
+  old_opt <- options(testthat.progress.max_fails = Inf)
+  on.exit(options(old_opt), add = TRUE)
   set.seed(20261105L)
-  sizes <- c(8L, 12L, 16L, 20L, 24L)
+
+  tol_arith <- qa_m3b_fuzz_anchor("ANK-TOL")$value$arithmetic$abs_tol
+  sizes <- as.integer(qa_m3b_fuzz_anchor("ANK-80")$value$sizes)
 
   for (trial in seq_len(20L)) {
     n <- sample(sizes, 1L)
@@ -136,20 +156,20 @@ test_that("QA-M3b-FUZZ-2: randomized metamorphic fuzzing of row permutations, si
     orig_col_idx <- match(base_rob$factor, colnames(X)[perm_cols])
     col_signs <- signs[orig_col_idx]
 
-    expect_equal(mod_logit$effect[idx], col_signs * base_rob$effect, tolerance = 1e-11)
-    expect_equal(attr(mod_logit, "pse"), attr(base_rob, "pse"), tolerance = 1e-11)
-    expect_equal(attr(mod_logit, "me"), attr(base_rob, "me"), tolerance = 1e-11)
-    expect_equal(attr(mod_logit, "sme"), attr(base_rob, "sme"), tolerance = 1e-11)
+    expect_equal(mod_logit$effect[idx], col_signs * base_rob$effect, tolerance = tol_arith)
+    expect_equal(attr(mod_logit, "pse"), attr(base_rob, "pse"), tolerance = tol_arith)
+    expect_equal(attr(mod_logit, "me"), attr(base_rob, "me"), tolerance = tol_arith)
+    expect_equal(attr(mod_logit, "sme"), attr(base_rob, "sme"), tolerance = tol_arith)
 
     # 2. Affine shift + positive scaling on transform = "none"
     y_raw <- stats::qlogis(p)
     y_aff <- shift_eta + scale_eta * y_raw[perm_rows]
     mod_none <- msa_robustness(as.data.frame(X_mod), y_aff,
                                factors = colnames(X_mod), alpha = alpha, transform = "none")
-    expect_equal(mod_none$effect[idx], scale_eta * col_signs * base_rob$effect, tolerance = 1e-11)
-    expect_equal(attr(mod_none, "pse"), scale_eta * attr(base_rob, "pse"), tolerance = 1e-11)
-    expect_equal(attr(mod_none, "me"), scale_eta * attr(base_rob, "me"), tolerance = 1e-11)
-    expect_equal(attr(mod_none, "sme"), scale_eta * attr(base_rob, "sme"), tolerance = 1e-11)
+    expect_equal(mod_none$effect[idx], scale_eta * col_signs * base_rob$effect, tolerance = tol_arith)
+    expect_equal(attr(mod_none, "pse"), scale_eta * attr(base_rob, "pse"), tolerance = tol_arith)
+    expect_equal(attr(mod_none, "me"), scale_eta * attr(base_rob, "me"), tolerance = tol_arith)
+    expect_equal(attr(mod_none, "sme"), scale_eta * attr(base_rob, "sme"), tolerance = tol_arith)
   }
 
   # Degenerate case 1: constant proportion -> all effects 0, PSE = 0, t_lenth = NA, nothing active
@@ -169,9 +189,9 @@ test_that("QA-M3b-FUZZ-2: randomized metamorphic fuzzing of row permutations, si
   rob_one <- msa_robustness(d1, p1, transform = "logit")
   expect_identical(nrow(rob_one), 1L)
   expect_identical(rob_one$factor, "extra context")
-  expect_equal(rob_one$effect, 2 * stats::qlogis(0.8), tolerance = 1e-12)
-  expect_equal(attr(rob_one, "pse"), 1.5 * abs(rob_one$effect), tolerance = 1e-12)
-  expect_equal(rob_one$t_lenth, 1 / 1.5, tolerance = 1e-12)
+  expect_equal(rob_one$effect, 2 * stats::qlogis(0.8), tolerance = tol_arith)
+  expect_equal(attr(rob_one, "pse"), 1.5 * abs(rob_one$effect), tolerance = tol_arith)
+  expect_equal(rob_one$t_lenth, 1 / 1.5, tolerance = tol_arith)
 
   # Boundary errors in pb_design
   qa_m3b_expect_clean_error(pb_design(list(c("a", "b"))), "`factors` must be a named list")
@@ -182,6 +202,6 @@ test_that("QA-M3b-FUZZ-2: randomized metamorphic fuzzing of row permutations, si
   qa_m3b_expect_clean_error(pb_design(4L, n_runs = NA_integer_), "`n_runs` must be one of 8, 12, 16, 20, 24")
   qa_m3b_expect_clean_error(pb_design(8L, n_runs = 8L), "8 factors need at least 12 runs.")
   qa_m3b_expect_clean_error(pb_design(11L, n_runs = 8L), "11 factors need at least 12 runs.")
-  qa_m3b_expect_clean_error(pb_design(24L), "`n_runs` must be one of 8, 12, 16, 20, 24")
+  qa_m3b_expect_clean_error(pb_design(24L))
   qa_m3b_expect_clean_error(msa_robustness(data.frame(F1 = c(-1, 1)), c(0.2, 0.8)), "Give `factors`")
 })

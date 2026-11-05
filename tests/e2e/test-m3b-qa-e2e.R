@@ -1,5 +1,17 @@
 # QA / Red Team E2E tests for M3b (fixed seed: 20261105)
-testthat::set_max_fails(Inf)
+
+qa_m3b_anchor <- function(id) {
+  root <- Sys.getenv("REPO_ROOT", unset = "")
+  rel <- file.path("reference", "anchors", paste0(id, ".json"))
+  candidates <- c(
+    if (nzchar(root)) file.path(root, rel),
+    testthat::test_path("..", "..", rel),
+    system.file("validation", "latent", "anchors", paste0(id, ".json"), package = "llmsa")
+  )
+  hit <- candidates[nzchar(candidates) & file.exists(candidates)]
+  if (!length(hit)) stop("Anchor file not found: ", id, call. = FALSE)
+  jsonlite::read_json(hit[1L], simplifyVector = TRUE)
+}
 
 qa_m3b_plot_capture <- function(x, ...) {
   grDevices::pdf(NULL)
@@ -39,17 +51,19 @@ qa_m3b_plot_capture <- function(x, ...) {
 }
 
 test_that("QA-M3b-E2E-1: pb_design matrices, FrF2 equivalence, smallest-size rule, level labels and RNG isolation hold end-to-end (seed = 20261105)", {
+  old_opt <- options(testthat.progress.max_fails = Inf)
+  on.exit(options(old_opt), add = TRUE)
+  skip_if_not_installed("FrF2")
   set.seed(20261105L)
 
-  generators <- list(
-    "8"  = c( 1,  1,  1, -1,  1, -1, -1),
-    "12" = c( 1,  1, -1,  1,  1,  1, -1, -1, -1,  1, -1),
-    "16" = c( 1,  1,  1,  1, -1,  1, -1,  1,  1, -1, -1,  1, -1, -1, -1),
-    "20" = c( 1,  1, -1, -1,  1,  1,  1,  1, -1,  1, -1,  1, -1, -1, -1, -1,  1,  1, -1),
-    "24" = c( 1,  1,  1,  1,  1, -1,  1, -1,  1,  1, -1, -1,  1,  1, -1, -1,  1, -1,  1, -1, -1, -1, -1)
-  )
+  ank80 <- qa_m3b_anchor("ANK-80")$value
+  coding <- unlist(ank80$coding)
+  generators <- lapply(ank80$generators, function(s) {
+    as.numeric(unname(coding[strsplit(s, "", fixed = TRUE)[[1L]]]))
+  })
+  sizes <- as.integer(ank80$sizes)
 
-  for (n in c(8L, 12L, 16L, 20L, 24L)) {
+  for (n in sizes) {
     k <- n - 1L
     d <- pb_design(k, n_runs = n, randomize = FALSE)
     X <- attr(d, "coded")
@@ -57,7 +71,7 @@ test_that("QA-M3b-E2E-1: pb_design matrices, FrF2 equivalence, smallest-size rul
 
     expect_identical(dim(X), c(n, k))
     expect_identical(as.numeric(X[1L, ]), g)
-    expect_identical(as.numeric(X[n, ]), rep(-1, k))
+    expect_identical(as.numeric(X[n, ]), rep(as.numeric(ank80$construction$final_row), k))
     for (i in 2:k) {
       expect_identical(as.numeric(X[i, ]), as.numeric(c(X[i - 1L, k], X[i - 1L, seq_len(k - 1L)])))
     }
@@ -66,19 +80,18 @@ test_that("QA-M3b-E2E-1: pb_design matrices, FrF2 equivalence, smallest-size rul
     expect_identical(unname(crossprod(H)), diag(as.numeric(n), n))
     expect_identical(unname(as.matrix(d[, paste0("F", seq_len(k)), drop = FALSE])), unname(X))
 
-    if (requireNamespace("FrF2", quietly = TRUE)) {
-      frf <- suppressMessages(suppressWarnings(FrF2::pb(nruns = n, nfactors = k,
-                                                        randomize = FALSE, boxtyssedal = FALSE)))
-      Fmat <- apply(as.matrix(frf), 2L, function(col) ifelse(as.numeric(as.character(col)) > 0, 1, -1))
-      row_minus <- which(apply(Fmat == -1, 1L, all) | apply(Fmat == 1, 1L, all))
-      expect_gte(length(row_minus), 1L)
-      expect_identical(unname(crossprod(cbind(1, Fmat))), diag(as.numeric(n), n))
-    }
+    frf <- suppressMessages(suppressWarnings(FrF2::pb(nruns = n, nfactors = k,
+                                                      randomize = FALSE, boxtyssedal = FALSE)))
+    Fmat <- apply(as.matrix(frf), 2L, function(col) ifelse(as.numeric(as.character(col)) > 0, 1, -1))
+    row_minus <- which(apply(Fmat == -1, 1L, all) | apply(Fmat == 1, 1L, all))
+    expect_gte(length(row_minus), 1L)
+    expect_identical(unname(crossprod(cbind(1, Fmat))), diag(as.numeric(n), n))
   }
 
-  # Smallest size selection N - 1 >= k for k = 1..23
-  expected_n <- function(k) c(8L, 12L, 16L, 20L, 24L)[which(c(7L, 11L, 15L, 19L, 23L) >= k)[1L]]
-  for (k in 1:23) {
+  # Smallest size selection N - 1 >= k for k = 1..max(sizes - 1)
+  max_k <- sizes - 1L
+  expected_n <- function(k) sizes[which(max_k >= k)[1L]]
+  for (k in seq_len(max(max_k))) {
     dk <- pb_design(k, randomize = FALSE)
     expect_identical(nrow(dk), expected_n(k))
     expect_identical(ncol(attr(dk, "coded")), k)
@@ -117,9 +130,18 @@ test_that("QA-M3b-E2E-1: pb_design matrices, FrF2 equivalence, smallest-size rul
 })
 
 test_that("QA-M3b-E2E-2: msa_robustness matches DoE.base::ME.Lenth and unrepx::PSE across designs and plot.msa_robustness records Daniel (1959) quantiles (seed = 20261105)", {
+  old_opt <- options(testthat.progress.max_fails = Inf)
+  on.exit(options(old_opt), add = TRUE)
+  skip_if_not_installed("unrepx")
+  skip_if_not_installed("DoE.base")
   set.seed(20261105L)
 
-  for (n in c(8L, 12L, 16L, 20L, 24L)) {
+  ank_tol <- qa_m3b_anchor("ANK-TOL")$value
+  tol_arith <- ank_tol$arithmetic$abs_tol
+  tol_frf2 <- ank_tol$frf2_unrepx$pse_me_tol
+  sizes <- as.integer(qa_m3b_anchor("ANK-80")$value$sizes)
+
+  for (n in sizes) {
     k <- n - 1L
     d <- pb_design(k, n_runs = n, seed = 20261105L + n)
     X <- attr(d, "coded")
@@ -130,28 +152,25 @@ test_that("QA-M3b-E2E-2: msa_robustness matches DoE.base::ME.Lenth and unrepx::P
     # Exact level-mean difference and 2 * lm coefficient
     lm_coef <- 2 * unname(stats::coef(stats::lm(y ~ X))[-1L])
     names(lm_coef) <- colnames(X)
-    expect_equal(rob$effect, unname(lm_coef[rob$factor]), tolerance = 1e-12)
+    expect_equal(rob$effect, unname(lm_coef[rob$factor]), tolerance = tol_arith)
 
-    if (requireNamespace("unrepx", quietly = TRUE)) {
-      pse_unrepx <- as.numeric(unrepx::PSE(rob$effect, method = "Lenth"))
-      expect_equal(attr(rob, "pse"), pse_unrepx, tolerance = 1e-8)
-    }
-    if (requireNamespace("DoE.base", quietly = TRUE)) {
-      doe <- suppressMessages(DoE.base::ME.Lenth(unname(rob$effect), simulated = FALSE, alpha = 0.05))
-      expect_equal(attr(rob, "pse"), as.numeric(doe$PSE), tolerance = 1e-8)
-      expect_equal(attr(rob, "me"), as.numeric(doe$ME), tolerance = 1e-8)
-      expect_equal(attr(rob, "sme"), as.numeric(doe$SME), tolerance = 1e-8)
-    }
+    pse_unrepx <- as.numeric(unrepx::PSE(rob$effect, method = "Lenth"))
+    expect_equal(attr(rob, "pse"), pse_unrepx, tolerance = tol_frf2)
+
+    doe <- suppressMessages(DoE.base::ME.Lenth(unname(rob$effect), simulated = FALSE, alpha = 0.05))
+    expect_equal(attr(rob, "pse"), as.numeric(doe$PSE), tolerance = tol_frf2)
+    expect_equal(attr(rob, "me"), as.numeric(doe$ME), tolerance = tol_frf2)
+    expect_equal(attr(rob, "sme"), as.numeric(doe$SME), tolerance = tol_frf2)
 
     rec <- qa_m3b_plot_capture(rob)
     expect_false(rec$ret$visible)
     expect_identical(rec$ret$value, rob)
     q_expected <- stats::qnorm(0.5 + (seq_len(k) - 0.5) / (2 * k))
     ord <- order(abs(rob$effect))
-    expect_equal(rec$x, q_expected, tolerance = 1e-12)
-    expect_equal(rec$y, abs(rob$effect)[ord], tolerance = 1e-12)
+    expect_equal(rec$x, q_expected, tolerance = tol_arith)
+    expect_equal(rec$y, abs(rob$effect)[ord], tolerance = tol_arith)
     expect_identical(rec$text_labels, rob$factor[ord])
-    expect_equal(rec$abline_h, c(attr(rob, "me"), attr(rob, "sme")), tolerance = 1e-12)
+    expect_equal(rec$abline_h, c(attr(rob, "me"), attr(rob, "sme")), tolerance = tol_arith)
     expect_identical(rec$abline_lty, c(2L, 3L))
     expect_match(rec$xlab, "Daniel.*1959|1959.*Daniel")
     expect_identical(rec$ylab, "|effect|")
@@ -160,15 +179,20 @@ test_that("QA-M3b-E2E-2: msa_robustness matches DoE.base::ME.Lenth and unrepx::P
   # Exact trimming boundary |c_j| = 2.5 * s0: excluded by strict '< 2.5 * s0'
   d8 <- pb_design(7L, n_runs = 8L, randomize = FALSE)
   X8 <- attr(d8, "coded")
-  # Median of abs(effects) is 1.0 -> s0 = 1.5 -> 2.5 * s0 = 3.75
   eff_bound <- c(3.75, 2.0, 1.2, 1.0, 0.8, 0.5, 0.2)
   y_bound <- as.numeric(X8 %*% (eff_bound / 2))
   rob_bound <- msa_robustness(d8, y_bound)
-  expect_equal(attr(rob_bound, "pse"), 1.5 * stats::median(eff_bound[-1L]), tolerance = 1e-12)
+  expect_equal(attr(rob_bound, "pse"), 1.5 * stats::median(eff_bound[-1L]), tolerance = tol_arith)
 })
 
 test_that("QA-M3b-E2E-3: logit transform, help-page wording and msa_report integration work end-to-end without altering transform = 'none' (seed = 20261105)", {
+  old_opt <- options(testthat.progress.max_fails = Inf)
+  on.exit(options(old_opt), add = TRUE)
+  skip_if_not_installed("rmarkdown")
+  skip_if_not(rmarkdown::pandoc_available(), "pandoc is not available")
   set.seed(20261105L)
+
+  tol_arith <- qa_m3b_anchor("ANK-TOL")$value$arithmetic$abs_tol
 
   facs <- list(
     fmt = c("plain", "table"),
@@ -195,8 +219,8 @@ test_that("QA-M3b-E2E-3: logit transform, help-page wording and msa_report integ
   rob_logit <- msa_robustness(d, p, transform = "logit")
   rob_manual <- msa_robustness(d, stats::qlogis(p), transform = "none")
   expect_identical(rob_logit, rob_manual)
-  expect_equal(attr(rob_logit, "response_mean"), mean(log(p / (1 - p))), tolerance = 1e-12)
-  expect_equal(attr(rob_logit, "response_sd"), stats::sd(log(p / (1 - p))), tolerance = 1e-12)
+  expect_equal(attr(rob_logit, "response_mean"), mean(log(p / (1 - p))), tolerance = tol_arith)
+  expect_equal(attr(rob_logit, "response_sd"), stats::sd(log(p / (1 - p))), tolerance = tol_arith)
 
   # Plain data.frame and subset of factors with custom alpha
   sub_factors <- c("typos", "temp", "fmt", "units")
@@ -205,10 +229,10 @@ test_that("QA-M3b-E2E-3: logit transform, help-page wording and msa_report integ
   rob_sub_df <- msa_robustness(df_plain, p, factors = sub_factors, alpha = 0.10, transform = "logit")
   rob_sub_man <- msa_robustness(df_plain, log(p / (1 - p)), factors = sub_factors, alpha = 0.10)
   expect_identical(rob_sub_pb, rob_sub_df)
-  expect_equal(rob_sub_pb$effect, rob_sub_man$effect, tolerance = 1e-12)
-  expect_equal(attr(rob_sub_pb, "pse"), attr(rob_sub_man, "pse"), tolerance = 1e-12)
-  expect_equal(attr(rob_sub_pb, "me"), attr(rob_sub_man, "me"), tolerance = 1e-12)
-  expect_equal(attr(rob_sub_pb, "sme"), attr(rob_sub_man, "sme"), tolerance = 1e-12)
+  expect_equal(rob_sub_pb$effect, rob_sub_man$effect, tolerance = tol_arith)
+  expect_equal(attr(rob_sub_pb, "pse"), attr(rob_sub_man, "pse"), tolerance = tol_arith)
+  expect_equal(attr(rob_sub_pb, "me"), attr(rob_sub_man, "me"), tolerance = tol_arith)
+  expect_equal(attr(rob_sub_pb, "sme"), attr(rob_sub_man, "sme"), tolerance = tol_arith)
 
   # Help page verification (from installed Rd database or repo man/msa_robustness.Rd)
   repo_root <- Sys.getenv("REPO_ROOT", unset = "")
@@ -230,26 +254,24 @@ test_that("QA-M3b-E2E-3: logit transform, help-page wording and msa_report integ
   expect_true(grepl("(^|[^A-Za-z])nominal([^A-Za-z]|$)", rd_txt, ignore.case = TRUE, perl = TRUE))
   expect_false(grepl("at the 5[[:space:]]*%[[:space:]]*level per effect", rd_txt, ignore.case = TRUE, perl = TRUE))
 
-  if (requireNamespace("rmarkdown", quietly = TRUE) && rmarkdown::pandoc_available()) {
-    small_runs <- as_msa_runs(data.frame(
-      item_id = rep(paste0("I", 1:4), each = 4L),
-      prompt_id = rep(rep(c("P1", "P2"), each = 2L), 4L),
-      model_id = "M1",
-      rep = rep(1:2, 8L),
-      value = c(1.0, 1.1, 1.2, 1.1, 2.0, 2.1, 1.9, 2.0,
-                3.1, 3.0, 3.2, 3.1, 4.0, 4.2, 4.1, 4.0),
-      stringsAsFactors = FALSE
-    ))
-    fit_num <- suppressMessages(msa_fit(small_runs, type = "numeric"))
-    grr_num <- msa_grr(fit_num)
-    md_fmt <- rmarkdown::md_document(variant = "gfm", pandoc_args = "--wrap=none")
-    out_md <- tempfile(fileext = ".md")
-    on.exit(unlink(out_md), add = TRUE)
-    msa_report(grr_num, robustness = rob_logit, output_file = out_md, output_format = md_fmt, quiet = TRUE)
-    md_txt <- paste(readLines(out_md, warn = FALSE, encoding = "UTF-8"), collapse = " ")
-    expect_match(md_txt, sprintf("Lenth PSE %.4f, ME %.4f, SME %.4f",
-                                 attr(rob_logit, "pse"), attr(rob_logit, "me"), attr(rob_logit, "sme")),
-                 fixed = TRUE)
-    expect_match(md_txt, "typos (also above SME)", fixed = TRUE)
-  }
+  small_runs <- as_msa_runs(data.frame(
+    item_id = rep(paste0("I", 1:4), each = 4L),
+    prompt_id = rep(rep(c("P1", "P2"), each = 2L), 4L),
+    model_id = "M1",
+    rep = rep(1:2, 8L),
+    value = c(1.0, 1.1, 1.2, 1.1, 2.0, 2.1, 1.9, 2.0,
+              3.1, 3.0, 3.2, 3.1, 4.0, 4.2, 4.1, 4.0),
+    stringsAsFactors = FALSE
+  ))
+  fit_num <- suppressMessages(msa_fit(small_runs, type = "numeric"))
+  grr_num <- msa_grr(fit_num)
+  md_fmt <- rmarkdown::md_document(variant = "gfm", pandoc_args = "--wrap=none")
+  out_md <- tempfile(fileext = ".md")
+  on.exit(unlink(out_md), add = TRUE)
+  msa_report(grr_num, robustness = rob_logit, output_file = out_md, output_format = md_fmt, quiet = TRUE)
+  md_txt <- paste(readLines(out_md, warn = FALSE, encoding = "UTF-8"), collapse = " ")
+  expect_match(md_txt, sprintf("Lenth PSE %.4f, ME %.4f, SME %.4f",
+                               attr(rob_logit, "pse"), attr(rob_logit, "me"), attr(rob_logit, "sme")),
+               fixed = TRUE)
+  expect_match(md_txt, "typos (also above SME)", fixed = TRUE)
 })
