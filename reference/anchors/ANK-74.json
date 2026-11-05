@@ -1,0 +1,74 @@
+{
+  "id": "ANK-74",
+  "title": "AIAG-Attributstudie (50 Teile × 3 Prüfer × 3 Durchgänge, Entscheidung 0/1, Referenzentscheidung): Datenblatt Tab. III-C 1, Kreuztabellen Tab. III-C 2 und III-C 4, Kappa-Tabelle III-C 3 (zwischen Prüfern) und Kappa gegen die Referenz, Tab. III-C 5",
+  "criteria": ["K-M3a-4"],
+  "value": {
+    "design": {"parts": 50, "appraisers": ["A", "B", "C"], "trials": 3, "decisions": 450, "categories": ["0", "1"], "coding": "1 = acceptable decision, 0 = unacceptable decision"},
+    "mapping": "Item = Teil (part), Prompt = Prüfer (appraiser), Replikat = Durchgang (trial), ein Modell (Lehre) und ein Block; Referenz je Teil = Referenzentscheidung (Spalte Reference der Tab. III-C 1)",
+    "data_file": {
+      "path": "reference/quellen/data/aiag/attribute_study.csv",
+      "columns": ["part", "appraiser", "trial", "value", "reference"],
+      "rows": 450,
+      "content_sha256": "d64ed768122e56800de45a3ab036ffb9d40a705c94ebc9a95b899be000048c77",
+      "canonical_form": "Zeilen sortiert nach part, appraiser, trial; je Zeile part, appraiser, trial, value, reference durch Komma getrennt, ganze Zahlen ohne Nachkommastellen (%d), appraiser als Buchstabe; ohne Kopfzeile; Zeilenende LF auch nach der letzten Zeile; SHA-256 über die UTF-8-Bytes",
+      "status": "Datei fehlt (Stand 05.11.2026); der Betreiber legt sie an (ANKER-TODO ANK-74, BL-42); die Prüfsumme der kanonischen Form hat der Reviewer aus dem Textspiegel von Tab. III-C 1 berechnet (method)"
+    },
+    "reference_decisions": {"accept": 34, "reject": 16},
+    "crosstab_pairing": "Paare je Teil und Durchgang: Prüfer X im Durchgang t gegen Prüfer Y im Durchgang t („34 times where A-1 = 1 and B-1 = 1; … 32 times where A-2 = 1 and B-2 = 1; … 31 times where A-3 = 1 and B-3 = 1“), 150 Paare je Prüferpaar; gegen die Referenz jede der 150 Entscheidungen eines Prüfers gegen die Referenzentscheidung des Teils",
+    "crosstabs": {
+      "A_B": {"x0_y0": 44, "x0_y1": 6, "x1_y0": 3, "x1_y1": 97},
+      "B_C": {"x0_y0": 42, "x0_y1": 5, "x1_y0": 9, "x1_y1": 94},
+      "A_C": {"x0_y0": 43, "x0_y1": 7, "x1_y0": 8, "x1_y1": 92},
+      "A_REF": {"x0_y0": 45, "x0_y1": 5, "x1_y0": 3, "x1_y1": 97},
+      "B_REF": {"x0_y0": 45, "x0_y1": 2, "x1_y0": 3, "x1_y1": 100},
+      "C_REF": {"x0_y0": 42, "x0_y1": 9, "x1_y0": 6, "x1_y1": 93},
+      "note": "x = erster Name des Paares (Zeilen der gedruckten Tabelle), y = zweiter (Spalten); x0_y1 = Zahl der Paare mit x = 0 und y = 1"
+    },
+    "kappa_between": {"A_B": 0.86, "A_C": 0.78, "B_C": 0.79},
+    "kappa_reference": {"A": 0.88, "B": 0.92, "C": 0.77},
+    "kappa_decimals": 2,
+    "effectiveness_table": {
+      "total_inspected": 50,
+      "appraiser_matched_all_trials": {"A": 42, "B": 45, "C": 40},
+      "score_vs_attribute_matched": {"A": 42, "B": 45, "C": 40},
+      "mixed": {"A": 8, "B": 5, "C": 10},
+      "false_negative": {"A": 0, "B": 0, "C": 0},
+      "false_positive": {"A": 0, "B": 0, "C": 0},
+      "system_in_agreement": 39,
+      "system_in_agreement_vs_reference": 39,
+      "notes": "(1) Appraiser agrees with him/herself on all trials; (2) Appraiser agrees on all trials with the known standard; (3) All appraisers agreed within and between themselves; (4) All appraisers agreed within & between themselves AND agreed with the reference"
+    }
+  },
+  "unit": "κ dimensionslos; Kreuztabellen und Tab. III-C 5 in Anzahlen von Entscheidungen bzw. Teilen; decimals = Zahl der gedruckten Nachkommastellen",
+  "tolerance": {
+    "kappa": "halbe Einheit der zweiten Nachkommastelle (0,005) zuzüglich ANK-TOL.arithmetic.abs_tol",
+    "counts": 0,
+    "data_file": "Inhaltsprüfsumme der kanonischen Form gleich content_sha256, Spalten und Zeilenzahl gleich"
+  },
+  "tolerance_note": "docs/01 §2 Nr. 6: halbe Einheit der letzten publizierten Stelle; exakt (Nachrechnung aus den gedruckten Kreuztabellen) A_B 0,862944, A_C 0,776119, B_C 0,788007, A 0,878788, B 0,922982, C 0,773960 (je 150 Paare).",
+  "source_url": "AIAG2010 (reference/privat/QUELLENKATALOG.md): AIAG (2010), Measurement Systems Analysis Reference Manual, 4. Aufl., ISBN 978-1-60534-211-5; Kap. III Abschnitt C: Tab. III-C 1 Druckseite 134 (PDF 143), Text und Kreuztabelle A*B Druckseite 135 (PDF 144), Tab. III-C 2 Druckseite 136 (PDF 145), Kappa Druckseite 137 (PDF 146) mit Tab. III-C 3, Tab. III-C 4 und Kappa gegen die Referenz Druckseite 138 (PDF 147), Tab. III-C 5 Druckseite 139 (PDF 148); lokale Kopie quellen/literatur/A_statistikkern/AIAG_2010_MSA_Reference_Manual_4th_Edition.pdf (SHA-256 aeb067807277a89a484844f33667eacfa2de4e3c70f66a042a83a815f73a2e5f)",
+  "source": "Literatur, geschützt (lokal); PDF aus Acrobat PDFMaker 9.1 mit echter Textschicht; Textspiegel reference/quellen/text/literatur/A_statistikkern/AIAG_2010_MSA_Reference_Manual_4th_Edition.pdf.layout.txt; Datenblatt als CSV reference/quellen/data/aiag/attribute_study.csv (Betreiber, git-ignoriert)",
+  "quote": "Kappa A B C A – .86 .78 B .86 – .79 C .78 .79 –",
+  "quote_location": "Tab. III-C 3 „Kappa Summary“, Druckseite 137 (PDF 146), Textspiegel .layout.txt Zeilen 6839–6844, Leerraum zusammengefasst; am Seitenbild geprüft",
+  "further_quotes": [
+    {"quote": "A B C kappa .88 .92 .77", "location": "Druckseite 138 (PDF 147), unter Tab. III-C 4 (Zeilen 6915–6916); am Seitenbild geprüft"},
+    {"quote": "The team also calculated the kappa measure to determine the agreement of each appraiser to the reference decision:", "location": "Druckseite 138 (Zeilen 6912–6913)"},
+    {"quote": "To determine the level of this agreement the team uses the (Cohen's) kappa which measures the agreement between the evaluations of two raters when both are rating the same object.", "location": "Druckseite 136 (PDF 145), Zeilen 6788–6790"},
+    {"quote": "That is, for the evaluations, there are 34 times where A-1 = 1 and B-1 = 1; there are 32 times where A-2 = 1 and B-2 = 1; and there are 31 times where A-3 = 1 and B-3 = 1for a total agreement of 97.", "location": "Druckseite 135 (PDF 144), Zeilen 6697–6700 („1for“ wie gedruckt)"},
+    {"quote": "Three appraisers are used, with each appraiser making three decisions on the each part.", "location": "Druckseite 133 (PDF 142), Zeilen 6602–6603"},
+    {"quote": "An acceptable decision was designated with a one (1) and an unacceptable decision with zero (0).", "location": "Druckseite 133 (PDF 142), Zeilen 6606–6607"},
+    {"quote": "A .00 Count 44 6 50", "location": "Tab. III-C 2, A * B Crosstabulation, Druckseite 136 (Zeile 6754); 1.00: 3 97 100 (Zeile 6756)"},
+    {"quote": "B .00 Count 42 5 47", "location": "Tab. III-C 2, B * C Crosstabulation (Zeile 6766); 1.00: 9 94 103 (Zeile 6768)"},
+    {"quote": "A .00 Count 43 7 50", "location": "Tab. III-C 2, A * C Crosstabulation (Zeile 6778); 1.00: 8 92 100 (Zeile 6780)"},
+    {"quote": "A .00 Count 45 5 50", "location": "Tab. III-C 4, A * REF Crosstabulation, Druckseite 138 (Zeile 6877); 1.00: 3 97 100 (Zeile 6879)"},
+    {"quote": "B .00 Count 45 2 47", "location": "Tab. III-C 4, B * REF (Zeile 6889); 1.00: 3 100 103 (Zeile 6891)"},
+    {"quote": "C .00 Count 42 9 51", "location": "Tab. III-C 4, C * REF (Zeile 6901); 1.00: 6 93 99 (Zeile 6903)"},
+    {"quote": "# Matched 42 45 40 42 45 40", "location": "Tab. III-C 5 „Study Effectiveness Table“, Druckseite 139 (PDF 148), Zeile 6937"},
+    {"quote": "Mixed 8 5 10", "location": "Tab. III-C 5 (Zeile 6940); False Negative und False Positive je 0 (Zeilen 6938–6939)"},
+    {"quote": "# in Agreement 39 39", "location": "Tab. III-C 5, System % Effective Score und vs. Reference (Zeile 6949)"},
+    {"quote": "(1)Appraiser agrees with him/herself on all trials", "location": "Tab. III-C 5, Notes (Zeile 6956); (3) „All appraisers agreed within and between themselves“ (Zeile 6958), (4) „All appraisers agreed within & between themselves AND agreed with the reference“ (Zeile 6959)"}
+  ],
+  "retrieved": "2026-11-05",
+  "method": "Reviewer, ACCEPTANCE M3a (05.11.2026): SHA-256 der PDF mit tools::sha256sum() aus Rscript; Tab. III-C 1 maschinell aus dem Textspiegel gelesen (Zeilen 6634–6683: je Teil 9 Entscheidungen A-1 bis C-3, Referenzentscheidung, Ref Value, Code) und daraus die kanonische Form der CSV gebildet; Tab. III-C 3 und das Kappa gegen die Referenz am Seitenbild (pdftoppm, PDF 146 und 147, 90 dpi) geprüft. Die CSV liegt noch nicht vor; die Inhaltsprüfsumme bindet die Datei, die der Betreiber anlegt, an diese Lesung.",
+  "verification": "Nachrechnung aus der Lesung von Tab. III-C 1 (R 4.6.1, Cohens Kappa nach Formelsammlung §5): alle sechs Kreuztabellen der Tab. III-C 2 und III-C 4 Zelle für Zelle gleich; κ A_B 0,862944, A_C 0,776119, B_C 0,788007, gegen die Referenz A 0,878788, B 0,922982, C 0,773960, auf zwei Stellen gleich dem Druck; Tab. III-C 5: Teile mit gleichen Entscheidungen in allen drei Durchgängen 42/45/40, davon alle gleich der Referenz 42/45/40, gemischt 8/5/10, alle neun Entscheidungen gleich 39, zugleich gleich der Referenz 39; Referenzentscheidungen 34 × 1 und 16 × 0 (Tab. III-C 4: 102 und 48 von 150)."
+}

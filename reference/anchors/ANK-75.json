@@ -1,0 +1,72 @@
+{
+  "id": "ANK-75",
+  "title": "AIAG-Biasbeispiel (Independent Sample Method): Datenblatt Tab. III-B 1 (ein Teil, Referenzwert 6.00, 15 Messungen), Auswertung Tab. III-B 2 (n, Mittelwert, σ_r, σ_b, t, df, t-Quantil, mittlerer Bias, 95-%-Intervall)",
+  "criteria": ["K-M3a-5"],
+  "value": {
+    "design": {"parts": 1, "appraisers": 1, "trials": 15, "observations": 15},
+    "mapping": "Item = das eine Teil, Prompt = der eine Prüfer (lead operator), Modell = die Messeinrichtung, Replikat = Messung (trial); Referenz = Referenzwert des Teils",
+    "data_file": {
+      "path": "reference/quellen/data/aiag/bias_study.csv",
+      "columns": ["part", "reference", "trial", "value"],
+      "rows": 15,
+      "content_sha256": "c31dd684517e15e55207bb905635e981c1e9e6e49de1d46dd995aa20a3835393",
+      "canonical_form": "Zeilen sortiert nach part, trial; je Zeile part (%d), reference (%.2f), trial (%d), value (%.2f) durch Komma getrennt; ohne Kopfzeile; Zeilenende LF auch nach der letzten Zeile; SHA-256 über die UTF-8-Bytes",
+      "status": "Datei fehlt (Stand 05.11.2026); der Betreiber legt sie an (ANKER-TODO ANK-75, BL-42); die Prüfsumme der kanonischen Form hat der Reviewer aus dem Textspiegel von Tab. III-B 1 berechnet (method)"
+    },
+    "reference_value": 6.00,
+    "n": 15,
+    "average": 6.0067,
+    "average_decimals": 4,
+    "sigma_r": 0.2120,
+    "sigma_r_decimals": 4,
+    "sigma_b": 0.0547,
+    "sigma_b_decimals": 4,
+    "t_statistic": 0.12,
+    "t_statistic_decimals": 2,
+    "df": 14,
+    "t_quantile": 2.14479,
+    "t_quantile_decimals": 5,
+    "alpha": 0.05,
+    "average_bias": 0.0067,
+    "average_bias_decimals": 4,
+    "ci95": {"lower": -0.1107, "upper": 0.1241},
+    "ci_decimals": 4,
+    "p_value": null,
+    "p_value_note": "Tab. III-B 2 druckt keinen p-Wert. Belegbar ist nur das Intervall, das aus der gedruckten t-Statistik (0.12, zwei Stellen) und df = 14 folgt: 2 · P(T_14 > |t|) für |t| zwischen 0.115 und 0.125, also 0.902301 bis 0.910078 (Rechenregel der Abnahme, kein gedruckter Wert); Zweitbeleg stats::t.test (Orakel).",
+    "rules": {
+      "bias": "bias_i = x_i − reference value (S. 87)",
+      "sigma_b": "σ_b = σ_r / √n (S. 88)",
+      "t": "t_bias = average bias / σ_b (S. 88)",
+      "interval": "Bias − σ_b · t_{ν, 1−α/2} ≤ zero ≤ Bias + σ_b · t_{ν, 1−α/2}, ν = n − 1 (S. 89)"
+    },
+    "not_used": {
+      "p_value_rule_p88": "Bias is acceptable (statistically zero) at the α level if the p-value associated with tbias is less than α; or",
+      "reason": "Der Satz auf S. 88 verkehrt die Richtung des Tests (Formelsammlung §6: Druckfehler); die Annahmeregel des Beispiels ist das Intervall (S. 89 und 91)."
+    }
+  },
+  "unit": "Messwerte, Referenzwert, Mittelwert, σ_r, σ_b, Bias und Intervallgrenzen in Einheiten der Messgröße (AIAG ohne Einheit); t, t-Quantil und p dimensionslos; df und n Anzahlen; decimals = Zahl der gedruckten Nachkommastellen",
+  "tolerance": {
+    "published": "halbe Einheit der letzten gedruckten Stelle (0,5 · 10^-decimals) zuzüglich ANK-TOL.arithmetic.abs_tol",
+    "p_value": "Intervall aus der gedruckten t-Statistik (p_value_note); Gleichheit mit stats::t.test auf ANK-TOL.package_compare.abs_tol",
+    "counts": 0,
+    "data_file": "Inhaltsprüfsumme der kanonischen Form gleich content_sha256, Spalten und Zeilenzahl gleich"
+  },
+  "tolerance_note": "docs/01 §2 Nr. 6: halbe Einheit der letzten publizierten Stelle. Fußnote 35 (S. 92): die Ergebnisse stehen mit mehr Stellen, als die Daten tragen; die Toleranz folgt trotzdem den gedruckten Stellen. Exakt: Mittelwert 6.006667, σ_r 0.212020, σ_b 0.054743, t 0.121781, t-Quantil 2.144787, Intervall −0.110746 bis 0.124079, p (stats::t.test) 0.904804.",
+  "source_url": "AIAG2010 (reference/privat/QUELLENKATALOG.md): AIAG (2010), Measurement Systems Analysis Reference Manual, 4. Aufl., ISBN 978-1-60534-211-5; Verfahren Druckseiten 87–89 (PDF 96–98), Tab. III-B 1 Druckseite 90 (PDF 99), Text zum Beispiel Druckseite 91 (PDF 100), Tab. III-B 2 Druckseite 92 (PDF 101); lokale Kopie quellen/literatur/A_statistikkern/AIAG_2010_MSA_Reference_Manual_4th_Edition.pdf (SHA-256 aeb067807277a89a484844f33667eacfa2de4e3c70f66a042a83a815f73a2e5f)",
+  "source": "Literatur, geschützt (lokal); PDF mit echter Textschicht; Textspiegel reference/quellen/text/literatur/A_statistikkern/AIAG_2010_MSA_Reference_Manual_4th_Edition.pdf.layout.txt; Datenblatt als CSV reference/quellen/data/aiag/bias_study.csv (Betreiber, git-ignoriert)",
+  "quote": "Measured Value 0.12 14 2.14479 .0067 -0.1107 0.1241",
+  "quote_location": "Tab. III-B 2 „Bias Study – Analysis of Bias Study“, Druckseite 92 (PDF 101), untere Tabelle (Textspiegel .layout.txt Zeile 4514, Leerraum zusammengefasst); Spalten t statistic, df, Significant t value (2-tailed), Average Bias, 95% Confidence Interval of the Bias Lower/Upper; am Seitenbild geprüft",
+  "further_quotes": [
+    {"quote": "Measured 15 6.0067 0.2120 0.0547", "location": "Tab. III-B 2, obere Tabelle (Zeile 4504; Spalten n, Average, Standard Deviation σ_r, Standard Error of Mean σ_b)"},
+    {"quote": "Reference Value = 6.00, α =.05", "location": "Tab. III-B 2, Kopf der unteren Tabelle (Zeile 4508)"},
+    {"quote": "Table III-B 1: Bias Study Data", "location": "Druckseite 90 (PDF 99), Zeile 4427; Kopf „Reference Value = 6.00“ (Zeilen 4408–4410), 15 Messungen in den Zeilen 4411–4425"},
+    {"quote": "The part was then measured fifteen times by the lead operator.", "location": "Druckseite 89 (PDF 98), Zeilen 4397–4398"},
+    {"quote": "Since zero falls within the confidence interval of the bias (– 0.1107, 0.1241), the engineer can assume that the measurement bias is acceptable", "location": "Druckseite 91 (PDF 100), Zeilen 4489–4491"},
+    {"quote": "The repeatability of 0.2120 was compared to an expected process variation (standard deviation) of 2.5.", "location": "Druckseite 91, Zeilen 4486–4487"},
+    {"quote": "where ν = n – 1 and", "location": "Druckseite 89 (PDF 98), unter der Intervallformel (Zeile 4376; ν in der Textschicht als Symbolzeichen)"},
+    {"quote": "Even though data is given with one digit after the decimal point, the results are shown as provided by a typical statistical program using double precision; i.e., with multiple decimal digits.", "location": "Druckseite 92, Fußnote 35 (Zeilen 4539–4540)"}
+  ],
+  "retrieved": "2026-11-05",
+  "method": "Reviewer, ACCEPTANCE M3a (05.11.2026): SHA-256 der PDF mit tools::sha256sum() aus Rscript; Tab. III-B 1 maschinell aus dem Textspiegel gelesen (Zeilen 4411–4425, je Zeile Messung und gedruckter Bias; jeder gedruckte Bias gleich Messung − 6.00) und daraus die kanonische Form der CSV gebildet; Tab. III-B 2 am Seitenbild (pdftoppm, PDF 101, 90 dpi) geprüft. Die CSV liegt noch nicht vor.",
+  "verification": "Nachrechnung aus der Lesung von Tab. III-B 1 (R 4.6.1): Mittelwert 6.006667, mittlerer Bias 0.006667, σ_r 0.212020, σ_b 0.054743, t 0.121781, qt(0.975, 14) 2.144787, Intervall −0.110746 bis 0.124079; alle gedruckten Stellen der Tab. III-B 2 getroffen; stats::t.test auf den 15 Abweichungen: Mittelwert, Intervall gleich, p 0.904804."
+}

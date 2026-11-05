@@ -1,0 +1,56 @@
+{
+  "id": "ANK-70",
+  "title": "Cohen (1968): Tab. 1 (3 × 3, N = 200, beobachtete Anteile, Nichtübereinstimmungsgewichte 0/1/3/6), κ = .492, κ_w = .348 und κ_w = .574 mit vertauschten Gewichten 6 und 1",
+  "criteria": ["K-M3a-1"],
+  "value": {
+    "categories": ["Personality disorder", "Neurosis", "Psychosis"],
+    "orientation": "Zeilen: Judge B, Spalten: Judge A (Tab. 1); Kategorien in der gedruckten Reihenfolge",
+    "N": 200,
+    "observed_proportions": [[0.44, 0.07, 0.09], [0.05, 0.20, 0.05], [0.01, 0.03, 0.06]],
+    "chance_proportions": [[0.30, 0.18, 0.12], [0.15, 0.09, 0.06], [0.05, 0.03, 0.02]],
+    "row_margins": [0.60, 0.30, 0.10],
+    "column_margins": [0.50, 0.30, 0.20],
+    "proportions_decimals": 2,
+    "disagreement_weights": [[0, 1, 3], [1, 0, 6], [3, 6, 0]],
+    "v_max": 6,
+    "agreement_weights_rule": "w_ij = 1 − v_ij / v_max (Fußnote 3, S. 217: κ_w bleibt gleich, wenn w_ij/w_max = 1 − v_ij/v_max); Formelsammlung §5",
+    "interchanged_weights": "die Nichtübereinstimmungsgewichte 6 und 1 der Tab. 1 gegeneinander vertauscht (S. 216); die Gewichte 0 und 3 bleiben",
+    "kappa": 0.492,
+    "kappa_w": 0.348,
+    "kappa_w_interchanged": 0.574,
+    "kappa_decimals": 3,
+    "intermediate": {"q_o": 0.30, "q_c": 0.59, "sum_v_po": 0.90, "sum_v_pc": 1.38, "decimals": 2},
+    "not_used": {
+      "sigma_kappa_w": 0.0901,
+      "sigma_kappa_w0": 0.0916,
+      "ci95_kappa_w": [0.171, 0.525],
+      "reason": "Standardfehler und Intervall von κ_w (Gl. [10], [13], Tab. 1) verlangt K-M3a-1 nicht; msa_agreement() gibt für Kappa keinen Standardfehler aus (Formelsammlung §5)."
+    }
+  },
+  "unit": "Anteile (beobachtet, zufallserwartet, Randsummen) und κ, κ_w dimensionslos; N Zahl der Urteilspaare; Gewichte als Verhältniszahlen ohne Einheit; decimals = Zahl der gedruckten Nachkommastellen",
+  "tolerance": {
+    "kappa": "halbe Einheit der dritten Nachkommastelle (0,0005) zuzüglich ANK-TOL.arithmetic.abs_tol",
+    "proportions": "die gedruckten Anteile mal N = 200 sind ganze Zahlen (88, 14, 18 / 10, 40, 10 / 2, 6, 12); Abweichung von der nächsten ganzen Zahl höchstens ANK-TOL.arithmetic.abs_tol",
+    "package_compare": "Gegenrechnungen mit irr::kappa2, psych::cohen.kappa und DescTools::CohenKappa zur Testlaufzeit mit ANK-TOL.package_compare.abs_tol"
+  },
+  "tolerance_note": "docs/01 §2 Nr. 6: halbe Einheit der letzten publizierten Stelle. Die Anteile sind exakt (Häufigkeiten / 200), κ, κ_w und der Wert mit vertauschten Gewichten sind auf drei Stellen gedruckt (exakt 0,491525, 0,347826, 0,573643).",
+  "source_url": "Cohen1968 (reference/privat/QUELLENKATALOG.md): Cohen, J. (1968), Weighted kappa: nominal scale agreement with provision for scaled disagreement or partial credit, Psychological Bulletin 70(4), 213–220, doi:10.1037/h0026256; Tab. 1 Druckseite 214 (PDF-Seite 2), κ, κ_w und vertauschte Gewichte Druckseite 216 (PDF-Seite 4), Fußnote 3 Druckseite 217 (PDF-Seite 5); lokale Kopie quellen/literatur/B_bausteine/Cohen_1968_Weighted_Kappa_PsychBull70_213.pdf (SHA-256 ff82ab2bd1712a120bf887686704f64cd3855c64d6fb06a472e74a3fdd5ff76a)",
+  "source": "Literatur, geschützt (lokal); OCR-Textschicht (Producer PDFlib+PDI 6.0.1), Symbole und Tabelle in der Textschicht entstellt, deshalb jede Zahl am Seitenbild gelesen",
+  "quote": "For κw, the weighted sums over all cells (numerators of Formulas 5 and 6) are substituted in Formula 8. For the vij in Table 1, κw = .348.",
+  "quote_location": "Druckseite 216 (PDF-Seite 4), linke Spalte, am Seitenbild gelesen (Textspiegel .layout.txt Zeilen 246–249; Fußnotenzeichen 2 nach „Formula 8“ weggelassen)",
+  "further_quotes": [
+    {"quote": "For κ, only the poij and pcij values in the agreement diagonal (i = j) are needed, and κ is found from Formula 4 to equal .492", "location": "Druckseite 216, linke Spalte (Zeilen 240–242)"},
+    {"quote": "If the vij's of 6 and 1 are interchanged in the table, κw becomes .574, a value greater than κ.", "location": "Druckseite 216, rechte Spalte (Zeilen 223–225)"},
+    {"quote": "AN AGREEMENT MATRIX OF PROPORTIONS WITH ILLUSTRATIVE COMPUTATIONS OF κ, κw AND RELEVANT STATISTICS", "location": "Druckseite 214, Überschrift von Tab. 1 (Zeilen 94–96)"},
+    {"quote": "Note.—N = 200", "location": "Druckseite 214, unter Tab. 1 (Zeile 114)"},
+    {"quote": "qo = 1 − po = 1 − (.44 + .20 + .06) = .30", "location": "Druckseite 214, Rechnung unter Tab. 1 (Zeile 115)"},
+    {"quote": "qc = 1 − pc = 1 − (.30 + .09 + .02) = .59", "location": "Druckseite 214, Rechnung unter Tab. 1 (Zeile 116)"},
+    {"quote": "Σvijpoij = 0(.44) + 1(.07) + 3(.09) + 1(.05) + · · · + 0(.06) = .90", "location": "Druckseite 214, Rechnung unter Tab. 1 (Zeile 119, Seitenbild)"},
+    {"quote": "Σvijpcij = 0(.30) + 1(.18) + 3(.12) + 1(.15) + · · · + 0(.02) = 1.38", "location": "Druckseite 214, Rechnung unter Tab. 1 (Seitenbild; in der Textschicht fehlt die Zeile)"},
+    {"quote": "a Disagreement weight vij b Chance-expected cell proportion, pcij = pi.p.j c Observed cell proportion, poij", "location": "Druckseite 214, Legende zu Tab. 1 (Zeilen 135–139, Seitenbild)"},
+    {"quote": "Specifically, κw remains constant when (wij/wmax) = 1 − (vij/vmax)", "location": "Druckseite 217 (PDF-Seite 5), Fußnote 3 (Zeilen 341–347, Seitenbild)"}
+  ],
+  "retrieved": "2026-11-05",
+  "method": "Reviewer, ACCEPTANCE M3a (05.11.2026): SHA-256 der PDF mit tools::sha256sum() aus Rscript (Präfix gleich dem Textspiegel, SHA256-16 ff82ab2bd1712a12); Seiten 2 und 4 mit pdftoppm (110 dpi) als Bild gelesen: Tab. 1 mit Gewichten, Anteilen in Klammern (zufallserwartet) und ohne Klammern (beobachtet), Randsummen, Rechnung [4] und [8]; Textstellen zu .492, .348 und .574.",
+  "verification": "Nachrechnung (R 4.6.1, Mini-Referenz nach Formelsammlung §5 mit Übereinstimmungsgewichten w = 1 − v/6): κ = 0,4915254, κ_w = 0,3478261, mit vertauschten Gewichten 0,5736434; zufallserwartete Anteile gleich dem Produkt der gedruckten Randsummen. Gegenrechnung: psych::cohen.kappa(Tafel, w = v) 0,4915254 / 0,3478261, DescTools::CohenKappa(Tafel, weights = 1 − v/6) 0,3478261. Linear und quadratisch gewichtet (keine Literaturwerte): 0,4736842 und 0,4545455 übereinstimmend aus Mini-Referenz, irr::kappa2 (\"equal\", \"squared\"), psych::cohen.kappa und DescTools::CohenKappa (\"Equal-Spacing\", \"Fleiss-Cohen\")."
+}

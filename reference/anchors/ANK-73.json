@@ -1,0 +1,55 @@
+{
+  "id": "ANK-73",
+  "title": "Krippendorff (2011): Rechenbeispiel 4 Beobachter × 12 Einheiten mit 7 fehlenden Werten; n = 40 paarbare Werte; α nominal .743, ordinal .815, Intervall .849 (Ratio .797)",
+  "criteria": ["K-M3a-3"],
+  "value": {
+    "observers": ["A", "B", "C", "D"],
+    "units": 12,
+    "values": [1, 2, 3, 4, 5],
+    "data": {
+      "A": [1, 2, 3, 3, 2, 1, 4, 1, 2, null, null, null],
+      "B": [1, 2, 3, 3, 2, 2, 4, 1, 2, 5, null, 3],
+      "C": [null, 3, 3, 3, 2, 3, 4, 2, 2, 5, 1, null],
+      "D": [1, 2, 3, 3, 2, 4, 4, 1, 2, 5, 1, null]
+    },
+    "data_note": "Zeilen der Reliabilitätsdatenmatrix in der Reihenfolge der Einheiten 1 bis 12; null = fehlender Wert („.“ im Druck)",
+    "values_per_unit": [3, 4, 4, 4, 4, 4, 4, 4, 4, 3, 2, 1],
+    "missing": 7,
+    "possible": 48,
+    "pairable_values": 40,
+    "pairable_by_value": [9, 13, 10, 5, 3],
+    "lone_value_units": [12],
+    "alpha": {"nominal": 0.743, "ordinal": 0.815, "interval": 0.849, "ratio": 0.797},
+    "alpha_decimals": 3,
+    "weights_to_metric": {"unweighted": "nominal", "linear": "ordinal", "quadratic": "interval"},
+    "weights_to_metric_source": "docs/04-weitere-bausteine.md K-M3a-3 und Formelsammlung §5 („Zuordnung der Gewichte: ungewichtet → nominal, linear → ordinal, quadratisch → Intervall“); keine Aussage der Quelle"
+  },
+  "unit": "α dimensionslos; Werte 1 bis 5 als Kategorien (ordinal: Ränge, Intervall: Zahlenwerte); Anzahlen von Werten und Einheiten; decimals = Zahl der gedruckten Nachkommastellen",
+  "tolerance": {
+    "alpha": "halbe Einheit der dritten Nachkommastelle (0,0005) zuzüglich ANK-TOL.arithmetic.abs_tol",
+    "counts": 0,
+    "package_compare": "Gegenrechnung mit irr::kripp.alpha zur Testlaufzeit mit ANK-TOL.package_compare.abs_tol"
+  },
+  "tolerance_note": "docs/01 §2 Nr. 6: halbe Einheit der letzten publizierten Stelle; exakt α nominal 0,7434211, ordinal 0,8153875, Intervall 0,8491071, Ratio 0,7974028.",
+  "source_url": "Krippendorff2011 (reference/privat/QUELLENKATALOG.md): Krippendorff, K. (2011), Computing Krippendorff's Alpha-Reliability, University of Pennsylvania, Annenberg School for Communication, Departmental Papers (ASC) 43, https://repository.upenn.edu/asc_papers/43 (Fassung 2011.1.25); Datenmatrix PDF-Seite 4 (Abschnitt C), nominal PDF-Seiten 5 und 10, ordinal, Intervall und Ratio PDF-Seite 8 (Abschnitt D); lokale Kopie quellen/literatur/B_bausteine/Krippendorff_2011_Computing_Alpha_Reliability.pdf (SHA-256 34a0ef7a8ea663d9e4bda60ede9d8364e97ed847e000951a17750487d09c69ee)",
+  "source": "Literatur, frei zugänglich (Katalog: frei); PDF aus Microsoft Word 2007 mit echter Textschicht; Datenmatrix und Ergebnisse aus dem Textspiegel gelesen",
+  "quote": "Note that 7 out of the 48 possible values in this matrix are missing. mu varies from 1 to 4.",
+  "quote_location": "PDF-Seite 4, Abschnitt C, unter der Datenmatrix (Textspiegel .layout.txt Zeile 196; mu mit tiefgestelltem u)",
+  "further_quotes": [
+    {"quote": "Observer A: 1 2 3 3 2 1 4 1 2 . . .", "location": "PDF-Seite 4, Datenmatrix (Zeile 191; Leerraum zusammengefasst)"},
+    {"quote": "Observer B: 1 2 3 3 2 2 4 1 2 5 . 3", "location": "PDF-Seite 4 (Zeile 192)"},
+    {"quote": "Observer C: . 3 3 3 2 3 4 2 2 5 1 .", "location": "PDF-Seite 4 (Zeile 193)"},
+    {"quote": "Observer D: 1 2 3 3 2 4 4 1 2 5 1 .", "location": "PDF-Seite 4 (Zeile 194)"},
+    {"quote": "Number mu of values in unit u: 3 4 4 4 4 4 4 4 4 3 2 1 41", "location": "PDF-Seite 4 (Zeile 195)"},
+    {"quote": "The lone value 3 in unit 12 affords no comparisons, 1(1-1)=0 pairs and does not add to this account.", "location": "PDF-Seite 5 (Zeile 219)"},
+    {"quote": "here n=40 pairable values over all units.", "location": "PDF-Seite 5 (Zeilen 221–222)"},
+    {"quote": "0.743", "location": "PDF-Seite 5, Ergebnis der nominalen Rechnung in Abschnitt C (Zeile 230); dasselbe Ergebnis PDF-Seite 10, Abschnitt E (Zeile 570)"},
+    {"quote": "With data in C as ordinal data:", "location": "PDF-Seite 8 (Zeile 440); Ergebnis 0.815 in Zeile 450"},
+    {"quote": "With data in C as interval data:", "location": "PDF-Seite 8 (Zeile 456); Ergebnis 0.849 in Zeile 466, dasselbe PDF-Seite 10 (Zeile 579)"},
+    {"quote": "With data in C as ratio data:", "location": "PDF-Seite 8 (Zeile 473); Ergebnis 0.797 in Zeile 484"},
+    {"quote": "9 = n.1", "location": "PDF-Seite 10, Werte-mal-Einheiten-Matrix, Randsummen 9, 13, 10, 5, 3 und 40 = n.. (Zeilen 540–545)"}
+  ],
+  "retrieved": "2026-11-05",
+  "method": "Reviewer, ACCEPTANCE M3a (05.11.2026): SHA-256 der PDF mit tools::sha256sum() aus Rscript (Präfix gleich dem Textspiegel, SHA256-16 34a0ef7a8ea663d9); Datenmatrix, Zahl der Werte je Einheit, fehlende Werte, n = 40, Randsummen der paarbaren Werte und die vier α aus dem Textspiegel (Word-PDF mit Textschicht) gelesen; Datenmatrix und Randsummen gegeneinander geprüft (Zeilen 191–195 und 540–545).",
+  "verification": "Nachrechnung (R 4.6.1): irr::kripp.alpha (irr 0.85) auf der Datenmatrix nominal 0,7434211, ordinal 0,8153875, Intervall 0,8491071, Ratio 0,7974028; llmsa v0.1.0 msa_agreement() (Beobachter als Prompts, Zeile „all conditions“) nominal 0,7434211, ordinal 0,8153875, Intervall 0,8491071. Einheit 12 trägt einen einzelnen Wert und geht nicht ein; die übrigen 11 Einheiten tragen 40 paarbare Werte."
+}

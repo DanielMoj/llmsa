@@ -1,0 +1,60 @@
+{
+  "id": "ANK-72",
+  "title": "Fleiss (1971): Tab. 1 (30 Patienten, je 6 Diagnosen, 5 Kategorien; gleich irr::diagnoses), p_j, P̄ = .5556, P̄_e = .2201, κ = .430; großstichprobige Varianz von κ unter der Nullhypothese nach Fleiss, Nee & Landis (1979), Gl. (12)",
+  "criteria": ["K-M3a-2"],
+  "value": {
+    "subjects": 30,
+    "ratings_per_subject": 6,
+    "categories": ["Depression", "Personality disorder", "Schizophrenia", "Neurosis", "Other"],
+    "dataset": "irr::diagnoses: 30 Zeilen (Patienten), Spalten rater1 bis rater6, Faktorstufen „1. Depression“ bis „5. Other“ in der Reihenfolge j = 1 bis 5 der Tab. 1",
+    "category_totals": [26, 26, 30, 55, 43],
+    "p_j": [0.144, 0.144, 0.167, 0.306, 0.239],
+    "p_j_decimals": 3,
+    "P_bar": 0.5556,
+    "P_bar_decimals": 4,
+    "P_e": 0.2201,
+    "P_e_decimals": 4,
+    "P_e_rule": "Gl. (6) summiert die Quadrate der auf drei Stellen gerundeten p_j (.144² + .144² + … + .239² = .2201); aus den exakten p_j (Häufigkeiten / 180) ergibt sich 0,219938",
+    "kappa": 0.430,
+    "kappa_decimals": 3,
+    "variance_fleiss_nee_landis_1979": {
+      "equation": "Var(κ) = 2 / (N n (n − 1) (Σ_j p_j q_j)²) · [(Σ_j p_j q_j)² − Σ_j p_j q_j (q_j − p_j)], q_j = 1 − p_j",
+      "notation": "N Zahl der Personen, n Zahl der Bewertungen je Person, p_j Anteil aller Bewertungen in Kategorie j (Gl. (1)), wie Fleiss (1971)",
+      "standard_error": "SE(κ) = √Var(κ)",
+      "validity": "großstichprobige Varianz unter der Nullhypothese zufälliger Bewertungen (multinomial mit Parametern n und P_1, …, P_k); Fleiss, Nee & Landis (1979), Druckseiten 975–976",
+      "test_statistic_note": "Gl. (17) testet κ mit dem Zuschlag 1/(N(n − 1)) zum Schätzer; K-M3a-2 verlangt nur den Standardfehler"
+    },
+    "not_used": {
+      "var_fleiss_1971": 0.000759,
+      "se_fleiss_1971": 0.028,
+      "kappa_over_se_fleiss_1971": 15.4,
+      "reason": "Fleiss (1971), Gl. (16)–(19), Druckseiten 380–381: Fleiss, Nee & Landis (1979) nennen diese Formeln falsch („The incorrect formulas given in Equations 16 and 23 of Fleiss (1971) overestimate the variance“); K-M3a-2 lässt einen Standardfehler nur nach Fleiss, Nee & Landis (1979) zu. Exakt nach Gl. (16): Var 0,000756, SE 0,027503; nach Fleiss, Nee & Landis (1979), Gl. (12): SE 0,024374."
+    }
+  },
+  "unit": "P̄, P̄_e, p_j und κ als Anteile, dimensionslos; Varianz und Standardfehler von κ dimensionslos; category_totals sind Anzahlen von Diagnosen; decimals = Zahl der gedruckten Nachkommastellen",
+  "tolerance": {
+    "P_bar": "halbe Einheit der vierten Nachkommastelle (0,00005) zuzüglich ANK-TOL.arithmetic.abs_tol",
+    "kappa": "halbe Einheit der dritten Nachkommastelle (0,0005) zuzüglich ANK-TOL.arithmetic.abs_tol",
+    "P_e": "halbe Einheit der vierten Nachkommastelle (0,00005) zuzüglich ANK-TOL.arithmetic.abs_tol, gerechnet wie Gl. (6) aus den gedruckten p_j; aus den exakten p_j weicht P̄_e um die Rundung der p_j ab (höchstens Σ_j (2 p_j + 0,0005) · 0,0005 ≈ 0,0011)",
+    "category_totals": 0,
+    "package_compare": "Gegenrechnung mit irr::kappam.fleiss zur Testlaufzeit mit ANK-TOL.package_compare.abs_tol (Wert und Standardfehler value/statistic)"
+  },
+  "tolerance_note": "docs/01 §2 Nr. 6: halbe Einheit der letzten publizierten Stelle. P̄_e ist in der Quelle aus gerundeten Anteilen gerechnet; der Anker vergleicht deshalb die Nachrechnung aus den gedruckten p_j mit dem gedruckten P̄_e und die exakte Rechnung nur über κ und P̄.",
+  "source_url": "Fleiss1971 (reference/privat/QUELLENKATALOG.md): Fleiss, J. L. (1971), Measuring nominal scale agreement among many raters, Psychological Bulletin 76(5), 378–382, doi:10.1037/h0031619; Tab. 1 und Gl. (2)–(8) Druckseite 379 (PDF-Seite 2); lokale Kopie quellen/literatur/B_bausteine/Fleiss_1971_Nominal_Scale_Agreement_Many_Raters_PsychBull76_378.pdf (SHA-256 2adf6090db3a91c043f454bb0140d7c22ca31a56982bb90a4fce74cb25a28bf4). FleissNeeLandis1979: Fleiss, J. L., Nee, J. C. M., Landis, J. R. (1979), Large sample variance of kappa in the case of different sets of raters, Psychological Bulletin 86(5), 974–977, doi:10.1037/0033-2909.86.5.974; Gl. (12) Druckseite 976 (PDF-Seite 3); lokale Kopie quellen/literatur/B_bausteine/Fleiss_Nee_Landis_1979_Variance_of_Kappa_PsychBull86_974.pdf (SHA-256 7518f40987d84c3cbe9f82842f1d2f885e1e58d2d7c1db409159d3efe0eca17c)",
+  "source": "Literatur, geschützt (lokal); OCR-Textschichten (Producer PDFlib+PDI 6.0.1), Tab. 1, Gl. (8) und Gl. (12) in der Textschicht unvollständig, deshalb am Seitenbild gelesen; Daten von Tab. 1 als Orakeldaten irr::diagnoses (docs/01 §6)",
+  "quote": "κ = (.5556 − .2201) / (1 − .2201) = .430.",
+  "quote_location": "Fleiss (1971), Druckseite 379 (PDF-Seite 2), Gl. (8), rechte Spalte unten, am Seitenbild gelesen (Bruchstrich als / geschrieben; Textspiegel .layout.txt Zeilen 135–137 ohne Ergebnis)",
+  "further_quotes": [
+    {"quote": "P̄ = 1/((30)(6)(5)) (680 − 30 × 6) = .5556.", "location": "Fleiss (1971), Druckseite 379, Gl. (4) (Zeilen 105–106; Bruch als 1/(…) geschrieben)"},
+    {"quote": "P̄e = .144² + .144² + · · · + .239² = .2201.", "location": "Fleiss (1971), Druckseite 379, Gl. (6) (Zeilen 136–137, Seitenbild)"},
+    {"quote": "Table 1 presents data on which of k = 5 diagnoses were given each of N = 30 patients by n = 6 psychiatrists.", "location": "Fleiss (1971), Druckseite 378 (PDF-Seite 1), rechte Spalte (Zeilen 49–51)"},
+    {"quote": "The overall proportions are p1 = .144, p2 = .144, p3 = .167, p4 = .306, and p5 = .239.", "location": "Fleiss (1971), Druckseite 378, rechte Spalte (Zeilen 53–55, Indizes tiefgestellt)"},
+    {"quote": "Total 26 26 30 55 43", "location": "Fleiss (1971), Druckseite 379, Tab. 1, Summenzeile (Zeile 116; Leerraum zusammengefasst)"},
+    {"quote": "Var(κ) = 2 / (Nn(n − 1)(Σ pjqj)²) × [(Σ pjqj)² − Σ pjqj(qj − pj)].", "location": "Fleiss, Nee & Landis (1979), Druckseite 976 (PDF-Seite 3), Gl. (12), linke Spalte oben, am Seitenbild gelesen (Bruch als 2 / (…) geschrieben)"},
+    {"quote": "In this article, formulas for the standard error of kappa in the case of different sets of equal numbers of raters that are valid when the number of subjects is large and the null hypothesis is true are derived.", "location": "Fleiss, Nee & Landis (1979), Druckseite 974 (PDF-Seite 1), rechte Spalte (Zeilen 57–69, Zeilenumbrüche als Leerzeichen)"},
+    {"quote": "The incorrect formulas given in Equations 16 and 23 of Fleiss (1971) overestimate the variance", "location": "Fleiss, Nee & Landis (1979), Druckseite 976, rechte Spalte (Zeilen 172–174)"}
+  ],
+  "retrieved": "2026-11-05",
+  "method": "Reviewer, ACCEPTANCE M3a (05.11.2026): SHA-256 beider PDF mit tools::sha256sum() aus Rscript (Präfixe gleich den Textspiegeln); Fleiss (1971) PDF-Seite 2 und Fleiss, Nee & Landis (1979) PDF-Seite 3 mit pdftoppm (110 dpi) als Bild gelesen. Tab. 1 vom Seitenbild Zeile für Zeile mit den Kategorienhäufigkeiten je Patient aus irr::diagnoses (irr 0.85) verglichen: alle 30 Zeilen gleich.",
+  "verification": "Nachrechnung aus irr::diagnoses (R 4.6.1, Mini-Referenz nach Formelsammlung §5): Kategoriensummen 26, 26, 30, 55, 43; P̄ = 0,5555556, P̄_e = 0,2199383 (aus den gedruckten p_j 0,220118), κ = 0,4302445; irr::kappam.fleiss(diagnoses)$value 0,4302445. Gl. (12): Var 0,000594, SE 0,0243742, gleich irr::kappam.fleiss value/statistic (irr rechnet varkappa nach Gl. (12)). Fleiss (1971), Gl. (16), exakt: SE 0,027503 (gedruckt .028 aus gerundeten Summen)."
+}

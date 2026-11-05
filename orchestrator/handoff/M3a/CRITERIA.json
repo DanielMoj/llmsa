@@ -1,0 +1,194 @@
+{
+  "criteria": [
+    {
+      "id": "K-M3a-1",
+      "quote": "**K-M3a-1:** Cohens Kappa ungewichtet, linear und quadratisch gewichtet (Formelsammlung §5) reproduziert das Beispiel aus Cohen (1968) (`ankerRef: ANK-70`) und stimmt auf `irr::vision`, `irr::diagnoses` (paarweise) und konstruierten Tabellen mit `irr::kappa2`, `psych::cohen.kappa` und `DescTools::CohenKappa` überein (Toleranz `ankerRef: ANK-TOL.package_compare`); eine Tabelle mit nur einer besetzten Kategorie liefert `NA` mit Hinweis, nie `NaN`. (Prüfweg: Test)",
+      "source": "docs/04-weitere-bausteine.md"
+    },
+    {
+      "id": "K-M3a-2",
+      "quote": "**K-M3a-2:** Fleiss' Kappa: `msa_agreement()` erhält ein Argument `fleiss = FALSE` (Vorgabewert, Schnittstellenregel) und berechnet mit `fleiss = TRUE` κ_F nach Formelsammlung §5 für Einheiten mit gleicher Bewerterzahl; auf `irr::diagnoses` gleicht der Wert Fleiss (1971), Tabelle 1 (`ankerRef: ANK-72`), und `irr::kappam.fleiss` (`ANK-TOL.package_compare`); bei ungleicher Bewerterzahl liefert es `NA` mit einer Meldung, die auf Krippendorffs Alpha verweist; ein Standardfehler wird nur ausgegeben, wenn er nach Fleiss, Nee & Landis (1979) berechnet ist, sonst nicht. (Prüfweg: Test)",
+      "source": "docs/04-weitere-bausteine.md"
+    },
+    {
+      "id": "K-M3a-3",
+      "quote": "**K-M3a-3:** Krippendorffs Alpha für nominal, ordinal und Intervall mit fehlenden Werten reproduziert das Rechenbeispiel aus Krippendorff (2011) (`ankerRef: ANK-73`), stimmt mit `irr::kripp.alpha` überein (`ANK-TOL.package_compare`), und die Zuordnung der Gewichte (ungewichtet → nominal, linear → ordinal, quadratisch → Intervall) ist dokumentiert und getestet; Einheiten mit weniger als zwei gültigen Antworten gehen nicht ein und werden gezählt. (Prüfweg: Test)",
+      "source": "docs/04-weitere-bausteine.md"
+    },
+    {
+      "id": "K-M3a-4",
+      "quote": "**K-M3a-4:** Attributkennzahlen: Trefferquote gesamt und je Prompt×Modell, Anteil vollständig richtiger Items, Modalantwort je Item mit der Gleichstandsregel „niedrigste Kategorie“, Attribut-Wiederholbarkeit (Zellen mit identischen Replikaten, Zellen mit weniger als zwei gültigen Antworten zählen nicht) und Attribut-Reproduzierbarkeit (über Prompts, über Modelle, über alle Bedingungen) werden auf konstruierten Datensätzen mit von Hand bestimmten Werten exakt getroffen; die AIAG-Attributstudie (`reference/quellen/data/aiag/attribute_study.csv`) reproduziert die Kappa-Tabelle des Handbuchs (`ankerRef: ANK-74`). (Prüfweg: Test)",
+      "source": "docs/04-weitere-bausteine.md"
+    },
+    {
+      "id": "K-M3a-5",
+      "quote": "**K-M3a-5:** Bias: Mittelwert, t-Intervall und p-Wert aus `msa_bias()` reproduzieren das AIAG-Beispiel Tabelle III-B 2 (`ankerRef: ANK-75`, Daten unter `reference/quellen/data/aiag/bias_study.csv`) und stimmen mit `stats::t.test` auf denselben Abweichungen überein (`ANK-TOL.package_compare`); je Prompt×Modell dasselbe. (Prüfweg: Test)",
+      "source": "docs/04-weitere-bausteine.md"
+    },
+    {
+      "id": "K-M3a-6",
+      "quote": "**K-M3a-6:** Linearität: `msa_bias()` reproduziert mit der Handbuchrechnung (Regression aller g·m Einzelwerte, gm − 2 Freiheitsgrade) das AIAG-Beispiel Tabelle III-B 4/5 (`ankerRef: ANK-76`; Daten unter `reference/quellen/data/aiag/linearity_study.csv`): Steigung, Achsenabschnitt, R², t-Werte, t-Quantil; sie gibt zusätzlich die Regression auf die Item-Mittelwerte (g − 2 Freiheitsgrade) mit R² und t-Werten aus (`ANK-76`), berechnet das Vertrauensband der Geraden und das Kriterium „Bias = 0 liegt im Band“, trägt das Verdikt mit der Handbuchrechnung und benennt im Objekt und im Bericht den Unterschied beider Rechnungen (Formelsammlung Nr. 2). (Prüfweg: Test)",
+      "source": "docs/04-weitere-bausteine.md"
+    },
+    {
+      "id": "K-M3a-7",
+      "quote": "**K-M3a-7:** Überdeckung des Bias-Intervalls (Klasse A, `tests/simulation/test-bias-coverage.R`): Für Szenarien S-bias-1 (Items 20, Prompts 3, Modelle 3, Replikate 3, Rest σ² 0,1, Item σ² 1, wahrer Bias 0,2) und S-bias-2 (wie S-bias-1, Rest σ² 0,5, Bias 0) liegt die gemessene Überdeckung des 95-%-Intervalls innerhalb von `ankerRef: ANK-TOL.mc_factor` (Bestehenskriterium) Monte-Carlo-Standardfehlern um 0,95 (`n_sim` ≥ `ANK-06`), und die Vignette `validation.Rmd` berichtet sie. (Prüfweg: Test)",
+      "source": "docs/04-weitere-bausteine.md"
+    }
+  ],
+  "open": [
+    {
+      "id": "ACC-1",
+      "status": "Anker geerntet in ACCEPTANCE M3a (05.11.2026), jede verwendete Zahl am Original geprüft",
+      "ref": "ANKER-TODO.md, Abschnitt „M3a — Übereinstimmung, Bias, Linearität“; docs/01 §6: „Anker erntet der Reviewer in der ACCEPTANCE-Phase nach `ANKER-TODO.md`.“",
+      "kind": "Anker",
+      "owner": "Reviewer",
+      "blocking_builder": false,
+      "note": "ANK-70 (Cohen 1968): Tab. 1, Rechnung [4] und [8] und die Werte .492, .348, .574 am Seitenbild gelesen (OCR-Textschicht entstellt). ANK-72 (Fleiss 1971 mit Fleiss, Nee & Landis 1979): Tab. 1 Zeile für Zeile am Seitenbild mit irr::diagnoses verglichen, alle 30 Zeilen gleich; κ = .430 (Gl. (8)) und Gl. (12) der Varianz nur am Seitenbild lesbar; P̄_e = .2201 der Quelle ist aus gerundeten p_j gerechnet (exakt 0,21994), der Anker hält die Regel fest. ANK-73 (Krippendorff 2011): Word-PDF mit Textschicht, Datenmatrix und Randsummen gegeneinander geprüft. ANK-74 bis ANK-76 (AIAG 2010): PDF mit Textschicht; Tab. III-B 2, Fig. III-B 3 mit t-Werten, Tab. III-C 3 und das Kappa gegen die Referenz zusätzlich am Seitenbild. Die Datenblätter Tab. III-B 1, III-B 4 und III-C 1 hat der Reviewer maschinell aus dem Textspiegel gelesen; die Lesung trifft jede gedruckte Auswertung (Tab. III-B 2, III-B 5, Fig. III-B 3, t_a, t_b, t_{58; 0,975}, alle sechs Kreuztabellen, die sechs Kappa, Tab. III-C 5). Die Item-Mittelwert-Regression (R² 97,8 %, t_a −11,52) stammt aus Formelsammlung §6 (Betreiberfestlegung), nachgerechnet 0,97791 und −11,5233. Die Anker liegen vor dem Tag plan/M3a (Gate golden-adr unberührt); die Auslegungen ACC-3 bis ACC-16 hält der Reviewer im 30-plan-review in einem ADR fest."
+    },
+    {
+      "id": "ACC-2",
+      "status": "offen: drei geschützte Datenblätter fehlen (Betreiber); bis dahin sieben Abnahmetests rot mit benanntem Fehler",
+      "ref": "docs/01 §6: „der Betreiber legt sie an, der Reviewer gleicht sie am Original ab. Abnahmetests, die solche Daten brauchen, schlagen fehl, wenn die Datei fehlt (kein `skip`).“; ANKER-TODO.md, Zeilen ANK-74 bis ANK-76: „Datei anlegen (Betreiber)“; BL-42",
+      "kind": "Geschützte Daten",
+      "owner": "Betreiber (Dateien), Reviewer (Abgleich)",
+      "blocking_builder": false,
+      "note": "Es fehlen reference/quellen/data/aiag/bias_study.csv, linearity_study.csv und attribute_study.csv (Stand 05.11.2026; vorhanden sind nur anova_example.csv und QUELLE.txt). Ohne sie enden sieben Tests mit „local AIAG data sheet missing“ (K-M3a-4: Kappa-Tabelle und Tab. III-C 5; K-M3a-5: Tab. III-B 2 gesamt und je Prompt × Modell; K-M3a-6: Handbuchrechnung, Item-Mittelwerte, Band und Verdikt); der Builder kann das nicht beheben. Erwartetes Format (in den Ankern unter data_file festgehalten): bias_study.csv mit den Spalten part, reference, trial, value (15 Zeilen: part 1, reference 6.00, trial 1–15, value wie Tab. III-B 1); linearity_study.csv mit part, reference, trial, value (60 Zeilen: part 1–5 mit reference 2.00, 4.00, 6.00, 8.00, 10.00, trial 1–12, value wie Tab. III-B 4); attribute_study.csv mit part, appraiser, trial, value, reference (450 Zeilen: part 1–50, appraiser A, B, C, trial 1–3, value = Entscheidung A-1 … C-3, reference = Spalte Reference der Tab. III-C 1). Kopfzeile, Komma, Dezimalpunkt, ohne Zeilennamen (utils::write.csv(row.names = FALSE) genügt). Der Test bindet jede Datei über die SHA-256 einer kanonischen Form ihres Inhalts (content_sha256, canonical_form) an die Lesung des Reviewers aus dem Textspiegel (.layout.txt Zeilen 4411–4425, 4897–4908, 6634–6683); Anführungszeichen, Zeilenenden und die Schreibweise der Zahlen (5.8 oder 5.80) ändern sie nicht. Bitte die drei Dateien in reference/quellen/data/aiag/QUELLE.txt beschreiben. Den Abgleich der gelieferten Dateien am Seitenbild und ihre Datei-SHA-256 hält der Reviewer im ADR des 30-plan-review fest."
+    },
+    {
+      "id": "ACC-3",
+      "status": "Auslegung des Reviewers (Spec schweigt); ADR im 30-plan-review",
+      "ref": "K-M3a-1: „Cohens Kappa ungewichtet, linear und quadratisch gewichtet (Formelsammlung §5) reproduziert das Beispiel aus Cohen (1968) (`ankerRef: ANK-70`)“; Formelsammlung §5: „Diese Form ist äquivalent zu Cohen (1968) mit Nichtübereinstimmungsgewichten v (w = 1 − v/v\\_max).“",
+      "kind": "Auslegung",
+      "owner": "Reviewer",
+      "blocking_builder": false,
+      "note": "Das gewichtete Kappa des Beispiels (κ_w .348, mit vertauschten Gewichten .574) beruht auf den Nichtübereinstimmungsgewichten 0/1/3/6; keine der drei Gewichtungen von msa_agreement() bildet sie ab (in keiner Ordnung der drei Kategorien linear oder quadratisch), und K-M3a-1 führt kein Argument für freie Gewichte ein. Der Test verlangt vom Paket das ungewichtete κ = .492 des Beispiels (kappa_all_vs_reference und kappa_modal_vs_reference, je ein Item je Urteilspaar) und auf derselben Tafel lineare und quadratische Gewichtung gleich Mini-Referenz, irr::kappa2, psych::cohen.kappa und DescTools::CohenKappa. κ_w = .348 und .574 reproduzieren die Mini-Referenz der Formelsammlung mit w = 1 − v/v_max, psych mit den Nichtübereinstimmungsgewichten und DescTools mit den Übereinstimmungsgewichten. Eine freie Gewichtsmatrix verlangt der Vertrag nicht."
+    },
+    {
+      "id": "ACC-4",
+      "status": "Auslegung des Reviewers; ADR im 30-plan-review",
+      "ref": "K-M3a-1: „stimmt auf `irr::vision`, `irr::diagnoses` (paarweise) und konstruierten Tabellen mit `irr::kappa2`, `psych::cohen.kappa` und `DescTools::CohenKappa` überein (Toleranz `ankerRef: ANK-TOL.package_compare`)“",
+      "kind": "Auslegung",
+      "owner": "Reviewer",
+      "blocking_builder": false,
+      "note": "irr::kappa2 bildet seine Skala aus den beobachteten Kategorien beider Spalten, und die gewichteten Kappas hängen von der Zahl K der Skala ab. Verglichen wird deshalb auf Daten, in denen jede Kategorie vorkommt; bei irr::diagnoses erhält jedes der 15 Bewerterpaare als levels die Kategorien, die es verwendet (in Skalenordnung), für Paket und Orakel gleich. irr erhält die Kategorien als ganze Zahlen 1..K, psych::cohen.kappa die Kreuztafel mit den Nichtübereinstimmungsgewichten |i − j| bzw. (i − j)², DescTools::CohenKappa die Kreuztafel mit \"Equal-Spacing\" bzw. \"Fleiss-Cohen\"; die Kreuztafel des Pakets entsteht aus einem Item je Paar (erste Spalte Antwort, zweite Referenz). irr::vision: rechtes Auge als Antwort, linkes als Referenz (7477 Paare). Konstruierte Tafeln: K = 2 bis 5 (Seeds 312 bis 315) und eine Tafel mit leerer Zeile und leerer Spalte (Seed 319). Toleranz ANK-TOL.package_compare (1e-8); alle Orakel und v0.1.0 stimmen auf Cohens Tafel bis 1e-15 überein."
+    },
+    {
+      "id": "ACC-5",
+      "status": "Auslegung des Reviewers; ADR im 30-plan-review",
+      "ref": "Formelsammlung §5: „Fehlende oder nicht parsbare Antworten bleiben fehlend.“; docs/01 §2 Nr. 4: „Ergebnis ist eine richtige Zahl oder eine klare Fehlermeldung, nie stillschweigend eine falsche Zahl.“",
+      "kind": "Auslegung",
+      "owner": "Reviewer",
+      "blocking_builder": false,
+      "note": "Fehlende Antworten zählen weder als richtig noch als falsch: Trefferquote = Anteil der gültigen Antworten, die der Referenz gleichen (wie v0.1.0). Anteil vollständig richtiger Items = Anteil der Items mit mindestens einer gültigen Antwort, deren gültige Antworten alle richtig sind; ein Item ohne gültige Antwort geht nicht ein. v0.1.0 zählt ein solches Item über all(logical(0)) als richtig (Datensatz D1, Item i6: 50 % statt 40 %). Modalantwort eines Items ohne gültige Antwort: NA. Gleichstand: die niedrigste der gleich häufigen Kategorien in Skalenordnung (D1, i3: b vor c, obwohl a vorkommt; D2, i2: 0 vor 1). Die Handwerte stehen als Brüche mit Zählkommentar in test-m3a-4-attribute.R und werden ein zweites Mal von der Mini-Referenz (Schleifen, setup-m3a.R) getroffen; Toleranz ANK-TOL.arithmetic auf der Prozentskala."
+    },
+    {
+      "id": "ACC-6",
+      "status": "Auslegung des Reviewers; ADR im 30-plan-review",
+      "ref": "Formelsammlung §5: „Anteil der Items mit identischer Antwort über alle Prompts (innerhalb Modell), über alle Modelle (innerhalb Prompt) und über alle Bedingungen.“",
+      "kind": "Auslegung",
+      "owner": "Reviewer",
+      "blocking_builder": false,
+      "note": "Wie v0.1.0 (Status Code): über Prompts = Anteil der Einheiten Item × Modell, deren gültige Antworten (alle Prompts und Replikate) gleich sind; über Modelle = dasselbe für Item × Prompt; über alle Bedingungen für das Item. Es zählen nur Einheiten mit mindestens zwei gültigen Antworten, wie bei der Wiederholbarkeit (Zellen Item × Prompt × Modell, je Prompt × Modell und gesamt). Blöcke trennen keine Einheit (die Testdaten haben einen Block)."
+    },
+    {
+      "id": "ACC-7",
+      "status": "Auslegung des Reviewers; ADR im 30-plan-review",
+      "ref": "K-M3a-4: „die AIAG-Attributstudie (`reference/quellen/data/aiag/attribute_study.csv`) reproduziert die Kappa-Tabelle des Handbuchs (`ankerRef: ANK-74`)“",
+      "kind": "Auslegung",
+      "owner": "Reviewer",
+      "blocking_builder": false,
+      "note": "Tab. III-C 3 vergleicht die Prüfer paarweise über 150 Paare (Teil, Durchgang) (S. 135: „34 times where A-1 = 1 and B-1 = 1 …“); msa_agreement() hat kein Kappa zwischen Prompts, und K-M3a-4 verlangt keines. Der Test bildet die Paare selbst, prüft sie gegen die gedruckten Kreuztabellen der Tab. III-C 2 und rechnet sie mit Cohens Kappa von msa_agreement() (ein Item je Paar, erster Prüfer als Antwort, zweiter als Referenz). Das Kappa gegen die Referenz (S. 138) ist kappa_all_vs_reference von msa_agreement() auf den 150 Entscheidungen eines Prüfers (Prüfer = Prompt, Durchgang = Replikat). Über den Wortlaut hinaus: Tab. III-C 5 als zweite Quelle der Attributkennzahlen auf denselben Daten (Wiederholbarkeit je Prüfer 42/45/40 von 50, vollständig richtige Teile je Prüfer 42/45/40, Übereinstimmung aller Prüfer 39, zugleich mit der Referenz 39); v0.1.0 trifft diese Werte bereits. Kein neues Ergebnisfeld."
+    },
+    {
+      "id": "ACC-8",
+      "status": "Auslegung des Reviewers; ADR im 30-plan-review",
+      "ref": "K-M3a-2: „`msa_agreement()` erhält ein Argument `fleiss = FALSE` (Vorgabewert, Schnittstellenregel) und berechnet mit `fleiss = TRUE` κ_F nach Formelsammlung §5 für Einheiten mit gleicher Bewerterzahl“; Formelsammlung §5: „m Bewertungen je Item (gleich für alle Items)“",
+      "kind": "Auslegung",
+      "owner": "Reviewer",
+      "blocking_builder": false,
+      "note": "Bewertungen eines Items sind alle seine gültigen Antworten über Prompts, Modelle, Blöcke und Replikate; gleiche Bewerterzahl heißt gleiche Zahl gültiger Antworten je Item, mindestens zwei. fleiss steht hinter weights mit der Vorgabe FALSE; mit der Vorgabe trägt das Ergebnis kein Element fleiss (Verhalten v0.1.0). Mit fleiss = TRUE trägt es die Liste fleiss mit dem numerischen Element kappa (κ_F). Ungleiche Zahl: kappa NA_real_ (nicht NaN) und eine Meldung nach ACC-16. Gleiche Antworten auf allen Items (P̄_e = 1): kappa NA_real_, nicht NaN, ohne Abbruch, die übrigen Kennzahlen bleiben (Randfall docs/01 §2 Nr. 4, wie K-M3a-1). Geprüft auf irr::diagnoses in drei Anordnungen der sechs Bewertungen (sechs Prompts; drei Prompts × zwei Replikate; zwei Modelle × drei Prompts) und auf drei konstruierten Datensätzen (Seeds 3201 bis 3203, einer mit je einer fehlenden Antwort je Item)."
+    },
+    {
+      "id": "ACC-9",
+      "status": "Auslegung des Reviewers; ADR im 30-plan-review",
+      "ref": "K-M3a-2: „ein Standardfehler wird nur ausgegeben, wenn er nach Fleiss, Nee & Landis (1979) berechnet ist, sonst nicht“; Formelsammlung §13: „Abschnitt 5 (Varianz, bei Umsetzung von Nr. 1)“",
+      "kind": "Auslegung",
+      "owner": "Reviewer",
+      "blocking_builder": false,
+      "note": "Zulässig sind beide Wege: kein Standardfehler oder einer nach Gl. (12) von Fleiss, Nee & Landis (1979), der Varianz unter der Nullhypothese (ANK-72; irr::kappam.fleiss rechnet dieselbe Varianz, value/statistic). Als Standardfehler gilt jedes Element von fleiss, dessen Name ihn bezeichnet (se, se0, ase, sd, std, stderr, std_err, standard_error, auch mit Präfix oder Suffix wie kappa_se); jedes muss Gl. (12) auf ANK-TOL.package_compare treffen (irr::diagnoses: 0,024374; Fleiss 1971, Gl. (16), gäbe 0,027503). Druckzeilen, die Fleiss und SE oder standard error nennen, zeigen diesen Wert. Die Attrappe ohne Standardfehler besteht, die mit dem Standardfehler von Fleiss (1971) nicht."
+    },
+    {
+      "id": "ACC-10",
+      "status": "Auslegung des Reviewers; ADR im 30-plan-review",
+      "ref": "K-M3a-3: „Einheiten mit weniger als zwei gültigen Antworten gehen nicht ein und werden gezählt“",
+      "kind": "Auslegung",
+      "owner": "Reviewer",
+      "blocking_builder": false,
+      "note": "Gezählt wird je Bereich der Alpha-Tabelle in der neuen Spalte n_units_excluded: Zahl der Einheiten des Bereichs (vorkommende Kombinationen Item × Prompt × Modell, Item × Modell, Item × Prompt, Item), die weniger als zwei gültige Antworten tragen, auch solche ohne gültige Antwort. Krippendorffs Beispiel mit den Beobachtern als Prompts: 48, 1, 48, 1; als Replikate: je 1. Drei angehängte Einheiten mit einer oder keiner gültigen Antwort ändern kein Alpha und erhöhen die Zahl in „all conditions“ um drei. Die Bereichsnamen der Spalte scope bleiben wie in v0.1.0."
+    },
+    {
+      "id": "ACC-11",
+      "status": "Auslegung des Reviewers; ADR im 30-plan-review",
+      "ref": "K-M3a-3: „die Zuordnung der Gewichte (ungewichtet → nominal, linear → ordinal, quadratisch → Intervall) ist dokumentiert und getestet“",
+      "kind": "Auslegung",
+      "owner": "Reviewer",
+      "blocking_builder": false,
+      "note": "Dokumentiert heißt: Die Hilfeseite man/msa_agreement.Rd (roxygen in R/agreement.R) nennt jede Zuordnung in der Form „Gewicht (Metrik)“, „Gewicht → Metrik“, „Gewicht -> Metrik“, „Gewicht: Metrik“ oder „Gewicht = Metrik“ (auch umgekehrt; Anführungszeichen und Code-Auszeichnung zählen nicht) und keine falsche Paarung in dieser Form. v0.1.0 nennt nur „\"unweighted\" (nominal)“. Getestet heißt: Jede Gewichtung trifft Mini-Referenz und irr::kripp.alpha der zugeordneten Metrik und keine der beiden anderen Metriken."
+    },
+    {
+      "id": "ACC-12",
+      "status": "Auslegung des Reviewers; ADR im 30-plan-review",
+      "ref": "K-M3a-6: „berechnet das Vertrauensband der Geraden und das Kriterium „Bias = 0 liegt im Band“, trägt das Verdikt mit der Handbuchrechnung“; docs/01 §3 Nr. 2: „Handbuchrechnung (alle g·m Einzelwerte, gm − 2 Freiheitsgrade) bleibt und trägt das Verdikt (Vertrauensband, „Bias = 0 im Band“)“; AIAG 2010, S. 98 (ANK-76): „the “bias = 0” line must lie entirely within the confidence bands of the fitted line“",
+      "kind": "Auslegung",
+      "owner": "Reviewer",
+      "blocking_builder": false,
+      "note": "Neue Felder von msa_bias() (zusätzliche Rückgabefelder, Schnittstellenregel): linearity behält intercept, slope und slope_p_value und erhält r_squared (Anteil, nicht Prozent), t_intercept, t_slope, df (gm − 2) und t_quantile (t_{gm−2; 1−(1−level)/2}); linearity_item_means mit intercept, slope, r_squared, t_intercept, t_slope und df (g − 2), Regression der ungewichteten Item-Mittelwerte der gültigen Abweichungen auf den Referenzwert; linearity_band als data.frame reference, fit, lower, upper mit mindestens einer Zeile je Referenzwert der Items, Niveau = Argument level; linearity_in_band (logisch): „Bias = 0“ liegt über den ganzen Bereich vom kleinsten bis zum größten Referenzwert im Band, nicht nur an den Referenzwerten (die untere Grenze ist konkav, ihr Maximum kann zwischen zwei Referenzwerten liegen; Testfall between_references); linearity_verdict \"acceptable\" bei linearity_in_band, sonst \"unacceptable\". Die Handbuchrechnung trägt das Verdikt (Testfall handbook_rejects: Handbuchband ohne, Item-Mittelwert-Band mit der Null). Bei nur einem Referenzwert (Biasstudie, ein Teil) muss msa_bias() ein Ergebnis liefern, sonst ist K-M3a-5 nicht erfüllbar; v0.1.0 bricht dort mit „subscript out of bounds“ ab, weil summary(lm)$coefficients keine Steigung trägt."
+    },
+    {
+      "id": "ACC-13",
+      "status": "Auslegung des Reviewers; ADR im 30-plan-review",
+      "ref": "K-M3a-6: „benennt im Objekt und im Bericht den Unterschied beider Rechnungen (Formelsammlung Nr. 2)“; Formelsammlung §6: „Die Antworten eines Items sind korreliert (Item-Effekt); die gm − 2 Freiheitsgrade des Handbuchs überschätzen deshalb die Information, und der p-Wert der Steigung fällt zu klein aus.“",
+      "kind": "Auslegung",
+      "owner": "Reviewer",
+      "blocking_builder": false,
+      "note": "Im Objekt die Zeichenkette linearity_note, im Bericht der Abschnitt „5. Bias and linearity“ von msa_report(bias = …), gerendert als GitHub-Markdown. Beide nennen (a) die Item-Mittelwerte („item mean“), (b) Freiheitsgrade („degrees of freedom“ oder „df“), (c) die Freiheitsgrade beider Rechnungen als Zahlen der Daten (im Test 18 und 3) oder als gm − 2 und g − 2, (d) die Korrelation der Replikate eines Items („correlat…“, „dependen…“ oder „not independent“)."
+    },
+    {
+      "id": "ACC-14",
+      "status": "Auslegung des Reviewers; ADR im 30-plan-review",
+      "ref": "K-M3a-7: „Für Szenarien S-bias-1 (Items 20, Prompts 3, Modelle 3, Replikate 3, Rest σ² 0,1, Item σ² 1, wahrer Bias 0,2) und S-bias-2 (wie S-bias-1, Rest σ² 0,5, Bias 0) liegt die gemessene Überdeckung des 95-%-Intervalls innerhalb von `ankerRef: ANK-TOL.mc_factor` (Bestehenskriterium) Monte-Carlo-Standardfehlern um 0,95 (`n_sim` ≥ `ANK-06`)“",
+      "kind": "Auslegung",
+      "owner": "Reviewer",
+      "blocking_builder": false,
+      "note": "tests/simulation/test-bias-coverage.R: Referenz x_i ~ N(0, Item-σ²) als Itemwahrheit, Antwort y = x_i + Bias + e mit e ~ N(0, Rest-σ²), unabhängig je Item, Prompt, Modell und Replikat; die Szenarien nennen keine Prompt-, Modell- oder Blockkomponente. Verfahren msa_bias(level = 0.95), Intervall overall[c(\"lower\", \"upper\")]. n_sim = ANK-06 = 1000, Seeds 20261106 und 20261107, RNG Mersenne-Twister/Inversion/Rejection. Bestanden bei |c − 0,95| ≤ ANK-TOL.mc_factor (pass) · √(c(1 − c)/n_sim) mit der gemessenen Überdeckung c (Formelsammlung §9); jedes Intervall gleicht der Mini-Referenz (ANK-TOL.package_compare). Lauf auf v0.1.0: S-bias-1 0,9590 (MCSE 0,0063, +1,4 MCSE), S-bias-2 0,9520 (MCSE 0,0068, +0,3 MCSE), 7,5 s."
+    },
+    {
+      "id": "ACC-15",
+      "status": "Auslegung des Reviewers; ADR im 30-plan-review",
+      "ref": "K-M3a-7: „und die Vignette `validation.Rmd` berichtet sie“",
+      "kind": "Auslegung",
+      "owner": "Reviewer",
+      "blocking_builder": false,
+      "note": "Die gestrickte Vignette (gemeinsamer Knit der Abnahmetests, acc_m1a_knit_validation()) enthält einen Abschnitt, dessen Überschrift „bias“ und „coverage“ nennt (Vorschlag: „Bias interval: coverage by scenario“), mit einer Pipe- oder HTML-Tabelle, deren Spalten mit scenario, coverage, MCSE und n_sim beginnen und die die Zeilen S-bias-1 und S-bias-2 trägt; coverage als Anteil oder mit Prozentzeichen. Die gezeigten Werte erfüllen das Bestehenskriterium der Simulation (mit dem Rundungsspielraum der gezeigten Stellen), n_sim ≥ ANK-06, MCSE = √(c(1 − c)/n_sim). Woher die Vignette die Zahlen nimmt, legt der Vertrag nicht fest; kein gezeigter Wert mit mindestens drei signifikanten Stellen steht als Literal im Rmd (wie K-M1c-5). Den Bau im R CMD check entscheidet das lint-Gate."
+    },
+    {
+      "id": "ACC-16",
+      "status": "Auslegung des Reviewers; ADR im 30-plan-review",
+      "ref": "K-M3a-1: „eine Tabelle mit nur einer besetzten Kategorie liefert `NA` mit Hinweis, nie `NaN`“; K-M3a-2: „bei ungleicher Bewerterzahl liefert es `NA` mit einer Meldung, die auf Krippendorffs Alpha verweist“",
+      "kind": "Auslegung",
+      "owner": "Reviewer",
+      "blocking_builder": false,
+      "note": "Hinweis und Meldung sind R-Bedingungen der Klasse message oder warning, die msa_agreement() signalisiert, ohne abzubrechen. Der Hinweis zu Kappa nennt „kappa“ (Groß- und Kleinschreibung egal), die Meldung zu Fleiss nennt „Krippendorff“. Geprüft für alle drei Gewichtungen mit drei Kategorien, von denen eine besetzt ist, und mit einer Skala aus einer Kategorie; v0.1.0 gibt dort NA ohne Hinweis und bricht linear und quadratisch ab, weil die Gewichte durch K − 1 = 0 teilen."
+    },
+    {
+      "id": "ACC-17",
+      "status": "Hinweis an Builder und Betreiber, nonblocking",
+      "ref": "BL-15, BL-44, BL-113; docs/01 §5: „Suggests dürfen ergänzt werden“",
+      "kind": "Hinweis",
+      "owner": "Builder, Betreiber",
+      "blocking_builder": false,
+      "note": "BL-15 (Fleiss implementieren) und BL-44 (Varianz nach Fleiss, Nee & Landis) erledigt K-M3a-2; BL-113 (Modalwert) berührt K-M3a-4: die Gleichstandsregel „niedrigste Kategorie“ gleicht v0.1.0, ihre Nennung in ?msa_agreement verlangt der Vertrag nicht. Die Orakel irr, psych und DescTools stehen nicht in DESCRIPTION unter Suggests; die Abnahmetests rufen sie ohne skip. Ab M3 laufen die Abnahmetests je Mutant über alle geänderten R/*.R: die M3a-Tests brauchen ohne Vignettenknit etwa 4 s (Attrappe), der Knit von validation.Rmd ist mit K-M1a-7 geteilt. Vor M3a ist nach BL-123 die Mutations-Baseline zu entfernen (Betreiber). Lauf der M3a-Abnahmetests auf dem Stand vor M3a: 35 Tests, 553 Erwartungen, 10 fehlgeschlagen, 12 Fehler, 0 übersprungen, 29,5 s; grün sind die Prüfungen, die v0.1.0 bereits erfüllt (Cohen ungewichtet und Orakel, Krippendorff-Beispiel, Orakel und Zuordnung, D2, Bias gegen stats::t.test) und die Mini-Referenzen. Trennschärfe (Paketkopie unter tempdir() mit Attrappe, gepatchter Hilfeseite und Berichtsvorlage, Vignettenausschnitt, Datenblättern der Lesung): korrekte Attrappe 35 Tests mit 872 Erwartungen grün; 28 von 29 verfälschten Varianten rot; grün bleibt nur die Variante ohne Standardfehler, die K-M3a-2 zulässt."
+    }
+  ]
+}
