@@ -8,7 +8,7 @@
 * checking for empty or unneeded directories
 * building ‘llmsa_0.1.0.tar.gz’
 
-* using log directory ‘/tmp/harness-r-check.swhExP/llmsa.Rcheck’
+* using log directory ‘/tmp/harness-r-check.Y5STsA/llmsa.Rcheck’
 * using R version 4.6.1 (2026-06-24)
 * using platform: x86_64-pc-linux-gnu
 * R was compiled by
@@ -16,7 +16,7 @@
     GNU Fortran (Ubuntu 15.2.0-16ubuntu1) 15.2.0
 * running under: Ubuntu 26.04 LTS
 * using session charset: UTF-8
-* current time: 2026-11-04 16:56:08 UTC
+* current time: 2026-11-04 23:17:37 UTC
 * using options ‘--no-manual --as-cran’
 * checking for file ‘llmsa/DESCRIPTION’ ... OK
 * checking extension type ... Package
@@ -74,14 +74,14 @@
 * checking installed files from ‘inst/doc’ ... OK
 * checking files in ‘vignettes’ ... OK
 * checking examples ... OK
-* checking examples with --run-donttest ... [69s/69s] OK
+* checking examples with --run-donttest ... [64s/64s] OK
 * checking for unstated dependencies in ‘tests’ ... OK
 * checking tests ...
-  Running ‘testthat.R’ [199s/199s]
- [199s/199s] OK
+  Running ‘testthat.R’ [186s/186s]
+ [187s/187s] OK
 * checking for unstated dependencies in vignettes ... OK
 * checking package vignettes ... OK
-* checking re-building of vignette outputs ... [99s/100s] OK
+* checking re-building of vignette outputs ... [92s/93s] OK
 * checking for non-standard things in the check directory ... OK
 * checking for detritus in the temp directory ... OK
 * DONE

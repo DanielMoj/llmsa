@@ -1,328 +1,328 @@
 # stdout
 r-mutation: 317 Mutanten in R/robustness.R; Tests: tests/testthat, tests/acceptance, tests/e2e, tests/fuzz; ausgelassen nach MUT_TEST_EXCLUDE='^(m2-[0-9]|m0-testthat-count$|m1b-[23]-|m1b-7-vignette-full|m1c-[34]-|m1c-5-vignette-full|m1c-8-check-runs|m1d-)': tests/testthat/test-m1d-data.R, tests/testthat/test-m1d-findings.R, tests/acceptance/test-m0-testthat-count.R, tests/acceptance/test-m1b-2-recovery-scripts.R, tests/acceptance/test-m1b-3-two-level-script.R, tests/acceptance/test-m1b-7-vignette-full-results.R, tests/acceptance/test-m1c-3-coverage-script.R, tests/acceptance/test-m1c-4-coverage-rerun.R, tests/acceptance/test-m1c-5-vignette-full-results.R, tests/acceptance/test-m1c-8-check-runs.R, tests/acceptance/test-m1d-1-llm-stability-data.R, tests/acceptance/test-m1d-2-llm-stability-vignette.R, tests/acceptance/test-m1d-3-clinvar-data.R, tests/acceptance/test-m1d-4-clinvar-vignette.R, tests/acceptance/test-m1d-5-size-licence-network.R, tests/acceptance/test-m1d-6-full-runs.R, tests/acceptance/test-m1d-7-findings.R, tests/acceptance/test-m1d-8-robustness-wording.R, tests/acceptance/test-m2-1-items.R, tests/acceptance/test-m2-2-memorisation.R, tests/acceptance/test-m2-3-prompts-parser.R, tests/acceptance/test-m2-4-backends.R, tests/acceptance/test-m2-5-plan.R, tests/acceptance/test-m2-6-evaluate.R, tests/acceptance/test-m2-7-robustness-pilot.R, tests/e2e/test-m1d-qa-e2e.R, tests/fuzz/test-m1d-qa-fuzz.R
-r-mutation: unmutierter Testlauf: 377.8 s; 504 Tests, davon 0 fehlgeschlagen, 0 abgebrochen
-r-mutation: Zeitlimit je Mutant: 1889 s (MUT_TEST_TIMEOUT=353 s, 5 × unmutierter Lauf = 1889 s)
+r-mutation: unmutierter Testlauf: 193.5 s; 509 Tests, davon 0 fehlgeschlagen, 0 abgebrochen
+r-mutation: Zeitlimit je Mutant: 968 s (MUT_TEST_TIMEOUT=353 s, 5 × unmutierter Lauf = 968 s)
 ℹ Mutation Testing
   |   K |   S |   N |   E |   T |   % | Mutator  | File 
-x |   0 |   0 |   0 |   1 |   1 | 100 | - → +    | robustness.R 
-✔ |   1 |   0 |   0 |   1 |   2 | 100 | - → +    | robustness.R 
-✔ |   2 |   0 |   0 |   1 |   3 | 100 | - → +    | robustness.R 
-x |   2 |   0 |   0 |   2 |   4 | 100 | - → +    | robustness.R 
-✔ |   3 |   0 |   0 |   2 |   5 | 100 | - → +    | robustness.R 
-✔ |   4 |   0 |   0 |   2 |   6 | 100 | - → +    | robustness.R 
-✔ |   5 |   0 |   0 |   2 |   7 | 100 | - → +    | robustness.R 
-✔ |   6 |   0 |   0 |   2 |   8 | 100 | - → +    | robustness.R 
-✔ |   7 |   0 |   0 |   2 |   9 | 100 | - → +    | robustness.R 
-✔ |   8 |   0 |   0 |   2 |  10 | 100 | - → +    | robustness.R 
-✔ |   9 |   0 |   0 |   2 |  11 | 100 | !<condit | robustness.R 
-✔ |  10 |   0 |   0 |   2 |  12 | 100 | !<condit | robustness.R 
-x |  10 |   0 |   0 |   3 |  13 | 100 | !<condit | robustness.R 
-✔ |  11 |   0 |   0 |   3 |  14 | 100 | !<condit | robustness.R 
-x |  11 |   0 |   0 |   4 |  15 | 100 | !<condit | robustness.R 
-✔ |  12 |   0 |   0 |   4 |  16 | 100 | != → ==  | robustness.R 
-✔ |  13 |   0 |   0 |   4 |  17 | 100 | != → ==  | robustness.R 
-✔ |  14 |   0 |   0 |   4 |  18 | 100 | != → ==  | robustness.R 
-✔ |  15 |   0 |   0 |   4 |  19 | 100 | "" → "mu | robustness.R 
-✔ |  16 |   0 |   0 |   4 |  20 | 100 | "" → "mu | robustness.R 
-✔ |  17 |   0 |   0 |   4 |  21 | 100 | "" → "mu | robustness.R 
-✔ |  18 |   0 |   0 |   4 |  22 | 100 | "" → "mu | robustness.R 
-✔ |  19 |   0 |   0 |   4 |  23 | 100 | * → /    | robustness.R 
-✔ |  20 |   0 |   0 |   4 |  24 | 100 | * → /    | robustness.R 
-✔ |  21 |   0 |   0 |   4 |  25 | 100 | * → /    | robustness.R 
-✔ |  22 |   0 |   0 |   4 |  26 | 100 | * → /    | robustness.R 
-✔ |  23 |   0 |   0 |   4 |  27 | 100 | * → /    | robustness.R 
-x |  23 |   0 |   0 |   5 |  28 | 100 | * → /    | robustness.R 
-✔ |  24 |   0 |   0 |   5 |  29 | 100 | / → *    | robustness.R 
-✔ |  25 |   0 |   0 |   5 |  30 | 100 | / → *    | robustness.R 
-✔ |  26 |   0 |   0 |   5 |  31 | 100 | / → *    | robustness.R 
-✔ |  27 |   0 |   0 |   5 |  32 | 100 | / → *    | robustness.R 
-✔ |  28 |   0 |   0 |   5 |  33 | 100 | / → *    | robustness.R 
-x |  28 |   0 |   0 |   6 |  34 | 100 | / → *    | robustness.R 
-✔ |  29 |   0 |   0 |   6 |  35 | 100 | && → ||  | robustness.R 
-x |  29 |   0 |   0 |   7 |  36 | 100 | %% → *   | robustness.R 
-✔ |  30 |   0 |   0 |   7 |  37 | 100 | ^ → *    | robustness.R 
-x |  30 |   0 |   0 |   8 |  38 | 100 | + → -    | robustness.R 
-✔ |  31 |   0 |   0 |   8 |  39 | 100 | + → -    | robustness.R 
-✔ |  32 |   0 |   0 |   8 |  40 | 100 | + → -    | robustness.R 
-✔ |  33 |   0 |   0 |   8 |  41 | 100 | < → >    | robustness.R 
-✔ |  34 |   0 |   0 |   8 |  42 | 100 | < → >    | robustness.R 
-x |  34 |   1 |   0 |   8 |  43 |  97 | < → <=   | robustness.R 
-✔ |  35 |   1 |   0 |   8 |  44 |  97 | < → <=   | robustness.R 
-x |  35 |   1 |   0 |   9 |  45 |  97 | <= → >=  | robustness.R 
-✔ |  36 |   1 |   0 |   9 |  46 |  97 | <= → <   | robustness.R 
-✔ |  37 |   1 |   0 |   9 |  47 |  97 | <conditi | robustness.R 
-✔ |  38 |   1 |   0 |   9 |  48 |  97 | <conditi | robustness.R 
-✔ |  39 |   1 |   0 |   9 |  49 |  97 | <conditi | robustness.R 
-✔ |  40 |   1 |   0 |   9 |  50 |  98 | <conditi | robustness.R 
-✔ |  41 |   1 |   0 |   9 |  51 |  98 | <conditi | robustness.R 
-✔ |  42 |   1 |   0 |   9 |  52 |  98 | <conditi | robustness.R 
-✔ |  43 |   1 |   0 |   9 |  53 |  98 | <conditi | robustness.R 
-✔ |  44 |   1 |   0 |   9 |  54 |  98 | <conditi | robustness.R 
-✔ |  45 |   1 |   0 |   9 |  55 |  98 | <conditi | robustness.R 
-x |  45 |   1 |   0 |  10 |  56 |  98 | <conditi | robustness.R 
-✔ |  46 |   1 |   0 |  10 |  57 |  98 | <conditi | robustness.R 
-✔ |  47 |   1 |   0 |  10 |  58 |  98 | <conditi | robustness.R 
-✔ |  48 |   1 |   0 |  10 |  59 |  98 | <conditi | robustness.R 
-✔ |  49 |   1 |   0 |  10 |  60 |  98 | <conditi | robustness.R 
-✔ |  50 |   1 |   0 |  10 |  61 |  98 | <conditi | robustness.R 
-✔ |  51 |   1 |   0 |  10 |  62 |  98 | <conditi | robustness.R 
-x |  51 |   1 |   0 |  11 |  63 |  98 | <conditi | robustness.R 
-✔ |  52 |   1 |   0 |  11 |  64 |  98 | <conditi | robustness.R 
-✔ |  53 |   1 |   0 |  11 |  65 |  98 | <conditi | robustness.R 
-✔ |  54 |   1 |   0 |  11 |  66 |  98 | <conditi | robustness.R 
-✔ |  55 |   1 |   0 |  11 |  67 |  98 | <n> - 1  | robustness.R 
-✔ |  56 |   1 |   0 |  11 |  68 |  98 | <n> - 1  | robustness.R 
-✔ |  57 |   1 |   0 |  11 |  69 |  98 | <n> - 1  | robustness.R 
-✔ |  58 |   1 |   0 |  11 |  70 |  98 | <n> - 1  | robustness.R 
-✔ |  59 |   1 |   0 |  11 |  71 |  98 | <n> - 1  | robustness.R 
-✔ |  60 |   1 |   0 |  11 |  72 |  98 | <n> - 1  | robustness.R 
-x |  60 |   1 |   0 |  12 |  73 |  98 | <n> - 1  | robustness.R 
-x |  60 |   1 |   0 |  13 |  74 |  98 | <n> - 1  | robustness.R 
-x |  60 |   1 |   0 |  14 |  75 |  98 | <n> - 1  | robustness.R 
-x |  60 |   1 |   0 |  15 |  76 |  98 | <n> - 1  | robustness.R 
-x |  60 |   1 |   0 |  16 |  77 |  98 | <n> - 1  | robustness.R 
-✔ |  61 |   1 |   0 |  16 |  78 |  98 | <n> - 1  | robustness.R 
-✔ |  62 |   1 |   0 |  16 |  79 |  98 | <n> - 1  | robustness.R 
-✔ |  63 |   1 |   0 |  16 |  80 |  98 | <n> - 1  | robustness.R 
-x |  63 |   2 |   0 |  16 |  81 |  97 | <n> - 1  | robustness.R 
-✔ |  64 |   2 |   0 |  16 |  82 |  97 | <n> - 1  | robustness.R 
-✔ |  65 |   2 |   0 |  16 |  83 |  97 | <n> - 1  | robustness.R 
-x |  65 |   2 |   0 |  17 |  84 |  97 | <n> - 1  | robustness.R 
-✔ |  66 |   2 |   0 |  17 |  85 |  97 | <n> - 1  | robustness.R 
-✔ |  67 |   2 |   0 |  17 |  86 |  97 | <n> - 1  | robustness.R 
-✔ |  68 |   2 |   0 |  17 |  87 |  97 | <n> - 1  | robustness.R 
-x |  68 |   2 |   0 |  18 |  88 |  97 | <n> - 1  | robustness.R 
-✔ |  69 |   2 |   0 |  18 |  89 |  97 | <n> - 1  | robustness.R 
-✔ |  70 |   2 |   0 |  18 |  90 |  97 | <n> - 1  | robustness.R 
-✔ |  71 |   2 |   0 |  18 |  91 |  97 | <n> - 1  | robustness.R 
-✔ |  72 |   2 |   0 |  18 |  92 |  97 | <n> - 1  | robustness.R 
-x |  72 |   2 |   0 |  19 |  93 |  97 | <n> - 1  | robustness.R 
-✔ |  73 |   2 |   0 |  19 |  94 |  97 | <n> - 1  | robustness.R 
-x |  73 |   3 |   0 |  19 |  95 |  96 | <n> - 1  | robustness.R 
-✔ |  74 |   3 |   0 |  19 |  96 |  96 | <n> - 1  | robustness.R 
-✔ |  75 |   3 |   0 |  19 |  97 |  96 | <n> - 1  | robustness.R 
-✔ |  76 |   3 |   0 |  19 |  98 |  96 | <n> - 1  | robustness.R 
-✔ |  77 |   3 |   0 |  19 |  99 |  96 | <n> - 1  | robustness.R 
-✔ |  78 |   3 |   0 |  19 | 100 |  97 | <n> - 1  | robustness.R 
-✔ |  79 |   3 |   0 |  19 | 101 |  97 | <n> - 1  | robustness.R 
-✔ |  80 |   3 |   0 |  19 | 102 |  97 | <n> - 1  | robustness.R 
-✔ |  81 |   3 |   0 |  19 | 103 |  97 | <n> - 1  | robustness.R 
-✔ |  82 |   3 |   0 |  19 | 104 |  97 | <n> - 1  | robustness.R 
-✔ |  83 |   3 |   0 |  19 | 105 |  97 | <n> - 1  | robustness.R 
-✔ |  84 |   3 |   0 |  19 | 106 |  97 | <n> - 1  | robustness.R 
-✔ |  85 |   3 |   0 |  19 | 107 |  97 | <n> - 1  | robustness.R 
-✔ |  86 |   3 |   0 |  19 | 108 |  97 | <n> - 1  | robustness.R 
-✔ |  87 |   3 |   0 |  19 | 109 |  97 | <n> - 1  | robustness.R 
-x |  87 |   3 |   0 |  20 | 110 |  97 | <n> - 1  | robustness.R 
-✔ |  88 |   3 |   0 |  20 | 111 |  97 | <n> - 1  | robustness.R 
-✔ |  89 |   3 |   0 |  20 | 112 |  97 | <n> - 1  | robustness.R 
-✔ |  90 |   3 |   0 |  20 | 113 |  97 | <n> - 1  | robustness.R 
-✔ |  91 |   3 |   0 |  20 | 114 |  97 | <n> - 1  | robustness.R 
-✔ |  92 |   3 |   0 |  20 | 115 |  97 | <n> - 1  | robustness.R 
-✔ |  93 |   3 |   0 |  20 | 116 |  97 | <n> - 1  | robustness.R 
-✔ |  94 |   3 |   0 |  20 | 117 |  97 | <n> - 1  | robustness.R 
-✔ |  95 |   3 |   0 |  20 | 118 |  97 | <n> + 1  | robustness.R 
-✔ |  96 |   3 |   0 |  20 | 119 |  97 | <n> + 1  | robustness.R 
-✔ |  97 |   3 |   0 |  20 | 120 |  97 | <n> + 1  | robustness.R 
-✔ |  98 |   3 |   0 |  20 | 121 |  97 | <n> + 1  | robustness.R 
-✔ |  99 |   3 |   0 |  20 | 122 |  97 | <n> + 1  | robustness.R 
-✔ | 100 |   3 |   0 |  20 | 123 |  97 | <n> + 1  | robustness.R 
-x | 100 |   3 |   0 |  21 | 124 |  97 | <n> + 1  | robustness.R 
-x | 100 |   3 |   0 |  22 | 125 |  97 | <n> + 1  | robustness.R 
-x | 100 |   3 |   0 |  23 | 126 |  97 | <n> + 1  | robustness.R 
-✔ | 101 |   3 |   0 |  23 | 127 |  97 | <n> + 1  | robustness.R 
-✔ | 102 |   3 |   0 |  23 | 128 |  97 | <n> + 1  | robustness.R 
-x | 102 |   3 |   0 |  24 | 129 |  97 | <n> + 1  | robustness.R 
-✔ | 103 |   3 |   0 |  24 | 130 |  97 | <n> + 1  | robustness.R 
-✔ | 104 |   3 |   0 |  24 | 131 |  97 | <n> + 1  | robustness.R 
-✔ | 105 |   3 |   0 |  24 | 132 |  97 | <n> + 1  | robustness.R 
-✔ | 106 |   3 |   0 |  24 | 133 |  97 | <n> + 1  | robustness.R 
-✔ | 107 |   3 |   0 |  24 | 134 |  97 | <n> + 1  | robustness.R 
-x | 107 |   3 |   0 |  25 | 135 |  97 | <n> + 1  | robustness.R 
-✔ | 108 |   3 |   0 |  25 | 136 |  97 | <n> + 1  | robustness.R 
-✔ | 109 |   3 |   0 |  25 | 137 |  97 | <n> + 1  | robustness.R 
-✔ | 110 |   3 |   0 |  25 | 138 |  97 | <n> + 1  | robustness.R 
-✔ | 111 |   3 |   0 |  25 | 139 |  97 | <n> + 1  | robustness.R 
-✔ | 112 |   3 |   0 |  25 | 140 |  97 | <n> + 1  | robustness.R 
-✔ | 113 |   3 |   0 |  25 | 141 |  97 | <n> + 1  | robustness.R 
-✔ | 114 |   3 |   0 |  25 | 142 |  97 | <n> + 1  | robustness.R 
-x | 114 |   3 |   0 |  26 | 143 |  97 | <n> + 1  | robustness.R 
-✔ | 115 |   3 |   0 |  26 | 144 |  97 | <n> + 1  | robustness.R 
-✔ | 116 |   3 |   0 |  26 | 145 |  97 | <n> + 1  | robustness.R 
-✔ | 117 |   3 |   0 |  26 | 146 |  97 | <n> + 1  | robustness.R 
-x | 117 |   4 |   0 |  26 | 147 |  97 | <n> + 1  | robustness.R 
-✔ | 118 |   4 |   0 |  26 | 148 |  97 | <n> + 1  | robustness.R 
-✔ | 119 |   4 |   0 |  26 | 149 |  97 | <n> + 1  | robustness.R 
-✔ | 120 |   4 |   0 |  26 | 150 |  97 | <n> + 1  | robustness.R 
-✔ | 121 |   4 |   0 |  26 | 151 |  97 | <n> + 1  | robustness.R 
-✔ | 122 |   4 |   0 |  26 | 152 |  97 | <n> + 1  | robustness.R 
-✔ | 123 |   4 |   0 |  26 | 153 |  97 | <n> + 1  | robustness.R 
-✔ | 124 |   4 |   0 |  26 | 154 |  97 | <n> + 1  | robustness.R 
-✔ | 125 |   4 |   0 |  26 | 155 |  97 | <n> + 1  | robustness.R 
-✔ | 126 |   4 |   0 |  26 | 156 |  97 | <n> + 1  | robustness.R 
-✔ | 127 |   4 |   0 |  26 | 157 |  97 | <n> + 1  | robustness.R 
-✔ | 128 |   4 |   0 |  26 | 158 |  97 | <n> + 1  | robustness.R 
-✔ | 129 |   4 |   0 |  26 | 159 |  97 | <n> + 1  | robustness.R 
-✔ | 130 |   4 |   0 |  26 | 160 |  97 | <n> + 1  | robustness.R 
-x | 130 |   4 |   0 |  27 | 161 |  97 | <n> + 1  | robustness.R 
-✔ | 131 |   4 |   0 |  27 | 162 |  97 | <n> + 1  | robustness.R 
-✔ | 132 |   4 |   0 |  27 | 163 |  97 | <n> + 1  | robustness.R 
-✔ | 133 |   4 |   0 |  27 | 164 |  97 | <n> + 1  | robustness.R 
-✔ | 134 |   4 |   0 |  27 | 165 |  97 | <n> + 1  | robustness.R 
-✔ | 135 |   4 |   0 |  27 | 166 |  97 | <n> + 1  | robustness.R 
-✔ | 136 |   4 |   0 |  27 | 167 |  97 | <n> + 1  | robustness.R 
-✔ | 137 |   4 |   0 |  27 | 168 |  97 | <n> + 1  | robustness.R 
-✔ | 138 |   4 |   0 |  27 | 169 |  97 | <non-emp | robustness.R 
-✔ | 139 |   4 |   0 |  27 | 170 |  97 | <non-emp | robustness.R 
-✔ | 140 |   4 |   0 |  27 | 171 |  97 | <non-emp | robustness.R 
-✔ | 141 |   4 |   0 |  27 | 172 |  97 | <non-emp | robustness.R 
-✔ | 142 |   4 |   0 |  27 | 173 |  97 | <non-emp | robustness.R 
-✔ | 143 |   4 |   0 |  27 | 174 |  97 | <non-emp | robustness.R 
-✔ | 144 |   4 |   0 |  27 | 175 |  97 | <non-emp | robustness.R 
-✔ | 145 |   4 |   0 |  27 | 176 |  97 | <non-emp | robustness.R 
-x | 145 |   4 |   0 |  28 | 177 |  97 | <non-emp | robustness.R 
-✔ | 146 |   4 |   0 |  28 | 178 |  97 | <non-emp | robustness.R 
-x | 146 |   4 |   0 |  29 | 179 |  97 | <non-emp | robustness.R 
-✔ | 147 |   4 |   0 |  29 | 180 |  97 | <non-emp | robustness.R 
-x | 147 |   4 |   0 |  30 | 181 |  97 | <non-emp | robustness.R 
-✔ | 148 |   4 |   0 |  30 | 182 |  97 | <non-emp | robustness.R 
-x | 148 |   4 |   0 |  31 | 183 |  97 | <non-emp | robustness.R 
-✔ | 149 |   4 |   0 |  31 | 184 |  97 | <non-emp | robustness.R 
-x | 149 |   4 |   0 |  32 | 185 |  97 | <non-emp | robustness.R 
-✔ | 150 |   4 |   0 |  32 | 186 |  97 | <non-emp | robustness.R 
-x | 150 |   4 |   0 |  33 | 187 |  97 | <non-emp | robustness.R 
-✔ | 151 |   4 |   0 |  33 | 188 |  97 | <non-emp | robustness.R 
-✔ | 152 |   4 |   0 |  33 | 189 |  97 | <non-emp | robustness.R 
-✔ | 153 |   4 |   0 |  33 | 190 |  97 | <non-emp | robustness.R 
-✔ | 154 |   4 |   0 |  33 | 191 |  97 | <non-emp | robustness.R 
-✔ | 155 |   4 |   0 |  33 | 192 |  97 | <non-emp | robustness.R 
-✔ | 156 |   4 |   0 |  33 | 193 |  97 | <non-emp | robustness.R 
-✔ | 157 |   4 |   0 |  33 | 194 |  97 | <non-emp | robustness.R 
-✔ | 158 |   4 |   0 |  33 | 195 |  97 | <non-emp | robustness.R 
-✔ | 159 |   4 |   0 |  33 | 196 |  97 | <non-emp | robustness.R 
-✔ | 160 |   4 |   0 |  33 | 197 |  97 | <non-emp | robustness.R 
-✔ | 161 |   4 |   0 |  33 | 198 |  97 | <non-emp | robustness.R 
-✔ | 162 |   4 |   0 |  33 | 199 |  97 | <non-emp | robustness.R 
-✔ | 163 |   4 |   0 |  33 | 200 |  98 | <non-emp | robustness.R 
-✔ | 164 |   4 |   0 |  33 | 201 |  98 | <non-emp | robustness.R 
-✔ | 165 |   4 |   0 |  33 | 202 |  98 | <non-emp | robustness.R 
-✔ | 166 |   4 |   0 |  33 | 203 |  98 | <non-emp | robustness.R 
-✔ | 167 |   4 |   0 |  33 | 204 |  98 | <non-emp | robustness.R 
-✔ | 168 |   4 |   0 |  33 | 205 |  98 | <non-emp | robustness.R 
-x | 168 |   4 |   0 |  34 | 206 |  98 | <non-emp | robustness.R 
-✔ | 169 |   4 |   0 |  34 | 207 |  98 | <non-emp | robustness.R 
-✔ | 170 |   4 |   0 |  34 | 208 |  98 | <non-emp | robustness.R 
-✔ | 171 |   4 |   0 |  34 | 209 |  98 | <non-emp | robustness.R 
-✔ | 172 |   4 |   0 |  34 | 210 |  98 | <non-emp | robustness.R 
-✔ | 173 |   4 |   0 |  34 | 211 |  98 | <non-emp | robustness.R 
-✔ | 174 |   4 |   0 |  34 | 212 |  98 | <non-emp | robustness.R 
-✔ | 175 |   4 |   0 |  34 | 213 |  98 | <non-emp | robustness.R 
-✔ | 176 |   4 |   0 |  34 | 214 |  98 | <non-emp | robustness.R 
-✔ | 177 |   4 |   0 |  34 | 215 |  98 | <non-emp | robustness.R 
-✔ | 178 |   4 |   0 |  34 | 216 |  98 | <non-emp | robustness.R 
-✔ | 179 |   4 |   0 |  34 | 217 |  98 | <non-emp | robustness.R 
-✔ | 180 |   4 |   0 |  34 | 218 |  98 | <non-emp | robustness.R 
-✔ | 181 |   4 |   0 |  34 | 219 |  98 | <non-emp | robustness.R 
-✔ | 182 |   4 |   0 |  34 | 220 |  98 | <non-emp | robustness.R 
-x | 182 |   5 |   0 |  34 | 221 |  97 | <non-emp | robustness.R 
-✔ | 183 |   5 |   0 |  34 | 222 |  97 | <non-emp | robustness.R 
-✔ | 184 |   5 |   0 |  34 | 223 |  97 | <non-emp | robustness.R 
-✔ | 185 |   5 |   0 |  34 | 224 |  97 | <non-emp | robustness.R 
-✔ | 186 |   5 |   0 |  34 | 225 |  97 | <non-emp | robustness.R 
-✔ | 187 |   5 |   0 |  34 | 226 |  97 | <non-emp | robustness.R 
-✔ | 188 |   5 |   0 |  34 | 227 |  97 | <non-emp | robustness.R 
-✔ | 189 |   5 |   0 |  34 | 228 |  97 | <non-emp | robustness.R 
-✔ | 190 |   5 |   0 |  34 | 229 |  97 | == → !=  | robustness.R 
-✔ | 191 |   5 |   0 |  34 | 230 |  97 | == → !=  | robustness.R 
-✔ | 192 |   5 |   0 |  34 | 231 |  97 | == → !=  | robustness.R 
-✔ | 193 |   5 |   0 |  34 | 232 |  97 | == → !=  | robustness.R 
-✔ | 194 |   5 |   0 |  34 | 233 |  97 | > → <    | robustness.R 
-✔ | 195 |   5 |   0 |  34 | 234 |  97 | > → <    | robustness.R 
-✔ | 196 |   5 |   0 |  34 | 235 |  97 | > → <    | robustness.R 
-✔ | 197 |   5 |   0 |  34 | 236 |  97 | > → <    | robustness.R 
-✔ | 198 |   5 |   0 |  34 | 237 |  97 | > → <    | robustness.R 
-✔ | 199 |   5 |   0 |  34 | 238 |  97 | > → <    | robustness.R 
-x | 199 |   5 |   0 |  35 | 239 |  97 | > → >=   | robustness.R 
-x | 199 |   6 |   0 |  35 | 240 |  97 | > → >=   | robustness.R 
-x | 199 |   7 |   0 |  35 | 241 |  97 | > → >=   | robustness.R 
-✔ | 200 |   7 |   0 |  35 | 242 |  97 | > → >=   | robustness.R 
-✔ | 201 |   7 |   0 |  35 | 243 |  97 | > → >=   | robustness.R 
-✔ | 202 |   7 |   0 |  35 | 244 |  97 | > → >=   | robustness.R 
-x | 202 |   7 |   0 |  36 | 245 |  97 | >= → <=  | robustness.R 
-✔ | 203 |   7 |   0 |  36 | 246 |  97 | >= → <=  | robustness.R 
-x | 203 |   7 |   0 |  37 | 247 |  97 | >= → <=  | robustness.R 
-✔ | 204 |   7 |   0 |  37 | 248 |  97 | >= → >   | robustness.R 
-✔ | 205 |   7 |   0 |  37 | 249 |  97 | >= → >   | robustness.R 
-✔ | 206 |   7 |   0 |  37 | 250 |  97 | >= → >   | robustness.R 
-✔ | 207 |   7 |   0 |  37 | 251 |  97 | | → &    | robustness.R 
-✔ | 208 |   7 |   0 |  37 | 252 |  97 | || → &&  | robustness.R 
-✔ | 209 |   7 |   0 |  37 | 253 |  97 | || → &&  | robustness.R 
-✔ | 210 |   7 |   0 |  37 | 254 |  97 | || → &&  | robustness.R 
-✔ | 211 |   7 |   0 |  37 | 255 |  97 | || → &&  | robustness.R 
-✔ | 212 |   7 |   0 |  37 | 256 |  97 | || → &&  | robustness.R 
-✔ | 213 |   7 |   0 |  37 | 257 |  97 | || → &&  | robustness.R 
-✔ | 214 |   7 |   0 |  37 | 258 |  97 | || → &&  | robustness.R 
-✔ | 215 |   7 |   0 |  37 | 259 |  97 | || → &&  | robustness.R 
-✔ | 216 |   7 |   0 |  37 | 260 |  97 | || → &&  | robustness.R 
-✔ | 217 |   7 |   0 |  37 | 261 |  97 | || → &&  | robustness.R 
-x | 217 |   7 |   0 |  38 | 262 |  97 | FALSE →  | robustness.R 
-✔ | 218 |   7 |   0 |  38 | 263 |  97 | FALSE →  | robustness.R 
-✔ | 219 |   7 |   0 |  38 | 264 |  97 | FALSE →  | robustness.R 
-✔ | 220 |   7 |   0 |  38 | 265 |  97 | FALSE →  | robustness.R 
-✔ | 221 |   7 |   0 |  38 | 266 |  97 | FALSE →  | robustness.R 
-✔ | 222 |   7 |   0 |  38 | 267 |  97 | FALSE →  | robustness.R 
-x | 222 |   7 |   0 |  39 | 268 |  97 | FALSE →  | robustness.R 
-x | 222 |   7 |   0 |  40 | 269 |  97 | FALSE →  | robustness.R 
-✔ | 223 |   7 |   0 |  40 | 270 |  97 | FALSE →  | robustness.R 
-✔ | 224 |   7 |   0 |  40 | 271 |  97 | FALSE →  | robustness.R 
-✔ | 225 |   7 |   0 |  40 | 272 |  97 | FALSE →  | robustness.R 
-✔ | 226 |   7 |   0 |  40 | 273 |  97 | FALSE →  | robustness.R 
-x | 226 |   7 |   0 |  41 | 274 |  97 | FALSE →  | robustness.R 
-x | 226 |   7 |   0 |  42 | 275 |  97 | FALSE →  | robustness.R 
-✔ | 227 |   7 |   0 |  42 | 276 |  97 | FALSE →  | robustness.R 
-✔ | 228 |   7 |   0 |  42 | 277 |  97 | FALSE →  | robustness.R 
-✔ | 229 |   7 |   0 |  42 | 278 |  97 | FALSE →  | robustness.R 
-✔ | 230 |   7 |   0 |  42 | 279 |  97 | FALSE →  | robustness.R 
-✔ | 231 |   7 |   0 |  42 | 280 |  97 | FALSE →  | robustness.R 
-x | 231 |   8 |   0 |  42 | 281 |  97 | NA_real_ | robustness.R 
-✔ | 232 |   8 |   0 |  42 | 282 |  97 | NA_real_ | robustness.R 
-✔ | 233 |   8 |   0 |  42 | 283 |  97 | NULL → N | robustness.R 
-✔ | 234 |   8 |   0 |  42 | 284 |  97 | NULL → N | robustness.R 
-✔ | 235 |   8 |   0 |  42 | 285 |  97 | NULL → N | robustness.R 
-✔ | 236 |   8 |   0 |  42 | 286 |  97 | NULL → N | robustness.R 
-✔ | 237 |   8 |   0 |  42 | 287 |  97 | TRUE → F | robustness.R 
-✔ | 238 |   8 |   0 |  42 | 288 |  97 | TRUE → F | robustness.R 
-x | 238 |   9 |   0 |  42 | 289 |  96 | TRUE → F | robustness.R 
-✔ | 239 |   9 |   0 |  42 | 290 |  96 | x[<i>] → | robustness.R 
-✔ | 240 |   9 |   0 |  42 | 291 |  96 | x[<i>] → | robustness.R 
-x | 240 |   9 |   0 |  43 | 292 |  96 | x[<i>] → | robustness.R 
-x | 240 |   9 |   0 |  44 | 293 |  96 | x[<i>] → | robustness.R 
-x | 240 |   9 |   0 |  45 | 294 |  96 | x[<i>] → | robustness.R 
-✔ | 241 |   9 |   0 |  45 | 295 |  96 | x[<i>] → | robustness.R 
-x | 241 |   9 |   0 |  46 | 296 |  96 | x[<i>] → | robustness.R 
-✔ | 242 |   9 |   0 |  46 | 297 |  96 | x[<i>] → | robustness.R 
-x | 242 |   9 |   0 |  47 | 298 |  96 | x[<i>] → | robustness.R 
-✔ | 243 |   9 |   0 |  47 | 299 |  96 | x[<i>] → | robustness.R 
-x | 243 |   9 |   0 |  48 | 300 |  97 | x[<i>] → | robustness.R 
-x | 243 |   9 |   0 |  49 | 301 |  97 | x[<i>] → | robustness.R 
-x | 243 |   9 |   0 |  50 | 302 |  97 | x[<i>] → | robustness.R 
-✔ | 244 |   9 |   0 |  50 | 303 |  97 | x[<i>] → | robustness.R 
-x | 244 |   9 |   0 |  51 | 304 |  97 | x[<i>] → | robustness.R 
-✔ | 245 |   9 |   0 |  51 | 305 |  97 | x[<i>] → | robustness.R 
-x | 245 |   9 |   0 |  52 | 306 |  97 | x[<i>] → | robustness.R 
-x | 245 |   9 |   0 |  53 | 307 |  97 | x[<i>] → | robustness.R 
-x | 245 |   9 |   0 |  54 | 308 |  97 | x[<i>] → | robustness.R 
-✔ | 246 |   9 |   0 |  54 | 309 |  97 | x[<i>] → | robustness.R 
-x | 246 |   9 |   0 |  55 | 310 |  97 | x[<i>] → | robustness.R 
-✔ | 247 |   9 |   0 |  55 | 311 |  97 | x[<i>] → | robustness.R 
-x | 247 |   9 |   0 |  56 | 312 |  97 | x[<i>] → | robustness.R 
-✔ | 248 |   9 |   0 |  56 | 313 |  97 | x[<i>] → | robustness.R 
-✔ | 249 |   9 |   0 |  56 | 314 |  97 | x[<i>] → | robustness.R 
-x | 249 |   9 |   0 |  57 | 315 |  97 | x[<i>] → | robustness.R 
-x | 249 |   9 |   0 |  58 | 316 |  97 | x[<i>] → | robustness.R 
-✔ | 250 |   9 |   0 |  58 | 317 |  97 | x[<i>] → | robustness.R 
+✔ |   1 |   0 |   0 |   0 |   1 | 100 | - → +    | robustness.R 
+✔ |   2 |   0 |   0 |   0 |   2 | 100 | - → +    | robustness.R 
+✔ |   3 |   0 |   0 |   0 |   3 | 100 | - → +    | robustness.R 
+x |   3 |   0 |   0 |   1 |   4 | 100 | - → +    | robustness.R 
+✔ |   4 |   0 |   0 |   1 |   5 | 100 | - → +    | robustness.R 
+✔ |   5 |   0 |   0 |   1 |   6 | 100 | - → +    | robustness.R 
+✔ |   6 |   0 |   0 |   1 |   7 | 100 | - → +    | robustness.R 
+✔ |   7 |   0 |   0 |   1 |   8 | 100 | - → +    | robustness.R 
+✔ |   8 |   0 |   0 |   1 |   9 | 100 | - → +    | robustness.R 
+✔ |   9 |   0 |   0 |   1 |  10 | 100 | - → +    | robustness.R 
+✔ |  10 |   0 |   0 |   1 |  11 | 100 | !<condit | robustness.R 
+✔ |  11 |   0 |   0 |   1 |  12 | 100 | !<condit | robustness.R 
+x |  11 |   0 |   0 |   2 |  13 | 100 | !<condit | robustness.R 
+✔ |  12 |   0 |   0 |   2 |  14 | 100 | !<condit | robustness.R 
+x |  12 |   0 |   0 |   3 |  15 | 100 | !<condit | robustness.R 
+✔ |  13 |   0 |   0 |   3 |  16 | 100 | != → ==  | robustness.R 
+✔ |  14 |   0 |   0 |   3 |  17 | 100 | != → ==  | robustness.R 
+✔ |  15 |   0 |   0 |   3 |  18 | 100 | != → ==  | robustness.R 
+✔ |  16 |   0 |   0 |   3 |  19 | 100 | "" → "mu | robustness.R 
+✔ |  17 |   0 |   0 |   3 |  20 | 100 | "" → "mu | robustness.R 
+✔ |  18 |   0 |   0 |   3 |  21 | 100 | "" → "mu | robustness.R 
+✔ |  19 |   0 |   0 |   3 |  22 | 100 | "" → "mu | robustness.R 
+✔ |  20 |   0 |   0 |   3 |  23 | 100 | * → /    | robustness.R 
+✔ |  21 |   0 |   0 |   3 |  24 | 100 | * → /    | robustness.R 
+✔ |  22 |   0 |   0 |   3 |  25 | 100 | * → /    | robustness.R 
+✔ |  23 |   0 |   0 |   3 |  26 | 100 | * → /    | robustness.R 
+✔ |  24 |   0 |   0 |   3 |  27 | 100 | * → /    | robustness.R 
+x |  24 |   0 |   0 |   4 |  28 | 100 | * → /    | robustness.R 
+✔ |  25 |   0 |   0 |   4 |  29 | 100 | / → *    | robustness.R 
+✔ |  26 |   0 |   0 |   4 |  30 | 100 | / → *    | robustness.R 
+✔ |  27 |   0 |   0 |   4 |  31 | 100 | / → *    | robustness.R 
+✔ |  28 |   0 |   0 |   4 |  32 | 100 | / → *    | robustness.R 
+✔ |  29 |   0 |   0 |   4 |  33 | 100 | / → *    | robustness.R 
+x |  29 |   0 |   0 |   5 |  34 | 100 | / → *    | robustness.R 
+✔ |  30 |   0 |   0 |   5 |  35 | 100 | && → ||  | robustness.R 
+x |  30 |   0 |   0 |   6 |  36 | 100 | %% → *   | robustness.R 
+✔ |  31 |   0 |   0 |   6 |  37 | 100 | ^ → *    | robustness.R 
+x |  31 |   0 |   0 |   7 |  38 | 100 | + → -    | robustness.R 
+✔ |  32 |   0 |   0 |   7 |  39 | 100 | + → -    | robustness.R 
+✔ |  33 |   0 |   0 |   7 |  40 | 100 | + → -    | robustness.R 
+✔ |  34 |   0 |   0 |   7 |  41 | 100 | < → >    | robustness.R 
+✔ |  35 |   0 |   0 |   7 |  42 | 100 | < → >    | robustness.R 
+x |  35 |   1 |   0 |   7 |  43 |  97 | < → <=   | robustness.R 
+✔ |  36 |   1 |   0 |   7 |  44 |  97 | < → <=   | robustness.R 
+x |  36 |   1 |   0 |   8 |  45 |  97 | <= → >=  | robustness.R 
+✔ |  37 |   1 |   0 |   8 |  46 |  97 | <= → <   | robustness.R 
+✔ |  38 |   1 |   0 |   8 |  47 |  97 | <conditi | robustness.R 
+✔ |  39 |   1 |   0 |   8 |  48 |  97 | <conditi | robustness.R 
+✔ |  40 |   1 |   0 |   8 |  49 |  97 | <conditi | robustness.R 
+✔ |  41 |   1 |   0 |   8 |  50 |  98 | <conditi | robustness.R 
+✔ |  42 |   1 |   0 |   8 |  51 |  98 | <conditi | robustness.R 
+✔ |  43 |   1 |   0 |   8 |  52 |  98 | <conditi | robustness.R 
+✔ |  44 |   1 |   0 |   8 |  53 |  98 | <conditi | robustness.R 
+✔ |  45 |   1 |   0 |   8 |  54 |  98 | <conditi | robustness.R 
+✔ |  46 |   1 |   0 |   8 |  55 |  98 | <conditi | robustness.R 
+x |  46 |   1 |   0 |   9 |  56 |  98 | <conditi | robustness.R 
+✔ |  47 |   1 |   0 |   9 |  57 |  98 | <conditi | robustness.R 
+✔ |  48 |   1 |   0 |   9 |  58 |  98 | <conditi | robustness.R 
+✔ |  49 |   1 |   0 |   9 |  59 |  98 | <conditi | robustness.R 
+✔ |  50 |   1 |   0 |   9 |  60 |  98 | <conditi | robustness.R 
+✔ |  51 |   1 |   0 |   9 |  61 |  98 | <conditi | robustness.R 
+✔ |  52 |   1 |   0 |   9 |  62 |  98 | <conditi | robustness.R 
+x |  52 |   1 |   0 |  10 |  63 |  98 | <conditi | robustness.R 
+✔ |  53 |   1 |   0 |  10 |  64 |  98 | <conditi | robustness.R 
+✔ |  54 |   1 |   0 |  10 |  65 |  98 | <conditi | robustness.R 
+✔ |  55 |   1 |   0 |  10 |  66 |  98 | <conditi | robustness.R 
+✔ |  56 |   1 |   0 |  10 |  67 |  98 | <n> - 1  | robustness.R 
+✔ |  57 |   1 |   0 |  10 |  68 |  98 | <n> - 1  | robustness.R 
+✔ |  58 |   1 |   0 |  10 |  69 |  98 | <n> - 1  | robustness.R 
+✔ |  59 |   1 |   0 |  10 |  70 |  98 | <n> - 1  | robustness.R 
+✔ |  60 |   1 |   0 |  10 |  71 |  98 | <n> - 1  | robustness.R 
+✔ |  61 |   1 |   0 |  10 |  72 |  98 | <n> - 1  | robustness.R 
+x |  61 |   1 |   0 |  11 |  73 |  98 | <n> - 1  | robustness.R 
+x |  61 |   1 |   0 |  12 |  74 |  98 | <n> - 1  | robustness.R 
+x |  61 |   1 |   0 |  13 |  75 |  98 | <n> - 1  | robustness.R 
+✔ |  62 |   1 |   0 |  13 |  76 |  98 | <n> - 1  | robustness.R 
+✔ |  63 |   1 |   0 |  13 |  77 |  98 | <n> - 1  | robustness.R 
+✔ |  64 |   1 |   0 |  13 |  78 |  98 | <n> - 1  | robustness.R 
+✔ |  65 |   1 |   0 |  13 |  79 |  98 | <n> - 1  | robustness.R 
+✔ |  66 |   1 |   0 |  13 |  80 |  98 | <n> - 1  | robustness.R 
+x |  66 |   2 |   0 |  13 |  81 |  97 | <n> - 1  | robustness.R 
+✔ |  67 |   2 |   0 |  13 |  82 |  97 | <n> - 1  | robustness.R 
+✔ |  68 |   2 |   0 |  13 |  83 |  97 | <n> - 1  | robustness.R 
+x |  68 |   2 |   0 |  14 |  84 |  97 | <n> - 1  | robustness.R 
+✔ |  69 |   2 |   0 |  14 |  85 |  97 | <n> - 1  | robustness.R 
+✔ |  70 |   2 |   0 |  14 |  86 |  97 | <n> - 1  | robustness.R 
+✔ |  71 |   2 |   0 |  14 |  87 |  97 | <n> - 1  | robustness.R 
+x |  71 |   2 |   0 |  15 |  88 |  97 | <n> - 1  | robustness.R 
+✔ |  72 |   2 |   0 |  15 |  89 |  97 | <n> - 1  | robustness.R 
+✔ |  73 |   2 |   0 |  15 |  90 |  97 | <n> - 1  | robustness.R 
+✔ |  74 |   2 |   0 |  15 |  91 |  97 | <n> - 1  | robustness.R 
+✔ |  75 |   2 |   0 |  15 |  92 |  97 | <n> - 1  | robustness.R 
+x |  75 |   2 |   0 |  16 |  93 |  97 | <n> - 1  | robustness.R 
+✔ |  76 |   2 |   0 |  16 |  94 |  97 | <n> - 1  | robustness.R 
+x |  76 |   3 |   0 |  16 |  95 |  96 | <n> - 1  | robustness.R 
+✔ |  77 |   3 |   0 |  16 |  96 |  96 | <n> - 1  | robustness.R 
+✔ |  78 |   3 |   0 |  16 |  97 |  96 | <n> - 1  | robustness.R 
+✔ |  79 |   3 |   0 |  16 |  98 |  96 | <n> - 1  | robustness.R 
+✔ |  80 |   3 |   0 |  16 |  99 |  96 | <n> - 1  | robustness.R 
+✔ |  81 |   3 |   0 |  16 | 100 |  97 | <n> - 1  | robustness.R 
+✔ |  82 |   3 |   0 |  16 | 101 |  97 | <n> - 1  | robustness.R 
+✔ |  83 |   3 |   0 |  16 | 102 |  97 | <n> - 1  | robustness.R 
+✔ |  84 |   3 |   0 |  16 | 103 |  97 | <n> - 1  | robustness.R 
+✔ |  85 |   3 |   0 |  16 | 104 |  97 | <n> - 1  | robustness.R 
+✔ |  86 |   3 |   0 |  16 | 105 |  97 | <n> - 1  | robustness.R 
+✔ |  87 |   3 |   0 |  16 | 106 |  97 | <n> - 1  | robustness.R 
+✔ |  88 |   3 |   0 |  16 | 107 |  97 | <n> - 1  | robustness.R 
+✔ |  89 |   3 |   0 |  16 | 108 |  97 | <n> - 1  | robustness.R 
+✔ |  90 |   3 |   0 |  16 | 109 |  97 | <n> - 1  | robustness.R 
+x |  90 |   3 |   0 |  17 | 110 |  97 | <n> - 1  | robustness.R 
+✔ |  91 |   3 |   0 |  17 | 111 |  97 | <n> - 1  | robustness.R 
+✔ |  92 |   3 |   0 |  17 | 112 |  97 | <n> - 1  | robustness.R 
+✔ |  93 |   3 |   0 |  17 | 113 |  97 | <n> - 1  | robustness.R 
+✔ |  94 |   3 |   0 |  17 | 114 |  97 | <n> - 1  | robustness.R 
+✔ |  95 |   3 |   0 |  17 | 115 |  97 | <n> - 1  | robustness.R 
+✔ |  96 |   3 |   0 |  17 | 116 |  97 | <n> - 1  | robustness.R 
+✔ |  97 |   3 |   0 |  17 | 117 |  97 | <n> - 1  | robustness.R 
+✔ |  98 |   3 |   0 |  17 | 118 |  97 | <n> + 1  | robustness.R 
+✔ |  99 |   3 |   0 |  17 | 119 |  97 | <n> + 1  | robustness.R 
+✔ | 100 |   3 |   0 |  17 | 120 |  97 | <n> + 1  | robustness.R 
+✔ | 101 |   3 |   0 |  17 | 121 |  97 | <n> + 1  | robustness.R 
+✔ | 102 |   3 |   0 |  17 | 122 |  97 | <n> + 1  | robustness.R 
+✔ | 103 |   3 |   0 |  17 | 123 |  97 | <n> + 1  | robustness.R 
+x | 103 |   3 |   0 |  18 | 124 |  97 | <n> + 1  | robustness.R 
+x | 103 |   3 |   0 |  19 | 125 |  97 | <n> + 1  | robustness.R 
+x | 103 |   3 |   0 |  20 | 126 |  97 | <n> + 1  | robustness.R 
+✔ | 104 |   3 |   0 |  20 | 127 |  97 | <n> + 1  | robustness.R 
+✔ | 105 |   3 |   0 |  20 | 128 |  97 | <n> + 1  | robustness.R 
+x | 105 |   3 |   0 |  21 | 129 |  97 | <n> + 1  | robustness.R 
+✔ | 106 |   3 |   0 |  21 | 130 |  97 | <n> + 1  | robustness.R 
+✔ | 107 |   3 |   0 |  21 | 131 |  97 | <n> + 1  | robustness.R 
+✔ | 108 |   3 |   0 |  21 | 132 |  97 | <n> + 1  | robustness.R 
+✔ | 109 |   3 |   0 |  21 | 133 |  97 | <n> + 1  | robustness.R 
+✔ | 110 |   3 |   0 |  21 | 134 |  97 | <n> + 1  | robustness.R 
+x | 110 |   3 |   0 |  22 | 135 |  97 | <n> + 1  | robustness.R 
+✔ | 111 |   3 |   0 |  22 | 136 |  97 | <n> + 1  | robustness.R 
+✔ | 112 |   3 |   0 |  22 | 137 |  97 | <n> + 1  | robustness.R 
+✔ | 113 |   3 |   0 |  22 | 138 |  97 | <n> + 1  | robustness.R 
+✔ | 114 |   3 |   0 |  22 | 139 |  97 | <n> + 1  | robustness.R 
+✔ | 115 |   3 |   0 |  22 | 140 |  97 | <n> + 1  | robustness.R 
+✔ | 116 |   3 |   0 |  22 | 141 |  97 | <n> + 1  | robustness.R 
+✔ | 117 |   3 |   0 |  22 | 142 |  97 | <n> + 1  | robustness.R 
+x | 117 |   3 |   0 |  23 | 143 |  97 | <n> + 1  | robustness.R 
+✔ | 118 |   3 |   0 |  23 | 144 |  97 | <n> + 1  | robustness.R 
+✔ | 119 |   3 |   0 |  23 | 145 |  97 | <n> + 1  | robustness.R 
+✔ | 120 |   3 |   0 |  23 | 146 |  97 | <n> + 1  | robustness.R 
+x | 120 |   4 |   0 |  23 | 147 |  97 | <n> + 1  | robustness.R 
+✔ | 121 |   4 |   0 |  23 | 148 |  97 | <n> + 1  | robustness.R 
+✔ | 122 |   4 |   0 |  23 | 149 |  97 | <n> + 1  | robustness.R 
+✔ | 123 |   4 |   0 |  23 | 150 |  97 | <n> + 1  | robustness.R 
+✔ | 124 |   4 |   0 |  23 | 151 |  97 | <n> + 1  | robustness.R 
+✔ | 125 |   4 |   0 |  23 | 152 |  97 | <n> + 1  | robustness.R 
+✔ | 126 |   4 |   0 |  23 | 153 |  97 | <n> + 1  | robustness.R 
+✔ | 127 |   4 |   0 |  23 | 154 |  97 | <n> + 1  | robustness.R 
+✔ | 128 |   4 |   0 |  23 | 155 |  97 | <n> + 1  | robustness.R 
+✔ | 129 |   4 |   0 |  23 | 156 |  97 | <n> + 1  | robustness.R 
+✔ | 130 |   4 |   0 |  23 | 157 |  97 | <n> + 1  | robustness.R 
+✔ | 131 |   4 |   0 |  23 | 158 |  97 | <n> + 1  | robustness.R 
+✔ | 132 |   4 |   0 |  23 | 159 |  97 | <n> + 1  | robustness.R 
+✔ | 133 |   4 |   0 |  23 | 160 |  97 | <n> + 1  | robustness.R 
+x | 133 |   4 |   0 |  24 | 161 |  97 | <n> + 1  | robustness.R 
+✔ | 134 |   4 |   0 |  24 | 162 |  97 | <n> + 1  | robustness.R 
+✔ | 135 |   4 |   0 |  24 | 163 |  97 | <n> + 1  | robustness.R 
+✔ | 136 |   4 |   0 |  24 | 164 |  97 | <n> + 1  | robustness.R 
+✔ | 137 |   4 |   0 |  24 | 165 |  97 | <n> + 1  | robustness.R 
+✔ | 138 |   4 |   0 |  24 | 166 |  97 | <n> + 1  | robustness.R 
+✔ | 139 |   4 |   0 |  24 | 167 |  97 | <n> + 1  | robustness.R 
+✔ | 140 |   4 |   0 |  24 | 168 |  97 | <n> + 1  | robustness.R 
+✔ | 141 |   4 |   0 |  24 | 169 |  97 | <non-emp | robustness.R 
+✔ | 142 |   4 |   0 |  24 | 170 |  97 | <non-emp | robustness.R 
+✔ | 143 |   4 |   0 |  24 | 171 |  97 | <non-emp | robustness.R 
+✔ | 144 |   4 |   0 |  24 | 172 |  97 | <non-emp | robustness.R 
+✔ | 145 |   4 |   0 |  24 | 173 |  97 | <non-emp | robustness.R 
+✔ | 146 |   4 |   0 |  24 | 174 |  97 | <non-emp | robustness.R 
+✔ | 147 |   4 |   0 |  24 | 175 |  97 | <non-emp | robustness.R 
+✔ | 148 |   4 |   0 |  24 | 176 |  97 | <non-emp | robustness.R 
+x | 148 |   4 |   0 |  25 | 177 |  97 | <non-emp | robustness.R 
+✔ | 149 |   4 |   0 |  25 | 178 |  97 | <non-emp | robustness.R 
+x | 149 |   4 |   0 |  26 | 179 |  97 | <non-emp | robustness.R 
+✔ | 150 |   4 |   0 |  26 | 180 |  97 | <non-emp | robustness.R 
+x | 150 |   4 |   0 |  27 | 181 |  97 | <non-emp | robustness.R 
+✔ | 151 |   4 |   0 |  27 | 182 |  97 | <non-emp | robustness.R 
+x | 151 |   4 |   0 |  28 | 183 |  97 | <non-emp | robustness.R 
+✔ | 152 |   4 |   0 |  28 | 184 |  97 | <non-emp | robustness.R 
+x | 152 |   4 |   0 |  29 | 185 |  97 | <non-emp | robustness.R 
+✔ | 153 |   4 |   0 |  29 | 186 |  97 | <non-emp | robustness.R 
+x | 153 |   4 |   0 |  30 | 187 |  97 | <non-emp | robustness.R 
+✔ | 154 |   4 |   0 |  30 | 188 |  97 | <non-emp | robustness.R 
+✔ | 155 |   4 |   0 |  30 | 189 |  97 | <non-emp | robustness.R 
+✔ | 156 |   4 |   0 |  30 | 190 |  97 | <non-emp | robustness.R 
+✔ | 157 |   4 |   0 |  30 | 191 |  97 | <non-emp | robustness.R 
+✔ | 158 |   4 |   0 |  30 | 192 |  97 | <non-emp | robustness.R 
+✔ | 159 |   4 |   0 |  30 | 193 |  97 | <non-emp | robustness.R 
+✔ | 160 |   4 |   0 |  30 | 194 |  97 | <non-emp | robustness.R 
+✔ | 161 |   4 |   0 |  30 | 195 |  97 | <non-emp | robustness.R 
+✔ | 162 |   4 |   0 |  30 | 196 |  97 | <non-emp | robustness.R 
+✔ | 163 |   4 |   0 |  30 | 197 |  97 | <non-emp | robustness.R 
+✔ | 164 |   4 |   0 |  30 | 198 |  97 | <non-emp | robustness.R 
+✔ | 165 |   4 |   0 |  30 | 199 |  97 | <non-emp | robustness.R 
+✔ | 166 |   4 |   0 |  30 | 200 |  98 | <non-emp | robustness.R 
+✔ | 167 |   4 |   0 |  30 | 201 |  98 | <non-emp | robustness.R 
+✔ | 168 |   4 |   0 |  30 | 202 |  98 | <non-emp | robustness.R 
+✔ | 169 |   4 |   0 |  30 | 203 |  98 | <non-emp | robustness.R 
+✔ | 170 |   4 |   0 |  30 | 204 |  98 | <non-emp | robustness.R 
+✔ | 171 |   4 |   0 |  30 | 205 |  98 | <non-emp | robustness.R 
+x | 171 |   4 |   0 |  31 | 206 |  98 | <non-emp | robustness.R 
+✔ | 172 |   4 |   0 |  31 | 207 |  98 | <non-emp | robustness.R 
+✔ | 173 |   4 |   0 |  31 | 208 |  98 | <non-emp | robustness.R 
+✔ | 174 |   4 |   0 |  31 | 209 |  98 | <non-emp | robustness.R 
+✔ | 175 |   4 |   0 |  31 | 210 |  98 | <non-emp | robustness.R 
+✔ | 176 |   4 |   0 |  31 | 211 |  98 | <non-emp | robustness.R 
+✔ | 177 |   4 |   0 |  31 | 212 |  98 | <non-emp | robustness.R 
+✔ | 178 |   4 |   0 |  31 | 213 |  98 | <non-emp | robustness.R 
+✔ | 179 |   4 |   0 |  31 | 214 |  98 | <non-emp | robustness.R 
+✔ | 180 |   4 |   0 |  31 | 215 |  98 | <non-emp | robustness.R 
+✔ | 181 |   4 |   0 |  31 | 216 |  98 | <non-emp | robustness.R 
+✔ | 182 |   4 |   0 |  31 | 217 |  98 | <non-emp | robustness.R 
+✔ | 183 |   4 |   0 |  31 | 218 |  98 | <non-emp | robustness.R 
+✔ | 184 |   4 |   0 |  31 | 219 |  98 | <non-emp | robustness.R 
+✔ | 185 |   4 |   0 |  31 | 220 |  98 | <non-emp | robustness.R 
+x | 185 |   5 |   0 |  31 | 221 |  97 | <non-emp | robustness.R 
+✔ | 186 |   5 |   0 |  31 | 222 |  97 | <non-emp | robustness.R 
+✔ | 187 |   5 |   0 |  31 | 223 |  97 | <non-emp | robustness.R 
+✔ | 188 |   5 |   0 |  31 | 224 |  97 | <non-emp | robustness.R 
+✔ | 189 |   5 |   0 |  31 | 225 |  97 | <non-emp | robustness.R 
+✔ | 190 |   5 |   0 |  31 | 226 |  97 | <non-emp | robustness.R 
+✔ | 191 |   5 |   0 |  31 | 227 |  97 | <non-emp | robustness.R 
+✔ | 192 |   5 |   0 |  31 | 228 |  97 | <non-emp | robustness.R 
+✔ | 193 |   5 |   0 |  31 | 229 |  97 | == → !=  | robustness.R 
+✔ | 194 |   5 |   0 |  31 | 230 |  97 | == → !=  | robustness.R 
+✔ | 195 |   5 |   0 |  31 | 231 |  97 | == → !=  | robustness.R 
+✔ | 196 |   5 |   0 |  31 | 232 |  97 | == → !=  | robustness.R 
+✔ | 197 |   5 |   0 |  31 | 233 |  97 | > → <    | robustness.R 
+✔ | 198 |   5 |   0 |  31 | 234 |  97 | > → <    | robustness.R 
+✔ | 199 |   5 |   0 |  31 | 235 |  97 | > → <    | robustness.R 
+✔ | 200 |   5 |   0 |  31 | 236 |  97 | > → <    | robustness.R 
+✔ | 201 |   5 |   0 |  31 | 237 |  97 | > → <    | robustness.R 
+✔ | 202 |   5 |   0 |  31 | 238 |  97 | > → <    | robustness.R 
+x | 202 |   5 |   0 |  32 | 239 |  97 | > → >=   | robustness.R 
+x | 202 |   6 |   0 |  32 | 240 |  97 | > → >=   | robustness.R 
+x | 202 |   7 |   0 |  32 | 241 |  97 | > → >=   | robustness.R 
+✔ | 203 |   7 |   0 |  32 | 242 |  97 | > → >=   | robustness.R 
+✔ | 204 |   7 |   0 |  32 | 243 |  97 | > → >=   | robustness.R 
+✔ | 205 |   7 |   0 |  32 | 244 |  97 | > → >=   | robustness.R 
+✔ | 206 |   7 |   0 |  32 | 245 |  97 | >= → <=  | robustness.R 
+✔ | 207 |   7 |   0 |  32 | 246 |  97 | >= → <=  | robustness.R 
+x | 207 |   7 |   0 |  33 | 247 |  97 | >= → <=  | robustness.R 
+✔ | 208 |   7 |   0 |  33 | 248 |  97 | >= → >   | robustness.R 
+✔ | 209 |   7 |   0 |  33 | 249 |  97 | >= → >   | robustness.R 
+✔ | 210 |   7 |   0 |  33 | 250 |  97 | >= → >   | robustness.R 
+✔ | 211 |   7 |   0 |  33 | 251 |  97 | | → &    | robustness.R 
+✔ | 212 |   7 |   0 |  33 | 252 |  97 | || → &&  | robustness.R 
+✔ | 213 |   7 |   0 |  33 | 253 |  97 | || → &&  | robustness.R 
+✔ | 214 |   7 |   0 |  33 | 254 |  97 | || → &&  | robustness.R 
+✔ | 215 |   7 |   0 |  33 | 255 |  97 | || → &&  | robustness.R 
+✔ | 216 |   7 |   0 |  33 | 256 |  97 | || → &&  | robustness.R 
+✔ | 217 |   7 |   0 |  33 | 257 |  97 | || → &&  | robustness.R 
+✔ | 218 |   7 |   0 |  33 | 258 |  97 | || → &&  | robustness.R 
+✔ | 219 |   7 |   0 |  33 | 259 |  97 | || → &&  | robustness.R 
+✔ | 220 |   7 |   0 |  33 | 260 |  97 | || → &&  | robustness.R 
+✔ | 221 |   7 |   0 |  33 | 261 |  97 | || → &&  | robustness.R 
+x | 221 |   7 |   0 |  34 | 262 |  97 | FALSE →  | robustness.R 
+✔ | 222 |   7 |   0 |  34 | 263 |  97 | FALSE →  | robustness.R 
+✔ | 223 |   7 |   0 |  34 | 264 |  97 | FALSE →  | robustness.R 
+✔ | 224 |   7 |   0 |  34 | 265 |  97 | FALSE →  | robustness.R 
+✔ | 225 |   7 |   0 |  34 | 266 |  97 | FALSE →  | robustness.R 
+✔ | 226 |   7 |   0 |  34 | 267 |  97 | FALSE →  | robustness.R 
+x | 226 |   7 |   0 |  35 | 268 |  97 | FALSE →  | robustness.R 
+✔ | 227 |   7 |   0 |  35 | 269 |  97 | FALSE →  | robustness.R 
+✔ | 228 |   7 |   0 |  35 | 270 |  97 | FALSE →  | robustness.R 
+✔ | 229 |   7 |   0 |  35 | 271 |  97 | FALSE →  | robustness.R 
+✔ | 230 |   7 |   0 |  35 | 272 |  97 | FALSE →  | robustness.R 
+✔ | 231 |   7 |   0 |  35 | 273 |  97 | FALSE →  | robustness.R 
+x | 231 |   7 |   0 |  36 | 274 |  97 | FALSE →  | robustness.R 
+x | 231 |   7 |   0 |  37 | 275 |  97 | FALSE →  | robustness.R 
+✔ | 232 |   7 |   0 |  37 | 276 |  97 | FALSE →  | robustness.R 
+✔ | 233 |   7 |   0 |  37 | 277 |  97 | FALSE →  | robustness.R 
+✔ | 234 |   7 |   0 |  37 | 278 |  97 | FALSE →  | robustness.R 
+✔ | 235 |   7 |   0 |  37 | 279 |  97 | FALSE →  | robustness.R 
+✔ | 236 |   7 |   0 |  37 | 280 |  97 | FALSE →  | robustness.R 
+x | 236 |   8 |   0 |  37 | 281 |  97 | NA_real_ | robustness.R 
+✔ | 237 |   8 |   0 |  37 | 282 |  97 | NA_real_ | robustness.R 
+✔ | 238 |   8 |   0 |  37 | 283 |  97 | NULL → N | robustness.R 
+✔ | 239 |   8 |   0 |  37 | 284 |  97 | NULL → N | robustness.R 
+✔ | 240 |   8 |   0 |  37 | 285 |  97 | NULL → N | robustness.R 
+✔ | 241 |   8 |   0 |  37 | 286 |  97 | NULL → N | robustness.R 
+✔ | 242 |   8 |   0 |  37 | 287 |  97 | TRUE → F | robustness.R 
+✔ | 243 |   8 |   0 |  37 | 288 |  97 | TRUE → F | robustness.R 
+x | 243 |   9 |   0 |  37 | 289 |  96 | TRUE → F | robustness.R 
+✔ | 244 |   9 |   0 |  37 | 290 |  96 | x[<i>] → | robustness.R 
+✔ | 245 |   9 |   0 |  37 | 291 |  96 | x[<i>] → | robustness.R 
+x | 245 |   9 |   0 |  38 | 292 |  96 | x[<i>] → | robustness.R 
+x | 245 |   9 |   0 |  39 | 293 |  96 | x[<i>] → | robustness.R 
+x | 245 |   9 |   0 |  40 | 294 |  96 | x[<i>] → | robustness.R 
+✔ | 246 |   9 |   0 |  40 | 295 |  96 | x[<i>] → | robustness.R 
+x | 246 |   9 |   0 |  41 | 296 |  96 | x[<i>] → | robustness.R 
+✔ | 247 |   9 |   0 |  41 | 297 |  96 | x[<i>] → | robustness.R 
+x | 247 |   9 |   0 |  42 | 298 |  96 | x[<i>] → | robustness.R 
+✔ | 248 |   9 |   0 |  42 | 299 |  96 | x[<i>] → | robustness.R 
+x | 248 |   9 |   0 |  43 | 300 |  97 | x[<i>] → | robustness.R 
+x | 248 |   9 |   0 |  44 | 301 |  97 | x[<i>] → | robustness.R 
+x | 248 |   9 |   0 |  45 | 302 |  97 | x[<i>] → | robustness.R 
+✔ | 249 |   9 |   0 |  45 | 303 |  97 | x[<i>] → | robustness.R 
+✔ | 250 |   9 |   0 |  45 | 304 |  97 | x[<i>] → | robustness.R 
+✔ | 251 |   9 |   0 |  45 | 305 |  97 | x[<i>] → | robustness.R 
+x | 251 |   9 |   0 |  46 | 306 |  97 | x[<i>] → | robustness.R 
+x | 251 |   9 |   0 |  47 | 307 |  97 | x[<i>] → | robustness.R 
+x | 251 |   9 |   0 |  48 | 308 |  97 | x[<i>] → | robustness.R 
+✔ | 252 |   9 |   0 |  48 | 309 |  97 | x[<i>] → | robustness.R 
+x | 252 |   9 |   0 |  49 | 310 |  97 | x[<i>] → | robustness.R 
+✔ | 253 |   9 |   0 |  49 | 311 |  97 | x[<i>] → | robustness.R 
+x | 253 |   9 |   0 |  50 | 312 |  97 | x[<i>] → | robustness.R 
+✔ | 254 |   9 |   0 |  50 | 313 |  97 | x[<i>] → | robustness.R 
+✔ | 255 |   9 |   0 |  50 | 314 |  97 | x[<i>] → | robustness.R 
+x | 255 |   9 |   0 |  51 | 315 |  97 | x[<i>] → | robustness.R 
+x | 255 |   9 |   0 |  52 | 316 |  97 | x[<i>] → | robustness.R 
+✔ | 256 |   9 |   0 |  52 | 317 |  97 | x[<i>] → | robustness.R 
 
-Duration: 16666.21 s
+Duration: 8523.77 s
 
 ── Survived Mutants ────────────────────────────────────────────────────────────
 robustness.R  < → <=
@@ -354,10 +354,10 @@ robustness.R  TRUE → FALSE
   56+       old <- .Random.seed_get(); on.exit(.Random.seed_set(old), add = FALSE); set.seed(seed)
 
 ── Results ─────────────────────────────────────────────────────────────────────
-[ KILLED 250 | SURVIVED 9 | NO COVERAGE 0 | ERRORS 58 | TOTAL 317 | SCORE 97.2% ]
+[ KILLED 256 | SURVIVED 9 | NO COVERAGE 0 | ERRORS 52 | TOTAL 317 | SCORE 97.2% ]
 
 r-mutation: Bericht: /mnt/c/Users/Danie/dev/Llmsa/llmsa/reports/mutation/mutation.json
-mutgate: pass (score=96.53 required=80 baseline=96.53 floor=80)
+mutgate: pass (score=96.6 required=94.53 baseline=96.6 floor=80)
 
 # stderr
 JSON report: /mnt/c/Users/Danie/dev/Llmsa/llmsa/reports/mutation/mutation.json
