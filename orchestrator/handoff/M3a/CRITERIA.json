@@ -39,7 +39,7 @@
   "open": [
     {
       "id": "ACC-1",
-      "status": "Anker geerntet in ACCEPTANCE M3a (05.11.2026), jede verwendete Zahl am Original geprüft",
+      "status": "Anker geerntet in ACCEPTANCE M3a (05.11.2026), jede verwendete Zahl am Original geprüft; festgehalten in ADR-052 Nr. 15",
       "ref": "ANKER-TODO.md, Abschnitt „M3a — Übereinstimmung, Bias, Linearität“; docs/01 §6: „Anker erntet der Reviewer in der ACCEPTANCE-Phase nach `ANKER-TODO.md`.“",
       "kind": "Anker",
       "owner": "Reviewer",
@@ -48,7 +48,7 @@
     },
     {
       "id": "ACC-2",
-      "status": "offen: drei geschützte Datenblätter fehlen (Betreiber); bis dahin sieben Abnahmetests rot mit benanntem Fehler",
+      "status": "erledigt: Datenblätter vom Betreiber am 05.11.2026 geliefert, vom Reviewer am Seitenbild abgeglichen (PLAN-REVIEW M3a r1, Prüflauf 1); festgehalten in ADR-052 Nr. 15",
       "ref": "docs/01 §6: „der Betreiber legt sie an, der Reviewer gleicht sie am Original ab. Abnahmetests, die solche Daten brauchen, schlagen fehl, wenn die Datei fehlt (kein `skip`).“; ANKER-TODO.md, Zeilen ANK-74 bis ANK-76: „Datei anlegen (Betreiber)“; BL-42",
       "kind": "Geschützte Daten",
       "owner": "Betreiber (Dateien), Reviewer (Abgleich)",
@@ -57,7 +57,7 @@
     },
     {
       "id": "ACC-3",
-      "status": "Auslegung des Reviewers (Spec schweigt); ADR im 30-plan-review",
+      "status": "Auslegung des Reviewers (Spec schweigt); festgehalten in ADR-052 Nr. 1",
       "ref": "K-M3a-1: „Cohens Kappa ungewichtet, linear und quadratisch gewichtet (Formelsammlung §5) reproduziert das Beispiel aus Cohen (1968) (`ankerRef: ANK-70`)“; Formelsammlung §5: „Diese Form ist äquivalent zu Cohen (1968) mit Nichtübereinstimmungsgewichten v (w = 1 − v/v\\_max).“",
       "kind": "Auslegung",
       "owner": "Reviewer",
@@ -66,7 +66,7 @@
     },
     {
       "id": "ACC-4",
-      "status": "Auslegung des Reviewers; ADR im 30-plan-review",
+      "status": "Auslegung des Reviewers; festgehalten in ADR-052 Nr. 2",
       "ref": "K-M3a-1: „stimmt auf `irr::vision`, `irr::diagnoses` (paarweise) und konstruierten Tabellen mit `irr::kappa2`, `psych::cohen.kappa` und `DescTools::CohenKappa` überein (Toleranz `ankerRef: ANK-TOL.package_compare`)“",
       "kind": "Auslegung",
       "owner": "Reviewer",
@@ -75,7 +75,7 @@
     },
     {
       "id": "ACC-5",
-      "status": "Auslegung des Reviewers; ADR im 30-plan-review",
+      "status": "Auslegung des Reviewers; festgehalten in ADR-052 Nr. 3",
       "ref": "Formelsammlung §5: „Fehlende oder nicht parsbare Antworten bleiben fehlend.“; docs/01 §2 Nr. 4: „Ergebnis ist eine richtige Zahl oder eine klare Fehlermeldung, nie stillschweigend eine falsche Zahl.“",
       "kind": "Auslegung",
       "owner": "Reviewer",
@@ -84,7 +84,7 @@
     },
     {
       "id": "ACC-6",
-      "status": "Auslegung des Reviewers; ADR im 30-plan-review",
+      "status": "Auslegung des Reviewers; festgehalten in ADR-052 Nr. 4",
       "ref": "Formelsammlung §5: „Anteil der Items mit identischer Antwort über alle Prompts (innerhalb Modell), über alle Modelle (innerhalb Prompt) und über alle Bedingungen.“",
       "kind": "Auslegung",
       "owner": "Reviewer",
@@ -93,7 +93,7 @@
     },
     {
       "id": "ACC-7",
-      "status": "Auslegung des Reviewers; ADR im 30-plan-review",
+      "status": "Auslegung des Reviewers; festgehalten in ADR-052 Nr. 5",
       "ref": "K-M3a-4: „die AIAG-Attributstudie (`reference/quellen/data/aiag/attribute_study.csv`) reproduziert die Kappa-Tabelle des Handbuchs (`ankerRef: ANK-74`)“",
       "kind": "Auslegung",
       "owner": "Reviewer",
@@ -102,7 +102,7 @@
     },
     {
       "id": "ACC-8",
-      "status": "Auslegung des Reviewers; ADR im 30-plan-review",
+      "status": "Auslegung des Reviewers; festgehalten in ADR-052 Nr. 6",
       "ref": "K-M3a-2: „`msa_agreement()` erhält ein Argument `fleiss = FALSE` (Vorgabewert, Schnittstellenregel) und berechnet mit `fleiss = TRUE` κ_F nach Formelsammlung §5 für Einheiten mit gleicher Bewerterzahl“; Formelsammlung §5: „m Bewertungen je Item (gleich für alle Items)“",
       "kind": "Auslegung",
       "owner": "Reviewer",
@@ -111,7 +111,7 @@
     },
     {
       "id": "ACC-9",
-      "status": "Auslegung des Reviewers; ADR im 30-plan-review",
+      "status": "Auslegung des Reviewers; festgehalten in ADR-052 Nr. 7",
       "ref": "K-M3a-2: „ein Standardfehler wird nur ausgegeben, wenn er nach Fleiss, Nee & Landis (1979) berechnet ist, sonst nicht“; Formelsammlung §13: „Abschnitt 5 (Varianz, bei Umsetzung von Nr. 1)“",
       "kind": "Auslegung",
       "owner": "Reviewer",
@@ -120,7 +120,7 @@
     },
     {
       "id": "ACC-10",
-      "status": "Auslegung des Reviewers; ADR im 30-plan-review",
+      "status": "Auslegung des Reviewers; festgehalten in ADR-052 Nr. 8",
       "ref": "K-M3a-3: „Einheiten mit weniger als zwei gültigen Antworten gehen nicht ein und werden gezählt“",
       "kind": "Auslegung",
       "owner": "Reviewer",
@@ -129,7 +129,7 @@
     },
     {
       "id": "ACC-11",
-      "status": "Auslegung des Reviewers; ADR im 30-plan-review",
+      "status": "Auslegung des Reviewers; festgehalten in ADR-052 Nr. 9",
       "ref": "K-M3a-3: „die Zuordnung der Gewichte (ungewichtet → nominal, linear → ordinal, quadratisch → Intervall) ist dokumentiert und getestet“",
       "kind": "Auslegung",
       "owner": "Reviewer",
@@ -138,7 +138,7 @@
     },
     {
       "id": "ACC-12",
-      "status": "Auslegung des Reviewers; ADR im 30-plan-review",
+      "status": "Auslegung des Reviewers; festgehalten in ADR-052 Nr. 10",
       "ref": "K-M3a-6: „berechnet das Vertrauensband der Geraden und das Kriterium „Bias = 0 liegt im Band“, trägt das Verdikt mit der Handbuchrechnung“; docs/01 §3 Nr. 2: „Handbuchrechnung (alle g·m Einzelwerte, gm − 2 Freiheitsgrade) bleibt und trägt das Verdikt (Vertrauensband, „Bias = 0 im Band“)“; AIAG 2010, S. 98 (ANK-76): „the “bias = 0” line must lie entirely within the confidence bands of the fitted line“",
       "kind": "Auslegung",
       "owner": "Reviewer",
@@ -147,7 +147,7 @@
     },
     {
       "id": "ACC-13",
-      "status": "Auslegung des Reviewers; ADR im 30-plan-review",
+      "status": "Auslegung des Reviewers; festgehalten in ADR-052 Nr. 11",
       "ref": "K-M3a-6: „benennt im Objekt und im Bericht den Unterschied beider Rechnungen (Formelsammlung Nr. 2)“; Formelsammlung §6: „Die Antworten eines Items sind korreliert (Item-Effekt); die gm − 2 Freiheitsgrade des Handbuchs überschätzen deshalb die Information, und der p-Wert der Steigung fällt zu klein aus.“",
       "kind": "Auslegung",
       "owner": "Reviewer",
@@ -156,7 +156,7 @@
     },
     {
       "id": "ACC-14",
-      "status": "Auslegung des Reviewers; ADR im 30-plan-review",
+      "status": "Auslegung des Reviewers; festgehalten in ADR-052 Nr. 12",
       "ref": "K-M3a-7: „Für Szenarien S-bias-1 (Items 20, Prompts 3, Modelle 3, Replikate 3, Rest σ² 0,1, Item σ² 1, wahrer Bias 0,2) und S-bias-2 (wie S-bias-1, Rest σ² 0,5, Bias 0) liegt die gemessene Überdeckung des 95-%-Intervalls innerhalb von `ankerRef: ANK-TOL.mc_factor` (Bestehenskriterium) Monte-Carlo-Standardfehlern um 0,95 (`n_sim` ≥ `ANK-06`)“",
       "kind": "Auslegung",
       "owner": "Reviewer",
@@ -165,7 +165,7 @@
     },
     {
       "id": "ACC-15",
-      "status": "Auslegung des Reviewers; ADR im 30-plan-review",
+      "status": "Auslegung des Reviewers; festgehalten in ADR-052 Nr. 13",
       "ref": "K-M3a-7: „und die Vignette `validation.Rmd` berichtet sie“",
       "kind": "Auslegung",
       "owner": "Reviewer",
@@ -174,7 +174,7 @@
     },
     {
       "id": "ACC-16",
-      "status": "Auslegung des Reviewers; ADR im 30-plan-review",
+      "status": "Auslegung des Reviewers; festgehalten in ADR-052 Nr. 14",
       "ref": "K-M3a-1: „eine Tabelle mit nur einer besetzten Kategorie liefert `NA` mit Hinweis, nie `NaN`“; K-M3a-2: „bei ungleicher Bewerterzahl liefert es `NA` mit einer Meldung, die auf Krippendorffs Alpha verweist“",
       "kind": "Auslegung",
       "owner": "Reviewer",
