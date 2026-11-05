@@ -1,243 +1,221 @@
-# PLAN-REVIEW — M3a, Runde 1
+# PLAN-REVIEW — M3a, Runde 2
 
-Rolle: Reviewer · Phase: `30-plan-review` · Runde: 1 (von `MAX_ROUNDS_PLAN=2`) · Stand: 05.11.2026 · Gegenstand: `orchestrator/handoff/M3a/PLAN.md` (Runde 1, 366 Zeilen). Es gibt weder `PLAN-UPDATE.md` noch `ARBITER.md`. Keine Git-Kommandos.
+Rolle: Reviewer · Phase: `30-plan-review` · Runde: 2 (von `MAX_ROUNDS_PLAN=2`) · Stand: 05.11.2026 · Gegenstand: `orchestrator/handoff/M3a/PLAN.md` (Runde 1, 366 Zeilen) mit `PLAN-UPDATE.md` (Runde 2, 346 Zeilen). Es gibt keine `ARBITER.md`. Keine Git-Kommandos.
 
 ## Ergebnis
 
-**Verdict REWORK.** Drei blocking-Befunde (E1 bis E3), vier minor-Befunde (E4 bis E7).
+**Verdict PASS.** Kein blocking-Befund. Neu sind vier minor-Befunde (E8 bis E11).
 
-- **Spec-Treue:**
-  - Der Plan deckt K-M3a-1 bis K-M3a-7 ab und übernimmt die Auslegungen ACC-3 bis ACC-16 (PLAN Z. 11–19).
-  - Signatur (`fleiss = FALSE` hinter `weights`), Fleiss-Formel, Alpha-Zählung, Nenner der Attributkennzahlen, Linearitätsfelder, Handbuchverdikt, Hinweistext und Vignettenweg stimmen mit docs/04 M3a, docs/01 §2 bis §5 und §8, der Formelsammlung §5, §6 und §9 und den Abnahmetests überein.
-  - Die geplante Bandprüfung ist richtig: Prüflauf 2 findet sie in 4000 von 4000 Zufallsfällen gleich der Mini-Referenz.
-- **Warum REWORK:** Drei Stellen verletzen docs/01 §2 Nr. 4 oder §5, und der Plan regelt sie nicht. Alle drei sind an v0.1.0 nachgewiesen.
-  - **E1:** Cohens Kappa ist still falsch, sobald die Referenz eine Kategorie außerhalb der Skala enthält; mit `levels = NULL` reicht eine Referenzkategorie, die keine Antwort verwendet (0,571 statt 0,500, 0,400 und 0,286). Widersprüchliche Referenzen eines Items ersetzt das Paket still durch die erste.
-  - **E2:** `msa_bias()` zählt fehlende und nicht lesbare Werte nicht, und eine Bedingung ohne gültiges Paar verschwindet aus `by_condition`.
-  - **E3:** Identische Antworten enden in `msa_bias()` mit dem Rohfehler „data are essentially constant“ von `stats::t.test`, sobald die Subtraktion der Referenz Rundungsreste lässt.
-- **Neu in dieser Phase:**
-  - `docs/decisions/ADR-052-m3a-reviewer-auslegungen.md`:
-    - hält ACC-3 bis ACC-16 fest (Nr. 1 bis 14);
-    - hält Anker und Datenblätter mit dem Abgleich am Seitenbild fest (Nr. 15; ACC-1, ACC-2);
-    - bestätigt die Festlegungen des Plans einschließlich seiner Randfallvorschläge (Nr. 16);
-    - nennt die Mindestanforderungen zu E1 bis E3 (Nr. 17);
-    - beschreibt den Mutationsumfang (Nr. 18, Hinweis).
-  - In `CRITERIA.json` verweisen die Statuszeilen von ACC-1 bis ACC-16 auf ADR-052; ACC-2 ist erledigt. Kriterien und alle übrigen Felder sind unverändert (Prüflauf 6).
+- **Antworten auf Runde 1:** `PLAN-UPDATE.md` beantwortet E1 bis E7 je mit „akzeptiert“ und legt die Form fest (Z. 13–19, 45–125). Die blocking-Befunde E1 bis E3 sind damit erledigt; die Form erfüllt die Mindestanforderungen von ADR-052 Nr. 17. Die Prüfläufe bestätigen die tragenden Annahmen:
+  - Die Daten der bestehenden Aufrufer haben je Item höchstens eine Referenz, und keine liegt außerhalb der Skala. Die neuen Fehler nach E1 treffen keinen bestehenden Pfad (Prüflauf 1).
+  - Die Konstanzregel des Plans entscheidet auf 20000 Fällen nahe der Grenze genau wie `stats::t.test` (Prüflauf 2, (a)).
+  - Die Restregel greift auf der exakt linearen Abweichung und nicht bei echtem Rauschen (Prüflauf 2, (c)).
+- **Zwei Präzisierungen** schreibt der Reviewer bindend in ADR-052. Die Spec schweigt dazu, und nach dem Ende der Planrunden bindet das Reviewer-Urteil (AGENTS.md, Handoff-Disziplin):
+  - E8, ADR-052 Nr. 17.3.6: R² ist `NA_real_`, wenn die Zielwerte einer Regression numerisch konstant sind. Der Plan setzt R² nur bei TSS = 0 auf `NA` (Z. 99). Bei bis auf die Rundung gleichen Abweichungen gäbe er etwa 0,7506 aus (Prüflauf 2, (b)).
+  - E9, ADR-052 Nr. 17.2.2: Ein Überlauf der Differenz ist ein benannter Fehler. Sonst gilt die Gleichung `n + n_excluded` = Zahl der Eingabezeilen (Z. 74) nicht.
+- **Neu in dieser Phase:** `docs/decisions/ADR-052-m3a-reviewer-auslegungen.md`:
+  - Status, Kontext („Gemessen in Runde 2“) und Konsequenzen sind nachgeführt;
+  - Nr. 17 enthält jetzt je Befund E1 bis E3 die Mindestanforderung und die Form aus `PLAN-UPDATE.md`;
+  - Nr. 19 ist neu: die Formen zu E4, E5, E7 und E10.
+  - `CRITERIA.json` bleibt unverändert.
 
 ### An den Betreiber
 
-1. **Keine Zuarbeit vor Runde 2 nötig.**
-   - Die drei AIAG-Datenblätter sind geliefert und am Seitenbild abgeglichen (Prüflauf 1): 15 + 60 Messwerte, 5 Referenzwerte, 450 Entscheidungen und 50 Referenzentscheidungen gleich, die kanonischen Prüfsummen gleich den Ankern. Die Datei-SHA-256 stehen in ADR-052 Nr. 15.2.
-   - `orchestrator/state/mut-baseline` fehlt, wie BL-123 verlangt.
-   - irr 0.85, psych 2.6.9 und DescTools 0.99.60 sind installiert; das deps-Gate findet sie nach der Suggests-Ergänzung.
-2. **Zur Kenntnis:** `data_file.status` von ANK-74 bis ANK-76 nennt noch „Datei fehlt“. Das Feld ist kein Wert, kein Test liest es; es wird mit der nächsten Änderung dieser Anker nachgeführt (ADR-052 Nr. 15.4).
-3. **Zur Planung (Hochrechnung, nicht gemessen):** Die Vignettentabelle wird beim Knit gerechnet. Auf v0.1.0 kosten 2 × 1000 Aufrufe von `msa_bias()` etwa 6,6 s (Prüflauf 2, (e)). Der Knit läuft im lint-Gate zweimal (Build und Check) und im mutgate je Mutant einmal.
+1. **Keine Zuarbeit vor BUILD nötig.** `orchestrator/state/mut-baseline` fehlt weiterhin, wie BL-123 verlangt. Die drei AIAG-Datenblätter liegen vor (ADR-052 Nr. 15).
+2. **Zur Planung (unverändert aus Runde 1, Hochrechnung):** Die Vignette rechnet ihre Bias-Tabelle beim Knit mit 2 × 1000 Aufrufen von `msa_bias()`. Auf v0.1.0 kostet das etwa 6,6 s, und der Knit läuft in mutgate je Mutant. Der Builder misst den ganzen Knit vor und nach der Änderung (PLAN-UPDATE Z. 284).
 
 ### Ablauf
 
-Mit REWORK erhöht der Orchestrator die Planrunde auf 2. Der Builder schreibt `PLAN-UPDATE.md` und beantwortet E1 bis E7 Punkt für Punkt.
+Mit PASS gibt der Orchestrator den Plan frei und setzt den Tag `plan/M3a`; danach folgt `40-build`. BUILD folgt `PLAN.md`, `PLAN-UPDATE.md` und ADR-052. Weichen die Pläne von ADR-052 Nr. 17 oder Nr. 19 ab, gilt das ADR.
 
 ## Gelesen
 
-- **Rollen und Protokoll:** `AGENTS.md`, `CLAUDE.md`, `IMPLEMENTATION-RULES.md`, `contracts/PROTOCOLS.md`, `orchestrator/handoff/SCHEMA.md`, `orchestrator/LESSONS.md`, `orchestrator/prompts/30-plan-review.md`.
-- **Spezifikation:** docs/04 M3a vollständig (Ergebnissatz, K-M3a-1 bis K-M3a-7); docs/01 §1 bis §10; Formelsammlung §1, §5, §6, §9, §11 bis §13.
-- **Handoff M3a:** `CRITERIA.json` (sieben Kriterien, ACC-1 bis ACC-17), `PLAN.md` vollständig. Zum Format: `PLAN-REVIEW.md` und `verdict-plan.json` aus M3b.
-- **ADRs:** ADR-022 (fehlende Werte, Nullgrenze), ADR-043, ADR-048 Nr. 14 und 15, ADR-051 (Format, Mutationsumfang).
+- **Rollen und Protokoll:** `AGENTS.md`, `CLAUDE.md`, `IMPLEMENTATION-RULES.md`, `contracts/PROTOCOLS.md`, `orchestrator/handoff/SCHEMA.md`, `orchestrator/LESSONS.md`, `orchestrator/prompts/30-plan-review.md`; `orchestrate.sh` (`path_allowed` Z. 515–544, Planschleife Z. 946–978).
+- **Spezifikation:** docs/04 M3a (Ergebnissatz, K-M3a-1 bis K-M3a-7); docs/01 §1 bis §9; Formelsammlung §1, §5, §6.
+- **Handoff M3a:**
+  - `CRITERIA.json` (sieben Kriterien, ACC-1 bis ACC-17);
+  - `PLAN.md` und `PLAN-UPDATE.md` vollständig;
+  - `PLAN-REVIEW.md` und `verdict-plan.json` der Runde 1.
+- **ADRs:** ADR-052 vollständig, ADR-022 Nr. 7, ADR-048 Nr. 14.5.
 - **Abnahmetests:**
-  - `setup-m3a.R`, `test-m3a-1` bis `test-m3a-7` vollständig; `tests/simulation/setup-simulation.R` und `test-bias-coverage.R` vollständig;
-  - `setup-m1a.R` Z. 380–450 (gemeinsamer Knit), `setup-m2.R` Z. 860–890 (AP1-Vergleich mit `msa_agreement()`), Fundstellen der Abschnittsprüfungen in `test-m1a-7`, `test-m1b-7` und `test-m1c-5`.
-- **Anker:** ANK-06, ANK-75, ANK-76 vollständig; ANK-70, ANK-72 bis ANK-74 über die Tests und `CRITERIA.json`; ANK-TOL (`arithmetic`, `package_compare`, `mc_factor`, `sim_runtime`, `invariance`, `oracle`).
-- **Daten:** `reference/quellen/data/aiag/QUELLE.txt` und die drei Datenblätter; Textspiegel der AIAG-PDF Z. 4400–4431, 4888–4935, 6620–6694; Seitenbilder der PDF-Seiten 99, 108 und 143.
-- **Produktcode und Tests des Builders:** `R/agreement.R` vollständig, `R/report.R` Z. 1–80, `R/acmg.R` Z. 959–1000 und 1224, `R/fit.R` (Fundstellen zu `NaN`, `Inf`, fehlenden Werten), `inst/templates/validation_report.Rmd` Z. 105–205, `vignettes/validation.Rmd` Z. 1–30, 120–160 und 290–392, `DESCRIPTION`, `tests/testthat/test-agreement.R`, `test-report.R` Z. 1–80, `test-fit-grr.R` Z. 60–75, `helper-validation-latent.R` vollständig, `test-validation-latent.R` Z. 90–157.
-- **Harness:** `orchestrate.sh` (`path_allowed` Z. 515–544, `verdict()` Z. 734–756, Planschleife Z. 946–978), `config.env` Z. 196–274, `lib/r-mutation.R` Z. 55–94, `lib/r-deps.R` vollständig, `toolchain.json`, `BACKLOG.md` (alle 131 Zeilen maschinell; gelesen BL-13, BL-15, BL-42, BL-44, BL-46, BL-57, BL-113, BL-122, BL-123, BL-131).
+  - vollständig: `setup-m3a.R`, `test-m3a-1`, `test-m3a-5`, `test-m3a-6`, `test-m3a-7`;
+  - in Teilen: `test-m3a-2` Z. 120–177, `test-m3a-4` Z. 20–69 und alle Aufrufe, `test-m3a-3` alle Aufrufe;
+  - `tests/simulation/test-bias-coverage.R` Z. 20–75;
+  - außerhalb von M3a: `setup-m1a.R` Z. 519–523 und 540–580, `setup-m1c.R` Z. 595–640, `setup-m2.R` Z. 855–894, `test-m1d-7-findings.R` Z. 52–100.
+- **Produktcode und Bestand:**
+  - `R/agreement.R` vollständig;
+  - `R/acmg.R` Z. 155–228, 855–875, 974–1063, 1170–1230; `R/plan.R` Z. 1–36;
+  - `vignettes/validation.Rmd` (Überschriften), `vignettes/llmsa.Rmd` Z. 100–150;
+  - `tests/testthat/helper-validation-latent.R` Z. 45–140, `test-validation-latent.R` Z. 118–160;
+  - Ankerkopien unter `inst/validation/latent/anchors/` und `inst/validation/m1d/anchors/`: ANK-06 und ANK-TOL sind byte-gleich mit `reference/anchors/` (`sha256sum`).
+  - Aufrufer von `msa_agreement()` und `msa_bias()` per Suche über `R/`, `tests/`, `vignettes/` und `inst/`.
 
 ## Eigene Prüfläufe
 
-Alle als R-Skripte unter `orchestrator/handoff/M3a/.probe-plan-review/`, mit `Rscript --vanilla` aus der Repo-Wurzel; die Seitenbilder sofort nach dem Ablesen und das Verzeichnis am Ende gelöscht. R 4.6.1, testthat 3.3.2, pkgload 1.5.3, irr 0.85, psych 2.6.9, DescTools 0.99.60, jsonlite 2.0.0. Produktcode ist v0.1.0 (`R/agreement.R` unverändert); `REPO_ROOT` gesetzt; Abnahmehilfen aus allen `tests/acceptance/setup-*.R`.
+Drei R-Skripte unter `orchestrator/handoff/M3a/.probe-plan-review-r2/`, mit `Rscript --vanilla` aus der Repo-Wurzel; das Verzeichnis ist am Ende gelöscht. R 4.6.1, pkgload 1.5.3, testthat 3.3.2. Produktcode ist v0.1.0. Die Mathematik der Pläne ist in den Proben unabhängig von `R/agreement.R` nachgebaut. Außer ADR-052 hat sich seit dem Schreiben von `PLAN-UPDATE.md` keine Datei geändert (`find -newer`, ohne Orchestrator-Zustand).
 
-1. **Datenblätter (ACC-2).** `data.R` und `crops.R`. Ausgabe (gekürzt auf die Prüfzeilen):
-
-   ```text
-   PDF sha256 aeb067807277a89a484844f33667eacfa2de4e3c70f66a042a83a815f73a2e5f
-   Creator:         Acrobat PDFMaker 9.1 for Word | Producer:        GPL Ghostscript 9.55.0 | Pages:           241 | Page size:       612.826 x 790.99 pts
-   attribute_study.csv file sha256 c6d393eff6dc11665e13be8506714c79394477cac0f6ab4bdd2b635c91b01ab5 bytes 4906
-   bias_study.csv file sha256 9ddcba5ff48078b36385e7bd8adb5c4906372d99aba743c1fad5389d4550caab bytes 228
-   linearity_study.csv file sha256 cfefaecd2ef2089d7fbfd512c3cc06a828a03b3b00cfe6b8af7a893400292253 bytes 894
-   ANK-74: canonical hash = anchor, 450 rows, columns part,appraiser,trial,value,reference
-   ANK-75: canonical hash = anchor, 15 rows, columns part,reference,trial,value
-   ANK-76: canonical hash = anchor, 60 rows, columns part,reference,trial,value
-   bias: text rows 15; trial equal TRUE; value equal TRUE; printed bias = value - 6 TRUE; reference all 6 TRUE; part all 1 TRUE
-   linearity: text value matrix equal TRUE; printed bias matrix = value - reference TRUE; reference per part 2 4 6 8 10
-   attribute: text parts 1..50 TRUE; decisions A-1..C-3 equal TRUE; reference equal TRUE; reference constant per part TRUE
-   ```
-
-   - Die Datei-SHA-256 gleichen `QUELLE.txt`.
-   - Danach Seitenbilder mit pdftoppm (60 dpi Übersicht, 150 dpi Ausschnitte) der PDF-Seiten 99, 108 und 143, Zeile für Zeile gegen die Ausgabe der Dateien in Tabellenform gelesen: Tab. III-B 1 (15 Messungen), Tab. III-B 4 (12 × 5 Messungen, Referenzwerte 2.00 bis 10.00) und Tab. III-C 1 (50 Teile, A-1 bis C-3, Reference) sind gleich. Keine Abweichung.
-2. **Planbehauptungen und Lücken auf v0.1.0.** `claims.R`. Ausgabe:
+1. **Aufrufer und Daten gegen E1 und E2.** `callers.R`, Paket mit `pkgload::load_all()`. Ausgabe:
 
    ```text
-   (a) unweighted: levels NULL -> a,b, kappa_all 0.571429; levels a,b,c -> kappa_all 0.500000; mini-reference 0.500000; irr::kappa2 0.500000
-   (a) linear: levels NULL -> a,b, kappa_all 0.571429; levels a,b,c -> kappa_all 0.400000; mini-reference 0.400000; irr::kappa2 0.400000
-   (a) quadratic: levels NULL -> a,b, kappa_all 0.571429; levels a,b,c -> kappa_all 0.285714; mini-reference 0.285714; irr::kappa2 0.285714
-   (b) levels a,b with reference value c: kappa_all 0.571429, accuracy 66.6667, messages none (silent)
-       v0.1.0 cohen_kappa table sum after factor(): 0.6667 of 1 (pairs with reference c fall out of the table, not of the denominator)
-   (c) band check: plan q(z) and acceptance mini-reference agree in 4000 of 4000 random cases (NA inside)
-       acceptable: plan TRUE (margin -1.0000), mini-reference TRUE
-       handbook_rejects: plan FALSE (margin 0.1994), mini-reference FALSE
-       between_references: plan FALSE (margin 0.2357), mini-reference FALSE
-   (d) deviations 0.1+0.2, 0.3, 0.3, 0.3 (sd 3.2e-17): msa_bias v0.1.0 ERROR: subscript out of bounds
-       stats::t.test: ERROR: data are essentially constant
-       exactly constant 0.3: msa_bias v0.1.0 ERROR: subscript out of bounds
-   (e) 200 msa_bias() calls on 540 values: 0.66 s, i.e. about 6.6 s for 2 x 1000
-   (f) bias study, one reference value: msa_bias v0.1.0 ERROR: subscript out of bounds
-   (g) condition P1 x M2 without valid values: by_condition rows 1 (P1 x M1)
+   acmg_demo (llmsa.Rmd, test-report) items   60, rows  2160, items with NA reference   0, conflicting items 0, references outside levels 0, empty strings 0
+     acmg_demo levels derived from responses: B LB LP P VUS
+   ic50_demo (msa_bias examples)      items   40, rows  2160, items with NA reference   0, conflicting items 0, references outside levels NA, empty strings 0
+     ic50_demo: rows 2160, missing values 8, prompt x model conditions 9, conditions without a valid value 0
+   llmsa.Rmd num$latent as reference  items   30, rows   540, items with NA reference   0, conflicting items 0, references outside levels NA, empty strings 0
+   AP1 items.csv + pilot.csv          items  110, rows   110, items with NA reference  25, conflicting items 0, references outside levels 0, empty strings 0
+     AP1 classes: Benign Likely benign Uncertain significance Likely pathogenic Pathogenic ; sources without reference: insaid 25
+   as.character round trip identical: FALSE FALSE FALSE | as.character: 0.333333333333333 0.3 10
    ```
 
-   - (a), (b): Antworten a, a, b, b, a, b; Referenz a, a, b, c, c, b; ein Item je Paar.
-   - (c): Bandprüfung nach PLAN Z. 103–109, nachgebaut in der Probe, gegen `acc_m3a_in_band_ref()`; Zufallspläne mit 3 bis 8 Items und 2 bis 6 Replikaten, Fälle mit relativem Rand unter 1e-6 ausgenommen. „NA inside“ ist ein Formatierungsrest der Probe ohne Bedeutung.
-   - (d): Alle Referenzen 0, also ein Referenzwert; der Abbruch kommt aus der Linearität (wie (f)). Deshalb Prüflauf 3.
-3. **Fast konstante Abweichungen mit zwei Referenzwerten.** `claims2.R`, Referenzen 0, 0, 1, 1. Ausgabe:
+   - Abgedeckt sind die Einstiegsvignette (`msa_agreement()` mit `levels = tiers`, `msa_bias(num, reference = "reference")` mit `num$reference <- num$latent`), die Hilfebeispiele, `test-report.R` und AP1 (`R/acmg.R:1224`).
+   - AP1 liest leere Referenzen als `NA` (`na.strings = ""`, `R/acmg.R:212`). `acmg_evaluate()` lehnt Klassen außerhalb der Skala schon vorher ab (Z. 1185–1187). Der M2-Abnahmetest setzt leere Referenzen ebenfalls auf `NA` (`setup-m2.R:875–876`).
+   - Alle M3a-Abnahmetests übergeben `levels` ausdrücklich, und ihre Referenzen liegen darin. Das gilt auch für die Tafel mit leerer Zeile und Spalte (`test-m3a-1` Z. 133–140) und für das Item i6 von D1 ohne gültige Antwort (`test-m3a-4` Z. 31–32).
+   - Die E2E-Tests und die ClinVar-Vignette rufen `msa_agreement()` ohne Referenz.
+   - Die letzte Zeile gehört zu E9.
+2. **Numerik der Regeln von E3.** `numerics.R`, ohne Paket. Ausgabe:
 
    ```text
-   deviations 0.30000000000000004 0.29999999999999999 0.30000000000000004 0.30000000000000004, sd 3.2e-17
-   msa_bias v0.1.0: ERROR: data are essentially constant
-   stats::t.test: ERROR: data are essentially constant
-   lm warning: essentially perfect fit: summary may be unreliable
-   done
+   R 4 6.1
+   (a) 20000 cases: plan rule constant 16715, t.test error 15241, exactly zero 1474
+       plan rule (sd/sqrt(n)) differs from 't.test error or all zero': 0; with sqrt(var/n): 0
+   (b) answers = reference + bias, deviations constant up to rounding
+       x 2,4.., bias  0.30: sd 4.39e-16, plan rule constant TRUE, TSS 1.14e-29, RSS 2.84e-30, R2 (plan formula) 0.7506, summary.lm R2 0.6960 (essentially perfect fit: summary may be unreliable)
+       x 2,4.., bias  0.70: sd 4.39e-16, plan rule constant TRUE, TSS 1.14e-29, RSS 2.84e-30, R2 (plan formula) 0.7506, summary.lm R2 0.5473 (essentially perfect fit: summary may be unreliable)
+       x 1.1,2.3.., bias  0.10: sd 2.01e-16, plan rule constant TRUE, TSS 4.44e-31, RSS 1.83e-31, R2 (plan formula) 0.5867, summary.lm R2 0.6135 (none)
+       x 0.5,1.5.., bias -0.20: sd 9.76e-17, plan rule constant TRUE, TSS 1.05e-31, RSS 3.96e-32, R2 (plan formula) 0.6223, summary.lm R2 0.6215 (essentially perfect fit: summary may be unreliable)
+       x 10,20.., bias  0.03: sd 5.42e-16, plan rule constant FALSE, TSS 8.52e-30, RSS 6.20e-30, R2 (plan formula) 0.2727, summary.lm R2 0.2713 (none)
+   (c) bias = 0.1 + 0.05 x plus relative noise
+       rel noise 0e+00: sqrt(RSS)/sqrt(TSS) 1.61e-15, plan rule vanishing TRUE, t_slope (own) 4.739e+15, summary.lm warning: essentially perfect fit: summary may be unreliable
+       rel noise 1e-15: sqrt(RSS)/sqrt(TSS) 3.06e-15, plan rule vanishing FALSE, t_slope (own) 2.488e+15, summary.lm warning: none
+       rel noise 1e-13: sqrt(RSS)/sqrt(TSS) 2.58e-13, plan rule vanishing FALSE, t_slope (own) 2.952e+13, summary.lm warning: none
+       rel noise 1e-10: sqrt(RSS)/sqrt(TSS) 2.57e-10, plan rule vanishing FALSE, t_slope (own) 2.958e+10, summary.lm warning: none
+       rel noise 1e-06: sqrt(RSS)/sqrt(TSS) 2.57e-06, plan rule vanishing FALSE, t_slope (own) 2.958e+06, summary.lm warning: none
    ```
 
-4. **Backlog-Abdeckung.** `backlog.R` und eine Gegenprobe. `BACKLOG.md` hat 131 Zeilen mit eindeutigen IDs. Der Plan hat 90 Maßnahmenzeilen (PLAN Z. 187–278) und 41 IDs in der Liste der erledigten (Z. 283–288); zusammen alle 131, keine doppelt. Alle 41 erledigten tragen in `BACKLOG.md` einen Erledigungs- oder Behebungsvermerk:
+   - (a): Zufallsfälle mit n = 2 bis 60, Mittel 0,3, 1, 7,5, 1e3, 1e-3, −2 oder 0 und relativem Rauschen von 10^−17,5 bis 10^−13,5. Seed 20261105, RNG Mersenne-Twister/Inversion/Rejection. Die Regel von PLAN-UPDATE Z. 89 gleicht der Abbruchregel von `stats::t.test`, ergänzt um exakt 0, und zwar mit SE = s/√n wie mit √(var/n).
+   - (b): Die Konstanzregel führt diese Fälle in den entarteten Zweig. Weil TSS > 0 ist, gäbe Z. 99 als R² eine Zahl aus der Rundung, keine Eigenschaft der Daten (E8). Im fünften Fall greift die Regel knapp nicht; dort rechnet auch `stats::t.test`, und der Plan gleicht ihm, wie K-M3a-5 verlangt.
+   - (c): Die Restregel von Z. 97 greift nur auf der exakt linearen Abweichung. Ab relativem Rauschen von 1e-15 bleibt die eigene t-Rechnung endlich und ohne Meldung.
+3. **Backlog-Abdeckung.** `backlog.R`. Ausgabe:
 
    ```text
-   done-list ids: 41
-   without marker:
+   BACKLOG ids 131 (unique 131); PLAN-UPDATE rows 90 (unique 90); closed list 41 (unique 41)
+   missing from PLAN-UPDATE:
+   in both lists:
+   not in BACKLOG:
+   same open set as PLAN round 1: TRUE
    ```
 
-   BL-07, BL-64, BL-87, BL-91, BL-101, BL-102, BL-103 und BL-109 enthalten ein solches Wort, sind aber nur zum Teil erledigt; der Plan behandelt sie zu Recht als offen.
-5. **Ausgangsstand der M3a-Abnahme und Referenzauflösung.** `baseline.R`. Ausgabe (Kopf; die Zeilen je Test stehen in der Probe):
-
-   ```text
-   (1) item i1 with references 2 and 5: bias 0.0000 (order 2, 3, 5) and -1.5000 (order 5, 3, 2); no message
-   (2) CRITERIA.json round trip byte-identical: TRUE (26823 bytes)
-   (3) m3a acceptance: 35 tests, 628 expectations, 34 failed, 8 with error, 0 skipped, 28.1 s
-   ```
-
-   - Grün auf v0.1.0: Cohen-Beispiel und Orakel (sechs Blöcke), Fleiss-Mini-Referenz, Krippendorff-Beispiel, Orakel und Zuordnung, D2, beide AIAG-Attributtests (Tab. III-C 3, Kappa gegen die Referenz, Tab. III-C 5), K-M3a-5 je Prompt × Modell und auf Zufallsdaten.
-   - Rot oder Fehler: Ein-Kategorien-Tafel, alle Fleiss-Tests am Paket, Hilfeseite, `n_units_excluded`, D1 (eine Erwartung, der Anteil vollständig richtiger Items; Prüflauf 6), AIAG-Biasstudie (Abbruch wie Prüflauf 2, (f)), alle Linearitätstests, Vignette.
-   - Kein Test übersprungen. Das leere `tests/acceptance/_snaps/` des Laufs ist entfernt.
-   - Dazu einzeln: `acmg_demo` hat nur Referenzen aus den fünf Klassen (B 360, LB 540, LP 324, P 468, VUS 468); `ic50_demo` hat 8 fehlende Werte.
-6. **D1 und `CRITERIA.json`.** `criteria.R`. Nur `status` von ACC-1 bis ACC-16 neu, aus R geschrieben (`jsonlite::toJSON(auto_unbox = TRUE, pretty = TRUE)` plus Zeilenende; Rundlauf vorher bytegleich, Prüflauf 5, (2)). Ausgabe (Kopf):
-
-   ```text
-   CRITERIA.json sha256 before: 4335a63fdd7c278adf0c4a418753d972ec88d1984f84f88efec8aa334138df05
-   D1 v0.1.0: pct_items_all_correct 50.0000 (hand 40.0000); accuracy_overall 60.6061 (hand 60.6061); repeatability 66.6667 (hand 66.6667)
-   CRITERIA.json: status changed for ACC-1, ACC-2, ACC-3, ACC-4, ACC-5, ACC-6, ACC-7, ACC-8, ACC-9, ACC-10, ACC-11, ACC-12, ACC-13, ACC-14, ACC-15, ACC-16; criteria identical TRUE; all fields except status identical TRUE; valid JSON TRUE
-   ```
-
-   Neue Statuszeilen: ACC-1 „…; festgehalten in ADR-052 Nr. 15“; ACC-2 „erledigt: Datenblätter vom Betreiber am 05.11.2026 geliefert, vom Reviewer am Seitenbild abgeglichen (PLAN-REVIEW M3a r1, Prüflauf 1); festgehalten in ADR-052 Nr. 15“; ACC-3 bis ACC-16 „…; festgehalten in ADR-052 Nr. 1“ bis „Nr. 14“ statt „ADR im 30-plan-review“. ACC-17 bleibt.
+   Die offene Menge ist dieselbe wie in Runde 1. Dort war geprüft, dass alle 41 erledigten Einträge einen Erledigungs- oder Behebungsvermerk tragen (PLAN-REVIEW r1, Prüflauf 4).
 
 ## Antworten auf die Einwand-IDs
 
-- **Runde 1:** Es gibt keine früheren Einwände.
-- **ACC-1 und ACC-2:** Der Plan stellt richtig fest, dass die Datenblätter vorliegen und ihre kanonischen Prüfsummen den Ankern gleichen (Z. 21, 153–162). Den Abgleich am Seitenbild hat der Reviewer nachgeholt (Prüflauf 1). Festgehalten in ADR-052 Nr. 15; ACC-2 ist erledigt.
-- **ACC-3 bis ACC-16:** übernommen (Z. 11–19) und im Testplan je Kriterium wiedergegeben (Z. 299–307). Festgehalten in ADR-052 Nr. 1 bis 14. Die Wahl ohne Fleiss-Standardfehler ist nach ACC-9 zulässig (Z. 15, 69).
-- **ACC-17:** Suggests (Z. 35), BL-15, BL-44 und BL-113 (Z. 202, 224, 264), Baseline (Z. 166, 270), Laufzeit (Z. 177) sind zugeordnet.
-- **Randfallvorschläge des Plans (Z. 111):** bestätigt in ADR-052 Nr. 16.5, ergänzt um `NaN` als fehlend (wie ADR-022 Nr. 3) und `NA` statt `NaN` bei R². Offen sind nur die Teile, die E2 und E3 betreffen.
-- **BACKLOG:** Alle 131 Zeilen sind zugeordnet (Prüflauf 4). Jede Vertagung nennt Grund und Zuständigkeit (AGENTS.md, Handoff-Disziplin). Stichproben gegen den Text: BL-13, BL-15, BL-42, BL-44, BL-46, BL-57, BL-113, BL-123, BL-131.
+- **[E1] erledigt.** PLAN-UPDATE Z. 13 und 49–58 erfüllen ADR-052 Nr. 17.1 und folgen dem Vorschlag der Runde 1 in allen vier Punkten:
+  - benannter Fehler für Referenzwerte außerhalb der übergebenen oder abgeleiteten Skala, auch wenn die Antworten des Items fehlen; keine Vereinigung mit der Skala, also bleiben K, Gewichte und Skalenpositionen unabhängig von der Referenz (Z. 54–55);
+  - benannter Fehler bei widersprüchlichen Referenzen in allen drei Eingabeformen, gleich in welcher Zeilenfolge (Z. 52);
+  - Unit-Tests für alle Gewichtungen und beide Kappa-Felder gegen die Rechnung über die volle Skala (Z. 267, 279);
+  - Rückwirkung auf AP1, M1d und Bericht (Z. 58, 142, 283). Prüflauf 1 zeigt, dass kein bestehender Pfad an den neuen Fehlern scheitert.
+  - Eine Referenz neben fehlenden Einträgen gilt als die Referenz des Items (Z. 53); in v0.1.0 hing das von der Zeilenfolge ab (`R/agreement.R:111–112`). Die Formelsammlung kennt eine Referenz je Item („Referenz x_i: der von Experten kuratierte Wert oder die Klasse des Items i“, §1).
+  - Hinweise: E9 (Nr. 2) und E11 (Nr. 2).
+- **[E2] erledigt.** PLAN-UPDATE Z. 14 und 72–85 erfüllen ADR-052 Nr. 17.2:
+  - `n_excluded` in `overall` (am Ende) und als letzte Spalte von `by_condition`;
+  - jede beobachtete Bedingung bleibt, ohne gültiges Paar mit `n = 0` und `NA`;
+  - kein gültiges Paar insgesamt ist ein benannter Fehler;
+  - Druckausgabe und Abschnitt 5 nennen die Zahlen, alte Objekte zeigen „not recorded“;
+  - die Zählfixture steht in Z. 280.
+  - Die Abnahmetests lesen `overall` und `by_condition` über Namen (`test-m3a-5` Z. 11–27, 60–63); das angehängte Feld stört sie nicht.
+  - Hinweis: E9 (Nr. 1, Überlauf).
+- **[E3] erledigt.** PLAN-UPDATE Z. 15 und 89–111 erfüllen ADR-052 Nr. 17.3:
+  - kein Aufruf von `stats::t.test`, `stats::lm` oder `summary.lm` (Z. 15, 95);
+  - t und p aus eigener Rechnung, gleich `stats::t.test`, wo dieses rechnet (Z. 91);
+  - relative Konstanzregel mit der Grenze von `stats::t.test` (Z. 89; Prüflauf 2, (a));
+  - relative Restregel für beide Regressionen (Z. 97; Prüflauf 2, (c));
+  - Band und Entscheidung im entarteten Fall folgen der Regel q(z) ≤ 0 mit Q = 0 (Z. 99, 111);
+  - Raster über die ganze Fehlerklasse (Z. 281), wie LESSONS verlangt.
+  - Lücke: R² bei numerisch konstanten Zielwerten, siehe E8.
+- **[E4] akzeptiert** (Z. 16, 62, 108): `fleiss` enthält genau `kappa`, die Druckzeile nennt keinen Standardfehler, beide Linearitätsfelder sind Skalare ohne Namen. Festgehalten in ADR-052 Nr. 19.1.
+- **[E5] akzeptiert** (Z. 17, 115–123): eigener Abschnitt der Ebene zwei hinter dem Bootstrap-Abschnitt; keine Zahlenliterale; Abstand in MCSE; die Berichtsschwelle wird benannt, der Knit bricht nicht ab; Knit-Laufzeit vorher und nachher. Festgehalten in ADR-052 Nr. 19.2. Hinweis: E10.
+  - Geprüft: `vignettes/validation.Rmd` hat „## Bootstrap intervals: coverage by scenario“ (Z. 293) und danach „## Robustness screening: Plackett-Burman and Lenth“ (Z. 361). Ein neuer Abschnitt der Ebene zwei beendet den Bootstrap-Abschnitt, den K-M1c-5 liest.
+  - Der Literalfilter der Abnahme (`setup-m1a.R:565–580`) und die transitive Quellenprüfung (`helper-validation-latent.R:51–111`) zählen nur Dezimal- und Exponentenliterale mit mindestens drei Stellen. Die Design- und Seed-Literale im Helfer fallen nicht darunter.
+- **[E6] akzeptiert** (Z. 18, 282): vollständige Druckausgaben mit letztem Zeilenumbruch und unsichtbarer Rückgabe, jede Fehlermeldung genau und mit `conditionCall()` `NULL`, auch die bestehenden Pfade; keine Ausschlüsse.
+- **[E7] akzeptiert** (Z. 19, 275): `skip_if_not_installed()` vor jedem Aufruf der drei Orakel in Unit-Tests; Formeltests laufen ohne sie. Festgehalten in ADR-052 Nr. 19.4.
+- **Backlog:** Alle 131 Einträge sind zugeordnet, die offene Menge ist dieselbe wie in Runde 1 (Prüflauf 3). Gegen den Text geprüft: BL-09, BL-15, BL-44, BL-113, BL-123, BL-128, BL-131.
 
-## Einwände (Runde 1)
+## Einwände (Runde 2)
 
-- [E1] (blocking) docs/01 §2 Nr. 4 („Ergebnis ist eine richtige Zahl oder eine klare Fehlermeldung, nie stillschweigend eine falsche Zahl.“); K-M3a-1; Formelsammlung §5 („p\_cd relative Häufigkeit der Kombination (Antwort c, Referenz d)“); K-M3a-5 — **Befund:** Der Plan regelt für Cohens Kappa eine einzige Skalenkategorie, einen entarteten Nenner und leere Randkategorien der übergebenen Skala (Z. 59). Referenzwerte außerhalb der Skala regelt er nicht, ebenso wenig widersprüchliche Referenzen.
-  - v0.1.0 bildet die Vorgabeskala nur aus den gültigen Antworten (`R/agreement.R:40`). `cohen_kappa()` macht Referenzwerte außerhalb der Skala über `factor()` zu `NA`; `table()` verwirft diese Paare, der Nenner `length(x)` behält sie (Z. 187–191). Die Kreuztafel summiert dann nicht zu 1, und beide Kappa-Felder sind falsch, ohne Meldung.
-  - Prüflauf 2, (a) und (b): Mit `levels = NULL` und einer Referenzkategorie, die keine Antwort verwendet, ist `kappa_all_vs_reference` 0,571429 für alle drei Gewichtungen. Richtig (Skala a, b, c; Mini-Referenz und `irr::kappa2`) sind 0,500000, 0,400000 und 0,285714. Die Tafel summiert sich auf 0,6667. Mit `levels = c("a", "b")` ist es dasselbe.
-  - `resolve_reference()` (Z. 109–121, für beide Funktionen) nimmt bei mehreren Referenzwerten eines Items still den ersten. Prüflauf 5, (1): Item i1 mit den Referenzen 2 und 5 ergibt in `msa_bias()` den mittleren Bias 0,0000 oder −1,5000, je nach Zeilenfolge.
-
-  — **Vorschlag:** In `PLAN-UPDATE.md` das Verhalten für beide Kappa-Felder und beide Funktionen festlegen (Mindestanforderung ADR-052 Nr. 17.1). Empfohlen:
-  1. Ein nicht fehlender Referenzwert außerhalb der Skala ist ein benannter englischer Fehler, der die Werte nennt und auf `levels` verweist, bei übergebenen wie bei abgeleiteten `levels`.
-     - Die Alternative, die Vorgabeskala aus Antworten und Referenz zu bilden, verschiebt K der Gewichte und die Positionen der Intervallmetrik, sobald eine Referenzkategorie zwischen Antwortkategorien liegt. Alpha hinge dann von der Referenz ab. Sie braucht deshalb eine eigene Begründung und Tests.
-  2. Ein Item mit zwei verschiedenen Referenzwerten ist ein benannter Fehler, gleich ob die Referenz als Vektor, als data.frame oder als Spalte von `runs` kommt.
-  3. Unit-Tests für beide Pfade, alle drei Gewichtungen und beide Kappa-Felder; Vergleich mit der Rechnung über die volle Kategorienmenge.
-  4. Rückwirkung prüfen: AP1 übergibt die Klassen ausdrücklich (`R/acmg.R:1224`), und die Referenzen von `acmg_demo` liegen in der Skala (Prüflauf 5). Die M2-, M1d- und Berichtstests laufen in BUILD mit.
-- [E2] (blocking) docs/01 §5 („Fehlende oder nicht parsbare Antworten bleiben fehlend und werden gezählt, nie ersetzt.“); K-M3a-5 („je Prompt×Modell dasselbe“) — **Befund:** Der Plan lässt fehlende und nicht lesbare Werte in `msa_bias()` „ausgeschlossen“ (Z. 111), zählt sie aber nirgends.
-  - v0.1.0 filtert sie ohne Zählung (`R/agreement.R:225`). Eine Bedingung Prompt × Modell ohne gültiges Paar verschwindet aus `by_condition` (`split(…, drop = TRUE)`, Z. 235).
-  - Prüflauf 2, (g): P1 × M2 nur mit fehlenden Werten ergibt eine einzige Zeile in `by_condition` (P1 × M1), ohne Meldung.
-  - Das Paket zählt sonst: `msa_agreement()` mit `n["missing"]`, `msa_fit()` mit einer Warnung samt Zahl, `print()` eines `msa_runs`-Objekts mit „missing values“. `msa_bias(ic50_demo, "reference")` verwirft dagegen 8 fehlende Werte ohne Spur (Prüflauf 5).
-
-  — **Vorschlag:** zusätzliche Felder (docs/01 §4, ohne ADR; Mindestanforderung ADR-052 Nr. 17.2):
-  1. die Zahl der nicht eingehenden Werte gesamt (fehlende, nicht lesbare oder `NaN`-Antwort, fehlende Referenz), dazu je Zeile von `by_condition`;
-  2. jede Bedingung aus `runs` bleibt eine Zeile von `by_condition`, ohne gültiges Paar mit `n = 0` und `NA`;
-  3. Druckausgabe und Abschnitt 5 nennen die Zahl;
-  4. Unit-Test mit einer leeren Bedingung und Fehlwerten beider Arten.
-  Namen und Form legt `PLAN-UPDATE.md` fest.
-- [E3] (blocking) docs/01 §2 Nr. 4 („Randfälle sind Pflicht: fehlende Werte, unbalancierte Pläne, Komponenten an der Grenze null, Faktoren mit zwei Stufen, identische Antworten, nicht konvergierende Fits. Ergebnis ist eine richtige Zahl oder eine klare Fehlermeldung, nie stillschweigend eine falsche Zahl.“); K-M3a-5; K-M3a-6; ADR-022 Nr. 7 — **Befund:** Der Plan regelt konstante Abweichungen (Punktintervall, p `NA` mit Hinweis, Z. 111) und nennt ein Raster gegen Rohfehler (Z. 174). Er legt aber nicht fest, wann Abweichungen numerisch konstant sind.
-  - v0.1.0 ruft `stats::t.test` auf, sobald der Standardfehler größer als 0 ist (`R/agreement.R:231`).
-  - Prüflauf 3: Abweichungen 0,1 + 0,2, 0,3, 1,3 − 1 und 1 + 0,1 + 0,2 − 1 (sd 3,2e-17, zwei Referenzwerte) beenden `msa_bias()` mit „data are essentially constant“. `summary(lm)` warnt dabei „essentially perfect fit: summary may be unreliable“.
-  - Sind alle Abweichungen exakt 0, gibt `stats::t.test` den p-Wert `NaN`.
-  - Solche Werte entstehen bei identischen Antworten schon durch die Subtraktion der Referenz. LESSONS: Einzelbefunde dieser Art kosteten in M1a je eine Runde.
-
-  — **Vorschlag:** in `PLAN-UPDATE.md` eine Regel für den ganzen Pfad (Mindestanforderung ADR-052 Nr. 17.3):
-  1. Kein Aufruf von `stats::t.test` oder `summary.lm` im Produkt. t, p und Intervall kommen aus eigener Rechnung mit p = 2 · pt(−|t|, n − 1), gleich `stats::t.test`, wo dieses ein Ergebnis liefert.
-  2. „Konstant“ ist relativ: Standardfehler < 10 · `.Machine$double.eps` · |Mittel| (die Grenze von `stats::t.test`) oder exakt 0. Dann Punktintervall, t und p `NA` mit Hinweis.
-  3. Für die Reststreuung beider Regressionen eine relative Grenze (Restquadratsumme gegen Gesamtquadratsumme, wie ADR-022 Nr. 7). Darunter sind t-Werte und p `NA` mit Hinweis, das Band ist die Gerade, die Entscheidung folgt aus ihr. R² ist `NA`, wenn die Gesamtstreuung null ist.
-  4. Rastertest über Itemzahlen, Referenzbereiche, Rauschstufen bis zur Arbeitsgenauigkeit (nur Rundungsrauschen) und mehrere Seeds: kein Fehler, keine Warnung, kein `NaN`.
-- [E4] (minor) ACC-8; ACC-9; ACC-12; `tests/acceptance/test-m3a-2-fleiss-kappa.R:144–163`; `test-m3a-6-linearity.R:138–139` — **Befund:** Vertragsdetails, an denen eine richtige Rechnung scheitern kann.
-  - Eine Druckzeile, die „Fleiss“ und „SE“, „standard error“ oder „std err“ nennt, muss den Wert nach Gl. (12) zeigen. Ein Satz wie „Fleiss' kappa … (no standard error)“ in einer Zeile macht K-M3a-2 rot, obwohl der Plan zu Recht keinen Standardfehler ausgibt (Z. 69).
-  - Jedes Element von `fleiss`, dessen Name das Muster `acc_m3a_se_pattern` trifft, gilt als Standardfehler, auch Teilnamen wie `n_sd` oder `std_counts`.
-  - `linearity_in_band` und `linearity_verdict` vergleicht der Test mit `expect_identical()`.
+- [E8] (minor) ADR-052 Nr. 16.5 („Nicht definierte Größen sind `NA`, nie `NaN`; das gilt auch für R² bei Gesamtstreuung null.“) und Nr. 17.3 („behandelt `msa_bias()` wie exakt gleiche“); docs/01 §2 Nr. 4; K-M3a-6; PLAN-UPDATE Z. 97–99 — **Befund:** Der Plan führt Zielwerte, die nach der SE-Regel numerisch konstant sind, in den entarteten Zweig (Z. 97). R² setzt er aber nur bei TSS = 0 auf `NA_real_`, sonst auf 1 − RSS/TSS (Z. 99).
+  - Prüflauf 2, (b): Antworten = Referenz + 0,3 an den Referenzwerten 2, 4, 6, 8, 10 mit je 12 Werten. Die Abweichungen haben sd 4,4e-16, die Regel greift, TSS = 1,1e-29 > 0. 1 − RSS/TSS ist 0,7506; `summary.lm` gibt 0,6960 mit „essentially perfect fit“. Zwei weitere Fälle geben 0,5867 und 0,6223.
+  - Bei exakt gleichen Abweichungen ist R² nicht definiert. Objekt und Bericht zeigten für eine konstante Abweichung ein R² von 75 %.
 
   — **Vorschlag:**
-  - Die Fleiss-Zeile der Druckausgabe nennt nur den Punktschätzer. Ein Hinweis auf den fehlenden Standardfehler gehört, falls gewünscht, in die Hilfe.
-  - `fleiss` enthält neben `kappa` höchstens Zählgrößen mit eindeutigen Namen, etwa `ratings_per_item` oder `n_items`.
-  - Beide Linearitätsfelder ohne Namen und Attribute (`unname()`), Länge 1.
-- [E5] (minor) K-M3a-7; ACC-15; docs/01 §2 Nr. 3 („Berichtet wird, was herauskommt, nicht was herauskommen soll“); ADR-048 Nr. 14.5; `tests/acceptance/test-m1c-5-vignette.R:38`; PLAN-REVIEW M3b r1, E2 — **Befund:** Der Plan legt Inhalt und Herkunft der Vignettentabelle richtig fest (Z. 115–137), aber nicht ihren Ort und den Umgang mit Literalen.
-  - K-M1c-5 liest alle Tabellen des Abschnitts „Bootstrap intervals: coverage by scenario“ bis zur nächsten Überschrift gleicher oder höherer Ebene. Ein dort eingeschobener Unterabschnitt mit der Bias-Tabelle läge in diesem Bereich.
-  - K-M1a-7 wertet jedes Literal der ganzen Datei als abgetippt, das einer ANK-TOL-Toleranz gleicht (etwa 1e-8). Weitere Tests prüfen Literale mit mindestens drei signifikanten Stellen aus Ankern und Ergebnisdateien (M3b r1, E2).
-  - Über das Bestehen entscheidet der Klasse-A-Test, die Vignette berichtet.
+  1. R² beider Regressionen ist `NA_real_` mit Hinweis, sobald ihre Zielwerte TSS = 0 haben oder nach der SE-Regel numerisch konstant sind.
+  2. Sonst gilt 1 − RSS/TSS, bei verschwindenden Resten also nahe 1.
+  3. Das Raster prüft das für beide Regressionen.
+
+  Bindend festgehalten in ADR-052 Nr. 17.3.6.
+- [E9] (minor) ADR-052 Nr. 17.2; PLAN-UPDATE Z. 72 und Z. 74 („Nach obiger Referenzauflösung gilt `n + n_excluded = Zahl der Eingabezeilen`, insgesamt und je beobachteter Bedingung.“); docs/01 §2 Nr. 4 — **Befund:**
+  1. Ist die Differenz zweier endlicher Werte nicht endlich (Überlauf), führt sie nach Z. 72 „zu einer klaren Meldung“, und die Zeile ist ungültig. `n_excluded` zählt nach Z. 74 aber nur fehlende Werte. Die Zeile stünde weder in `n` noch in `n_excluded`, und die Gleichung von Z. 74 gälte nicht.
+  2. v0.1.0 liest Antwort und Referenz über `as.character()` (`R/agreement.R:112`, `:116`, `:118`, `:223`). Das behält 15 signifikante Stellen; nach Prüflauf 1 ändern sich 1/3, 0,1 + 0,2 und 10 + 1e-14 im Rundlauf. Konstanzregel (Z. 89) und Konfliktprüfung (Z. 52) urteilten dann über gerundete Werte. Vergleicht der Builder dagegen die Zahlen selbst, kann eine Konfliktmeldung im Standardformat zwei gleich aussehende Werte zeigen („0.3, 0.3“).
 
   — **Vorschlag:**
-  - ein eigener Abschnitt der Ebene zwei, etwa „## Bias interval: coverage by scenario“, hinter dem Bootstrap-Abschnitt;
-  - im Rmd keine Zahlenliterale: Szenarien, Seeds und n_sim kommen aus dem Helfer und aus ANK-06, Toleranzen aus ANK-TOL;
-  - die Tabelle zeigt zusätzlich den Abstand zu 0,95 in MCSE; eine Abweichung über ANK-TOL.mc_factor (report) wird benannt und bricht den Bau nicht ab;
-  - die Laufzeit des ganzen Knits vor und nach der Änderung in `PROGRESS.md` nennen, weil er je Mutant läuft.
-- [E6] (minor) Gate mutgate (`orchestrator/gates.d/86-mutgate.sh`; `config.env:228–229`, `:242`, `:267`); ANK-32; docs/01 §2 Nr. 7; ADR-051 Nr. 10; ADR-052 Nr. 18 — **Befund:** Der Plan plant Druck- und Berichtstests (Z. 39, 321) und zielgerichtete Tests gegen Überlebende (Z. 354).
-  - mutgate mutiert `R/agreement.R` aber ganz, auch die bestehenden Teile: `print.msa_agreement()` (Z. 123–147), `print.msa_bias()` (Z. 248–262), die Fehlerpfade von `resolve_reference()` und `krippendorff_alpha()`.
-  - Die Mutatoren `string_literals` und `numeric_literals` treffen jede Formatzeichenkette (`orchestrator/lib/r-mutation.R:59–67`).
-  - Heute prüft nur `test-m3a-2-fleiss-kappa.R:157–162` eine Druckausgabe, und nur Zeilen mit Fleiss-Standardfehler. In M3b lag eine Attrappe ohne Drucktests bei 63,2 % (ADR-051 Nr. 10).
+  1. Überlauf ist ein benannter englischer Fehler. Bindend festgehalten in ADR-052 Nr. 17.2.2.
+  2. Numerische Eingaben werden als Zahlen gelesen, ohne Umweg über `as.character()`. Nur Zeichenketten und Faktorbeschriftungen gehen durch `as.numeric()`.
+  3. Konflikte werden auf den gelesenen Zahlen geprüft. Die Meldung zeigt die Werte so, dass sie sich unterscheiden, etwa mit `format(x, digits = 17)`.
+- [E10] (minor) K-M3a-7; ACC-15; `tests/acceptance/setup-m1a.R:519–523` (`acc_m1a_column()`); `tests/acceptance/setup-m3a.R:624–635`; `tests/acceptance/test-m3a-7-vignette.R:43` — **Befund:** Der Abnahmetest nimmt eine Spalte nur, wenn genau eine Überschrift (klein geschrieben, ohne Rand) mit dem gesuchten Wort beginnt. Der Plan gibt der Tabelle eine fünfte Spalte mit dem Abstand in MCSE (Z. 121).
+  - Hieße sie etwa „coverage − level (MCSE)“ oder „MCSE distance“, begännen zwei Überschriften mit „coverage“ bzw. „mcse“. Der Test fände dann keine Tabelle, und K-M3a-7 wäre rot.
+  - n_sim liest der Test als Ziffernfolge, alle anderen Zeichen entfernt: aus „1e+03“ würde 103.
 
   — **Vorschlag:**
-  - Unit-Tests vergleichen die ganze Ausgabe von `capture.output(print(x))` beider Druckmethoden mit Zeilen, die der Test aus dem Objekt bildet (wie M3b r1, E1 Nr. 1), mit und ohne Referenz, mit und ohne Fleiss, bestimmte und unbestimmte Linearität.
-  - Jede Fehlermeldung genau (`expect_error(…, fixed = TRUE)`) und `conditionCall()` gleich `NULL`; jede Teilbedingung einzeln.
-  - Die Tests bleiben schnell, weil sie je Mutant laufen. Kein Umbau bestehenden Codes für den Score, keine Ausschlüsse; Äquivalenz nur einzeln über `MUT-EQUIV.json`.
-- [E7] (minor) docs/01 §5 („Tests unter `tests/testthat/` überspringen mit `skip_if_not_installed()`, Abnahmetests nicht (das deps-Gate installiert Suggests)“); ADR-051 Nr. 9.8 — **Befund:** Der Plan nimmt irr, psych und DescTools in Suggests auf (Z. 35) und plant „unabhängige Referenzrechnungen“ in neuen Unit-Tests (Z. 37–40), ohne zu sagen, ob diese die Pakete rufen.
+  1. Die Überschriften lauten scenario, coverage, MCSE und n_sim. Die Abstandsspalte beginnt mit keinem dieser Wörter, etwa „distance to level (MCSE)“; ebenso jede weitere Spalte.
+  2. n_sim steht als ganze Zahl ohne Exponent.
 
-  — **Vorschlag:** Jeder Unit-Test unter `tests/testthat/`, der irr, psych oder DescTools ruft, beginnt mit `skip_if_not_installed()`. Hilfebeispiele, Bericht und Vignette brauchen die Pakete nicht.
+  Festgehalten in ADR-052 Nr. 19.3.
+- [E11] (minor) docs/01 §2 Nr. 4 („Ergebnis ist eine richtige Zahl oder eine klare Fehlermeldung“); K-M3a-2; ADR-052 Nr. 14 und Nr. 16.2; PLAN-UPDATE Z. 54 und Z. 64 — **Befund:**
+  1. Z. 64 gibt jedem nicht schätzbaren Fleiss-Fall einen Hinweis auf Krippendorffs Alpha. Das schließt P̄_e = 1 und weniger als zwei Bewertungen je Item ein. Dort ist auch das Alpha von `msa_agreement()` `NA`: bei D_e = 0 (`R/agreement.R:180`) und ohne Einheit mit zwei Werten (Z. 161, 167).
+  2. Die Beispielmeldung von Z. 54 nennt die Werte ohne Anführungszeichen. Eine leere Zeichenkette als Referenz wäre unsichtbar („…: .“).
+
+  — **Vorschlag:**
+  1. Der Verweis auf Krippendorff steht bei ungleicher Zahl gültiger Bewertungen, auch für ein Item ohne gültige Antwort (K-M3a-2, ADR-052 Nr. 14).
+  2. In den anderen Fällen nennt die Meldung den Grund: gleiche Antworten auf allen Items oder weniger als zwei Bewertungen je Item.
+  3. Werte in Meldungen stehen in Anführungszeichen, etwa mit `encodeString(x, quote = "\"")`.
 
 ## Prüfung nach Gesichtspunkten
 
 - **Spec-Treue:**
-  - K-M3a-1: Formel nach Formelsammlung §5, keine freie Gewichtsmatrix (ACC-3), Hinweis bei einer Kategorie (ACC-16). Lücke: E1.
-  - K-M3a-2: `fleiss = FALSE` hinter `weights`, κ_F mit Marginalanteilen aus den Daten, `NA` mit Krippendorff-Meldung, kein Standardfehler (zulässig). Die Formel im Plan (Z. 64–66) gleicht Formelsammlung §5 und der Mini-Referenz.
-  - K-M3a-3: `n_units_excluded` aus Einheiten vor dem Entfernen ungültiger Antworten (Z. 80), die drei Zuordnungen in der Hilfe.
-  - K-M3a-4: Nenner nach ACC-5 und ACC-6 (Z. 82), Modalregel, BL-113 (Z. 84).
-  - K-M3a-5: Biasrechnung von der Geraden getrennt (Z. 90), t-Intervall mit n − 1. Lücken: E2, E3.
-  - K-M3a-6: alle Felder aus ACC-12 (Z. 92–99), beide Gewichtungen bei ungleichen Replikaten (Z. 101), stetige Bandprüfung (Z. 103–109), Verdikt nur aus der Handbuchrechnung, Hinweis in Objekt und Bericht. Lücke: E3 für die Regressionen.
-  - K-M3a-7: ADEMP nach docs/01 §8 (Z. 127–135), Seeds und RNG nach ACC-14, Zahlen aus dem geladenen Paket. Hinweis: E5.
-- **Architektur:** Die Produktarbeit bleibt in `R/agreement.R`; Fit-, Bootstrap- und AP1-Kern bleiben unberührt (Z. 43). Der Vignettenhelfer folgt ADR-048 Nr. 14.5 und ADR-043. Weil der Knit den Helfer über `system.file()` aus dem geladenen Paket lädt, ruft er im Mutationslauf den mutierten Namespace (`lib/r-mutation.R:77`: `inst` wird mitkopiert).
-- **Verträge:** Nur additive Änderungen nach docs/01 §4: ein neues Argument mit Vorgabe am Ende, neue Felder, neue Spalte, geänderte Druckausgabe. ANK-02 bleibt. Die Prüfung der Eingaben von `level`, `fleiss` und nicht endlichen Werten ersetzt bisher stille `NaN`-Ergebnisse durch benannte Fehler und ändert keine Bedeutung.
-- **Vollständigkeit:** Dateiliste (Z. 27–41) und Territorium passen zu `BUILDER_EXTRA_PATHS_REGEX` (`config.env:200`). `README.md` und `_pkgdown.yml` bleiben unberührt. Alle 131 Backlog-Zeilen sind zugeordnet.
-- **Risiken:** Die Risikotabelle (Z. 170–181) nennt die richtigen Klassen. E3 macht die Klasse „Rohfehler bei kleiner Streuung“ prüfbar. Laufzeit: E5 und „An den Betreiber“ Nr. 3.
+  - K-M3a-1 bis K-M3a-4: wie Runde 1. Dazu die Referenzregeln für beide Kappa-Felder (Formelsammlung §5: p_cd über die Paare aus Antwort und Referenz).
+  - K-M3a-5: t-Intervall und p aus eigener Rechnung, gleich `stats::t.test`, gesamt und je Prompt × Modell.
+  - K-M3a-6: Handbuchrechnung und Item-Mittelwerte ohne `lm`; Band, Verdikt und Hinweis wie ADR-052 Nr. 10, 11 und 16.6; entartete Fälle nach Nr. 17.3.
+  - K-M3a-7: Szenarien, Seeds 20261106 und 20261107, RNG und Ziehungsfolge gleich der Klasse-A-Studie (`test-bias-coverage.R` Z. 23–60).
+- **Architektur:**
+  - Eine gemeinsame Referenzauflösung für beide Funktionen.
+  - Die Produktarbeit bleibt in `R/agreement.R`; Fit-, Bootstrap-, AP1- und Robustheitskern bleiben unberührt.
+  - Der Vignettenhelfer lädt sich mit `sys.source(system.file(…))` und wörtlichen Argumenten, trägt das Präfix `agreement_`, rechnet mit dem geladenen Namespace und nutzt die vorhandenen, byte-gleichen Ankerkopien.
+- **Verträge:**
+  - Nur zusätzliche Felder und Druckänderungen (docs/01 §4); Signaturen und ANK-02 bleiben.
+  - Die neuen Eingabefehler ersetzen stille falsche Zahlen, etwa bei Referenzen außerhalb der Skala oder bei widersprüchlichen Referenzen; die Bedeutung keines Arguments ändert sich.
+  - Die Abnahmetests greifen über Namen zu; nach Prüflauf 1 brechen keine bestehenden Aufrufer.
+- **Vollständigkeit:**
+  - Dateiliste, Reihenfolge und Testplan decken alle sieben Kriterien und E1 bis E7 ab; alle 131 Backlog-Einträge sind zugeordnet.
+  - Offene Details sind E8 bis E11; die bindenden davon stehen in ADR-052.
+- **Risiken:** Die Tabelle (Z. 140–147) nennt die richtigen Klassen. Hinzu kommt das Risiko der Spaltennamen (E10). Die Laufzeit des Knits je Mutant wird gemessen, nicht geschätzt.
 - **Gate-Abdeckung:**
 
   | Kriterium | Prüfweg | Gates |
   | --- | --- | --- |
   | K-M3a-1 bis K-M3a-6 | `tests/acceptance/test-m3a-1` bis `-6` | tests; mutgate je Mutant |
-  | K-M3a-7 | `tests/simulation/test-bias-coverage.R`, `tests/acceptance/test-m3a-7-vignette.R` | tests; lint (Bau der Vignette); mutgate je Mutant nur der Vignettenteil |
+  | K-M3a-7 | `tests/simulation/test-bias-coverage.R`, `tests/acceptance/test-m3a-7-vignette.R` | tests; lint (Bau der Vignetten); mutgate je Mutant nur der Vignettenteil |
   | alle | Kriteriums-IDs in `tests/acceptance` | trace |
   | Suggests | `DESCRIPTION` | deps |
-  | Anker, Golden-Daten | keine Änderung nach `plan/M3a` geplant | golden-adr |
+  | Anker, Golden-Daten | keine Änderung nach `plan/M3a` | golden-adr |
   | Pfade | Dateiliste des Plans | territory |
 
 ## Hinweise für BUILD
 
-- Prüfumfang laut Plan (Z. 327–352) mit `REPO_ROOT` und `options(testthat.progress.max_fails = Inf)`. Zusätzlich vor der Übergabe die Abnahmetests, die `msa_agreement()` oder den gemeinsamen Knit außerhalb von M3a nutzen, soweit sie ohne Git laufen: `filter = "^(m1a-7|m1b-7|m1c-5|m1d-4)"` (Knit und ClinVar-Alpha). Den AP1-Vergleich mit `msa_agreement()` in `setup-m2.R` Z. 873–882 deckt der Gate-Lauf ab.
-- Hilfeseiten nur aus roxygen erzeugen; übernommen werden nur `man/msa_agreement.Rd` und `man/msa_bias.Rd` (Plan Z. 30).
-- Datenblätter nicht kopieren, nicht in Tests unter `tests/testthat/` lesen (BL-09).
+- **Vertrag:** `PLAN.md`, `PLAN-UPDATE.md` und ADR-052 Nr. 1 bis 19. Vorrang hat das ADR, insbesondere Nr. 17.2.2 (Überlauf) und Nr. 17.3.6 (R²). Das Code-Review prüft gegen Nr. 1 bis 17 und Nr. 19.
+- **Minor-Befunde der Runde 1** (dieses Dokument ersetzt `PLAN-REVIEW.md` der Runde 1):
+  - E4: keine Druckzeile, die „Fleiss“ und „SE“, „standard error“ oder „std err“ nennt; in `fleiss` kein Name nach `acc_m3a_se_pattern` (`setup-m3a.R:246`), auch keine Teilnamen wie `n_sd`.
+  - E5: in `validation.Rmd` kein Literal, das einem ANK-TOL-Wert gleicht (etwa 1e-8).
+  - E6: Drucktests vergleichen die ganze Ausgabe von `capture.output(print(x))` mit Zeilen, die der Test aus dem Objekt bildet; die Tests bleiben schnell, weil sie je Mutant laufen.
+  - E7: `skip_if_not_installed()` vor jedem Aufruf von irr, psych oder DescTools in Unit-Tests.
+- **Prüfumfang** laut PLAN-UPDATE Z. 290–314, mit `REPO_ROOT` und `options(testthat.progress.max_fails = Inf)`. Den AP1-Vergleich mit `msa_agreement()` in `setup-m2.R` Z. 873–882 deckt der Gate-Lauf ab.
+- **Hilfeseiten** nur aus roxygen erzeugen; übernommen werden nur `man/msa_agreement.Rd` und `man/msa_bias.Rd`.
+- **Datenblätter** nicht kopieren und nicht in Tests unter `tests/testthat/` lesen (BL-09).

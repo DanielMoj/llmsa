@@ -2,15 +2,16 @@
 
 ## Status
 
-Angenommen (Reviewer, `30-plan-review` M3a, Runde 1, 05.11.2026). Bindet nach dem Ende der Planrunden (AGENTS.md, Handoff-Disziplin; docs/01 §1).
+Angenommen (Reviewer, `30-plan-review` M3a, Runde 1, 05.11.2026; ergänzt in Runde 2, 05.11.2026: Nr. 17 und Nr. 19). Bindet nach dem Ende der Planrunden (AGENTS.md, Handoff-Disziplin; docs/01 §1).
 
 - Nr. 1 bis 14 halten die Auslegungen fest, die `orchestrator/handoff/M3a/CRITERIA.json` unter `open` als ACC-3 bis ACC-16 führt.
   - ACC-1 kündigt dieses ADR an: `10-acceptance` darf `docs/decisions/` nicht schreiben (`orchestrate.sh:518`, `path_allowed`).
   - `PLAN.md` (Runde 1) übernimmt diese Auslegungen (Abschnitt „Ziel“, Z. 11–19).
 - Nr. 15 hält Anker und geschützte Daten fest (ACC-1, ACC-2), mit dem Abgleich der drei AIAG-Datenblätter am Seitenbild.
 - Nr. 16 bestätigt Festlegungen aus `PLAN.md`. Darunter sind die Randfallvorschläge, die der Plan dem Reviewer zur Entscheidung vorlegt (Schnittstellen, Z. 111).
-- Nr. 17 nennt die Mindestanforderungen zu den blocking-Befunden E1 bis E3 aus PLAN-REVIEW M3a r1. Die Form legt `PLAN-UPDATE.md` (Runde 2) fest; das Plan-Review der Runde 2 trägt sie hier nach.
+- Nr. 17 nennt die Mindestanforderungen zu den blocking-Befunden E1 bis E3 aus PLAN-REVIEW M3a r1. Das Plan-Review der Runde 2 trägt die Form aus `PLAN-UPDATE.md` nach, mit zwei Präzisierungen des Reviewers (Nr. 17.2.2 und Nr. 17.3.6).
 - Nr. 18 ist ein Hinweis zum Mutationsumfang, keine neue Regel.
+- Nr. 19 bestätigt die Formen aus `PLAN-UPDATE.md` zu den minor-Befunden E4, E5 und E7 der Runde 1 und nennt die Spaltennamen der Überdeckungstabelle (E10 der Runde 2).
 - Die Nummern ändern keinen Abnahmetest; sie schreiben fest, was die Tests prüfen. Einzelheiten stehen im Feld `note` des jeweiligen ACC-Eintrags. Weicht ein Eintrag von diesem ADR ab, gilt dieses ADR.
 
 ## Kontext
@@ -20,7 +21,7 @@ Angenommen (Reviewer, `30-plan-review` M3a, Runde 1, 05.11.2026). Bindet nach de
   - K-M3a-2: wer die „Bewerter“ eines Items im Datenmodell sind; Name und Form des Ergebnisses; was als Standardfehler gilt; Form der Meldung;
   - K-M3a-3: wo und wie die ausgeschlossenen Einheiten gezählt werden; was „dokumentiert“ heißt;
   - K-M3a-4: Nenner bei fehlenden Antworten; Einheiten der Reproduzierbarkeit; wie die Kappa-Tabelle des Handbuchs auf `msa_agreement()` abgebildet wird;
-  - K-M3a-5 und K-M3a-6: Namen und Form der neuen Ergebnisfelder; der Fall mit nur einem Referenzwert; Inhalt des Hinweises auf den Unterschied beider Rechnungen;
+  - K-M3a-5 und K-M3a-6: Namen und Form der neuen Ergebnisfelder; der Fall mit nur einem Referenzwert; Inhalt des Hinweises auf den Unterschied beider Rechnungen; wann Abweichungen und Reste numerisch konstant bzw. null sind und was dann gilt (docs/01 §2 Nr. 4 verlangt nur „eine richtige Zahl oder eine klare Fehlermeldung“);
   - K-M3a-7: Datenerzeugung, Seeds und Bestehensprüfung der Studie; Form der Tabelle in der Vignette.
 - **Gemessen in dieser Phase** (PLAN-REVIEW M3a, Runde 1, Prüfläufe 1 bis 6; R 4.6.1, testthat 3.3.2, irr 0.85; Arbeitsbaum ohne Produktänderung; Proben unter `orchestrator/handoff/M3a/.probe-plan-review/`, danach gelöscht):
   - Datenblätter: Datei- und Inhaltsprüfsummen, Textschicht und Seitenbild (Nr. 15).
@@ -37,6 +38,12 @@ Angenommen (Reviewer, `30-plan-review` M3a, Runde 1, 05.11.2026). Bindet nach de
     - eine Bedingung Prompt × Modell ohne gültigen Wert fehlt ohne Meldung in `by_condition` (E2).
   - Bandprüfung nach `PLAN.md` (Maximum von q(z) über den Bereich) gegen `acc_m3a_in_band_ref()`: auf 4000 Zufallsplänen (3 bis 8 Items, 2 bis 6 Replikate; Fälle mit relativem Rand unter 1e-6 ausgenommen) 4000 gleich; die Testfälle acceptable, handbook_rejects und between_references gleich.
   - Laufzeit: 200 Aufrufe von `msa_bias()` v0.1.0 auf 540 Werten dauern 0,66 s; hochgerechnet etwa 6,6 s für 2 × 1000.
+- **Gemessen in Runde 2** (PLAN-REVIEW M3a, Runde 2, Prüfläufe 1 bis 3; R 4.6.1; Produktcode v0.1.0 unverändert; Proben unter `orchestrator/handoff/M3a/.probe-plan-review-r2/`, danach gelöscht):
+  - Daten der bestehenden Aufrufer von `msa_agreement()` und `msa_bias()`: `acmg_demo` (60 Items), AP1-Items aus `items.csv` und `pilot.csv` (110 Items, davon 25 INSAID-Items mit fehlender Referenz `NA`), `ic50_demo` (40 Items), `msa_simulate()` der Einstiegsvignette (30 Items, `latent` je Item konstant, `R/plan.R:28`). Jedes Item hat höchstens eine Referenz, keine liegt außerhalb der Skala, keine ist eine leere Zeichenkette. Die Regeln von Nr. 17.1 lösen auf diesen Pfaden keinen neuen Fehler aus.
+  - Konstanzregel von Nr. 17.3.2 (SE = s/√n): auf 20000 Zufallsfällen nahe der Grenze in jedem Fall dieselbe Entscheidung wie „`stats::t.test` bricht mit ‚data are essentially constant‘ ab oder alle Werte sind 0“; mit SE = √(var/n) ebenso.
+  - Antworten = Referenz + 0,3 an den Referenzwerten 2, 4, 6, 8, 10 (je 12 Werte): sd der Abweichungen 4,4e-16, die Konstanzregel greift, TSS = 1,1e-29 > 0, 1 − RSS/TSS = 0,7506; `summary.lm` gibt 0,6960 mit „essentially perfect fit“. Zwei weitere Fälle: 0,5867 und 0,6223 (Nr. 17.3.6).
+  - Restregel von Nr. 17.3.5 (b): auf der exakt linearen Abweichung 0,1 + 0,05 · x ist √RSS/√TSS = 1,6e-15 ≤ 10 ε, die Regel greift; bei relativem Rauschen von 1e-15 bis 1e-6 greift sie nicht, und die eigene t-Rechnung bleibt endlich.
+  - `as.character()` einer Zahl behält 15 signifikante Stellen: 1/3, 0,1 + 0,2 und 10 + 1e-14 ändern sich im Rundlauf `as.numeric(as.character(x))`.
 
 ## Entscheidung
 
@@ -165,26 +172,53 @@ Angenommen (Reviewer, `30-plan-review` M3a, Runde 1, 05.11.2026). Bindet nach de
        - ANK-06 und ANK-TOL kommen aus den bestehenden, hashgeprüften Ankerkopien unter `inst/validation/`; keine neue Ankerkopie, keine Ergebnisdatei.
        - Die Rechnung läuft beim Knit mit dem geladenen Namespace, sequentiell und ohne Netz; Seeds und RNG nach Nr. 12.3. Der Zufallszustand des Aufrufers wird auch im Fehlerfall wiederhergestellt. Jede Wiederholung zählt; eine gescheiterte Rechnung bricht benannt ab.
     9. Suggests `irr`, `psych` und `DescTools` (docs/01 §5; ACC-17). Keine neuen Imports, keine neuen Exporte, kein Builder-ADR zur API. Keine Änderung unter `inst/extdata/` und `reference/anchors/`.
-17. **Mindestanforderungen zu E1 bis E3** (PLAN-REVIEW M3a r1, blocking). Die Form legt `PLAN-UPDATE.md` fest; das Plan-Review der Runde 2 trägt sie hier nach.
-    1. (E1) Referenzauflösung in `msa_agreement()` und `msa_bias()`:
-       - Ein nicht fehlender Referenzwert außerhalb der Skala (`levels`, übergeben oder abgeleitet) geht in keine stille Rechnung ein. Entweder gehen alle Paare mit gültiger Antwort und vorhandener Referenz in die Kreuztafel beider Kappa-Felder ein, oder der Aufruf endet mit einem benannten Fehler.
-       - Widersprüchliche Referenzwerte für dasselbe Item sind ein benannter Fehler.
-    2. (E2) `msa_bias()` zählt die Werte, die nicht eingehen, gesamt und je Prompt × Modell, in zusätzlichen Feldern. Eine Bedingung aus `runs` ohne gültiges Paar verschwindet nicht ungezählt. Druckausgabe und Abschnitt 5 nennen die Zahl.
-    3. (E3) Keine Fehlermeldung und keine Warnung von `stats::t.test`, `stats::lm` oder `summary.lm` erreicht den Aufrufer von `msa_bias()`.
-       - Abweichungen, die bis auf die Arbeitsgenauigkeit gleich sind, behandelt `msa_bias()` wie exakt gleiche: Punktintervall, t und p `NA` mit Hinweis. Die Grenze ist relativ, nicht exakt 0 (wie ADR-022 Nr. 7).
-       - Wo `stats::t.test` ein Ergebnis liefert, gleicht `msa_bias()` ihm (K-M3a-5).
-       - Dasselbe gilt für die Reststreuung beider Regressionen.
+17. **E1 bis E3: Mindestanforderungen und Form** (PLAN-REVIEW M3a r1, blocking; Form aus `PLAN-UPDATE.md` Runde 2, Abschnitt „Schnittstellen“, Z. 45–111, nachgetragen im Plan-Review der Runde 2). Jede Nummer nennt zuerst die Mindestanforderung der Runde 1, dann die Form. Die Form gilt; die Präzisierungen Nr. 17.2.2 und Nr. 17.3.6 gehen `PLAN-UPDATE.md` vor.
+    1. (E1) Referenzauflösung, gemeinsam für `msa_agreement()` und `msa_bias()`.
+       - Mindestanforderung: Ein nicht fehlender Referenzwert außerhalb der Skala (`levels`, übergeben oder abgeleitet) geht in keine stille Rechnung ein. Entweder gehen alle Paare mit gültiger Antwort und vorhandener Referenz in die Kreuztafel beider Kappa-Felder ein, oder der Aufruf endet mit einem benannten Fehler. Widersprüchliche Referenzwerte für dasselbe Item sind ein benannter Fehler.
+       - Form:
+         1. Eingabeformen wie v0.1.0: benannter Vektor, data.frame mit `item_id` und `reference`, Name einer Spalte von `runs`. Faktoren gelten mit ihren Beschriftungen. Kategorielle Referenzen werden als Kategorienamen verglichen, Referenzen von `msa_bias()` nach der Umwandlung in Zahlen („2“ und „2.0“ sind derselbe Wert).
+         2. Mehrere gleiche, nicht fehlende Referenzen eines Items sind zulässig. Zwei verschiedene nicht fehlende Werte sind ein englischer Fehler, der die `item_id` und die Werte in fester Ordnung nennt, gleich in welcher Zeilenfolge und Eingabeform (Beispiel des Plans: `Conflicting reference values for item_id 'i1': 2, 5.`).
+         3. Steht neben fehlenden Einträgen genau ein nicht fehlender Wert, ist er die Referenz des Items. Ohne lesbaren Wert oder ohne Zuordnung ist die Referenz des Items fehlend. Keine Antwort wird verändert, keine Referenz ergänzt.
+         4. `msa_agreement()`: Die Skala ist `levels` oder, wie in v0.1.0, die aus den nicht fehlenden Antworten abgeleitete. Jede nicht fehlende Referenz eines Items aus `runs` muss in ihr liegen, auch wenn die Antworten des Items fehlen. Sonst endet der Aufruf vor jeder Rechnung mit einem englischen Fehler, der alle betroffenen Werte und `levels` nennt. Die Referenzkategorien werden nicht mit der Skala vereinigt; K, Gewichte und Skalenpositionen hängen nicht von der Referenz ab.
+         5. Beide Kappa-Felder entfernen dieselben unvollständigen Paare vor Kreuztafel und Nenner; jedes verbleibende Paar liegt in genau einer Zelle, die relative Tafel summiert sich zu 1. Leere Tafel, Skala aus einer Kategorie und entarteter Nenner ergeben `NA_real_` mit dem Hinweis nach Nr. 14, nie `NaN`; für alle drei Gewichtungen.
+         6. Alle neuen Eingabefehler sind englisch, mit `call. = FALSE`.
+    2. (E2) Ausschlüsse in `msa_bias()`.
+       - Mindestanforderung: `msa_bias()` zählt die Werte, die nicht eingehen, gesamt und je Prompt × Modell, in zusätzlichen Feldern. Eine Bedingung aus `runs` ohne gültiges Paar verschwindet nicht ungezählt. Druckausgabe und Abschnitt 5 nennen die Zahl.
+       - Form:
+         1. Antwort und zugeordnete Referenz werden als Zahlen gelesen. `NA`, `NaN` und nicht lesbare Werte sind fehlend (Nr. 16.5), ±Inf in Antwort oder Referenz ist ein benannter Fehler. Eine Zeile ist gültig, wenn beide Werte vorliegen und ihre Differenz endlich ist.
+         2. Präzisierung des Reviewers (PLAN-REVIEW M3a r2, E9): Ist die Differenz zweier endlicher Werte nicht endlich (Überlauf), endet der Aufruf mit einem benannten englischen Fehler. `PLAN-UPDATE.md` Z. 72 nennt hier nur eine „klare Meldung“; die Zeile wäre dann weder gültig noch ausgeschlossen, und Nr. 17.2.3 gälte nicht.
+         3. `n_excluded` zählt je Eingabezeile die Vereinigung von fehlender Antwort und fehlender Referenz; eine Zeile zählt einmal. Es gilt `n + n_excluded` = Zahl der Eingabezeilen, gesamt und je Bedingung.
+         4. `overall` behält `n`, `bias`, `sd`, `lower`, `upper`, `p_value` in dieser Folge und erhält dahinter `n_excluded` (numerisch). `by_condition` behält seine Spalten und erhält dahinter die numerische Spalte `n_excluded`. Es hat eine Zeile je beobachteter Kombination Prompt × Modell der ungefilterten Eingabe, ohne kartesisches Auffüllen.
+         5. Bedingung ohne gültiges Paar: `n` = 0, `n_excluded` gleich ihrer Zeilenzahl, `bias`, `sd`, `lower`, `upper` und `p_value` `NA_real_`. Ein gültiges Paar: Nr. 16.5. Kein gültiges Paar insgesamt: benannter Fehler mit Ursache und Ausschlusszahl. `n_items` zählt wie bisher die Items mit gültigem Paar.
+         6. Druckausgabe und Abschnitt 5 zeigen gültige und ausgeschlossene Werte gesamt und je Bedingung. Bei Objekten ohne `n_excluded` steht „not recorded“; aus dem fehlenden Feld wird keine Null.
+    3. (E3) Numerik von `msa_bias()`.
+       - Mindestanforderung: Keine Fehlermeldung und keine Warnung von `stats::t.test`, `stats::lm` oder `summary.lm` erreicht den Aufrufer von `msa_bias()`. Abweichungen, die bis auf die Arbeitsgenauigkeit gleich sind, behandelt `msa_bias()` wie exakt gleiche: Punktintervall, t und p `NA` mit Hinweis. Die Grenze ist relativ, nicht exakt 0 (wie ADR-022 Nr. 7). Wo `stats::t.test` ein Ergebnis liefert, gleicht `msa_bias()` ihm (K-M3a-5). Dasselbe gilt für die Reststreuung beider Regressionen.
+       - Form:
+         1. `msa_bias()` ruft weder `stats::t.test` noch `stats::lm` noch `summary.lm`; alle Größen kommen aus eigener geschlossener Rechnung.
+         2. Konstanz: Für n ≥ 2 gültige Abweichungen mit Mittel m, Standardabweichung s und SE = s/√n gilt „numerisch konstant“ genau dann, wenn SE = 0 oder SE < 10 · ε · |m| mit ε = `.Machine$double.eps` (die Grenze von `stats::t.test`; Kontext, Runde 2). Sonst sind t = m/SE, p = 2 · pt(−|t|, n − 1) und die Grenzen m ± q · SE mit dem t-Quantil q zu `level`, über die obere Seite der Verteilung gerechnet. Bei Konstanz sind `lower` und `upper` gleich m, p ist `NA_real_`, ein englischer Hinweis nennt die Auswertung (gesamt oder die Bedingung); `sd` bleibt der gerechnete Wert. Es gibt kein öffentliches t-Feld.
+         3. `level` ist ein endlicher numerischer Skalar strikt zwischen 0 und 1, sonst ein benannter Fehler.
+         4. Beide Regressionen rechnen mit zentrierten Summen, skaliert, wo Quadrate über- oder unterliefen: alle gültigen Einzelwerte mit N − 2 Freiheitsgraden und die ungewichteten Item-Mittelwerte mit g − 2. Koeffizienten, Reste, Standardfehler und R² entstehen ohne `lm`.
+         5. Entarteter Zweig, für jede Regression getrennt: (a) Die Zielwerte (Abweichungen bzw. Item-Mittelwerte) haben TSS = 0 oder sind nach Nr. 17.3.2 numerisch konstant. (b) TSS > 0 und √RSS ≤ 10 · ε · √TSS (gleichwertig RSS ≤ (10 ε)² · TSS, ohne Unterlauf gerechnet). Ist die Gerade bestimmt und df > 0, bleiben die gerechneten Koeffizienten. t-Werte und p-Werte sind `NA_real_` mit Hinweis, das Band fällt auf die Gerade. „Bias = 0“ liegt genau dann im Band, wenn die Gerade auf dem ganzen geschlossenen Bereich null ist (q(z) ≤ 0 nach Nr. 16.6 mit Q = 0). Eine zusätzliche absolute Untergrenze der Streuung gibt es nicht.
+         6. Präzisierung des Reviewers (PLAN-REVIEW M3a r2, E8): Im Fall (a) ist R² `NA_real_`, auch wenn TSS > 0 ist; der Hinweis nennt den Grund. Sonst ist R² = 1 − RSS/TSS, im Fall (b) also nahe 1. Grund: Bei exakt gleichen Zielwerten ist R² nicht definiert (Nr. 16.5: „das gilt auch für R² bei Gesamtstreuung null“). Bei bis auf die Rundung gleichen Zielwerten wäre 1 − RSS/TSS eine Zahl aus der Rundung (Kontext, Runde 2: 0,7506). `PLAN-UPDATE.md` Z. 99 setzt R² nur bei TSS = 0 auf `NA`.
+         7. Die Rangfälle von Nr. 16.5 bleiben. Kein Ergebnis ist `NaN`, keine Meldung einer Engine erreicht den Aufrufer; Hinweise sind gezielt signalisierte R-Meldungen, die die betroffene Rechnung nennen.
+         8. Unit-Raster über Itemzahlen, Replikate (auch ungleiche), Referenzbereiche, Verschiebungen und positive Skalierungen, Rauschstufen bis zur Arbeitsgenauigkeit, Werte beiderseits beider Grenzen und mehrere Seeds: kein Fehler, keine Warnung, kein `NaN`. Reguläre Fälle werden gegen `stats::t.test` und `stats::lm` geprüft, entartete gegen die algebraisch bekannten Werte.
 18. **Mutationsumfang (Hinweis, keine neue Regel).**
     1. mutgate mutiert jede seit `plan/M3a` geänderte Datei im Scope ganz (`orchestrator/gates.d/86-mutgate.sh`; `MUT_SCOPE_REGEX='^R/.*\.R$'`, `config.env:228`). Mit `R/agreement.R` sind das auch `print.msa_agreement()`, `print.msa_bias()`, `resolve_reference()`, `krippendorff_alpha()` und `cohen_kappa()`. Verlangt sind 80 (`config.env:229`); eine Baseline gibt es nicht (BL-123).
     2. Die Mutatoren (`orchestrator/lib/r-mutation.R:59–67`) umfassen `string_literals` und `numeric_literals`, also auch die Formatzeichenketten der Druckmethoden. Heute prüft nur `test-m3a-2-fleiss-kappa.R:157–162` eine Druckausgabe von `msa_agreement()`, und nur Zeilen mit einem Fleiss-Standardfehler. In M3b lag eine Attrappe ohne Drucktests bei 63,2 % (ADR-051 Nr. 10).
     3. Die M3a-Abnahmetests mit dem gemeinsamen Knit von `validation.Rmd` laufen je Mutant (`MUT_TEST_DIRS` und `MUT_TEST_EXCLUDE`, `config.env:242` und `:267`). Die Rechnung der Vignettentabelle kostet nach dem Kontext einige Sekunden je Mutant.
     4. Der Score kommt aus Tests. Es kommen keine Ausschlüsse hinzu (AGENTS.md, Integrität Nr. 1 und 6). Ein Mutant verlässt den Nenner nur über `MUT-EQUIV.json` und Einzelfreigabe des Reviewers (SCHEMA.md).
+19. **Formen aus `PLAN-UPDATE.md` zu E4, E5 und E7 (Runde 1) und zu E10 (Runde 2).** Bestätigt im Plan-Review der Runde 2; minor, aber Teil des Umsetzungsvertrags.
+    1. (E4) `fleiss` ist `list(kappa = <numerischer Skalar ohne Namen>)` ohne weiteres Element. Die Fleiss-Zeile der Druckausgabe zeigt nur den Punktschätzer und nennt keinen Standardfehler; warum keiner ausgegeben wird, steht nur in der Hilfe. `linearity_in_band` ist ein logischer Skalar ohne Namen und Attribute, `linearity_verdict` eine Zeichenkette ohne Namen; im unbestimmten Fall `NA` bzw. `NA_character_`.
+    2. (E5) Der Abschnitt `## Bias interval: coverage by scenario` steht hinter dem vollständigen Abschnitt „Bootstrap intervals: coverage by scenario“ auf derselben Ebene. Der neue Rmd-Teil enthält keine Zahlenliterale. Die Tabelle zeigt scenario, coverage, MCSE, n_sim und den vorzeichenbehafteten Abstand (coverage − level)/MCSE; bei MCSE 0 ist ein Abstand ungleich 0 ±Inf, nie `NaN`. Ein Überschreiten von ANK-TOL.mc_factor (report) wird als Unter- oder Überdeckung benannt und bricht den Knit nicht ab; Rechenfehler und nicht endliche Grenzen brechen mit Szenario und Wiederholung benannt ab. Der Helfer trägt das Präfix `agreement_` und rechnet mit dem geladenen Namespace.
+    3. (E10) In der Tabelle beginnt genau je eine Spaltenüberschrift mit scenario, coverage, MCSE und n_sim (ohne Rücksicht auf Groß- und Kleinschreibung; `acc_m1a_column()`, `tests/acceptance/setup-m1a.R:519–523`). Die Abstandsspalte und jede weitere Spalte beginnen mit keinem dieser Wörter. n_sim steht als ganze Zahl ohne Exponent.
+    4. (E7) Unit-Tests unter `tests/testthat/`, die irr, psych oder DescTools rufen, beginnen mit `skip_if_not_installed()`. Hilfe, Bericht, Vignette und Helfer brauchen diese Pakete nicht.
 
 ## Konsequenzen
 
-- `PLAN.md` Runde 1 ist nicht freigegeben (PLAN-REVIEW M3a, Runde 1: REWORK wegen E1 bis E3). `PLAN-UPDATE.md` beantwortet E1 bis E7 Punkt für Punkt.
-- Nr. 1 bis 16 gelten unabhängig vom Ausgang der Runde 2. Nr. 17 ergänzt das Plan-Review der Runde 2 um die Form aus `PLAN-UPDATE.md`.
-- Die minor-Befunde E4 bis E7 in `orchestrator/handoff/M3a/PLAN-REVIEW.md` sind Umsetzungshinweise und keine neuen Kriterien.
-- Das Code-Review M3a prüft gegen Nr. 1 bis 17.
+- `PLAN.md` Runde 1 war nicht freigegeben (PLAN-REVIEW M3a, Runde 1: REWORK wegen E1 bis E3). `PLAN-UPDATE.md` beantwortet E1 bis E7 Punkt für Punkt.
+- `PLAN.md` mit `PLAN-UPDATE.md` ist freigegeben (PLAN-REVIEW M3a, Runde 2: PASS). Wo beide von Nr. 17 oder Nr. 19 abweichen, gilt dieses ADR (Nr. 17.2.2, Nr. 17.3.6).
+- Nr. 1 bis 16 gelten unverändert. Nr. 17 trägt die Form aus `PLAN-UPDATE.md` nach; Nr. 19 kommt hinzu.
+- Die minor-Befunde E4 bis E7 (Runde 1) und E8 bis E11 (Runde 2) in `orchestrator/handoff/M3a/PLAN-REVIEW.md` sind Umsetzungshinweise und keine neuen Kriterien. Verbindlich sind ihre Formen in Nr. 17 und Nr. 19.
+- Das Code-Review M3a prüft gegen Nr. 1 bis 17 und Nr. 19.
 - Die Messwerte im Kontext sind Proben des Reviewers auf v0.1.0. Sie sind weder Ergebnisse des Builders noch Referenzwerte für Tests.
 - Rücknahme: Ändert der Betreiber docs/04 M3a, docs/01 §2, §4 oder §5 oder die Formelsammlung §5 oder §6, ersetzt ein neues ADR die betroffenen Nummern.
