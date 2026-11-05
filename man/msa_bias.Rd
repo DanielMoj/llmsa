@@ -10,19 +10,74 @@ msa_bias(runs, reference, level = 0.95)
 \item{runs}{An \code{msa_runs} object with numeric values.}
 
 \item{reference}{A named numeric vector keyed by \code{item_id}, a data.frame
-with columns \code{item_id} and \code{reference}, or a column name in \code{runs}.}
+with columns \code{item_id} and \code{reference}, or a column name in \code{runs}.
+Each item has at most one distinct readable reference; conflicting
+references are errors. A known value beside missing entries supplies
+that item's reference. Factor labels are read as numbers.}
 
-\item{level}{Confidence level.}
+\item{level}{Finite numeric confidence level strictly between zero and one.}
 }
 \value{
-An object of class \code{msa_bias}: a list with \code{overall},
-\code{by_condition} and \code{linearity}.
+An object of class \code{msa_bias}, with:
+\describe{
+\item{overall}{Named numeric vector \code{n}, \code{bias}, \code{sd}, \code{lower}, \code{upper},
+\code{p_value}, \code{n_excluded}.}
+\item{by_condition}{The same quantities per observed prompt-model
+combination. With no valid pair all estimates are \code{NA}.}
+\item{linearity}{Handbook \code{intercept}, \code{slope}, \code{slope_p_value},
+\code{r_squared} (proportion), \code{t_intercept}, \code{t_slope}, \code{df}, \code{t_quantile}.}
+\item{linearity_item_means}{Unweighted item-mean \code{intercept}, \code{slope},
+\code{r_squared}, \code{t_intercept}, \code{t_slope}, \code{df}.}
+\item{linearity_band}{Data frame \code{reference}, \code{fit}, \code{lower}, \code{upper},
+at each distinct reference value; empty when the band is undefined.}
+\item{linearity_in_band}{Logical scalar: zero lies in the entire
+handbook band, or \code{NA} when undefined.}
+\item{linearity_verdict}{\code{"acceptable"} when the entire band contains
+zero, \code{"unacceptable"} otherwise, or \code{NA_character_} when undefined.}
+\item{linearity_note}{Methods, both degrees of freedom, dependence
+limitation and any reason for undefined linearity.}
+\item{level, n_items}{Confidence level and count of items with valid pairs.}
+}
 }
 \description{
 Compares parsed numeric values with reference values per item: mean
 bias with a t-based confidence interval overall and per prompt-model
 combination, and a linearity check (does the bias depend on the
 magnitude of the reference?) by regressing the bias on the reference.
+}
+\details{
+Missing, NaN and unparseable responses or references are excluded
+and counted once per row in \code{n_excluded}. Infinite inputs and overflow
+of the response minus reference are errors. All observed prompt-model
+conditions remain in the output, even with no valid pairs. If there are
+no valid pairs overall, the call fails with an explanatory error.
+
+The bias interval and p-value use the one-sample t calculation with
+\code{n - 1} degrees of freedom. One valid pair gives its bias but no
+inference. Numerically constant deviations give a point interval and
+an undefined p-value, with a message; the measured SD is retained.
+Constancy means a zero standard error, or a standard error smaller than
+ten times machine precision times the absolute mean.
+
+The handbook regression uses all valid single deviations (\code{N - 2}
+degrees of freedom, or \code{gm - 2} in a balanced design). The additional
+regression uses unweighted item means (\code{g - 2} degrees of freedom).
+Items with the same reference value remain distinct. Unequal replicate
+counts thus give different weighting in the two regressions. Replicates
+of the same item may be correlated, so the handbook calculation can
+overstate the information. The object and report describe this limitation.
+
+The handbook confidence band for the mean bias determines the linearity
+verdict. Zero must lie in the band throughout the closed observed
+reference range, including between displayed reference values; touching
+the boundary counts as inclusion. This is not a prediction interval.
+A single reference value leaves linearity undefined without preventing
+bias estimation. Without residual degrees of freedom, coefficients are
+retained but inference and the band are undefined. Numerically constant
+targets have undefined R-squared. A residual norm no larger than ten
+times machine precision times the centered target norm is treated as
+zero: t and p are undefined and the band collapses onto the fitted line.
+These cases produce messages and \code{NA}, never \code{NaN}.
 }
 \examples{
 msa_bias(ic50_demo, reference = "reference")

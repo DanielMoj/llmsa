@@ -195,7 +195,7 @@ if (length(latent_checks$diagnostics)) {
 The following tables read the installed studies' `<study>_results.csv` if it
 exists, otherwise `<study>_check_results.csv`. An invalid existing full result
 file stops the build. The displayed `n_sim` comes from each file. Knitting
-does not run simulations. Bias, relative bias, empirical standard error
+does not rerun these class B simulations. Bias, relative bias, empirical standard error
 (EmpSE) and root mean squared error (RMSE) each have a Monte Carlo standard
 error (MCSE); the tables retain significant digits for small estimates.
 `n_finite` and `n_failed` count the usable and missing estimates separately.
@@ -304,7 +304,8 @@ This section reads **`r basename(coverage_results$path)`**
 **n_sim = `r coverage_results$n_sim`** repetitions per scenario. The installed
 `boot_coverage_results.csv` takes precedence over
 `boot_coverage_check_results.csv`. An invalid existing full result stops the
-build. Knitting reads the results and starts neither simulations nor downloads.
+build. This section reads the existing bootstrap results without rerunning
+the class B simulations or downloading inputs.
 
 The study evaluates the existing 95% percentile intervals from `msa_boot()`
 for gauge R&R study variation and contribution, ndc and item ICC. Every outer
@@ -357,6 +358,50 @@ if (coverage_results$mode == "full") {
     cat("No interval estimand exceeds the anchored report threshold.\n")
 } else cat("\nShort run: no full-run coverage finding is claimed.\n")
 ```
+
+## Bias interval: coverage by scenario
+
+```{r bias-coverage-setup, include=FALSE}
+agreement_validation <- new.env(parent = globalenv())
+sys.source(system.file("validation", "agreement", "bias_coverage.R",
+                       package = "llmsa", mustWork = TRUE), envir = agreement_validation)
+bias_coverage <- agreement_validation$agreement_bias_coverage(latent_anchors)
+```
+
+This section recomputes the bias interval study using the currently loaded
+`msa_bias()` at confidence level `r bias_coverage$settings$level`. Item truths
+are the supplied references, with independent residuals for every response.
+The specification settings and seeds are shown below. Both scenarios use
+`r bias_coverage$n_sim` repetitions, from the minimum in ANK-06. The RNG is
+`r paste(bias_coverage$settings$rng, collapse = "/")`; the caller's random
+state is restored after the calculation.
+
+```{r bias-coverage-settings, echo=FALSE, results='asis'}
+print(knitr::kable(bias_coverage$settings$scenarios, row.names = FALSE))
+```
+
+Coverage counts every closed interval containing the true bias. Its MCSE is
+the square root of coverage times its complement divided by n_sim. Failed
+calculations abort with the scenario and repetition instead of dropping
+observations. The signed distance from the nominal level is reported in
+MCSE; undercoverage or overcoverage beyond the anchored reporting threshold
+is named in the table. The reporting threshold is
+`r bias_coverage$report_factor` MCSE and the acceptance threshold is
+`r bias_coverage$pass_factor` MCSE (ANK-TOL.mc_factor). Reporting a finding
+does not change the interval or stop the table from rendering.
+
+```{r bias-coverage-table, echo=FALSE, results='asis'}
+print(knitr::kable(agreement_validation$agreement_coverage_table(bias_coverage), row.names = FALSE))
+```
+
+Elapsed time: `r format(bias_coverage$elapsed)` seconds, with R
+`r bias_coverage$versions[["R"]]` and llmsa
+`r bias_coverage$versions[["llmsa"]]`. The independent class A acceptance
+study checks the same scenarios and each interval against the t formula.
+These results assess the bias interval with independent residuals; they
+do not establish linearity-band coverage for correlated item replicates.
+The installed `validation/agreement/README.md` records ADEMP and commands
+for public and repository contexts.
 
 ## Robustness screening: Plackett-Burman and Lenth
 

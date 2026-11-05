@@ -112,11 +112,13 @@ if (!is.null(params$boot)) {
 ag <- params$agreement
 if (!is.null(ag)) {
   if (!is.null(params$assessment)) cat("Complete-case agreement diagnostics from msa_agreement(); application decision metrics and their missing-value rules are reported separately below.\n\n")
+  cat("General agreement diagnostics omit missing answers. The modal response selects the lowest tied category in scale order; an item without valid answers has no mode. AP1 decision metrics use acmg_modal(), which treats missing answers as a category and excludes ties from decisions.\n\n")
   cat(sprintf("Categories: %s (weights: %s). %d items, %d responses, %d missing.\n\n",
               paste(ag$levels, collapse = " < "), ag$weights, ag$n[["items"]], ag$n[["responses"]], ag$n[["missing"]]))
   cat(sprintf("* Repeatability: %.1f %% of item-prompt-model cells have identical replicates\n", ag$repeatability_overall))
   r <- ag$reproducibility
   cat(sprintf("* Reproducibility: items consistent across prompts %.1f %%, across models %.1f %%, under all conditions %.1f %%\n", r[[1]], r[[2]], r[[3]]))
+  if (!is.null(ag$fleiss)) cat(sprintf("* Fleiss' kappa: %.3f\n", ag$fleiss$kappa))
   if (!is.null(ag$accuracy)) {
     cat(sprintf("* Accuracy: %.1f %% of responses correct; %.1f %% of items correct in every call; Cohen's kappa (modal response vs reference) %.3f, (all responses vs reference) %.3f\n",
                 ag$accuracy_overall, ag$pct_items_all_correct, ag$kappa[[1]], ag$kappa[[2]]))
@@ -140,10 +142,32 @@ if (!is.null(bi)) {
   cat(sprintf("Mean bias %.4f (%.0f %% CI %.4f to %.4f; sd %.4f; n = %d; p = %.3g). Linearity: bias = %.4f + %.4f x reference (slope p = %.3g).\n\n",
               o[["bias"]], 100 * bi$level, o[["lower"]], o[["upper"]], o[["sd"]], as.integer(o[["n"]]), o[["p_value"]],
               bi$linearity[["intercept"]], bi$linearity[["slope"]], bi$linearity[["slope_p_value"]]))
+  excluded <- if ("n_excluded" %in% names(o)) format(o[["n_excluded"]], scientific = FALSE) else "not recorded"
+  cat(sprintf("Valid response-reference pairs: %d; excluded: %s.\n\n", as.integer(o[["n"]]), excluded))
   bc <- bi$by_condition
+  if (!"n_excluded" %in% names(bc)) bc$n_excluded <- "not recorded"
   for (nm in c("bias", "sd", "lower", "upper")) bc[[nm]] <- fmt(bc[[nm]], 4)
   bc$p_value <- formatC(bc$p_value, digits = 3, format = "g")
   print(knitr::kable(bc, caption = "Bias per prompt variant and model."))
+  if (!is.null(bi$linearity_item_means)) {
+    fields <- c("intercept", "slope", "r_squared", "t_intercept", "t_slope", "df")
+    regressions <- data.frame(method = c("Handbook: all valid single values", "Unweighted item means"),
+                              rbind(bi$linearity[fields], bi$linearity_item_means[fields]),
+                              row.names = NULL, check.names = FALSE)
+    for (nm in setdiff(fields, "df")) regressions[[nm]] <- fmt(regressions[[nm]], 4)
+    cat("\n\n")
+    print(knitr::kable(regressions, caption = "Linearity regressions; R-squared is a proportion."))
+    cat(sprintf("\nHandbook t quantile: %.4f.\n\n", bi$linearity[["t_quantile"]]))
+  }
+  verdict <- bi$linearity_verdict
+  if (is.null(verdict)) verdict <- "not recorded" else if (is.na(verdict)) verdict <- "undetermined"
+  cat(sprintf("\nHandbook linearity verdict: **%s**. Zero must lie in the confidence band throughout the observed reference range.\n\n", verdict))
+  if (!is.null(bi$linearity_note)) cat(bi$linearity_note, "\n\n")
+  if (!is.null(bi$linearity_band) && nrow(bi$linearity_band)) {
+    band <- bi$linearity_band
+    for (nm in names(band)) band[[nm]] <- fmt(band[[nm]], 4)
+    print(knitr::kable(band, caption = "Handbook confidence band for the mean bias (not a prediction interval)."))
+  }
 } else cat(na_text)
 ```
 

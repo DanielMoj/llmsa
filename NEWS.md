@@ -1,5 +1,18 @@
 # llmsa (development version)
 
+* `msa_agreement(fleiss = TRUE)` adds Fleiss' kappa without a standard error.
+  Alpha counts excluded units at each scope. Empty items no longer count as
+  fully correct, and degenerate Cohen kappas return `NA` with a message.
+  References are checked for conflicts and for categories outside the scale.
+  Help and reports distinguish the general modal tie rule from AP1 decisions.
+* `msa_bias()` counts excluded pairs, retains empty conditions and supports
+  studies with a single reference value. It reports both the handbook
+  regression and the unweighted item-mean regression, with a confidence band
+  and a handbook verdict checked throughout the reference range. Constant
+  or numerically degenerate data have explicit undefined inference.
+* The validation vignette computes seeded bias-interval coverage and MCSE
+  for both specified scenarios from the loaded package at build time.
+
 * `msa_robustness()` accepts `transform = "logit"` for finite proportions
   strictly between zero and one. Effects and response summaries then use
   the logit scale; the default `transform = "none"` preserves existing results.

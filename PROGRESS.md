@@ -1,5 +1,354 @@
 # PROGRESS — Langzeitgedächtnis des Builders
 
+## M3a — BUILD, Runde 1 (05.11.2026)
+
+Der freigegebene PLAN samt PLAN-UPDATE ist umgesetzt; maßgeblich sind
+PLAN-REVIEW Runde 2, `verdict-plan.json: PASS` und ADR-052 einschließlich
+Nr. 17 und 19. Keine ARBITER-Datei vorhanden. Keine Planabweichung und
+kein neuer Builder-ADR. Die Backlog-Zuordnungen und Vertagungen des
+PLAN-UPDATE bleiben bestehen. Dieser Eintrag enthält die Build-Antworten
+und ausgeführten Nachweise; eine gesonderte REVIEW-INPUT-Datei wurde in
+diesem Auftrag nicht zugewiesen.
+
+### Umsetzung und Antworten auf die Einwände
+
+`R/agreement.R` ergänzt Fleiss-Kappa, Alpha-Ausschlusszahlen und beide
+Bias-/Linearitätsrechnungen. Gemeinsame Referenzauflösung und gültige
+Paarnenner gelten für die drei bisherigen Referenzformen. Die OLS-Rechnung
+zentriert und skaliert vor Quadraten; das Handbuchband wird über den ganzen
+geschlossenen Referenzbereich einschließlich innerer Extrema beurteilt.
+Die zusätzlichen Ausgabefelder, Randfälle und Methoden stehen in den zwei
+aus roxygen erzeugten Hilfeseiten und in Berichtsteil 4/5. Der bestehende
+AP1-, Fit-, Bootstrap- und Robustheitsproduktcode wurde nicht geändert.
+
+Der neue installierbare Helfer unter `inst/validation/agreement/` rechnet
+die Bias-Überdeckung sequenziell mit dem geladenen `llmsa`-Namespace.
+Seine ADEMP-Beschreibung steht in README.md. Der neue Abschnitt der
+Validierungsvignette folgt vollständig hinter dem Bootstrap-Abschnitt.
+Er nutzt die bereits hashgeprüften latenten ANK-06-/ANK-TOL-Objekte; keine
+neue Ankerkopie und keine eingefrorene Ergebnisdatei. `irr`, `psych` und
+`DescTools` sind Suggests; Imports, Exporte und NAMESPACE sind unverändert.
+NEWS beschreibt die Erweiterungen auf Englisch.
+
+| ID | Umsetzung und Nachweis |
+| --- | --- |
+| E1 | Referenzen werden vor der Kategorienfilterung eindeutig je Item aufgelöst; Konflikte und Referenzen außerhalb der ausdrücklichen/abgeleiteten Skala scheitern benannt. Cohen verwendet gültige Paare und die vollständige Skala. Unit-Tests prüfen alle Referenzformen, Gewichte und Reihenfolgen; K-M3a-1/-5 sowie AP1-/ClinVar-Integration wurden ausgeführt. |
+| E2 | `n_excluded` steht hinter den bestehenden Feldern; jede beobachtete Prompt×Modell-Bedingung bleibt auch mit `n = 0` erhalten. Gesamt-/Gruppenzählungen, Singleton, fehlende Referenzen und unparsebare Antworten sind geprüft. Druck und Bericht zeigen Ausschlüsse, bei alten Objekten „not recorded“. |
+| E3 | Eigene geschlossene t-/OLS-Rechnungen ohne `t.test`, `lm` oder `summary.lm` im Produktpfad. Relative Konstanz-/Restregeln aus ADR-052, Punktintervalle bzw. zusammenfallende Bänder und eindeutige Hinweise. Das numerische Raster umfasst 240 synthetische Fälle; zusätzlich extreme Skalen, Achsenverschiebungen, ungleiche Replikation, zwei Beobachtungen und innere Bandextrema. |
+| E4 | `fleiss` enthält genau den unbenannten numerischen Punktschätzer `kappa`; kein SE. Beide Urteilsfelder sind unbenannte Skalare der vereinbarten Typen, auch bei undefinierter Linearität. Exakte Struktur- und Drucktests bestehen. |
+| E5 | Eigener Bias-Abschnitt auf Ebene zwei ohne abgetippte Ergebniszahlen. Tabelle mit MCSE-Abstand und Befundtext; voller Umfang aus ANK-06, RNG-Wiederherstellung auch bei Fehlern. Ganze Knits vor/nach Änderung wurden mit demselben Skript gemessen; beide ohne Fehler und neue Repository-Dateien. |
+| E6 | Vier neue Unit-Dateien prüfen u. a. beide vollständigen Druckausgaben, verschiedene Reproduzierbarkeitsraten, letzten Zeilenumbruch, unsichtbare Rückgabe, englische Fehlertexte und `conditionCall() == NULL`. Formattests sind als solche gekennzeichnet. Lokale Mutation über die ganze `R/agreement.R`; keine Mutationsausnahme und kein Äquivalenzclaim. |
+| E7 | Optionale Live-Orakel in neuen Unit-Tests stehen hinter `skip_if_not_installed()`; unabhängige Formel-/Paarzähltests in eigenen Blöcken benötigen diese Pakete nicht. Abnahme und Schwellen bleiben unverändert. |
+| E8 | Numerisch konstante Zielwerte ergeben in beiden Regressionen `r_squared = NA_real_` mit Hinweis. Das Raster prüft auch Rundungsreste nach `value - reference`. |
+| E9 | Numerische Eingaben behalten ihre Double-Werte ohne Zeichenketten-Rundlauf. Konflikte zeigen 17 signifikante Stellen; Faktorlabels und gleiche numerische Schreibweisen sind geprüft. Unendlichkeiten und Differenzüberlauf führen zu benannten Fehlern. |
+| E10 | Eindeutige Spalten `scenario`, `coverage`, `MCSE`, `n_sim`; Zusatzspalte `distance to level (MCSE)`. `n_sim` ohne Exponent. Unit- und Vignetten-Abnahme lesen die tatsächlich berechnete Tabelle erfolgreich. |
+| E11 | Fleiss verweist nur bei ungleichen gültigen Anzahlen auf Alpha; andere Entartungen nennen ihren eigenen Grund. Kategorien und Konfliktwerte erscheinen in Anführungszeichen, auch leere Zeichenketten. Vollständige Meldungstests bestehen. |
+
+Die vier neuen Tests liegen unter `tests/testthat/`: `test-agreement-m3a.R`,
+`test-bias-linearity.R`, `test-agreement-report.R` und
+`test-validation-bias.R`. Fachliche Vergleiche verwenden die Toleranzen aus
+ANK-TOL; synthetische Designwerte sind keine empirischen Referenzkonstanten.
+Die Formelprüfung und Live-Orakel laufen getrennt. Bei Alpha wurde ein
+Fehler im ersten neuen Orakeltest korrigiert; der ausführbare Befund zu
+`irr` steht unten. Weitere erste Fehler betrafen Argumentfehler mit Call
+sowie typografische Anführungszeichen in R/Pandoc. Der Produktfehlerpfad
+unterdrückt jetzt den Call; die neuen Formatprüfungen berücksichtigen die
+tatsächliche R-/Pandoc-Darstellung. `unit-initial.log` und
+`unit-expanded.log` bewahren diese frühen fehlgeschlagenen Läufe.
+
+### Ausgeführte Befehle und echte Outputs
+
+Arbeitsverzeichnis aller Repository-Befehle war die Repo-Wurzel.
+Rohlogs und reproduzierbare Hilfsskripte liegen unter
+`/tmp/llmsa-m3a-build-b4z_2rv_/`. R 4.6.1 (2026-06-24),
+testthat 3.3.2, pkgload 1.5.3, roxygen2 8.1.1, irr 0.85,
+psych 2.6.9, DescTools 0.99.60, knitr 1.52, rmarkdown 2.32,
+jsonlite 2.0.0, digest 0.6.39 und muttest 0.3.0.
+Keine Installation oder Aktualisierung von Abhängigkeiten; Paketbau und
+Prüfinstallation verwenden ausschließlich temporäre Paketkopien.
+
+`Rscript --vanilla orchestrator/lib/r-deps.R --check-only`, Exit 0
+(`dependencies.log`):
+
+```text
+r-deps: pass — 31 Anforderungen erfüllt (R 4.6.1)
+```
+
+Rd-Erzeugung mit `roxygen2::roxygenise(..., roclets = "rd")` in
+`/tmp/llmsa-m3a-build-b4z_2rv_/docs-src`, Exit 0. Übernommen wurden nur
+`man/msa_agreement.Rd` und `man/msa_bias.Rd`. Erneute Erzeugung aus dem
+Produkt-Endstand bestätigt (`roxygen-final.log`):
+
+```text
+ℹ Loading llmsa
+msa_agreement.Rd: generated output identical = True
+msa_bias.Rd: generated output identical = True
+```
+
+`run-suite.R` setzt `REPO_ROOT`, `NOT_CRAN=true`, ein Null-PDF-Gerät und
+führt `testthat::test_dir(load_package = "source", reporter = "summary",
+stop_on_failure = FALSE)` aus. Die Zusammenfassung stammt aus dem echten
+Ergebnisrahmen; Fehler oder fehlgeschlagene Erwartungen ergeben Exit 1.
+Die folgenden Läufe endeten mit Exit 0:
+
+```sh
+TZ=Europe/Berlin Rscript --vanilla /tmp/llmsa-m3a-build-b4z_2rv_/run-suite.R tests/testthat '^(agreement|agreement-m3a|bias-linearity|agreement-report|validation-bias|report|validation-latent|validation-latent-rework)$' 'M3a final unit and source contracts'
+TZ=Europe/Berlin Rscript --vanilla /tmp/llmsa-m3a-build-b4z_2rv_/run-suite.R tests/acceptance '^m3a-' 'M3a acceptance initial'
+TZ=Europe/Berlin Rscript --vanilla /tmp/llmsa-m3a-build-b4z_2rv_/run-suite.R tests/simulation '^bias-coverage$' 'M3a class A'
+```
+
+Unveränderte Outputzeilen aus `unit-complete.log`,
+`acceptance-initial.log` und `simulation.log`:
+
+```text
+Synthetic bias grid: 240 cases, seeds 1201/1202; largest normalized oracle difference 2.36e-13
+M3a final unit and source contracts: 51 blocks; 0 failed expectations; 0 error blocks; 0 warnings; 0 skips; 819 passed expectations; elapsed 25.289 s
+M3a acceptance initial: 35 blocks; 0 failed expectations; 0 error blocks; 0 warnings; 0 skips; 872 passed expectations; elapsed 38.581 s
+M3a class A: 1 blocks; 0 failed expectations; 0 error blocks; 0 warnings; 0 skips; 4 passed expectations; elapsed 8.442 s
+```
+
+Die unveränderte unabhängige Klasse-A-Studie meldet:
+
+```text
+K-M3a-7 (tests/simulation/test-bias-coverage.R, 6.9 s):
+S-bias-1: coverage 0.9590 (MCSE 0.0063), distance to 0.95 +0.0090 (+1.4 MCSE); n_sim 1000, seed 20261106, RNG Mersenne-Twister/Inversion/Rejection, R version 4.6.1 (2026-06-24), llmsa 0.1.0
+S-bias-2: coverage 0.9520 (MCSE 0.0068), distance to 0.95 +0.0020 (+0.3 MCSE); n_sim 1000, seed 20261107, RNG Mersenne-Twister/Inversion/Rejection, R version 4.6.1 (2026-06-24), llmsa 0.1.0
+```
+
+Der erweiterte Lauf mit dem Filter
+`'^(m3a-|m1a-7|m1b-7|m1c-5|m1d-4|m2-7)'` und dem Label
+`'M3a and integration acceptance'` endete mit Exit 1
+(`acceptance-integration.log`). Alle M3a-Blöcke, die vorhandenen
+Vignetten-/ClinVar-Prüfungen und der fachliche AP1-Auswertungsvergleich
+liefen durch. Ein bestehender M2-HTTP-Mock scheiterte am lokalen
+Socketverbot; M3a-B2 unten enthält den vollständigen relevanten Befund.
+
+```text
+M3a and integration acceptance: 78 blocks; 0 failed expectations; 1 error blocks; 0 warnings; 0 skips; 2027 passed expectations; elapsed 496.247 s
+```
+
+Die vollständigen vorhandenen Unit-/E2E-/Fuzz-Suiten wurden über den
+lesenden Testläufer ausgeführt, Exit 0 (`unit-qa-all.log`):
+
+```sh
+TZ=Europe/Berlin REPO_ROOT=/mnt/c/Users/Danie/dev/Llmsa/llmsa Rscript --vanilla -e 'grDevices::pdf(NULL); source("orchestrator/lib/r-tests.R")' --args tests/testthat tests/e2e tests/fuzz
+```
+
+```text
+Duration: 169.6 s
+[ FAIL 0 | WARN 0 | SKIP 1 | PASS 6866 ]
+Duration: 58.3 s
+[ FAIL 0 | WARN 0 | SKIP 0 | PASS 575 ]
+Duration: 10.5 s
+[ FAIL 0 | WARN 0 | SKIP 0 | PASS 494 ]
+r-tests: pass — 384 Tests in tests/testthat, tests/e2e, tests/fuzz; 0 fehlgeschlagen, 0 Fehler, 1 übersprungen
+```
+
+Der vorhandene Skip in `test-backends.R:32` prüft den Fehlerfall ohne
+ellmer und greift, weil ellmer 0.5.0 installiert ist. Nach diesem
+Gesamtlauf wurden ausschließlich drei neue Unit-Dateien um die oben
+genannten Numerik-/Ausgabefälle ergänzt bzw. die optionale Orakelprüfung
+vom Formeltest getrennt; deren Endstand ist im abschließenden gezielten
+Lauf und im installierten Kontext geprüft.
+
+### Vignette, installierter Kontext und API
+
+Vor und nach der Produktänderung wurde jeweils in einem frischen Prozess
+derselbe ganze Repository-Knit ohne wiederverwendeten Knit-Cache gemessen:
+
+```sh
+TZ=Europe/Berlin Rscript --vanilla /tmp/llmsa-m3a-build-b4z_2rv_/knit.R /mnt/c/Users/Danie/dev/Llmsa/llmsa before /tmp/llmsa-m3a-build-b4z_2rv_
+TZ=Europe/Berlin Rscript --vanilla /tmp/llmsa-m3a-build-b4z_2rv_/knit.R /mnt/c/Users/Danie/dev/Llmsa/llmsa after /tmp/llmsa-m3a-build-b4z_2rv_
+```
+
+Beide Exit 0; gleiche R-/Paket-/Kontextkonfiguration und bei der
+Nachhermessung keine parallel laufende lokale Test-/Mutationsprüfung.
+`knit-before.log` und `knit-after.log`:
+
+```text
+before: error=none; new_files=0; lines=1515; elapsed=17.075 s; R=4.6.1; knitr=1.52; llmsa=0.1.0
+after: error=none; new_files=0; lines=1559; elapsed=24.085 s; R=4.6.1; knitr=1.52; llmsa=0.1.0
+```
+
+Differenz: 7,010 s. Die neu berechnete Tabelle in `after-validation.md`
+enthält folgende echte Zeilen; die Helferrechnung meldet 6,8 s:
+
+```text
+|scenario |coverage |MCSE     |n_sim |distance to level (MCSE) |finding                 |
+|S-bias-1 |0.959000 |0.006270 |1000  |1.435295                 |within report threshold |
+|S-bias-2 |0.952000 |0.006760 |1000  |0.295863                 |within report threshold |
+```
+
+`python3 /tmp/llmsa-m3a-build-b4z_2rv_/public-check.py` baut eine
+öffentliche Paketkopie ohne Harness/geschützte Quellen und ohne
+`REPO_ROOT`. Mit der bestehenden Offline-Einstellung
+`_R_CHECK_CRAN_INCOMING_REMOTE_=false` und `TZ=Europe/Berlin` führt sie in
+`/tmp/llmsa-m3a-build-b4z_2rv_/public/` aus:
+
+```sh
+R CMD build --no-manual src
+R CMD check --as-cran --no-manual llmsa_0.1.0.tar.gz
+```
+
+Beide Exit 0 (`public/build.log`, `public/check.log`, `public/commands.json`):
+Build 107,652 s, Check 354,557 s; beide einschließlich vollständiger
+Vignetten. Kein ERROR und kein WARNING, eine NOTE:
+
+```text
+* checking for future file timestamps ... NOTE
+Unable to verify current time.  To disable remote verification,
+set environment variable _R_CHECK_SYSTEM_CLOCK_ to a false value.
+* checking re-building of vignette outputs ... [103s/103s] OK
+Status: 1 NOTE
+```
+
+Die Uhrzeitprüfung wurde nicht abgeschaltet. Die installierten Tests
+melden `[ FAIL 0 | WARN 0 | SKIP 9 | PASS 6790 ]`. Alle neun Skips sind
+vorhandene Kontextregeln: fünf externe AP1-Aufzeichnungsfälle, zwei
+Originalanker-Vergleiche, der CRAN-Berichtstest und der ellmer-Fehlerfall.
+
+138 Produkt-/Ressourcendateien der geprüften Kopie stimmen bytegleich mit
+dem Produkt-Endstand überein (siehe Integritätsprüfung). Die nach dem
+Anlegen dieser Paketkopie ergänzten drei neuen Unit-Dateien wurden mit
+`public-final-tests.R` nochmals gegen genau dieses installierte Paket
+geprüft; `REPO_ROOT` war entfernt, `load_package = "installed"`:
+
+```text
+Final public-context additions: 29 blocks; 0 failed expectations; 0 error blocks; 0 warnings; 0 skips; 592 passed expectations; elapsed 3.589 s
+Loaded package: /tmp/llmsa-m3a-build-b4z_2rv_/public/llmsa.Rcheck/llmsa; REPO_ROOT: <unset>
+```
+
+Der erste temporäre Stagingversuch dieses Zusatzlaufs stoppte vor jedem
+Test, weil `file.copy()` das Snapshot-Unterverzeichnis nicht rekursiv
+kopierte. `public-final-tests-stage-initial.log` bewahrt den Fehler; nur
+das temporäre Kopierskript wurde auf rekursives Kopieren korrigiert.
+
+`TZ=Europe/Berlin Rscript --vanilla /tmp/llmsa-m3a-build-b4z_2rv_/api-check.R`,
+Exit 0, nutzt beide unveränderten API-Vergleichshelfer aus `setup-m0.R`
+ohne dessen Git-bezogene Tests auszuführen (`api-check.log`):
+
+```text
+ANK-02 API: 22 snapshot exports preserved; 0 signature violations; independent prefix check TRUE; fleiss fifth with FALSE default.
+```
+
+### Lokale Mutationsdiagnose und Integrität
+
+Die Diagnose erzeugt mit den neun Mutatorfamilien des vorhandenen
+R-Mutationswerkzeugs 875 Mutanten der gesamten `R/agreement.R`.
+Ausführung: `Rscript --vanilla .../mutation-plan.R`, anschließend
+`python3 .../run-mutation-probe.py` unter dem oben genannten Temp-Pfad.
+14 lokale R-Prozesse führen die schnellen Agreement-/Bias-Unit-Tests
+und, sofern diese noch keinen Fehler finden, die unveränderten
+M3a-Abnahmetests 1–6 aus. Vignetten- und Klasse-A-Simulation sind nicht
+Teil dieser lokalen Diagnose; das ist kein regulärer mutgate-Lauf.
+Jeder Mutant, seine Quelle und sein eigener Ergebnis-/Logpfad stehen
+unter `mutation/`. Der erste Lauf dauerte 547,31 s:
+
+```text
+Final diagnostic counts: {'Survived': 111, 'Killed': 762, 'CompileError': 2}
+Detected 762/873 parseable mutants (87.29%); no gate verdict
+```
+
+Die Diagnose zeigte fehlende Testunterscheidungen für ein geneigtes
+inneres Bandextremum, endliche Regressionsresultate trotz überlaufender
+Zwischenterme und vertauschte Reproduzierbarkeits-Druckfelder. Ergänzt
+wurden analytische Zeugen bzw. unabhängige begrenzte OLS-Gegenrechnungen
+und eine handzählbare Druckfixture mit verschiedenen Raten. Produktcode
+und Schwellen wurden dabei nicht geändert. Danach rechnet
+`python3 /tmp/llmsa-m3a-build-b4z_2rv_/rerun-mutation.py` die unmutierte
+Kontrolle und alle 111 überlebenden Mutanten mit den finalen Unit-Tests
+erneut; die 762 bereits erkannten und zwei nicht parsbaren bleiben im
+Ergebnis erhalten. Exit 0, 150,88 s (`mutation-final.log`):
+
+```text
+Final tests, unmutated diagnostic: {"status": "Survived", "failed": 0, "errors": 0, "warnings": 0, "skipped": 0, "passed": 1459, "elapsed": 15.097, "wall_seconds": 15.303903992986307}
+111/111: {'Killed': 23, 'Survived': 88}
+Final diagnostic counts: {'Survived': 88, 'Killed': 785, 'CompileError': 2}
+Detected 785/873 parseable mutants (89.92%); no gate verdict
+```
+
+Alle überlebenden Mutanten bleiben im Nenner; es gibt keine Ausnahmen,
+keine behauptete Äquivalenz und keinen Timeout-/Harnessfehler.
+`mutation-final/diagnostic-results.json` und `test-hashes.json` halten
+den zusammengeführten Befund und die finalen Unit-Dateihashes fest.
+Produkt-SHA-256 dieser Läufe:
+`0d60fd2085f5c055165530c0738d850c738a4c4fb9309fd463a1b3f24f2d8794`.
+Regulärer Mutationsscope, Ratchet und Gate-Verdict bleiben beim Betreiber.
+
+Der lesende SHA-256-Vergleich `python3 .../integrity.py`, Exit 0, prüft
+die 211 vor BUILD erfassten geschützten Dateien, neue Dateien in den
+erfassten geschützten Verzeichnissen, den Produktstand des Paketchecks
+und die wiederverwendeten Ankerkopien (`integrity.log`):
+
+```json
+{
+  "protected_files": 211,
+  "changed_or_missing": [],
+  "additional_protected_files": [],
+  "public_check_current_product_files": 138,
+  "public_check_product_differences": [],
+  "reused_anchor_copies_identical": {
+    "ANK-06.json": true,
+    "ANK-TOL.json": true
+  },
+  "agreement_sha256": "0d60fd2085f5c055165530c0738d850c738a4c4fb9309fd463a1b3f24f2d8794"
+}
+```
+
+### Handoff-Befunde und Grenzen
+
+- **M3a-B1 (nonblocking, Orakelhinweis).** `ref`: K-M3a-3,
+  Formelsammlung §5 (Normierung mit `m_u - 1`). Die installierte
+  `irr::kripp.alpha()` 0.85 setzt bei vollständig beobachteten Matrizen
+  `mc <- rep(1, dimx[2])`, auch bei mehr als zwei Beurteilern. Eine
+  zusätzliche vollständig fehlende Beurteilerzeile verändert keinen
+  gültigen Wert oder Vergleich, aktiviert aber den richtigen
+  `apply(x, 2, vn) - 1`-Zweig. Der neue Unit-Orakeladapter verwendet diese
+  Darstellung; eine eigene vollständige Paarzählung steht ohne
+  Orakelabhängigkeit daneben. Die Produktformel wurde nicht an den
+  fehlerhaften Orakelzweig angepasst. Vorschlag an den Reviewer:
+  Einschränkung bei künftigen vollständigen Mehrbeurteiler-Orakelfällen
+  berücksichtigen. Reproduktion:
+  `Rscript --vanilla /tmp/llmsa-m3a-build-b4z_2rv_/oracle-alpha.R`, Exit 0.
+  Synthetische Itemzeilen: `(1,1,2)`, `(2,3,2)`, `(3,1,3)`, `(1,2,2)`,
+  `(3,3,3)`; 15 gültige Bewertungen vor und nach dem Anhängen. Output:
+
+  ```text
+     metric          llmsa pair_enumeration   irr_complete irr_missing_coder
+    nominal 0.243243243243   0.243243243243 0.216216216216    0.243243243243
+    ordinal 0.356094276094   0.356094276094 0.333097643098    0.356094276094
+   interval 0.328767123288   0.328767123288 0.304794520548    0.328767123288
+  ```
+
+- **M3a-B2 [INFRA] (für den Builder nonblocking).** `ref`:
+  `tests/acceptance/test-m2-7-robustness-pilot.R:175`,
+  `tests/acceptance/setup-m2.R:787`, K-M2-7. Der vorhandene HTTP-Mock
+  verwendet `httr2::req_dry_run()` und damit einen lokalen Echo-Server.
+  Der Socket ist in dieser Sandbox verboten. Der erweiterte Testlauf
+  ist deshalb ausdrücklich nicht vollständig grün. Vorschlag für
+  Betreiber/Reviewer bzw. BACKLOG: unveränderten Test im vorgesehenen
+  Gate-Kontext mit lokaler Socketunterstützung ausführen. Kein Scheinfix
+  im Produkt und kein Eingriff in den Test. Relevanter Originaloutput:
+
+  ```text
+  Error ('test-m2-7-robustness-pilot.R:175:5')
+  Error: System failure for: socket() (Operation not permitted)
+  1. acc_m2_backend(s, system = cs$arg)(...)
+  2. httr2::req_perform(req) at llmsa/R/backends.R:177:5
+  4. httr2::req_dry_run(req, quiet = TRUE) at ./setup-m2.R:787:5
+  5. curl::curl_echo(handle, progress = FALSE)
+  6. httpuv::startServer("0.0.0.0", port, list(call = echo_handler))
+  ```
+
+Alle hier genannten Ergebnisse sind lokale ausgeführte Befunde, keine
+Builder-Abnahme. Die vollständige Git-basierte historische Abnahme,
+reguläre Gates einschließlich Territory/Trace/Mutation, unabhängige QA,
+Windows-CI sowie Commit bleiben beim Orchestrator/Reviewer/Betreiber.
+Keine Git-Kommandos, keine Änderungen an Abnahmetests, Quellen, Ankern,
+Gates oder Betreiberzustand. Die Systemzeit-NOTE und der M2-Socketfehler
+bleiben sichtbar; keine dieser Prüfungen wurde für ein grünes Ergebnis
+abgeschwächt.
+
 ## M3b — BUILD, Runde 1 (04.11.2026)
 
 Der freigegebene PLAN ist umgesetzt; Grundlage sind PLAN-REVIEW mit

@@ -8,7 +8,8 @@ msa_agreement(
   runs,
   levels = NULL,
   reference = NULL,
-  weights = c("unweighted", "linear", "quadratic")
+  weights = c("unweighted", "linear", "quadratic"),
+  fleiss = FALSE
 )
 }
 \arguments{
@@ -22,7 +23,14 @@ by \code{item_id}, a data.frame with columns \code{item_id} and \code{reference}
 the name of a column in \code{runs}.}
 
 \item{weights}{Weighting of disagreements for the ordinal statistics:
-\code{"unweighted"} (nominal), \code{"linear"} or \code{"quadratic"}.}
+\code{unweighted} (nominal), \code{linear} (ordinal), \code{quadratic} (interval).
+Interval distances use category positions, not numeric label values.}
+
+\item{fleiss}{Also compute Fleiss' kappa over all valid ratings of each
+item. Every observed item must have the same number of valid ratings,
+at least two. Unequal counts give \code{NA} with a message pointing to
+Krippendorff's alpha. Only the point estimate is returned; no standard
+error is computed.}
 }
 \value{
 An object of class \code{msa_agreement}, a list with
@@ -32,7 +40,8 @@ prompts, across models and overall), \code{alpha} (Krippendorff's alpha
 within replicates, across prompts, across models, and overall), and,
 if a reference is given, \code{accuracy} (per prompt-model and overall) and
 \code{kappa} (Cohen's kappa of the modal response and of all responses
-against the reference).
+against the reference). With \code{fleiss = TRUE}, \code{fleiss} is a list with
+the single numeric element \code{kappa}.
 }
 \description{
 The categorical counterpart of \code{\link[=msa_grr]{msa_grr()}}, following the attribute
@@ -43,6 +52,30 @@ answer (accuracy against a reference)? Agreement is summarised as
 percentages of consistent cells and items, as Krippendorff's alpha
 (which tolerates missing responses and ordinal scales) and, against a
 reference, as Cohen's kappa with optional ordinal weights.
+}
+\details{
+Missing responses and responses outside \code{levels} are excluded.
+Accuracy uses valid response-reference pairs. An item without a valid
+pair does not enter the proportion of fully correct items. Repeatability
+and reproducibility require at least two valid responses per unit;
+blocks do not split these units. Alpha counts excluded observed units
+in \code{n_units_excluded}, including units without any valid response.
+
+Each item must have at most one distinct nonmissing reference. Repeated
+identical references are allowed; a known reference beside missing
+entries is used for that item. Conflicting references are errors.
+Nonmissing references must belong to \code{levels}, including when the scale
+is derived from responses. Supply the complete scale explicitly when
+some categories occur only in the reference. Undefined Cohen's kappa
+gives \code{NA} with a message, including single-category scales.
+
+The modal response ignores missing answers; ties select the lowest of
+the tied categories in scale order. An item without a valid answer has
+a missing mode. These are general agreement diagnostics. The AP1
+application uses its own decision metric: \code{acmg_modal()} treats missing
+answers as a category and excludes tied modes from decisions. Cohen's
+kappa over all responses has no standard error because responses of
+the same item can be dependent.
 }
 \examples{
 lv <- c("B", "LB", "VUS", "LP", "P")

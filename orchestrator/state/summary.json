@@ -1,24 +1,24 @@
 {
   "contract": 1,
   "project": "llmsa",
-  "ts": "2026-11-05T11:56:58+01:00",
+  "ts": "2026-11-05T12:39:51+01:00",
   "milestone": {
     "id": "M3a",
     "index": 7,
     "total": 10
   },
-  "phase": "30-plan-approved",
+  "phase": "40-build",
   "round": 1,
   "needs_human": false,
   "reason": "",
   "gates": {},
   "parked": [],
   "last_events": [
-    "[20261105-103007] === M3a start ===",
     "[20261105-103034] RUN builder 20-plan (M3a r1, Versuch 1) -> /mnt/c/Users/Danie/dev/Llmsa/llmsa/orchestrator/logs/M3a-20-plan-r1-a1-20261105-103034.log",
     "[20261105-104938] RUN reviewer 30-plan-review (M3a r1, Versuch 1) -> /mnt/c/Users/Danie/dev/Llmsa/llmsa/orchestrator/logs/M3a-30-plan-review-r1-a1-20261105-104938.log",
     "[20261105-111807] RUN builder 20-plan (M3a r2, Versuch 1) -> /mnt/c/Users/Danie/dev/Llmsa/llmsa/orchestrator/logs/M3a-20-plan-r2-a1-20261105-111807.log",
-    "[20261105-113326] RUN reviewer 30-plan-review (M3a r2, Versuch 1) -> /mnt/c/Users/Danie/dev/Llmsa/llmsa/orchestrator/logs/M3a-30-plan-review-r2-a1-20261105-113326.log"
+    "[20261105-113326] RUN reviewer 30-plan-review (M3a r2, Versuch 1) -> /mnt/c/Users/Danie/dev/Llmsa/llmsa/orchestrator/logs/M3a-30-plan-review-r2-a1-20261105-113326.log",
+    "[20261105-115728] RUN builder 40-build (M3a r1, Versuch 1) -> /mnt/c/Users/Danie/dev/Llmsa/llmsa/orchestrator/logs/M3a-40-build-r1-a1-20261105-115728.log"
   ],
   "exit": null,
   "role_guards": "on"
