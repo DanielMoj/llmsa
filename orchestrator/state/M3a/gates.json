@@ -4,8 +4,8 @@
   "base": "438ffb91b1cb79de8771235966640b299d852cdb",
   "baseRef": "plan/M3a",
   "env": {
-    "ts": "2026-11-05T20:15:11+01:00",
-    "sha": "184f7a93bf148ebf413fcbba37879d389c460e6f",
+    "ts": "2026-11-06T04:41:02+01:00",
+    "sha": "72315f9f49c4b0769a3666fd33877e010cf38533",
     "bash": "5.3.9(1)-release",
     "git": "2.53.0",
     "toolchain": {
@@ -28,8 +28,8 @@
     "lint": "lint: Kommando erfolgreich",
     "tests": "tests: Kommando erfolgreich",
     "trace": "trace: alle Kriterien sind wörtlich und beidseitig verknüpft",
-    "territory": "territory: letzter Diff sauber (builder/40-build, Runde 1, Basis 438ffb91b1cb79de8771235966640b299d852cdb, 2026-11-05T12:39:51+01:00)",
-    "mutgate": "mutgate: pass (score=88.85 required=80 baseline=88.85 floor=80)",
+    "territory": "territory: letzter Diff sauber (qa/45-qa, Runde 1, Basis cc693fd21788f234fb8d665ab9a03ab9e5d49beb, 2026-11-05T20:44:06+01:00)",
+    "mutgate": "mutgate: pass (score=91 required=86.85 baseline=91 floor=80)",
     "golden-adr": "golden-adr: keine Golden-/Ankeränderung",
     "mutfull": "mutfull: pass (nicht fällig in M3a)"
   },
