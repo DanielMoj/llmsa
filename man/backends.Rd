@@ -51,7 +51,17 @@ to exercise failure handling.}
 
 \item{template}{A sprintf-style sentence with one \verb{\%s} for the value.}
 
-\item{seed}{Seed for the mock's private random number stream.}
+\item{seed}{Seed for the mock's private random number stream.
+With an explicit seed, each row's noise and failure draw depend only on
+\code{block}, \code{item_id}, \code{prompt_id}, \code{model_id} and \code{rep}, so a newly created
+mock can resume a stored run. Missing \code{block} and \code{rep} default to 1.
+The row stream starts at the seed modulo 2147483647, then folds the
+UTF-8 bytes of each length-prefixed part (\code{byte_length:part}, concatenated
+in that order) with \code{s = (131 * s + byte) \%\% 2147483647}. These are
+integer hash parameters, not statistical reference constants. Prompt
+and model effects retain their separate per-ID streams. Private draws
+restore the caller's RNG state, including an absent state. With \code{NULL},
+construction samples a private seed from the caller's RNG as before.}
 
 \item{chats}{For \code{backend_ellmer()}: an \code{ellmer} Chat object, or a named
 list of Chat objects keyed by model id.}
@@ -99,6 +109,10 @@ from prompt to parser can be exercised offline.
 \item \code{backend_ellmer()} wraps one or several \code{ellmer} chat objects (one per
 model id). Each call uses a fresh clone, so no conversation history
 leaks between calls.
+The last turn's response fields \code{model}, \code{provider} and \code{usage}, when
+present, are retained as \code{model_snapshot}, \code{provider} and \code{usage} in
+\code{meta}. Missing fields are not inferred from the request. Without ellmer
+the diagnostic is: "Package \code{ellmer} is required for backend_ellmer()."
 \item \code{backend_openai_compatible()} talks to any server that implements the
 OpenAI chat-completions API: OpenAI itself, Ollama (\code{base_url = "http://localhost:11434/v1"}), vLLM, LM Studio, Azure-style proxies.
 }

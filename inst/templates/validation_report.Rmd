@@ -22,6 +22,14 @@ params:
   title: ""
   author: ""
   data_hash: NA
+  design_seed: "not reported"
+  bootstrap_seed: "not reported"
+  plackett_burman_seed: "not reported"
+  model_metadata: NULL
+  metadata_notes: NULL
+  control_chart: NULL
+  ndc_constant: NULL
+  contribution_thresholds: NULL
   package_version: ""
   rendered_at: ""
 ---
@@ -29,7 +37,7 @@ params:
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE, comment = "")
 grr <- params$grr
-fmt <- function(x, d = 3) ifelse(is.na(x), "NA", formatC(x, digits = d, format = "f"))
+fmt <- function(x, d = 3) ifelse(is.na(x), "NA", formatC(x, digits = d, format = "f", decimal.mark = "."))
 esc <- function(x) gsub("|", "\\|", x, fixed = TRUE)   # pipes break markdown tables
 na_text <- "*Not assessed in this validation.*"
 ```
@@ -91,10 +99,15 @@ s <- grr$summary
 cat(sprintf("* Total gauge R&R: **%.1f %% of study variation** (%.1f %% contribution)\n", s[["grr_pct_study_var"]], s[["grr_pct_contribution"]]))
 cat(sprintf("* Repeatability %.1f %%, reproducibility %.1f %% of study variation\n", s[["repeatability_pct_study_var"]], s[["reproducibility_pct_study_var"]]))
 if (grr$type != "numeric") cat("* On the latent scale, Repeatability is the residual variance fixed by the link, not a measurement of disagreement between replicates; see the share of cells with identical replicates from `msa_agreement()`.\n")
-cat(sprintf("* Number of distinct categories (ndc): %s; ICC(items) = %.3f\n", if (is.finite(s[["ndc"]])) format(s[["ndc"]]) else "Inf", s[["icc_items"]]))
+cat(sprintf("* Number of distinct categories (ndc): %s; ICC(items) = %.3f\n", format(s[["ndc"]]), s[["icc_items"]]))
 cat(sprintf("* Classification: **%s** (basis %s, thresholds %g / %g)\n", toupper(grr$verdict),
             if (grr$basis == "study_var") "% study variation" else "% contribution", grr$threshold[1], grr$threshold[2]))
 if (isTRUE(grr$singular)) cat("* Note: singular fit; at least one variance component was estimated at zero. With few prompt or model levels this is expected; see the bootstrap intervals.\n")
+cat(sprintf("\nThe ndc calculation uses the constant %g, truncates to an integer and has a minimum of one.\n\n", params$ndc_constant))
+cat(sprintf("The %%Contribution thresholds %g %% and %g %% are a convention, the squared study-variation thresholds, not thresholds specified in the AIAG handbook.\n\n", params$contribution_thresholds[1], params$contribution_thresholds[2]))
+if (grr$type != "numeric") cat("The AIAG verdict thresholds on the latent scale are a convention.\n\n")
+for (source in grr$derived) cat("The ", source, " component is derived from two fixed levels using the range method; see `msa_fit()` and the validation vignette for its limitations.\n\n", sep = "")
+cat("The fitted model excludes block interactions and three-way interactions.\n\n")
 ```
 
 ```{r boot}
@@ -197,7 +210,18 @@ if (!is.null(ro)) {
 if (!is.null(params$assessment) && !is.null(params$robustness)) plot(params$robustness)
 ```
 
-## 7. Conclusion
+## 7. System suitability: Westgard control chart
+
+```{r control-chart, results='asis'}
+if (is.null(params$control_chart)) {
+  cat(na_text)
+} else {
+  print(knitr::kable(params$control_chart, row.names = FALSE))
+  cat("\n\nR_4s uses the range of two consecutive standardized values.\n")
+}
+```
+
+## 8. Conclusion
 
 ```{r conclusion, results='asis'}
 if (is.null(params$assessment)) {
@@ -222,7 +246,7 @@ if (!is.null(params$assessment)) {
 }
 ```
 
-## 8. Traceability
+## 9. Traceability
 
 | | |
 |---|---|
@@ -230,7 +254,23 @@ if (!is.null(params$assessment)) {
 | llmsa version | `r params$package_version` |
 | R version | `r R.version.string` |
 | lme4 / ordinal | `r as.character(utils::packageVersion("lme4"))` / `r as.character(utils::packageVersion("ordinal"))` |
-| Data hash (md5 of the analysed runs) | `r if (is.na(params$data_hash)) "not available (runs not supplied)" else params$data_hash` |
+| Data hash (SHA-256 of the canonical run table) | `r if (is.na(params$data_hash)) "not available (runs not supplied)" else params$data_hash` |
+
+Design seed: `r params$design_seed`
+
+Bootstrap seed: `r params$bootstrap_seed`
+
+Plackett-Burman seed: `r params$plackett_burman_seed`
+
+```{r model-metadata, results='asis'}
+if (nrow(params$model_metadata)) {
+  models <- params$model_metadata
+  models[] <- lapply(models, esc)
+  print(knitr::kable(models, row.names = FALSE))
+  cat("\n\nModel and Provider list all observed response metadata. Quantization lists requested routing settings recorded in meta; it is not a provider attestation. Missing values are not reported.\n\n")
+  if (length(params$metadata_notes)) cat(paste(esc(params$metadata_notes), collapse = "\n\n"), "\n\n")
+} else cat("Model metadata: not reported (no run rows supplied).\n\n")
+```
 
 ```{r session}
 si <- utils::sessionInfo()

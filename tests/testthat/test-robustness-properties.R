@@ -9,6 +9,7 @@ robust_property_case <- function() {
 }
 
 robust_property_error <- function(expr, message) {
+  # Diagnostic presentation contract; not an independent numerical oracle.
   err <- tryCatch(expr, error = identity)
   expect_s3_class(err, "error")
   if (inherits(err, "error")) {
@@ -207,17 +208,20 @@ test_that("Lenth statistics cover small positive PSE and constant responses", {
 })
 
 test_that("PB printing describes run capacity, omits row names and returns invisibly", {
+  # Output characterization of independently validated design fields.
   d <- pb_design(9, randomize = FALSE)
   printed <- NULL
   lines <- utils::capture.output(printed <- withVisible(print(d)))
   expected <- c("Plackett-Burman design: 12 runs, 9 factors (12-run design screens up to 11)",
                 utils::capture.output(print(as.data.frame(d), row.names = FALSE)))
   expect_identical(lines, expected)
+  expect_identical(utils::capture.output({ print(d); cat("|\n") }), c(expected, "|"))
   expect_identical(printed$value, d)
   expect_false(printed$visible)
 })
 
 test_that("robustness printing reports margins, rounded statistics and both activity meanings", {
+  # Output characterization; a consumer's marker must start on a fresh line.
   cs <- robust_property_case()
   small <- as.numeric(3 + cs$X %*% (seq_len(ncol(cs$X)) / 128))
   none <- msa_robustness(cs$d, small)
@@ -247,6 +251,7 @@ test_that("robustness printing reports margins, rounded statistics and both acti
     printed <- NULL
     lines <- utils::capture.output(printed <- withVisible(print(x)))
     expect_identical(lines, expected)
+    expect_identical(utils::capture.output({ print(x); cat("|\n") }), c(expected, "|"))
     expect_identical(printed$value, x)
     expect_false(printed$visible)
   }

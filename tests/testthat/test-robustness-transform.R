@@ -1,5 +1,6 @@
 # Small synthetic responses only; numerical tolerances come from ANK-TOL.
 robust_transform_error <- function(expr, message) {
+  # Diagnostic presentation contract; not an independent numerical oracle.
   err <- expect_no_warning(tryCatch(expr, error = identity))
   expect_s3_class(err, "error")
   if (inherits(err, "error")) {

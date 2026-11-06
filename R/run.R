@@ -7,6 +7,14 @@
 #' interrupted study can be resumed with `resume = TRUE` and no response is
 #' ever lost.
 #' Numeric metadata retain their precision when serialized as JSON.
+#' CSV stores retain text exactly, including numeric-looking identifiers and
+#' responses. Only `block`, `position`, `rep` and `latency_s` are read as numbers.
+#' Backend errors and null, length-zero, missing or empty responses are stored
+#' as error rows with a missing value, without invoking the parser. Available
+#' metadata are retained. Whitespace-only text is passed to the parser.
+#' Interrupts and other conditions that are not errors leave the run without
+#' adding a row. Resuming skips every stored call, including error rows and
+#' unparseable responses; it does not reparse or rewrite the stored answers.
 #'
 #' @param design An `msa_design` (see [msa_design()]).
 #' @param backend A backend function, see [backends].
@@ -72,13 +80,23 @@ msa_run <- function(design, backend, parse = parse_identity, block = NULL,
     lat <- as.numeric(difftime(Sys.time(), t0, units = "secs"))
     if (inherits(res, "error")) {
       txt <- NA_character_; meta <- NULL; err <- conditionMessage(res)
-    } else if (is.list(res)) {
-      txt <- as.character(res$text %||% NA_character_)[1]; meta <- res$meta; err <- NA_character_
+      if (!nzchar(trimws(err))) err <- "Backend error without a message."
     } else {
-      txt <- as.character(res)[1]; meta <- NULL; err <- NA_character_
+      content <- if (is.list(res)) res[["text"]] else res
+      meta <- if (is.list(res)) res[["meta"]] else NULL
+      txt <- as.character(content)[1L]
+      err <- if (is.null(content)) {
+        "Empty response: message content is null."
+      } else if (!length(content)) {
+        "Empty response: message content has length zero."
+      } else if (is.na(txt)) {
+        "Empty response: message content is NA."
+      } else if (!nzchar(txt)) {
+        "Empty response: message content is an empty string."
+      } else NA_character_
     }
     parser <- parse_by_prompt[[row$prompt_id]] %||% parse
-    val <- tryCatch(parser(txt), error = function(e) NA)
+    val <- if (is.na(err)) tryCatch(parser(txt), error = function(e) NA) else NA
     if (length(val) != 1) val <- NA
     rec <- data.frame(
       run_id = paste0(row$block, "-", row$position),
@@ -150,7 +168,13 @@ read_store <- function(path) {
     on.exit(DBI::dbDisconnect(con), add = TRUE)
     x <- DBI::dbReadTable(con, "runs")
   } else {
-    x <- utils::read.csv(path, stringsAsFactors = FALSE)
+    columns <- names(utils::read.csv(path, nrows = 0L, colClasses = "character",
+                                    check.names = FALSE))
+    types <- rep("character", length(columns))
+    types[columns %in% c("block", "position", "rep")] <- "integer"
+    types[columns == "latency_s"] <- "numeric"
+    x <- utils::read.csv(path, colClasses = types, stringsAsFactors = FALSE,
+                         check.names = FALSE)
   }
   x$value <- as.character(x$value)
   x

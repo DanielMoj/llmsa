@@ -20,7 +20,8 @@ parse_json_field(field)
 \item{text}{The raw response text (argument of the returned parser and of
 \code{parse_identity()}).}
 
-\item{decimal}{Decimal mark for \code{parse_number()}.}
+\item{decimal}{Decimal mark for \code{parse_number()}. Both ASCII minus and
+the Unicode minus sign U+2212 are accepted.}
 
 \item{levels}{For \code{parse_choice()}: the admissible labels, in the order
 that defines the ordinal scale. Matching is case-insensitive; the
@@ -36,7 +37,12 @@ different labels in one response give \code{NA}. Repeated matches of the same
 label are allowed. The default retains the substring parser.}
 
 \item{field}{For \code{parse_json_field()}: the name of the field to extract
-from a JSON object in the response (the first \code{{...}} block is used).}
+from a JSON object in the response (the first \code{{...}} block is used).
+The complete first object must be valid JSON; only its top-level field
+is read. Strings are decoded and numbers returned as character values.
+Missing fields, malformed input and non-scalar field values return \code{NA}.
+The factory requires jsonlite; without it the diagnostic is:
+"Package \code{jsonlite} is required for parse_json_field(); install it to use this parser."}
 }
 \value{
 A function with signature \verb{function(text)} returning a length-one

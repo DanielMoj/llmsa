@@ -24,6 +24,9 @@ A data.frame of class \code{pb_design} with one row per run, a column
 \code{run}, one coded column per factor (\code{-1}/\code{+1}), and, when levels were
 given, one labelled column per factor (suffix \verb{_level}). The design
 matrix is stored as attribute \code{coded}.
+With \code{randomize = TRUE}, an explicitly supplied \code{seed} is retained as
+the \code{seed} attribute. No seed is recorded for an unrandomised design or
+when \code{seed = NULL}.
 }
 \description{
 Robustness in the ICH Q2(R2) sense asks whether small, deliberate

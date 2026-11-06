@@ -16,6 +16,10 @@
 #' * `backend_ellmer()` wraps one or several `ellmer` chat objects (one per
 #'   model id). Each call uses a fresh clone, so no conversation history
 #'   leaks between calls.
+#'   The last turn's response fields `model`, `provider` and `usage`, when
+#'   present, are retained as `model_snapshot`, `provider` and `usage` in
+#'   `meta`. Missing fields are not inferred from the request. Without ellmer
+#'   the diagnostic is: "Package `ellmer` is required for backend_ellmer()."
 #' * `backend_openai_compatible()` talks to any server that implements the
 #'   OpenAI chat-completions API: OpenAI itself, Ollama (`base_url =
 #'   "http://localhost:11434/v1"`), vLLM, LM Studio, Azure-style proxies.
@@ -34,6 +38,16 @@
 #'   to exercise failure handling.
 #' @param template A sprintf-style sentence with one `%s` for the value.
 #' @param seed Seed for the mock's private random number stream.
+#'   With an explicit seed, each row's noise and failure draw depend only on
+#'   `block`, `item_id`, `prompt_id`, `model_id` and `rep`, so a newly created
+#'   mock can resume a stored run. Missing `block` and `rep` default to 1.
+#'   The row stream starts at the seed modulo 2147483647, then folds the
+#'   UTF-8 bytes of each length-prefixed part (`byte_length:part`, concatenated
+#'   in that order) with `s = (131 * s + byte) %% 2147483647`. These are
+#'   integer hash parameters, not statistical reference constants. Prompt
+#'   and model effects retain their separate per-ID streams. Private draws
+#'   restore the caller's RNG state, including an absent state. With `NULL`,
+#'   construction samples a private seed from the caller's RNG as before.
 #' @param chats For `backend_ellmer()`: an `ellmer` Chat object, or a named
 #'   list of Chat objects keyed by model id.
 #' @param base_url,api_key,temperature,system,max_tokens,timeout,... For
@@ -80,7 +94,15 @@ backend_mock <- function(truth, levels = NULL, thresholds = NULL,
   rng$prompt_eff <- numeric(0)
   rng$model_eff <- numeric(0)
   rng$seed <- seed %||% sample.int(.Machine$integer.max, 1)
-  rng$counter <- 0L
+
+  row_seed <- function(parts) {
+    parts <- enc2utf8(as.character(parts))
+    key <- paste0(nchar(parts, type = "bytes"), ":", parts, collapse = "")
+    s <- as.double(rng$seed) %% .Machine$integer.max
+    # Every intermediate is below 2^39: exact integer arithmetic in a double.
+    for (byte in as.integer(charToRaw(key))) s <- (131 * s + byte) %% .Machine$integer.max
+    s
+  }
 
   draw <- function(key, sd, slot) {
     eff <- get(slot, envir = rng)
@@ -102,10 +124,10 @@ backend_mock <- function(truth, levels = NULL, thresholds = NULL,
     }
     pid <- as.character(row$prompt_id %||% "P")
     mid <- as.character(row$model_id %||% model)
-    rng$counter <- rng$counter + 1L
     old <- .Random.seed_get()
-    set.seed(rng$seed + rng$counter)
     on.exit(.Random.seed_set(old), add = TRUE)
+    set.seed(row_seed(c(row[["block"]] %||% 1L, id, pid, mid,
+                       row[["rep"]] %||% 1L)))
     if (p_fail > 0 && stats::runif(1) < p_fail) {
       return(list(text = "I'm sorry, I cannot help with that request.",
                   meta = list(mock = TRUE)))
@@ -143,7 +165,13 @@ backend_ellmer <- function(chats) {
     if (is.null(chat)) stop(sprintf("backend_ellmer: no chat object for model id '%s'.", key), call. = FALSE)
     ch <- chat$clone()
     txt <- ch$chat(prompt, echo = "none")
-    list(text = as.character(txt), meta = list(client = "ellmer"))
+    response <- ch$last_turn()@json
+    meta <- list(client = "ellmer")
+    fields <- c(model = "model_snapshot", provider = "provider", usage = "usage")
+    for (field in intersect(names(fields), names(response))) {
+      meta[fields[[field]]] <- list(response[[field]])
+    }
+    list(text = as.character(txt), meta = meta)
   }
 }
 

@@ -20,7 +20,8 @@ msa_report(
   output_file = "validation_report.html",
   output_format = "html_document",
   quiet = TRUE,
-  assessment = NULL
+  assessment = NULL,
+  control_chart = NULL
 )
 }
 \arguments{
@@ -58,6 +59,10 @@ string), and \code{sections} (a named list of entries with character \code{text}
 and optional data.frame \code{table}). Validated before rendering. The supplied
 verdict is used in the conclusion; GRR remains in the precision section.
 \code{NULL} retains the original report. Application rules belong to the caller.}
+
+\item{control_chart}{Optional result of \code{\link[=msa_control_chart]{msa_control_chart()}}. The report
+lists TRUE counts and sorted index positions for each rule and \code{reject},
+and identifies the range interpretation of R_4s on consecutive values.}
 }
 \value{
 The path of the rendered report, invisibly.
@@ -75,6 +80,26 @@ The sections are filled from the objects supplied; omitted objects give
 an explicit "not assessed" entry rather than silence. Rendering needs
 the packages \code{rmarkdown} and \code{knitr} and a pandoc installation (RStudio
 and Positron ship one).
+A supplied run table also requires \code{digest} for its SHA-256 hash. JSON
+metadata are read with \code{jsonlite}; missing or unreadable metadata are
+identified explicitly. Each model's table lists all observed snapshot and
+provider values, and the requested quantizations recorded in \code{meta}.
+
+The data hash covers every column and row, without row names or object
+attributes. Canonical CSV puts \code{block}, \code{item_id}, \code{prompt_id}, \code{model_id},
+\code{rep} first, followed by other column names in UTF-8 byte order. Rows sort
+by those five keys (numeric keys by value, other keys by UTF-8 bytes, missing
+keys last), with the full serialized row as the tie breaker. Duplicates
+remain. The quoted header and every row end in LF. Text, including factor
+labels, is UTF-8 and quoted with doubled internal quotes; embedded newlines
+remain. Logical values are TRUE/FALSE, integers decimal, doubles use
+\code{sprintf("\%.17g")} with a decimal point. NA, NaN, Inf and -Inf retain their
+distinct unquoted forms. Other columns are converted with \code{as.character()}.
+The lowercase SHA-256 is computed over these bytes without R serialization.
+
+Seeds are read only from the design attached to \code{runs} and the \code{seed}
+attributes of \code{boot} and \code{robustness}. Older objects or unrecorded seeds
+are shown as "not reported"; the current RNG state is never used.
 }
 \examples{
 \donttest{

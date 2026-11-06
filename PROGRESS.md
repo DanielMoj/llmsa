@@ -1,5 +1,376 @@
 # PROGRESS — Langzeitgedächtnis des Builders
 
+## M3d — BUILD, Runde 1 (06.11.2026)
+
+Der freigegebene PLAN ist gemäß ADR-053 im Builder-Territorium umgesetzt.
+Die lokalen Unit-, Numerik-, Berichts- und Klasse-B-Reproduktionen bestehen.
+Die unveränderte M3d-Abnahme bleibt wegen des lokalen Socketverbots rot;
+die unveränderte QA-Suite zeigt die zwei von ADR-053 angekündigten
+Seed-Attribut-Konflikte. Dies ist ein BUILD-Nachweis, keine Gate-Abnahme.
+
+### Grundlage und Umsetzung
+
+Gelesen: AGENTS, IMPLEMENTATION-RULES, PROTOCOLS, Handoff-Schema,
+PROGRESS, LESSONS, PLAN, PLAN-REVIEW/verdict-plan (Runde 1, PASS),
+CRITERIA ACC-1 bis ACC-17, die vollständigen M3d-Abnahmetests samt
+Helfern, docs/01, die Stellen zu K-M3d-1 bis K-M3d-6 in docs/04,
+die betroffenen M1c-/M1d-/M2-Verträge und Formelsammlung §§2–4, 8,
+11–12. PLAN-UPDATE und ARBITER liegen für M3d nicht vor. Die einzige
+LESSONS-Lehre verlangt allgemeine Ursachenbehebung statt Einzelfallpatches.
+ADR-053 entscheidet die im PLAN vorgelegten Vertragsfragen. Es gibt
+keine Planabweichung und keinen neuen Builder-ADR.
+
+- `R/run.R`: CSV liest ausschließlich block/position/rep als Integer und
+  latency_s als Double, sämtliche übrigen und unbekannten Spalten als Text.
+  Fehler sowie NULL, Länge null, NA und leerer Antworttext erhalten eine
+  benannte Fehlerzeile ohne Parseraufruf; vorhandene Metadaten bleiben.
+  Whitespace geht an den Parser. Nicht-Fehlerbedingungen propagieren
+  unverändert; Schreibfehler brechen ab. Resume überspringt auch gespeicherte
+  Fehler und nicht parsbare Antworten, ohne sie umzuschreiben.
+- `R/backends.R`: Der Mock verwendet den dokumentierten, stellenabhängigen
+  Strom aus Seed und längenmarkierten UTF-8-Teilen des vollständigen
+  Aufrufschlüssels. Neue Backendinstanzen und andere Reihenfolgen liefern
+  dieselbe zeilenbezogene Antwort. Prompt-/Modelleffekte bleiben unverändert,
+  ebenso die Rückgabe eines vorhandenen oder fehlenden Aufrufer-RNG-Zustands.
+  ellmer nutzt weiterhin eine frische Chat-Kopie und übernimmt Modell,
+  Anbieter und verschachtelte usage aus der tatsächlichen letzten Antwort.
+- `R/parse.R`: Unicode-Minus wird für Zahlen normalisiert. Der JSON-Parser
+  validiert das erste vollständig abgegrenzte Objekt mit
+  `jsonlite::parse_json(simplifyVector = FALSE)`, berücksichtigt Strings und
+  Escapes und liest nur das exakte Feld der obersten Ebene. Syntaxfehler,
+  Warnungen und nicht skalare/nicht unterstützte Werte ergeben NA; ein
+  Dateiname wird nicht als Eingabequelle interpretiert. Die Fabrik nennt
+  jsonlite als Voraussetzung. Choice-Verhalten bleibt unverändert.
+- `R/report.R`, `R/report-data.R` und die Vorlage: letztes Defaultargument
+  `control_chart = NULL`, frühe Klassenprüfung, Westgard-Zahlen und echte
+  Indexpositionen, Konventionen und Modellgrenzen, alle beobachteten
+  Metadatenwerte sowie ausdrücklich benannte Lücken. Hash, Seed-Texte,
+  Modell- und Westgard-Tabellen entstehen in R und gehen als deklarierte
+  Parameter an die Vorlage. Der SHA-256 deckt sämtliche Zellen der nach
+  ADR-053 kanonisierten Lauftabelle ab. NA-ndc bleibt NA. Zahlen verwenden
+  Dezimalpunkte; das ursprüngliche OutDec wird nach dem Rendern restauriert.
+- `R/grr.R` und `R/robustness.R`: genau die drei Seed-Zuweisungen aus
+  ADR-053 Nr. 14.2 neben ergänzender roxygen-Dokumentation. Keine Änderung
+  einer Formel, eines Fits, einer Quantilrechnung oder eines AP1-Bands.
+  Sieben Hilfeseiten wurden in einer temporären Kopie erzeugt; nur diese
+  sieben wurden übernommen. NEWS beschreibt das endgültige Verhalten.
+- Fünf neue Unit-/Property-Dateien prüfen Resume/Typen/Abbruch/RNG,
+  JSON- und Zahlenparser, beide echten Adapter mit Aufzeichnungen und
+  synthetischen Fehlerantworten, unabhängige kanonische CSV-Bytes,
+  Metadaten/Markdown/HTML und Seed-Provenienz. Darstellungstests sind als
+  solche markiert. BL-128 ergänzt die Kommentare der bestehenden
+  Robustheitstests und prüft den abschließenden Zeilenumbruch mit einem
+  nachfolgenden Ausgabemarker. BL-130 bleibt wie geplant vertagt.
+
+### Antworten auf PLAN-REVIEW
+
+| ID | Umsetzung und Übergabe |
+| --- | --- |
+| E1 | Abschnitte 1–6 behalten Nummer und Titel; keine zusätzlichen Überschriften in 3/5/6. Die latente Erklärung steht unmittelbar nach der einzigen Listenzeile mit beiden Präzisionsbegriffen. Bestehende Robustheits-, Bias-, AP1- und Bootstraptexte bleiben. Berichtsregression und QA bestätigen die alten Leser. |
+| E2 | Nur `error` wird gespeichert. Eigene CSV-/SQLite-Tests prüfen unveränderte `interrupt`- und `acmg_network_abort`-Bedingungen ohne zusätzliche Zeile; vorhandene AP1-Netzwachentests bestehen. |
+| E3 | Alle vier Leerarten, Parserunterdrückung und Metadatenerhalt geprüft. AP1-Folge unten ausdrücklich beschrieben; keine Änderung von AP1-Regeln. |
+| E4 | Vollständige colClasses-Zuordnung; eigene Tests für führende Nullen, Textantworten, NA-Spalten und unbekannte Textspalten sowie fertigen Resume ohne Neuaufruf. |
+| E5 | Längenmarkierte UTF-8-Teile und Positionsmischung dokumentiert. Tests für gleiche Zeichensummen, verschiedene Teilgrenzen, Unicode, Block/Replikat und Aufrufreihenfolge. Mock-Werte ändern sich gegenüber dem alten Aufrufzähler; keine empirischen Konstanten oder eingefrorenen Resultate angepasst. |
+| E6 | Seeds ohne Exponent/Tausendertrenner und unmittelbar nach der Bezeichnung; Konventionen 1.41, 1 und 9 aus ANK-16. Tatsächliche Verdiktbasis/-schwellen kommen aus grr. |
+| E7 | parse_json statt fromJSON; Syntax- und Dateinamensnegativfälle, exakte Feldnamen und dokumentierter Fehler bei fehlendem jsonlite geprüft. |
+| E8 | Alte runs ohne meta/design, unlesbares meta, ausgelassene Objekte und fehlende Seeds rendern. Die Vorlage formatiert die in R vorbereiteten Herkunftsdaten. |
+| E9 | [QA-PENDING], nonblocking gemäß ADR-053 Nr. 14.6/ACC-17: genau zwei rote Erwartungen in QA-M3b-E2E-3, siehe echter Output unten. Änderung ausschließlich durch QA. |
+| E10 | Reviewer-Auftrag gemäß ADR-053 Nr. 14.5: die drei historischen M1d-Vergleiche bleiben bis zum Code-Review erwartet rot. Ihre Git-verwendenden Pfade wurden lokal nicht ausgeführt; keine Änderung/Ersetzung der Tests durch den Builder. |
+
+### Ausführungsumgebung und Testtreiber
+
+Alle ausführenden Prüfungen liefen in Positivlisten-Kopien unter
+`/tmp/llmsa-m3d-build-64t4zgy9/`. `baseline/` enthält den gesicherten
+Ausgangsstand, `work/` den geprüften Produktstand, `docs-src/` die
+roxygen-Kopie und `public/src/` die öffentliche Paketkopie. Die Inventur
+vor der Änderung umfasst 438 Dateien. Keine Git-/Schlüsseldateien wurden
+kopiert. Quellen, Aufzeichnungen und Anker werden ausschließlich gelesen.
+
+Für die nachstehenden vollständigen Befehle ist die Pfadabkürzung:
+
+```bash
+M3D_BUILD_DIR=/tmp/llmsa-m3d-build-64t4zgy9
+```
+
+`run-suite.R` setzt das übergebene Paketverzeichnis als Arbeitsverzeichnis,
+`REPO_ROOT=/mnt/c/Users/Danie/dev/Llmsa/llmsa`, `NOT_CRAN=true`,
+`TZ=Europe/Berlin` sowie die vorhandene Unit-Option
+`llmsa.test.ap1_recordings` auf die Originalaufzeichnungen. Es öffnet
+`pdf(NULL)`, setzt `testthat::set_max_fails(Inf)` und ruft
+`testthat::test_dir(testdir, filter = filter, load_package = "source",
+reporter = "summary", stop_on_failure = FALSE)` auf. Alle Blöcke laufen;
+der Prozess endet anhand der tatsächlichen Fehl-/Fehlerblöcke mit 0/1.
+Ergebnisobjekte und vollständige Outputs stehen im genannten Verzeichnis.
+Abnahmehelfer, erwartete Werte und Fehlerbedingungen werden nicht ersetzt.
+
+Rein lesende Abhängigkeitsdiagnose aus `work/` (Exit 0):
+
+```bash
+Rscript --vanilla /mnt/c/Users/Danie/dev/Llmsa/llmsa/orchestrator/lib/r-deps.R --check-only
+```
+
+Echter Schluss aus `dependencies.log`:
+
+```text
+r-deps: pass — 31 Anforderungen erfüllt (R 4.6.1)
+```
+
+Unter anderem unverändert installiert: lme4 2.0.6, Matrix 1.7.4,
+ordinal 2026.7.26, ellmer 0.5.0, httr2 1.3.0, jsonlite 2.0.0,
+testthat 3.3.2, digest 0.6.39, rmarkdown 2.32 und knitr 1.52.
+Keine Installation/Aktualisierung von Abhängigkeiten und kein Live-API-Aufruf.
+
+### Frühe Diagnosen
+
+```bash
+Rscript --vanilla "$M3D_BUILD_DIR/run-suite.R" "$M3D_BUILD_DIR/baseline" tests/acceptance '^m3d-' 'M3d baseline acceptance'
+Rscript --vanilla "$M3D_BUILD_DIR/run-suite.R" "$M3D_BUILD_DIR/work" tests/acceptance '^m3d-' 'M3d implementation acceptance'
+Rscript --vanilla "$M3D_BUILD_DIR/run-suite.R" "$M3D_BUILD_DIR/work" tests/testthat '^(run-resume|parser-properties|backend-metadata|report-provenance|seed-provenance)$' 'M3d unit initial'
+Rscript --vanilla "$M3D_BUILD_DIR/run-suite.R" "$M3D_BUILD_DIR/work" tests/testthat '^(run-resume|parser-properties|backend-metadata|report-provenance|seed-provenance|robustness-transform|robustness-properties)$' 'M3d unit corrected'
+```
+
+Echte Outputs in `acceptance-before.log`, `acceptance-initial.log`,
+`unit-initial.log`, `unit-corrected.log`; Exit-Codes 1, 1, 1, 0:
+
+```text
+M3d baseline acceptance: 31 blocks; 211 failed expectations; 1 error blocks; 0 warnings; 0 skips; 1199 passed expectations; elapsed 38.911 s
+M3d implementation acceptance: 31 blocks; 32 failed expectations; 1 error blocks; 0 warnings; 0 skips; 1453 passed expectations; elapsed 34.236 s
+M3d unit initial: 26 blocks; 10 failed expectations; 1 error blocks; 0 warnings; 0 skips; 410 passed expectations; elapsed 11.791 s
+M3d unit corrected: 45 blocks; 0 failed expectations; 0 error blocks; 0 warnings; 0 skips; 932 passed expectations; elapsed 12.591 s
+```
+
+Im ersten Implementierungslauf fehlte noch die neu erzeugte ellmer-Hilfe.
+Die übrigen negativen Erwartungen sind der unten beschriebene Replayweg.
+Der erste neue Unit-Lauf fand Fehler in den eigenen Testhilfen: Der
+synthetische Response-Bauer rundete JSON-Zahlen schon vor dem Adapter;
+ellmers strukturierter Message-Inhalt wurde für die Fehlerfallauswahl
+falsch gelesen; requireNamespace wurde an einer nicht vorhandenen
+Namespace-Bindung gemockt; HTML-Zeilenumbruch störte einen Textvergleich.
+Korrigiert wurden Serialisierungspräzision, Auswertung der tatsächlichen
+Message-Struktur, die lokale Abhängigkeitsumgebung der unveränderten
+Parserfabrik und Whitespace-Normalisierung des gelesenen HTML. Keine
+fachliche Erwartung wurde entfernt oder abgeschwächt.
+
+### Endgültige Unit-, QA- und Abnahmeregressionen
+
+```bash
+Rscript --vanilla "$M3D_BUILD_DIR/run-suite.R" "$M3D_BUILD_DIR/work" tests/testthat '.' 'M3d full unit'
+Rscript --vanilla "$M3D_BUILD_DIR/run-suite.R" "$M3D_BUILD_DIR/work" tests/e2e '.' 'M3d unchanged QA e2e'
+Rscript --vanilla "$M3D_BUILD_DIR/run-suite.R" "$M3D_BUILD_DIR/work" tests/fuzz '.' 'M3d unchanged QA fuzz'
+Rscript --vanilla "$M3D_BUILD_DIR/run-suite.R" "$M3D_BUILD_DIR/work" tests/acceptance '^m3d-' 'M3d final acceptance'
+Rscript --vanilla "$M3D_BUILD_DIR/run-suite.R" "$M3D_BUILD_DIR/work" tests/acceptance '^(m3b-|m3a-6-|m1c-[12]-|m1c-7-latent-note)' 'M3d core report regression'
+Rscript --vanilla "$M3D_BUILD_DIR/run-suite.R" "$M3D_BUILD_DIR/work" tests/acceptance '^m2-[3467]-' 'M3d M2 regression'
+```
+
+Vollständige Logs: `unit-full.log`, `qa-e2e.log`, `qa-fuzz.log`,
+`acceptance-final.log`, `core-report.log`, `m2-regression.log`.
+Exit-Codes in dieser Reihenfolge: 0, 1, 0, 1, 0, 1.
+
+```text
+M3d full unit: 380 blocks; 0 failed expectations; 0 error blocks; 0 warnings; 1 skips; 7486 passed expectations; elapsed 154.548 s
+M3d unchanged QA e2e: 25 blocks; 2 failed expectations; 0 error blocks; 0 warnings; 0 skips; 722 passed expectations; elapsed 39.154 s
+M3d unchanged QA fuzz: 13 blocks; 0 failed expectations; 0 error blocks; 0 warnings; 0 skips; 1385 passed expectations; elapsed 10.501 s
+M3d final acceptance: 31 blocks; 31 failed expectations; 1 error blocks; 0 warnings; 0 skips; 1454 passed expectations; elapsed 63.773 s
+M3d core report regression: 53 blocks; 0 failed expectations; 0 error blocks; 0 warnings; 0 skips; 850 passed expectations; elapsed 35.969 s
+M3d M2 regression: 35 blocks; 2 failed expectations; 5 error blocks; 0 warnings; 0 skips; 1587 passed expectations; elapsed 747.030 s
+```
+
+Der einzige Quell-Unit-Skip ist der bestehende Negativfall
+`backend_ellmer needs ellmer`, weil ellmer installiert ist. Der gesonderte
+M3d-Abnahmetest für fehlendes ellmer im isolierten Teilprozess besteht.
+Die Aufzeichnungen wurden in den neuen Quell-Unit-Tests tatsächlich gegen
+beide Adapter wiedergegeben, einschließlich unveränderter verschachtelter
+usage und frischer Chat-Verläufe. Beide Adapter bestehen zusätzlich die
+SQLite-Folge Erfolg/HTTP 500/HTTP 401/Timeout/leerer Body/NULL/leerer
+Content/Erfolg. Das ist ergänzende Evidenz, kein Ersatz der roten Abnahme.
+
+Die zwei erwarteten QA-Fehler stehen unverändert in
+`tests/e2e/test-m3b-qa-e2e.R:214` und `:231`:
+
+```text
+Expected `sort(names(attributes(rob_default)))` to be identical to `sort(...)`.
+Differences:
+`actual[7:11]`:   "response_mean" "response_sd" "row.names" "seed" "sme"
+`expected[7:10]`: "response_mean" "response_sd" "row.names"        "sme"
+Expected `rob_sub_pb` to be identical to `rob_sub_df`.
+Differences:
+`attr(actual, 'seed')` is an integer vector (20261105)
+`attr(expected, 'seed')` is absent
+```
+
+M3d-Ergebnisse nach Datei (aus dem gespeicherten testthat-Ergebnis):
+
+| Kriterium | Erfolgreiche Erwartungen | Fehlgeschlagene Erwartungen | Fehlerblöcke |
+| --- | ---: | ---: | ---: |
+| K-M3d-1 Resume | 706 | 0 | 0 |
+| K-M3d-2 Parser | 13 | 0 | 0 |
+| K-M3d-3 Backends | 100 | 31 | 0 |
+| K-M3d-4 Berichtszahlen | 513 | 0 | 0 |
+| K-M3d-5 Datenhash | 89 | 0 | 0 |
+| K-M3d-6 Konventionen | 33 | 0 | 1 |
+
+**M3d-BUILD-INFRA-01 — [INFRA], nonblocking für den Builder.**
+Ref: K-M3d-3, K-M3d-6 Metadaten, K-M2-4/7, PLAN P-M3d-04;
+`tests/acceptance/setup-m2.R:771` (von M3d mitbenutzt). Der unveränderte
+Abnahme-Replay verwendet req_dry_run und damit einen lokalen Socket:
+
+```text
+System failure for: socket() (Operation not permitted)
+httr2::req_dry_run(req, quiet = TRUE)
+curl::curl_echo(handle, progress = FALSE)
+httpuv::startServer("0.0.0.0", port, list(call = echo_handler))
+```
+
+Dadurch werden auch die vorgesehenen Erfolgsantworten zu Fehlerzeilen.
+Alle 31 M3d-Fehlerwartungen stammen aus diesem Replay und seinen
+Folgen. K-M3d-6 scheitert im Abnahmehelfer beim JSON-Lesen der dadurch
+fehlenden meta mit `missing value where TRUE/FALSE needed`, bevor die
+Metadatentabelle geprüft wird. Kein Test, Helfer, Gate, Recht oder
+Schwellenwert wurde verändert. Handoff: Betreiber/Reviewer führen den
+unveränderten Prüfweg im regulären Gate-Umfeld mit lokalen Sockets aus.
+Die M2-Regression hat dieselbe Ursache: K-M2-4 meldet zwei negative
+Erwartungen und vier Fehlerblöcke, K-M2-7 einen Fehlerblock beim
+Systemspalten-Replay. K-M2-3 besteht mit 837 Erwartungen, K-M2-6 mit
+383; die übrigen 353 Erwartungen aus K-M2-7 bestehen einschließlich
+Mock-CLI, Teile-/Resume-Schlüsseln, Pilot, Robustheit und Assessment.
+Die Aufschlüsselung mit jedem Fehlertext liegt in `m2-files.log`.
+
+### Numerik, Simulationen und Seeds
+
+```bash
+Rscript --vanilla "$M3D_BUILD_DIR/compare-seeds.R"
+Rscript --vanilla "$M3D_BUILD_DIR/run-suite.R" "$M3D_BUILD_DIR/work" tests/acceptance '^m(1c-4-|1d-6-)' 'M3d class B reproduction'
+Rscript --vanilla "$M3D_BUILD_DIR/run-suite.R" "$M3D_BUILD_DIR/work" tests/simulation '^lenth-h0$' 'M3d Lenth class A'
+```
+
+Alle drei Prozesse Exit 0. Echter Output aus `compare-seeds.log`,
+`class-b.log`, `lenth-class-a.log`:
+
+```text
+Before/after: 12 PB designs; 24 robustness results; 9 bootstraps; 5 AP1 assessments
+All existing result fields, attributes, warnings, messages and RNG states identical after removing only the approved seed attributes.
+Seed provenance checked separately for NULL, integer and double seeds; all three AP1 bands retained.
+M3d class B reproduction: 25 blocks; 0 failed expectations; 0 error blocks; 0 warnings; 0 skips; 4881 passed expectations; elapsed 344.360 s
+M3d Lenth class A: 1 blocks; 0 failed expectations; 0 error blocks; 0 warnings; 0 skips; 6 passed expectations; elapsed 2.056 s
+```
+
+Der Vorher-/Nachher-Vergleich lädt gesicherte Ausgangsquellen in einen
+eigenen Funktionskontext im selben R-Prozess. Er entfernt ausschließlich
+die erlaubten neuen Seed-Attribute vor identical; alle übrigen Attribute,
+Replikate, Intervalle, Warnungen, Meldungen und RNG-Zustände werden exakt
+verglichen. Die AP1-Fälle enthalten acceptable, marginal und unacceptable.
+Der unabhängige Bootstrapvergleich gegen bootMer und die alten Berichtsleser
+sind zusätzlich Bestandteil der grünen Kernregression oben.
+
+K-M1c-4 reproduziert den Kurzlauf und das S-boot-7-Präfix. K-M1d-6 prüft
+Vollständigkeit der vorhandenen vier Studien, ihre Kennzahlen aus den
+Einzelschätzern und reproduziert mit ANK-TOL.n_check die vorgeschriebenen
+Präfixe; für boot_coverage sind dies S-boot-1 und S-boot-7. Alle Ergebnisse
+entstehen unter temporären Ausgabepfaden. Historische Kurz-/Vollresultate
+und Session-Dateien sind bytegleich; kein zusätzlicher Volllauf wurde
+gerechnet oder behauptet. Der neue Körper von msa_boot ändert künftig
+boot_implementation; alte Session-Hashes werden nach ADR-053 Nr. 16
+nicht umetikettiert, alte und neue Chunks nicht zusammengeführt.
+
+Lenth-Klasse-A meldete n_sim = 1000 je Szenario, Seeds 20261112/20261115,
+RNG Mersenne-Twister/Inversion/Rejection. Für acht Faktoren: ME-Rate
+0.02325 (MCSE 0.00222), SME-Rate 0.01500 (0.00384); für elf Faktoren:
+0.02891 (0.00231) und 0.02500 (0.00494). Jede Entscheidung stimmt mit
+der unabhängigen Mini-Referenz überein; die unveränderten Kriterien bestehen.
+
+### Dokumentation, API und öffentlicher Paketcheck
+
+```bash
+Rscript --vanilla -e 'roxygen2::roxygenise("/tmp/llmsa-m3d-build-64t4zgy9/docs-src", roclets="rd")'
+Rscript --vanilla "$M3D_BUILD_DIR/check-api.R"
+```
+
+Beide Exit 0. roxygen2 8.1.1 erzeugte die sieben geplanten Hilfen;
+die zusätzliche Autorenformatierung von llmsa-package.Rd wurde nicht
+übernommen. DESCRIPTION und NAMESPACE bleiben bytegleich. `api.log`:
+
+```text
+ANK-02: 22 exports and 108 original ordered arguments/defaults preserved; every appended argument has a default.
+msa_report: final argument control_chart = NULL; no new exports.
+```
+
+Öffentliche Positivlisten-Kopie nur mit Paketdateien, ausgelieferten
+Ressourcen, Unit-Tests und Vignetten; keine Originalanker, geschützten
+Daten, API-Aufzeichnungen, Harness- oder Git-Dateien. Aus `public/`
+tatsächlich ausgeführt, beide Exit 0:
+
+```bash
+env -u REPO_ROOT TZ=Europe/Berlin R CMD build --no-manual src
+env -u REPO_ROOT TZ=Europe/Berlin _R_CHECK_CRAN_INCOMING_REMOTE_=false R CMD check --as-cran --no-manual llmsa_0.1.0.tar.gz
+```
+
+Die Incoming-Einstellung entspricht dem unveränderten Betreiberprüfweg
+`orchestrator/lib/r-check.sh`; die Uhrzeitprüfung blieb aktiv. Aus
+`public/build.log`, `public/check.log` und dem installierten Testoutput:
+
+```text
+* creating vignettes ... OK
+* building ‘llmsa_0.1.0.tar.gz’
+* checking R code for possible problems ... OK
+* checking examples with --run-donttest ... [39s/39s] OK
+* checking tests ...
+  Running ‘testthat.R’ [99s/99s]
+ [100s/99s] OK
+[ FAIL 0 | WARN 0 | SKIP 10 | PASS 7195 ]
+* checking package vignettes ... OK
+* checking re-building of vignette outputs ... [54s/54s] OK
+* DONE
+Status: 1 NOTE
+```
+
+Kein ERROR, keine WARNING. Die einzige NOTE lautet
+`Unable to verify current time` bei `checking for future file timestamps`.
+Die zehn installierten Skips betreffen sechs Replayblöcke mit bewusst
+nicht ausgelieferten Betreiberaufzeichnungen, zwei Originalanker-Vergleiche
+im öffentlichen Tarball, den bestehenden Report-On-CRAN-Skip und den
+ellmer-Abwesenheitsfall bei installiertem ellmer. Die entsprechenden
+Quellprüfungen liefen oben mit Originalressourcen. Windows/macOS/R 4.1
+werden durch diesen Linux-Lauf mit R 4.6.1 nicht als geprüft erklärt.
+
+### Integrität und Übergabe
+
+Abschließend ausgeführt (Exit 0):
+
+```bash
+python3 "$M3D_BUILD_DIR/check-integrity.py"
+```
+
+Echter Output (`integrity-final.log`):
+
+```text
+Inventory: 438 baseline files; 18 authorized changes; 6 authorized additions; no removals.
+Protected inventoried paths: 325/325 byte-identical, including all acceptance, QA, anchor and simulation result files.
+R/grr.R and R/robustness.R: only three approved seed assignments beyond roxygen changes; other statistical cores byte-identical.
+Checked package copy: 23 changed/new package paths byte-identical; seven generated help files match roxygen output.
+R sources ASCII; existing PROGRESS content retained; no generated artifacts in Builder paths.
+```
+
+Die Datei `integrity.json` enthält die vollständige Pfadliste. Kein
+fremdes Territorium wurde geändert; das bestehende QA-Artefakt aus BL-135
+bleibt bei QA. Die Inventur ersetzt nicht die Territoriumsprüfung.
+
+**AP1-Folge (E3, ADR-053 Nr. 19.2):** Neu erfasste leere Antworten zählen
+jetzt als backend_errors und damit für Pilot-/Wiederholungstagsregeln.
+Die vorhandene AP1-Auswertung nimmt nur fehlerfreie Zeilen für
+Provider-/Token-/Kostennachweise, obwohl die leere Fehlerzeile ihre meta
+weiterhin speichert. Vorhandene Stores werden nicht nachklassifiziert
+und beim Resume nicht neu gerechnet. Über Fortsetzung vorhandener oder
+gemischter Erhebungen beziehungsweise einen neuen Store entscheidet der
+Betreiber. Der Builder hat keine Betreiberstores verwendet oder geändert.
+
+Die im PLAN dokumentierten Backlog-Zuordnungen und Vertagungen bleiben
+bestehen. Reviewer/QA übernehmen E10/E9 und den belegten Infrastrukturpunkt
+in ihrem Territorium. Der Orchestrator führt die unveränderten kumulativen
+Gates einschließlich Mutation aus, prüft das Territorium und erzeugt den
+Phasen-Commit. Es gibt keine eigenen Git-Kommandos, Gate-Fakten,
+Äquivalenzfreigaben oder Abschwächungen von Tests und Schwellen.
+
+
 ## M3a — BUILD, Runde 1 (05.11.2026)
 
 Der freigegebene PLAN samt PLAN-UPDATE ist umgesetzt; maßgeblich sind

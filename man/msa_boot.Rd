@@ -24,6 +24,8 @@ statistic, plus the bootstrap replicates as attribute \code{boot}, the
 confidence \code{level}, and counts \code{n_failed} (replicates with at least one
 non-finite statistic) and \code{n_singular} (singular replicates with all
 statistics finite).
+An explicitly supplied \code{seed} is retained as the \code{seed} attribute for
+reporting; with \code{seed = NULL} no seed provenance is claimed.
 }
 \description{
 Parametric bootstrap of the fitted mixed model (\code{\link[lme4:bootMer]{lme4::bootMer()}}):

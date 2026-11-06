@@ -1,5 +1,19 @@
 # llmsa (development version)
 
+* CSV resume preserves text identifiers and responses. Seeded mock responses
+  depend on the complete call key, so a new backend reproduces an interrupted
+  run. Backend errors and empty responses are recorded without calling the
+  parser; interrupts leave the next call available for resume.
+* Number parsing accepts Unicode minus. JSON field parsing uses `jsonlite`
+  to validate the first object and decode a top-level string or number.
+  The ellmer adapter retains response model, provider and usage metadata.
+* Validation reports add optional Westgard rule counts and positions,
+  explicit conventions and model limits, all recorded model metadata,
+  seed provenance and a canonical SHA-256 hash covering the complete run
+  table. Missing metadata and seeds are reported explicitly.
+* `pb_design()`, `msa_robustness()` and `msa_boot()` retain the supplied seed
+  as provenance when used, without changing their numerical results.
+
 * `msa_agreement(fleiss = TRUE)` adds Fleiss' kappa without a standard error.
   Alpha counts excluded units at each scope. Empty items no longer count as
   fully correct, and degenerate Cohen kappas return `NA` with a message.

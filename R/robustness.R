@@ -22,6 +22,9 @@
 #'   `run`, one coded column per factor (`-1`/`+1`), and, when levels were
 #'   given, one labelled column per factor (suffix `_level`). The design
 #'   matrix is stored as attribute `coded`.
+#'   With `randomize = TRUE`, an explicitly supplied `seed` is retained as
+#'   the `seed` attribute. No seed is recorded for an unrandomised design or
+#'   when `seed = NULL`.
 #' @references Plackett, R. L. and Burman, J. P. (1946). The design of
 #'   optimum multifactorial experiments. *Biometrika* 33, 305-325.
 #' @examples
@@ -65,6 +68,7 @@ pb_design <- function(factors, n_runs = NULL, randomize = TRUE, seed = NULL) {
                                             as.character(factors[[nm]][1]))
     }
   }
+  if (randomize && !is.null(seed)) attr(out, "seed") <- seed
   structure(out, class = c("pb_design", "data.frame"), coded = X, factors = factors,
             n_runs = n_runs)
 }
@@ -126,6 +130,8 @@ print.pb_design <- function(x, ...) {
 #'   plus the response summary. With `transform = "logit"`, effects, PSE, ME,
 #'   SME and the attributes `response_mean` and `response_sd` are on the
 #'   logit scale.
+#'   If `design` carries a `seed` attribute it is copied unchanged to the
+#'   result for reporting. Otherwise no seed provenance is claimed.
 #' @references Lenth, R. V. (1989). Quick and easy analysis of unreplicated
 #'   factorials. *Technometrics* 31, 469-473.
 #'
@@ -176,6 +182,7 @@ msa_robustness <- function(design, response, factors = NULL, alpha = 0.05,
                     stringsAsFactors = FALSE)
   out <- out[order(-abs(out$effect)), ]
   rownames(out) <- NULL
+  attr(out, "seed") <- attr(design, "seed", exact = TRUE)
   structure(out, class = c("msa_robustness", "data.frame"), pse = pse, me = me, sme = sme,
             alpha = alpha, response_mean = mean(response), response_sd = stats::sd(response),
             n_runs = nrow(X))

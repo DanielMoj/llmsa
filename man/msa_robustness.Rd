@@ -37,6 +37,8 @@ effect / PSE, \code{active} flag) with attributes \code{pse}, \code{me}, \code{s
 plus the response summary. With \code{transform = "logit"}, effects, PSE, ME,
 SME and the attributes \code{response_mean} and \code{response_sd} are on the
 logit scale.
+If \code{design} carries a \code{seed} attribute it is copied unchanged to the
+result for reporting. Otherwise no seed provenance is claimed.
 }
 \description{
 Estimates the main effect of every factor in a Plackett-Burman (or any

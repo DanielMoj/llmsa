@@ -184,6 +184,8 @@ print.msa_grr <- function(x, digits = 4, ...) {
 #'   confidence `level`, and counts `n_failed` (replicates with at least one
 #'   non-finite statistic) and `n_singular` (singular replicates with all
 #'   statistics finite).
+#'   An explicitly supplied `seed` is retained as the `seed` attribute for
+#'   reporting; with `seed = NULL` no seed provenance is claimed.
 #' @examples
 #' \donttest{
 #' fit <- msa_fit(ic50_demo, type = "numeric")
@@ -213,6 +215,7 @@ msa_boot <- function(fit, nsim = 200, level = 0.95, seed = NULL, ...) {
   failed <- rowSums(!is.finite(t)) > 0L
   attr(out, "n_failed") <- sum(failed)
   attr(out, "n_singular") <- sum(b$t[!failed, length(est) + 1L] == 1)
+  attr(out, "seed") <- seed
   class(out) <- c("msa_boot", "data.frame")
   out
 }

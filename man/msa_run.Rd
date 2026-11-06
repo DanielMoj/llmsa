@@ -54,6 +54,14 @@ error. Rows are appended to \code{store} as they arrive, so that an
 interrupted study can be resumed with \code{resume = TRUE} and no response is
 ever lost.
 Numeric metadata retain their precision when serialized as JSON.
+CSV stores retain text exactly, including numeric-looking identifiers and
+responses. Only \code{block}, \code{position}, \code{rep} and \code{latency_s} are read as numbers.
+Backend errors and null, length-zero, missing or empty responses are stored
+as error rows with a missing value, without invoking the parser. Available
+metadata are retained. Whitespace-only text is passed to the parser.
+Interrupts and other conditions that are not errors leave the run without
+adding a row. Resuming skips every stored call, including error rows and
+unparseable responses; it does not reparse or rewrite the stored answers.
 }
 \examples{
 truth <- c(v1 = 1.2, v2 = -0.4, v3 = 0.1)
