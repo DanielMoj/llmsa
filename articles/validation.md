@@ -50,7 +50,7 @@ unrounded standard deviations.
 | Anchor | Source | Quantity | Expected | Observed | Tolerance | Result |
 |:---|:---|:---|:---|:---|:---|:---|
 | ANK-TOL.reml_anova | Independent stats::aov EMS solution | Synthetic design 1 (seed 1) item | 0.835101910404327 | 0.835102313122942 | 0.000112176345654644 absolute | PASS |
-| ANK-TOL.reml_anova | Independent stats::aov EMS solution | Synthetic design 1 (seed 1) prompt | 0.168794312318088 | 0.168794416682278 | 0.000112176345654644 absolute | PASS |
+| ANK-TOL.reml_anova | Independent stats::aov EMS solution | Synthetic design 1 (seed 1) prompt | 0.168794312318087 | 0.168794416682278 | 0.000112176345654644 absolute | PASS |
 | ANK-TOL.reml_anova | Independent stats::aov EMS solution | Synthetic design 1 (seed 1) model | 0.0123698579800859 | 0.0123698382273596 | 0.000112176345654644 absolute | PASS |
 | ANK-TOL.reml_anova | Independent stats::aov EMS solution | Synthetic design 1 (seed 1) Residual | 0.105497375843937 | 0.10549737464579 | 0.000112176345654644 absolute | PASS |
 | ANK-TOL.reml_anova | Independent GRR formulas | Synthetic design 1 (seed 1) grr_pct_study_var | 50.5515033377568 | 50.5514997389425 | 0.00505515033377568 absolute | PASS |
@@ -59,13 +59,13 @@ unrounded standard deviations.
 | ANK-TOL.reml_anova | Independent GRR formulas | Synthetic design 1 (seed 1) ndc | 2 | 2 | 0 absolute | PASS |
 | ANK-TOL.reml_anova | Independent stats::aov EMS solution | Synthetic design 2 (seed 1) item | 0.896356056977856 | 0.896355885245044 | 0.000119652855913307 absolute | PASS |
 | ANK-TOL.reml_anova | Independent stats::aov EMS solution | Synthetic design 2 (seed 1) prompt | 0.099234985232256 | 0.0992349351431396 | 0.000119652855913307 absolute | PASS |
-| ANK-TOL.reml_anova | Independent stats::aov EMS solution | Synthetic design 2 (seed 1) model | 0.00163326075749219 | 0.00163326845691075 | 0.000119652855913307 absolute | PASS |
-| ANK-TOL.reml_anova | Independent stats::aov EMS solution | Synthetic design 2 (seed 1) item:prompt | 0.0332467620444284 | 0.0332467584284754 | 0.000119652855913307 absolute | PASS |
+| ANK-TOL.reml_anova | Independent stats::aov EMS solution | Synthetic design 2 (seed 1) model | 0.00163326075749218 | 0.00163326845691075 | 0.000119652855913307 absolute | PASS |
+| ANK-TOL.reml_anova | Independent stats::aov EMS solution | Synthetic design 2 (seed 1) item:prompt | 0.0332467620444283 | 0.0332467584284754 | 0.000119652855913307 absolute | PASS |
 | ANK-TOL.reml_anova | Independent stats::aov EMS solution | Synthetic design 2 (seed 1) item:model | 0.0292096365532243 | 0.0292096391073928 | 0.000119652855913307 absolute | PASS |
 | ANK-TOL.reml_anova | Independent stats::aov EMS solution | Synthetic design 2 (seed 1) prompt:model | 0.0207364731002638 | 0.0207364810060388 | 0.000119652855913307 absolute | PASS |
 | ANK-TOL.reml_anova | Independent stats::aov EMS solution | Synthetic design 2 (seed 1) Residual | 0.116111384467547 | 0.116111384938424 | 0.000119652855913307 absolute | PASS |
 | ANK-TOL.reml_anova | Independent GRR formulas | Synthetic design 2 (seed 1) grr_pct_study_var | 50.086872925452 | 50.086874327654 | 0.0050086872925452 absolute | PASS |
-| ANK-TOL.reml_anova | Independent GRR formulas | Synthetic design 2 (seed 1) grr_pct_contribution | 25.0869483945037 | 25.0869497991421 | 0.00250869483945037 absolute | PASS |
+| ANK-TOL.reml_anova | Independent GRR formulas | Synthetic design 2 (seed 1) grr_pct_contribution | 25.0869483945038 | 25.0869497991421 | 0.00250869483945038 absolute | PASS |
 | ANK-TOL.reml_anova | Independent GRR formulas | Synthetic design 2 (seed 1) icc_items | 0.749130516054963 | 0.749130502008579 | 7.49130516054962e-05 absolute | PASS |
 | ANK-TOL.reml_anova | Independent GRR formulas | Synthetic design 2 (seed 1) ndc | 2 | 2 | 0 absolute | PASS |
 | ANK-TOL.reml_anova | Independent stats::aov EMS solution | Synthetic design 3 (seed 1) item | 0.831776303543049 | 0.831777146976174 | 0.000116858157865115 absolute | PASS |
@@ -79,13 +79,13 @@ unrounded standard deviations.
 | ANK-TOL.reml_anova | Independent GRR formulas | Synthetic design 3 (seed 1) ndc | 2 | 2 | 0 absolute | PASS |
 | ANK-TOL.reml_anova | Independent stats::aov EMS solution | Synthetic design 4 (seed 1) item | 0.812907930868241 | 0.812903011877827 | 0.000127510045272807 absolute | PASS |
 | ANK-TOL.reml_anova | Independent stats::aov EMS solution | Synthetic design 4 (seed 1) prompt | 0.19014246243158 | 0.190140990142518 | 0.000127510045272807 absolute | PASS |
-| ANK-TOL.reml_anova | Independent stats::aov EMS solution | Synthetic design 4 (seed 1) model | 0.00493987696115858 | 0.00493990642879696 | 0.000127510045272807 absolute | PASS |
+| ANK-TOL.reml_anova | Independent stats::aov EMS solution | Synthetic design 4 (seed 1) model | 0.00493987696115859 | 0.00493990642879696 | 0.000127510045272807 absolute | PASS |
 | ANK-TOL.reml_anova | Independent stats::aov EMS solution | Synthetic design 4 (seed 1) block | 0.0447175071996804 | 0.0447173774568431 | 0.000127510045272807 absolute | PASS |
 | ANK-TOL.reml_anova | Independent stats::aov EMS solution | Synthetic design 4 (seed 1) item:prompt | 0.0445888629217295 | 0.0445888568476236 | 0.000127510045272807 absolute | PASS |
 | ANK-TOL.reml_anova | Independent stats::aov EMS solution | Synthetic design 4 (seed 1) item:model | 0.0365928277418786 | 0.0365928295480705 | 0.000127510045272807 absolute | PASS |
 | ANK-TOL.reml_anova | Independent stats::aov EMS solution | Synthetic design 4 (seed 1) prompt:model | 0.0312833167960641 | 0.031283375422539 | 0.000127510045272807 absolute | PASS |
 | ANK-TOL.reml_anova | Independent stats::aov EMS solution | Synthetic design 4 (seed 1) Residual | 0.109927667807743 | 0.109927674665773 | 0.000127510045272807 absolute | PASS |
-| ANK-TOL.reml_anova | Independent GRR formulas | Synthetic design 4 (seed 1) grr_pct_study_var | 60.2059283263632 | 60.2059817007425 | 0.00602059283263632 absolute | PASS |
+| ANK-TOL.reml_anova | Independent GRR formulas | Synthetic design 4 (seed 1) grr_pct_study_var | 60.2059283263633 | 60.2059817007425 | 0.00602059283263633 absolute | PASS |
 | ANK-TOL.reml_anova | Independent GRR formulas | Synthetic design 4 (seed 1) grr_pct_contribution | 36.2475380563919 | 36.2476023255014 | 0.00362475380563919 absolute | PASS |
 | ANK-TOL.reml_anova | Independent GRR formulas | Synthetic design 4 (seed 1) icc_items | 0.637524619436081 | 0.637523976744986 | 6.37524619436081e-05 absolute | PASS |
 | ANK-TOL.reml_anova | Independent GRR formulas | Synthetic design 4 (seed 1) ndc | 1 | 1 | 0 absolute | PASS |
@@ -139,23 +139,23 @@ unrounded standard deviations.
 | ANK-TOL.oracle | VCA::anovaVCA | ic50_demo (unbalanced) prompt | 0.00488367383776392 | 0.00486224064145486 | not a criterion: unbalanced ANOVA | REPORT |
 | ANK-TOL.oracle | VCA::anovaVCA | ic50_demo (unbalanced) model | 0.0171099342884023 | 0.0171354046279492 | not a criterion: unbalanced ANOVA | REPORT |
 | ANK-TOL.oracle | VCA::anovaVCA | ic50_demo (unbalanced) block | 0.00100892168736979 | 0.00101739985692395 | not a criterion: unbalanced ANOVA | REPORT |
-| ANK-TOL.oracle | VCA::anovaVCA | ic50_demo (unbalanced) item:prompt | 9.42738421534421e-05 | 8.42408728729267e-05 | not a criterion: unbalanced ANOVA | REPORT |
-| ANK-TOL.oracle | VCA::anovaVCA | ic50_demo (unbalanced) item:model | 0.00534173250038113 | 0.00534983731012706 | not a criterion: unbalanced ANOVA | REPORT |
-| ANK-TOL.oracle | VCA::anovaVCA | ic50_demo (unbalanced) prompt:model | 2.15882253347022e-05 | 2.12809485421782e-05 | not a criterion: unbalanced ANOVA | REPORT |
-| ANK-TOL.oracle | VCA::anovaVCA | ic50_demo (unbalanced) Residual | 0.014010703740144 | 0.0140103056395663 | not a criterion: unbalanced ANOVA | REPORT |
+| ANK-TOL.oracle | VCA::anovaVCA | ic50_demo (unbalanced) item:prompt | 9.42738421534943e-05 | 8.42408728729267e-05 | not a criterion: unbalanced ANOVA | REPORT |
+| ANK-TOL.oracle | VCA::anovaVCA | ic50_demo (unbalanced) item:model | 0.00534173250038118 | 0.00534983731012706 | not a criterion: unbalanced ANOVA | REPORT |
+| ANK-TOL.oracle | VCA::anovaVCA | ic50_demo (unbalanced) prompt:model | 2.15882253347061e-05 | 2.12809485421782e-05 | not a criterion: unbalanced ANOVA | REPORT |
+| ANK-TOL.oracle | VCA::anovaVCA | ic50_demo (unbalanced) Residual | 0.0140107037401431 | 0.0140103056395663 | not a criterion: unbalanced ANOVA | REPORT |
 
 ### SixSigma oracle
 
 | Anchor | Source | Quantity | Expected | Observed | Tolerance | Result |
 |:---|:---|:---|:---|:---|:---|:---|
 | ANK-TOL.oracle | SixSigma::ss.rr, default pooling | Residual | 0.0213087542087542 | 0.0213087542223815 | 8.62212121212121e-06 absolute | PASS |
-| ANK-TOL.oracle | SixSigma::ss.rr, default pooling | prompt | 0.000573512906846248 | 0.000573512905820389 | 8.62212121212121e-06 absolute | PASS |
+| ANK-TOL.oracle | SixSigma::ss.rr, default pooling | prompt | 0.000573512906846233 | 0.000573512905820389 | 8.62212121212121e-06 absolute | PASS |
 | ANK-TOL.oracle | SixSigma::ss.rr, default pooling | item:prompt | 0 | 0 | 8.62212121212121e-06 absolute | PASS |
 | ANK-TOL.oracle | SixSigma::ss.rr, default pooling | item | 0.0643389450056117 | 0.0643389445237618 | 8.62212121212121e-06 absolute | PASS |
 | ANK-TOL.oracle | SixSigma::ss.rr, unrounded StdDev | Total gauge R&R % study variation | 50.3777881275185 | 50.3777882791117 | 0.00503777881275185 absolute | PASS |
 | ANK-TOL.oracle | SixSigma::ss.rr, unrounded StdDev | Repeatability % study variation | 49.7132284728041 | 49.7132286239795 | 0.00497132284728041 absolute | PASS |
-| ANK-TOL.oracle | SixSigma::ss.rr, unrounded StdDev | Reproducibility % study variation | 8.15576185478261 | 8.15576186968176 | 0.000815576185478261 absolute | PASS |
-| ANK-TOL.oracle | SixSigma::ss.rr, unrounded StdDev | prompt % study variation | 8.15576185478261 | 8.15576186968176 | 0.000815576185478261 absolute | PASS |
+| ANK-TOL.oracle | SixSigma::ss.rr, unrounded StdDev | Reproducibility % study variation | 8.1557618547825 | 8.15576186968176 | 0.00081557618547825 absolute | PASS |
+| ANK-TOL.oracle | SixSigma::ss.rr, unrounded StdDev | prompt % study variation | 8.1557618547825 | 8.15576186968176 | 0.00081557618547825 absolute | PASS |
 | ANK-TOL.oracle | SixSigma::ss.rr, unrounded StdDev | Part-to-part (items) % study variation | 86.3833228313131 | 86.3833227429056 | 0.00863833228313131 absolute | PASS |
 | ANK-TOL.oracle | SixSigma::ss.rr | ndc | 2 | 2 | 0 absolute | PASS |
 
@@ -163,9 +163,9 @@ unrounded standard deviations.
 
 | Anchor | Source | Quantity | Expected | Observed | Tolerance | Result |
 |:---|:---|:---|:---|:---|:---|:---|
-| ANK-TOL.reml_anova | Penicillin: stats::aov EMS | item | 3.73091787439613 | 3.73091787439614 | 0.000475024154589371 absolute | PASS |
-| ANK-TOL.reml_anova | Penicillin: stats::aov EMS | prompt | 0.716908212560386 | 0.716908212560387 | 0.000475024154589371 absolute | PASS |
-| ANK-TOL.reml_anova | Penicillin: stats::aov EMS | Residual | 0.302415458937198 | 0.302415458937198 | 0.000475024154589371 absolute | PASS |
+| ANK-TOL.reml_anova | Penicillin: stats::aov EMS | item | 3.73091787439613 | 3.73091787439614 | 0.000475024154589372 absolute | PASS |
+| ANK-TOL.reml_anova | Penicillin: stats::aov EMS | prompt | 0.716908212560386 | 0.716908212560387 | 0.000475024154589372 absolute | PASS |
+| ANK-TOL.reml_anova | Penicillin: stats::aov EMS | Residual | 0.302415458937197 | 0.302415458937198 | 0.000475024154589372 absolute | PASS |
 
 ### Penicillin published estimates
 
@@ -243,11 +243,11 @@ rounded input values are never repaired.
 | Dataset | LRE msa_fit residual | LRE msa_fit item | LRE aov residual | LRE aov item |
 |:--------|---------------------:|-----------------:|-----------------:|-------------:|
 | SmLs04  |             10.81152 |        10.265686 |        10.286173 |    10.043134 |
-| SmLs05  |             10.24344 |         9.923803 |        10.286173 |     9.943752 |
-| SmLs06  |             10.29010 |         9.936698 |        10.286172 |     9.934953 |
+| SmLs05  |             10.24344 |         9.923803 |        10.286173 |     9.943746 |
+| SmLs06  |             10.29010 |         9.936698 |        10.286172 |     9.934948 |
 | SmLs07  |                   NA |               NA |         4.250358 |     4.022777 |
-| SmLs08  |                   NA |               NA |         4.085552 |     3.922826 |
-| SmLs09  |                   NA |               NA |         3.351163 |     3.914627 |
+| SmLs08  |                   NA |               NA |         3.670512 |     3.922443 |
+| SmLs09  |                   NA |               NA |         3.224860 |     3.914684 |
 
 Fit diagnostics:
 
@@ -1312,7 +1312,7 @@ rendering.
 | S-bias-1 | 0.959000 | 0.006270 | 1000 | 1.435295 | within report threshold |
 | S-bias-2 | 0.952000 | 0.006760 | 1000 | 0.295863 | within report threshold |
 
-Elapsed time: 12.315 seconds, with R 4.6.2 and llmsa 0.1.0. The
+Elapsed time: 15.239 seconds, with R 4.6.2 and llmsa 0.1.0. The
 independent class A acceptance study checks the same scenarios and each
 interval against the t formula. These results assess the bias interval
 with independent residuals; they do not establish linearity-band
