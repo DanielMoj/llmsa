@@ -1,0 +1,298 @@
+{
+  "id": "ANK-93",
+  "title": "Rundungsstellen der Berichtsvorlage je Kennzahl: inst/templates/validation_report.Rmd im Stand 332a2d5 (v0.1.0)",
+  "criteria": [
+    "K-M3d-4"
+  ],
+  "value": {
+    "template": {
+      "path": "inst/templates/validation_report.Rmd",
+      "commit": "332a2d5897598685c17efe893e2ad65478ec04eb",
+      "git_blob": "2d5def34bbe15280deb92fb0e37a5b6266c3c536",
+      "sha256": "5c6cea5bb9f4ff49172a3991b9b192f673b02294694a421a6d2d98c90a9e4ddc",
+      "bytes": 8473
+    },
+    "formats": {
+      "fmt": "fmt <- function(x, d = 3) ifelse(is.na(x), \"NA\", formatC(x, digits = d, format = \"f\"))",
+      "fixed": "fmt(x, d) und sprintf(\"%.df\") runden auf d Nachkommastellen (formatC(format = \"f\"), C-Rundung der Binärzahl); NA erscheint als \"NA\"",
+      "significant": "%.3g und formatC(digits = 3, format = \"g\"): drei signifikante Stellen, wissenschaftliche Schreibweise nach C-Regel",
+      "integer": "%d und format(): ganze Zahlen ohne Nachkommastellen"
+    },
+    "digits": {
+      "variance": {
+        "decimals": 4,
+        "field": "msa_grr()$table$variance",
+        "line": 80,
+        "quote": "tab$variance <- fmt(tab$variance, 4); tab$sd <- fmt(tab$sd, 4)"
+      },
+      "sd": {
+        "decimals": 4,
+        "field": "msa_grr()$table$sd",
+        "line": 80,
+        "quote": "tab$variance <- fmt(tab$variance, 4); tab$sd <- fmt(tab$sd, 4)"
+      },
+      "pct_contribution": {
+        "decimals": 1,
+        "field": "msa_grr()$table$pct_contribution",
+        "line": 81,
+        "quote": "tab$pct_contribution <- fmt(tab$pct_contribution, 1); tab$pct_study_var <- fmt(tab$pct_study_var, 1)"
+      },
+      "pct_study_var": {
+        "decimals": 1,
+        "field": "msa_grr()$table$pct_study_var",
+        "line": 81,
+        "quote": "tab$pct_contribution <- fmt(tab$pct_contribution, 1); tab$pct_study_var <- fmt(tab$pct_study_var, 1)"
+      },
+      "grr_pct_study_var": {
+        "decimals": 1,
+        "field": "msa_grr()$summary[[\"grr_pct_study_var\"]]",
+        "line": 90,
+        "quote": "cat(sprintf(\"* Total gauge R&R: **%.1f %% of study variation** (%.1f %% contribution)\\n\", s[[\"grr_pct_study_var\"]], s[[\"grr_pct_contribution\"]]))"
+      },
+      "grr_pct_contribution": {
+        "decimals": 1,
+        "field": "msa_grr()$summary[[\"grr_pct_contribution\"]]",
+        "line": 90,
+        "quote": "cat(sprintf(\"* Total gauge R&R: **%.1f %% of study variation** (%.1f %% contribution)\\n\", s[[\"grr_pct_study_var\"]], s[[\"grr_pct_contribution\"]]))"
+      },
+      "repeatability_pct_study_var": {
+        "decimals": 1,
+        "field": "msa_grr()$summary[[\"repeatability_pct_study_var\"]]",
+        "line": 91,
+        "quote": "cat(sprintf(\"* Repeatability %.1f %%, reproducibility %.1f %% of study variation\\n\", s[[\"repeatability_pct_study_var\"]], s[[\"reproducibility_pct_study_var\"]]))"
+      },
+      "reproducibility_pct_study_var": {
+        "decimals": 1,
+        "field": "msa_grr()$summary[[\"reproducibility_pct_study_var\"]]",
+        "line": 91,
+        "quote": "cat(sprintf(\"* Repeatability %.1f %%, reproducibility %.1f %% of study variation\\n\", s[[\"repeatability_pct_study_var\"]], s[[\"reproducibility_pct_study_var\"]]))"
+      },
+      "ndc": {
+        "decimals": 0,
+        "rule": "format(ndc), ganzzahlig; nicht endlich als \"Inf\"",
+        "field": "msa_grr()$summary[[\"ndc\"]]",
+        "line": 92,
+        "quote": "cat(sprintf(\"* Number of distinct categories (ndc): %s; ICC(items) = %.3f\\n\", if (is.finite(s[[\"ndc\"]])) format(s[[\"ndc\"]]) else \"Inf\", s[[\"icc_items\"]]))"
+      },
+      "icc_items": {
+        "decimals": 3,
+        "field": "msa_grr()$summary[[\"icc_items\"]]",
+        "line": 92,
+        "quote": "cat(sprintf(\"* Number of distinct categories (ndc): %s; ICC(items) = %.3f\\n\", if (is.finite(s[[\"ndc\"]])) format(s[[\"ndc\"]]) else \"Inf\", s[[\"icc_items\"]]))"
+      },
+      "verdict": {
+        "rule": "toupper(verdict); Basis als Text, Schwellen mit %g",
+        "field": "msa_grr()$verdict",
+        "line": 93,
+        "quote": "cat(sprintf(\"* Classification: **%s** (basis %s, thresholds %g / %g)\\n\", toupper(grr$verdict),"
+      },
+      "boot_estimate": {
+        "decimals": 2,
+        "field": "msa_boot()$estimate",
+        "line": 101,
+        "quote": "b$estimate <- fmt(b$estimate, 2); b$lower <- fmt(b$lower, 2); b$upper <- fmt(b$upper, 2)"
+      },
+      "boot_lower": {
+        "decimals": 2,
+        "field": "msa_boot()$lower",
+        "line": 101,
+        "quote": "b$estimate <- fmt(b$estimate, 2); b$lower <- fmt(b$lower, 2); b$upper <- fmt(b$upper, 2)"
+      },
+      "boot_upper": {
+        "decimals": 2,
+        "field": "msa_boot()$upper",
+        "line": 101,
+        "quote": "b$estimate <- fmt(b$estimate, 2); b$lower <- fmt(b$lower, 2); b$upper <- fmt(b$upper, 2)"
+      },
+      "boot_level_percent": {
+        "decimals": 0,
+        "field": "100 * attr(msa_boot(), \"level\")",
+        "line": 102,
+        "quote": "knitr::kable(b, caption = sprintf(\"Parametric bootstrap, %d replicates, %.0f %% percentile intervals.\","
+      },
+      "agreement_repeatability": {
+        "decimals": 1,
+        "field": "msa_agreement()$repeatability_overall",
+        "line": 114,
+        "quote": "cat(sprintf(\"* Repeatability: %.1f %% of item-prompt-model cells have identical replicates\\n\", ag$repeatability_overall))"
+      },
+      "agreement_reproducibility": {
+        "decimals": 1,
+        "field": "msa_agreement()$reproducibility",
+        "line": 116,
+        "quote": "cat(sprintf(\"* Reproducibility: items consistent across prompts %.1f %%, across models %.1f %%, under all conditions %.1f %%\\n\", r[[1]], r[[2]], r[[3]]))"
+      },
+      "accuracy_overall": {
+        "decimals": 1,
+        "field": "msa_agreement()$accuracy_overall",
+        "line": 118,
+        "quote": "cat(sprintf(\"* Accuracy: %.1f %% of responses correct; %.1f %% of items correct in every call; Cohen's kappa (modal response vs reference) %.3f, (all responses vs reference) %.3f\\n\","
+      },
+      "pct_items_all_correct": {
+        "decimals": 1,
+        "field": "msa_agreement()$pct_items_all_correct",
+        "line": 118,
+        "quote": "cat(sprintf(\"* Accuracy: %.1f %% of responses correct; %.1f %% of items correct in every call; Cohen's kappa (modal response vs reference) %.3f, (all responses vs reference) %.3f\\n\","
+      },
+      "kappa": {
+        "decimals": 3,
+        "field": "msa_agreement()$kappa (kappa_modal_vs_reference, kappa_all_vs_reference)",
+        "line": 118,
+        "quote": "cat(sprintf(\"* Accuracy: %.1f %% of responses correct; %.1f %% of items correct in every call; Cohen's kappa (modal response vs reference) %.3f, (all responses vs reference) %.3f\\n\","
+      },
+      "alpha": {
+        "decimals": 3,
+        "field": "msa_agreement()$alpha$alpha",
+        "line": 122,
+        "quote": "al <- ag$alpha; al$alpha <- fmt(al$alpha, 3)"
+      },
+      "accuracy_pct_correct": {
+        "decimals": 1,
+        "field": "msa_agreement()$accuracy$pct_correct",
+        "line": 125,
+        "quote": "ac <- ag$accuracy; ac$pct_correct <- fmt(ac$pct_correct, 1)"
+      },
+      "bias": {
+        "decimals": 4,
+        "field": "msa_bias()$overall[[\"bias\"]]",
+        "line": 137,
+        "quote": "cat(sprintf(\"Mean bias %.4f (%.0f %% CI %.4f to %.4f; sd %.4f; n = %d; p = %.3g). Linearity: bias = %.4f + %.4f x reference (slope p = %.3g).\\n\\n\","
+      },
+      "bias_level_percent": {
+        "decimals": 0,
+        "field": "100 * msa_bias()$level",
+        "line": 137,
+        "quote": "cat(sprintf(\"Mean bias %.4f (%.0f %% CI %.4f to %.4f; sd %.4f; n = %d; p = %.3g). Linearity: bias = %.4f + %.4f x reference (slope p = %.3g).\\n\\n\","
+      },
+      "bias_lower": {
+        "decimals": 4,
+        "field": "msa_bias()$overall[[\"lower\"]]",
+        "line": 137,
+        "quote": "cat(sprintf(\"Mean bias %.4f (%.0f %% CI %.4f to %.4f; sd %.4f; n = %d; p = %.3g). Linearity: bias = %.4f + %.4f x reference (slope p = %.3g).\\n\\n\","
+      },
+      "bias_upper": {
+        "decimals": 4,
+        "field": "msa_bias()$overall[[\"upper\"]]",
+        "line": 137,
+        "quote": "cat(sprintf(\"Mean bias %.4f (%.0f %% CI %.4f to %.4f; sd %.4f; n = %d; p = %.3g). Linearity: bias = %.4f + %.4f x reference (slope p = %.3g).\\n\\n\","
+      },
+      "bias_sd": {
+        "decimals": 4,
+        "field": "msa_bias()$overall[[\"sd\"]]",
+        "line": 137,
+        "quote": "cat(sprintf(\"Mean bias %.4f (%.0f %% CI %.4f to %.4f; sd %.4f; n = %d; p = %.3g). Linearity: bias = %.4f + %.4f x reference (slope p = %.3g).\\n\\n\","
+      },
+      "bias_p_value": {
+        "significant": 3,
+        "field": "msa_bias()$overall[[\"p_value\"]]",
+        "line": 137,
+        "quote": "cat(sprintf(\"Mean bias %.4f (%.0f %% CI %.4f to %.4f; sd %.4f; n = %d; p = %.3g). Linearity: bias = %.4f + %.4f x reference (slope p = %.3g).\\n\\n\","
+      },
+      "linearity_intercept": {
+        "decimals": 4,
+        "field": "msa_bias()$linearity[[\"intercept\"]]",
+        "line": 137,
+        "quote": "cat(sprintf(\"Mean bias %.4f (%.0f %% CI %.4f to %.4f; sd %.4f; n = %d; p = %.3g). Linearity: bias = %.4f + %.4f x reference (slope p = %.3g).\\n\\n\","
+      },
+      "linearity_slope": {
+        "decimals": 4,
+        "field": "msa_bias()$linearity[[\"slope\"]]",
+        "line": 137,
+        "quote": "cat(sprintf(\"Mean bias %.4f (%.0f %% CI %.4f to %.4f; sd %.4f; n = %d; p = %.3g). Linearity: bias = %.4f + %.4f x reference (slope p = %.3g).\\n\\n\","
+      },
+      "linearity_slope_p_value": {
+        "significant": 3,
+        "field": "msa_bias()$linearity[[\"slope_p_value\"]]",
+        "line": 137,
+        "quote": "cat(sprintf(\"Mean bias %.4f (%.0f %% CI %.4f to %.4f; sd %.4f; n = %d; p = %.3g). Linearity: bias = %.4f + %.4f x reference (slope p = %.3g).\\n\\n\","
+      },
+      "by_condition_bias": {
+        "decimals": 4,
+        "field": "msa_bias()$by_condition$bias",
+        "line": 141,
+        "quote": "for (nm in c(\"bias\", \"sd\", \"lower\", \"upper\")) bc[[nm]] <- fmt(bc[[nm]], 4)"
+      },
+      "by_condition_sd": {
+        "decimals": 4,
+        "field": "msa_bias()$by_condition$sd",
+        "line": 141,
+        "quote": "for (nm in c(\"bias\", \"sd\", \"lower\", \"upper\")) bc[[nm]] <- fmt(bc[[nm]], 4)"
+      },
+      "by_condition_lower": {
+        "decimals": 4,
+        "field": "msa_bias()$by_condition$lower",
+        "line": 141,
+        "quote": "for (nm in c(\"bias\", \"sd\", \"lower\", \"upper\")) bc[[nm]] <- fmt(bc[[nm]], 4)"
+      },
+      "by_condition_upper": {
+        "decimals": 4,
+        "field": "msa_bias()$by_condition$upper",
+        "line": 141,
+        "quote": "for (nm in c(\"bias\", \"sd\", \"lower\", \"upper\")) bc[[nm]] <- fmt(bc[[nm]], 4)"
+      },
+      "by_condition_p_value": {
+        "significant": 3,
+        "field": "msa_bias()$by_condition$p_value",
+        "line": 142,
+        "quote": "bc$p_value <- formatC(bc$p_value, digits = 3, format = \"g\")"
+      },
+      "response_mean": {
+        "decimals": 4,
+        "field": "attr(msa_robustness(), \"response_mean\")",
+        "line": 152,
+        "quote": "cat(sprintf(\"Screening design with %d runs and %d factors; response mean %.4f (sd %.4f). Lenth PSE %.4f, ME %.4f, SME %.4f.\\n\\n\","
+      },
+      "response_sd": {
+        "decimals": 4,
+        "field": "attr(msa_robustness(), \"response_sd\")",
+        "line": 152,
+        "quote": "cat(sprintf(\"Screening design with %d runs and %d factors; response mean %.4f (sd %.4f). Lenth PSE %.4f, ME %.4f, SME %.4f.\\n\\n\","
+      },
+      "lenth_pse": {
+        "decimals": 4,
+        "field": "attr(msa_robustness(), \"pse\")",
+        "line": 152,
+        "quote": "cat(sprintf(\"Screening design with %d runs and %d factors; response mean %.4f (sd %.4f). Lenth PSE %.4f, ME %.4f, SME %.4f.\\n\\n\","
+      },
+      "lenth_me": {
+        "decimals": 4,
+        "field": "attr(msa_robustness(), \"me\")",
+        "line": 152,
+        "quote": "cat(sprintf(\"Screening design with %d runs and %d factors; response mean %.4f (sd %.4f). Lenth PSE %.4f, ME %.4f, SME %.4f.\\n\\n\","
+      },
+      "lenth_sme": {
+        "decimals": 4,
+        "field": "attr(msa_robustness(), \"sme\")",
+        "line": 152,
+        "quote": "cat(sprintf(\"Screening design with %d runs and %d factors; response mean %.4f (sd %.4f). Lenth PSE %.4f, ME %.4f, SME %.4f.\\n\\n\","
+      },
+      "effect": {
+        "decimals": 4,
+        "field": "msa_robustness()$effect",
+        "line": 155,
+        "quote": "d <- as.data.frame(ro); d$effect <- fmt(d$effect, 4); d$t_lenth <- fmt(d$t_lenth, 2)"
+      },
+      "t_lenth": {
+        "decimals": 2,
+        "field": "msa_robustness()$t_lenth",
+        "line": 155,
+        "quote": "d <- as.data.frame(ro); d$effect <- fmt(d$effect, 4); d$t_lenth <- fmt(d$t_lenth, 2)"
+      }
+    },
+    "absent_at_332a2d5": [
+      "Westgard-Regelkarte: kein Abschnitt, kein Parameter von msa_report()",
+      "Fleiss' Kappa (seit M3a: sprintf(\"* Fleiss' kappa: %.3f\\n\"))",
+      "Linearitätsregressionen, t-Quantil und Vertrauensband (seit M3a, fmt(…, 4) und %.4f)"
+    ]
+  },
+  "unit": "Nachkommastellen (decimals) bzw. signifikante Stellen (significant) der gedruckten Zahl; rule bei Text und ganzen Zahlen",
+  "tolerance": 0,
+  "tolerance_note": "Stellenzahl exakt. Der Abnahmetest verlangt, dass die gedruckte Zahl genau decimals Nachkommastellen trägt und vom Objektwert höchstens um die halbe Einheit der letzten gedruckten Stelle abweicht (docs/01 §2 Nr. 6) plus ANK-TOL.arithmetic.",
+  "source_url": "inst/templates/validation_report.Rmd im Commit 332a2d5897598685c17efe893e2ad65478ec04eb (Git-Blob 2d5def34bbe15280deb92fb0e37a5b6266c3c536)",
+  "source": "Berichtsvorlage von llmsa v0.1.0 (Datenstand); ANKER-TODO.md, Abschnitt „M3d — Ausführung, Parser, Backends, Bericht“, Zeile ANK-93: „`inst/templates/validation_report.Rmd` (Stand `332a2d5`)“, „Reviewer liest aus Vorlage“",
+  "quote": "fmt <- function(x, d = 3) ifelse(is.na(x), \"NA\", formatC(x, digits = d, format = \"f\"))",
+  "quote_location": "inst/templates/validation_report.Rmd im Stand 332a2d5, Zeile 31 (Chunk setup); die Stellen je Kennzahl stehen unter value.digits mit Zeilennummer und wörtlicher Zeile (quote)",
+  "retrieved": "2026-11-06",
+  "method": "Blob der Vorlage im Commit 332a2d5 ohne Git-Kommando aus den Git-Objekten gelesen (R: Pack-Index v2, Pack-Einträge mit Deltas, zlib mit memDecompress, SHA-1 jedes Objekts nachgeprüft); Commit 332a2d5897598685c17efe893e2ad65478ec04eb, Baum dc5c0557e42a4fca10f7ac43def8b1bf3ab88518, Blob 2d5def34bbe15280deb92fb0e37a5b6266c3c536 (8473 Byte). 332a2d5 liegt vor dem ersten von git filter-repo umgeschriebenen Commit (.git/filter-repo/first-changed-commits) und behält seine Kennung. Je Kennzahl die Formatangabe der Zeile gelesen: fmt(x, d) = formatC(x, digits = d, format = \"f\"), sprintf(\"%.nf\"), %.3g, %d, format().",
+  "verification": "Die Vorlage im Arbeitsbaum vor M3d (Git-Blob 2391f37ffdf2b3e0d2aae8e71f77fbdbb7b30675, SHA-256 5b3759ec9b371b3efcc5a6ab6cbede7cd7735663f67f0b28ad66533c3df82643, 12073 Byte) druckt jede Kennzahl aus value.digits mit denselben Stellen (geprüft Zeile für Zeile: Varianzkomponenten 4/4/1/1, Zusammenfassung %.1f, ICC %.3f, Kappa %.3f, Alpha fmt(…, 3), Trefferquote %.1f und fmt(…, 1), Bias %.4f und fmt(…, 4), p %.3g, Lenth %.4f, ME formatC(…, format = \"f\", digits = 4), Effekte fmt(…, 4), t fmt(…, 2), Bootstrap fmt(…, 2)); seither hinzugekommen sind Fleiss' Kappa (%.3f), die Linearitätsregressionen und das Vertrauensband (4 Stellen) und das t-Quantil (%.4f). Ein gerenderter Bericht (md_document, gfm) zeigt die Zahlen mit diesen Stellen (Probe der Acceptance M3d)."
+}

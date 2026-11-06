@@ -1,0 +1,180 @@
+{
+  "criteria": [
+    {
+      "id": "K-M3d-1",
+      "quote": "**K-M3d-1:** Fortsetzen (Eigenschaftstest): Für `ankerRef: ANK-TOL.resume_cutpoints` zufällig gewählte Abbruchpunkte wird ein Lauf mit `backend_mock()` und festem Seed nach dem Abbruch mit `resume = TRUE` fortgesetzt; der resultierende Speicher (CSV und SQLite) enthält dieselbe Zeilenmenge mit denselben Werten wie ein ununterbrochener Lauf, ohne Dubletten (`run_key` eindeutig). (Prüfweg: Test)",
+      "source": "docs/04-weitere-bausteine.md"
+    },
+    {
+      "id": "K-M3d-2",
+      "quote": "**K-M3d-2:** Parser (Eigenschaftstest): `parse_number()` (Dezimalpunkt und -komma, Vorzeichen, Exponenten, Einheiten im Text), `parse_choice()` (Aliase, Groß-/Kleinschreibung, umgebender Text) und `parse_json_field()` (gültiges JSON, JSON in Text, kaputtes JSON) liefern auf `ankerRef: ANK-TOL.parser_cases` zufällig erzeugten Eingaben nie einen Fehler, geben für gültige Formen den erwarteten Wert und für ungültige `NA` zurück. (Prüfweg: Test)",
+      "source": "docs/04-weitere-bausteine.md"
+    },
+    {
+      "id": "K-M3d-3",
+      "quote": "**K-M3d-3:** Backends gegen Aufzeichnungen: Mit den Aufzeichnungen unter `tests/fixtures/api/` (`ankerRef: ANK-94`), eingespielt mit `httr2::local_mocked_responses()` und zugeordnet über die URL und das Feld `model` des JSON-Bodys wie in K-M2-4, liefern `backend_openai_compatible()` und `backend_ellmer()` Text und `meta` (Modellkennung, Anbieter, Verbrauch) wie aufgezeichnet (ob die Mocks die Aufrufe von `backend_ellmer()` abfangen, klärt BL-60 vor M3d); HTTP-Fehler, Zeitüberschreitung und leere Antworten werden in `msa_run()` als `error`-Zeilen gespeichert und beenden den Lauf nicht; `backend_ellmer()` ohne installiertes `ellmer` endet mit der dokumentierten Fehlermeldung. (Prüfweg: Test)",
+      "source": "docs/04-weitere-bausteine.md"
+    },
+    {
+      "id": "K-M3d-4",
+      "quote": "**K-M3d-4:** Zahlentreue des Berichts: Jede in `msa_report()` gerenderte Kennzahl (Varianzkomponenten, % Contribution, % Studienvariation, ndc, ICC, Verdikt, Kappa, Alpha, Trefferquote, Bias-Intervall, Lenth-Werte, Westgard-Verletzungen) gleicht dem Wert im übergebenen Objekt nach Rundung auf die in der Vorlage festgelegten Stellen (`ankerRef: ANK-93`); der Abnahmetest parst das gerenderte Markdown/HTML und vergleicht. (Prüfweg: Test)",
+      "source": "docs/04-weitere-bausteine.md"
+    },
+    {
+      "id": "K-M3d-5",
+      "quote": "**K-M3d-5:** Datenhash: Der Bericht nennt den Algorithmus SHA-256 und den Hash der kanonischen Form der Lauftabelle (Zeilen sortiert nach Block, Item, Prompt, Modell, Replikat; feste Spaltenreihenfolge; UTF-8; CSV ohne Zeilennamen; Dezimalpunkt; LF; Formelsammlung §11); der Abnahmetest berechnet ihn unabhängig mit `digest::digest(algo = \"sha256\")` über eine eigene Kanonisierung und erhält denselben Wert; der Hash ändert sich bei Zeilenpermutation nicht und bei jeder Wertänderung. (Prüfweg: Test)",
+      "source": "docs/04-weitere-bausteine.md"
+    },
+    {
+      "id": "K-M3d-6",
+      "quote": "**K-M3d-6:** Konventionen im Bericht: Der gerenderte Bericht nennt die ndc-Konstante 1,41, die Verdiktschwellen mit Basis, die %Contribution-Schwellen als Konvention, abgeleitete Zwei-Stufen-Komponenten, das Modell ohne Block- und Dreifach-Wechselwirkungen, die R_4s-Lesart, alle Seeds (Design, Bootstrap, Plackett-Burman) und je Modell Modellkennung, Anbieter und Quantisierung aus `meta` (Formelsammlung Nr. 6, 7, 8, 10, 13, §11). (Prüfweg: Test)",
+      "source": "docs/04-weitere-bausteine.md"
+    }
+  ],
+  "open": [
+    {
+      "id": "ACC-1",
+      "status": "Anker geerntet in ACCEPTANCE M3d (06.11.2026); im 30-plan-review als ADR festzuhalten",
+      "ref": "ANKER-TODO.md, Abschnitt „M3d — Ausführung, Parser, Backends, Bericht“, Zeile ANK-93: „`inst/templates/validation_report.Rmd` (Stand `332a2d5`)“, „Reviewer liest aus Vorlage“; docs/01 §6: „Anker erntet der Reviewer in der ACCEPTANCE-Phase nach `ANKER-TODO.md`.“",
+      "kind": "Anker",
+      "owner": "Reviewer",
+      "blocking_builder": false,
+      "note": "ANK-93 neu: Rundungsstellen je Kennzahl aus inst/templates/validation_report.Rmd im Commit 332a2d5897598685c17efe893e2ad65478ec04eb (Git-Blob 2d5def34bbe15280deb92fb0e37a5b6266c3c536, SHA-256 5c6cea5b…4ddc, 8473 Byte), ohne Git-Kommando mit R aus den Git-Objekten gelesen (Pack-Index v2, Pack-Einträge mit Deltas, SHA-1 jedes Objekts nachgeprüft); 332a2d5 liegt vor dem ersten von git filter-repo umgeschriebenen Commit und behält seine Kennung. 43 Einträge mit Objektfeld, Zeilennummer und wörtlicher Zeile: Varianz und SD 4 Nachkommastellen, % Contribution und % Studienvariation 1, ICC 3, Kappa 3, Alpha 3, Trefferquoten 1, Bias, Grenzen und SD 4, Konfidenzniveau in Prozent 0, p-Werte 3 signifikante Stellen, Lenth PSE, ME, SME und Effekte 4, t-Werte 2, Bootstrap 2; ndc ganzzahlig über format(), Verdikt über toupper(). Die Vorlage vor M3d (Git-Blob 2391f37f…0675) druckt jede dieser Kennzahlen mit denselben Stellen; seither hinzugekommen sind Fleiss' Kappa (%.3f), die Linearitätsregressionen, das Vertrauensband und das t-Quantil. In 332a2d5 fehlen Westgard-Abschnitt und Fleiss' Kappa (ACC-10, ACC-11). ANK-94 unverändert, die SHA-256 der drei Aufzeichnungen erneut geprüft. ANK-TOL.resume_cutpoints (50, Seeds 1 bis 50) und ANK-TOL.parser_cases (10.000, Seed 20261024) liegen vor; ANK-16 (1,41; 10/30; 1/9), ANK-54 und ANK-55 (Quantisierung fp16, fp8) und ANK-69 (Klassen, Aliase) werden wiederverwendet. Die Anker liegen vor dem Tag plan/M3d (Gate golden-adr unberührt)."
+    },
+    {
+      "id": "ACC-2",
+      "status": "Auslegung des Reviewers (Spec schweigt zu Abbruchform, Abbruchpunkt, Neustart des Backends und verglichenen Spalten); im 30-plan-review als ADR festzuhalten",
+      "ref": "K-M3d-1: „wird ein Lauf mit `backend_mock()` und festem Seed nach dem Abbruch mit `resume = TRUE` fortgesetzt; der resultierende Speicher (CSV und SQLite) enthält dieselbe Zeilenmenge mit denselben Werten wie ein ununterbrochener Lauf, ohne Dubletten (`run_key` eindeutig)“; docs/04, M3d, Ergebnis: „`msa_run()` ist abbrechbar und wiederaufnehmbar ohne Datenverlust“",
+      "kind": "Auslegung",
+      "owner": "Reviewer",
+      "blocking_builder": false,
+      "note": "Plan: zwei Items mit den IDs „001“ und „010“, Prompts P1 und P2, Modelle m1 und m2, zwei Replikate, zwei Blöcke, order = \"random\", seed = 3101, also N = 32 Aufrufe; backend_mock(c(\"001\" = 0.8, \"010\" = -0.4), p_fail = 0.25, seed = 3101) mit parse_number(). Seeds 1 bis 50 aus ANK-TOL.resume_cutpoints; je Seed s ist der Abbruchpunkt k = sample.int(N − 1, 1) unter set.seed(s) (Mersenne-Twister, Inversion, Rejection). Abbruch: Vor Aufruf k + 1 signalisiert das Backend eine Bedingung der Klasse interrupt (wie Strg+C), keinen error; msa_run() zeichnet sie nicht als Fehlerzeile auf, sondern endet. Danach hält der Speicher genau die k abgeschlossenen Aufrufe (ohne Datenverlust). Fortsetzen: msa_run(resume = TRUE) mit einem neuen backend_mock() mit denselben Argumenten und demselben Seed, wie nach einem Neustart der R-Sitzung; die Antwort von backend_mock() auf einen Aufruf darf deshalb nur von Seed und Zeile (block, item_id, prompt_id, model_id, rep) abhängen, nicht von der Zahl der vorherigen Aufrufe. Verglichen werden alle gespeicherten Spalten außer den Zeitspalten timestamp und latency_s, Zeilen nach run_key sortiert; CSV-Felder als Text gelesen (utils::read.csv(colClasses = \"character\")), die SQLite-Tabelle wie gespeichert. run_key ist eindeutig, und die Schlüsselmenge gleicht der des Plans. IDs aus Ziffern sind ein Randfall nach docs/01 §2 Nr. 4: Ein CSV-Leser, der Spaltentypen rät, liest „001“ als 1."
+    },
+    {
+      "id": "ACC-3",
+      "status": "Befund des Reviewers aus der Probe (06.11.2026), Hinweis an den Builder",
+      "ref": "K-M3d-1; ACC-2",
+      "kind": "Hinweis",
+      "owner": "Builder",
+      "blocking_builder": false,
+      "note": "Auf dem Stand vor M3d schlagen beide Speicherarten fehl. CSV: in allen 50 Fällen Dubletten, weil read_store() mit read.csv() die Item-IDs „001“ und „010“ als Zahlen liest, run_key nicht mehr passt und jeder gespeicherte Aufruf erneut läuft. SQLite: in allen 50 Fällen andere Werte, weil backend_mock() Replikatrauschen und p_fail aus set.seed(seed + Zähler) zieht und ein neues Mock nach dem Abbruch wieder bei Zähler 1 beginnt; mit demselben Mock-Objekt (Zähler läuft weiter) wäre der SQLite-Speicher gleich, das zählt nicht als neue Sitzung. Die Attrappe des Reviewers mit zeilenweisem Seed im Mock und read.csv(colClasses) für item_id, prompt_id, model_id und value besteht alle 50 Fälle in beiden Speichern. backend_mock() muss weiter ohne block und rep in der Zeile funktionieren (tests/testthat/test-backends.R ruft es mit item_id, prompt_id und model_id)."
+    },
+    {
+      "id": "ACC-4",
+      "status": "Auslegung des Reviewers (Spec schweigt zur Grammatik gültiger und ungültiger Formen); im 30-plan-review als ADR festzuhalten",
+      "ref": "K-M3d-2: „`parse_number()` (Dezimalpunkt und -komma, Vorzeichen, Exponenten, Einheiten im Text) … liefern auf `ankerRef: ANK-TOL.parser_cases` zufällig erzeugten Eingaben nie einen Fehler, geben für gültige Formen den erwarteten Wert und für ungültige `NA` zurück“; docs/01 §2 Nr. 4: „nie stillschweigend eine falsche Zahl“",
+      "kind": "Auslegung",
+      "owner": "Reviewer",
+      "blocking_builder": false,
+      "note": "10.000 Eingaben, Seed 20261024; das Dezimalzeichen wird je Eingabe gezogen und mit parse_number() bzw. parse_number(decimal = \",\") geprüft. Ungültig (erwartet NA): Text ohne Ziffer (Wörter aus einem ziffernfreien Vokabular, auch „-“, „+“, „.“, „,“, „e“), \"\", Leerraum, NA. Gültig: genau eine Zahl, die nicht an einem Buchstaben klebt: Vorzeichen leer, „-“, „+“ oder in etwa 5 % der Fälle das Minuszeichen U+2212; ganzzahliger Teil ohne führende Nullen (außer „0“) oder leer vor einem Dezimalzeichen; Nachkommastellen (1 bis 5) mit dem Dezimalzeichen des Parsers; Exponent e/E mit optionalem Vorzeichen und 1 bis 2 Ziffern. Davor optional Wörter, die an Buchstaben klebende Ziffern enthalten dürfen (IC50, EC50, pIC50, CYP3A4, H2O), Leerraum und eine öffnende Klammer oder ein Anführungszeichen; danach eine Einheit (nM, µM, mg/L, mg/m3, µg/mL, %, °C, mmol/l, ng/ml, IU, fold, m2, cm3, kDa, auch ohne Leerzeichen) und Text ohne Ziffern. Erwartet: as.numeric() der Zahl mit „.“ und ASCII-Minus, exakt gleich. Nicht im Vertrag: Tausendertrenner, „× 10^n“ und hochgestellte Exponenten, Zahlen direkt hinter Buchstaben (USD12.50), mehrere Zahlen. Stand vor M3d: 301 von 10.000 falsch, alle mit U+2212 (das Vorzeichen geht verloren: „−587!“ ergibt 587)."
+    },
+    {
+      "id": "ACC-5",
+      "status": "Auslegung des Reviewers (Spec schweigt zu Modus, Aliasen und umgebendem Text); im 30-plan-review als ADR festzuhalten",
+      "ref": "K-M3d-2: „`parse_choice()` (Aliase, Groß-/Kleinschreibung, umgebender Text)“; K-M2-3: „gibt `NA`, wenn zwei verschiedene Klassen oder keine vorkommen“",
+      "kind": "Auslegung",
+      "owner": "Reviewer",
+      "blocking_builder": false,
+      "note": "Klassen und Aliase aus ANK-69; Modus je Eingabe gezogen. Vorgabemodus (whole_word = FALSE, Teilzeichenkette): Aliase nur VUS, VOUS und uncertain, weil B, P, LB und LP als Teilzeichenkette in fast jedem Wort stecken; umgebende Wörter ohne Klassen- und Aliaszeichenkette. Wortmodus (whole_word = TRUE): alle ANK-69-Aliase; umgebende Wörter einschließlich ACMG-Kriterien (PS1, PM2, PP3, BS1, BP4, PVS1), ohne die Wörter der Klassen und ohne „likely“. Gültig: eine Klasse über eine ihrer Bezeichnungen in zufälliger Groß- und Kleinschreibung je Zeichen, mit 0 bis 4 Wörtern davor und danach und Trennern (Leerzeichen, Doppelpunkt, Bindestrich, Zeilenumbruch, Komma, Punkt, Klammern, **), in 20 % wiederholt (dieselbe Klasse, auch über einen anderen Alias); erwartet die Klasse. Ungültig (NA): keine Klasse, \"\", NA; im Wortmodus zusätzlich zwei verschiedene Klassen (K-M2-3). Zweiter Beleg: Die Mini-Referenzen von K-M2-3 (acc_m2_parse_ww(), acc_m2_parse_v010()) liefern auf allen Eingaben den erwarteten Wert. Stand vor M3d: 0 Fehler."
+    },
+    {
+      "id": "ACC-6",
+      "status": "Auslegung des Reviewers (Spec schweigt zu Feldtypen, Verschachtelung und Arten kaputten JSONs); im 30-plan-review als ADR festzuhalten",
+      "ref": "K-M3d-2: „`parse_json_field()` (gültiges JSON, JSON in Text, kaputtes JSON)“; Hilfeseite parsers: „the name of the field to extract from a JSON object in the response (the first `{...}` block is used)“",
+      "kind": "Auslegung",
+      "owner": "Reviewer",
+      "blocking_builder": false,
+      "note": "Feld aus classification, class, value, result, label_1, Klasse. Gültig: Das Feld ist Mitglied der obersten Ebene des ersten Objekts; sein Wert ist eine Zeichenkette (erwartet: die dekodierte Zeichenkette; Escapes für Anführungszeichen, Backslash, Schrägstrich, Zeilenumbruch, Tabulator, Wagenrücklauf, Steuerzeichen und wahlweise Nicht-ASCII-Zeichen als u-Escape) oder eine Zahl, deren Text R mit as.character(as.numeric(t)) wiedergibt (42, -2.5, 0.125; erwartet dieser Text). Weitere Mitglieder: beliebige JSON-Werte einschließlich verschachtelter Objekte und Felder; Zeichenketten mit geschweiften und eckigen Klammern, Anführungszeichen, Doppelpunkten und Kommas; verschachtelte Objekte dürfen denselben Schlüssel tragen (es gilt die oberste Ebene); Leerraum einschließlich CRLF. Einbettung: reines JSON, JSON in Text (Text davor ohne geschweifte Klammern, Text danach), Codeblock ```json. Ungültig (erwartet NA): kein „{“; abgeschnittenes Objekt (vor der letzten schließenden Klammer abgeschnitten); Feld fehlt auf der obersten Ebene (auch nur in einem verschachtelten Objekt oder „{}“); Feld nur in einem zweiten Objekt nach dem ersten; Syntaxfehler: einfache Anführungszeichen, Schlüssel ohne Anführungszeichen, fehlender Doppelpunkt, fehlendes Komma, Komma vor der schließenden Klammer, nicht beendete Zeichenkette, ungültiges Escape (Backslash vor x). Nicht im Vertrag: null, true und false, Felder oder Objekte als Feldwert, leere Zeichenkette als Wert, doppelte Schlüssel. Zweiter Beleg: jsonlite::validate() und jsonlite::fromJSON() bestätigen Form und Feldwert jeder erzeugten Eingabe. Stand vor M3d: 2536 von 10.000 falsch (Klammern in Zeichenketten, gleichnamiger Schlüssel in einem verschachtelten Objekt, nicht dekodierte Escapes, angenommene Syntaxfehler)."
+    },
+    {
+      "id": "ACC-7",
+      "status": "Auslegung des Reviewers (Spec schweigt zu Chat-Objekten und Feldnamen von meta bei ellmer); BL-60 durch Ausführung geklärt; im 30-plan-review als ADR festzuhalten",
+      "ref": "K-M3d-3: „liefern `backend_openai_compatible()` und `backend_ellmer()` Text und `meta` (Modellkennung, Anbieter, Verbrauch) wie aufgezeichnet (ob die Mocks die Aufrufe von `backend_ellmer()` abfangen, klärt BL-60 vor M3d)“; BL-60",
+      "kind": "Auslegung",
+      "owner": "Reviewer",
+      "blocking_builder": false,
+      "note": "Wiedergabe mit acc_m2_replay() (setup-m2.R): Zuordnung über URL und Feld model, Fehler ohne passende Aufzeichnung. backend_ellmer() erhält list(sol =, llama =, qwen =) aus ellmer::chat_openai_compatible(base_url = URL der Aufzeichnung ohne /chat/completions, model = request_model, credentials = function() \"acc-test-key\", echo = \"none\"). BL-60 ist durch Ausführung bestätigt (ellmer 0.5.0, httr2 1.3.0, Probe 06.11.2026): local_mocked_responses() fängt die Aufrufe ab, je Aufruf geht eine Anfrage an die aufgezeichnete URL mit dem aufgezeichneten Modell, der Text ist „Uncertain significance“, auch bei Qwen mit Reasoning. meta beider Backends: model_snapshot = Feld model der Antwort, provider = Feld provider der Antwort (bei Sol fehlt es, also kein Eintrag), usage = Feld usage der Antwort, identisch mit jsonlite::fromJSON(simplifyVector = FALSE) der Aufzeichnung; für ellmer liegt der Antwortkörper in ch$last_turn()@json (Probe). msa_run() mit backend_ellmer() schreibt meta als JSON in den Speicher; das Chat-Objekt wird über model_id gewählt."
+    },
+    {
+      "id": "ACC-8",
+      "status": "Auslegung des Reviewers (Spec schweigt zu Fehlerarten und zur Form leerer Antworten); im 30-plan-review als ADR festzuhalten",
+      "ref": "K-M3d-3: „HTTP-Fehler, Zeitüberschreitung und leere Antworten werden in `msa_run()` als `error`-Zeilen gespeichert und beenden den Lauf nicht“",
+      "kind": "Auslegung",
+      "owner": "Reviewer",
+      "blocking_builder": false,
+      "note": "Die Mock-Funktion wählt die Fehlerart über eine Marke „fail:<art>“ im Prompt, sonst die Aufzeichnung: HTTP 500 und 401 (nicht transient, keine Wartezeit durch req_retry()), Zeitüberschreitung als Fehler der Klasse curl_error_operation_timedout aus der Mock-Funktion, leere Antworten als HTTP 200 mit leerem Körper, mit message.content null und mit message.content \"\" (sonst llama.json). Plan: ok_first, die sechs Fehlerarten, ok_last; Modell llama; order = \"fixed\". Erwartet für beide Backends, im Rückgabewert und im SQLite-Speicher: acht Zeilen (der Lauf endet nicht); jede Fehlerzeile mit nichtleerem Text in error und value NA; die beiden ok-Zeilen ohne error mit dem aufgezeichneten Wert. Stand vor M3d: content null und \"\" erzeugen keinen Fehler (sie zählen als nicht parsbar); ob das Backend oder msa_run() den Fehler meldet, entscheidet der Builder. Antworten nur aus Leerraum sind nicht im Vertrag."
+    },
+    {
+      "id": "ACC-9",
+      "status": "Auslegung des Reviewers (Spec schweigt zu Prüfweg und Ort der Dokumentation); im 30-plan-review als ADR festzuhalten",
+      "ref": "K-M3d-3: „`backend_ellmer()` ohne installiertes `ellmer` endet mit der dokumentierten Fehlermeldung“",
+      "kind": "Auslegung",
+      "owner": "Reviewer",
+      "blocking_builder": false,
+      "note": "Prüfung in einem Teilprozess (Rscript --vanilla): Ein nicht ladbares Platzhalterpaket „ellmer“ (nur DESCRIPTION) steht zuerst in .libPaths(), requireNamespace(\"ellmer\") ist FALSE; dann pkgload::load_all() des Pakets unter Test (export_all = FALSE). backend_ellmer(list(m = \"not a chat object\")) muss mit einem Fehler enden; seine Meldung (Leerraum zusammengefasst, Anführungszeichen und Backticks entfernt, Kleinschreibung) muss im Klartext von man/backends.Rd (Rd2txt, Repository-Wurzel) gleich normalisiert vorkommen. Stand vor M3d: Die Meldung „Package `ellmer` is required for backend_ellmer().“ gibt es, die Hilfeseite nennt sie nicht."
+    },
+    {
+      "id": "ACC-10",
+      "status": "Auslegung des Reviewers (Spec schweigt zu Ausgabeformat, Fundstellen der Kennzahlen und Vergleichsregel); im 30-plan-review als ADR festzuhalten",
+      "ref": "K-M3d-4: „Jede in `msa_report()` gerenderte Kennzahl (…) gleicht dem Wert im übergebenen Objekt nach Rundung auf die in der Vorlage festgelegten Stellen (`ankerRef: ANK-93`); der Abnahmetest parst das gerenderte Markdown/HTML und vergleicht.“",
+      "kind": "Auslegung",
+      "owner": "Reviewer",
+      "blocking_builder": false,
+      "note": "Gerendert mit rmarkdown::md_document(variant = \"gfm\", pandoc_args = \"--wrap=none\"). Abschnitte über den Titel der Überschrift zweiter Ebene, Nummer frei: Precision, Agreement, Bias, Robustness, Conclusion. Text normalisiert (Markdown-Escapes, *, Backticks, typografische Anführungszeichen und Striche). Die Zeilen der Vorlage seit v0.1.0 behalten ihre Form; neue Inhalte (Konventionen, Seeds) kommen als eigene Zeilen dazu: „Total gauge R&R: x % of study variation (y % contribution)“, „Repeatability x %, reproducibility y % of study variation“, „Number of distinct categories (ndc): n; ICC(items) = x“, „Classification: VERDIKT“, im Abschnitt Conclusion „classifies the pipeline as VERDIKT“, „Cohen's kappa (modal response vs reference) x, (all responses vs reference) y“, „Fleiss' kappa: x“, „Accuracy: x % of responses correct; y % of items correct in every call“, „Mean bias x (L % CI a to b;“, „Lenth PSE x, ME y, SME z“. Tabellen mit den Kopfzellen Source, Variance, SD, % Contribution, % Study variation (Zeile je Quelle ohne führende Leerzeichen); statistic, estimate, lower, upper (Bootstrap); scope, alpha; prompt_id, model_id, pct_correct; prompt_id, model_id, bias, lower, upper; factor, effect, t_lenth, active, active_simultaneous. Jedes Vorkommen muss stimmen. Vergleich: Die gedruckte Zahl trägt genau die Nachkommastellen aus ANK-93 und weicht vom Objektwert höchstens um ½·10^−d plus ANK-TOL.arithmetic ab; NA wird als „NA“ gedruckt, ndc über format() bzw. „Inf“, das Verdikt in Großbuchstaben, Aktivitätskennzeichen als TRUE/FALSE. Geprüft werden die Familien des Kriteriums (die Bootstrap-Tabelle als Intervalle derselben Kennzahlen); nicht: Attribut-Wiederholbarkeit und -Reproduzierbarkeit, Linearität, p-Werte. Fleiss' Kappa (in 332a2d5 nicht vorhanden) mit den Kappa-Stellen (3). Objekte: numerische Studie (12 Items × 3 Prompts × 3 Modelle × 2 Replikate × 2 Blöcke über msa_design(), msa_run() und backend_mock(), Design-Seed 314159), msa_boot(nsim = 4, seed = 271828), ordinale Studie für msa_agreement(weights = \"linear\", fleiss = TRUE), msa_bias(), msa_robustness() auf pb_design(8 Läufe, 7 Faktoren, seed = 161803). Stand vor M3d: diese Abschnitte grün."
+    },
+    {
+      "id": "ACC-11",
+      "status": "Auslegung des Reviewers (Spec schweigt zu Argument, Abschnitt und Form der Westgard-Verletzungen und der R_4s-Lesart); im 30-plan-review als ADR festzuhalten",
+      "ref": "K-M3d-4: „(… Lenth-Werte, Westgard-Verletzungen)“; K-M3d-6: „die R_4s-Lesart“; docs/01 §3 Nr. 6: „Bericht und `print` nennen die Lesart“; docs/01 §4: „Ohne ADR erlaubt: … neue Argumente mit Vorgabewert am Ende der Argumentliste“",
+      "kind": "Auslegung",
+      "owner": "Reviewer",
+      "blocking_builder": false,
+      "note": "msa_report() erhält das neue letzte Argument control_chart = NULL (ein msa_control_chart-Objekt). Mit ihm hat der Bericht einen Abschnitt zweiter Ebene, dessen Titel Westgard, control chart oder system suitability nennt, mit einer Tabelle mit den Kopfzellen Rule, Violations und Positions: je eine Zeile für jede Regel aus attr(chart, \"rules\") (Name wie im Objekt, etwa 1_2s oder R_4s) und eine Zeile reject; Violations ist die Zahl der Punkte, an denen die Spalte der Regel TRUE ist, Positions sind deren Werte von index aufsteigend (ganze Zahlen in der Zelle, Trenner frei, ohne Zahl, wenn keine). Im selben Abschnitt nennt eine Zeile R_4s (auch R4s), die Spannweitenlesart („range“) und aufeinanderfolgende Werte („consecutive“ oder „successive“); die Lesart „westgard“ ergänzt erst M3c (K-M3c-2). Ohne control_chart darf der Abschnitt „not assessed“ melden. Testkarte: 24 Werte auf der z-Skala (center 0, sd 1), an denen jede Regel mindestens einmal anschlägt. Stand vor M3d: Das Argument fehlt."
+    },
+    {
+      "id": "ACC-12",
+      "status": "Auslegung des Reviewers (Spec schweigt zu Spaltenmenge, Kopfzeile, Zahlenformat, Anführung und Sortierregel); im 30-plan-review als ADR festzuhalten",
+      "ref": "K-M3d-5: „den Hash der kanonischen Form der Lauftabelle (Zeilen sortiert nach Block, Item, Prompt, Modell, Replikat; feste Spaltenreihenfolge; UTF-8; CSV ohne Zeilennamen; Dezimalpunkt; LF; Formelsammlung §11)“; „der Hash ändert sich bei Zeilenpermutation nicht und bei jeder Wertänderung“",
+      "kind": "Auslegung",
+      "owner": "Reviewer",
+      "blocking_builder": false,
+      "note": "Kanonische Form, Byte für Byte: (1) Spalten: block, item_id, prompt_id, model_id, rep, dann jede weitere Spalte der Lauftabelle (as.data.frame(runs), Attribute bleiben außen vor) in Bytereihenfolge der Namen (C-Locale). (2) Erste Zeile: die Spaltennamen als Text. (3) Zellen: logisch TRUE/FALSE; integer in Dezimalziffern; double mit sprintf(\"%.17g\") (in R: NA als NA, NaN als NaN, Inf als Inf); Faktoren über ihre Stufennamen und jede andere Spalte über as.character() als Text; Text in doppelten Anführungszeichen mit verdoppelten inneren Anführungszeichen, UTF-8, eingebettete Zeilenumbrüche unverändert; fehlende Werte NA ohne Anführungszeichen. (4) Felder durch „,“ getrennt, jede Zeile endet mit LF, auch die letzte. (5) Zeilen sortiert nach block, item_id, prompt_id, model_id, rep: numerische Spalten nach Wert, alle anderen nach den Bytes des Texts (wie sort(method = \"radix\")), fehlende Werte zuletzt, Gleichstände nach den Bytes der ganzen Zeile. (6) SHA-256 über die UTF-8-Bytes, 64 Hexadezimalziffern klein. %.17g gibt jeder verschiedenen double-Zahl einen verschiedenen Text, auch bei einer Änderung im letzten Bit. Bericht: eine Zeile, die SHA-256 und die Daten oder die Lauftabelle nennt, mit dem 64-stelligen Hash (etwa „Data hash (SHA-256 of the canonical run table)“ im Abschnitt Traceability); keine Zeile nennt den Datenhash MD5 (docs/01 §3 Nr. 9). Testtabellen: die msa_run()-Tabelle der numerischen Studie und eine konstruierte Tabelle mit 48 Zeilen (NA, Anführungszeichen, Kommas, Zeilenumbruch, Nicht-ASCII, Faktor, logisch, 1e-20, 123456789.123, ganzzahlige double-Werte, Spaltenname mit Leerzeichen; Bytereihenfolge I10 < I2 < i3 und m-a < m_b). Permutationen: Zeilen (geseedet und umgekehrt) und Spalten; Änderungen: 14 einzelne Zellen, auch in Schlüsselspalten."
+    },
+    {
+      "id": "ACC-13",
+      "status": "Auslegung des Reviewers (Spec schweigt zu Wortlaut und Ort der Konventionen); im 30-plan-review als ADR festzuhalten",
+      "ref": "K-M3d-6: „Der gerenderte Bericht nennt die ndc-Konstante 1,41, die Verdiktschwellen mit Basis, die %Contribution-Schwellen als Konvention, abgeleitete Zwei-Stufen-Komponenten, das Modell ohne Block- und Dreifach-Wechselwirkungen, die R_4s-Lesart“; Formelsammlung §12 Nr. 7, 8, 10, 13",
+      "kind": "Auslegung",
+      "owner": "Reviewer",
+      "blocking_builder": false,
+      "note": "Was als Nennung zählt (Groß- und Kleinschreibung egal, normalisierter Text): ndc-Konstante: eine Zeile im Abschnitt Precision mit „ndc“ oder „distinct categories“ und der Zahl 1.41 (ANK-16). Verdiktschwellen: Die Zeile „Classification: …“ nennt die Basis („% study variation“ bzw. „% contribution“) und beide Schwellen des Objekts (gleich ANK-16), geprüft für basis = \"study_var\" und \"contribution\". %Contribution-Konvention: eine Zeile außerhalb von Tabellen mit „contribution“, „convention“ und den Zahlen 1 und 9 (ANK-16), in beiden Berichten. Abgeleitete Zwei-Stufen-Komponenten: für ordinale Fits mit zwei Modellen und mit zwei Blöcken (acc_m1b_ordinal_runs(), Seeds 41 und 42; grr$derived = model bzw. block) eine Zeile im Abschnitt Precision mit dem Namen der Quelle und „range method“ (oder „two-level“, „two fixed levels“). Modell: eine Zeile mit „interaction“, „block“, „three-way“ (oder 3-way, three-factor, triple) und einer Verneinung (no, not, without, pooled, exclud…, omit…). R_4s-Lesart: ACC-11."
+    },
+    {
+      "id": "ACC-14",
+      "status": "Auslegung des Reviewers (Spec schweigt zu Ort und Form der Seeds und der Modelltabelle); im 30-plan-review als ADR festzuhalten",
+      "ref": "K-M3d-6: „alle Seeds (Design, Bootstrap, Plackett-Burman) und je Modell Modellkennung, Anbieter und Quantisierung aus `meta` (Formelsammlung Nr. 6, 7, 8, 10, 13, §11)“; docs/01 §4: „zusätzliche Attribute“ ohne ADR erlaubt",
+      "kind": "Auslegung",
+      "owner": "Reviewer",
+      "blocking_builder": false,
+      "note": "Seeds: Design-Seed attr(attr(runs, \"design\"), \"seed\") (msa_run()), Bootstrap-Seed aus msa_boot(seed =), Plackett-Burman-Seed aus pb_design(seed =); für jeden eine Zeile, die „seed“ und die Bezeichnung (design, bootstrap, Plackett-Burman) nennt, wobei die erste ganze Zahl nach der Bezeichnung der Seed ist. Wie die Seeds zum Bericht gelangen (etwa als Attribut der msa_boot- und msa_robustness-Objekte), entscheidet der Builder. Modelltabelle: eine Tabelle mit den Kopfzellen Model ID, Model, Provider, Quantization; je model_id eine Zeile; Model nennt jeden verschiedenen Wert von meta$model_snapshot, Provider jeden von meta$provider, Quantization jeden von meta$quantizations der Zeilen des Modells; ohne Wert „not reported“. Testlauf: die drei aufgezeichneten Modelle über msa_run() mit zwei Items; eine Llama-Zeile meldet als konstruierten Anbieterwechsel einen zweiten Anbieter „AccTestHost“; Sol hat weder Anbieter noch Quantisierung."
+    },
+    {
+      "id": "ACC-15",
+      "status": "Hinweis an Builder und Betreiber, nonblocking",
+      "ref": "BL-17, BL-18, BL-60, BL-130; docs/01 §5: „Suggests dürfen ergänzt werden“",
+      "kind": "Hinweis",
+      "owner": "Builder, Betreiber",
+      "blocking_builder": false,
+      "note": "BL-130 (Logit-Skala in Druck und Bericht) gehört nicht zum M3d-Vertrag: K-M3d-4 vergleicht gedruckte Zahl und Objektwert auf derselben Skala, K-M3d-6 nennt die Skala nicht; die Skalenangabe bleibt ohne ADR zulässig und ein Backlog-Punkt. BL-17: K-M3d-3 prüft backend_ellmer() gegen die Aufzeichnungen. BL-18: K-M3d-5 ersetzt MD5 beim Datenhash; der Prompt-Hash (md5 in hash_text()) ist nicht Teil des Vertrags. BL-60: durch Ausführung beantwortet (ACC-7). Laufzeit der M3d-Abnahmetests: 42 s auf dem Stand vor M3d, 31 s mit der Attrappe; K-M3d-1 SQLite allein etwa 10 s (eine Verbindung je gespeicherter Zeile). Die Tests laufen je Mutant (MUT_TEST_EXCLUDE nimmt m3d- nicht aus); ob das so bleiben soll, entscheidet der Betreiber. DBI, RSQLite, digest, ellmer, httr2, jsonlite, rmarkdown, knitr und pkgload stehen in Suggests."
+    },
+    {
+      "id": "ACC-16",
+      "status": "erledigt (Reviewer-Probe, 06.11.2026)",
+      "ref": "docs/01 §2 Nr. 1: „Ein Test zählt erst, wenn er ein falsches Ergebnis erkennen würde.“",
+      "kind": "Prüflauf",
+      "owner": "Reviewer",
+      "blocking_builder": false,
+      "note": "Lauf der M3d-Abnahmetests auf dem Stand vor M3d (HEAD e86aac2): 31 Tests, 1478 Erwartungen, 20 Tests rot, 0 Fehler, 0 übersprungen, 42,6 s; grün sind K-M3d-2 parse_choice(), K-M3d-3 Aufzeichnungen und backend_openai_compatible() sowie K-M3d-4 Abschnitte Precision, Agreement, Bias und Robustness einschließlich Bootstrap-Tabelle. Attrappe (Paketkopie unter /tmp mit R/zzz-mock.R, geänderter Berichtsvorlage und Hilfeseite): 31 Tests, 1567 Erwartungen, alle grün, 30,6 s. Elf verfälschte Varianten der Attrappe sind jeweils am vorgesehenen Test rot: Mock mit Aufrufzähler (K-M3d-1, CSV und SQLite), CSV-Leser mit geratenen Typen (K-M3d-1 CSV), kein U+2212 (K-M3d-2 parse_number()), JSON über regulären Ausdruck (K-M3d-2 parse_json_field()), leere Antworten angenommen (K-M3d-3, beide Backends), ellmer ohne meta (K-M3d-3), Varianz mit 3 Nachkommastellen (K-M3d-4), Westgard-Positionen um eins verschoben (K-M3d-4), %.15g statt %.17g (K-M3d-5), Plackett-Burman-Seed fehlt (K-M3d-6), nur der erste Anbieter (K-M3d-6)."
+    }
+  ]
+}
