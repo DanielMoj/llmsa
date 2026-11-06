@@ -3,7 +3,8 @@
 * `msa_robustness()` accepts `transform = "logit"` for finite proportions
   strictly between zero and one. Effects and response summaries then use
   the logit scale; the default `transform = "none"` preserves existing results.
-* The robustness half-normal plot names Daniel's plotting convention.
+* The x-axis title of the robustness half-normal plot names the plotting
+  convention of Daniel (1959).
   The help page explains that Lenth's ME and SME are conservative and
   `alpha` is a nominal significance level.
 
