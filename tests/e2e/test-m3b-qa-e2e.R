@@ -211,9 +211,10 @@ test_that("QA-M3b-E2E-3: logit transform, help-page wording and msa_report integ
   rob_default <- msa_robustness(d, p)
   rob_none <- msa_robustness(d, p, transform = "none")
   expect_identical(rob_default, rob_none)
+  expect_identical(attr(rob_default, "seed", exact = TRUE), 20261105L)
   expect_identical(
     sort(names(attributes(rob_default))),
-    sort(c("names", "row.names", "class", "pse", "me", "sme", "alpha", "response_mean", "response_sd", "n_runs"))
+    sort(c("names", "row.names", "class", "pse", "me", "sme", "alpha", "response_mean", "response_sd", "n_runs", "seed"))
   )
 
   rob_logit <- msa_robustness(d, p, transform = "logit")
@@ -228,7 +229,9 @@ test_that("QA-M3b-E2E-3: logit transform, help-page wording and msa_report integ
   rob_sub_pb <- msa_robustness(d, p, factors = sub_factors, alpha = 0.10, transform = "logit")
   rob_sub_df <- msa_robustness(df_plain, p, factors = sub_factors, alpha = 0.10, transform = "logit")
   rob_sub_man <- msa_robustness(df_plain, log(p / (1 - p)), factors = sub_factors, alpha = 0.10)
-  expect_identical(rob_sub_pb, rob_sub_df)
+  expect_identical(attr(rob_sub_pb, "seed", exact = TRUE), 20261105L)
+  expect_null(attr(rob_sub_df, "seed", exact = TRUE))
+  expect_identical(structure(rob_sub_pb, seed = NULL), rob_sub_df)
   expect_equal(rob_sub_pb$effect, rob_sub_man$effect, tolerance = tol_arith)
   expect_equal(attr(rob_sub_pb, "pse"), attr(rob_sub_man, "pse"), tolerance = tol_arith)
   expect_equal(attr(rob_sub_pb, "me"), attr(rob_sub_man, "me"), tolerance = tol_arith)
