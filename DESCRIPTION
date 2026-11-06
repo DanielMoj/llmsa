@@ -9,15 +9,20 @@ Description: Treats a pipeline built on a large language model (LLM) as a
     measurement system and validates it with the tools that analytical
     laboratories already use: crossed precision studies with variance
     components (gauge repeatability and reproducibility), attribute
-    agreement with kappa statistics, bias against a reference,
-    Plackett-Burman screening of robustness against prompt and formatting
-    perturbations, simulation-based planning of study size, Westgard-rule
-    control charts for ongoing system suitability, and a reproducible
-    validation report. The package is pipeline-agnostic: any backend that
-    turns a prompt and a model identifier into a text response can be
-    validated, and results produced elsewhere can be imported.
+    agreement with kappa statistics and Krippendorff's alpha, bias against
+    a reference, Plackett-Burman screening of robustness against prompt and
+    formatting perturbations, simulation-based planning of study size,
+    Westgard-rule control charts for ongoing system suitability, and a
+    reproducible validation report. The methods follow Burdick, Borror and
+    Montgomery (2003) <doi:10.1080/00224065.2003.11980232>, Plackett and
+    Burman (1946) <doi:10.1093/biomet/33.4.305>, Lenth (1989)
+    <doi:10.1080/00401706.1989.10488595> and Westgard et al. (1981)
+    <doi:10.1093/clinchem/27.3.493>. The package is pipeline-agnostic: any
+    backend that turns a prompt and a model identifier into a text
+    response can be validated, and results produced elsewhere can be
+    imported.
 License: MIT + file LICENSE
-URL: https://github.com/DanielMoj/llmsa
+URL: https://danielmoj.github.io/llmsa/, https://github.com/DanielMoj/llmsa
 BugReports: https://github.com/DanielMoj/llmsa/issues
 Encoding: UTF-8
 Language: en-US

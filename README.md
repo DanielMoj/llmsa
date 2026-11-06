@@ -2,6 +2,7 @@
 
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/DanielMoj/llmsa/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/DanielMoj/llmsa/actions/workflows/R-CMD-check.yaml)
+[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE.md)
 <!-- badges: end -->
 
@@ -13,14 +14,18 @@ components (gauge R&R), attribute agreement, bias against a reference,
 Plackett-Burman screening of robustness, simulation-based planning of the
 study size, Westgard-rule control charts for ongoing system suitability,
 and a validation report in the structure a reviewer or an auditor expects.
-It produces the evidence that a quality unit, an inspector, a notified body
-or a model-risk function asks for before the output of an LLM step may
-count.
+It produces the kind of evidence that a quality unit, an inspector, a
+notified body or a model-risk function asks for before the output of an LLM
+step is relied on; whether to rely on it remains the decision of the
+organization that runs the pipeline.
 
 The object of the validation is always a concrete pipeline (model, prompt,
 settings) for a stated task and risk, never "the LLM" in general. Any
 pipeline qualifies whose output is a number, an ordered class or a yes/no
 answer; results produced outside R can be imported.
+
+Documentation, reference pages and articles:
+<https://danielmoj.github.io/llmsa/>
 
 ## Why
 
@@ -42,6 +47,19 @@ risk and acceptance criteria fixed in advance. This is the structure of the
 credibility assessment in the FDA's 2025 draft guidance on AI in regulatory
 decision-making.
 
+## Related work
+
+Variance decompositions of LLM outputs are an active research topic.
+Generalizability-theory studies separate items, prompt variants, models
+and replicates and use the components to plan designs (Messing, 2026;
+Żatuchin, 2026). Evaluation frameworks such as Inspect AI report standard
+errors and Krippendorff's alpha for scores (UK AI Security Institute,
+2026). `llmsa` takes the measurement-system view of regulated laboratories
+and adds what such a laboratory needs on top: acceptance criteria fixed
+before the study and a verdict against them, designed robustness
+screening, control charts for routine use, and a validation report tied
+to context of use and model risk.
+
 ## Who needs this
 
 Classic computer system validation assumes that the same input gives the
@@ -49,7 +67,7 @@ same output. A step built on a language model breaks that assumption. Its
 answer can change with the wording of the prompt, with the day, and with
 model updates the provider makes without notice, so a single test run
 proves little. Wherever such a step sorts, extracts or calculates inside a
-regulated process, the organisation running it is expected to show three
+regulated process, the organization running it is expected to show three
 things: what the step gets wrong, how often, and whether that still holds
 after the next update. A benchmark score or a vendor certificate describes
 a model on someone else's data, not this pipeline on this task.
@@ -108,13 +126,24 @@ for the critical error direction, and the comparison of model versions.
 5. A control set and Westgard rules for every later change of model or
    prompt.
 
+## Scope and limits
+
+`llmsa` is research software, released under the MIT license without
+warranty. It is not a medical device or an in vitro diagnostic device and
+has no medical purpose of its own. A validation report documents one study
+of one pipeline: model snapshot, prompts, data, dates, results and what was
+not tested. It is evidence on analytical performance at that point in
+time. It does not certify a pipeline, establish regulatory compliance or
+replace the review and release by the organization that uses the
+pipeline.
+
 ## When to use it
 
 * **Before deployment.** A crossed study (items × prompt variants × models ×
   replicates × blocks) shows where the variation comes from and whether the
   pipeline separates the items it has to separate.
 * **After a change.** A new model version, a reworded prompt, another
-  provider or quantisation: repeat the study with the changed component and
+  provider or quantization: repeat the study with the changed component and
   compare the result with the validated state.
 * **In routine use.** A small control set with known answers runs before
   each batch, and `msa_control_chart()` applies the Westgard rules to catch
@@ -127,7 +156,7 @@ for the critical error direction, and the comparison of model versions.
 | Measurand | What the pipeline reports: a number (IC50), an ordered class (ACMG/AMP tier), a yes/no finding |
 | Part | Item (variant, document, assay record) |
 | Appraiser | Prompt variant (semantically equivalent wording) |
-| Instrument | Model (provider, version, quantisation) |
+| Instrument | Model (provider, version, quantization) |
 | Trial / replicate | Repeated call under identical conditions |
 | Day / session | Block (endpoints drift with load and time) |
 | Repeatability | Variance between replicate calls |
@@ -155,14 +184,15 @@ explicitly.
 | Variance components, %GRR, % contribution, ndc and verdict (numeric) | verified | equal to the ANOVA estimators on balanced designs; AIAG worked example; published REML estimates for lme4's `Penicillin` data; NIST StRD ANOVA datasets with certified values; live comparison with VCA, SixSigma and lme4 |
 | Ordinal and binary outcomes (latent scale) | verified | equal to direct fits with `ordinal::clmm()` and `lme4::glmer()`; latent ICC against rptR and performance; recovery of simulated components with MCSE |
 | Bootstrap intervals (`msa_boot()`) | verified | quantiles equal to `lme4::bootMer()`; coverage measured in seven scenarios with MCSE |
-| Robustness screening (Plackett-Burman, Lenth) | implemented; validation in progress | planned: generator rows of Plackett and Burman (1946), comparison with FrF2, the worked examples of Lenth (1989), false-alarm rate at the nominal level |
-| Agreement (Cohen, Krippendorff), bias and linearity | implemented; not yet validated | planned: published values for every weighting and scale level, established packages, AIAG examples, simulated coverage |
+| Robustness screening (Plackett-Burman, Lenth) | verified | generator rows equal to Plackett and Burman (1946), cross-checked with the NIST/SEMATECH e-Handbook and FrF2; examples II and IV of Lenth (1989), with unrepx and DoE.base as live comparisons; false-alarm rate in a simulation with MCSE, equal to an independent calculation (Lenth's limits are conservative: about 2 to 3 % per effect at a nominal 5 %) |
+| Agreement (Cohen, Krippendorff), bias and linearity | implemented; validation in progress | planned: published values for every weighting and scale level, established packages, AIAG examples, simulated coverage |
 | Westgard rules, simulator, study planning | implemented; not yet validated | planned: each rule exactly at its limit, false-alarm rates against Westgard et al. (1981), recovery of simulated components |
 | Execution, parsers, backends, report | implemented; not yet validated | planned: an interrupted and resumed run gives the same store, parsers on random input, recorded real API responses, every number in the report equal to the object value |
 
 The test suite of the statistical core detects 92.8 % of 1,478
 deliberately injected faults (mutation testing of `R/fit.R` and `R/grr.R`,
-threshold 80 %).
+threshold 80 %); for the robustness code in `R/robustness.R` the figure is
+96.6 % of 317.
 
 The article `vignette("validation", package = "llmsa")` reruns the
 reference comparisons when it is built and reads the simulation results
@@ -182,6 +212,9 @@ of `msa_fit()` and `msa_boot()` name the affected scenarios.
 
 ```r
 # install.packages("remotes")
+remotes::install_github("DanielMoj/llmsa")  # package only
+
+# with all optional packages and the articles
 remotes::install_github("DanielMoj/llmsa", dependencies = TRUE, build_vignettes = TRUE)
 ```
 
@@ -190,13 +223,14 @@ al., 2015) and `ordinal` (Christensen, 2026). Optional packages add
 features: `httr2` (API backend), `ellmer`
 (chat objects), `DBI` and `RSQLite` (SQLite store), `jsonlite` (response
 metadata), `rmarkdown` with pandoc (report). The validation article uses
-VCA, SixSigma, rptR and performance as live comparisons, so building the
-vignettes needs `dependencies = TRUE`. Continuous integration runs
+VCA, SixSigma, rptR, performance, DoE.base and unrepx as live comparisons,
+so building the vignettes needs `dependencies = TRUE`; the built articles
+are also on the website. Continuous integration runs
 `R CMD check` on Linux, macOS and Windows.
 
 ## Quick start
 
-### Analyse a study
+### Analyze a study
 
 `ic50_demo` is a simulated numeric extraction with known variance
 components: 40 compounds, 3 prompt variants, 3 models, 3 replicates in each
@@ -273,17 +307,17 @@ without repeating a call.
 
 `backend_openai_compatible()` talks to any server with the OpenAI
 chat-completions API. Behind a router such as OpenRouter, the same model
-name can be served by different providers and quantisations, which would
+name can be served by different providers and quantizations, which would
 change the instrument between calls. Pin both and disallow fallbacks:
 
 ```r
-pinned <- function(endpoint, quantisation) {
+pinned <- function(endpoint, quantization) {
   backend_openai_compatible("https://openrouter.ai/api/v1",
                             api_key = Sys.getenv("OPENROUTER_API_KEY"),
                             temperature = 0, seed = 20261024,
                             provider = list(order = list(endpoint),
                                             allow_fallbacks = FALSE,
-                                            quantizations = list(quantisation)))
+                                            quantizations = list(quantization)))
 }
 backends <- list(llama = pinned("coreweave/fp16", "fp16"),
                  qwen  = pinned("deepinfra/fp8", "fp8"),
@@ -307,14 +341,14 @@ value, latency and any error. From the API response the store keeps the
 response ID, the reported model snapshot, token usage, the system
 fingerprint, the finish reason and, where the endpoint returns them, the
 serving provider and the reasoning text; from the request, the provider
-order, quantisations, the fallback setting, seed, temperature, reasoning
+order, quantizations, the fallback setting, seed, temperature, reasoning
 effort and timeout. Credentials and headers are never stored. `msa_run(parse_by_prompt = ...)` sets a parser
 per prompt variant, for example `parse_json_field()` for a prompt that asks
 for JSON.
 
 ### Results from another pipeline
 
-Results from Python, a workflow engine or a spreadsheet are analysed the
+Results from Python, a workflow engine or a spreadsheet are analyzed the
 same way once they have one row per call:
 
 ```r
@@ -335,7 +369,7 @@ appraisers.
 | Backends | `backend_openai_compatible()`, `backend_ellmer()`, `backend_mock()` |
 | Parsers | `parse_choice()`, `parse_number()`, `parse_json_field()`, `parse_identity()` |
 | Import results from elsewhere | `as_msa_runs()` |
-| Realised cell counts of a study | `msa_counts()` |
+| Realized cell counts of a study | `msa_counts()` |
 | Variance components, numeric / ordinal / binary | `msa_fit()` |
 | Gauge R&R statistics, verdict, bootstrap intervals | `msa_grr()`, `msa_boot()` |
 | Attribute agreement and accuracy (Krippendorff, 2011; Cohen, 1960, 1968) | `msa_agreement()` |
@@ -376,7 +410,7 @@ components as an attribute.
   with it the batch size, changes the order of floating-point operations
   (He and Thinking Machines Lab, 2025). Five calls within one second
   underestimate repeatability; use `blocks` and run them on different days.
-* **Pin the instrument.** Fix provider, quantisation and model snapshot,
+* **Pin the instrument.** Fix provider, quantization and model snapshot,
   and record what the endpoint reports. A model name alone does not
   identify an instrument.
 * **Few levels, wide intervals.** Three models and four prompt variants are
@@ -396,7 +430,7 @@ components as an attribute.
   ordinal and binary outcomes the residual variance is set by the link (1
   for probit, pi^2/3 for logit; Nakagawa, Johnson and Schielzeth, 2017).
   The observed agreement between replicates comes from `msa_agreement()`.
-* **Memorisation confounds accuracy, not precision.** Reference answers
+* **Memorization confounds accuracy, not precision.** Reference answers
   that are public (ClinVar, textbooks) may be in the training data. Use
   items added after the model's knowledge cut-off for the accuracy
   question; the precision statistics are unaffected.
@@ -409,7 +443,7 @@ components as an attribute.
   numeric precision or inference runtime; with identical replicates a
   numeric `msa_fit()` stops with a named error. The variation then moves to input
   preprocessing and training seeds. The score (logit or probability) is
-  analysed as a numeric outcome, and the decision threshold sets the
+  analyzed as a numeric outcome, and the decision threshold sets the
   critical error direction. In its July 2025 draft, EU GMP Annex 22
   covers only static models with deterministic output and keeps generative
   AI and LLMs out of critical GMP applications; the final text is still
@@ -424,21 +458,23 @@ components as an attribute.
 The first application under way is the five-tier ACMG/AMP classification
 of sequence variants (Richards et al., 2015) against expert
 classifications: 100 variants, 3 prompt variants, 3 models via APIs (one
-proprietary, two open-weight with pinned provider and quantisation), 3
+proprietary, two open-weight with pinned provider and quantization), 3
 replicates in each of 2 blocks, 5,400 calls in the main study, plus a
 pilot and a robustness screen. The plan, the frozen item set
 and the runner are in `inst/validation/ap1/`. The plan was approved before
 the first call, and every later change is documented in a decision record.
-Results will be reported when the analysis is complete.
+Data collection for the main study and the robustness screen is complete;
+results will be reported with the final analysis.
 
 ## How llmsa is developed
 
-Changes are built in milestones from written specifications. One model
-implements, a second reviews and owns the acceptance tests and reference
-values, a third writes adversarial end-to-end and fuzz tests, and only
-deterministic gates (`R CMD check`, the test suites, mutation testing)
-decide whether a milestone passes. The maintainer approves the
-specifications and every decision record. Specifications and decision
+Changes are built in milestones from written specifications. One language
+model implements, a second reviews and owns the acceptance tests and
+reference values, a third writes adversarial end-to-end and fuzz tests, and
+only deterministic gates (`R CMD check`, the test suites, mutation testing)
+decide whether a milestone passes. The maintainer chooses the statistical
+methods and approves the specifications, the acceptance criteria and every
+decision record. Specifications and decision
 records are in `docs/` (in German); `AGENTS.md`, `BACKLOG.md`,
 `PROGRESS.md`, `orchestrator/` and the other process files are excluded
 from the package build. The 22 exported functions of version 0.1.0 keep
@@ -458,7 +494,7 @@ period.
   score near its threshold, estimated as C5 and C95.
 * Bootstrap intervals for ordinal fits; modified-large-sample intervals for
   variance components (Burdick, Borror and Montgomery, 2003).
-* Batched multi-item prompts: position and carry-over effects analysed as
+* Batched multi-item prompts: position and carry-over effects analyzed as
   in a crossover study (Williams designs).
 * Nested validation of LLM-as-judge scoring for free-text outcomes.
 * Detection-limit style experiments: how much evidence a document must
@@ -567,6 +603,9 @@ A Zenodo DOI will be added with the first release.
 * Lenth, R. V. (1989). Quick and easy analysis of unreplicated factorials.
   *Technometrics* 31(4), 469–473.
   https://doi.org/10.1080/00401706.1989.10488595
+* Messing, S. (2026). Hidden measurement error in LLM pipelines distorts
+  annotation, evaluation, and benchmarking. arXiv preprint
+  arXiv:2604.11581, version 6. https://doi.org/10.48550/arXiv.2604.11581
 * Morris, T. P., White, I. R., Crowther, M. J. (2019). Using simulation
   studies to evaluate statistical methods. *Statistics in Medicine* 38(11),
   2074–2102. https://doi.org/10.1002/sim.8086
@@ -587,6 +626,8 @@ A Zenodo DOI will be added with the first release.
   recommendation of the American College of Medical Genetics and Genomics
   and the Association for Molecular Pathology. *Genetics in Medicine* 17(5),
   405–424. https://doi.org/10.1038/gim.2015.30
+* UK AI Security Institute (2026). *Inspect AI: Scoring metrics*.
+  https://inspect.aisi.org.uk/metrics.html (retrieved 6 November 2026).
 * U.S. Food and Drug Administration (2025). *Considerations for the Use of
   Artificial Intelligence to Support Regulatory Decision-Making for Drug and
   Biological Products: Guidance for Industry and Other Interested Parties*.
@@ -596,6 +637,10 @@ A Zenodo DOI will be added with the first release.
   multi-rule Shewhart chart for quality control in clinical chemistry.
   *Clinical Chemistry* 27(3), 493–501.
   https://doi.org/10.1093/clinchem/27.3.493
+* Żatuchin, D. (2026). Where does the noise come from? A
+  variance-components decomposition of non-determinism in LLM brand
+  answers. arXiv preprint arXiv:2607.13304.
+  https://doi.org/10.48550/arXiv.2607.13304
 
 ## License
 
