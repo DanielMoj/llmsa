@@ -439,6 +439,9 @@ msa_bias_numeric <- function(x, what) {
 # subtraction itself exceeds the floating-point range. No squared raw values.
 msa_bias_center <- function(x) {
   m <- mean(x)
+  # Without extended precision (Apple silicon, CRAN's noLD check) mean() can
+  # overflow near .Machine$double.xmax although the mean of finite values is finite.
+  if (!is.finite(m) && length(x) > 0L && all(is.finite(x))) m <- msa_bias_scaled_mean(x)
   z <- x - m
   if (all(is.finite(z))) {
     scale <- max(abs(z))
@@ -449,6 +452,16 @@ msa_bias_center <- function(x) {
     z <- x / scale - m / scale
   }
   list(mean = m, z = z, scale = scale)
+}
+
+# Mean of finite values on x / p for a power of two p near max(abs(x)). The scaling
+# is exact and |x / p| < 2, so neither the sum nor the result can overflow, and an
+# input without overflow gives mean(x) bit for bit.
+msa_bias_scaled_mean <- function(x) {
+  s <- max(abs(x))
+  if (s == 0) return(0)
+  p <- 2^min(floor(log2(s)), 1023)
+  p * mean(x / p)
 }
 
 msa_bias_constant <- function(se, mean) {

@@ -264,6 +264,20 @@ test_that("extreme finite regressions retain their band and intercept", {
   expect_false(any(is.nan(unlist(fit[c("coefficients", "band")]))))
 })
 
+test_that("the scaled mean stays finite near the double range and equals mean() elsewhere", {
+  # Without extended precision (Apple silicon, CRAN noLD) mean() of the two large
+  # vectors overflows; msa_bias_center() then falls back to msa_bias_scaled_mean().
+  xmax <- .Machine$double.xmax
+  tol <- numeric_tolerance("arithmetic", "abs_tol")
+  expect_equal(msa_bias_scaled_mean(c(-1, 1, 1) * xmax) / xmax, 1 / 3, tolerance = tol)
+  expect_equal(msa_bias_scaled_mean(c(7, 8, 9) / 10 * xmax) / xmax, 4 / 5, tolerance = tol)
+  expect_identical(msa_bias_scaled_mean(c(0, 0)), 0)
+  # Scaling by a power of two commutes with rounding, with or without long double.
+  for (x in list(c(-3, 2, 2.1, 10), c(0.1, 0.2, 0.3), c(1e-300, 3e-300), -c(5, 7.25, 1e6))) {
+    expect_identical(msa_bias_scaled_mean(x), mean(x))
+  }
+})
+
 test_that("relative constancy boundaries match t inference and algebraic linear fits", {
   eps <- .Machine$double.eps
   expect_true(msa_bias_constant(0, 0))

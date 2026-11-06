@@ -174,6 +174,7 @@ test_that("the vignette sources the installed helper and uses the full anchored 
   expect_match(paste(section, collapse = "\n"), 'agreement_validation$agreement_bias_coverage(latent_anchors)', fixed = TRUE)
   expect_false(any(grepl("n_sim[[:space:]]*=", section)))
   sources <- latent_test_documentation_sources(path)
-  expect_true(any(endsWith(sources, "/validation/agreement/bias_coverage.R")))
+  expect_true(normalizePath(system.file("validation", "agreement", "bias_coverage.R", package = "llmsa",
+                                       mustWork = TRUE), mustWork = TRUE) %in% sources)
   expect_false(any(grepl("^[[:space:]]*(sim_|boot_)", readLines(system.file("validation", "agreement", "bias_coverage.R", package = "llmsa")))))
 })
