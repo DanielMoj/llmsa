@@ -1,0 +1,44 @@
+{
+  "milestone": "M3a",
+  "phase": "code",
+  "round": 1,
+  "verdict": "PASS",
+  "blocking": [],
+  "nonblocking": [
+    {
+      "id": "E12",
+      "ref": "docs/01 §2 Nr. 5 (Invarianzen: Zeilenreihenfolge); ADR-052 Nr. 17.2.4; R/agreement.R:185-188, :398-405; BL-133 (1)",
+      "note": "msa_bias()$by_condition ordnet die Bedingungen jetzt nach erstem Auftreten in runs; v0.1.0 nach sortierten Stufen. Auf permutiertem ic50_demo ändert sich die Zeilenfolge, jede Zeile bleibt nach Schlüsselabgleich gleich (REVIEW r1 Prüflauf 2). msa_run() ordnet nach Block und (bei order = \"random\" zufälliger) Position, Druck und Bericht zeigen die Bedingungen dann zufällig geordnet. Keine falsche Zahl, Abnahme greift über Namen zu, docs/01 §4 bindet die Zeilenfolge an kein ADR. Vorschlag: sortierte Folge wie v0.1.0 und Test mit identical() auf permutierten Zeilen."
+    },
+    {
+      "id": "E13",
+      "ref": "ADR-052 Nr. 17.3.6 (\"der Hinweis nennt den Grund\"); R/agreement.R:516-521; BL-133 (2)",
+      "note": "Bei df = 0 (genau zwei Beobachtungen einer Regression) und numerisch konstanten Zielwerten ist R² richtig NA, der Hinweis nennt aber nur die fehlenden Restfreiheitsgrade, nicht den Grund für R² (REVIEW r1 Prüflauf 2 (c): zwei Items mit gleichem Item-Mittelwert). Seltener Randfall ohne falsche Zahl. Vorschlag: in diesem Zweig auch \"R-squared is undefined for numerically constant targets\"."
+    },
+    {
+      "id": "E14",
+      "ref": "orchestrator/handoff/M3a/QA.md QA-M3a-001; BACKLOG.md BL-132; docs/01 §2 Nr. 4; ADR-052 Nr. 17.1, Nr. 17.3.4",
+      "note": "Herabstufung begründet: kein roter reproduzierender Test (QA-Tests grün). Teil (1) am Produkt bestätigt: die wahre Steigung -3e-401 ist nicht darstellbar und wird -0, daraus folgen Achsenabschnitt 2.5e-201 statt 7e-201 und t_intercept 0.7715 statt 2.1602; Band, Verdikt und übrige Felder stimmen, Eingaben über mehr als 400 Größenordnungen, ohne Meldung. Teil (2) (NA oder Duplikate in levels) unverändert seit v0.1.0 und außerhalb von ADR-052 Nr. 17.1. Nach dem 26.11.2026 wie BL-132, für (1) zusätzlich eine Meldung beim Unterlauf der Steigung."
+    },
+    {
+      "id": "E15",
+      "ref": "Gate mutgate (pass, gate-mutgate.log Z. 1101-1104); reports/mutation/mutation.json; BL-134 (2)",
+      "note": "Score 718/789 = 91,0 bei verlangten 86,85; 86 RuntimeError aus dem Nenner, 0 NoCoverage, kein MUT-EQUIV.json, daher keine Freigabe. Gleichwertig nach Code-Lesung: Z. 275-277 (Skalierung der Nichtübereinstimmungsgewichte), NA-Typen (Z. 84, 87, 88, 135, 138, 253, 434, 462, 463, 487-489), stringsAsFactors/drop ohne Wirkung (Z. 71, 172, 383, 399), Z. 445, Formel-Terme Z. 91, 93, 99, 100, 130 (identical() geprüft). Testlücken bei richtigem Produkt: Z. 187 (nicht gekreuzte Pläne, ADR-052 Nr. 8.1 und 17.2.4), Z. 562 und 566 (innerer Scheitel; && -> ||), Z. 514 (Restgrenze nur bei 8 eps und 32 eps), Z. 505 (Rückfall slope == 0, BL-132), Z. 240 (n = 2), Z. 397 und 400-402 (Etikett und Schlüssel einer Bedingung mit einer Zeile), Z. 122, 176, 379, 403 (Spaltentypen, Breite, Klasse von level). Tests beim nächsten Eingriff in R/agreement.R."
+    },
+    {
+      "id": "E16",
+      "ref": "Prüfauftrag 50-code-review (Momentaufnahme der eigenen Ausgabe nur gekennzeichnet); IMPLEMENTATION-RULES.md, Tests; BL-128; PLAN-UPDATE Testplan Nr. 4; BL-134 (1)",
+      "note": "tests/testthat/test-agreement-m3a.R:7-20, :217-238 und test-bias-linearity.R:345-403 vergleichen den vollen Wortlaut eigener Fehlermeldungen mit expect_identical(conditionMessage(err), ...) ohne Kennzeichnung als Momentaufnahme; vertraglich belegt sind nur Anführungszeichen (E11), 17 Stellen (E9), 'outside `levels`' (Nr. 17.1.4) und conditionCall() NULL (Nr. 17.1.6). test-agreement-report.R ist im Kopf als Formatprüfung gekennzeichnet. Die Prüfungen ersetzen keine Logikprüfung. Vorschlag: Blöcke kommentieren."
+    },
+    {
+      "id": "E17",
+      "ref": "[QA-PENDING] AGENTS.md, Territorien (QA: tests/e2e/**); BL-135",
+      "note": "tests/e2e/testthat-problems.rds (63847 Bytes, 05.11. 20:38:27, während QA r1) ist versioniert: Rest eines roten Zwischenlaufs mit sieben expectation_failure einer früheren Fassung von QA-M3a-E2E-1, mit lokalem absolutem Pfad im srcref. tests/e2e steht in .Rbuildignore, Bau und Check sind unberührt. Für den Builder nonblocking; QA löscht die Datei in der nächsten QA-Phase."
+    },
+    {
+      "id": "E18",
+      "ref": "PROGRESS.md M3a-B1 (Builder); K-M3a-3; docs/01 §6 (Orakel); BL-136",
+      "note": "irr::kripp.alpha() 0.85 rechnet bei vollständig beobachteten Matrizen mit mehr als zwei Bewertern falsch (Zweig ohne NA setzt mc = 1): unabhängige Koinzidenzrechnung 0.243243, irr 0.216216, mit leerer Bewerterzeile 0.243243, bei zwei Bewertern gleich (REVIEW r1 Prüflauf 4). Die M3a-Abnahme nutzt irr::kripp.alpha nur auf Daten mit fehlenden Werten und ist nicht betroffen. Künftige Abnahme- und QA-Tests: auf vollständigen Daten mit mehr als zwei Bewertern nur mit leerer Bewerterzeile oder eigener Paarzählung."
+    }
+  ]
+}
