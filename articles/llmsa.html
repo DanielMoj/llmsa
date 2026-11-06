@@ -77,7 +77,7 @@ mock backend that behaves like a noisy model. Replace the backend with
 <code><a href="../reference/backends.html">backend_ellmer()</a></code> to validate a real pipeline; nothing else
 changes.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/DanielMoj/llmsa" class="external-link">llmsa</a></span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://danielmoj.github.io/llmsa/">llmsa</a></span><span class="op">)</span></span></code></pre></div>
 <div class="section level2">
 <h2 id="the-study-items-x-prompts-x-models-x-replicates">1. The study: items x prompts x models x replicates<a class="anchor" aria-label="anchor" href="#the-study-items-x-prompts-x-models-x-replicates"></a>
 </h2>
@@ -246,11 +246,11 @@ kappa.</p>
 <span><span class="co">#&gt; Reproducibility: items consistent across prompts 12.5 %, across models 11.1 %, overall 8.3 %</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Krippendorff's alpha:</span></span>
-<span><span class="co">#&gt;                               scope alpha</span></span>
-<span><span class="co">#&gt;  replicates (within prompt &amp; model) 0.850</span></span>
-<span><span class="co">#&gt;       across prompts (within model) 0.825</span></span>
-<span><span class="co">#&gt;       across models (within prompt) 0.833</span></span>
-<span><span class="co">#&gt;                      all conditions 0.807</span></span>
+<span><span class="co">#&gt;                               scope alpha n_units_excluded</span></span>
+<span><span class="co">#&gt;  replicates (within prompt &amp; model) 0.850                0</span></span>
+<span><span class="co">#&gt;       across prompts (within model) 0.825                0</span></span>
+<span><span class="co">#&gt;       across models (within prompt) 0.833                0</span></span>
+<span><span class="co">#&gt;                      all conditions 0.807                0</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Accuracy vs reference: 63.4 % of responses correct; 8.3 % of items correct in every call</span></span>
 <span><span class="co">#&gt;  prompt_id model_id pct_correct</span></span>
@@ -296,15 +296,20 @@ difficulty is addressed at the planning stage below.</p>
 <code class="sourceCode R"><span><span class="va">num</span><span class="op">$</span><span class="va">reference</span> <span class="op">&lt;-</span> <span class="va">num</span><span class="op">$</span><span class="va">latent</span></span>
 <span><span class="fu"><a href="../reference/msa_bias.html">msa_bias</a></span><span class="op">(</span><span class="va">num</span>, reference <span class="op">=</span> <span class="st">"reference"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Bias against reference (30 items, 540 values)</span></span>
+<span><span class="co">#&gt;   Excluded response-reference pairs: 0</span></span>
 <span><span class="co">#&gt;   mean bias 0.2396  [95 % CI 0.2105, 0.2688]  sd 0.3444  p = 3.14e-48</span></span>
-<span><span class="co">#&gt;  prompt_id model_id  n   bias     sd  lower  upper  p_value</span></span>
-<span><span class="co">#&gt;         P1       M1 90 0.4050 0.3378 0.3343 0.4758 4.87e-19</span></span>
-<span><span class="co">#&gt;         P2       M1 90 0.3602 0.3343 0.2902 0.4302 1.12e-16</span></span>
-<span><span class="co">#&gt;         P3       M1 90 0.2925 0.2782 0.2342 0.3507 3.62e-16</span></span>
-<span><span class="co">#&gt;         P1       M2 90 0.1401 0.3007 0.0771 0.2031 2.79e-05</span></span>
-<span><span class="co">#&gt;         P2       M2 90 0.1535 0.3422 0.0818 0.2252 5.15e-05</span></span>
-<span><span class="co">#&gt;         P3       M2 90 0.0866 0.3482 0.0137 0.1595   0.0205</span></span>
-<span><span class="co">#&gt;   linearity: bias = 0.2368 + -0.0121 * reference (slope p = 0.515)</span></span></code></pre></div>
+<span><span class="co">#&gt;  prompt_id model_id  n   bias     sd  lower  upper  p_value n_excluded</span></span>
+<span><span class="co">#&gt;         P1       M1 90 0.4050 0.3378 0.3343 0.4758 4.87e-19          0</span></span>
+<span><span class="co">#&gt;         P2       M1 90 0.3602 0.3343 0.2902 0.4302 1.12e-16          0</span></span>
+<span><span class="co">#&gt;         P3       M1 90 0.2925 0.2782 0.2342 0.3507 3.62e-16          0</span></span>
+<span><span class="co">#&gt;         P1       M2 90 0.1401 0.3007 0.0771 0.2031 2.79e-05          0</span></span>
+<span><span class="co">#&gt;         P2       M2 90 0.1535 0.3422 0.0818 0.2252 5.15e-05          0</span></span>
+<span><span class="co">#&gt;         P3       M2 90 0.0866 0.3482 0.0137 0.1595   0.0205          0</span></span>
+<span><span class="co">#&gt;   Handbook linearity: bias = 0.2368 + -0.0121 * reference (slope p = 0.515)</span></span>
+<span><span class="co">#&gt;     R-squared 0.0008; t intercept 15.326; t slope -0.652; df 538; t quantile 1.9644</span></span>
+<span><span class="co">#&gt;   Item means: bias = 0.2368 + -0.0121 * reference; R-squared 0.0159; t intercept 15.817; t slope -0.673; df 28</span></span>
+<span><span class="co">#&gt;   Handbook linearity verdict: unacceptable</span></span>
+<span><span class="co">#&gt; The handbook regression uses all valid single deviations (df = 538; gm - 2 in a balanced design); the regression on unweighted item means uses df = 28 (g - 2). Replicates of the same item may be correlated and are not independent. The handbook confidence band determines the linearity verdict.</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="robustness-screening">7. Robustness screening<a class="anchor" aria-label="anchor" href="#robustness-screening"></a>

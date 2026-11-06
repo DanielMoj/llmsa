@@ -66,7 +66,8 @@ reference, as Cohen's kappa with optional ordinal weights.</p>
 <span>  <span class="va">runs</span>,</span>
 <span>  levels <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  reference <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  weights <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"unweighted"</span>, <span class="st">"linear"</span>, <span class="st">"quadratic"</span><span class="op">)</span></span>
+<span>  weights <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"unweighted"</span>, <span class="st">"linear"</span>, <span class="st">"quadratic"</span><span class="op">)</span>,</span>
+<span>  fleiss <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -91,7 +92,16 @@ the name of a column in <code>runs</code>.</p></dd>
 
 <dt id="arg-weights">weights<a class="anchor" aria-label="anchor" href="#arg-weights"></a></dt>
 <dd><p>Weighting of disagreements for the ordinal statistics:
-<code>"unweighted"</code> (nominal), <code>"linear"</code> or <code>"quadratic"</code>.</p></dd>
+<code>unweighted</code> (nominal), <code>linear</code> (ordinal), <code>quadratic</code> (interval).
+Interval distances use category positions, not numeric label values.</p></dd>
+
+
+<dt id="arg-fleiss">fleiss<a class="anchor" aria-label="anchor" href="#arg-fleiss"></a></dt>
+<dd><p>Also compute Fleiss' kappa over all valid ratings of each
+item. Every observed item must have the same number of valid ratings,
+at least two. Unequal counts give <code>NA</code> with a message pointing to
+Krippendorff's alpha. Only the point estimate is returned; no standard
+error is computed.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -103,7 +113,31 @@ prompts, across models and overall), <code>alpha</code> (Krippendorff's alpha
 within replicates, across prompts, across models, and overall), and,
 if a reference is given, <code>accuracy</code> (per prompt-model and overall) and
 <code>kappa</code> (Cohen's kappa of the modal response and of all responses
-against the reference).</p>
+against the reference). With <code>fleiss = TRUE</code>, <code>fleiss</code> is a list with
+the single numeric element <code>kappa</code>.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
+    <p>Missing responses and responses outside <code>levels</code> are excluded.
+Accuracy uses valid response-reference pairs. An item without a valid
+pair does not enter the proportion of fully correct items. Repeatability
+and reproducibility require at least two valid responses per unit;
+blocks do not split these units. Alpha counts excluded observed units
+in <code>n_units_excluded</code>, including units without any valid response.</p>
+<p>Each item must have at most one distinct nonmissing reference. Repeated
+identical references are allowed; a known reference beside missing
+entries is used for that item. Conflicting references are errors.
+Nonmissing references must belong to <code>levels</code>, including when the scale
+is derived from responses. Supply the complete scale explicitly when
+some categories occur only in the reference. Undefined Cohen's kappa
+gives <code>NA</code> with a message, including single-category scales.</p>
+<p>The modal response ignores missing answers; ties select the lowest of
+the tied categories in scale order. An item without a valid answer has
+a missing mode. These are general agreement diagnostics. The AP1
+application uses its own decision metric: <code>acmg_modal()</code> treats missing
+answers as a category and excludes tied modes from decisions. Cohen's
+kappa over all responses has no standard error because responses of
+the same item can be dependent.</p>
     </div>
 
     <div class="section level2">
@@ -132,11 +166,11 @@ against the reference).</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Reproducibility: items consistent across prompts 16.7 %, across models 15.8 %, overall 8.3 %</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Krippendorff's alpha:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                               scope alpha</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  replicates (within prompt &amp; model) 0.876</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       across prompts (within model) 0.874</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       across models (within prompt) 0.839</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                      all conditions 0.839</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                               scope alpha n_units_excluded</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  replicates (within prompt &amp; model) 0.876                1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       across prompts (within model) 0.874                0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       across models (within prompt) 0.839                0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                      all conditions 0.839                0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Accuracy vs reference: 60.8 % of responses correct; 8.3 % of items correct in every call</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  prompt_id model_id pct_correct</span>

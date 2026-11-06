@@ -63,35 +63,109 @@ magnitude of the reference?) by regressing the bias on the reference.</p>
 
 <dt id="arg-reference">reference<a class="anchor" aria-label="anchor" href="#arg-reference"></a></dt>
 <dd><p>A named numeric vector keyed by <code>item_id</code>, a data.frame
-with columns <code>item_id</code> and <code>reference</code>, or a column name in <code>runs</code>.</p></dd>
+with columns <code>item_id</code> and <code>reference</code>, or a column name in <code>runs</code>.
+Each item has at most one distinct readable reference; conflicting
+references are errors. A known value beside missing entries supplies
+that item's reference. Factor labels are read as numbers.</p></dd>
 
 
 <dt id="arg-level">level<a class="anchor" aria-label="anchor" href="#arg-level"></a></dt>
-<dd><p>Confidence level.</p></dd>
+<dd><p>Finite numeric confidence level strictly between zero and one.</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>An object of class <code>msa_bias</code>: a list with <code>overall</code>,
-<code>by_condition</code> and <code>linearity</code>.</p>
+    <p>An object of class <code>msa_bias</code>, with:</p><dl><dt>overall</dt>
+<dd><p>Named numeric vector <code>n</code>, <code>bias</code>, <code>sd</code>, <code>lower</code>, <code>upper</code>,
+<code>p_value</code>, <code>n_excluded</code>.</p></dd>
+
+<dt>by_condition</dt>
+<dd><p>The same quantities per observed prompt-model
+combination. With no valid pair all estimates are <code>NA</code>.</p></dd>
+
+<dt>linearity</dt>
+<dd><p>Handbook <code>intercept</code>, <code>slope</code>, <code>slope_p_value</code>,
+<code>r_squared</code> (proportion), <code>t_intercept</code>, <code>t_slope</code>, <code>df</code>, <code>t_quantile</code>.</p></dd>
+
+<dt>linearity_item_means</dt>
+<dd><p>Unweighted item-mean <code>intercept</code>, <code>slope</code>,
+<code>r_squared</code>, <code>t_intercept</code>, <code>t_slope</code>, <code>df</code>.</p></dd>
+
+<dt>linearity_band</dt>
+<dd><p>Data frame <code>reference</code>, <code>fit</code>, <code>lower</code>, <code>upper</code>,
+at each distinct reference value; empty when the band is undefined.</p></dd>
+
+<dt>linearity_in_band</dt>
+<dd><p>Logical scalar: zero lies in the entire
+handbook band, or <code>NA</code> when undefined.</p></dd>
+
+<dt>linearity_verdict</dt>
+<dd><p><code>"acceptable"</code> when the entire band contains
+zero, <code>"unacceptable"</code> otherwise, or <code>NA_character_</code> when undefined.</p></dd>
+
+<dt>linearity_note</dt>
+<dd><p>Methods, both degrees of freedom, dependence
+limitation and any reason for undefined linearity.</p></dd>
+
+<dt>level, n_items</dt>
+<dd><p>Confidence level and count of items with valid pairs.</p></dd>
+
+
+</dl></div>
+    <div class="section level2">
+    <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
+    <p>Missing, NaN and unparseable responses or references are excluded
+and counted once per row in <code>n_excluded</code>. Infinite inputs and overflow
+of the response minus reference are errors. All observed prompt-model
+conditions remain in the output, even with no valid pairs. If there are
+no valid pairs overall, the call fails with an explanatory error.</p>
+<p>The bias interval and p-value use the one-sample t calculation with
+<code>n - 1</code> degrees of freedom. One valid pair gives its bias but no
+inference. Numerically constant deviations give a point interval and
+an undefined p-value, with a message; the measured SD is retained.
+Constancy means a zero standard error, or a standard error smaller than
+ten times machine precision times the absolute mean.</p>
+<p>The handbook regression uses all valid single deviations (<code>N - 2</code>
+degrees of freedom, or <code>gm - 2</code> in a balanced design). The additional
+regression uses unweighted item means (<code>g - 2</code> degrees of freedom).
+Items with the same reference value remain distinct. Unequal replicate
+counts thus give different weighting in the two regressions. Replicates
+of the same item may be correlated, so the handbook calculation can
+overstate the information. The object and report describe this limitation.</p>
+<p>The handbook confidence band for the mean bias determines the linearity
+verdict. Zero must lie in the band throughout the closed observed
+reference range, including between displayed reference values; touching
+the boundary counts as inclusion. This is not a prediction interval.
+A single reference value leaves linearity undefined without preventing
+bias estimation. Without residual degrees of freedom, coefficients are
+retained but inference and the band are undefined. Numerically constant
+targets have undefined R-squared. A residual norm no larger than ten
+times machine precision times the centered target norm is treated as
+zero: t and p are undefined and the band collapses onto the fitted line.
+These cases produce messages and <code>NA</code>, never <code>NaN</code>.</p>
     </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">msa_bias</span><span class="op">(</span><span class="va">ic50_demo</span>, reference <span class="op">=</span> <span class="st">"reference"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Bias against reference (40 items, 2152 values)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Excluded response-reference pairs: 8</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   mean bias 0.0110  [95 % CI 0.0030, 0.0190]  sd 0.1885  p = 0.00682</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  prompt_id model_id   n    bias     sd   lower   upper  p_value</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     direct  model-a 239 -0.0061 0.1468 -0.0248  0.0126    0.519</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   stepwise  model-a 240  0.0835 0.1530  0.0640  0.1029 2.87e-15</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      table  model-a 240 -0.0502 0.1429 -0.0684 -0.0320 1.31e-07</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     direct  model-b 239 -0.1267 0.1338 -0.1438 -0.1097 4.77e-35</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   stepwise  model-b 239 -0.0505 0.1495 -0.0696 -0.0315 3.78e-07</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      table  model-b 238 -0.1819 0.1404 -0.1998 -0.1639 9.61e-53</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     direct  model-c 239  0.1432 0.1432  0.1250  0.1615  8.1e-38</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   stepwise  model-c 239  0.2206 0.1411  0.2026  0.2386 5.02e-66</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      table  model-c 239  0.0663 0.1453  0.0478  0.0848 1.87e-11</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   linearity: bias = 0.0278 + -0.0092 * reference (slope p = 0.0268)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  prompt_id model_id   n    bias     sd   lower   upper  p_value n_excluded</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     direct  model-a 239 -0.0061 0.1468 -0.0248  0.0126    0.519          1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   stepwise  model-a 240  0.0835 0.1530  0.0640  0.1029 2.87e-15          0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      table  model-a 240 -0.0502 0.1429 -0.0684 -0.0320 1.31e-07          0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     direct  model-b 239 -0.1267 0.1338 -0.1438 -0.1097 4.77e-35          1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   stepwise  model-b 239 -0.0505 0.1495 -0.0696 -0.0315 3.78e-07          1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      table  model-b 238 -0.1819 0.1404 -0.1998 -0.1639 9.61e-53          2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     direct  model-c 239  0.1432 0.1432  0.1250  0.1615  8.1e-38          1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   stepwise  model-c 239  0.2206 0.1411  0.2026  0.2386 5.02e-66          1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      table  model-c 239  0.0663 0.1453  0.0478  0.0848 1.87e-11          1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Handbook linearity: bias = 0.0278 + -0.0092 * reference (slope p = 0.0268)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     R-squared 0.0023; t intercept 3.234; t slope -2.215; df 2150; t quantile 1.9611</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Item means: bias = 0.0278 + -0.0092 * reference; R-squared 0.0274; t intercept 1.510; t slope -1.034; df 38</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Handbook linearity verdict: unacceptable</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> The handbook regression uses all valid single deviations (df = 2150; gm - 2 in a balanced design); the regression on unweighted item means uses df = 38 (g - 2). Replicates of the same item may be correlated and are not independent. The handbook confidence band determines the linearity verdict.</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

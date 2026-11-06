@@ -10,8 +10,8 @@
 <script src="deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Measurement System Analysis for Pipelines Built on Large Language Models">
-<meta name="description" content="Treats a pipeline built on a large language model (LLM) as a measurement system and validates it with the tools that analytical laboratories already use: crossed precision studies with variance components (gauge repeatability and reproducibility), attribute agreement with kappa statistics, bias against a reference, Plackett-Burman screening of robustness against prompt and formatting perturbations, simulation-based planning of study size, Westgard-rule control charts for ongoing system suitability, and a reproducible validation report. The package is pipeline-agnostic: any backend that turns a prompt and a model identifier into a text response can be validated, and results produced elsewhere can be imported.">
-<meta property="og:description" content="Treats a pipeline built on a large language model (LLM) as a measurement system and validates it with the tools that analytical laboratories already use: crossed precision studies with variance components (gauge repeatability and reproducibility), attribute agreement with kappa statistics, bias against a reference, Plackett-Burman screening of robustness against prompt and formatting perturbations, simulation-based planning of study size, Westgard-rule control charts for ongoing system suitability, and a reproducible validation report. The package is pipeline-agnostic: any backend that turns a prompt and a model identifier into a text response can be validated, and results produced elsewhere can be imported.">
+<meta name="description" content="Treats a pipeline built on a large language model (LLM) as a measurement system and validates it with the tools that analytical laboratories already use: crossed precision studies with variance components (gauge repeatability and reproducibility), attribute agreement with kappa statistics and Krippendorff's alpha, bias against a reference, Plackett-Burman screening of robustness against prompt and formatting perturbations, simulation-based planning of study size, Westgard-rule control charts for ongoing system suitability, and a reproducible validation report. The methods follow Burdick, Borror and Montgomery (2003) &lt;doi:10.1080/00224065.2003.11980232&gt;, Plackett and Burman (1946) &lt;doi:10.1093/biomet/33.4.305&gt;, Lenth (1989) &lt;doi:10.1080/00401706.1989.10488595&gt; and Westgard et al. (1981) &lt;doi:10.1093/clinchem/27.3.493&gt;. The package is pipeline-agnostic: any backend that turns a prompt and a model identifier into a text response can be validated, and results produced elsewhere can be imported.">
+<meta property="og:description" content="Treats a pipeline built on a large language model (LLM) as a measurement system and validates it with the tools that analytical laboratories already use: crossed precision studies with variance components (gauge repeatability and reproducibility), attribute agreement with kappa statistics and Krippendorff's alpha, bias against a reference, Plackett-Burman screening of robustness against prompt and formatting perturbations, simulation-based planning of study size, Westgard-rule control charts for ongoing system suitability, and a reproducible validation report. The methods follow Burdick, Borror and Montgomery (2003) &lt;doi:10.1080/00224065.2003.11980232&gt;, Plackett and Burman (1946) &lt;doi:10.1093/biomet/33.4.305&gt;, Lenth (1989) &lt;doi:10.1080/00401706.1989.10488595&gt; and Westgard et al. (1981) &lt;doi:10.1093/clinchem/27.3.493&gt;. The package is pipeline-agnostic: any backend that turns a prompt and a model identifier into a text response can be validated, and results produced elsewhere can be imported.">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -52,8 +52,9 @@
 </h1></div>
 <!-- badges: start -->
 
-<p><code>llmsa</code> treats a pipeline built on a large language model (LLM) as what it is: a measurement procedure with unknown measurement uncertainty. It validates the pipeline with the methods that analytical and clinical laboratories have used for decades: a crossed precision study with variance components (gauge R&amp;R), attribute agreement, bias against a reference, Plackett-Burman screening of robustness, simulation-based planning of the study size, Westgard-rule control charts for ongoing system suitability, and a validation report in the structure a reviewer or an auditor expects. It produces the evidence that a quality unit, an inspector, a notified body or a model-risk function asks for before the output of an LLM step may count.</p>
+<p><code>llmsa</code> treats a pipeline built on a large language model (LLM) as what it is: a measurement procedure with unknown measurement uncertainty. It validates the pipeline with the methods that analytical and clinical laboratories have used for decades: a crossed precision study with variance components (gauge R&amp;R), attribute agreement, bias against a reference, Plackett-Burman screening of robustness, simulation-based planning of the study size, Westgard-rule control charts for ongoing system suitability, and a validation report in the structure a reviewer or an auditor expects. It produces the kind of evidence that a quality unit, an inspector, a notified body or a model-risk function asks for before the output of an LLM step is relied on; whether to rely on it remains the decision of the organization that runs the pipeline.</p>
 <p>The object of the validation is always a concrete pipeline (model, prompt, settings) for a stated task and risk, never “the LLM” in general. Any pipeline qualifies whose output is a number, an ordered class or a yes/no answer; results produced outside R can be imported.</p>
+<p>Documentation, reference pages and articles: <a href="https://danielmoj.github.io/llmsa/" class="uri">https://danielmoj.github.io/llmsa/</a></p>
 <div class="section level2">
 <h2 id="why">Why<a class="anchor" aria-label="anchor" href="#why"></a>
 </h2>
@@ -61,9 +62,14 @@
 <p>The validation report ties the evidence to a stated context of use, a model risk and acceptance criteria fixed in advance. This is the structure of the credibility assessment in the FDA’s 2025 draft guidance on AI in regulatory decision-making.</p>
 </div>
 <div class="section level2">
+<h2 id="related-work">Related work<a class="anchor" aria-label="anchor" href="#related-work"></a>
+</h2>
+<p>Variance decompositions of LLM outputs are an active research topic. Generalizability-theory studies separate items, prompt variants, models and replicates and use the components to plan designs (Messing, 2026; Żatuchin, 2026). Evaluation frameworks such as Inspect AI report standard errors and Krippendorff’s alpha for scores (UK AI Security Institute, 2026). <code>llmsa</code> takes the measurement-system view of regulated laboratories and adds what such a laboratory needs on top: acceptance criteria fixed before the study and a verdict against them, designed robustness screening, control charts for routine use, and a validation report tied to context of use and model risk.</p>
+</div>
+<div class="section level2">
 <h2 id="who-needs-this">Who needs this<a class="anchor" aria-label="anchor" href="#who-needs-this"></a>
 </h2>
-<p>Classic computer system validation assumes that the same input gives the same output. A step built on a language model breaks that assumption. Its answer can change with the wording of the prompt, with the day, and with model updates the provider makes without notice, so a single test run proves little. Wherever such a step sorts, extracts or calculates inside a regulated process, the organisation running it is expected to show three things: what the step gets wrong, how often, and whether that still holds after the next update. A benchmark score or a vendor certificate describes a model on someone else’s data, not this pipeline on this task.</p>
+<p>Classic computer system validation assumes that the same input gives the same output. A step built on a language model breaks that assumption. Its answer can change with the wording of the prompt, with the day, and with model updates the provider makes without notice, so a single test run proves little. Wherever such a step sorts, extracts or calculates inside a regulated process, the organization running it is expected to show three things: what the step gets wrong, how often, and whether that still holds after the next update. A benchmark score or a vendor certificate describes a model on someone else’s data, not this pipeline on this task.</p>
 <p><code>llmsa</code> produces that evidence. Laboratories, quality units and notified bodies know its methods from instruments. Insurers and banks ask the same questions in the terms of model risk management: stability on re-run, sensitivity analysis, ongoing monitoring, revalidation after a change.</p>
 <p>The following constructed examples show the kind of error a study is designed to catch:</p>
 <ul>
@@ -152,13 +158,18 @@
 </div>
 </div>
 <div class="section level2">
+<h2 id="scope-and-limits">Scope and limits<a class="anchor" aria-label="anchor" href="#scope-and-limits"></a>
+</h2>
+<p><code>llmsa</code> is research software, released under the MIT license without warranty. It is not a medical device or an in vitro diagnostic device and has no medical purpose of its own. A validation report documents one study of one pipeline: model snapshot, prompts, data, dates, results and what was not tested. It is evidence on analytical performance at that point in time. It does not certify a pipeline, establish regulatory compliance or replace the review and release by the organization that uses the pipeline.</p>
+</div>
+<div class="section level2">
 <h2 id="when-to-use-it">When to use it<a class="anchor" aria-label="anchor" href="#when-to-use-it"></a>
 </h2>
 <ul>
 <li>
 <strong>Before deployment.</strong> A crossed study (items × prompt variants × models × replicates × blocks) shows where the variation comes from and whether the pipeline separates the items it has to separate.</li>
 <li>
-<strong>After a change.</strong> A new model version, a reworded prompt, another provider or quantisation: repeat the study with the changed component and compare the result with the validated state.</li>
+<strong>After a change.</strong> A new model version, a reworded prompt, another provider or quantization: repeat the study with the changed component and compare the result with the validated state.</li>
 <li>
 <strong>In routine use.</strong> A small control set with known answers runs before each batch, and <code><a href="reference/msa_control_chart.html">msa_control_chart()</a></code> applies the Westgard rules to catch drift, for example after a silent model update.</li>
 </ul>
@@ -190,7 +201,7 @@
 </tr>
 <tr>
 <td>Instrument</td>
-<td>Model (provider, version, quantisation)</td>
+<td>Model (provider, version, quantization)</td>
 </tr>
 <tr>
 <td>Trial / replicate</td>
@@ -260,12 +271,12 @@
 </tr>
 <tr>
 <td>Robustness screening (Plackett-Burman, Lenth)</td>
-<td>implemented; validation in progress</td>
-<td>planned: generator rows of Plackett and Burman (1946), comparison with FrF2, the worked examples of Lenth (1989), false-alarm rate at the nominal level</td>
+<td>verified</td>
+<td>generator rows equal to Plackett and Burman (1946), cross-checked with the NIST/SEMATECH e-Handbook and FrF2; examples II and IV of Lenth (1989), with unrepx and DoE.base as live comparisons; false-alarm rate in a simulation with MCSE, equal to an independent calculation (Lenth’s limits are conservative: about 2 to 3 % per effect at a nominal 5 %)</td>
 </tr>
 <tr>
 <td>Agreement (Cohen, Krippendorff), bias and linearity</td>
-<td>implemented; not yet validated</td>
+<td>implemented; validation in progress</td>
 <td>planned: published values for every weighting and scale level, established packages, AIAG examples, simulated coverage</td>
 </tr>
 <tr>
@@ -280,7 +291,7 @@
 </tr>
 </tbody>
 </table>
-<p>The test suite of the statistical core detects 92.8 % of 1,478 deliberately injected faults (mutation testing of <code>R/fit.R</code> and <code>R/grr.R</code>, threshold 80 %).</p>
+<p>The test suite of the statistical core detects 92.8 % of 1,478 deliberately injected faults (mutation testing of <code>R/fit.R</code> and <code>R/grr.R</code>, threshold 80 %); for the robustness code in <code>R/robustness.R</code> the figure is 96.6 % of 317.</p>
 <p>The article <code><a href="articles/validation.html">vignette("validation", package = "llmsa")</a></code> reruns the reference comparisons when it is built and reads the simulation results from the stored runs. It needs no network, and no number in it is typed in by hand. The AIAG handbook data are protected and not distributed: the public build marks those rows as <em>not rerun</em>, and the complete comparison runs locally.</p>
 <p>The simulation studies also produced findings that matter in practice. For ordinal and binary outcomes, the latent prompt and model components were underestimated in several scenarios. Percentile intervals for the integer-valued ndc cover more often than their nominal level. The validation article reports every scenario with its MCSE, and the help pages of <code><a href="reference/msa_fit.html">msa_fit()</a></code> and <code><a href="reference/msa_boot.html">msa_boot()</a></code> name the affected scenarios.</p>
 </div>
@@ -289,18 +300,21 @@
 </h2>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># install.packages("remotes")</span></span>
+<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"DanielMoj/llmsa"</span><span class="op">)</span>  <span class="co"># package only</span></span>
+<span></span>
+<span><span class="co"># with all optional packages and the articles</span></span>
 <span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"DanielMoj/llmsa"</span>, dependencies <span class="op">=</span> <span class="cn">TRUE</span>, build_vignettes <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<p><code>llmsa</code> needs R 4.1 or later. The fitting engines are <code>lme4</code> (Bates et al., 2015) and <code>ordinal</code> (Christensen, 2026). Optional packages add features: <code>httr2</code> (API backend), <code>ellmer</code> (chat objects), <code>DBI</code> and <code>RSQLite</code> (SQLite store), <code>jsonlite</code> (response metadata), <code>rmarkdown</code> with pandoc (report). The validation article uses VCA, SixSigma, rptR and performance as live comparisons, so building the vignettes needs <code>dependencies = TRUE</code>. Continuous integration runs <code>R CMD check</code> on Linux, macOS and Windows.</p>
+<p><code>llmsa</code> needs R 4.1 or later. The fitting engines are <code>lme4</code> (Bates et al., 2015) and <code>ordinal</code> (Christensen, 2026). Optional packages add features: <code>httr2</code> (API backend), <code>ellmer</code> (chat objects), <code>DBI</code> and <code>RSQLite</code> (SQLite store), <code>jsonlite</code> (response metadata), <code>rmarkdown</code> with pandoc (report). The validation article uses VCA, SixSigma, rptR, performance, DoE.base and unrepx as live comparisons, so building the vignettes needs <code>dependencies = TRUE</code>; the built articles are also on the website. Continuous integration runs <code>R CMD check</code> on Linux, macOS and Windows.</p>
 </div>
 <div class="section level2">
 <h2 id="quick-start">Quick start<a class="anchor" aria-label="anchor" href="#quick-start"></a>
 </h2>
 <div class="section level3">
-<h3 id="analyse-a-study">Analyse a study<a class="anchor" aria-label="anchor" href="#analyse-a-study"></a>
+<h3 id="analyze-a-study">Analyze a study<a class="anchor" aria-label="anchor" href="#analyze-a-study"></a>
 </h3>
 <p><code>ic50_demo</code> is a simulated numeric extraction with known variance components: 40 compounds, 3 prompt variants, 3 models, 3 replicates in each of 2 blocks.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/DanielMoj/llmsa" class="external-link">llmsa</a></span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://danielmoj.github.io/llmsa/">llmsa</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/msa_fit.html">msa_fit</a></span><span class="op">(</span><span class="va">ic50_demo</span>, type <span class="op">=</span> <span class="st">"numeric"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="reference/msa_grr.html">msa_grr</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span>
@@ -358,15 +372,15 @@
 <div class="section level3">
 <h3 id="run-against-real-models">Run against real models<a class="anchor" aria-label="anchor" href="#run-against-real-models"></a>
 </h3>
-<p><code><a href="reference/backends.html">backend_openai_compatible()</a></code> talks to any server with the OpenAI chat-completions API. Behind a router such as OpenRouter, the same model name can be served by different providers and quantisations, which would change the instrument between calls. Pin both and disallow fallbacks:</p>
+<p><code><a href="reference/backends.html">backend_openai_compatible()</a></code> talks to any server with the OpenAI chat-completions API. Behind a router such as OpenRouter, the same model name can be served by different providers and quantizations, which would change the instrument between calls. Pin both and disallow fallbacks:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">pinned</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">endpoint</span>, <span class="va">quantisation</span><span class="op">)</span> <span class="op">{</span></span>
+<code class="sourceCode R"><span><span class="va">pinned</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">endpoint</span>, <span class="va">quantization</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="reference/backends.html">backend_openai_compatible</a></span><span class="op">(</span><span class="st">"https://openrouter.ai/api/v1"</span>,</span>
 <span>                            api_key <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"OPENROUTER_API_KEY"</span><span class="op">)</span>,</span>
 <span>                            temperature <span class="op">=</span> <span class="fl">0</span>, seed <span class="op">=</span> <span class="fl">20261024</span>,</span>
 <span>                            provider <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>order <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">endpoint</span><span class="op">)</span>,</span>
 <span>                                            allow_fallbacks <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>                                            quantizations <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">quantisation</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span>                                            quantizations <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">quantization</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span><span class="va">backends</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>llama <span class="op">=</span> <span class="fu">pinned</span><span class="op">(</span><span class="st">"coreweave/fp16"</span>, <span class="st">"fp16"</span><span class="op">)</span>,</span>
 <span>                 qwen  <span class="op">=</span> <span class="fu">pinned</span><span class="op">(</span><span class="st">"deepinfra/fp8"</span>, <span class="st">"fp8"</span><span class="op">)</span>,</span>
@@ -382,12 +396,12 @@
 <span>        block <span class="op">=</span> <span class="fl">1</span>, store <span class="op">=</span> <span class="st">"study.sqlite"</span><span class="op">)</span>                     <span class="co"># day 1</span></span>
 <span><span class="va">runs</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/msa_run.html">msa_run</a></span><span class="op">(</span><span class="va">design</span>, <span class="va">backend</span>, parse <span class="op">=</span> <span class="fu"><a href="reference/parsers.html">parse_choice</a></span><span class="op">(</span><span class="va">tiers</span>, whole_word <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
 <span>                store <span class="op">=</span> <span class="st">"study.sqlite"</span>, resume <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>         <span class="co"># day 2: runs block 2, returns all</span></span></code></pre></div>
-<p>Each call is stored with its timestamp, block and run position, the model identifier, a hash of the rendered prompt, the raw response, the parsed value, latency and any error. From the API response the store keeps the response ID, the reported model snapshot, token usage, the system fingerprint, the finish reason and, where the endpoint returns them, the serving provider and the reasoning text; from the request, the provider order, quantisations, the fallback setting, seed, temperature, reasoning effort and timeout. Credentials and headers are never stored. <code>msa_run(parse_by_prompt = ...)</code> sets a parser per prompt variant, for example <code><a href="reference/parsers.html">parse_json_field()</a></code> for a prompt that asks for JSON.</p>
+<p>Each call is stored with its timestamp, block and run position, the model identifier, a hash of the rendered prompt, the raw response, the parsed value, latency and any error. From the API response the store keeps the response ID, the reported model snapshot, token usage, the system fingerprint, the finish reason and, where the endpoint returns them, the serving provider and the reasoning text; from the request, the provider order, quantizations, the fallback setting, seed, temperature, reasoning effort and timeout. Credentials and headers are never stored. <code>msa_run(parse_by_prompt = ...)</code> sets a parser per prompt variant, for example <code><a href="reference/parsers.html">parse_json_field()</a></code> for a prompt that asks for JSON.</p>
 </div>
 <div class="section level3">
 <h3 id="results-from-another-pipeline">Results from another pipeline<a class="anchor" aria-label="anchor" href="#results-from-another-pipeline"></a>
 </h3>
-<p>Results from Python, a workflow engine or a spreadsheet are analysed the same way once they have one row per call:</p>
+<p>Results from Python, a workflow engine or a spreadsheet are analyzed the same way once they have one row per call:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">runs</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/as_msa_runs.html">as_msa_runs</a></span><span class="op">(</span><span class="va">results</span>, item <span class="op">=</span> <span class="st">"doc_id"</span>, prompt <span class="op">=</span> <span class="st">"prompt"</span>, model <span class="op">=</span> <span class="st">"model"</span>,</span>
 <span>                    rep <span class="op">=</span> <span class="st">"replicate"</span>, value <span class="op">=</span> <span class="st">"answer"</span><span class="op">)</span></span></code></pre></div>
@@ -438,7 +452,7 @@
 <td><code><a href="reference/as_msa_runs.html">as_msa_runs()</a></code></td>
 </tr>
 <tr>
-<td>Realised cell counts of a study</td>
+<td>Realized cell counts of a study</td>
 <td><code><a href="reference/msa_counts.html">msa_counts()</a></code></td>
 </tr>
 <tr>
@@ -498,7 +512,7 @@
 <li>
 <strong>Replicates must be spread in time.</strong> Identical requests at temperature 0 can return different completions because the load on the server, and with it the batch size, changes the order of floating-point operations (He and Thinking Machines Lab, 2025). Five calls within one second underestimate repeatability; use <code>blocks</code> and run them on different days.</li>
 <li>
-<strong>Pin the instrument.</strong> Fix provider, quantisation and model snapshot, and record what the endpoint reports. A model name alone does not identify an instrument.</li>
+<strong>Pin the instrument.</strong> Fix provider, quantization and model snapshot, and record what the endpoint reports. A model name alone does not identify an instrument.</li>
 <li>
 <strong>Few levels, wide intervals.</strong> Three models and four prompt variants are three and four levels of a random effect. Their variance components are estimated with large uncertainty, fits are often singular, and for ordinal and binary outcomes the simulation studies found these components underestimated in several scenarios. Report bootstrap intervals (<code><a href="reference/msa_boot.html">msa_boot()</a></code>) and plan the study (<code><a href="reference/msa_plan.html">msa_plan()</a></code>); the number of prompt variants, not the number of items, drives the precision of the reproducibility estimate.</li>
 <li>
@@ -506,11 +520,11 @@
 <li>
 <strong>On the latent scale, repeatability is fixed, not measured.</strong> For ordinal and binary outcomes the residual variance is set by the link (1 for probit, pi^2/3 for logit; Nakagawa, Johnson and Schielzeth, 2017). The observed agreement between replicates comes from <code><a href="reference/msa_agreement.html">msa_agreement()</a></code>.</li>
 <li>
-<strong>Memorisation confounds accuracy, not precision.</strong> Reference answers that are public (ClinVar, textbooks) may be in the training data. Use items added after the model’s knowledge cut-off for the accuracy question; the precision statistics are unaffected.</li>
+<strong>Memorization confounds accuracy, not precision.</strong> Reference answers that are public (ClinVar, textbooks) may be in the training data. Use items added after the model’s knowledge cut-off for the accuracy question; the precision statistics are unaffected.</li>
 <li>
 <strong>Acceptance criteria follow model risk.</strong> The AIAG thresholds (10 % and 30 % of study variation) are defaults, not laws. Set them from the consequence of a wrong decision in the stated context of use.</li>
 <li>
-<strong>Deterministic classifiers.</strong> The same design applies to fine-tuned encoder models and other classifiers. Their repeated calls agree, so the replicate has to be a factor that really varies, such as hardware, numeric precision or inference runtime; with identical replicates a numeric <code><a href="reference/msa_fit.html">msa_fit()</a></code> stops with a named error. The variation then moves to input preprocessing and training seeds. The score (logit or probability) is analysed as a numeric outcome, and the decision threshold sets the critical error direction. In its July 2025 draft, EU GMP Annex 22 covers only static models with deterministic output and keeps generative AI and LLMs out of critical GMP applications; the final text is still pending. A study of this kind documents how reproducible a model’s output actually is.</li>
+<strong>Deterministic classifiers.</strong> The same design applies to fine-tuned encoder models and other classifiers. Their repeated calls agree, so the replicate has to be a factor that really varies, such as hardware, numeric precision or inference runtime; with identical replicates a numeric <code><a href="reference/msa_fit.html">msa_fit()</a></code> stops with a named error. The variation then moves to input preprocessing and training seeds. The score (logit or probability) is analyzed as a numeric outcome, and the decision threshold sets the critical error direction. In its July 2025 draft, EU GMP Annex 22 covers only static models with deterministic output and keeps generative AI and LLMs out of critical GMP applications; the final text is still pending. A study of this kind documents how reproducible a model’s output actually is.</li>
 <li>
 <strong>Free-text outcomes</strong> judged by a second model are a second measurement system that needs its own validation (a nested MSA). This release covers numeric, ordinal and binary outcomes.</li>
 </ul>
@@ -518,12 +532,12 @@
 <div class="section level2">
 <h2 id="application-study">Application study<a class="anchor" aria-label="anchor" href="#application-study"></a>
 </h2>
-<p>The first application under way is the five-tier ACMG/AMP classification of sequence variants (Richards et al., 2015) against expert classifications: 100 variants, 3 prompt variants, 3 models via APIs (one proprietary, two open-weight with pinned provider and quantisation), 3 replicates in each of 2 blocks, 5,400 calls in the main study, plus a pilot and a robustness screen. The plan, the frozen item set and the runner are in <code>inst/validation/ap1/</code>. The plan was approved before the first call, and every later change is documented in a decision record. Results will be reported when the analysis is complete.</p>
+<p>The first application under way is the five-tier ACMG/AMP classification of sequence variants (Richards et al., 2015) against expert classifications: 100 variants, 3 prompt variants, 3 models via APIs (one proprietary, two open-weight with pinned provider and quantization), 3 replicates in each of 2 blocks, 5,400 calls in the main study, plus a pilot and a robustness screen. The plan, the frozen item set and the runner are in <code>inst/validation/ap1/</code>. The plan was approved before the first call, and every later change is documented in a decision record. Data collection for the main study and the robustness screen is complete; results will be reported with the final analysis.</p>
 </div>
 <div class="section level2">
 <h2 id="how-llmsa-is-developed">How llmsa is developed<a class="anchor" aria-label="anchor" href="#how-llmsa-is-developed"></a>
 </h2>
-<p>Changes are built in milestones from written specifications. One model implements, a second reviews and owns the acceptance tests and reference values, a third writes adversarial end-to-end and fuzz tests, and only deterministic gates (<code>R CMD check</code>, the test suites, mutation testing) decide whether a milestone passes. The maintainer approves the specifications and every decision record. Specifications and decision records are in <code>docs/</code> (in German); <code>AGENTS.md</code>, <code>BACKLOG.md</code>, <code>PROGRESS.md</code>, <code>orchestrator/</code> and the other process files are excluded from the package build. The 22 exported functions of version 0.1.0 keep their interfaces; a change requires a decision record and a deprecation period.</p>
+<p>Changes are built in milestones from written specifications. One language model implements, a second reviews and owns the acceptance tests and reference values, a third writes adversarial end-to-end and fuzz tests, and only deterministic gates (<code>R CMD check</code>, the test suites, mutation testing) decide whether a milestone passes. The maintainer chooses the statistical methods and approves the specifications, the acceptance criteria and every decision record. Specifications and decision records are in <code>docs/</code> (in German); <code>AGENTS.md</code>, <code>BACKLOG.md</code>, <code>PROGRESS.md</code>, <code>orchestrator/</code> and the other process files are excluded from the package build. The 22 exported functions of version 0.1.0 keep their interfaces; a change requires a decision record and a deprecation period.</p>
 </div>
 <div class="section level2">
 <h2 id="roadmap">Roadmap<a class="anchor" aria-label="anchor" href="#roadmap"></a>
@@ -533,7 +547,7 @@
 <li>Comparison of model versions as fixed levels, for revalidation after a change.</li>
 <li>Measures for binary results after CLSI EP12: sensitivity and specificity, or positive and negative percent agreement, with confidence bounds for the critical error direction; the imprecision of a classifier score near its threshold, estimated as C5 and C95.</li>
 <li>Bootstrap intervals for ordinal fits; modified-large-sample intervals for variance components (Burdick, Borror and Montgomery, 2003).</li>
-<li>Batched multi-item prompts: position and carry-over effects analysed as in a crossover study (Williams designs).</li>
+<li>Batched multi-item prompts: position and carry-over effects analyzed as in a crossover study (Williams designs).</li>
 <li>Nested validation of LLM-as-judge scoring for free-text outcomes.</li>
 <li>Detection-limit style experiments: how much evidence a document must contain before a finding is extracted reliably.</li>
 <li>First release with a Zenodo DOI, then CRAN.</li>
@@ -599,6 +613,8 @@ https://github.com/DanielMoj/llmsa</code></pre>
 </li>
 <li>Lenth, R. V. (1989). Quick and easy analysis of unreplicated factorials. <em>Technometrics</em> 31(4), 469–473. <a href="https://doi.org/10.1080/00401706.1989.10488595" class="external-link uri">https://doi.org/10.1080/00401706.1989.10488595</a>
 </li>
+<li>Messing, S. (2026). Hidden measurement error in LLM pipelines distorts annotation, evaluation, and benchmarking. arXiv preprint arXiv:2604.11581, version 6. <a href="https://doi.org/10.48550/arXiv.2604.11581" class="external-link uri">https://doi.org/10.48550/arXiv.2604.11581</a>
+</li>
 <li>Morris, T. P., White, I. R., Crowther, M. J. (2019). Using simulation studies to evaluate statistical methods. <em>Statistics in Medicine</em> 38(11), 2074–2102. <a href="https://doi.org/10.1002/sim.8086" class="external-link uri">https://doi.org/10.1002/sim.8086</a>
 </li>
 <li>Nakagawa, S., Johnson, P. C. D., Schielzeth, H. (2017). The coefficient of determination R² and intra-class correlation coefficient from generalized linear mixed-effects models revisited and expanded. <em>Journal of the Royal Society Interface</em> 14(134), 20170213. <a href="https://doi.org/10.1098/rsif.2017.0213" class="external-link uri">https://doi.org/10.1098/rsif.2017.0213</a>
@@ -608,9 +624,12 @@ https://github.com/DanielMoj/llmsa</code></pre>
 </li>
 <li>Richards, S., Aziz, N., Bale, S., et al. (2015). Standards and guidelines for the interpretation of sequence variants: a joint consensus recommendation of the American College of Medical Genetics and Genomics and the Association for Molecular Pathology. <em>Genetics in Medicine</em> 17(5), 405–424. <a href="https://doi.org/10.1038/gim.2015.30" class="external-link uri">https://doi.org/10.1038/gim.2015.30</a>
 </li>
+<li>UK AI Security Institute (2026). <em>Inspect AI: Scoring metrics</em>. <a href="https://inspect.aisi.org.uk/metrics.html" class="external-link uri">https://inspect.aisi.org.uk/metrics.html</a> (retrieved 6 November 2026).</li>
 <li>U.S. Food and Drug Administration (2025). <em>Considerations for the Use of Artificial Intelligence to Support Regulatory Decision-Making for Drug and Biological Products: Guidance for Industry and Other Interested Parties</em>. Draft guidance, January 2025, docket FDA-2024-D-4689. <a href="https://www.fda.gov/media/184830/download" class="external-link uri">https://www.fda.gov/media/184830/download</a>
 </li>
 <li>Westgard, J. O., Barry, P. L., Hunt, M. R., Groth, T. (1981). A multi-rule Shewhart chart for quality control in clinical chemistry. <em>Clinical Chemistry</em> 27(3), 493–501. <a href="https://doi.org/10.1093/clinchem/27.3.493" class="external-link uri">https://doi.org/10.1093/clinchem/27.3.493</a>
+</li>
+<li>Żatuchin, D. (2026). Where does the noise come from? A variance-components decomposition of non-determinism in LLM brand answers. arXiv preprint arXiv:2607.13304. <a href="https://doi.org/10.48550/arXiv.2607.13304" class="external-link uri">https://doi.org/10.48550/arXiv.2607.13304</a>
 </li>
 </ul>
 </div>
@@ -661,6 +680,7 @@ https://github.com/DanielMoj/llmsa</code></pre>
 <h2 data-toc-skip>Dev status</h2>
 <ul class="list-unstyled">
 <li><a href="https://github.com/DanielMoj/llmsa/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/DanielMoj/llmsa/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a></li>
+<li><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental" class="external-link"><img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="Lifecycle: experimental"></a></li>
 <li><a href="LICENSE.html"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT"></a></li>
 </ul>
 </div>

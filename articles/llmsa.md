@@ -205,11 +205,11 @@ ag
 #> Reproducibility: items consistent across prompts 12.5 %, across models 11.1 %, overall 8.3 %
 #> 
 #> Krippendorff's alpha:
-#>                               scope alpha
-#>  replicates (within prompt & model) 0.850
-#>       across prompts (within model) 0.825
-#>       across models (within prompt) 0.833
-#>                      all conditions 0.807
+#>                               scope alpha n_units_excluded
+#>  replicates (within prompt & model) 0.850                0
+#>       across prompts (within model) 0.825                0
+#>       across models (within prompt) 0.833                0
+#>                      all conditions 0.807                0
 #> 
 #> Accuracy vs reference: 63.4 % of responses correct; 8.3 % of items correct in every call
 #>  prompt_id model_id pct_correct
@@ -260,15 +260,20 @@ msa_boot(fit_num, nsim = 30, seed = 1)
 num$reference <- num$latent
 msa_bias(num, reference = "reference")
 #> Bias against reference (30 items, 540 values)
+#>   Excluded response-reference pairs: 0
 #>   mean bias 0.2396  [95 % CI 0.2105, 0.2688]  sd 0.3444  p = 3.14e-48
-#>  prompt_id model_id  n   bias     sd  lower  upper  p_value
-#>         P1       M1 90 0.4050 0.3378 0.3343 0.4758 4.87e-19
-#>         P2       M1 90 0.3602 0.3343 0.2902 0.4302 1.12e-16
-#>         P3       M1 90 0.2925 0.2782 0.2342 0.3507 3.62e-16
-#>         P1       M2 90 0.1401 0.3007 0.0771 0.2031 2.79e-05
-#>         P2       M2 90 0.1535 0.3422 0.0818 0.2252 5.15e-05
-#>         P3       M2 90 0.0866 0.3482 0.0137 0.1595   0.0205
-#>   linearity: bias = 0.2368 + -0.0121 * reference (slope p = 0.515)
+#>  prompt_id model_id  n   bias     sd  lower  upper  p_value n_excluded
+#>         P1       M1 90 0.4050 0.3378 0.3343 0.4758 4.87e-19          0
+#>         P2       M1 90 0.3602 0.3343 0.2902 0.4302 1.12e-16          0
+#>         P3       M1 90 0.2925 0.2782 0.2342 0.3507 3.62e-16          0
+#>         P1       M2 90 0.1401 0.3007 0.0771 0.2031 2.79e-05          0
+#>         P2       M2 90 0.1535 0.3422 0.0818 0.2252 5.15e-05          0
+#>         P3       M2 90 0.0866 0.3482 0.0137 0.1595   0.0205          0
+#>   Handbook linearity: bias = 0.2368 + -0.0121 * reference (slope p = 0.515)
+#>     R-squared 0.0008; t intercept 15.326; t slope -0.652; df 538; t quantile 1.9644
+#>   Item means: bias = 0.2368 + -0.0121 * reference; R-squared 0.0159; t intercept 15.817; t slope -0.673; df 28
+#>   Handbook linearity verdict: unacceptable
+#> The handbook regression uses all valid single deviations (df = 538; gm - 2 in a balanced design); the regression on unweighted item means uses df = 28 (g - 2). Replicates of the same item may be correlated and are not independent. The handbook confidence band determines the linearity verdict.
 ```
 
 ## 7. Robustness screening
