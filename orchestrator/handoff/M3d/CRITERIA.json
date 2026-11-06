@@ -34,7 +34,7 @@
   "open": [
     {
       "id": "ACC-1",
-      "status": "Anker geerntet in ACCEPTANCE M3d (06.11.2026); im 30-plan-review als ADR festzuhalten",
+      "status": "Anker geerntet in ACCEPTANCE M3d (06.11.2026); festgehalten in ADR-053 Nr. 13",
       "ref": "ANKER-TODO.md, Abschnitt „M3d — Ausführung, Parser, Backends, Bericht“, Zeile ANK-93: „`inst/templates/validation_report.Rmd` (Stand `332a2d5`)“, „Reviewer liest aus Vorlage“; docs/01 §6: „Anker erntet der Reviewer in der ACCEPTANCE-Phase nach `ANKER-TODO.md`.“",
       "kind": "Anker",
       "owner": "Reviewer",
@@ -43,7 +43,7 @@
     },
     {
       "id": "ACC-2",
-      "status": "Auslegung des Reviewers (Spec schweigt zu Abbruchform, Abbruchpunkt, Neustart des Backends und verglichenen Spalten); im 30-plan-review als ADR festzuhalten",
+      "status": "Auslegung des Reviewers (Spec schweigt zu Abbruchform, Abbruchpunkt, Neustart des Backends und verglichenen Spalten); festgehalten in ADR-053 Nr. 1",
       "ref": "K-M3d-1: „wird ein Lauf mit `backend_mock()` und festem Seed nach dem Abbruch mit `resume = TRUE` fortgesetzt; der resultierende Speicher (CSV und SQLite) enthält dieselbe Zeilenmenge mit denselben Werten wie ein ununterbrochener Lauf, ohne Dubletten (`run_key` eindeutig)“; docs/04, M3d, Ergebnis: „`msa_run()` ist abbrechbar und wiederaufnehmbar ohne Datenverlust“",
       "kind": "Auslegung",
       "owner": "Reviewer",
@@ -52,7 +52,7 @@
     },
     {
       "id": "ACC-3",
-      "status": "Befund des Reviewers aus der Probe (06.11.2026), Hinweis an den Builder",
+      "status": "Befund des Reviewers aus der Probe (06.11.2026), Hinweis an den Builder; übernommen in PLAN.md Runde 1 (Schnittstellen, Ausführung und Speicher, Nr. 1 und 2); Form in ADR-053 Nr. 18.3 und 18.4",
       "ref": "K-M3d-1; ACC-2",
       "kind": "Hinweis",
       "owner": "Builder",
@@ -61,7 +61,7 @@
     },
     {
       "id": "ACC-4",
-      "status": "Auslegung des Reviewers (Spec schweigt zur Grammatik gültiger und ungültiger Formen); im 30-plan-review als ADR festzuhalten",
+      "status": "Auslegung des Reviewers (Spec schweigt zur Grammatik gültiger und ungültiger Formen); festgehalten in ADR-053 Nr. 2",
       "ref": "K-M3d-2: „`parse_number()` (Dezimalpunkt und -komma, Vorzeichen, Exponenten, Einheiten im Text) … liefern auf `ankerRef: ANK-TOL.parser_cases` zufällig erzeugten Eingaben nie einen Fehler, geben für gültige Formen den erwarteten Wert und für ungültige `NA` zurück“; docs/01 §2 Nr. 4: „nie stillschweigend eine falsche Zahl“",
       "kind": "Auslegung",
       "owner": "Reviewer",
@@ -70,7 +70,7 @@
     },
     {
       "id": "ACC-5",
-      "status": "Auslegung des Reviewers (Spec schweigt zu Modus, Aliasen und umgebendem Text); im 30-plan-review als ADR festzuhalten",
+      "status": "Auslegung des Reviewers (Spec schweigt zu Modus, Aliasen und umgebendem Text); festgehalten in ADR-053 Nr. 3",
       "ref": "K-M3d-2: „`parse_choice()` (Aliase, Groß-/Kleinschreibung, umgebender Text)“; K-M2-3: „gibt `NA`, wenn zwei verschiedene Klassen oder keine vorkommen“",
       "kind": "Auslegung",
       "owner": "Reviewer",
@@ -79,7 +79,7 @@
     },
     {
       "id": "ACC-6",
-      "status": "Auslegung des Reviewers (Spec schweigt zu Feldtypen, Verschachtelung und Arten kaputten JSONs); im 30-plan-review als ADR festzuhalten",
+      "status": "Auslegung des Reviewers (Spec schweigt zu Feldtypen, Verschachtelung und Arten kaputten JSONs); festgehalten in ADR-053 Nr. 4",
       "ref": "K-M3d-2: „`parse_json_field()` (gültiges JSON, JSON in Text, kaputtes JSON)“; Hilfeseite parsers: „the name of the field to extract from a JSON object in the response (the first `{...}` block is used)“",
       "kind": "Auslegung",
       "owner": "Reviewer",
@@ -88,7 +88,7 @@
     },
     {
       "id": "ACC-7",
-      "status": "Auslegung des Reviewers (Spec schweigt zu Chat-Objekten und Feldnamen von meta bei ellmer); BL-60 durch Ausführung geklärt; im 30-plan-review als ADR festzuhalten",
+      "status": "Auslegung des Reviewers (Spec schweigt zu Chat-Objekten und Feldnamen von meta bei ellmer); BL-60 durch Ausführung geklärt; festgehalten in ADR-053 Nr. 5",
       "ref": "K-M3d-3: „liefern `backend_openai_compatible()` und `backend_ellmer()` Text und `meta` (Modellkennung, Anbieter, Verbrauch) wie aufgezeichnet (ob die Mocks die Aufrufe von `backend_ellmer()` abfangen, klärt BL-60 vor M3d)“; BL-60",
       "kind": "Auslegung",
       "owner": "Reviewer",
@@ -97,7 +97,7 @@
     },
     {
       "id": "ACC-8",
-      "status": "Auslegung des Reviewers (Spec schweigt zu Fehlerarten und zur Form leerer Antworten); im 30-plan-review als ADR festzuhalten",
+      "status": "Auslegung des Reviewers (Spec schweigt zu Fehlerarten und zur Form leerer Antworten); festgehalten in ADR-053 Nr. 6",
       "ref": "K-M3d-3: „HTTP-Fehler, Zeitüberschreitung und leere Antworten werden in `msa_run()` als `error`-Zeilen gespeichert und beenden den Lauf nicht“",
       "kind": "Auslegung",
       "owner": "Reviewer",
@@ -106,7 +106,7 @@
     },
     {
       "id": "ACC-9",
-      "status": "Auslegung des Reviewers (Spec schweigt zu Prüfweg und Ort der Dokumentation); im 30-plan-review als ADR festzuhalten",
+      "status": "Auslegung des Reviewers (Spec schweigt zu Prüfweg und Ort der Dokumentation); festgehalten in ADR-053 Nr. 7",
       "ref": "K-M3d-3: „`backend_ellmer()` ohne installiertes `ellmer` endet mit der dokumentierten Fehlermeldung“",
       "kind": "Auslegung",
       "owner": "Reviewer",
@@ -115,7 +115,7 @@
     },
     {
       "id": "ACC-10",
-      "status": "Auslegung des Reviewers (Spec schweigt zu Ausgabeformat, Fundstellen der Kennzahlen und Vergleichsregel); im 30-plan-review als ADR festzuhalten",
+      "status": "Auslegung des Reviewers (Spec schweigt zu Ausgabeformat, Fundstellen der Kennzahlen und Vergleichsregel); festgehalten in ADR-053 Nr. 8",
       "ref": "K-M3d-4: „Jede in `msa_report()` gerenderte Kennzahl (…) gleicht dem Wert im übergebenen Objekt nach Rundung auf die in der Vorlage festgelegten Stellen (`ankerRef: ANK-93`); der Abnahmetest parst das gerenderte Markdown/HTML und vergleicht.“",
       "kind": "Auslegung",
       "owner": "Reviewer",
@@ -124,7 +124,7 @@
     },
     {
       "id": "ACC-11",
-      "status": "Auslegung des Reviewers (Spec schweigt zu Argument, Abschnitt und Form der Westgard-Verletzungen und der R_4s-Lesart); im 30-plan-review als ADR festzuhalten",
+      "status": "Auslegung des Reviewers (Spec schweigt zu Argument, Abschnitt und Form der Westgard-Verletzungen und der R_4s-Lesart); festgehalten in ADR-053 Nr. 9",
       "ref": "K-M3d-4: „(… Lenth-Werte, Westgard-Verletzungen)“; K-M3d-6: „die R_4s-Lesart“; docs/01 §3 Nr. 6: „Bericht und `print` nennen die Lesart“; docs/01 §4: „Ohne ADR erlaubt: … neue Argumente mit Vorgabewert am Ende der Argumentliste“",
       "kind": "Auslegung",
       "owner": "Reviewer",
@@ -133,7 +133,7 @@
     },
     {
       "id": "ACC-12",
-      "status": "Auslegung des Reviewers (Spec schweigt zu Spaltenmenge, Kopfzeile, Zahlenformat, Anführung und Sortierregel); im 30-plan-review als ADR festzuhalten",
+      "status": "Auslegung des Reviewers (Spec schweigt zu Spaltenmenge, Kopfzeile, Zahlenformat, Anführung und Sortierregel); festgehalten in ADR-053 Nr. 10",
       "ref": "K-M3d-5: „den Hash der kanonischen Form der Lauftabelle (Zeilen sortiert nach Block, Item, Prompt, Modell, Replikat; feste Spaltenreihenfolge; UTF-8; CSV ohne Zeilennamen; Dezimalpunkt; LF; Formelsammlung §11)“; „der Hash ändert sich bei Zeilenpermutation nicht und bei jeder Wertänderung“",
       "kind": "Auslegung",
       "owner": "Reviewer",
@@ -142,7 +142,7 @@
     },
     {
       "id": "ACC-13",
-      "status": "Auslegung des Reviewers (Spec schweigt zu Wortlaut und Ort der Konventionen); im 30-plan-review als ADR festzuhalten",
+      "status": "Auslegung des Reviewers (Spec schweigt zu Wortlaut und Ort der Konventionen); festgehalten in ADR-053 Nr. 11",
       "ref": "K-M3d-6: „Der gerenderte Bericht nennt die ndc-Konstante 1,41, die Verdiktschwellen mit Basis, die %Contribution-Schwellen als Konvention, abgeleitete Zwei-Stufen-Komponenten, das Modell ohne Block- und Dreifach-Wechselwirkungen, die R_4s-Lesart“; Formelsammlung §12 Nr. 7, 8, 10, 13",
       "kind": "Auslegung",
       "owner": "Reviewer",
@@ -151,7 +151,7 @@
     },
     {
       "id": "ACC-14",
-      "status": "Auslegung des Reviewers (Spec schweigt zu Ort und Form der Seeds und der Modelltabelle); im 30-plan-review als ADR festzuhalten",
+      "status": "Auslegung des Reviewers (Spec schweigt zu Ort und Form der Seeds und der Modelltabelle); festgehalten in ADR-053 Nr. 12 (Weg der Seeds: Nr. 14)",
       "ref": "K-M3d-6: „alle Seeds (Design, Bootstrap, Plackett-Burman) und je Modell Modellkennung, Anbieter und Quantisierung aus `meta` (Formelsammlung Nr. 6, 7, 8, 10, 13, §11)“; docs/01 §4: „zusätzliche Attribute“ ohne ADR erlaubt",
       "kind": "Auslegung",
       "owner": "Reviewer",
@@ -160,7 +160,7 @@
     },
     {
       "id": "ACC-15",
-      "status": "Hinweis an Builder und Betreiber, nonblocking",
+      "status": "Hinweis an Builder und Betreiber, nonblocking; beantwortet in PLAN.md Runde 1 (BL-130 vertagt; P-M3d-04); ADR-053 Nr. 19",
       "ref": "BL-17, BL-18, BL-60, BL-130; docs/01 §5: „Suggests dürfen ergänzt werden“",
       "kind": "Hinweis",
       "owner": "Builder, Betreiber",
@@ -175,6 +175,15 @@
       "owner": "Reviewer",
       "blocking_builder": false,
       "note": "Lauf der M3d-Abnahmetests auf dem Stand vor M3d (HEAD e86aac2): 31 Tests, 1478 Erwartungen, 20 Tests rot, 0 Fehler, 0 übersprungen, 42,6 s; grün sind K-M3d-2 parse_choice(), K-M3d-3 Aufzeichnungen und backend_openai_compatible() sowie K-M3d-4 Abschnitte Precision, Agreement, Bias und Robustness einschließlich Bootstrap-Tabelle. Attrappe (Paketkopie unter /tmp mit R/zzz-mock.R, geänderter Berichtsvorlage und Hilfeseite): 31 Tests, 1567 Erwartungen, alle grün, 30,6 s. Elf verfälschte Varianten der Attrappe sind jeweils am vorgesehenen Test rot: Mock mit Aufrufzähler (K-M3d-1, CSV und SQLite), CSV-Leser mit geratenen Typen (K-M3d-1 CSV), kein U+2212 (K-M3d-2 parse_number()), JSON über regulären Ausdruck (K-M3d-2 parse_json_field()), leere Antworten angenommen (K-M3d-3, beide Backends), ellmer ohne meta (K-M3d-3), Varianz mit 3 Nachkommastellen (K-M3d-4), Westgard-Positionen um eins verschoben (K-M3d-4), %.15g statt %.17g (K-M3d-5), Plackett-Burman-Seed fehlt (K-M3d-6), nur der erste Anbieter (K-M3d-6)."
+    },
+    {
+      "id": "ACC-17",
+      "status": "Hinweis des Reviewers (30-plan-review M3d, Runde 1, 06.11.2026); für den Builder nonblocking",
+      "ref": "ADR-053 Nr. 14; docs/01 §4: „Ohne ADR erlaubt: … zusätzliche Attribute“; K-M3d-6: „alle Seeds (Design, Bootstrap, Plackett-Burman)“; PLAN.md P-M3d-01",
+      "kind": "Hinweis",
+      "owner": "Reviewer, QA, Betreiber",
+      "blocking_builder": false,
+      "note": "M3d gibt pb_design() (randomize = TRUE und seed nicht NULL), msa_robustness() (Kopie von attr(design, \"seed\")) und msa_boot() (seed nicht NULL) das zusätzliche Attribut seed; sonst bleiben die Objekte gleich (ADR-053 Nr. 14.2). Rot werden dadurch, ohne dass ein Wert falsch ist: (1) tests/acceptance/test-m1d-7-findings.R Z. 139–147 (Codezeilen von R/grr.R im Arbeitsbaum gegen done/M1c); (2) test-m1d-8-robustness-wording.R Z. 83–99 und (3) Z. 101–121 (identical() mit done/M1c); (4) tests/e2e/test-m3b-qa-e2e.R, QA-M3b-E2E-3, Z. 214 (Attributnamen) und Z. 231 (PB-Plan gegen einfachen data.frame). (4) belegt die Probe des Reviewers (PLAN-REVIEW M3d r1, Prüflauf 1): Paketkopie mit genau diesen Attributen; ohne sie grün; alle anderen ausgewählten Tests bleiben grün (M3b-Abnahme, test-m1c-1/-2, E2E M1c, M1d und M3b, Fuzz M3b, Unit-Tests zu Robustheit, Bootstrap und Bericht). (1) bis (3) führen Git-Kommandos aus und sind aus dem Code gelesen. (1) bis (3) passt der Reviewer im Code-Review M3d, Runde 1, nach ADR-053 Nr. 14.5 an, oder der Betreiber vorher. (4) ist [QA-PENDING]: QA passt in der QA-Phase M3d die zwei Erwartungen an (seed in der Namensmenge bei einem PB-Plan mit seed; Vergleich mit dem data.frame ohne seed, seed getrennt geprüft). Bis dahin bricht der rote unmutierte Vorlauf auch mutgate vor dem ersten Mutanten ab (MUT_TEST_DIRS enthält tests/e2e). Bindende Präzisierungen für BUILD: ADR-053 Nr. 14 bis 18; Befunde E1 bis E10 in PLAN-REVIEW.md M3d r1."
     }
   ]
 }
