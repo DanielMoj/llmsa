@@ -4,8 +4,8 @@
   "base": "a4115ae4e9bf8b536a6ec49825385787b77fe737",
   "baseRef": "plan/M3d",
   "env": {
-    "ts": "2026-11-06T12:48:54+01:00",
-    "sha": "638feaa5a662d04c1f3ec3f4d18200df29fef66d",
+    "ts": "2026-11-07T09:07:54+01:00",
+    "sha": "3a777444cf929d3d5a745512206c2f62df24979d",
     "bash": "5.3.9(1)-release",
     "git": "2.53.0",
     "toolchain": {
@@ -19,7 +19,7 @@
     "tests": "fail",
     "trace": "pass",
     "territory": "pass",
-    "mutgate": "fail",
+    "mutgate": "pass",
     "golden-adr": "pass",
     "mutfull": "pass"
   },
@@ -28,8 +28,8 @@
     "lint": "lint: Kommando erfolgreich",
     "tests": "tests: Kommando meldet fachlichen Fehlschlag rc=1",
     "trace": "trace: alle Kriterien sind wörtlich und beidseitig verknüpft",
-    "territory": "territory: letzter Diff sauber (builder/40-build, Runde 1, Basis a4115ae4e9bf8b536a6ec49825385787b77fe737, 2026-11-06T11:54:57+01:00)",
-    "mutgate": "mutgate: fail (unmutierter Vorlauf rot, kein Mutant gelaufen; 1 Tests: tests/e2e/test-m3b-qa-e2e.R: QA-M3b-E2E-3: logit transform, help-page wording and msa_report integration work end-to-end without altering transform = 'none' (seed = 20261105) [fehlgeschlagen])",
+    "territory": "territory: letzter Diff sauber (qa/45-qa, Runde 1, Basis 414e1a93dc9d278fc458c3bb95ade83152682806, 2026-11-06T13:07:00+01:00)",
+    "mutgate": "mutgate: pass (score=80.25 required=80 baseline=80.25 floor=80)",
     "golden-adr": "golden-adr: keine Golden-/Ankeränderung",
     "mutfull": "mutfull: pass (nicht fällig in M3d)"
   },

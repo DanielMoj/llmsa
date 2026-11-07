@@ -1,9 +1,2261 @@
 # stdout
 r-mutation: 1443 Mutanten in R/backends.R, R/grr.R, R/parse.R, R/report-data.R, R/report.R, R/robustness.R, R/run.R; Tests: tests/testthat, tests/acceptance, tests/e2e, tests/fuzz; ausgelassen nach MUT_TEST_EXCLUDE='^(m2-[0-9]|m0-testthat-count$|m1b-[23]-|m1b-7-vignette-full|m1c-[34]-|m1c-5-vignette-full|m1c-8-check-runs|m1d-)': tests/testthat/test-m1d-data.R, tests/testthat/test-m1d-findings.R, tests/acceptance/test-m0-testthat-count.R, tests/acceptance/test-m1b-2-recovery-scripts.R, tests/acceptance/test-m1b-3-two-level-script.R, tests/acceptance/test-m1b-7-vignette-full-results.R, tests/acceptance/test-m1c-3-coverage-script.R, tests/acceptance/test-m1c-4-coverage-rerun.R, tests/acceptance/test-m1c-5-vignette-full-results.R, tests/acceptance/test-m1c-8-check-runs.R, tests/acceptance/test-m1d-1-llm-stability-data.R, tests/acceptance/test-m1d-2-llm-stability-vignette.R, tests/acceptance/test-m1d-3-clinvar-data.R, tests/acceptance/test-m1d-4-clinvar-vignette.R, tests/acceptance/test-m1d-5-size-licence-network.R, tests/acceptance/test-m1d-6-full-runs.R, tests/acceptance/test-m1d-7-findings.R, tests/acceptance/test-m1d-8-robustness-wording.R, tests/acceptance/test-m2-1-items.R, tests/acceptance/test-m2-2-memorisation.R, tests/acceptance/test-m2-3-prompts-parser.R, tests/acceptance/test-m2-4-backends.R, tests/acceptance/test-m2-5-plan.R, tests/acceptance/test-m2-6-evaluate.R, tests/acceptance/test-m2-7-robustness-pilot.R, tests/e2e/test-m1d-qa-e2e.R, tests/fuzz/test-m1d-qa-fuzz.R
-r-mutation: unmutierter Testlauf: 276.5 s; 643 Tests, davon 1 fehlgeschlagen, 0 abgebrochen
-r-mutation: rot: tests/e2e/test-m3b-qa-e2e.R: QA-M3b-E2E-3: logit transform, help-page wording and msa_report integration work end-to-end without altering transform = 'none' (seed = 20261105) [fehlgeschlagen]
-r-mutation: Abbruch vor dem ersten Mutanten: Schon unmutiert scheitern 1 Tests (/mnt/c/Users/Danie/dev/Llmsa/llmsa/reports/mutation/unmutated.json)
-mutgate: fail (unmutierter Vorlauf rot, kein Mutant gelaufen; 1 Tests: tests/e2e/test-m3b-qa-e2e.R: QA-M3b-E2E-3: logit transform, help-page wording and msa_report integration work end-to-end without altering transform = 'none' (seed = 20261105) [fehlgeschlagen])
+r-mutation: unmutierter Testlauf: 270.4 s; 648 Tests, davon 0 fehlgeschlagen, 0 abgebrochen
+r-mutation: Zeitlimit je Mutant: 1353 s (MUT_TEST_TIMEOUT=353 s, 5 × unmutierter Lauf = 1353 s)
+ℹ Mutation Testing
+  |   K |   S |   N |   E |   T |   % | Mutator  | File 
+✔ |   1 |   0 |   0 |   0 |   1 | 100 | - → +    | backends.R 
+✔ |   2 |   0 |   0 |   0 |   2 | 100 | !<condit | backends.R 
+✔ |   3 |   0 |   0 |   0 |   3 | 100 | !<condit | backends.R 
+✔ |   4 |   0 |   0 |   0 |   4 | 100 | !<condit | backends.R 
+✔ |   5 |   0 |   0 |   0 |   5 | 100 | !<condit | backends.R 
+✔ |   6 |   0 |   0 |   0 |   6 | 100 | !<condit | backends.R 
+✔ |   7 |   0 |   0 |   0 |   7 | 100 | !<condit | backends.R 
+✔ |   8 |   0 |   0 |   0 |   8 | 100 | !<condit | backends.R 
+x |   8 |   1 |   0 |   0 |   9 |  88 | !<condit | backends.R 
+✔ |   9 |   1 |   0 |   0 |  10 |  90 | !<condit | backends.R 
+✔ |  10 |   1 |   0 |   0 |  11 |  90 | != → ==  | backends.R 
+x |  10 |   2 |   0 |   0 |  12 |  83 | "" → "mu | backends.R 
+x |  10 |   3 |   0 |   0 |  13 |  76 | "" → "mu | backends.R 
+✔ |  11 |   3 |   0 |   0 |  14 |  78 | * → /    | backends.R 
+x |  11 |   4 |   0 |   0 |  15 |  73 | * → /    | backends.R 
+✔ |  12 |   4 |   0 |   0 |  16 |  75 | && → ||  | backends.R 
+x |  12 |   5 |   0 |   0 |  17 |  70 | && → ||  | backends.R 
+✔ |  13 |   5 |   0 |   0 |  18 |  72 | && → ||  | backends.R 
+✔ |  14 |   5 |   0 |   0 |  19 |  73 | && → ||  | backends.R 
+✔ |  15 |   5 |   0 |   0 |  20 |  75 | && → ||  | backends.R 
+✔ |  16 |   5 |   0 |   0 |  21 |  76 | && → ||  | backends.R 
+✔ |  17 |   5 |   0 |   0 |  22 |  77 | && → ||  | backends.R 
+✔ |  18 |   5 |   0 |   0 |  23 |  78 | && → ||  | backends.R 
+✔ |  19 |   5 |   0 |   0 |  24 |  79 | && → ||  | backends.R 
+✔ |  20 |   5 |   0 |   0 |  25 |  80 | && → ||  | backends.R 
+x |  20 |   6 |   0 |   0 |  26 |  76 | %% → *   | backends.R 
+✔ |  21 |   6 |   0 |   0 |  27 |  77 | %% → *   | backends.R 
+✔ |  22 |   6 |   0 |   0 |  28 |  78 | %% → *   | backends.R 
+x |  22 |   7 |   0 |   0 |  29 |  75 | + → -    | backends.R 
+x |  22 |   8 |   0 |   0 |  30 |  73 | + → -    | backends.R 
+x |  22 |   9 |   0 |   0 |  31 |  70 | + → -    | backends.R 
+x |  22 |  10 |   0 |   0 |  32 |  68 | + → -    | backends.R 
+x |  22 |  11 |   0 |   0 |  33 |  66 | + → -    | backends.R 
+✔ |  23 |  11 |   0 |   0 |  34 |  67 | + → -    | backends.R 
+x |  23 |  11 |   0 |   1 |  35 |  68 | + → -    | backends.R 
+✔ |  24 |  11 |   0 |   1 |  36 |  69 | + → -    | backends.R 
+✔ |  25 |  11 |   0 |   1 |  37 |  70 | < → >    | backends.R 
+x |  25 |  12 |   0 |   1 |  38 |  68 | < → <=   | backends.R 
+✔ |  26 |  12 |   0 |   1 |  39 |  69 | <conditi | backends.R 
+✔ |  27 |  12 |   0 |   1 |  40 |  70 | <conditi | backends.R 
+✔ |  28 |  12 |   0 |   1 |  41 |  70 | <conditi | backends.R 
+✔ |  29 |  12 |   0 |   1 |  42 |  71 | <conditi | backends.R 
+✔ |  30 |  12 |   0 |   1 |  43 |  72 | <conditi | backends.R 
+✔ |  31 |  12 |   0 |   1 |  44 |  72 | <conditi | backends.R 
+✔ |  32 |  12 |   0 |   1 |  45 |  73 | <conditi | backends.R 
+✔ |  33 |  12 |   0 |   1 |  46 |  73 | <conditi | backends.R 
+✔ |  34 |  12 |   0 |   1 |  47 |  74 | <conditi | backends.R 
+✔ |  35 |  12 |   0 |   1 |  48 |  75 | <conditi | backends.R 
+✔ |  36 |  12 |   0 |   1 |  49 |  75 | <conditi | backends.R 
+✔ |  37 |  12 |   0 |   1 |  50 |  76 | <conditi | backends.R 
+✔ |  38 |  12 |   0 |   1 |  51 |  76 | <conditi | backends.R 
+✔ |  39 |  12 |   0 |   1 |  52 |  76 | <conditi | backends.R 
+✔ |  40 |  12 |   0 |   1 |  53 |  77 | <conditi | backends.R 
+✔ |  41 |  12 |   0 |   1 |  54 |  77 | <conditi | backends.R 
+✔ |  42 |  12 |   0 |   1 |  55 |  78 | <conditi | backends.R 
+x |  42 |  13 |   0 |   1 |  56 |  76 | <conditi | backends.R 
+✔ |  43 |  13 |   0 |   1 |  57 |  77 | <conditi | backends.R 
+✔ |  44 |  13 |   0 |   1 |  58 |  77 | <conditi | backends.R 
+✔ |  45 |  13 |   0 |   1 |  59 |  77 | <conditi | backends.R 
+✔ |  46 |  13 |   0 |   1 |  60 |  78 | <conditi | backends.R 
+✔ |  47 |  13 |   0 |   1 |  61 |  78 | <conditi | backends.R 
+✔ |  48 |  13 |   0 |   1 |  62 |  79 | <n> - 1  | backends.R 
+✔ |  49 |  13 |   0 |   1 |  63 |  79 | <n> - 1  | backends.R 
+✔ |  50 |  13 |   0 |   1 |  64 |  79 | <n> - 1  | backends.R 
+✔ |  51 |  13 |   0 |   1 |  65 |  80 | <n> - 1  | backends.R 
+✔ |  52 |  13 |   0 |   1 |  66 |  80 | <n> - 1  | backends.R 
+✔ |  53 |  13 |   0 |   1 |  67 |  80 | <n> - 1  | backends.R 
+✔ |  54 |  13 |   0 |   1 |  68 |  80 | <n> - 1  | backends.R 
+x |  54 |  14 |   0 |   1 |  69 |  79 | <n> - 1  | backends.R 
+x |  54 |  15 |   0 |   1 |  70 |  78 | <n> - 1  | backends.R 
+✔ |  55 |  15 |   0 |   1 |  71 |  78 | <n> - 1  | backends.R 
+✔ |  56 |  15 |   0 |   1 |  72 |  79 | <n> - 1  | backends.R 
+x |  56 |  16 |   0 |   1 |  73 |  78 | <n> - 1  | backends.R 
+✔ |  57 |  16 |   0 |   1 |  74 |  78 | <n> - 1  | backends.R 
+✔ |  58 |  16 |   0 |   1 |  75 |  78 | <n> - 1  | backends.R 
+✔ |  59 |  16 |   0 |   1 |  76 |  78 | <n> - 1  | backends.R 
+x |  59 |  17 |   0 |   1 |  77 |  77 | <n> - 1  | backends.R 
+✔ |  60 |  17 |   0 |   1 |  78 |  78 | <n> - 1  | backends.R 
+✔ |  61 |  17 |   0 |   1 |  79 |  78 | <n> - 1  | backends.R 
+✔ |  62 |  17 |   0 |   1 |  80 |  78 | <n> - 1  | backends.R 
+✔ |  63 |  17 |   0 |   1 |  81 |  79 | <n> - 1  | backends.R 
+✔ |  64 |  17 |   0 |   1 |  82 |  79 | <n> - 1  | backends.R 
+x |  64 |  17 |   0 |   2 |  83 |  79 | <n> - 1  | backends.R 
+✔ |  65 |  17 |   0 |   2 |  84 |  79 | <n> - 1  | backends.R 
+x |  65 |  18 |   0 |   2 |  85 |  78 | <n> - 1  | backends.R 
+✔ |  66 |  18 |   0 |   2 |  86 |  79 | <n> - 1  | backends.R 
+✔ |  67 |  18 |   0 |   2 |  87 |  79 | <n> - 1  | backends.R 
+✔ |  68 |  18 |   0 |   2 |  88 |  79 | <n> - 1  | backends.R 
+✔ |  69 |  18 |   0 |   2 |  89 |  79 | <n> + 1  | backends.R 
+✔ |  70 |  18 |   0 |   2 |  90 |  80 | <n> + 1  | backends.R 
+✔ |  71 |  18 |   0 |   2 |  91 |  80 | <n> + 1  | backends.R 
+✔ |  72 |  18 |   0 |   2 |  92 |  80 | <n> + 1  | backends.R 
+✔ |  73 |  18 |   0 |   2 |  93 |  80 | <n> + 1  | backends.R 
+x |  73 |  19 |   0 |   2 |  94 |  79 | <n> + 1  | backends.R 
+x |  73 |  20 |   0 |   2 |  95 |  78 | <n> + 1  | backends.R 
+x |  73 |  21 |   0 |   2 |  96 |  78 | <n> + 1  | backends.R 
+x |  73 |  22 |   0 |   2 |  97 |  77 | <n> + 1  | backends.R 
+x |  73 |  23 |   0 |   2 |  98 |  76 | <n> + 1  | backends.R 
+✔ |  74 |  23 |   0 |   2 |  99 |  76 | <n> + 1  | backends.R 
+✔ |  75 |  23 |   0 |   2 | 100 |  77 | <n> + 1  | backends.R 
+✔ |  76 |  23 |   0 |   2 | 101 |  77 | <n> + 1  | backends.R 
+x |  76 |  23 |   0 |   3 | 102 |  77 | <n> + 1  | backends.R 
+✔ |  77 |  23 |   0 |   3 | 103 |  77 | <n> + 1  | backends.R 
+x |  77 |  24 |   0 |   3 | 104 |  76 | <n> + 1  | backends.R 
+✔ |  78 |  24 |   0 |   3 | 105 |  77 | <n> + 1  | backends.R 
+✔ |  79 |  24 |   0 |   3 | 106 |  77 | <n> + 1  | backends.R 
+✔ |  80 |  24 |   0 |   3 | 107 |  77 | <n> + 1  | backends.R 
+✔ |  81 |  24 |   0 |   3 | 108 |  77 | <n> + 1  | backends.R 
+✔ |  82 |  24 |   0 |   3 | 109 |  77 | <n> + 1  | backends.R 
+✔ |  83 |  24 |   0 |   3 | 110 |  78 | <n> + 1  | backends.R 
+✔ |  84 |  24 |   0 |   3 | 111 |  78 | <n> + 1  | backends.R 
+x |  84 |  25 |   0 |   3 | 112 |  77 | <n> + 1  | backends.R 
+✔ |  85 |  25 |   0 |   3 | 113 |  77 | <n> + 1  | backends.R 
+✔ |  86 |  25 |   0 |   3 | 114 |  78 | <n> + 1  | backends.R 
+✔ |  87 |  25 |   0 |   3 | 115 |  78 | <n> + 1  | backends.R 
+✔ |  88 |  25 |   0 |   3 | 116 |  78 | <non-emp | backends.R 
+x |  88 |  26 |   0 |   3 | 117 |  77 | <non-emp | backends.R 
+x |  88 |  27 |   0 |   3 | 118 |  77 | <non-emp | backends.R 
+✔ |  89 |  27 |   0 |   3 | 119 |  77 | <non-emp | backends.R 
+x |  89 |  28 |   0 |   3 | 120 |  76 | <non-emp | backends.R 
+x |  89 |  28 |   0 |   4 | 121 |  76 | <non-emp | backends.R 
+x |  89 |  29 |   0 |   4 | 122 |  76 | <non-emp | backends.R 
+✔ |  90 |  29 |   0 |   4 | 123 |  76 | <non-emp | backends.R 
+✔ |  91 |  29 |   0 |   4 | 124 |  76 | <non-emp | backends.R 
+✔ |  92 |  29 |   0 |   4 | 125 |  76 | <non-emp | backends.R 
+✔ |  93 |  29 |   0 |   4 | 126 |  76 | <non-emp | backends.R 
+✔ |  94 |  29 |   0 |   4 | 127 |  77 | <non-emp | backends.R 
+✔ |  95 |  29 |   0 |   4 | 128 |  77 | <non-emp | backends.R 
+✔ |  96 |  29 |   0 |   4 | 129 |  77 | <non-emp | backends.R 
+✔ |  97 |  29 |   0 |   4 | 130 |  77 | <non-emp | backends.R 
+x |  97 |  29 |   0 |   5 | 131 |  77 | <non-emp | backends.R 
+x |  97 |  29 |   0 |   6 | 132 |  78 | <non-emp | backends.R 
+✔ |  98 |  29 |   0 |   6 | 133 |  78 | <non-emp | backends.R 
+✔ |  99 |  29 |   0 |   6 | 134 |  78 | <non-emp | backends.R 
+✔ | 100 |  29 |   0 |   6 | 135 |  78 | <non-emp | backends.R 
+x | 100 |  30 |   0 |   6 | 136 |  77 | <non-emp | backends.R 
+x | 100 |  31 |   0 |   6 | 137 |  77 | <non-emp | backends.R 
+✔ | 101 |  31 |   0 |   6 | 138 |  77 | <non-emp | backends.R 
+x | 101 |  32 |   0 |   6 | 139 |  76 | <non-emp | backends.R 
+✔ | 102 |  32 |   0 |   6 | 140 |  77 | <non-emp | backends.R 
+✔ | 103 |  32 |   0 |   6 | 141 |  77 | <non-emp | backends.R 
+✔ | 104 |  32 |   0 |   6 | 142 |  77 | <non-emp | backends.R 
+✔ | 105 |  32 |   0 |   6 | 143 |  77 | <non-emp | backends.R 
+✔ | 106 |  32 |   0 |   6 | 144 |  77 | <non-emp | backends.R 
+✔ | 107 |  32 |   0 |   6 | 145 |  77 | <non-emp | backends.R 
+x | 107 |  33 |   0 |   6 | 146 |  77 | <non-emp | backends.R 
+x | 107 |  34 |   0 |   6 | 147 |  76 | <non-emp | backends.R 
+✔ | 108 |  34 |   0 |   6 | 148 |  77 | <non-emp | backends.R 
+✔ | 109 |  34 |   0 |   6 | 149 |  77 | <non-emp | backends.R 
+✔ | 110 |  34 |   0 |   6 | 150 |  77 | <non-emp | backends.R 
+x | 110 |  34 |   0 |   7 | 151 |  77 | <non-emp | backends.R 
+x | 110 |  35 |   0 |   7 | 152 |  76 | <non-emp | backends.R 
+✔ | 111 |  35 |   0 |   7 | 153 |  77 | <non-emp | backends.R 
+✔ | 112 |  35 |   0 |   7 | 154 |  77 | <non-emp | backends.R 
+✔ | 113 |  35 |   0 |   7 | 155 |  77 | <non-emp | backends.R 
+✔ | 114 |  35 |   0 |   7 | 156 |  77 | <non-emp | backends.R 
+✔ | 115 |  35 |   0 |   7 | 157 |  77 | <non-emp | backends.R 
+✔ | 116 |  35 |   0 |   7 | 158 |  77 | <non-emp | backends.R 
+✔ | 117 |  35 |   0 |   7 | 159 |  77 | <non-emp | backends.R 
+✔ | 118 |  35 |   0 |   7 | 160 |  78 | <non-emp | backends.R 
+x | 118 |  36 |   0 |   7 | 161 |  77 | <non-emp | backends.R 
+x | 118 |  37 |   0 |   7 | 162 |  77 | <non-emp | backends.R 
+✔ | 119 |  37 |   0 |   7 | 163 |  77 | == → !=  | backends.R 
+✔ | 120 |  37 |   0 |   7 | 164 |  77 | == → !=  | backends.R 
+✔ | 121 |  37 |   0 |   7 | 165 |  77 | == → !=  | backends.R 
+✔ | 122 |  37 |   0 |   7 | 166 |  77 | == → !=  | backends.R 
+✔ | 123 |  37 |   0 |   7 | 167 |  77 | > → <    | backends.R 
+x | 123 |  38 |   0 |   7 | 168 |  77 | > → >=   | backends.R 
+✔ | 124 |  38 |   0 |   7 | 169 |  77 | || → &&  | backends.R 
+x | 124 |  39 |   0 |   7 | 170 |  77 | || → &&  | backends.R 
+x | 124 |  40 |   0 |   7 | 171 |  76 | FALSE →  | backends.R 
+x | 124 |  41 |   0 |   7 | 172 |  76 | FALSE →  | backends.R 
+x | 124 |  42 |   0 |   7 | 173 |  75 | FALSE →  | backends.R 
+x | 124 |  43 |   0 |   7 | 174 |  75 | FALSE →  | backends.R 
+x | 124 |  44 |   0 |   7 | 175 |  74 | FALSE →  | backends.R 
+x | 124 |  45 |   0 |   7 | 176 |  74 | FALSE →  | backends.R 
+x | 124 |  46 |   0 |   7 | 177 |  74 | FALSE →  | backends.R 
+x | 124 |  47 |   0 |   7 | 178 |  73 | FALSE →  | backends.R 
+x | 124 |  48 |   0 |   7 | 179 |  73 | FALSE →  | backends.R 
+x | 124 |  49 |   0 |   7 | 180 |  72 | NA_chara | backends.R 
+x | 124 |  50 |   0 |   7 | 181 |  72 | NA_chara | backends.R 
+x | 124 |  51 |   0 |   7 | 182 |  71 | NULL → N | backends.R 
+✔ | 125 |  51 |   0 |   7 | 183 |  72 | NULL → N | backends.R 
+✔ | 126 |  51 |   0 |   7 | 184 |  72 | NULL → N | backends.R 
+✔ | 127 |  51 |   0 |   7 | 185 |  72 | NULL → N | backends.R 
+x | 127 |  52 |   0 |   7 | 186 |  72 | NULL → N | backends.R 
+✔ | 128 |  52 |   0 |   7 | 187 |  72 | NULL → N | backends.R 
+x | 128 |  53 |   0 |   7 | 188 |  71 | NULL → N | backends.R 
+x | 128 |  54 |   0 |   7 | 189 |  71 | NULL → N | backends.R 
+x | 128 |  55 |   0 |   7 | 190 |  71 | NULL → N | backends.R 
+✔ | 129 |  55 |   0 |   7 | 191 |  71 | NULL → N | backends.R 
+✔ | 130 |  55 |   0 |   7 | 192 |  71 | NULL → N | backends.R 
+✔ | 131 |  55 |   0 |   7 | 193 |  71 | NULL → N | backends.R 
+x | 131 |  56 |   0 |   7 | 194 |  71 | TRUE → F | backends.R 
+x | 131 |  57 |   0 |   7 | 195 |  70 | TRUE → F | backends.R 
+x | 131 |  58 |   0 |   7 | 196 |  70 | TRUE → F | backends.R 
+x | 131 |  59 |   0 |   7 | 197 |  70 | TRUE → F | backends.R 
+x | 131 |  60 |   0 |   7 | 198 |  69 | TRUE → F | backends.R 
+✔ | 132 |  60 |   0 |   7 | 199 |  69 | x[<i>] → | backends.R 
+✔ | 133 |  60 |   0 |   7 | 200 |  70 | x[<i>] → | backends.R 
+✔ | 134 |  60 |   0 |   7 | 201 |  70 | x[<i>] → | backends.R 
+✔ | 135 |  60 |   0 |   7 | 202 |  70 | x[<i>] → | backends.R 
+✔ | 136 |  60 |   0 |   7 | 203 |  70 | x[<i>] → | backends.R 
+✔ | 137 |  60 |   0 |   7 | 204 |  70 | x[<i>] → | backends.R 
+✔ | 138 |  60 |   0 |   7 | 205 |  70 | x[<i>] → | backends.R 
+✔ | 139 |  60 |   0 |   7 | 206 |  70 | x[<i>] → | backends.R 
+✔ | 140 |  60 |   0 |   7 | 207 |  71 | x[<i>] → | backends.R 
+✔ | 141 |  60 |   0 |   7 | 208 |  71 | x[<i>] → | backends.R 
+✔ | 142 |  60 |   0 |   7 | 209 |  71 | x[<i>] → | backends.R 
+✔ | 143 |  60 |   0 |   7 | 210 |  71 | x[<i>] → | backends.R 
+✔ | 144 |  60 |   0 |   7 | 211 |  71 | x[<i>] → | backends.R 
+✔ | 145 |  60 |   0 |   7 | 212 |  71 | x[<i>] → | backends.R 
+✔ | 146 |  60 |   0 |   7 | 213 |  71 | x[<i>] → | backends.R 
+✔ | 147 |  60 |   0 |   7 | 214 |  71 | x[<i>] → | backends.R 
+✔ | 148 |  60 |   0 |   7 | 215 |  72 | x[<i>] → | backends.R 
+✔ | 149 |  60 |   0 |   7 | 216 |  72 | x[<i>] → | backends.R 
+✔ | 150 |  60 |   0 |   7 | 217 |  72 | x[<i>] → | backends.R 
+✔ | 151 |  60 |   0 |   7 | 218 |  72 | x[<i>] → | backends.R 
+✔ | 152 |  60 |   0 |   7 | 219 |  72 | x[<i>] → | backends.R 
+✔ | 153 |  60 |   0 |   7 | 220 |  72 | x[<i>] → | backends.R 
+✔ | 154 |  60 |   0 |   7 | 221 |  72 | x[<i>] → | backends.R 
+✔ | 155 |  60 |   0 |   7 | 222 |  72 | x[<i>] → | backends.R 
+✔ | 156 |  60 |   0 |   7 | 223 |  73 | x[<i>] → | backends.R 
+✔ | 157 |  60 |   0 |   7 | 224 |  73 | x[<i>] → | backends.R 
+✔ | 158 |  60 |   0 |   7 | 225 |  73 | x[<i>] → | backends.R 
+✔ | 159 |  60 |   0 |   7 | 226 |  73 | x[<i>] → | backends.R 
+✔ | 160 |  60 |   0 |   7 | 227 |  73 | x[<i>] → | backends.R 
+✔ | 161 |  60 |   0 |   7 | 228 |  73 | x[<i>] → | backends.R 
+✔ |   1 |   0 |   0 |   0 |   1 |  73 | - → +    | grr.R 
+✔ |   2 |   0 |   0 |   0 |   2 |  73 | - → +    | grr.R 
+✔ |   3 |   0 |   0 |   0 |   3 |  74 | !<condit | grr.R 
+x |   3 |   0 |   0 |   1 |   4 |  74 | !<condit | grr.R 
+✔ |   4 |   0 |   0 |   1 |   5 |  74 | !<condit | grr.R 
+✔ |   5 |   0 |   0 |   1 |   6 |  74 | !<condit | grr.R 
+✔ |   6 |   0 |   0 |   1 |   7 |  74 | != → ==  | grr.R 
+✔ |   7 |   0 |   0 |   1 |   8 |  74 | != → ==  | grr.R 
+✔ |   8 |   0 |   0 |   1 |   9 |  74 | != → ==  | grr.R 
+✔ |   9 |   0 |   0 |   1 |  10 |  74 | "" → "mu | grr.R 
+✔ |  10 |   0 |   0 |   1 |  11 |  74 | "" → "mu | grr.R 
+✔ |  11 |   0 |   0 |   1 |  12 |  75 | "" → "mu | grr.R 
+✔ |  12 |   0 |   0 |   1 |  13 |  75 | * → /    | grr.R 
+✔ |  13 |   0 |   0 |   1 |  14 |  75 | * → /    | grr.R 
+✔ |  14 |   0 |   0 |   1 |  15 |  75 | * → /    | grr.R 
+✔ |  15 |   0 |   0 |   1 |  16 |  75 | * → /    | grr.R 
+✔ |  16 |   0 |   0 |   1 |  17 |  75 | * → /    | grr.R 
+✔ |  17 |   0 |   0 |   1 |  18 |  75 | * → /    | grr.R 
+✔ |  18 |   0 |   0 |   1 |  19 |  75 | * → /    | grr.R 
+✔ |  19 |   0 |   0 |   1 |  20 |  75 | * → /    | grr.R 
+✔ |  20 |   0 |   0 |   1 |  21 |  75 | / → *    | grr.R 
+✔ |  21 |   0 |   0 |   1 |  22 |  76 | / → *    | grr.R 
+✔ |  22 |   0 |   0 |   1 |  23 |  76 | / → *    | grr.R 
+✔ |  23 |   0 |   0 |   1 |  24 |  76 | / → *    | grr.R 
+✔ |  24 |   0 |   0 |   1 |  25 |  76 | / → *    | grr.R 
+✔ |  25 |   0 |   0 |   1 |  26 |  76 | / → *    | grr.R 
+✔ |  26 |   0 |   0 |   1 |  27 |  76 | / → *    | grr.R 
+✔ |  27 |   0 |   0 |   1 |  28 |  76 | / → *    | grr.R 
+✔ |  28 |   0 |   0 |   1 |  29 |  76 | / → *    | grr.R 
+✔ |  29 |   0 |   0 |   1 |  30 |  76 | + → -    | grr.R 
+✔ |  30 |   0 |   0 |   1 |  31 |  76 | + → -    | grr.R 
+✔ |  31 |   0 |   0 |   1 |  32 |  76 | + → -    | grr.R 
+✔ |  32 |   0 |   0 |   1 |  33 |  77 | < → >    | grr.R 
+✔ |  33 |   0 |   0 |   1 |  34 |  77 | < → >    | grr.R 
+x |  33 |   0 |   0 |   2 |  35 |  77 | < → <=   | grr.R 
+✔ |  34 |   0 |   0 |   2 |  36 |  77 | < → <=   | grr.R 
+✔ |  35 |   0 |   0 |   2 |  37 |  77 | <= → >=  | grr.R 
+✔ |  36 |   0 |   0 |   2 |  38 |  77 | <= → <   | grr.R 
+✔ |  37 |   0 |   0 |   2 |  39 |  77 | <conditi | grr.R 
+✔ |  38 |   0 |   0 |   2 |  40 |  77 | <conditi | grr.R 
+✔ |  39 |   0 |   0 |   2 |  41 |  77 | <conditi | grr.R 
+x |  39 |   0 |   0 |   3 |  42 |  77 | <conditi | grr.R 
+✔ |  40 |   0 |   0 |   3 |  43 |  77 | <conditi | grr.R 
+✔ |  41 |   0 |   0 |   3 |  44 |  77 | <conditi | grr.R 
+✔ |  42 |   0 |   0 |   3 |  45 |  78 | <conditi | grr.R 
+✔ |  43 |   0 |   0 |   3 |  46 |  78 | <conditi | grr.R 
+✔ |  44 |   0 |   0 |   3 |  47 |  78 | <conditi | grr.R 
+✔ |  45 |   0 |   0 |   3 |  48 |  78 | <conditi | grr.R 
+✔ |  46 |   0 |   0 |   3 |  49 |  78 | <conditi | grr.R 
+✔ |  47 |   0 |   0 |   3 |  50 |  78 | <conditi | grr.R 
+✔ |  48 |   0 |   0 |   3 |  51 |  78 | <conditi | grr.R 
+✔ |  49 |   0 |   0 |   3 |  52 |  78 | <conditi | grr.R 
+✔ |  50 |   0 |   0 |   3 |  53 |  78 | <conditi | grr.R 
+✔ |  51 |   0 |   0 |   3 |  54 |  78 | <conditi | grr.R 
+✔ |  52 |   0 |   0 |   3 |  55 |  78 | <conditi | grr.R 
+✔ |  53 |   0 |   0 |   3 |  56 |  78 | <conditi | grr.R 
+✔ |  54 |   0 |   0 |   3 |  57 |  78 | <conditi | grr.R 
+✔ |  55 |   0 |   0 |   3 |  58 |  79 | <n> - 1  | grr.R 
+✔ |  56 |   0 |   0 |   3 |  59 |  79 | <n> - 1  | grr.R 
+✔ |  57 |   0 |   0 |   3 |  60 |  79 | <n> - 1  | grr.R 
+✔ |  58 |   0 |   0 |   3 |  61 |  79 | <n> - 1  | grr.R 
+✔ |  59 |   0 |   0 |   3 |  62 |  79 | <n> - 1  | grr.R 
+✔ |  60 |   0 |   0 |   3 |  63 |  79 | <n> - 1  | grr.R 
+✔ |  61 |   0 |   0 |   3 |  64 |  79 | <n> - 1  | grr.R 
+✔ |  62 |   0 |   0 |   3 |  65 |  79 | <n> - 1  | grr.R 
+✔ |  63 |   0 |   0 |   3 |  66 |  79 | <n> - 1  | grr.R 
+✔ |  64 |   0 |   0 |   3 |  67 |  79 | <n> - 1  | grr.R 
+✔ |  65 |   0 |   0 |   3 |  68 |  79 | <n> - 1  | grr.R 
+✔ |  66 |   0 |   0 |   3 |  69 |  79 | <n> - 1  | grr.R 
+x |  66 |   1 |   0 |   3 |  70 |  79 | <n> - 1  | grr.R 
+✔ |  67 |   1 |   0 |   3 |  71 |  79 | <n> - 1  | grr.R 
+✔ |  68 |   1 |   0 |   3 |  72 |  79 | <n> - 1  | grr.R 
+✔ |  69 |   1 |   0 |   3 |  73 |  79 | <n> - 1  | grr.R 
+✔ |  70 |   1 |   0 |   3 |  74 |  79 | <n> - 1  | grr.R 
+✔ |  71 |   1 |   0 |   3 |  75 |  79 | <n> - 1  | grr.R 
+✔ |  72 |   1 |   0 |   3 |  76 |  79 | <n> - 1  | grr.R 
+✔ |  73 |   1 |   0 |   3 |  77 |  80 | <n> - 1  | grr.R 
+✔ |  74 |   1 |   0 |   3 |  78 |  80 | <n> - 1  | grr.R 
+✔ |  75 |   1 |   0 |   3 |  79 |  80 | <n> - 1  | grr.R 
+✔ |  76 |   1 |   0 |   3 |  80 |  80 | <n> - 1  | grr.R 
+✔ |  77 |   1 |   0 |   3 |  81 |  80 | <n> - 1  | grr.R 
+✔ |  78 |   1 |   0 |   3 |  82 |  80 | <n> - 1  | grr.R 
+✔ |  79 |   1 |   0 |   3 |  83 |  80 | <n> - 1  | grr.R 
+✔ |  80 |   1 |   0 |   3 |  84 |  80 | <n> - 1  | grr.R 
+✔ |  81 |   1 |   0 |   3 |  85 |  80 | <n> - 1  | grr.R 
+✔ |  82 |   1 |   0 |   3 |  86 |  80 | <n> - 1  | grr.R 
+✔ |  83 |   1 |   0 |   3 |  87 |  80 | <n> - 1  | grr.R 
+✔ |  84 |   1 |   0 |   3 |  88 |  80 | <n> - 1  | grr.R 
+✔ |  85 |   1 |   0 |   3 |  89 |  80 | <n> - 1  | grr.R 
+✔ |  86 |   1 |   0 |   3 |  90 |  80 | <n> - 1  | grr.R 
+✔ |  87 |   1 |   0 |   3 |  91 |  80 | <n> - 1  | grr.R 
+✔ |  88 |   1 |   0 |   3 |  92 |  80 | <n> - 1  | grr.R 
+✔ |  89 |   1 |   0 |   3 |  93 |  80 | <n> + 1  | grr.R 
+✔ |  90 |   1 |   0 |   3 |  94 |  81 | <n> + 1  | grr.R 
+✔ |  91 |   1 |   0 |   3 |  95 |  81 | <n> + 1  | grr.R 
+✔ |  92 |   1 |   0 |   3 |  96 |  81 | <n> + 1  | grr.R 
+x |  92 |   1 |   0 |   4 |  97 |  81 | <n> + 1  | grr.R 
+✔ |  93 |   1 |   0 |   4 |  98 |  81 | <n> + 1  | grr.R 
+✔ |  94 |   1 |   0 |   4 |  99 |  81 | <n> + 1  | grr.R 
+✔ |  95 |   1 |   0 |   4 | 100 |  81 | <n> + 1  | grr.R 
+✔ |  96 |   1 |   0 |   4 | 101 |  81 | <n> + 1  | grr.R 
+✔ |  97 |   1 |   0 |   4 | 102 |  81 | <n> + 1  | grr.R 
+✔ |  98 |   1 |   0 |   4 | 103 |  81 | <n> + 1  | grr.R 
+✔ |  99 |   1 |   0 |   4 | 104 |  81 | <n> + 1  | grr.R 
+✔ | 100 |   1 |   0 |   4 | 105 |  81 | <n> + 1  | grr.R 
+✔ | 101 |   1 |   0 |   4 | 106 |  81 | <n> + 1  | grr.R 
+✔ | 102 |   1 |   0 |   4 | 107 |  81 | <n> + 1  | grr.R 
+✔ | 103 |   1 |   0 |   4 | 108 |  81 | <n> + 1  | grr.R 
+✔ | 104 |   1 |   0 |   4 | 109 |  81 | <n> + 1  | grr.R 
+✔ | 105 |   1 |   0 |   4 | 110 |  81 | <n> + 1  | grr.R 
+✔ | 106 |   1 |   0 |   4 | 111 |  82 | <n> + 1  | grr.R 
+✔ | 107 |   1 |   0 |   4 | 112 |  82 | <n> + 1  | grr.R 
+✔ | 108 |   1 |   0 |   4 | 113 |  82 | <n> + 1  | grr.R 
+✔ | 109 |   1 |   0 |   4 | 114 |  82 | <n> + 1  | grr.R 
+✔ | 110 |   1 |   0 |   4 | 115 |  82 | <n> + 1  | grr.R 
+✔ | 111 |   1 |   0 |   4 | 116 |  82 | <n> + 1  | grr.R 
+✔ | 112 |   1 |   0 |   4 | 117 |  82 | <n> + 1  | grr.R 
+✔ | 113 |   1 |   0 |   4 | 118 |  82 | <n> + 1  | grr.R 
+✔ | 114 |   1 |   0 |   4 | 119 |  82 | <n> + 1  | grr.R 
+✔ | 115 |   1 |   0 |   4 | 120 |  82 | <n> + 1  | grr.R 
+✔ | 116 |   1 |   0 |   4 | 121 |  82 | <n> + 1  | grr.R 
+✔ | 117 |   1 |   0 |   4 | 122 |  82 | <n> + 1  | grr.R 
+✔ | 118 |   1 |   0 |   4 | 123 |  82 | <n> + 1  | grr.R 
+✔ | 119 |   1 |   0 |   4 | 124 |  82 | <n> + 1  | grr.R 
+✔ | 120 |   1 |   0 |   4 | 125 |  82 | <n> + 1  | grr.R 
+✔ | 121 |   1 |   0 |   4 | 126 |  82 | <n> + 1  | grr.R 
+✔ | 122 |   1 |   0 |   4 | 127 |  82 | <n> + 1  | grr.R 
+✔ | 123 |   1 |   0 |   4 | 128 |  82 | <non-emp | grr.R 
+✔ | 124 |   1 |   0 |   4 | 129 |  82 | <non-emp | grr.R 
+✔ | 125 |   1 |   0 |   4 | 130 |  82 | <non-emp | grr.R 
+✔ | 126 |   1 |   0 |   4 | 131 |  83 | <non-emp | grr.R 
+✔ | 127 |   1 |   0 |   4 | 132 |  83 | <non-emp | grr.R 
+✔ | 128 |   1 |   0 |   4 | 133 |  83 | <non-emp | grr.R 
+✔ | 129 |   1 |   0 |   4 | 134 |  83 | <non-emp | grr.R 
+✔ | 130 |   1 |   0 |   4 | 135 |  83 | <non-emp | grr.R 
+✔ | 131 |   1 |   0 |   4 | 136 |  83 | <non-emp | grr.R 
+✔ | 132 |   1 |   0 |   4 | 137 |  83 | <non-emp | grr.R 
+✔ | 133 |   1 |   0 |   4 | 138 |  83 | <non-emp | grr.R 
+✔ | 134 |   1 |   0 |   4 | 139 |  83 | <non-emp | grr.R 
+✔ | 135 |   1 |   0 |   4 | 140 |  83 | <non-emp | grr.R 
+✔ | 136 |   1 |   0 |   4 | 141 |  83 | <non-emp | grr.R 
+✔ | 137 |   1 |   0 |   4 | 142 |  83 | <non-emp | grr.R 
+✔ | 138 |   1 |   0 |   4 | 143 |  83 | <non-emp | grr.R 
+✔ | 139 |   1 |   0 |   4 | 144 |  83 | <non-emp | grr.R 
+✔ | 140 |   1 |   0 |   4 | 145 |  83 | <non-emp | grr.R 
+✔ | 141 |   1 |   0 |   4 | 146 |  83 | <non-emp | grr.R 
+✔ | 142 |   1 |   0 |   4 | 147 |  83 | <non-emp | grr.R 
+✔ | 143 |   1 |   0 |   4 | 148 |  83 | <non-emp | grr.R 
+✔ | 144 |   1 |   0 |   4 | 149 |  83 | <non-emp | grr.R 
+✔ | 145 |   1 |   0 |   4 | 150 |  83 | <non-emp | grr.R 
+x | 145 |   1 |   0 |   5 | 151 |  83 | <non-emp | grr.R 
+x | 145 |   1 |   0 |   6 | 152 |  83 | <non-emp | grr.R 
+x | 145 |   1 |   0 |   7 | 153 |  83 | <non-emp | grr.R 
+✔ | 146 |   1 |   0 |   7 | 154 |  84 | <non-emp | grr.R 
+✔ | 147 |   1 |   0 |   7 | 155 |  84 | <non-emp | grr.R 
+✔ | 148 |   1 |   0 |   7 | 156 |  84 | <non-emp | grr.R 
+✔ | 149 |   1 |   0 |   7 | 157 |  84 | <non-emp | grr.R 
+✔ | 150 |   1 |   0 |   7 | 158 |  84 | <non-emp | grr.R 
+✔ | 151 |   1 |   0 |   7 | 159 |  84 | <non-emp | grr.R 
+✔ | 152 |   1 |   0 |   7 | 160 |  84 | <non-emp | grr.R 
+x | 152 |   1 |   0 |   8 | 161 |  84 | <non-emp | grr.R 
+x | 152 |   1 |   0 |   9 | 162 |  84 | <non-emp | grr.R 
+✔ | 153 |   1 |   0 |   9 | 163 |  84 | <non-emp | grr.R 
+✔ | 154 |   1 |   0 |   9 | 164 |  84 | <non-emp | grr.R 
+✔ | 155 |   1 |   0 |   9 | 165 |  84 | <non-emp | grr.R 
+✔ | 156 |   1 |   0 |   9 | 166 |  84 | <non-emp | grr.R 
+✔ | 157 |   1 |   0 |   9 | 167 |  84 | <non-emp | grr.R 
+✔ | 158 |   1 |   0 |   9 | 168 |  84 | <non-emp | grr.R 
+✔ | 159 |   1 |   0 |   9 | 169 |  84 | <non-emp | grr.R 
+✔ | 160 |   1 |   0 |   9 | 170 |  84 | <non-emp | grr.R 
+✔ | 161 |   1 |   0 |   9 | 171 |  84 | <non-emp | grr.R 
+x | 161 |   1 |   0 |  10 | 172 |  84 | <non-emp | grr.R 
+x | 161 |   1 |   0 |  11 | 173 |  84 | <non-emp | grr.R 
+✔ | 162 |   1 |   0 |  11 | 174 |  84 | <non-emp | grr.R 
+x | 162 |   1 |   0 |  12 | 175 |  84 | <non-emp | grr.R 
+✔ | 163 |   1 |   0 |  12 | 176 |  84 | <non-emp | grr.R 
+x | 163 |   1 |   0 |  13 | 177 |  84 | <non-emp | grr.R 
+✔ | 164 |   1 |   0 |  13 | 178 |  84 | <non-emp | grr.R 
+✔ | 165 |   1 |   0 |  13 | 179 |  85 | <non-emp | grr.R 
+✔ | 166 |   1 |   0 |  13 | 180 |  85 | <non-emp | grr.R 
+✔ | 167 |   1 |   0 |  13 | 181 |  85 | <non-emp | grr.R 
+x | 167 |   2 |   0 |  13 | 182 |  84 | <non-emp | grr.R 
+✔ | 168 |   2 |   0 |  13 | 183 |  84 | <non-emp | grr.R 
+✔ | 169 |   2 |   0 |  13 | 184 |  84 | <non-emp | grr.R 
+✔ | 170 |   2 |   0 |  13 | 185 |  84 | <non-emp | grr.R 
+✔ | 171 |   2 |   0 |  13 | 186 |  85 | <non-emp | grr.R 
+✔ | 172 |   2 |   0 |  13 | 187 |  85 | <non-emp | grr.R 
+✔ | 173 |   2 |   0 |  13 | 188 |  85 | <non-emp | grr.R 
+✔ | 174 |   2 |   0 |  13 | 189 |  85 | <non-emp | grr.R 
+✔ | 175 |   2 |   0 |  13 | 190 |  85 | <non-emp | grr.R 
+✔ | 176 |   2 |   0 |  13 | 191 |  85 | <non-emp | grr.R 
+✔ | 177 |   2 |   0 |  13 | 192 |  85 | <non-emp | grr.R 
+✔ | 178 |   2 |   0 |  13 | 193 |  85 | <non-emp | grr.R 
+✔ | 179 |   2 |   0 |  13 | 194 |  85 | <non-emp | grr.R 
+✔ | 180 |   2 |   0 |  13 | 195 |  85 | <non-emp | grr.R 
+✔ | 181 |   2 |   0 |  13 | 196 |  85 | <non-emp | grr.R 
+✔ | 182 |   2 |   0 |  13 | 197 |  85 | <non-emp | grr.R 
+✔ | 183 |   2 |   0 |  13 | 198 |  85 | <non-emp | grr.R 
+✔ | 184 |   2 |   0 |  13 | 199 |  85 | <non-emp | grr.R 
+✔ | 185 |   2 |   0 |  13 | 200 |  85 | <non-emp | grr.R 
+✔ | 186 |   2 |   0 |  13 | 201 |  85 | <non-emp | grr.R 
+✔ | 187 |   2 |   0 |  13 | 202 |  85 | <non-emp | grr.R 
+✔ | 188 |   2 |   0 |  13 | 203 |  85 | <non-emp | grr.R 
+✔ | 189 |   2 |   0 |  13 | 204 |  85 | <non-emp | grr.R 
+✔ | 190 |   2 |   0 |  13 | 205 |  85 | == → !=  | grr.R 
+✔ | 191 |   2 |   0 |  13 | 206 |  85 | == → !=  | grr.R 
+✔ | 192 |   2 |   0 |  13 | 207 |  85 | == → !=  | grr.R 
+✔ | 193 |   2 |   0 |  13 | 208 |  85 | == → !=  | grr.R 
+✔ | 194 |   2 |   0 |  13 | 209 |  85 | == → !=  | grr.R 
+✔ | 195 |   2 |   0 |  13 | 210 |  85 | == → !=  | grr.R 
+✔ | 196 |   2 |   0 |  13 | 211 |  85 | > → <    | grr.R 
+✔ | 197 |   2 |   0 |  13 | 212 |  85 | > → <    | grr.R 
+✔ | 198 |   2 |   0 |  13 | 213 |  85 | > → <    | grr.R 
+x | 198 |   2 |   0 |  14 | 214 |  85 | > → >=   | grr.R 
+x | 198 |   3 |   0 |  14 | 215 |  85 | > → >=   | grr.R 
+✔ | 199 |   3 |   0 |  14 | 216 |  85 | > → >=   | grr.R 
+✔ | 200 |   3 |   0 |  14 | 217 |  85 | || → &&  | grr.R 
+✔ | 201 |   3 |   0 |  14 | 218 |  85 | || → &&  | grr.R 
+✔ | 202 |   3 |   0 |  14 | 219 |  85 | || → &&  | grr.R 
+✔ | 203 |   3 |   0 |  14 | 220 |  85 | || → &&  | grr.R 
+✔ | 204 |   3 |   0 |  14 | 221 |  85 | || → &&  | grr.R 
+✔ | 205 |   3 |   0 |  14 | 222 |  86 | || → &&  | grr.R 
+✔ | 206 |   3 |   0 |  14 | 223 |  86 | FALSE →  | grr.R 
+✔ | 207 |   3 |   0 |  14 | 224 |  86 | FALSE →  | grr.R 
+✔ | 208 |   3 |   0 |  14 | 225 |  86 | FALSE →  | grr.R 
+✔ | 209 |   3 |   0 |  14 | 226 |  86 | FALSE →  | grr.R 
+✔ | 210 |   3 |   0 |  14 | 227 |  86 | FALSE →  | grr.R 
+✔ | 211 |   3 |   0 |  14 | 228 |  86 | FALSE →  | grr.R 
+✔ | 212 |   3 |   0 |  14 | 229 |  86 | FALSE →  | grr.R 
+✔ | 213 |   3 |   0 |  14 | 230 |  86 | FALSE →  | grr.R 
+x | 213 |   3 |   0 |  15 | 231 |  86 | FALSE →  | grr.R 
+✔ | 214 |   3 |   0 |  15 | 232 |  86 | FALSE →  | grr.R 
+✔ | 215 |   3 |   0 |  15 | 233 |  86 | FALSE →  | grr.R 
+x | 215 |   4 |   0 |  15 | 234 |  86 | NA_real_ | grr.R 
+x | 215 |   5 |   0 |  15 | 235 |  85 | NA_real_ | grr.R 
+x | 215 |   6 |   0 |  15 | 236 |  85 | NA_real_ | grr.R 
+✔ | 216 |   6 |   0 |  15 | 237 |  85 | NULL → N | grr.R 
+✔ | 217 |   6 |   0 |  15 | 238 |  85 | NULL → N | grr.R 
+✔ | 218 |   6 |   0 |  15 | 239 |  85 | NULL → N | grr.R 
+✔ | 219 |   6 |   0 |  15 | 240 |  85 | TRUE → F | grr.R 
+✔ | 220 |   6 |   0 |  15 | 241 |  85 | x[<i>] → | grr.R 
+✔ | 221 |   6 |   0 |  15 | 242 |  85 | x[<i>] → | grr.R 
+✔ | 222 |   6 |   0 |  15 | 243 |  85 | x[<i>] → | grr.R 
+✔ | 223 |   6 |   0 |  15 | 244 |  86 | x[<i>] → | grr.R 
+✔ | 224 |   6 |   0 |  15 | 245 |  86 | x[<i>] → | grr.R 
+✔ | 225 |   6 |   0 |  15 | 246 |  86 | x[<i>] → | grr.R 
+✔ | 226 |   6 |   0 |  15 | 247 |  86 | x[<i>] → | grr.R 
+✔ | 227 |   6 |   0 |  15 | 248 |  86 | x[<i>] → | grr.R 
+✔ | 228 |   6 |   0 |  15 | 249 |  86 | x[<i>] → | grr.R 
+✔ | 229 |   6 |   0 |  15 | 250 |  86 | x[<i>] → | grr.R 
+✔ | 230 |   6 |   0 |  15 | 251 |  86 | x[<i>] → | grr.R 
+✔ | 231 |   6 |   0 |  15 | 252 |  86 | x[<i>] → | grr.R 
+✔ | 232 |   6 |   0 |  15 | 253 |  86 | x[<i>] → | grr.R 
+✔ | 233 |   6 |   0 |  15 | 254 |  86 | x[<i>] → | grr.R 
+✔ | 234 |   6 |   0 |  15 | 255 |  86 | x[<i>] → | grr.R 
+✔ | 235 |   6 |   0 |  15 | 256 |  86 | x[<i>] → | grr.R 
+✔ | 236 |   6 |   0 |  15 | 257 |  86 | x[<i>] → | grr.R 
+✔ | 237 |   6 |   0 |  15 | 258 |  86 | x[<i>] → | grr.R 
+✔ | 238 |   6 |   0 |  15 | 259 |  86 | x[<i>] → | grr.R 
+✔ | 239 |   6 |   0 |  15 | 260 |  86 | x[<i>] → | grr.R 
+✔ |   1 |   0 |   0 |   0 |   1 |  86 | - → +    | parse.R 
+✔ |   2 |   0 |   0 |   0 |   2 |  86 | - → +    | parse.R 
+✔ |   3 |   0 |   0 |   0 |   3 |  86 | !<condit | parse.R 
+✔ |   4 |   0 |   0 |   0 |   4 |  86 | !<condit | parse.R 
+✔ |   5 |   0 |   0 |   0 |   5 |  86 | !<condit | parse.R 
+✔ |   6 |   0 |   0 |   0 |   6 |  86 | !<condit | parse.R 
+✔ |   7 |   0 |   0 |   0 |   7 |  86 | !<condit | parse.R 
+✔ |   8 |   0 |   0 |   0 |   8 |  86 | != → ==  | parse.R 
+✔ |   9 |   0 |   0 |   0 |   9 |  86 | != → ==  | parse.R 
+✔ |  10 |   0 |   0 |   0 |  10 |  86 | != → ==  | parse.R 
+✔ |  11 |   0 |   0 |   0 |  11 |  86 | != → ==  | parse.R 
+✔ |  12 |   0 |   0 |   0 |  12 |  86 | "" → "mu | parse.R 
+✔ |  13 |   0 |   0 |   0 |  13 |  86 | "" → "mu | parse.R 
+✔ |  14 |   0 |   0 |   0 |  14 |  86 | && → ||  | parse.R 
+✔ |  15 |   0 |   0 |   0 |  15 |  86 | && → ||  | parse.R 
+x |  15 |   1 |   0 |   0 |  16 |  86 | + → -    | parse.R 
+x |  15 |   1 |   0 |   1 |  17 |  86 | + → -    | parse.R 
+✔ |  16 |   1 |   0 |   1 |  18 |  86 | + → -    | parse.R 
+✔ |  17 |   1 |   0 |   1 |  19 |  86 | < → >    | parse.R 
+x |  17 |   2 |   0 |   1 |  20 |  86 | < → <=   | parse.R 
+x |  17 |   2 |   0 |   2 |  21 |  86 | <= → >=  | parse.R 
+✔ |  18 |   2 |   0 |   2 |  22 |  86 | <= → >=  | parse.R 
+✔ |  19 |   2 |   0 |   2 |  23 |  86 | <= → <   | parse.R 
+✔ |  20 |   2 |   0 |   2 |  24 |  86 | <= → <   | parse.R 
+x |  20 |   3 |   0 |   2 |  25 |  86 | <conditi | parse.R 
+✔ |  21 |   3 |   0 |   2 |  26 |  86 | <conditi | parse.R 
+✔ |  22 |   3 |   0 |   2 |  27 |  86 | <conditi | parse.R 
+✔ |  23 |   3 |   0 |   2 |  28 |  86 | <conditi | parse.R 
+✔ |  24 |   3 |   0 |   2 |  29 |  86 | <conditi | parse.R 
+✔ |  25 |   3 |   0 |   2 |  30 |  86 | <conditi | parse.R 
+✔ |  26 |   3 |   0 |   2 |  31 |  86 | <conditi | parse.R 
+✔ |  27 |   3 |   0 |   2 |  32 |  86 | <conditi | parse.R 
+✔ |  28 |   3 |   0 |   2 |  33 |  86 | <conditi | parse.R 
+x |  28 |   3 |   0 |   3 |  34 |  86 | <conditi | parse.R 
+x |  28 |   3 |   0 |   4 |  35 |  86 | <conditi | parse.R 
+✔ |  29 |   3 |   0 |   4 |  36 |  86 | <conditi | parse.R 
+✔ |  30 |   3 |   0 |   4 |  37 |  86 | <conditi | parse.R 
+✔ |  31 |   3 |   0 |   4 |  38 |  86 | <conditi | parse.R 
+✔ |  32 |   3 |   0 |   4 |  39 |  86 | <conditi | parse.R 
+✔ |  33 |   3 |   0 |   4 |  40 |  86 | <conditi | parse.R 
+✔ |  34 |   3 |   0 |   4 |  41 |  86 | <conditi | parse.R 
+✔ |  35 |   3 |   0 |   4 |  42 |  86 | <conditi | parse.R 
+✔ |  36 |   3 |   0 |   4 |  43 |  87 | <conditi | parse.R 
+✔ |  37 |   3 |   0 |   4 |  44 |  87 | <conditi | parse.R 
+✔ |  38 |   3 |   0 |   4 |  45 |  87 | <conditi | parse.R 
+✔ |  39 |   3 |   0 |   4 |  46 |  87 | <conditi | parse.R 
+✔ |  40 |   3 |   0 |   4 |  47 |  87 | <conditi | parse.R 
+✔ |  41 |   3 |   0 |   4 |  48 |  87 | <conditi | parse.R 
+✔ |  42 |   3 |   0 |   4 |  49 |  87 | <conditi | parse.R 
+✔ |  43 |   3 |   0 |   4 |  50 |  87 | <conditi | parse.R 
+✔ |  44 |   3 |   0 |   4 |  51 |  87 | <conditi | parse.R 
+x |  44 |   4 |   0 |   4 |  52 |  87 | <n> - 1  | parse.R 
+✔ |  45 |   4 |   0 |   4 |  53 |  87 | <n> - 1  | parse.R 
+✔ |  46 |   4 |   0 |   4 |  54 |  87 | <n> - 1  | parse.R 
+x |  46 |   5 |   0 |   4 |  55 |  86 | <n> + 1  | parse.R 
+✔ |  47 |   5 |   0 |   4 |  56 |  86 | <n> + 1  | parse.R 
+✔ |  48 |   5 |   0 |   4 |  57 |  86 | <n> + 1  | parse.R 
+✔ |  49 |   5 |   0 |   4 |  58 |  86 | <non-emp | parse.R 
+✔ |  50 |   5 |   0 |   4 |  59 |  87 | <non-emp | parse.R 
+✔ |  51 |   5 |   0 |   4 |  60 |  87 | <non-emp | parse.R 
+✔ |  52 |   5 |   0 |   4 |  61 |  87 | <non-emp | parse.R 
+✔ |  53 |   5 |   0 |   4 |  62 |  87 | <non-emp | parse.R 
+✔ |  54 |   5 |   0 |   4 |  63 |  87 | <non-emp | parse.R 
+✔ |  55 |   5 |   0 |   4 |  64 |  87 | <non-emp | parse.R 
+✔ |  56 |   5 |   0 |   4 |  65 |  87 | <non-emp | parse.R 
+✔ |  57 |   5 |   0 |   4 |  66 |  87 | <non-emp | parse.R 
+✔ |  58 |   5 |   0 |   4 |  67 |  87 | <non-emp | parse.R 
+✔ |  59 |   5 |   0 |   4 |  68 |  87 | <non-emp | parse.R 
+✔ |  60 |   5 |   0 |   4 |  69 |  87 | <non-emp | parse.R 
+✔ |  61 |   5 |   0 |   4 |  70 |  87 | <non-emp | parse.R 
+✔ |  62 |   5 |   0 |   4 |  71 |  87 | <non-emp | parse.R 
+✔ |  63 |   5 |   0 |   4 |  72 |  87 | <non-emp | parse.R 
+✔ |  64 |   5 |   0 |   4 |  73 |  87 | <non-emp | parse.R 
+✔ |  65 |   5 |   0 |   4 |  74 |  87 | <non-emp | parse.R 
+✔ |  66 |   5 |   0 |   4 |  75 |  87 | <non-emp | parse.R 
+✔ |  67 |   5 |   0 |   4 |  76 |  87 | == → !=  | parse.R 
+✔ |  68 |   5 |   0 |   4 |  77 |  87 | == → !=  | parse.R 
+✔ |  69 |   5 |   0 |   4 |  78 |  87 | == → !=  | parse.R 
+✔ |  70 |   5 |   0 |   4 |  79 |  87 | == → !=  | parse.R 
+✔ |  71 |   5 |   0 |   4 |  80 |  87 | == → !=  | parse.R 
+✔ |  72 |   5 |   0 |   4 |  81 |  87 | == → !=  | parse.R 
+✔ |  73 |   5 |   0 |   4 |  82 |  87 | == → !=  | parse.R 
+✔ |  74 |   5 |   0 |   4 |  83 |  87 | == → !=  | parse.R 
+x |  74 |   6 |   0 |   4 |  84 |  87 | || → &&  | parse.R 
+x |  74 |   6 |   0 |   5 |  85 |  87 | || → &&  | parse.R 
+x |  74 |   6 |   0 |   6 |  86 |  87 | || → &&  | parse.R 
+✔ |  75 |   6 |   0 |   6 |  87 |  87 | || → &&  | parse.R 
+✔ |  76 |   6 |   0 |   6 |  88 |  87 | || → &&  | parse.R 
+x |  76 |   6 |   0 |   7 |  89 |  87 | || → &&  | parse.R 
+x |  76 |   6 |   0 |   8 |  90 |  87 | || → &&  | parse.R 
+x |  76 |   7 |   0 |   8 |  91 |  87 | || → &&  | parse.R 
+x |  76 |   8 |   0 |   8 |  92 |  87 | || → &&  | parse.R 
+x |  76 |   9 |   0 |   8 |  93 |  87 | || → &&  | parse.R 
+✔ |  77 |   9 |   0 |   8 |  94 |  87 | || → &&  | parse.R 
+✔ |  78 |   9 |   0 |   8 |  95 |  87 | || → &&  | parse.R 
+✔ |  79 |   9 |   0 |   8 |  96 |  87 | FALSE →  | parse.R 
+✔ |  80 |   9 |   0 |   8 |  97 |  87 | FALSE →  | parse.R 
+✔ |  81 |   9 |   0 |   8 |  98 |  87 | FALSE →  | parse.R 
+✔ |  82 |   9 |   0 |   8 |  99 |  87 | FALSE →  | parse.R 
+x |  82 |  10 |   0 |   8 | 100 |  87 | FALSE →  | parse.R 
+✔ |  83 |  10 |   0 |   8 | 101 |  87 | FALSE →  | parse.R 
+✔ |  84 |  10 |   0 |   8 | 102 |  87 | FALSE →  | parse.R 
+✔ |  85 |  10 |   0 |   8 | 103 |  87 | FALSE →  | parse.R 
+x |  85 |  11 |   0 |   8 | 104 |  86 | NA_chara | parse.R 
+✔ |  86 |  11 |   0 |   8 | 105 |  87 | NA_chara | parse.R 
+✔ |  87 |  11 |   0 |   8 | 106 |  87 | NA_chara | parse.R 
+x |  87 |  12 |   0 |   8 | 107 |  86 | NA_chara | parse.R 
+x |  87 |  13 |   0 |   8 | 108 |  86 | NA_chara | parse.R 
+✔ |  88 |  13 |   0 |   8 | 109 |  86 | NA_chara | parse.R 
+✔ |  89 |  13 |   0 |   8 | 110 |  86 | NA_chara | parse.R 
+✔ |  90 |  13 |   0 |   8 | 111 |  86 | NA_chara | parse.R 
+✔ |  91 |  13 |   0 |   8 | 112 |  86 | NA_chara | parse.R 
+✔ |  92 |  13 |   0 |   8 | 113 |  86 | NA_chara | parse.R 
+x |  92 |  14 |   0 |   8 | 114 |  86 | NA_chara | parse.R 
+x |  92 |  15 |   0 |   8 | 115 |  86 | NA_integ | parse.R 
+✔ |  93 |  15 |   0 |   8 | 116 |  86 | NA_real_ | parse.R 
+✔ |  94 |  15 |   0 |   8 | 117 |  86 | NA_real_ | parse.R 
+x |  94 |  16 |   0 |   8 | 118 |  86 | NULL → N | parse.R 
+✔ |  95 |  16 |   0 |   8 | 119 |  86 | NULL → N | parse.R 
+x |  95 |  17 |   0 |   8 | 120 |  86 | TRUE → F | parse.R 
+x |  95 |  18 |   0 |   8 | 121 |  86 | TRUE → F | parse.R 
+✔ |  96 |  18 |   0 |   8 | 122 |  86 | TRUE → F | parse.R 
+x |  96 |  19 |   0 |   8 | 123 |  86 | TRUE → F | parse.R 
+x |  96 |  20 |   0 |   8 | 124 |  85 | TRUE → F | parse.R 
+✔ |  97 |  20 |   0 |   8 | 125 |  85 | TRUE → F | parse.R 
+x |  97 |  21 |   0 |   8 | 126 |  85 | TRUE → F | parse.R 
+✔ |  98 |  21 |   0 |   8 | 127 |  85 | TRUE → F | parse.R 
+✔ |  99 |  21 |   0 |   8 | 128 |  85 | TRUE → F | parse.R 
+x |  99 |  22 |   0 |   8 | 129 |  85 | TRUE → F | parse.R 
+x |  99 |  23 |   0 |   8 | 130 |  85 | x[<i>] → | parse.R 
+✔ | 100 |  23 |   0 |   8 | 131 |  85 | x[<i>] → | parse.R 
+✔ | 101 |  23 |   0 |   8 | 132 |  85 | x[<i>] → | parse.R 
+✔ | 102 |  23 |   0 |   8 | 133 |  85 | x[<i>] → | parse.R 
+✔ | 103 |  23 |   0 |   8 | 134 |  85 | x[<i>] → | parse.R 
+✔ | 104 |  23 |   0 |   8 | 135 |  85 | x[<i>] → | parse.R 
+✔ | 105 |  23 |   0 |   8 | 136 |  85 | x[<i>] → | parse.R 
+✔ | 106 |  23 |   0 |   8 | 137 |  85 | x[<i>] → | parse.R 
+✔ | 107 |  23 |   0 |   8 | 138 |  85 | x[<i>] → | parse.R 
+✔ | 108 |  23 |   0 |   8 | 139 |  85 | x[<i>] → | parse.R 
+✔ | 109 |  23 |   0 |   8 | 140 |  85 | x[<i>] → | parse.R 
+x | 109 |  24 |   0 |   8 | 141 |  85 | x[<i>] → | parse.R 
+✔ | 110 |  24 |   0 |   8 | 142 |  85 | x[<i>] → | parse.R 
+✔ | 111 |  24 |   0 |   8 | 143 |  85 | x[<i>] → | parse.R 
+✔ | 112 |  24 |   0 |   8 | 144 |  85 | x[<i>] → | parse.R 
+✔ | 113 |  24 |   0 |   8 | 145 |  85 | x[<i>] → | parse.R 
+✔ | 114 |  24 |   0 |   8 | 146 |  85 | x[<i>] → | parse.R 
+✔ | 115 |  24 |   0 |   8 | 147 |  85 | x[<i>] → | parse.R 
+✔ | 116 |  24 |   0 |   8 | 148 |  85 | x[<i>] → | parse.R 
+✔ | 117 |  24 |   0 |   8 | 149 |  85 | x[<i>] → | parse.R 
+✔ | 118 |  24 |   0 |   8 | 150 |  85 | x[<i>] → | parse.R 
+✔ | 119 |  24 |   0 |   8 | 151 |  85 | x[<i>] → | parse.R 
+✔ |   1 |   0 |   0 |   0 |   1 |  85 | !<condit | report-data.R 
+✔ |   2 |   0 |   0 |   0 |   2 |  85 | !<condit | report-data.R 
+✔ |   3 |   0 |   0 |   0 |   3 |  85 | !<condit | report-data.R 
+x |   3 |   1 |   0 |   0 |   4 |  85 | != → ==  | report-data.R 
+✔ |   4 |   1 |   0 |   0 |   5 |  85 | != → ==  | report-data.R 
+✔ |   5 |   1 |   0 |   0 |   6 |  85 | "" → "mu | report-data.R 
+x |   5 |   2 |   0 |   0 |   7 |  85 | "" → "mu | report-data.R 
+x |   5 |   3 |   0 |   0 |   8 |  85 | "" → "mu | report-data.R 
+✔ |   6 |   3 |   0 |   0 |   9 |  85 | & → |    | report-data.R 
+x |   6 |   4 |   0 |   0 |  10 |  85 | & → |    | report-data.R 
+✔ |   7 |   4 |   0 |   0 |  11 |  85 | && → ||  | report-data.R 
+x |   7 |   5 |   0 |   0 |  12 |  85 | && → ||  | report-data.R 
+x |   7 |   6 |   0 |   0 |  13 |  85 | && → ||  | report-data.R 
+x |   7 |   7 |   0 |   0 |  14 |  85 | && → ||  | report-data.R 
+x |   7 |   8 |   0 |   0 |  15 |  85 | && → ||  | report-data.R 
+✔ |   8 |   8 |   0 |   0 |  16 |  85 | + → -    | report-data.R 
+✔ |   9 |   8 |   0 |   0 |  17 |  85 | + → -    | report-data.R 
+✔ |  10 |   8 |   0 |   0 |  18 |  85 | <conditi | report-data.R 
+✔ |  11 |   8 |   0 |   0 |  19 |  85 | <conditi | report-data.R 
+✔ |  12 |   8 |   0 |   0 |  20 |  85 | <conditi | report-data.R 
+x |  12 |   9 |   0 |   0 |  21 |  85 | <conditi | report-data.R 
+✔ |  13 |   9 |   0 |   0 |  22 |  85 | <conditi | report-data.R 
+✔ |  14 |   9 |   0 |   0 |  23 |  85 | <conditi | report-data.R 
+✔ |  15 |   9 |   0 |   0 |  24 |  85 | <conditi | report-data.R 
+✔ |  16 |   9 |   0 |   0 |  25 |  85 | <conditi | report-data.R 
+✔ |  17 |   9 |   0 |   0 |  26 |  85 | <conditi | report-data.R 
+✔ |  18 |   9 |   0 |   0 |  27 |  85 | <conditi | report-data.R 
+✔ |  19 |   9 |   0 |   0 |  28 |  85 | <conditi | report-data.R 
+✔ |  20 |   9 |   0 |   0 |  29 |  85 | <conditi | report-data.R 
+✔ |  21 |   9 |   0 |   0 |  30 |  85 | <conditi | report-data.R 
+✔ |  22 |   9 |   0 |   0 |  31 |  85 | <conditi | report-data.R 
+✔ |  23 |   9 |   0 |   0 |  32 |  85 | <conditi | report-data.R 
+x |  23 |   9 |   0 |   1 |  33 |  85 | <conditi | report-data.R 
+✔ |  24 |   9 |   0 |   1 |  34 |  85 | <conditi | report-data.R 
+✔ |  25 |   9 |   0 |   1 |  35 |  85 | <conditi | report-data.R 
+✔ |  26 |   9 |   0 |   1 |  36 |  85 | <conditi | report-data.R 
+✔ |  27 |   9 |   0 |   1 |  37 |  85 | <conditi | report-data.R 
+x |  27 |  10 |   0 |   1 |  38 |  85 | <conditi | report-data.R 
+✔ |  28 |  10 |   0 |   1 |  39 |  85 | <conditi | report-data.R 
+✔ |  29 |  10 |   0 |   1 |  40 |  85 | <n> - 1  | report-data.R 
+✔ |  30 |  10 |   0 |   1 |  41 |  85 | <n> - 1  | report-data.R 
+✔ |  31 |  10 |   0 |   1 |  42 |  85 | <n> + 1  | report-data.R 
+✔ |  32 |  10 |   0 |   1 |  43 |  85 | <n> + 1  | report-data.R 
+✔ |  33 |  10 |   0 |   1 |  44 |  85 | <non-emp | report-data.R 
+✔ |  34 |  10 |   0 |   1 |  45 |  85 | <non-emp | report-data.R 
+✔ |  35 |  10 |   0 |   1 |  46 |  85 | <non-emp | report-data.R 
+✔ |  36 |  10 |   0 |   1 |  47 |  85 | <non-emp | report-data.R 
+✔ |  37 |  10 |   0 |   1 |  48 |  85 | <non-emp | report-data.R 
+✔ |  38 |  10 |   0 |   1 |  49 |  85 | <non-emp | report-data.R 
+✔ |  39 |  10 |   0 |   1 |  50 |  85 | <non-emp | report-data.R 
+✔ |  40 |  10 |   0 |   1 |  51 |  85 | <non-emp | report-data.R 
+x |  40 |  11 |   0 |   1 |  52 |  85 | <non-emp | report-data.R 
+x |  40 |  12 |   0 |   1 |  53 |  85 | <non-emp | report-data.R 
+✔ |  41 |  12 |   0 |   1 |  54 |  85 | <non-emp | report-data.R 
+✔ |  42 |  12 |   0 |   1 |  55 |  85 | <non-emp | report-data.R 
+✔ |  43 |  12 |   0 |   1 |  56 |  85 | <non-emp | report-data.R 
+✔ |  44 |  12 |   0 |   1 |  57 |  85 | <non-emp | report-data.R 
+✔ |  45 |  12 |   0 |   1 |  58 |  85 | <non-emp | report-data.R 
+x |  45 |  13 |   0 |   1 |  59 |  85 | <non-emp | report-data.R 
+✔ |  46 |  13 |   0 |   1 |  60 |  85 | <non-emp | report-data.R 
+✔ |  47 |  13 |   0 |   1 |  61 |  85 | <non-emp | report-data.R 
+✔ |  48 |  13 |   0 |   1 |  62 |  85 | <non-emp | report-data.R 
+✔ |  49 |  13 |   0 |   1 |  63 |  85 | <non-emp | report-data.R 
+✔ |  50 |  13 |   0 |   1 |  64 |  85 | <non-emp | report-data.R 
+✔ |  51 |  13 |   0 |   1 |  65 |  85 | <non-emp | report-data.R 
+✔ |  52 |  13 |   0 |   1 |  66 |  85 | <non-emp | report-data.R 
+x |  52 |  14 |   0 |   1 |  67 |  85 | <non-emp | report-data.R 
+✔ |  53 |  14 |   0 |   1 |  68 |  85 | <non-emp | report-data.R 
+✔ |  54 |  14 |   0 |   1 |  69 |  85 | <non-emp | report-data.R 
+✔ |  55 |  14 |   0 |   1 |  70 |  85 | <non-emp | report-data.R 
+x |  55 |  15 |   0 |   1 |  71 |  85 | <non-emp | report-data.R 
+✔ |  56 |  15 |   0 |   1 |  72 |  85 | <non-emp | report-data.R 
+✔ |  57 |  15 |   0 |   1 |  73 |  85 | <non-emp | report-data.R 
+✔ |  58 |  15 |   0 |   1 |  74 |  85 | <non-emp | report-data.R 
+x |  58 |  16 |   0 |   1 |  75 |  85 | <non-emp | report-data.R 
+✔ |  59 |  16 |   0 |   1 |  76 |  85 | <non-emp | report-data.R 
+✔ |  60 |  16 |   0 |   1 |  77 |  85 | <non-emp | report-data.R 
+✔ |  61 |  16 |   0 |   1 |  78 |  85 | <non-emp | report-data.R 
+✔ |  62 |  16 |   0 |   1 |  79 |  85 | <non-emp | report-data.R 
+✔ |  63 |  16 |   0 |   1 |  80 |  85 | <non-emp | report-data.R 
+✔ |  64 |  16 |   0 |   1 |  81 |  85 | <non-emp | report-data.R 
+✔ |  65 |  16 |   0 |   1 |  82 |  85 | <non-emp | report-data.R 
+✔ |  66 |  16 |   0 |   1 |  83 |  85 | <non-emp | report-data.R 
+x |  66 |  17 |   0 |   1 |  84 |  85 | <non-emp | report-data.R 
+x |  66 |  18 |   0 |   1 |  85 |  85 | <non-emp | report-data.R 
+✔ |  67 |  18 |   0 |   1 |  86 |  85 | <non-emp | report-data.R 
+✔ |  68 |  18 |   0 |   1 |  87 |  85 | <non-emp | report-data.R 
+✔ |  69 |  18 |   0 |   1 |  88 |  85 | <non-emp | report-data.R 
+x |  69 |  19 |   0 |   1 |  89 |  85 | <non-emp | report-data.R 
+✔ |  70 |  19 |   0 |   1 |  90 |  85 | <non-emp | report-data.R 
+✔ |  71 |  19 |   0 |   1 |  91 |  85 | == → !=  | report-data.R 
+✔ |  72 |  19 |   0 |   1 |  92 |  85 | || → &&  | report-data.R 
+x |  72 |  19 |   0 |   2 |  93 |  85 | || → &&  | report-data.R 
+✔ |  73 |  19 |   0 |   2 |  94 |  85 | || → &&  | report-data.R 
+✔ |  74 |  19 |   0 |   2 |  95 |  85 | || → &&  | report-data.R 
+✔ |  75 |  19 |   0 |   2 |  96 |  85 | || → &&  | report-data.R 
+x |  75 |  20 |   0 |   2 |  97 |  85 | FALSE →  | report-data.R 
+✔ |  76 |  20 |   0 |   2 |  98 |  85 | FALSE →  | report-data.R 
+✔ |  77 |  20 |   0 |   2 |  99 |  85 | FALSE →  | report-data.R 
+✔ |  78 |  20 |   0 |   2 | 100 |  85 | FALSE →  | report-data.R 
+✔ |  79 |  20 |   0 |   2 | 101 |  85 | FALSE →  | report-data.R 
+x |  79 |  21 |   0 |   2 | 102 |  85 | FALSE →  | report-data.R 
+x |  79 |  22 |   0 |   2 | 103 |  84 | FALSE →  | report-data.R 
+x |  79 |  23 |   0 |   2 | 104 |  84 | FALSE →  | report-data.R 
+x |  79 |  24 |   0 |   2 | 105 |  84 | FALSE →  | report-data.R 
+✔ |  80 |  24 |   0 |   2 | 106 |  84 | FALSE →  | report-data.R 
+x |  80 |  25 |   0 |   2 | 107 |  84 | NA_chara | report-data.R 
+x |  80 |  26 |   0 |   2 | 108 |  84 | NA_chara | report-data.R 
+✔ |  81 |  26 |   0 |   2 | 109 |  84 | NULL → N | report-data.R 
+x |  81 |  26 |   0 |   3 | 110 |  84 | NULL → N | report-data.R 
+x |  81 |  27 |   0 |   3 | 111 |  84 | NULL → N | report-data.R 
+x |  81 |  27 |   0 |   4 | 112 |  84 | NULL → N | report-data.R 
+✔ |  82 |  27 |   0 |   4 | 113 |  84 | NULL → N | report-data.R 
+✔ |  83 |  27 |   0 |   4 | 114 |  84 | NULL → N | report-data.R 
+x |  83 |  28 |   0 |   4 | 115 |  84 | TRUE → F | report-data.R 
+x |  83 |  29 |   0 |   4 | 116 |  84 | TRUE → F | report-data.R 
+x |  83 |  30 |   0 |   4 | 117 |  84 | TRUE → F | report-data.R 
+x |  83 |  31 |   0 |   4 | 118 |  84 | TRUE → F | report-data.R 
+x |  83 |  32 |   0 |   4 | 119 |  83 | TRUE → F | report-data.R 
+x |  83 |  33 |   0 |   4 | 120 |  83 | TRUE → F | report-data.R 
+✔ |  84 |  33 |   0 |   4 | 121 |  83 | TRUE → F | report-data.R 
+x |  84 |  34 |   0 |   4 | 122 |  83 | TRUE → F | report-data.R 
+✔ |  85 |  34 |   0 |   4 | 123 |  83 | TRUE → F | report-data.R 
+x |  85 |  35 |   0 |   4 | 124 |  83 | TRUE → F | report-data.R 
+✔ |  86 |  35 |   0 |   4 | 125 |  83 | TRUE → F | report-data.R 
+✔ |  87 |  35 |   0 |   4 | 126 |  83 | TRUE → F | report-data.R 
+x |  87 |  36 |   0 |   4 | 127 |  83 | TRUE → F | report-data.R 
+✔ |  88 |  36 |   0 |   4 | 128 |  83 | x[<i>] → | report-data.R 
+✔ |  89 |  36 |   0 |   4 | 129 |  83 | x[<i>] → | report-data.R 
+✔ |  90 |  36 |   0 |   4 | 130 |  83 | x[<i>] → | report-data.R 
+✔ |  91 |  36 |   0 |   4 | 131 |  83 | x[<i>] → | report-data.R 
+✔ |  92 |  36 |   0 |   4 | 132 |  83 | x[<i>] → | report-data.R 
+✔ |  93 |  36 |   0 |   4 | 133 |  83 | x[<i>] → | report-data.R 
+✔ |  94 |  36 |   0 |   4 | 134 |  83 | x[<i>] → | report-data.R 
+✔ |  95 |  36 |   0 |   4 | 135 |  83 | x[<i>] → | report-data.R 
+✔ |  96 |  36 |   0 |   4 | 136 |  83 | x[<i>] → | report-data.R 
+✔ |  97 |  36 |   0 |   4 | 137 |  83 | x[<i>] → | report-data.R 
+✔ |  98 |  36 |   0 |   4 | 138 |  83 | x[<i>] → | report-data.R 
+✔ |  99 |  36 |   0 |   4 | 139 |  83 | x[<i>] → | report-data.R 
+✔ | 100 |  36 |   0 |   4 | 140 |  83 | x[<i>] → | report-data.R 
+✔ | 101 |  36 |   0 |   4 | 141 |  83 | x[<i>] → | report-data.R 
+✔ |   1 |   0 |   0 |   0 |   1 |  83 | !<condit | report.R 
+✔ |   2 |   0 |   0 |   0 |   2 |  83 | !<condit | report.R 
+✔ |   3 |   0 |   0 |   0 |   3 |  83 | !<condit | report.R 
+✔ |   4 |   0 |   0 |   0 |   4 |  83 | !<condit | report.R 
+✔ |   5 |   0 |   0 |   0 |   5 |  83 | !<condit | report.R 
+✔ |   6 |   0 |   0 |   0 |   6 |  83 | !<condit | report.R 
+x |   6 |   0 |   0 |   1 |   7 |  83 | !<condit | report.R 
+x |   6 |   0 |   0 |   2 |   8 |  84 | !<condit | report.R 
+x |   6 |   0 |   0 |   3 |   9 |  84 | !<condit | report.R 
+x |   6 |   0 |   0 |   4 |  10 |  84 | !<condit | report.R 
+x |   6 |   0 |   0 |   5 |  11 |  84 | !<condit | report.R 
+x |   6 |   0 |   0 |   6 |  12 |  84 | != → ==  | report.R 
+✔ |   7 |   0 |   0 |   6 |  13 |  84 | "" → "mu | report.R 
+✔ |   8 |   0 |   0 |   6 |  14 |  84 | "" → "mu | report.R 
+✔ |   9 |   0 |   0 |   6 |  15 |  84 | "" → "mu | report.R 
+✔ |  10 |   0 |   0 |   6 |  16 |  84 | "" → "mu | report.R 
+✔ |  11 |   0 |   0 |   6 |  17 |  84 | && → ||  | report.R 
+x |  11 |   0 |   0 |   7 |  18 |  84 | && → ||  | report.R 
+x |  11 |   0 |   0 |   8 |  19 |  84 | && → ||  | report.R 
+✔ |  12 |   0 |   0 |   8 |  20 |  84 | <conditi | report.R 
+✔ |  13 |   0 |   0 |   8 |  21 |  84 | <conditi | report.R 
+✔ |  14 |   0 |   0 |   8 |  22 |  84 | <conditi | report.R 
+✔ |  15 |   0 |   0 |   8 |  23 |  84 | <conditi | report.R 
+✔ |  16 |   0 |   0 |   8 |  24 |  84 | <conditi | report.R 
+✔ |  17 |   0 |   0 |   8 |  25 |  84 | <conditi | report.R 
+x |  17 |   0 |   0 |   9 |  26 |  84 | <conditi | report.R 
+x |  17 |   0 |   0 |  10 |  27 |  84 | <conditi | report.R 
+x |  17 |   0 |   0 |  11 |  28 |  84 | <conditi | report.R 
+x |  17 |   0 |   0 |  12 |  29 |  84 | <conditi | report.R 
+x |  17 |   0 |   0 |  13 |  30 |  84 | <conditi | report.R 
+x |  17 |   0 |   0 |  14 |  31 |  84 | <conditi | report.R 
+✔ |  18 |   0 |   0 |  14 |  32 |  84 | <n> - 1  | report.R 
+✔ |  19 |   0 |   0 |  14 |  33 |  84 | <n> - 1  | report.R 
+✔ |  20 |   0 |   0 |  14 |  34 |  84 | <n> - 1  | report.R 
+✔ |  21 |   0 |   0 |  14 |  35 |  84 | <n> + 1  | report.R 
+✔ |  22 |   0 |   0 |  14 |  36 |  84 | <n> + 1  | report.R 
+✔ |  23 |   0 |   0 |  14 |  37 |  84 | <n> + 1  | report.R 
+✔ |  24 |   0 |   0 |  14 |  38 |  84 | <non-emp | report.R 
+✔ |  25 |   0 |   0 |  14 |  39 |  84 | <non-emp | report.R 
+✔ |  26 |   0 |   0 |  14 |  40 |  84 | <non-emp | report.R 
+✔ |  27 |   0 |   0 |  14 |  41 |  84 | <non-emp | report.R 
+✔ |  28 |   0 |   0 |  14 |  42 |  84 | <non-emp | report.R 
+✔ |  29 |   0 |   0 |  14 |  43 |  84 | <non-emp | report.R 
+✔ |  30 |   0 |   0 |  14 |  44 |  84 | <non-emp | report.R 
+x |  30 |   1 |   0 |  14 |  45 |  84 | <non-emp | report.R 
+✔ |  31 |   1 |   0 |  14 |  46 |  84 | <non-emp | report.R 
+x |  31 |   1 |   0 |  15 |  47 |  84 | <non-emp | report.R 
+✔ |  32 |   1 |   0 |  15 |  48 |  84 | <non-emp | report.R 
+✔ |  33 |   1 |   0 |  15 |  49 |  84 | <non-emp | report.R 
+x |  33 |   2 |   0 |  15 |  50 |  84 | <non-emp | report.R 
+x |  33 |   3 |   0 |  15 |  51 |  84 | <non-emp | report.R 
+✔ |  34 |   3 |   0 |  15 |  52 |  84 | <non-emp | report.R 
+✔ |  35 |   3 |   0 |  15 |  53 |  84 | <non-emp | report.R 
+✔ |  36 |   3 |   0 |  15 |  54 |  84 | <non-emp | report.R 
+x |  36 |   4 |   0 |  15 |  55 |  84 | <non-emp | report.R 
+✔ |  37 |   4 |   0 |  15 |  56 |  84 | <non-emp | report.R 
+✔ |  38 |   4 |   0 |  15 |  57 |  84 | <non-emp | report.R 
+x |  38 |   5 |   0 |  15 |  58 |  84 | <non-emp | report.R 
+x |  38 |   6 |   0 |  15 |  59 |  84 | <non-emp | report.R 
+x |  38 |   7 |   0 |  15 |  60 |  84 | <non-emp | report.R 
+✔ |  39 |   7 |   0 |  15 |  61 |  84 | <non-emp | report.R 
+✔ |  40 |   7 |   0 |  15 |  62 |  84 | <non-emp | report.R 
+x |  40 |   7 |   0 |  16 |  63 |  84 | <non-emp | report.R 
+x |  40 |   7 |   0 |  17 |  64 |  84 | <non-emp | report.R 
+x |  40 |   7 |   0 |  18 |  65 |  84 | <non-emp | report.R 
+x |  40 |   7 |   0 |  19 |  66 |  84 | <non-emp | report.R 
+x |  40 |   7 |   0 |  20 |  67 |  84 | <non-emp | report.R 
+x |  40 |   7 |   0 |  21 |  68 |  84 | <non-emp | report.R 
+x |  40 |   8 |   0 |  21 |  69 |  84 | || → &&  | report.R 
+x |  40 |   9 |   0 |  21 |  70 |  84 | || → &&  | report.R 
+x |  40 |  10 |   0 |  21 |  71 |  84 | || → &&  | report.R 
+x |  40 |  11 |   0 |  21 |  72 |  83 | || → &&  | report.R 
+x |  40 |  11 |   0 |  22 |  73 |  83 | || → &&  | report.R 
+x |  40 |  11 |   0 |  23 |  74 |  83 | || → &&  | report.R 
+x |  40 |  11 |   0 |  24 |  75 |  83 | || → &&  | report.R 
+x |  40 |  12 |   0 |  24 |  76 |  83 | || → &&  | report.R 
+x |  40 |  13 |   0 |  24 |  77 |  83 | || → &&  | report.R 
+x |  40 |  14 |   0 |  24 |  78 |  83 | || → &&  | report.R 
+x |  40 |  15 |   0 |  24 |  79 |  83 | || → &&  | report.R 
+x |  40 |  15 |   0 |  25 |  80 |  83 | || → &&  | report.R 
+x |  40 |  16 |   0 |  25 |  81 |  83 | FALSE →  | report.R 
+x |  40 |  17 |   0 |  25 |  82 |  83 | FALSE →  | report.R 
+x |  40 |  18 |   0 |  25 |  83 |  83 | FALSE →  | report.R 
+x |  40 |  19 |   0 |  25 |  84 |  83 | FALSE →  | report.R 
+x |  40 |  20 |   0 |  25 |  85 |  83 | FALSE →  | report.R 
+x |  40 |  21 |   0 |  25 |  86 |  83 | FALSE →  | report.R 
+✔ |  41 |  21 |   0 |  25 |  87 |  83 | FALSE →  | report.R 
+x |  41 |  22 |   0 |  25 |  88 |  82 | FALSE →  | report.R 
+✔ |  42 |  22 |   0 |  25 |  89 |  82 | NULL → N | report.R 
+✔ |  43 |  22 |   0 |  25 |  90 |  82 | NULL → N | report.R 
+✔ |  44 |  22 |   0 |  25 |  91 |  83 | NULL → N | report.R 
+✔ |  45 |  22 |   0 |  25 |  92 |  83 | NULL → N | report.R 
+✔ |  46 |  22 |   0 |  25 |  93 |  83 | NULL → N | report.R 
+✔ |  47 |  22 |   0 |  25 |  94 |  83 | NULL → N | report.R 
+✔ |  48 |  22 |   0 |  25 |  95 |  83 | NULL → N | report.R 
+✔ |  49 |  22 |   0 |  25 |  96 |  83 | TRUE → F | report.R 
+x |  49 |  23 |   0 |  25 |  97 |  83 | TRUE → F | report.R 
+x |  49 |  24 |   0 |  25 |  98 |  82 | TRUE → F | report.R 
+x |  49 |  25 |   0 |  25 |  99 |  82 | TRUE → F | report.R 
+x |  49 |  26 |   0 |  25 | 100 |  82 | TRUE → F | report.R 
+x |  49 |  27 |   0 |  25 | 101 |  82 | TRUE → F | report.R 
+x |  49 |  28 |   0 |  25 | 102 |  82 | TRUE → F | report.R 
+x |   0 |   0 |   0 |   1 |   1 |  82 | - → +    | robustness.R 
+✔ |   1 |   0 |   0 |   1 |   2 |  82 | - → +    | robustness.R 
+✔ |   2 |   0 |   0 |   1 |   3 |  82 | - → +    | robustness.R 
+✔ |   3 |   0 |   0 |   1 |   4 |  82 | - → +    | robustness.R 
+✔ |   4 |   0 |   0 |   1 |   5 |  82 | - → +    | robustness.R 
+✔ |   5 |   0 |   0 |   1 |   6 |  82 | - → +    | robustness.R 
+✔ |   6 |   0 |   0 |   1 |   7 |  82 | - → +    | robustness.R 
+✔ |   7 |   0 |   0 |   1 |   8 |  82 | - → +    | robustness.R 
+✔ |   8 |   0 |   0 |   1 |   9 |  82 | - → +    | robustness.R 
+✔ |   9 |   0 |   0 |   1 |  10 |  82 | - → +    | robustness.R 
+✔ |  10 |   0 |   0 |   1 |  11 |  82 | !<condit | robustness.R 
+✔ |  11 |   0 |   0 |   1 |  12 |  82 | !<condit | robustness.R 
+x |  11 |   0 |   0 |   2 |  13 |  82 | !<condit | robustness.R 
+✔ |  12 |   0 |   0 |   2 |  14 |  82 | !<condit | robustness.R 
+x |  12 |   0 |   0 |   3 |  15 |  82 | !<condit | robustness.R 
+✔ |  13 |   0 |   0 |   3 |  16 |  82 | != → ==  | robustness.R 
+✔ |  14 |   0 |   0 |   3 |  17 |  82 | != → ==  | robustness.R 
+✔ |  15 |   0 |   0 |   3 |  18 |  82 | != → ==  | robustness.R 
+✔ |  16 |   0 |   0 |   3 |  19 |  82 | "" → "mu | robustness.R 
+✔ |  17 |   0 |   0 |   3 |  20 |  82 | "" → "mu | robustness.R 
+✔ |  18 |   0 |   0 |   3 |  21 |  82 | "" → "mu | robustness.R 
+✔ |  19 |   0 |   0 |   3 |  22 |  82 | "" → "mu | robustness.R 
+✔ |  20 |   0 |   0 |   3 |  23 |  82 | * → /    | robustness.R 
+✔ |  21 |   0 |   0 |   3 |  24 |  83 | * → /    | robustness.R 
+✔ |  22 |   0 |   0 |   3 |  25 |  83 | * → /    | robustness.R 
+✔ |  23 |   0 |   0 |   3 |  26 |  83 | * → /    | robustness.R 
+✔ |  24 |   0 |   0 |   3 |  27 |  83 | * → /    | robustness.R 
+x |  24 |   0 |   0 |   4 |  28 |  83 | * → /    | robustness.R 
+✔ |  25 |   0 |   0 |   4 |  29 |  83 | / → *    | robustness.R 
+✔ |  26 |   0 |   0 |   4 |  30 |  83 | / → *    | robustness.R 
+✔ |  27 |   0 |   0 |   4 |  31 |  83 | / → *    | robustness.R 
+✔ |  28 |   0 |   0 |   4 |  32 |  83 | / → *    | robustness.R 
+✔ |  29 |   0 |   0 |   4 |  33 |  83 | / → *    | robustness.R 
+x |  29 |   0 |   0 |   5 |  34 |  83 | / → *    | robustness.R 
+✔ |  30 |   0 |   0 |   5 |  35 |  83 | && → ||  | robustness.R 
+✔ |  31 |   0 |   0 |   5 |  36 |  83 | && → ||  | robustness.R 
+✔ |  32 |   0 |   0 |   5 |  37 |  83 | %% → *   | robustness.R 
+✔ |  33 |   0 |   0 |   5 |  38 |  83 | ^ → *    | robustness.R 
+✔ |  34 |   0 |   0 |   5 |  39 |  83 | + → -    | robustness.R 
+✔ |  35 |   0 |   0 |   5 |  40 |  83 | + → -    | robustness.R 
+✔ |  36 |   0 |   0 |   5 |  41 |  83 | + → -    | robustness.R 
+✔ |  37 |   0 |   0 |   5 |  42 |  83 | < → >    | robustness.R 
+✔ |  38 |   0 |   0 |   5 |  43 |  83 | < → >    | robustness.R 
+x |  38 |   1 |   0 |   5 |  44 |  83 | < → <=   | robustness.R 
+✔ |  39 |   1 |   0 |   5 |  45 |  83 | < → <=   | robustness.R 
+x |  39 |   1 |   0 |   6 |  46 |  83 | <= → >=  | robustness.R 
+✔ |  40 |   1 |   0 |   6 |  47 |  83 | <= → <   | robustness.R 
+✔ |  41 |   1 |   0 |   6 |  48 |  83 | <conditi | robustness.R 
+✔ |  42 |   1 |   0 |   6 |  49 |  83 | <conditi | robustness.R 
+✔ |  43 |   1 |   0 |   6 |  50 |  83 | <conditi | robustness.R 
+✔ |  44 |   1 |   0 |   6 |  51 |  83 | <conditi | robustness.R 
+✔ |  45 |   1 |   0 |   6 |  52 |  83 | <conditi | robustness.R 
+✔ |  46 |   1 |   0 |   6 |  53 |  83 | <conditi | robustness.R 
+✔ |  47 |   1 |   0 |   6 |  54 |  83 | <conditi | robustness.R 
+✔ |  48 |   1 |   0 |   6 |  55 |  83 | <conditi | robustness.R 
+✔ |  49 |   1 |   0 |   6 |  56 |  83 | <conditi | robustness.R 
+✔ |  50 |   1 |   0 |   6 |  57 |  83 | <conditi | robustness.R 
+x |  50 |   1 |   0 |   7 |  58 |  83 | <conditi | robustness.R 
+✔ |  51 |   1 |   0 |   7 |  59 |  83 | <conditi | robustness.R 
+✔ |  52 |   1 |   0 |   7 |  60 |  83 | <conditi | robustness.R 
+✔ |  53 |   1 |   0 |   7 |  61 |  83 | <conditi | robustness.R 
+✔ |  54 |   1 |   0 |   7 |  62 |  83 | <conditi | robustness.R 
+✔ |  55 |   1 |   0 |   7 |  63 |  83 | <conditi | robustness.R 
+✔ |  56 |   1 |   0 |   7 |  64 |  83 | <conditi | robustness.R 
+x |  56 |   1 |   0 |   8 |  65 |  83 | <conditi | robustness.R 
+✔ |  57 |   1 |   0 |   8 |  66 |  83 | <conditi | robustness.R 
+✔ |  58 |   1 |   0 |   8 |  67 |  83 | <conditi | robustness.R 
+✔ |  59 |   1 |   0 |   8 |  68 |  83 | <conditi | robustness.R 
+✔ |  60 |   1 |   0 |   8 |  69 |  83 | <n> - 1  | robustness.R 
+✔ |  61 |   1 |   0 |   8 |  70 |  83 | <n> - 1  | robustness.R 
+✔ |  62 |   1 |   0 |   8 |  71 |  83 | <n> - 1  | robustness.R 
+✔ |  63 |   1 |   0 |   8 |  72 |  83 | <n> - 1  | robustness.R 
+✔ |  64 |   1 |   0 |   8 |  73 |  83 | <n> - 1  | robustness.R 
+✔ |  65 |   1 |   0 |   8 |  74 |  83 | <n> - 1  | robustness.R 
+x |  65 |   1 |   0 |   9 |  75 |  83 | <n> - 1  | robustness.R 
+x |  65 |   1 |   0 |  10 |  76 |  83 | <n> - 1  | robustness.R 
+x |  65 |   1 |   0 |  11 |  77 |  83 | <n> - 1  | robustness.R 
+x |  65 |   1 |   0 |  12 |  78 |  83 | <n> - 1  | robustness.R 
+✔ |  66 |   1 |   0 |  12 |  79 |  83 | <n> - 1  | robustness.R 
+✔ |  67 |   1 |   0 |  12 |  80 |  83 | <n> - 1  | robustness.R 
+✔ |  68 |   1 |   0 |  12 |  81 |  83 | <n> - 1  | robustness.R 
+✔ |  69 |   1 |   0 |  12 |  82 |  83 | <n> - 1  | robustness.R 
+x |  69 |   2 |   0 |  12 |  83 |  83 | <n> - 1  | robustness.R 
+✔ |  70 |   2 |   0 |  12 |  84 |  83 | <n> - 1  | robustness.R 
+✔ |  71 |   2 |   0 |  12 |  85 |  83 | <n> - 1  | robustness.R 
+✔ |  72 |   2 |   0 |  12 |  86 |  83 | <n> - 1  | robustness.R 
+✔ |  73 |   2 |   0 |  12 |  87 |  83 | <n> - 1  | robustness.R 
+✔ |  74 |   2 |   0 |  12 |  88 |  83 | <n> - 1  | robustness.R 
+✔ |  75 |   2 |   0 |  12 |  89 |  83 | <n> - 1  | robustness.R 
+✔ |  76 |   2 |   0 |  12 |  90 |  83 | <n> - 1  | robustness.R 
+✔ |  77 |   2 |   0 |  12 |  91 |  83 | <n> - 1  | robustness.R 
+✔ |  78 |   2 |   0 |  12 |  92 |  83 | <n> - 1  | robustness.R 
+✔ |  79 |   2 |   0 |  12 |  93 |  84 | <n> - 1  | robustness.R 
+✔ |  80 |   2 |   0 |  12 |  94 |  84 | <n> - 1  | robustness.R 
+x |  80 |   2 |   0 |  13 |  95 |  84 | <n> - 1  | robustness.R 
+✔ |  81 |   2 |   0 |  13 |  96 |  84 | <n> - 1  | robustness.R 
+x |  81 |   3 |   0 |  13 |  97 |  83 | <n> - 1  | robustness.R 
+✔ |  82 |   3 |   0 |  13 |  98 |  83 | <n> - 1  | robustness.R 
+✔ |  83 |   3 |   0 |  13 |  99 |  83 | <n> - 1  | robustness.R 
+✔ |  84 |   3 |   0 |  13 | 100 |  84 | <n> - 1  | robustness.R 
+✔ |  85 |   3 |   0 |  13 | 101 |  84 | <n> - 1  | robustness.R 
+✔ |  86 |   3 |   0 |  13 | 102 |  84 | <n> - 1  | robustness.R 
+✔ |  87 |   3 |   0 |  13 | 103 |  84 | <n> - 1  | robustness.R 
+✔ |  88 |   3 |   0 |  13 | 104 |  84 | <n> - 1  | robustness.R 
+✔ |  89 |   3 |   0 |  13 | 105 |  84 | <n> - 1  | robustness.R 
+✔ |  90 |   3 |   0 |  13 | 106 |  84 | <n> - 1  | robustness.R 
+✔ |  91 |   3 |   0 |  13 | 107 |  84 | <n> - 1  | robustness.R 
+✔ |  92 |   3 |   0 |  13 | 108 |  84 | <n> - 1  | robustness.R 
+✔ |  93 |   3 |   0 |  13 | 109 |  84 | <n> - 1  | robustness.R 
+✔ |  94 |   3 |   0 |  13 | 110 |  84 | <n> - 1  | robustness.R 
+✔ |  95 |   3 |   0 |  13 | 111 |  84 | <n> - 1  | robustness.R 
+x |  95 |   3 |   0 |  14 | 112 |  84 | <n> - 1  | robustness.R 
+✔ |  96 |   3 |   0 |  14 | 113 |  84 | <n> - 1  | robustness.R 
+✔ |  97 |   3 |   0 |  14 | 114 |  84 | <n> - 1  | robustness.R 
+✔ |  98 |   3 |   0 |  14 | 115 |  84 | <n> - 1  | robustness.R 
+✔ |  99 |   3 |   0 |  14 | 116 |  84 | <n> - 1  | robustness.R 
+✔ | 100 |   3 |   0 |  14 | 117 |  84 | <n> - 1  | robustness.R 
+✔ | 101 |   3 |   0 |  14 | 118 |  84 | <n> - 1  | robustness.R 
+✔ | 102 |   3 |   0 |  14 | 119 |  84 | <n> - 1  | robustness.R 
+✔ | 103 |   3 |   0 |  14 | 120 |  84 | <n> + 1  | robustness.R 
+✔ | 104 |   3 |   0 |  14 | 121 |  84 | <n> + 1  | robustness.R 
+✔ | 105 |   3 |   0 |  14 | 122 |  84 | <n> + 1  | robustness.R 
+✔ | 106 |   3 |   0 |  14 | 123 |  84 | <n> + 1  | robustness.R 
+✔ | 107 |   3 |   0 |  14 | 124 |  84 | <n> + 1  | robustness.R 
+✔ | 108 |   3 |   0 |  14 | 125 |  84 | <n> + 1  | robustness.R 
+x | 108 |   3 |   0 |  15 | 126 |  84 | <n> + 1  | robustness.R 
+x | 108 |   3 |   0 |  16 | 127 |  84 | <n> + 1  | robustness.R 
+x | 108 |   3 |   0 |  17 | 128 |  84 | <n> + 1  | robustness.R 
+✔ | 109 |   3 |   0 |  17 | 129 |  84 | <n> + 1  | robustness.R 
+✔ | 110 |   3 |   0 |  17 | 130 |  84 | <n> + 1  | robustness.R 
+✔ | 111 |   3 |   0 |  17 | 131 |  84 | <n> + 1  | robustness.R 
+✔ | 112 |   3 |   0 |  17 | 132 |  84 | <n> + 1  | robustness.R 
+✔ | 113 |   3 |   0 |  17 | 133 |  84 | <n> + 1  | robustness.R 
+✔ | 114 |   3 |   0 |  17 | 134 |  84 | <n> + 1  | robustness.R 
+✔ | 115 |   3 |   0 |  17 | 135 |  84 | <n> + 1  | robustness.R 
+✔ | 116 |   3 |   0 |  17 | 136 |  84 | <n> + 1  | robustness.R 
+✔ | 117 |   3 |   0 |  17 | 137 |  84 | <n> + 1  | robustness.R 
+✔ | 118 |   3 |   0 |  17 | 138 |  84 | <n> + 1  | robustness.R 
+✔ | 119 |   3 |   0 |  17 | 139 |  84 | <n> + 1  | robustness.R 
+✔ | 120 |   3 |   0 |  17 | 140 |  84 | <n> + 1  | robustness.R 
+✔ | 121 |   3 |   0 |  17 | 141 |  84 | <n> + 1  | robustness.R 
+✔ | 122 |   3 |   0 |  17 | 142 |  84 | <n> + 1  | robustness.R 
+✔ | 123 |   3 |   0 |  17 | 143 |  84 | <n> + 1  | robustness.R 
+✔ | 124 |   3 |   0 |  17 | 144 |  84 | <n> + 1  | robustness.R 
+x | 124 |   3 |   0 |  18 | 145 |  84 | <n> + 1  | robustness.R 
+✔ | 125 |   3 |   0 |  18 | 146 |  84 | <n> + 1  | robustness.R 
+✔ | 126 |   3 |   0 |  18 | 147 |  84 | <n> + 1  | robustness.R 
+✔ | 127 |   3 |   0 |  18 | 148 |  84 | <n> + 1  | robustness.R 
+x | 127 |   4 |   0 |  18 | 149 |  84 | <n> + 1  | robustness.R 
+✔ | 128 |   4 |   0 |  18 | 150 |  84 | <n> + 1  | robustness.R 
+✔ | 129 |   4 |   0 |  18 | 151 |  84 | <n> + 1  | robustness.R 
+✔ | 130 |   4 |   0 |  18 | 152 |  84 | <n> + 1  | robustness.R 
+✔ | 131 |   4 |   0 |  18 | 153 |  84 | <n> + 1  | robustness.R 
+✔ | 132 |   4 |   0 |  18 | 154 |  84 | <n> + 1  | robustness.R 
+✔ | 133 |   4 |   0 |  18 | 155 |  84 | <n> + 1  | robustness.R 
+✔ | 134 |   4 |   0 |  18 | 156 |  84 | <n> + 1  | robustness.R 
+✔ | 135 |   4 |   0 |  18 | 157 |  84 | <n> + 1  | robustness.R 
+✔ | 136 |   4 |   0 |  18 | 158 |  84 | <n> + 1  | robustness.R 
+✔ | 137 |   4 |   0 |  18 | 159 |  84 | <n> + 1  | robustness.R 
+✔ | 138 |   4 |   0 |  18 | 160 |  84 | <n> + 1  | robustness.R 
+✔ | 139 |   4 |   0 |  18 | 161 |  84 | <n> + 1  | robustness.R 
+✔ | 140 |   4 |   0 |  18 | 162 |  84 | <n> + 1  | robustness.R 
+x | 140 |   4 |   0 |  19 | 163 |  84 | <n> + 1  | robustness.R 
+✔ | 141 |   4 |   0 |  19 | 164 |  84 | <n> + 1  | robustness.R 
+✔ | 142 |   4 |   0 |  19 | 165 |  84 | <n> + 1  | robustness.R 
+✔ | 143 |   4 |   0 |  19 | 166 |  84 | <n> + 1  | robustness.R 
+✔ | 144 |   4 |   0 |  19 | 167 |  84 | <n> + 1  | robustness.R 
+✔ | 145 |   4 |   0 |  19 | 168 |  84 | <n> + 1  | robustness.R 
+✔ | 146 |   4 |   0 |  19 | 169 |  84 | <n> + 1  | robustness.R 
+✔ | 147 |   4 |   0 |  19 | 170 |  84 | <n> + 1  | robustness.R 
+✔ | 148 |   4 |   0 |  19 | 171 |  84 | <non-emp | robustness.R 
+✔ | 149 |   4 |   0 |  19 | 172 |  85 | <non-emp | robustness.R 
+✔ | 150 |   4 |   0 |  19 | 173 |  85 | <non-emp | robustness.R 
+✔ | 151 |   4 |   0 |  19 | 174 |  85 | <non-emp | robustness.R 
+✔ | 152 |   4 |   0 |  19 | 175 |  85 | <non-emp | robustness.R 
+✔ | 153 |   4 |   0 |  19 | 176 |  85 | <non-emp | robustness.R 
+✔ | 154 |   4 |   0 |  19 | 177 |  85 | <non-emp | robustness.R 
+✔ | 155 |   4 |   0 |  19 | 178 |  85 | <non-emp | robustness.R 
+✔ | 156 |   4 |   0 |  19 | 179 |  85 | <non-emp | robustness.R 
+x | 156 |   4 |   0 |  20 | 180 |  85 | <non-emp | robustness.R 
+✔ | 157 |   4 |   0 |  20 | 181 |  85 | <non-emp | robustness.R 
+x | 157 |   4 |   0 |  21 | 182 |  85 | <non-emp | robustness.R 
+✔ | 158 |   4 |   0 |  21 | 183 |  85 | <non-emp | robustness.R 
+x | 158 |   4 |   0 |  22 | 184 |  85 | <non-emp | robustness.R 
+✔ | 159 |   4 |   0 |  22 | 185 |  85 | <non-emp | robustness.R 
+x | 159 |   4 |   0 |  23 | 186 |  85 | <non-emp | robustness.R 
+✔ | 160 |   4 |   0 |  23 | 187 |  85 | <non-emp | robustness.R 
+x | 160 |   4 |   0 |  24 | 188 |  85 | <non-emp | robustness.R 
+✔ | 161 |   4 |   0 |  24 | 189 |  85 | <non-emp | robustness.R 
+x | 161 |   4 |   0 |  25 | 190 |  85 | <non-emp | robustness.R 
+✔ | 162 |   4 |   0 |  25 | 191 |  85 | <non-emp | robustness.R 
+✔ | 163 |   4 |   0 |  25 | 192 |  85 | <non-emp | robustness.R 
+✔ | 164 |   4 |   0 |  25 | 193 |  85 | <non-emp | robustness.R 
+✔ | 165 |   4 |   0 |  25 | 194 |  85 | <non-emp | robustness.R 
+✔ | 166 |   4 |   0 |  25 | 195 |  85 | <non-emp | robustness.R 
+✔ | 167 |   4 |   0 |  25 | 196 |  85 | <non-emp | robustness.R 
+✔ | 168 |   4 |   0 |  25 | 197 |  85 | <non-emp | robustness.R 
+✔ | 169 |   4 |   0 |  25 | 198 |  85 | <non-emp | robustness.R 
+✔ | 170 |   4 |   0 |  25 | 199 |  85 | <non-emp | robustness.R 
+✔ | 171 |   4 |   0 |  25 | 200 |  85 | <non-emp | robustness.R 
+✔ | 172 |   4 |   0 |  25 | 201 |  85 | <non-emp | robustness.R 
+✔ | 173 |   4 |   0 |  25 | 202 |  85 | <non-emp | robustness.R 
+✔ | 174 |   4 |   0 |  25 | 203 |  85 | <non-emp | robustness.R 
+✔ | 175 |   4 |   0 |  25 | 204 |  85 | <non-emp | robustness.R 
+✔ | 176 |   4 |   0 |  25 | 205 |  85 | <non-emp | robustness.R 
+✔ | 177 |   4 |   0 |  25 | 206 |  85 | <non-emp | robustness.R 
+✔ | 178 |   4 |   0 |  25 | 207 |  85 | <non-emp | robustness.R 
+✔ | 179 |   4 |   0 |  25 | 208 |  85 | <non-emp | robustness.R 
+✔ | 180 |   4 |   0 |  25 | 209 |  85 | <non-emp | robustness.R 
+✔ | 181 |   4 |   0 |  25 | 210 |  85 | <non-emp | robustness.R 
+x | 181 |   4 |   0 |  26 | 211 |  85 | <non-emp | robustness.R 
+✔ | 182 |   4 |   0 |  26 | 212 |  85 | <non-emp | robustness.R 
+✔ | 183 |   4 |   0 |  26 | 213 |  85 | <non-emp | robustness.R 
+✔ | 184 |   4 |   0 |  26 | 214 |  85 | <non-emp | robustness.R 
+✔ | 185 |   4 |   0 |  26 | 215 |  85 | <non-emp | robustness.R 
+✔ | 186 |   4 |   0 |  26 | 216 |  85 | <non-emp | robustness.R 
+✔ | 187 |   4 |   0 |  26 | 217 |  85 | <non-emp | robustness.R 
+✔ | 188 |   4 |   0 |  26 | 218 |  85 | <non-emp | robustness.R 
+✔ | 189 |   4 |   0 |  26 | 219 |  85 | <non-emp | robustness.R 
+✔ | 190 |   4 |   0 |  26 | 220 |  85 | <non-emp | robustness.R 
+✔ | 191 |   4 |   0 |  26 | 221 |  85 | <non-emp | robustness.R 
+✔ | 192 |   4 |   0 |  26 | 222 |  85 | <non-emp | robustness.R 
+✔ | 193 |   4 |   0 |  26 | 223 |  85 | <non-emp | robustness.R 
+✔ | 194 |   4 |   0 |  26 | 224 |  85 | <non-emp | robustness.R 
+✔ | 195 |   4 |   0 |  26 | 225 |  85 | <non-emp | robustness.R 
+✔ | 196 |   4 |   0 |  26 | 226 |  85 | <non-emp | robustness.R 
+✔ | 197 |   4 |   0 |  26 | 227 |  85 | <non-emp | robustness.R 
+✔ | 198 |   4 |   0 |  26 | 228 |  85 | <non-emp | robustness.R 
+✔ | 199 |   4 |   0 |  26 | 229 |  85 | <non-emp | robustness.R 
+✔ | 200 |   4 |   0 |  26 | 230 |  85 | <non-emp | robustness.R 
+✔ | 201 |   4 |   0 |  26 | 231 |  85 | <non-emp | robustness.R 
+✔ | 202 |   4 |   0 |  26 | 232 |  85 | <non-emp | robustness.R 
+✔ | 203 |   4 |   0 |  26 | 233 |  85 | <non-emp | robustness.R 
+✔ | 204 |   4 |   0 |  26 | 234 |  85 | == → !=  | robustness.R 
+✔ | 205 |   4 |   0 |  26 | 235 |  85 | == → !=  | robustness.R 
+✔ | 206 |   4 |   0 |  26 | 236 |  85 | == → !=  | robustness.R 
+✔ | 207 |   4 |   0 |  26 | 237 |  85 | == → !=  | robustness.R 
+✔ | 208 |   4 |   0 |  26 | 238 |  85 | > → <    | robustness.R 
+✔ | 209 |   4 |   0 |  26 | 239 |  85 | > → <    | robustness.R 
+✔ | 210 |   4 |   0 |  26 | 240 |  85 | > → <    | robustness.R 
+✔ | 211 |   4 |   0 |  26 | 241 |  85 | > → <    | robustness.R 
+✔ | 212 |   4 |   0 |  26 | 242 |  85 | > → <    | robustness.R 
+✔ | 213 |   4 |   0 |  26 | 243 |  85 | > → <    | robustness.R 
+✔ | 214 |   4 |   0 |  26 | 244 |  85 | > → >=   | robustness.R 
+x | 214 |   5 |   0 |  26 | 245 |  85 | > → >=   | robustness.R 
+x | 214 |   6 |   0 |  26 | 246 |  85 | > → >=   | robustness.R 
+✔ | 215 |   6 |   0 |  26 | 247 |  85 | > → >=   | robustness.R 
+✔ | 216 |   6 |   0 |  26 | 248 |  85 | > → >=   | robustness.R 
+✔ | 217 |   6 |   0 |  26 | 249 |  85 | > → >=   | robustness.R 
+x | 217 |   6 |   0 |  27 | 250 |  85 | >= → <=  | robustness.R 
+✔ | 218 |   6 |   0 |  27 | 251 |  85 | >= → <=  | robustness.R 
+x | 218 |   6 |   0 |  28 | 252 |  85 | >= → <=  | robustness.R 
+✔ | 219 |   6 |   0 |  28 | 253 |  85 | >= → >   | robustness.R 
+✔ | 220 |   6 |   0 |  28 | 254 |  85 | >= → >   | robustness.R 
+✔ | 221 |   6 |   0 |  28 | 255 |  85 | >= → >   | robustness.R 
+✔ | 222 |   6 |   0 |  28 | 256 |  85 | | → &    | robustness.R 
+✔ | 223 |   6 |   0 |  28 | 257 |  85 | || → &&  | robustness.R 
+✔ | 224 |   6 |   0 |  28 | 258 |  85 | || → &&  | robustness.R 
+✔ | 225 |   6 |   0 |  28 | 259 |  85 | || → &&  | robustness.R 
+✔ | 226 |   6 |   0 |  28 | 260 |  85 | || → &&  | robustness.R 
+✔ | 227 |   6 |   0 |  28 | 261 |  86 | || → &&  | robustness.R 
+✔ | 228 |   6 |   0 |  28 | 262 |  86 | || → &&  | robustness.R 
+✔ | 229 |   6 |   0 |  28 | 263 |  86 | || → &&  | robustness.R 
+✔ | 230 |   6 |   0 |  28 | 264 |  86 | || → &&  | robustness.R 
+✔ | 231 |   6 |   0 |  28 | 265 |  86 | || → &&  | robustness.R 
+✔ | 232 |   6 |   0 |  28 | 266 |  86 | || → &&  | robustness.R 
+x | 232 |   6 |   0 |  29 | 267 |  86 | FALSE →  | robustness.R 
+✔ | 233 |   6 |   0 |  29 | 268 |  86 | FALSE →  | robustness.R 
+✔ | 234 |   6 |   0 |  29 | 269 |  86 | FALSE →  | robustness.R 
+✔ | 235 |   6 |   0 |  29 | 270 |  86 | FALSE →  | robustness.R 
+✔ | 236 |   6 |   0 |  29 | 271 |  86 | FALSE →  | robustness.R 
+✔ | 237 |   6 |   0 |  29 | 272 |  86 | FALSE →  | robustness.R 
+x | 237 |   6 |   0 |  30 | 273 |  86 | FALSE →  | robustness.R 
+✔ | 238 |   6 |   0 |  30 | 274 |  86 | FALSE →  | robustness.R 
+✔ | 239 |   6 |   0 |  30 | 275 |  86 | FALSE →  | robustness.R 
+✔ | 240 |   6 |   0 |  30 | 276 |  86 | FALSE →  | robustness.R 
+✔ | 241 |   6 |   0 |  30 | 277 |  86 | FALSE →  | robustness.R 
+✔ | 242 |   6 |   0 |  30 | 278 |  86 | FALSE →  | robustness.R 
+x | 242 |   6 |   0 |  31 | 279 |  86 | FALSE →  | robustness.R 
+x | 242 |   6 |   0 |  32 | 280 |  86 | FALSE →  | robustness.R 
+✔ | 243 |   6 |   0 |  32 | 281 |  86 | FALSE →  | robustness.R 
+✔ | 244 |   6 |   0 |  32 | 282 |  86 | FALSE →  | robustness.R 
+✔ | 245 |   6 |   0 |  32 | 283 |  86 | FALSE →  | robustness.R 
+✔ | 246 |   6 |   0 |  32 | 284 |  86 | FALSE →  | robustness.R 
+✔ | 247 |   6 |   0 |  32 | 285 |  86 | FALSE →  | robustness.R 
+x | 247 |   7 |   0 |  32 | 286 |  86 | NA_real_ | robustness.R 
+✔ | 248 |   7 |   0 |  32 | 287 |  86 | NA_real_ | robustness.R 
+✔ | 249 |   7 |   0 |  32 | 288 |  86 | NULL → N | robustness.R 
+✔ | 250 |   7 |   0 |  32 | 289 |  86 | NULL → N | robustness.R 
+✔ | 251 |   7 |   0 |  32 | 290 |  86 | NULL → N | robustness.R 
+✔ | 252 |   7 |   0 |  32 | 291 |  86 | NULL → N | robustness.R 
+✔ | 253 |   7 |   0 |  32 | 292 |  86 | TRUE → F | robustness.R 
+✔ | 254 |   7 |   0 |  32 | 293 |  86 | TRUE → F | robustness.R 
+x | 254 |   8 |   0 |  32 | 294 |  86 | TRUE → F | robustness.R 
+x | 254 |   9 |   0 |  32 | 295 |  86 | TRUE → F | robustness.R 
+✔ | 255 |   9 |   0 |  32 | 296 |  86 | x[<i>] → | robustness.R 
+✔ | 256 |   9 |   0 |  32 | 297 |  86 | x[<i>] → | robustness.R 
+✔ | 257 |   9 |   0 |  32 | 298 |  86 | x[<i>] → | robustness.R 
+✔ | 258 |   9 |   0 |  32 | 299 |  86 | x[<i>] → | robustness.R 
+✔ | 259 |   9 |   0 |  32 | 300 |  86 | x[<i>] → | robustness.R 
+✔ | 260 |   9 |   0 |  32 | 301 |  86 | x[<i>] → | robustness.R 
+✔ | 261 |   9 |   0 |  32 | 302 |  86 | x[<i>] → | robustness.R 
+✔ | 262 |   9 |   0 |  32 | 303 |  86 | x[<i>] → | robustness.R 
+✔ | 263 |   9 |   0 |  32 | 304 |  86 | x[<i>] → | robustness.R 
+✔ | 264 |   9 |   0 |  32 | 305 |  86 | x[<i>] → | robustness.R 
+✔ | 265 |   9 |   0 |  32 | 306 |  86 | x[<i>] → | robustness.R 
+x | 265 |   9 |   0 |  33 | 307 |  86 | x[<i>] → | robustness.R 
+x | 265 |   9 |   0 |  34 | 308 |  86 | x[<i>] → | robustness.R 
+✔ | 266 |   9 |   0 |  34 | 309 |  86 | x[<i>] → | robustness.R 
+✔ | 267 |   9 |   0 |  34 | 310 |  86 | x[<i>] → | robustness.R 
+✔ | 268 |   9 |   0 |  34 | 311 |  86 | x[<i>] → | robustness.R 
+✔ | 269 |   9 |   0 |  34 | 312 |  86 | x[<i>] → | robustness.R 
+✔ | 270 |   9 |   0 |  34 | 313 |  86 | x[<i>] → | robustness.R 
+✔ | 271 |   9 |   0 |  34 | 314 |  86 | x[<i>] → | robustness.R 
+✔ | 272 |   9 |   0 |  34 | 315 |  86 | x[<i>] → | robustness.R 
+✔ | 273 |   9 |   0 |  34 | 316 |  86 | x[<i>] → | robustness.R 
+✔ | 274 |   9 |   0 |  34 | 317 |  86 | x[<i>] → | robustness.R 
+✔ | 275 |   9 |   0 |  34 | 318 |  86 | x[<i>] → | robustness.R 
+✔ | 276 |   9 |   0 |  34 | 319 |  86 | x[<i>] → | robustness.R 
+✔ | 277 |   9 |   0 |  34 | 320 |  86 | x[<i>] → | robustness.R 
+x | 277 |   9 |   0 |  35 | 321 |  86 | x[<i>] → | robustness.R 
+x | 277 |   9 |   0 |  36 | 322 |  86 | x[<i>] → | robustness.R 
+✔ | 278 |   9 |   0 |  36 | 323 |  86 | x[<i>] → | robustness.R 
+✔ |   1 |   0 |   0 |   0 |   1 |  86 | !<condit | run.R 
+✔ |   2 |   0 |   0 |   0 |   2 |  86 | !<condit | run.R 
+✔ |   3 |   0 |   0 |   0 |   3 |  86 | !<condit | run.R 
+✔ |   4 |   0 |   0 |   0 |   4 |  86 | !<condit | run.R 
+x |   4 |   0 |   0 |   1 |   5 |  86 | !<condit | run.R 
+✔ |   5 |   0 |   0 |   1 |   6 |  86 | !<condit | run.R 
+✔ |   6 |   0 |   0 |   1 |   7 |  86 | !<condit | run.R 
+✔ |   7 |   0 |   0 |   1 |   8 |  86 | !<condit | run.R 
+✔ |   8 |   0 |   0 |   1 |   9 |  86 | !<condit | run.R 
+✔ |   9 |   0 |   0 |   1 |  10 |  86 | !<condit | run.R 
+✔ |  10 |   0 |   0 |   1 |  11 |  86 | !<condit | run.R 
+✔ |  11 |   0 |   0 |   1 |  12 |  86 | !<condit | run.R 
+✔ |  12 |   0 |   0 |   1 |  13 |  86 | !<condit | run.R 
+✔ |  13 |   0 |   0 |   1 |  14 |  86 | != → ==  | run.R 
+x |  13 |   1 |   0 |   1 |  15 |  86 | "" → "mu | run.R 
+x |  13 |   2 |   0 |   1 |  16 |  86 | & → |    | run.R 
+x |  13 |   3 |   0 |   1 |  17 |  86 | && → ||  | run.R 
+✔ |  14 |   3 |   0 |   1 |  18 |  86 | && → ||  | run.R 
+✔ |  15 |   3 |   0 |   1 |  19 |  86 | && → ||  | run.R 
+✔ |  16 |   3 |   0 |   1 |  20 |  86 | && → ||  | run.R 
+x |  16 |   4 |   0 |   1 |  21 |  86 | && → ||  | run.R 
+x |  16 |   5 |   0 |   1 |  22 |  86 | && → ||  | run.R 
+x |  16 |   6 |   0 |   1 |  23 |  86 | %% → *   | run.R 
+x |  16 |   7 |   0 |   1 |  24 |  86 | + → -    | run.R 
+x |  16 |   8 |   0 |   1 |  25 |  86 | + → -    | run.R 
+x |  16 |   9 |   0 |   1 |  26 |  86 | + → -    | run.R 
+x |  16 |  10 |   0 |   1 |  27 |  85 | < → >    | run.R 
+x |  16 |  11 |   0 |   1 |  28 |  85 | < → >    | run.R 
+x |  16 |  12 |   0 |   1 |  29 |  85 | < → <=   | run.R 
+x |  16 |  13 |   0 |   1 |  30 |  85 | < → <=   | run.R 
+✔ |  17 |  13 |   0 |   1 |  31 |  85 | <conditi | run.R 
+✔ |  18 |  13 |   0 |   1 |  32 |  85 | <conditi | run.R 
+✔ |  19 |  13 |   0 |   1 |  33 |  85 | <conditi | run.R 
+✔ |  20 |  13 |   0 |   1 |  34 |  85 | <conditi | run.R 
+x |  20 |  13 |   0 |   2 |  35 |  85 | <conditi | run.R 
+✔ |  21 |  13 |   0 |   2 |  36 |  85 | <conditi | run.R 
+✔ |  22 |  13 |   0 |   2 |  37 |  85 | <conditi | run.R 
+✔ |  23 |  13 |   0 |   2 |  38 |  85 | <conditi | run.R 
+✔ |  24 |  13 |   0 |   2 |  39 |  85 | <conditi | run.R 
+✔ |  25 |  13 |   0 |   2 |  40 |  85 | <conditi | run.R 
+✔ |  26 |  13 |   0 |   2 |  41 |  85 | <conditi | run.R 
+✔ |  27 |  13 |   0 |   2 |  42 |  85 | <conditi | run.R 
+✔ |  28 |  13 |   0 |   2 |  43 |  85 | <conditi | run.R 
+✔ |  29 |  13 |   0 |   2 |  44 |  85 | <conditi | run.R 
+✔ |  30 |  13 |   0 |   2 |  45 |  85 | <conditi | run.R 
+✔ |  31 |  13 |   0 |   2 |  46 |  85 | <conditi | run.R 
+✔ |  32 |  13 |   0 |   2 |  47 |  85 | <conditi | run.R 
+✔ |  33 |  13 |   0 |   2 |  48 |  85 | <conditi | run.R 
+✔ |  34 |  13 |   0 |   2 |  49 |  85 | <conditi | run.R 
+✔ |  35 |  13 |   0 |   2 |  50 |  85 | <conditi | run.R 
+✔ |  36 |  13 |   0 |   2 |  51 |  85 | <conditi | run.R 
+✔ |  37 |  13 |   0 |   2 |  52 |  85 | <conditi | run.R 
+x |  37 |  14 |   0 |   2 |  53 |  85 | <conditi | run.R 
+✔ |  38 |  14 |   0 |   2 |  54 |  85 | <conditi | run.R 
+✔ |  39 |  14 |   0 |   2 |  55 |  85 | <conditi | run.R 
+✔ |  40 |  14 |   0 |   2 |  56 |  85 | <conditi | run.R 
+✔ |  41 |  14 |   0 |   2 |  57 |  85 | <conditi | run.R 
+✔ |  42 |  14 |   0 |   2 |  58 |  85 | <conditi | run.R 
+✔ |  43 |  14 |   0 |   2 |  59 |  85 | <conditi | run.R 
+✔ |  44 |  14 |   0 |   2 |  60 |  86 | <conditi | run.R 
+x |  44 |  15 |   0 |   2 |  61 |  85 | <conditi | run.R 
+x |  44 |  16 |   0 |   2 |  62 |  85 | <conditi | run.R 
+✔ |  45 |  16 |   0 |   2 |  63 |  85 | <n> - 1  | run.R 
+✔ |  46 |  16 |   0 |   2 |  64 |  85 | <n> - 1  | run.R 
+x |  46 |  17 |   0 |   2 |  65 |  85 | <n> - 1  | run.R 
+✔ |  47 |  17 |   0 |   2 |  66 |  85 | <n> - 1  | run.R 
+x |  47 |  18 |   0 |   2 |  67 |  85 | <n> - 1  | run.R 
+x |  47 |  19 |   0 |   2 |  68 |  85 | <n> - 1  | run.R 
+x |  47 |  20 |   0 |   2 |  69 |  85 | <n> - 1  | run.R 
+x |  47 |  21 |   0 |   2 |  70 |  85 | <n> - 1  | run.R 
+x |  47 |  21 |   0 |   3 |  71 |  85 | <n> - 1  | run.R 
+x |  47 |  22 |   0 |   3 |  72 |  85 | <n> - 1  | run.R 
+x |  47 |  23 |   0 |   3 |  73 |  85 | <n> - 1  | run.R 
+x |  47 |  24 |   0 |   3 |  74 |  85 | <n> - 1  | run.R 
+x |  47 |  24 |   0 |   4 |  75 |  85 | <n> + 1  | run.R 
+✔ |  48 |  24 |   0 |   4 |  76 |  85 | <n> + 1  | run.R 
+x |  48 |  25 |   0 |   4 |  77 |  85 | <n> + 1  | run.R 
+✔ |  49 |  25 |   0 |   4 |  78 |  85 | <n> + 1  | run.R 
+x |  49 |  26 |   0 |   4 |  79 |  85 | <n> + 1  | run.R 
+x |  49 |  27 |   0 |   4 |  80 |  85 | <n> + 1  | run.R 
+x |  49 |  28 |   0 |   4 |  81 |  85 | <n> + 1  | run.R 
+x |  49 |  29 |   0 |   4 |  82 |  85 | <n> + 1  | run.R 
+✔ |  50 |  29 |   0 |   4 |  83 |  85 | <n> + 1  | run.R 
+x |  50 |  30 |   0 |   4 |  84 |  85 | <n> + 1  | run.R 
+x |  50 |  31 |   0 |   4 |  85 |  84 | <n> + 1  | run.R 
+x |  50 |  32 |   0 |   4 |  86 |  84 | <n> + 1  | run.R 
+✔ |  51 |  32 |   0 |   4 |  87 |  84 | <non-emp | run.R 
+x |  51 |  33 |   0 |   4 |  88 |  84 | <non-emp | run.R 
+x |  51 |  34 |   0 |   4 |  89 |  84 | <non-emp | run.R 
+x |  51 |  35 |   0 |   4 |  90 |  84 | <non-emp | run.R 
+x |  51 |  35 |   0 |   5 |  91 |  84 | <non-emp | run.R 
+x |  51 |  36 |   0 |   5 |  92 |  84 | <non-emp | run.R 
+✔ |  52 |  36 |   0 |   5 |  93 |  84 | <non-emp | run.R 
+x |  52 |  37 |   0 |   5 |  94 |  84 | <non-emp | run.R 
+✔ |  53 |  37 |   0 |   5 |  95 |  84 | <non-emp | run.R 
+✔ |  54 |  37 |   0 |   5 |  96 |  84 | <non-emp | run.R 
+✔ |  55 |  37 |   0 |   5 |  97 |  84 | <non-emp | run.R 
+✔ |  56 |  37 |   0 |   5 |  98 |  84 | <non-emp | run.R 
+✔ |  57 |  37 |   0 |   5 |  99 |  84 | <non-emp | run.R 
+✔ |  58 |  37 |   0 |   5 | 100 |  84 | <non-emp | run.R 
+✔ |  59 |  37 |   0 |   5 | 101 |  84 | <non-emp | run.R 
+✔ |  60 |  37 |   0 |   5 | 102 |  84 | <non-emp | run.R 
+✔ |  61 |  37 |   0 |   5 | 103 |  84 | <non-emp | run.R 
+x |  61 |  38 |   0 |   5 | 104 |  84 | <non-emp | run.R 
+x |  61 |  39 |   0 |   5 | 105 |  84 | <non-emp | run.R 
+x |  61 |  40 |   0 |   5 | 106 |  84 | <non-emp | run.R 
+✔ |  62 |  40 |   0 |   5 | 107 |  84 | <non-emp | run.R 
+x |  62 |  41 |   0 |   5 | 108 |  84 | <non-emp | run.R 
+x |  62 |  42 |   0 |   5 | 109 |  84 | <non-emp | run.R 
+x |  62 |  43 |   0 |   5 | 110 |  84 | <non-emp | run.R 
+✔ |  63 |  43 |   0 |   5 | 111 |  84 | <non-emp | run.R 
+✔ |  64 |  43 |   0 |   5 | 112 |  84 | <non-emp | run.R 
+x |  64 |  44 |   0 |   5 | 113 |  84 | <non-emp | run.R 
+x |  64 |  45 |   0 |   5 | 114 |  84 | <non-emp | run.R 
+x |  64 |  46 |   0 |   5 | 115 |  84 | <non-emp | run.R 
+✔ |  65 |  46 |   0 |   5 | 116 |  84 | <non-emp | run.R 
+✔ |  66 |  46 |   0 |   5 | 117 |  84 | <non-emp | run.R 
+✔ |  67 |  46 |   0 |   5 | 118 |  84 | <non-emp | run.R 
+x |  67 |  47 |   0 |   5 | 119 |  84 | <non-emp | run.R 
+✔ |  68 |  47 |   0 |   5 | 120 |  84 | <non-emp | run.R 
+✔ |  69 |  47 |   0 |   5 | 121 |  84 | <non-emp | run.R 
+x |  69 |  47 |   0 |   6 | 122 |  84 | <non-emp | run.R 
+✔ |  70 |  47 |   0 |   6 | 123 |  84 | <non-emp | run.R 
+✔ |  71 |  47 |   0 |   6 | 124 |  84 | <non-emp | run.R 
+✔ |  72 |  47 |   0 |   6 | 125 |  84 | <non-emp | run.R 
+✔ |  73 |  47 |   0 |   6 | 126 |  84 | <non-emp | run.R 
+✔ |  74 |  47 |   0 |   6 | 127 |  84 | <non-emp | run.R 
+✔ |  75 |  47 |   0 |   6 | 128 |  84 | <non-emp | run.R 
+✔ |  76 |  47 |   0 |   6 | 129 |  84 | <non-emp | run.R 
+✔ |  77 |  47 |   0 |   6 | 130 |  84 | <non-emp | run.R 
+✔ |  78 |  47 |   0 |   6 | 131 |  84 | <non-emp | run.R 
+✔ |  79 |  47 |   0 |   6 | 132 |  84 | <non-emp | run.R 
+✔ |  80 |  47 |   0 |   6 | 133 |  84 | <non-emp | run.R 
+✔ |  81 |  47 |   0 |   6 | 134 |  84 | <non-emp | run.R 
+✔ |  82 |  47 |   0 |   6 | 135 |  84 | <non-emp | run.R 
+✔ |  83 |  47 |   0 |   6 | 136 |  84 | <non-emp | run.R 
+✔ |  84 |  47 |   0 |   6 | 137 |  84 | <non-emp | run.R 
+x |  84 |  48 |   0 |   6 | 138 |  84 | <non-emp | run.R 
+✔ |  85 |  48 |   0 |   6 | 139 |  84 | <non-emp | run.R 
+✔ |  86 |  48 |   0 |   6 | 140 |  84 | <non-emp | run.R 
+✔ |  87 |  48 |   0 |   6 | 141 |  84 | <non-emp | run.R 
+✔ |  88 |  48 |   0 |   6 | 142 |  84 | <non-emp | run.R 
+✔ |  89 |  48 |   0 |   6 | 143 |  84 | <non-emp | run.R 
+✔ |  90 |  48 |   0 |   6 | 144 |  84 | <non-emp | run.R 
+✔ |  91 |  48 |   0 |   6 | 145 |  84 | <non-emp | run.R 
+✔ |  92 |  48 |   0 |   6 | 146 |  84 | <non-emp | run.R 
+x |  92 |  49 |   0 |   6 | 147 |  84 | <non-emp | run.R 
+x |  92 |  50 |   0 |   6 | 148 |  84 | <non-emp | run.R 
+x |  92 |  51 |   0 |   6 | 149 |  84 | <non-emp | run.R 
+x |  92 |  52 |   0 |   6 | 150 |  84 | <non-emp | run.R 
+x |  92 |  53 |   0 |   6 | 151 |  84 | <non-emp | run.R 
+x |  92 |  54 |   0 |   6 | 152 |  84 | <non-emp | run.R 
+x |  92 |  55 |   0 |   6 | 153 |  83 | <non-emp | run.R 
+x |  92 |  56 |   0 |   6 | 154 |  83 | <non-emp | run.R 
+x |  92 |  57 |   0 |   6 | 155 |  83 | <non-emp | run.R 
+x |  92 |  58 |   0 |   6 | 156 |  83 | <non-emp | run.R 
+x |  92 |  59 |   0 |   6 | 157 |  83 | <non-emp | run.R 
+x |  92 |  60 |   0 |   6 | 158 |  83 | <non-emp | run.R 
+✔ |  93 |  60 |   0 |   6 | 159 |  83 | <non-emp | run.R 
+x |  93 |  61 |   0 |   6 | 160 |  83 | == → !=  | run.R 
+x |  93 |  62 |   0 |   6 | 161 |  83 | == → !=  | run.R 
+✔ |  94 |  62 |   0 |   6 | 162 |  83 | == → !=  | run.R 
+✔ |  95 |  62 |   0 |   6 | 163 |  83 | == → !=  | run.R 
+x |  95 |  63 |   0 |   6 | 164 |  83 | > → <    | run.R 
+x |  95 |  64 |   0 |   6 | 165 |  83 | > → <    | run.R 
+✔ |  96 |  64 |   0 |   6 | 166 |  83 | > → <    | run.R 
+x |  96 |  65 |   0 |   6 | 167 |  83 | > → >=   | run.R 
+x |  96 |  66 |   0 |   6 | 168 |  83 | > → >=   | run.R 
+x |  96 |  66 |   0 |   7 | 169 |  83 | > → >=   | run.R 
+✔ |  97 |  66 |   0 |   7 | 170 |  83 | || → &&  | run.R 
+✔ |  98 |  66 |   0 |   7 | 171 |  83 | || → &&  | run.R 
+✔ |  99 |  66 |   0 |   7 | 172 |  83 | || → &&  | run.R 
+✔ | 100 |  66 |   0 |   7 | 173 |  83 | || → &&  | run.R 
+✔ | 101 |  66 |   0 |   7 | 174 |  83 | || → &&  | run.R 
+x | 101 |  67 |   0 |   7 | 175 |  83 | || → &&  | run.R 
+x | 101 |  68 |   0 |   7 | 176 |  83 | || → &&  | run.R 
+✔ | 102 |  68 |   0 |   7 | 177 |  83 | FALSE →  | run.R 
+x | 102 |  69 |   0 |   7 | 178 |  83 | FALSE →  | run.R 
+x | 102 |  70 |   0 |   7 | 179 |  83 | FALSE →  | run.R 
+x | 102 |  71 |   0 |   7 | 180 |  83 | FALSE →  | run.R 
+x | 102 |  72 |   0 |   7 | 181 |  83 | FALSE →  | run.R 
+x | 102 |  73 |   0 |   7 | 182 |  82 | FALSE →  | run.R 
+x | 102 |  73 |   0 |   8 | 183 |  82 | FALSE →  | run.R 
+✔ | 103 |  73 |   0 |   8 | 184 |  83 | FALSE →  | run.R 
+x | 103 |  74 |   0 |   8 | 185 |  82 | FALSE →  | run.R 
+✔ | 104 |  74 |   0 |   8 | 186 |  82 | FALSE →  | run.R 
+x | 104 |  75 |   0 |   8 | 187 |  82 | FALSE →  | run.R 
+x | 104 |  75 |   0 |   9 | 188 |  82 | FALSE →  | run.R 
+x | 104 |  76 |   0 |   9 | 189 |  82 | FALSE →  | run.R 
+x | 104 |  76 |   0 |  10 | 190 |  82 | FALSE →  | run.R 
+x | 104 |  77 |   0 |  10 | 191 |  82 | FALSE →  | run.R 
+x | 104 |  78 |   0 |  10 | 192 |  82 | FALSE →  | run.R 
+✔ | 105 |  78 |   0 |  10 | 193 |  82 | FALSE →  | run.R 
+x | 105 |  79 |   0 |  10 | 194 |  82 | FALSE →  | run.R 
+x | 105 |  80 |   0 |  10 | 195 |  82 | FALSE →  | run.R 
+x | 105 |  81 |   0 |  10 | 196 |  82 | NA → NUL | run.R 
+x | 105 |  82 |   0 |  10 | 197 |  82 | NA → NUL | run.R 
+x | 105 |  83 |   0 |  10 | 198 |  82 | NA → NUL | run.R 
+x | 105 |  84 |   0 |  10 | 199 |  82 | NA → NA_ | run.R 
+x | 105 |  85 |   0 |  10 | 200 |  82 | NA → NA_ | run.R 
+x | 105 |  86 |   0 |  10 | 201 |  82 | NA → NA_ | run.R 
+x | 105 |  87 |   0 |  10 | 202 |  82 | NA → NA_ | run.R 
+x | 105 |  88 |   0 |  10 | 203 |  82 | NA → NA_ | run.R 
+x | 105 |  89 |   0 |  10 | 204 |  82 | NA → NA_ | run.R 
+x | 105 |  90 |   0 |  10 | 205 |  82 | NA → NA_ | run.R 
+x | 105 |  91 |   0 |  10 | 206 |  81 | NA → NA_ | run.R 
+x | 105 |  92 |   0 |  10 | 207 |  81 | NA → NA_ | run.R 
+x | 105 |  93 |   0 |  10 | 208 |  81 | NA_chara | run.R 
+✔ | 106 |  93 |   0 |  10 | 209 |  81 | NA_chara | run.R 
+✔ | 107 |  93 |   0 |  10 | 210 |  81 | NA_chara | run.R 
+✔ | 108 |  93 |   0 |  10 | 211 |  81 | NULL → N | run.R 
+✔ | 109 |  93 |   0 |  10 | 212 |  81 | NULL → N | run.R 
+✔ | 110 |  93 |   0 |  10 | 213 |  81 | NULL → N | run.R 
+✔ | 111 |  93 |   0 |  10 | 214 |  81 | NULL → N | run.R 
+✔ | 112 |  93 |   0 |  10 | 215 |  81 | NULL → N | run.R 
+x | 112 |  94 |   0 |  10 | 216 |  81 | NULL → N | run.R 
+✔ | 113 |  94 |   0 |  10 | 217 |  81 | NULL → N | run.R 
+✔ | 114 |  94 |   0 |  10 | 218 |  81 | NULL → N | run.R 
+✔ | 115 |  94 |   0 |  10 | 219 |  81 | TRUE → F | run.R 
+x | 115 |  95 |   0 |  10 | 220 |  81 | TRUE → F | run.R 
+✔ | 116 |  95 |   0 |  10 | 221 |  81 | TRUE → F | run.R 
+x | 116 |  96 |   0 |  10 | 222 |  81 | TRUE → F | run.R 
+x | 116 |  97 |   0 |  10 | 223 |  81 | TRUE → F | run.R 
+x | 116 |  98 |   0 |  10 | 224 |  81 | TRUE → F | run.R 
+x | 116 |  99 |   0 |  10 | 225 |  81 | TRUE → F | run.R 
+✔ | 117 |  99 |   0 |  10 | 226 |  81 | TRUE → F | run.R 
+x | 117 | 100 |   0 |  10 | 227 |  81 | TRUE → F | run.R 
+x | 117 | 101 |   0 |  10 | 228 |  81 | TRUE → F | run.R 
+✔ | 118 | 101 |   0 |  10 | 229 |  81 | x[<i>] → | run.R 
+✔ | 119 | 101 |   0 |  10 | 230 |  81 | x[<i>] → | run.R 
+x | 119 | 102 |   0 |  10 | 231 |  81 | x[<i>] → | run.R 
+✔ | 120 | 102 |   0 |  10 | 232 |  81 | x[<i>] → | run.R 
+✔ | 121 | 102 |   0 |  10 | 233 |  81 | x[<i>] → | run.R 
+✔ | 122 | 102 |   0 |  10 | 234 |  81 | x[<i>] → | run.R 
+✔ | 123 | 102 |   0 |  10 | 235 |  81 | x[<i>] → | run.R 
+✔ | 124 | 102 |   0 |  10 | 236 |  81 | x[<i>] → | run.R 
+✔ | 125 | 102 |   0 |  10 | 237 |  81 | x[<i>] → | run.R 
+✔ | 126 | 102 |   0 |  10 | 238 |  81 | x[<i>] → | run.R 
+
+Duration: 68772.70 s
+
+── Survived Mutants ────────────────────────────────────────────────────────────
+backends.R  !<condition> → <condition>
+  198-     if (!is.null(max_tokens)) body$max_tokens <- max_tokens
+  198+     if (is.null(max_tokens)) body$max_tokens <- max_tokens
+backends.R  "" → "mutant"
+  100-     key <- paste0(nchar(parts, type = "bytes"), ":", parts, collapse = "")
+  100+     key <- paste0(nchar(parts, type = "bytes"), ":", parts, collapse = "mutant")
+backends.R  "" → "mutant"
+  188-   base_url <- sub("/+$", "", base_url)
+  188+   base_url <- sub("/+$", "mutant", base_url)
+backends.R  * → /
+  111-       s <- (sum(utf8ToInt(key)) * 7919L + rng$seed) %% .Machine$integer.max
+  111+       s <- (sum(utf8ToInt(key)) / 7919L + rng$seed) %% .Machine$integer.max
+backends.R  && → ||
+  131-     if (p_fail > 0 && stats::runif(1) < p_fail) {
+  131+     if (p_fail > 0 || stats::runif(1) < p_fail) {
+backends.R  %% → *
+  101-     s <- as.double(rng$seed) %% .Machine$integer.max
+  101+     s <- as.double(rng$seed) * .Machine$integer.max
+backends.R  + → -
+  103-     for (byte in as.integer(charToRaw(key))) s <- (131 * s + byte) %% .Machine$integer.max
+  103+     for (byte in as.integer(charToRaw(key))) s <- (131 * s - byte) %% .Machine$integer.max
+backends.R  + → -
+  111-       s <- (sum(utf8ToInt(key)) * 7919L + rng$seed) %% .Machine$integer.max
+  111+       s <- (sum(utf8ToInt(key)) * 7919L - rng$seed) %% .Machine$integer.max
+backends.R  + → -
+  135-     eta <- unname(truth[id]) + draw(pid, sd_prompt, "prompt_eff") +
+  135+     eta <- unname(truth[id]) - draw(pid, sd_prompt, "prompt_eff") +
+backends.R  + → -
+  135-     eta <- unname(truth[id]) + draw(pid, sd_prompt, "prompt_eff") +
+  135+     eta <- unname(truth[id]) + draw(pid, sd_prompt, "prompt_eff") -
+backends.R  + → -
+  136-       draw(mid, sd_model, "model_eff") + stats::rnorm(1, 0, sd_rep)
+  136+       draw(mid, sd_model, "model_eff") - stats::rnorm(1, 0, sd_rep)
+backends.R  < → <=
+  131-     if (p_fail > 0 && stats::runif(1) < p_fail) {
+  131+     if (p_fail > 0 && stats::runif(1) <= p_fail) {
+backends.R  <condition> → !(<condition>)
+  198-     if (!is.null(max_tokens)) body$max_tokens <- max_tokens
+  198+     if (!(!is.null(max_tokens))) body$max_tokens <- max_tokens
+backends.R  <n> - 1 → <n> - 1
+  96-   rng$seed <- seed %||% sample.int(.Machine$integer.max, 1)
+  96+   rng$seed <- seed %||% sample.int(.Machine$integer.max, 0)
+backends.R  <n> - 1 → <n> - 1
+  103-     for (byte in as.integer(charToRaw(key))) s <- (131 * s + byte) %% .Machine$integer.max
+  103+     for (byte in as.integer(charToRaw(key))) s <- (130 * s + byte) %% .Machine$integer.max
+backends.R  <n> - 1 → <n> - 1
+  131-     if (p_fail > 0 && stats::runif(1) < p_fail) {
+  131+     if (p_fail > -1 && stats::runif(1) < p_fail) {
+backends.R  <n> - 1 → <n> - 1
+  137-     val <- if (is.null(levels)) formatC(eta, digits = 3, format = "f") else
+  137+     val <- if (is.null(levels)) formatC(eta, digits = 2, format = "f") else
+backends.R  <n> - 1 → <n> - 1
+  204-     req <- httr2::req_retry(req, max_tries = 3)
+  204+     req <- httr2::req_retry(req, max_tries = 2)
+backends.R  <n> + 1 → <n> + 1
+  94-   rng$prompt_eff <- numeric(0)
+  94+   rng$prompt_eff <- numeric(1)
+backends.R  <n> + 1 → <n> + 1
+  95-   rng$model_eff <- numeric(0)
+  95+   rng$model_eff <- numeric(1)
+backends.R  <n> + 1 → <n> + 1
+  96-   rng$seed <- seed %||% sample.int(.Machine$integer.max, 1)
+  96+   rng$seed <- seed %||% sample.int(.Machine$integer.max, 2)
+backends.R  <n> + 1 → <n> + 1
+  103-     for (byte in as.integer(charToRaw(key))) s <- (131 * s + byte) %% .Machine$integer.max
+  103+     for (byte in as.integer(charToRaw(key))) s <- (132 * s + byte) %% .Machine$integer.max
+backends.R  <n> + 1 → <n> + 1
+  113-       set.seed(s); val <- stats::rnorm(1, 0, sd); .Random.seed_set(old)
+  113+       set.seed(s); val <- stats::rnorm(2, 0, sd); .Random.seed_set(old)
+backends.R  <n> + 1 → <n> + 1
+  137-     val <- if (is.null(levels)) formatC(eta, digits = 3, format = "f") else
+  137+     val <- if (is.null(levels)) formatC(eta, digits = 4, format = "f") else
+backends.R  <n> + 1 → <n> + 1
+  204-     req <- httr2::req_retry(req, max_tries = 3)
+  204+     req <- httr2::req_retry(req, max_tries = 4)
+backends.R  <non-empty string> → ""
+  89-   if (is.null(names(truth))) stop("`truth` must be a named vector keyed by item_id.", call. = FALSE)
+  89+   if (is.null(names(truth))) stop("", call. = FALSE)
+backends.R  <non-empty string> → ""
+  91-     stop("`thresholds` must have length `length(levels) - 1`.", call. = FALSE)
+  91+     stop("", call. = FALSE)
+backends.R  <non-empty string> → ""
+  100-     key <- paste0(nchar(parts, type = "bytes"), ":", parts, collapse = "")
+  100+     key <- paste0(nchar(parts, type = "bytes"), "", parts, collapse = "")
+backends.R  <non-empty string> → ""
+  125-     pid <- as.character(row$prompt_id %||% "P")
+  125+     pid <- as.character(row$prompt_id %||% "")
+backends.R  <non-empty string> → ""
+  161-   if (!is.list(chats) || inherits(chats, "Chat")) chats <- list(default = chats)
+  161+   if (!is.list(chats) || inherits(chats, "")) chats <- list(default = chats)
+backends.R  <non-empty string> → ""
+  165-     if (is.null(chat)) stop(sprintf("backend_ellmer: no chat object for model id '%s'.", key), call. = FALSE)
+  165+     if (is.null(chat)) stop(sprintf("", key), call. = FALSE)
+backends.R  <non-empty string> → ""
+  169-     meta <- list(client = "ellmer")
+  169+     meta <- list(client = "")
+backends.R  <non-empty string> → ""
+  185-     stop("Package `httr2` is required for backend_openai_compatible().", call. = FALSE)
+  185+     stop("", call. = FALSE)
+backends.R  <non-empty string> → ""
+  188-   base_url <- sub("/+$", "", base_url)
+  188+   base_url <- sub("", "", base_url)
+backends.R  <non-empty string> → ""
+  200-     req <- httr2::req_headers(req, "Content-Type" = "application/json")
+  200+     req <- httr2::req_headers(req, "Content-Type" = "")
+backends.R  <non-empty string> → ""
+  226-     for (field in intersect(c("seed", "temperature", "reasoning_effort"), names(body))) {
+  226+     for (field in intersect(c("seed", "", "reasoning_effort"), names(body))) {
+backends.R  <non-empty string> → ""
+  226-     for (field in intersect(c("seed", "temperature", "reasoning_effort"), names(body))) {
+  226+     for (field in intersect(c("seed", "temperature", ""), names(body))) {
+backends.R  > → >=
+  131-     if (p_fail > 0 && stats::runif(1) < p_fail) {
+  131+     if (p_fail >= 0 && stats::runif(1) < p_fail) {
+backends.R  || → &&
+  161-   if (!is.list(chats) || inherits(chats, "Chat")) chats <- list(default = chats)
+  161+   if (!is.list(chats) && inherits(chats, "Chat")) chats <- list(default = chats)
+backends.R  FALSE → TRUE
+  89-   if (is.null(names(truth))) stop("`truth` must be a named vector keyed by item_id.", call. = FALSE)
+  89+   if (is.null(names(truth))) stop("`truth` must be a named vector keyed by item_id.", call. = TRUE)
+backends.R  FALSE → TRUE
+  91-     stop("`thresholds` must have length `length(levels) - 1`.", call. = FALSE)
+  91+     stop("`thresholds` must have length `length(levels) - 1`.", call. = TRUE)
+backends.R  FALSE → TRUE
+  123-       stop(sprintf("backend_mock: unknown item_id '%s' (not in `truth`).", id), call. = FALSE)
+  123+       stop(sprintf("backend_mock: unknown item_id '%s' (not in `truth`).", id), call. = TRUE)
+backends.R  FALSE → TRUE
+  144-   if (exists(".Random.seed", envir = globalenv(), inherits = FALSE))
+  144+   if (exists(".Random.seed", envir = globalenv(), inherits = TRUE))
+backends.R  FALSE → TRUE
+  145-     get(".Random.seed", envir = globalenv(), inherits = FALSE) else NULL
+  145+     get(".Random.seed", envir = globalenv(), inherits = TRUE) else NULL
+backends.R  FALSE → TRUE
+  149-     if (exists(".Random.seed", envir = globalenv(), inherits = FALSE))
+  149+     if (exists(".Random.seed", envir = globalenv(), inherits = TRUE))
+backends.R  FALSE → TRUE
+  159-     stop("Package `ellmer` is required for backend_ellmer().", call. = FALSE)
+  159+     stop("Package `ellmer` is required for backend_ellmer().", call. = TRUE)
+backends.R  FALSE → TRUE
+  165-     if (is.null(chat)) stop(sprintf("backend_ellmer: no chat object for model id '%s'.", key), call. = FALSE)
+  165+     if (is.null(chat)) stop(sprintf("backend_ellmer: no chat object for model id '%s'.", key), call. = TRUE)
+backends.R  FALSE → TRUE
+  185-     stop("Package `httr2` is required for backend_openai_compatible().", call. = FALSE)
+  185+     stop("Package `httr2` is required for backend_openai_compatible().", call. = TRUE)
+backends.R  NA_character_ → NA
+  121-     id <- row$item_id %||% NA_character_
+  121+     id <- row$item_id %||% NA
+backends.R  NA_character_ → NA
+  230-     list(text = as.character(txt %||% NA_character_), meta = meta)
+  230+     list(text = as.character(txt %||% NA), meta = meta)
+backends.R  NULL → NA
+  81- NULL
+  81+ NA
+backends.R  NULL → NA
+  120-   function(prompt, model, row = NULL) {
+  120+   function(prompt, model, row = NA) {
+backends.R  NULL → NA
+  152-   invisible(NULL)
+  152+   invisible(NA)
+backends.R  NULL → NA
+  162-   function(prompt, model, row = NULL) {
+  162+   function(prompt, model, row = NA) {
+backends.R  NULL → NA
+  164-     chat <- chats[[key]] %||% chats[[model]] %||% if (length(chats) == 1) chats[[1]] else NULL
+  164+     chat <- chats[[key]] %||% chats[[model]] %||% if (length(chats) == 1) chats[[1]] else NA
+backends.R  TRUE → FALSE
+  128-     on.exit(.Random.seed_set(old), add = TRUE)
+  128+     on.exit(.Random.seed_set(old), add = FALSE)
+backends.R  TRUE → FALSE
+  133-                   meta = list(mock = TRUE)))
+  133+                   meta = list(mock = FALSE)))
+backends.R  TRUE → FALSE
+  139-     list(text = sprintf(template, val), meta = list(mock = TRUE, latent = eta))
+  139+     list(text = sprintf(template, val), meta = list(mock = FALSE, latent = eta))
+backends.R  TRUE → FALSE
+  158-   if (!requireNamespace("ellmer", quietly = TRUE)) {
+  158+   if (!requireNamespace("ellmer", quietly = FALSE)) {
+backends.R  TRUE → FALSE
+  184-   if (!requireNamespace("httr2", quietly = TRUE)) {
+  184+   if (!requireNamespace("httr2", quietly = FALSE)) {
+grr.R  <n> - 1 → <n> - 1
+  102-   ndc <- if (total_v == 0) NA_real_ else if (grr_v > 0) max(1, floor(1.41 * sqrt(item_v) / sqrt(grr_v))) else Inf
+  102+   ndc <- if (total_v == 0) NA_real_ else if (grr_v > -1) max(1, floor(1.41 * sqrt(item_v) / sqrt(grr_v))) else Inf
+grr.R  <non-empty string> → ""
+  136-   for (source in x$derived) cat("  ", source, ": range method, see ?msa_fit\n", sep = "")
+  136+   for (source in x$derived) cat("", source, ": range method, see ?msa_fit\n", sep = "")
+grr.R  > → >=
+  102-   ndc <- if (total_v == 0) NA_real_ else if (grr_v > 0) max(1, floor(1.41 * sqrt(item_v) / sqrt(grr_v))) else Inf
+  102+   ndc <- if (total_v == 0) NA_real_ else if (grr_v >= 0) max(1, floor(1.41 * sqrt(item_v) / sqrt(grr_v))) else Inf
+grr.R  NA_real_ → NA
+  82-   get <- function(nm) if (nm %in% names(v)) unname(v[[nm]]) else NA_real_
+  82+   get <- function(nm) if (nm %in% names(v)) unname(v[[nm]]) else NA
+grr.R  NA_real_ → NA
+  90-   denominator <- if (total_v == 0) NA_real_ else total_v
+  90+   denominator <- if (total_v == 0) NA else total_v
+grr.R  NA_real_ → NA
+  102-   ndc <- if (total_v == 0) NA_real_ else if (grr_v > 0) max(1, floor(1.41 * sqrt(item_v) / sqrt(grr_v))) else Inf
+  102+   ndc <- if (total_v == 0) NA else if (grr_v > 0) max(1, floor(1.41 * sqrt(item_v) / sqrt(grr_v))) else Inf
+parse.R  + → -
+  93-           if (size && position + size - 1L <= length(tokens) &&
+  93+           if (size && position - size - 1L <= length(tokens) &&
+parse.R  < → <=
+  131-       if (start < 0L) return(NA_character_)
+  131+       if (start <= 0L) return(NA_character_)
+parse.R  <condition> → !(<condition>)
+  44-   if (is.null(text) || !length(text)) return(NA_character_)
+  44+   if (!(is.null(text) || !length(text))) return(NA_character_)
+parse.R  <n> - 1 → <n> - 1
+  45-   trimws(as.character(text)[1])
+  45+   trimws(as.character(text)[0])
+parse.R  <n> + 1 → <n> + 1
+  45-   trimws(as.character(text)[1])
+  45+   trimws(as.character(text)[2])
+parse.R  || → &&
+  44-   if (is.null(text) || !length(text)) return(NA_character_)
+  44+   if (is.null(text) && !length(text)) return(NA_character_)
+parse.R  || → &&
+  109-     if (is.null(text) || !length(text) || is.na(text)) return(NA_character_)
+  109+     if (is.null(text) && !length(text) || is.na(text)) return(NA_character_)
+parse.R  || → &&
+  109-     if (is.null(text) || !length(text) || is.na(text)) return(NA_character_)
+  109+     if (is.null(text) || !length(text) && is.na(text)) return(NA_character_)
+parse.R  || → &&
+  128-       if (length(text) != 1L || is.na(text)) return(NA_character_)
+  128+       if (length(text) != 1L && is.na(text)) return(NA_character_)
+parse.R  FALSE → TRUE
+  135-       escaped <- FALSE
+  135+       escaped <- TRUE
+parse.R  NA_character_ → NA
+  44-   if (is.null(text) || !length(text)) return(NA_character_)
+  44+   if (is.null(text) || !length(text)) return(NA)
+parse.R  NA_character_ → NA
+  109-     if (is.null(text) || !length(text) || is.na(text)) return(NA_character_)
+  109+     if (is.null(text) || !length(text) || is.na(text)) return(NA)
+parse.R  NA_character_ → NA
+  114-     NA_character_
+  114+     NA
+parse.R  NA_character_ → NA
+  157-     }, error = function(e) NA_character_, warning = function(w) NA_character_)
+  157+     }, error = function(e) NA_character_, warning = function(w) NA)
+parse.R  NA_integer_ → NA
+  136-       end <- NA_integer_
+  136+       end <- NA
+parse.R  NULL → NA
+  39- NULL
+  39+ NA
+parse.R  TRUE → FALSE
+  55-     x <- gsub("\u2212", "-", x, fixed = TRUE)
+  55+     x <- gsub("\u2212", "-", x, fixed = FALSE)
+parse.R  TRUE → FALSE
+  56-     if (decimal == ",") x <- gsub(",", ".", x, fixed = TRUE)
+  56+     if (decimal == ",") x <- gsub(",", ".", x, fixed = FALSE)
+parse.R  TRUE → FALSE
+  112-       if (grepl(k, x, fixed = TRUE)) return(unname(lookup[[k]]))
+  112+       if (grepl(k, x, fixed = FALSE)) return(unname(lookup[[k]]))
+parse.R  TRUE → FALSE
+  121-   if (!requireNamespace("jsonlite", quietly = TRUE)) {
+  121+   if (!requireNamespace("jsonlite", quietly = FALSE)) {
+parse.R  TRUE → FALSE
+  132-       chars <- strsplit(substring(x, start), "", fixed = TRUE)[[1L]]
+  132+       chars <- strsplit(substring(x, start), "", fixed = FALSE)[[1L]]
+parse.R  TRUE → FALSE
+  154-       value <- object[[field, exact = TRUE]]
+  154+       value <- object[[field, exact = FALSE]]
+parse.R  x[<i>] → x[<i> + 1L]
+  45-   trimws(as.character(text)[1])
+  45+   trimws(as.character(text)[1 + 1L])
+parse.R  x[<i>] → x[<i> - 1L]
+  45-   trimws(as.character(text)[1])
+  45+   trimws(as.character(text)[1 - 1L])
+report-data.R  != → ==
+  20-     if (decimal != ".") text <- gsub(decimal, ".", text, fixed = TRUE)
+  20+     if (decimal == ".") text <- gsub(decimal, ".", text, fixed = TRUE)
+report-data.R  "" → "mutant"
+  117-                paste(format(x, scientific = FALSE, trim = TRUE, big.mark = ""), collapse = ", ")
+  117+                paste(format(x, scientific = FALSE, trim = TRUE, big.mark = "mutant"), collapse = ", ")
+report-data.R  "" → "mutant"
+  118-              }, ""),
+  118+              }, "mutant"),
+report-data.R  & → |
+  91-         value <- value[!is.na(value) & nzchar(trimws(value))]
+  91+         value <- value[!is.na(value) | nzchar(trimws(value))]
+report-data.R  && → ||
+  37-       if (is.numeric(x) && !is.complex(x)) x else enc2utf8(as.character(x))
+  37+       if (is.numeric(x) || !is.complex(x)) x else enc2utf8(as.character(x))
+report-data.R  && → ||
+  77-       value <- if (has_json && startsWith(trimws(text), "{")) {
+  77+       value <- if (has_json || startsWith(trimws(text), "{")) {
+report-data.R  && → ||
+  88-         if (is.list(value) && is.null(names(value)) &&
+  88+         if (is.list(value) || is.null(names(value)) &&
+report-data.R  && → ||
+  88-         if (is.list(value) && is.null(names(value)) &&
+  88+         if (is.list(value) && is.null(names(value)) ||
+report-data.R  <condition> → !(<condition>)
+  20-     if (decimal != ".") text <- gsub(decimal, ".", text, fixed = TRUE)
+  20+     if (!(decimal != ".")) text <- gsub(decimal, ".", text, fixed = TRUE)
+report-data.R  <condition> → !(<condition>)
+  103-                                 if (has_json) " (expected a JSON object)" else " (jsonlite is unavailable)"))
+  103+                                 if (!(has_json)) " (expected a JSON object)" else " (jsonlite is unavailable)"))
+report-data.R  <non-empty string> → ""
+  20-     if (decimal != ".") text <- gsub(decimal, ".", text, fixed = TRUE)
+  20+     if (decimal != "") text <- gsub(decimal, ".", text, fixed = TRUE)
+report-data.R  <non-empty string> → ""
+  20-     if (decimal != ".") text <- gsub(decimal, ".", text, fixed = TRUE)
+  20+     if (decimal != ".") text <- gsub(decimal, "", text, fixed = TRUE)
+report-data.R  <non-empty string> → ""
+  29-   stop_if_missing_cols(tab, keys, "runs")
+  29+   stop_if_missing_cols(tab, keys, "")
+report-data.R  <non-empty string> → ""
+  49-     stop("Package `digest` is required to report the SHA-256 data hash.", call. = FALSE)
+  49+     stop("", call. = FALSE)
+report-data.R  <non-empty string> → ""
+  57-   format(seed, scientific = FALSE, trim = TRUE, big.mark = "", decimal.mark = ".")
+  57+   format(seed, scientific = FALSE, trim = TRUE, big.mark = "", decimal.mark = "")
+report-data.R  <non-empty string> → ""
+  77-       value <- if (has_json && startsWith(trimws(text), "{")) {
+  77+       value <- if (has_json && startsWith(trimws(text), "")) {
+report-data.R  <non-empty string> → ""
+  103-                                 if (has_json) " (expected a JSON object)" else " (jsonlite is unavailable)"))
+  103+                                 if (has_json) "" else " (jsonlite is unavailable)"))
+report-data.R  <non-empty string> → ""
+  103-                                 if (has_json) " (expected a JSON object)" else " (jsonlite is unavailable)"))
+  103+                                 if (has_json) " (expected a JSON object)" else ""))
+report-data.R  <non-empty string> → ""
+  112-   stop_if_missing_cols(chart, c("index", rules), "control_chart")
+  112+   stop_if_missing_cols(chart, c("index", rules), "")
+report-data.R  FALSE → TRUE
+  49-     stop("Package `digest` is required to report the SHA-256 data hash.", call. = FALSE)
+  49+     stop("Package `digest` is required to report the SHA-256 data hash.", call. = TRUE)
+report-data.R  FALSE → TRUE
+  78-         tryCatch(jsonlite::parse_json(text, simplifyVector = FALSE),
+  78+         tryCatch(jsonlite::parse_json(text, simplifyVector = TRUE),
+report-data.R  FALSE → TRUE
+  89-             all(vapply(value, is.character, logical(1)))) value <- unlist(value, use.names = FALSE)
+  89+             all(vapply(value, is.character, logical(1)))) value <- unlist(value, use.names = TRUE)
+report-data.R  FALSE → TRUE
+  94-       all <- unique(enc2utf8(unlist(observed, use.names = FALSE)))
+  94+       all <- unique(enc2utf8(unlist(observed, use.names = TRUE)))
+report-data.R  FALSE → TRUE
+  117-                paste(format(x, scientific = FALSE, trim = TRUE, big.mark = ""), collapse = ", ")
+  117+                paste(format(x, scientific = TRUE, trim = TRUE, big.mark = ""), collapse = ", ")
+report-data.R  NA_character_ → NA
+  47-   if (is.null(runs)) return(NA_character_)
+  47+   if (is.null(runs)) return(NA)
+report-data.R  NA_character_ → NA
+  73-       rep(NA_character_, sum(selected))
+  73+       rep(NA, sum(selected))
+report-data.R  NULL → NA
+  79-                  error = function(e) NULL, warning = function(w) NULL)
+  79+                  error = function(e) NULL, warning = function(w) NA)
+report-data.R  TRUE → FALSE
+  5-   quoted <- paste0('"', gsub('"', '""', enc2utf8(x), fixed = TRUE), '"')
+  5+   quoted <- paste0('"', gsub('"', '""', enc2utf8(x), fixed = FALSE), '"')
+report-data.R  TRUE → FALSE
+  20-     if (decimal != ".") text <- gsub(decimal, ".", text, fixed = TRUE)
+  20+     if (decimal != ".") text <- gsub(decimal, ".", text, fixed = FALSE)
+report-data.R  TRUE → FALSE
+  40-                            list(na.last = TRUE, method = "radix")))
+  40+                            list(na.last = FALSE, method = "radix")))
+report-data.R  TRUE → FALSE
+  48-   if (!requireNamespace("digest", quietly = TRUE)) {
+  48+   if (!requireNamespace("digest", quietly = FALSE)) {
+report-data.R  TRUE → FALSE
+  55-   seed <- attr(x, "seed", exact = TRUE)
+  55+   seed <- attr(x, "seed", exact = FALSE)
+report-data.R  TRUE → FALSE
+  57-   format(seed, scientific = FALSE, trim = TRUE, big.mark = "", decimal.mark = ".")
+  57+   format(seed, scientific = FALSE, trim = FALSE, big.mark = "", decimal.mark = ".")
+report-data.R  TRUE → FALSE
+  69-   has_json <- requireNamespace("jsonlite", quietly = TRUE)
+  69+   has_json <- requireNamespace("jsonlite", quietly = FALSE)
+report-data.R  TRUE → FALSE
+  111-   rules <- c(attr(chart, "rules", exact = TRUE), "reject")
+  111+   rules <- c(attr(chart, "rules", exact = FALSE), "reject")
+report-data.R  TRUE → FALSE
+  117-                paste(format(x, scientific = FALSE, trim = TRUE, big.mark = ""), collapse = ", ")
+  117+                paste(format(x, scientific = FALSE, trim = FALSE, big.mark = ""), collapse = ", ")
+report.R  <non-empty string> → ""
+  83-   if (!inherits(grr, "msa_grr")) stop("`grr` must come from msa_grr().", call. = FALSE)
+  83+   if (!inherits(grr, "msa_grr")) stop("", call. = FALSE)
+report.R  <non-empty string> → ""
+  90-     stop("Rendering needs packages `rmarkdown` and `knitr`.", call. = FALSE)
+  90+     stop("", call. = FALSE)
+report.R  <non-empty string> → ""
+  92-   if (!rmarkdown::pandoc_available()) stop("pandoc was not found; install pandoc or use RStudio/Positron.", call. = FALSE)
+  92+   if (!rmarkdown::pandoc_available()) stop("", call. = FALSE)
+report.R  <non-empty string> → ""
+  94-   if (!nzchar(template)) stop("Report template not found in the installed package.", call. = FALSE)
+  94+   if (!nzchar(template)) stop("", call. = FALSE)
+report.R  <non-empty string> → ""
+  109-     rendered_at = format(Sys.time(), "%Y-%m-%d %H:%M:%S %Z"))
+  109+     rendered_at = format(Sys.time(), ""))
+report.R  <non-empty string> → ""
+  110-   tmp <- file.path(tempdir(), "llmsa_report")
+  110+   tmp <- file.path(tempdir(), "")
+report.R  <non-empty string> → ""
+  112-   file.copy(template, file.path(tmp, "validation_report.Rmd"), overwrite = TRUE)
+  112+   file.copy(template, file.path(tmp, ""), overwrite = TRUE)
+report.R  || → &&
+  89-   if (!requireNamespace("rmarkdown", quietly = TRUE) || !requireNamespace("knitr", quietly = TRUE)) {
+  89+   if (!requireNamespace("rmarkdown", quietly = TRUE) && !requireNamespace("knitr", quietly = TRUE)) {
+report.R  || → &&
+  123-   if (!is.list(x) || !all(c("criteria", "verdict", "sections") %in% names(x))) fail()
+  123+   if (!is.list(x) && !all(c("criteria", "verdict", "sections") %in% names(x))) fail()
+report.R  || → &&
+  124-   if (!is.data.frame(x$criteria) || !all(c("criterion", "band") %in% names(x$criteria))) fail()
+  124+   if (!is.data.frame(x$criteria) && !all(c("criterion", "band") %in% names(x$criteria))) fail()
+report.R  || → &&
+  125-   if (!is.character(x$verdict) || length(x$verdict) != 1L || is.na(x$verdict) || !nzchar(x$verdict)) fail()
+  125+   if (!is.character(x$verdict) && length(x$verdict) != 1L || is.na(x$verdict) || !nzchar(x$verdict)) fail()
+report.R  || → &&
+  127-   if (length(x$sections) && (is.null(names(x$sections)) || anyNA(names(x$sections)) ||
+  127+   if (length(x$sections) && (is.null(names(x$sections)) || anyNA(names(x$sections)) &&
+report.R  || → &&
+  128-                             any(!nzchar(names(x$sections))) || anyDuplicated(names(x$sections)))) fail()
+  128+                             any(!nzchar(names(x$sections))) && anyDuplicated(names(x$sections)))) fail()
+report.R  || → &&
+  130-     if (!is.list(s) || !is.character(s$text) || anyNA(s$text) ||
+  130+     if (!is.list(s) && !is.character(s$text) || anyNA(s$text) ||
+report.R  || → &&
+  130-     if (!is.list(s) || !is.character(s$text) || anyNA(s$text) ||
+  130+     if (!is.list(s) || !is.character(s$text) && anyNA(s$text) ||
+report.R  FALSE → TRUE
+  83-   if (!inherits(grr, "msa_grr")) stop("`grr` must come from msa_grr().", call. = FALSE)
+  83+   if (!inherits(grr, "msa_grr")) stop("`grr` must come from msa_grr().", call. = TRUE)
+report.R  FALSE → TRUE
+  86-     stop("`control_chart` must come from msa_control_chart().", call. = FALSE)
+  86+     stop("`control_chart` must come from msa_control_chart().", call. = TRUE)
+report.R  FALSE → TRUE
+  90-     stop("Rendering needs packages `rmarkdown` and `knitr`.", call. = FALSE)
+  90+     stop("Rendering needs packages `rmarkdown` and `knitr`.", call. = TRUE)
+report.R  FALSE → TRUE
+  92-   if (!rmarkdown::pandoc_available()) stop("pandoc was not found; install pandoc or use RStudio/Positron.", call. = FALSE)
+  92+   if (!rmarkdown::pandoc_available()) stop("pandoc was not found; install pandoc or use RStudio/Positron.", call. = TRUE)
+report.R  FALSE → TRUE
+  94-   if (!nzchar(template)) stop("Report template not found in the installed package.", call. = FALSE)
+  94+   if (!nzchar(template)) stop("Report template not found in the installed package.", call. = TRUE)
+report.R  FALSE → TRUE
+  111-   dir.create(tmp, showWarnings = FALSE, recursive = TRUE)
+  111+   dir.create(tmp, showWarnings = TRUE, recursive = TRUE)
+report.R  FALSE → TRUE
+  122-   fail <- function() stop("`assessment` requires criteria (criterion, band), a verdict string and named sections with text and optional data.frame table.", call. = FALSE)
+  122+   fail <- function() stop("`assessment` requires criteria (criterion, band), a verdict string and named sections with text and optional data.frame table.", call. = TRUE)
+report.R  TRUE → FALSE
+  89-   if (!requireNamespace("rmarkdown", quietly = TRUE) || !requireNamespace("knitr", quietly = TRUE)) {
+  89+   if (!requireNamespace("rmarkdown", quietly = FALSE) || !requireNamespace("knitr", quietly = TRUE)) {
+report.R  TRUE → FALSE
+  89-   if (!requireNamespace("rmarkdown", quietly = TRUE) || !requireNamespace("knitr", quietly = TRUE)) {
+  89+   if (!requireNamespace("rmarkdown", quietly = TRUE) || !requireNamespace("knitr", quietly = FALSE)) {
+report.R  TRUE → FALSE
+  101-     design_seed = msa_report_seed(attr(runs, "design", exact = TRUE)),
+  101+     design_seed = msa_report_seed(attr(runs, "design", exact = FALSE)),
+report.R  TRUE → FALSE
+  111-   dir.create(tmp, showWarnings = FALSE, recursive = TRUE)
+  111+   dir.create(tmp, showWarnings = FALSE, recursive = FALSE)
+report.R  TRUE → FALSE
+  112-   file.copy(template, file.path(tmp, "validation_report.Rmd"), overwrite = TRUE)
+  112+   file.copy(template, file.path(tmp, "validation_report.Rmd"), overwrite = FALSE)
+report.R  TRUE → FALSE
+  114-   on.exit(options(old_options), add = TRUE)
+  114+   on.exit(options(old_options), add = FALSE)
+robustness.R  < → <=
+  169-   effects <- apply(X, 2, function(x) mean(response[x > 0]) - mean(response[x < 0]))
+  169+   effects <- apply(X, 2, function(x) mean(response[x > 0]) - mean(response[x <= 0]))
+robustness.R  <n> - 1 → <n> - 1
+  67-       out[[paste0(nm, "_level")]] <- ifelse(X[, nm] > 0, as.character(factors[[nm]][2]),
+  67+       out[[paste0(nm, "_level")]] <- ifelse(X[, nm] > -1, as.character(factors[[nm]][2]),
+robustness.R  <n> - 1 → <n> - 1
+  169-   effects <- apply(X, 2, function(x) mean(response[x > 0]) - mean(response[x < 0]))
+  169+   effects <- apply(X, 2, function(x) mean(response[x > -1]) - mean(response[x < 0]))
+robustness.R  <n> + 1 → <n> + 1
+  169-   effects <- apply(X, 2, function(x) mean(response[x > 0]) - mean(response[x < 0]))
+  169+   effects <- apply(X, 2, function(x) mean(response[x > 0]) - mean(response[x < 1]))
+robustness.R  > → >=
+  67-       out[[paste0(nm, "_level")]] <- ifelse(X[, nm] > 0, as.character(factors[[nm]][2]),
+  67+       out[[paste0(nm, "_level")]] <- ifelse(X[, nm] >= 0, as.character(factors[[nm]][2]),
+robustness.R  > → >=
+  169-   effects <- apply(X, 2, function(x) mean(response[x > 0]) - mean(response[x < 0]))
+  169+   effects <- apply(X, 2, function(x) mean(response[x >= 0]) - mean(response[x < 0]))
+robustness.R  NA_real_ → NA
+  88-   X <- matrix(NA_real_, n, m)
+  88+   X <- matrix(NA, n, m)
+robustness.R  TRUE → FALSE
+  59-       old <- .Random.seed_get(); on.exit(.Random.seed_set(old), add = TRUE); set.seed(seed)
+  59+       old <- .Random.seed_get(); on.exit(.Random.seed_set(old), add = FALSE); set.seed(seed)
+robustness.R  TRUE → FALSE
+  185-   attr(out, "seed") <- attr(design, "seed", exact = TRUE)
+  185+   attr(out, "seed") <- attr(design, "seed", exact = FALSE)
+run.R  "" → "mutant"
+  143-   paste(names(meta), vapply(meta, function(v) paste(format(unlist(v)), collapse = ","), ""),
+  143+   paste(names(meta), vapply(meta, function(v) paste(format(unlist(v)), collapse = ","), "mutant"),
+run.R  & → |
+  220-                 sum(!is.na(x$error)), sum(is.na(x$value) & is.na(x$error))))
+  220+                 sum(!is.na(x$error)), sum(is.na(x$value) | is.na(x$error))))
+run.R  && → ||
+  67-   if (resume && !is.null(store) && file.exists(store)) {
+  67+   if (resume || !is.null(store) && file.exists(store)) {
+run.R  && → ||
+  114-     if (delay > 0 && i < n) Sys.sleep(delay)
+  114+     if (delay > 0 || i < n) Sys.sleep(delay)
+run.R  && → ||
+  224-   if ("latency_s" %in% names(x) && any(!is.na(x$latency_s))) {
+  224+   if ("latency_s" %in% names(x) || any(!is.na(x$latency_s))) {
+run.R  %% → *
+  113-     if (verbose && (i %% 25 == 0 || i == n)) message(sprintf("  %d / %d", i, n))
+  113+     if (verbose && (i * 25 == 0 || i == n)) message(sprintf("  %d / %d", i, n))
+run.R  + → -
+  242-   tab <- stats::aggregate(cbind(n = 1, n_valid = ok) ~ prompt_id + model_id, data = runs, FUN = sum)
+  242+   tab <- stats::aggregate(cbind(n = 1, n_valid = ok) ~ prompt_id - model_id, data = runs, FUN = sum)
+run.R  + → -
+  243-   per_cell <- stats::aggregate(ok ~ item_id + prompt_id + model_id, data = runs, FUN = sum)
+  243+   per_cell <- stats::aggregate(ok ~ item_id - prompt_id + model_id, data = runs, FUN = sum)
+run.R  + → -
+  243-   per_cell <- stats::aggregate(ok ~ item_id + prompt_id + model_id, data = runs, FUN = sum)
+  243+   per_cell <- stats::aggregate(ok ~ item_id + prompt_id - model_id, data = runs, FUN = sum)
+run.R  < → >
+  114-     if (delay > 0 && i < n) Sys.sleep(delay)
+  114+     if (delay > 0 && i > n) Sys.sleep(delay)
+run.R  < → >
+  244-   attr(tab, "cells_under_two") <- sum(per_cell$ok < 2)
+  244+   attr(tab, "cells_under_two") <- sum(per_cell$ok > 2)
+run.R  < → <=
+  114-     if (delay > 0 && i < n) Sys.sleep(delay)
+  114+     if (delay > 0 && i <= n) Sys.sleep(delay)
+run.R  < → <=
+  244-   attr(tab, "cells_under_two") <- sum(per_cell$ok < 2)
+  244+   attr(tab, "cells_under_two") <- sum(per_cell$ok <= 2)
+run.R  <condition> → !(<condition>)
+  114-     if (delay > 0 && i < n) Sys.sleep(delay)
+  114+     if (!(delay > 0 && i < n)) Sys.sleep(delay)
+run.R  <condition> → !(<condition>)
+  218-   if ("error" %in% names(x)) {
+  218+   if (!("error" %in% names(x))) {
+run.R  <condition> → !(<condition>)
+  224-   if ("latency_s" %in% names(x) && any(!is.na(x$latency_s))) {
+  224+   if (!("latency_s" %in% names(x) && any(!is.na(x$latency_s)))) {
+run.R  <n> - 1 → <n> - 1
+  75-   if (verbose && n > 0) message(sprintf("Running %d calls ...", n))
+  75+   if (verbose && n > -1) message(sprintf("Running %d calls ...", n))
+run.R  <n> - 1 → <n> - 1
+  107-       response = txt, value = as.character(val), latency_s = round(lat, 3),
+  107+       response = txt, value = as.character(val), latency_s = round(lat, 2),
+run.R  <n> - 1 → <n> - 1
+  113-     if (verbose && (i %% 25 == 0 || i == n)) message(sprintf("  %d / %d", i, n))
+  113+     if (verbose && (i %% 24 == 0 || i == n)) message(sprintf("  %d / %d", i, n))
+run.R  <n> - 1 → <n> - 1
+  113-     if (verbose && (i %% 25 == 0 || i == n)) message(sprintf("  %d / %d", i, n))
+  113+     if (verbose && (i %% 25 == -1 || i == n)) message(sprintf("  %d / %d", i, n))
+run.R  <n> - 1 → <n> - 1
+  114-     if (delay > 0 && i < n) Sys.sleep(delay)
+  114+     if (delay > -1 && i < n) Sys.sleep(delay)
+run.R  <n> - 1 → <n> - 1
+  141-     return(as.character(jsonlite::toJSON(meta, auto_unbox = TRUE, null = "null", digits = 17)))
+  141+     return(as.character(jsonlite::toJSON(meta, auto_unbox = TRUE, null = "null", digits = 16)))
+run.R  <n> - 1 → <n> - 1
+  242-   tab <- stats::aggregate(cbind(n = 1, n_valid = ok) ~ prompt_id + model_id, data = runs, FUN = sum)
+  242+   tab <- stats::aggregate(cbind(n = 0, n_valid = ok) ~ prompt_id + model_id, data = runs, FUN = sum)
+run.R  <n> - 1 → <n> - 1
+  244-   attr(tab, "cells_under_two") <- sum(per_cell$ok < 2)
+  244+   attr(tab, "cells_under_two") <- sum(per_cell$ok < 1)
+run.R  <n> + 1 → <n> + 1
+  75-   if (verbose && n > 0) message(sprintf("Running %d calls ...", n))
+  75+   if (verbose && n > 1) message(sprintf("Running %d calls ...", n))
+run.R  <n> + 1 → <n> + 1
+  107-       response = txt, value = as.character(val), latency_s = round(lat, 3),
+  107+       response = txt, value = as.character(val), latency_s = round(lat, 4),
+run.R  <n> + 1 → <n> + 1
+  113-     if (verbose && (i %% 25 == 0 || i == n)) message(sprintf("  %d / %d", i, n))
+  113+     if (verbose && (i %% 26 == 0 || i == n)) message(sprintf("  %d / %d", i, n))
+run.R  <n> + 1 → <n> + 1
+  113-     if (verbose && (i %% 25 == 0 || i == n)) message(sprintf("  %d / %d", i, n))
+  113+     if (verbose && (i %% 25 == 1 || i == n)) message(sprintf("  %d / %d", i, n))
+run.R  <n> + 1 → <n> + 1
+  114-     if (delay > 0 && i < n) Sys.sleep(delay)
+  114+     if (delay > 1 && i < n) Sys.sleep(delay)
+run.R  <n> + 1 → <n> + 1
+  141-     return(as.character(jsonlite::toJSON(meta, auto_unbox = TRUE, null = "null", digits = 17)))
+  141+     return(as.character(jsonlite::toJSON(meta, auto_unbox = TRUE, null = "null", digits = 18)))
+run.R  <n> + 1 → <n> + 1
+  242-   tab <- stats::aggregate(cbind(n = 1, n_valid = ok) ~ prompt_id + model_id, data = runs, FUN = sum)
+  242+   tab <- stats::aggregate(cbind(n = 2, n_valid = ok) ~ prompt_id + model_id, data = runs, FUN = sum)
+run.R  <n> + 1 → <n> + 1
+  244-   attr(tab, "cells_under_two") <- sum(per_cell$ok < 2)
+  244+   attr(tab, "cells_under_two") <- sum(per_cell$ok < 3)
+run.R  <non-empty string> → ""
+  51-   if (!inherits(design, "msa_design")) stop("`design` must come from msa_design().", call. = FALSE)
+  51+   if (!inherits(design, "msa_design")) stop("", call. = FALSE)
+run.R  <non-empty string> → ""
+  52-   if (!is.function(backend)) stop("`backend` must be a function(prompt, model, row).", call. = FALSE)
+  52+   if (!is.function(backend)) stop("", call. = FALSE)
+run.R  <non-empty string> → ""
+  53-   if (!is.function(parse)) stop("`parse` must be a function(text).", call. = FALSE)
+  53+   if (!is.function(parse)) stop("", call. = FALSE)
+run.R  <non-empty string> → ""
+  71-     if (verbose) message(sprintf("Resuming: %d calls already stored, %d to go.", nrow(done), nrow(todo)))
+  71+     if (verbose) message(sprintf("", nrow(done), nrow(todo)))
+run.R  <non-empty string> → ""
+  75-   if (verbose && n > 0) message(sprintf("Running %d calls ...", n))
+  75+   if (verbose && n > 0) message(sprintf("", n))
+run.R  <non-empty string> → ""
+  102-       run_id = paste0(row$block, "-", row$position),
+  102+       run_id = paste0(row$block, "", row$position),
+run.R  <non-empty string> → ""
+  103-       timestamp = format(t0, "%Y-%m-%dT%H:%M:%OS3%z"),
+  103+       timestamp = format(t0, ""),
+run.R  <non-empty string> → ""
+  113-     if (verbose && (i %% 25 == 0 || i == n)) message(sprintf("  %d / %d", i, n))
+  113+     if (verbose && (i %% 25 == 0 || i == n)) message(sprintf("", i, n))
+run.R  <non-empty string> → ""
+  121-   extra <- setdiff(names(items), c("item_id", "text", names(runs)))
+  121+   extra <- setdiff(names(items), c("", "text", names(runs)))
+run.R  <non-empty string> → ""
+  121-   extra <- setdiff(names(items), c("item_id", "text", names(runs)))
+  121+   extra <- setdiff(names(items), c("item_id", "", names(runs)))
+run.R  <non-empty string> → ""
+  127- run_key <- function(x) paste(x$block, x$item_id, x$prompt_id, x$model_id, x$rep, sep = "|")
+  127+ run_key <- function(x) paste(x$block, x$item_id, x$prompt_id, x$model_id, x$rep, sep = "")
+run.R  <non-empty string> → ""
+  143-   paste(names(meta), vapply(meta, function(v) paste(format(unlist(v)), collapse = ","), ""),
+  143+   paste(names(meta), vapply(meta, function(v) paste(format(unlist(v)), collapse = ""), ""),
+run.R  <non-empty string> → ""
+  144-         sep = "=", collapse = ";")
+  144+         sep = "", collapse = ";")
+run.R  <non-empty string> → ""
+  144-         sep = "=", collapse = ";")
+  144+         sep = "=", collapse = "")
+run.R  <non-empty string> → ""
+  152-       stop("Writing to SQLite needs packages DBI and RSQLite.", call. = FALSE)
+  152+       stop("", call. = FALSE)
+run.R  <non-empty string> → ""
+  205-   stop_if_missing_cols(x, unname(need), "results")
+  205+   stop_if_missing_cols(x, unname(need), "")
+run.R  <non-empty string> → ""
+  215-   cat(sprintf("LLM runs: %d calls, %d items, %d prompt variants, %d models, %d block(s)\n",
+  215+   cat(sprintf("",
+run.R  <non-empty string> → ""
+  218-   if ("error" %in% names(x)) {
+  218+   if ("" %in% names(x)) {
+run.R  <non-empty string> → ""
+  219-     cat(sprintf("  backend errors: %d   unparseable responses: %d\n",
+  219+     cat(sprintf("",
+run.R  <non-empty string> → ""
+  222-     cat(sprintf("  missing values: %d\n", sum(is.na(x$value))))
+  222+     cat(sprintf("", sum(is.na(x$value))))
+run.R  <non-empty string> → ""
+  224-   if ("latency_s" %in% names(x) && any(!is.na(x$latency_s))) {
+  224+   if ("" %in% names(x) && any(!is.na(x$latency_s))) {
+run.R  <non-empty string> → ""
+  225-     cat(sprintf("  median latency: %.2f s\n", stats::median(x$latency_s, na.rm = TRUE)))
+  225+     cat(sprintf("", stats::median(x$latency_s, na.rm = TRUE)))
+run.R  <non-empty string> → ""
+  227-   print(utils::head(as.data.frame(x)[, intersect(c("block", "item_id", "prompt_id", "model_id", "rep", "value"), names(x))]), row.names = FALSE)
+  227+   print(utils::head(as.data.frame(x)[, intersect(c("", "item_id", "prompt_id", "model_id", "rep", "value"), names(x))]), row.names = FALSE)
+run.R  <non-empty string> → ""
+  227-   print(utils::head(as.data.frame(x)[, intersect(c("block", "item_id", "prompt_id", "model_id", "rep", "value"), names(x))]), row.names = FALSE)
+  227+   print(utils::head(as.data.frame(x)[, intersect(c("block", "", "prompt_id", "model_id", "rep", "value"), names(x))]), row.names = FALSE)
+run.R  <non-empty string> → ""
+  227-   print(utils::head(as.data.frame(x)[, intersect(c("block", "item_id", "prompt_id", "model_id", "rep", "value"), names(x))]), row.names = FALSE)
+  227+   print(utils::head(as.data.frame(x)[, intersect(c("block", "item_id", "", "model_id", "rep", "value"), names(x))]), row.names = FALSE)
+run.R  <non-empty string> → ""
+  227-   print(utils::head(as.data.frame(x)[, intersect(c("block", "item_id", "prompt_id", "model_id", "rep", "value"), names(x))]), row.names = FALSE)
+  227+   print(utils::head(as.data.frame(x)[, intersect(c("block", "item_id", "prompt_id", "", "rep", "value"), names(x))]), row.names = FALSE)
+run.R  <non-empty string> → ""
+  227-   print(utils::head(as.data.frame(x)[, intersect(c("block", "item_id", "prompt_id", "model_id", "rep", "value"), names(x))]), row.names = FALSE)
+  227+   print(utils::head(as.data.frame(x)[, intersect(c("block", "item_id", "prompt_id", "model_id", "", "value"), names(x))]), row.names = FALSE)
+run.R  <non-empty string> → ""
+  227-   print(utils::head(as.data.frame(x)[, intersect(c("block", "item_id", "prompt_id", "model_id", "rep", "value"), names(x))]), row.names = FALSE)
+  227+   print(utils::head(as.data.frame(x)[, intersect(c("block", "item_id", "prompt_id", "model_id", "rep", ""), names(x))]), row.names = FALSE)
+run.R  == → !=
+  113-     if (verbose && (i %% 25 == 0 || i == n)) message(sprintf("  %d / %d", i, n))
+  113+     if (verbose && (i %% 25 != 0 || i == n)) message(sprintf("  %d / %d", i, n))
+run.R  == → !=
+  113-     if (verbose && (i %% 25 == 0 || i == n)) message(sprintf("  %d / %d", i, n))
+  113+     if (verbose && (i %% 25 == 0 || i != n)) message(sprintf("  %d / %d", i, n))
+run.R  > → <
+  75-   if (verbose && n > 0) message(sprintf("Running %d calls ...", n))
+  75+   if (verbose && n < 0) message(sprintf("Running %d calls ...", n))
+run.R  > → <
+  114-     if (delay > 0 && i < n) Sys.sleep(delay)
+  114+     if (delay < 0 && i < n) Sys.sleep(delay)
+run.R  > → >=
+  75-   if (verbose && n > 0) message(sprintf("Running %d calls ...", n))
+  75+   if (verbose && n >= 0) message(sprintf("Running %d calls ...", n))
+run.R  > → >=
+  114-     if (delay > 0 && i < n) Sys.sleep(delay)
+  114+     if (delay >= 0 && i < n) Sys.sleep(delay)
+run.R  || → &&
+  113-     if (verbose && (i %% 25 == 0 || i == n)) message(sprintf("  %d / %d", i, n))
+  113+     if (verbose && (i %% 25 == 0 && i == n)) message(sprintf("  %d / %d", i, n))
+run.R  || → &&
+  151-     if (!requireNamespace("DBI", quietly = TRUE) || !requireNamespace("RSQLite", quietly = TRUE)) {
+  151+     if (!requireNamespace("DBI", quietly = TRUE) && !requireNamespace("RSQLite", quietly = TRUE)) {
+run.R  FALSE → TRUE
+  51-   if (!inherits(design, "msa_design")) stop("`design` must come from msa_design().", call. = FALSE)
+  51+   if (!inherits(design, "msa_design")) stop("`design` must come from msa_design().", call. = TRUE)
+run.R  FALSE → TRUE
+  52-   if (!is.function(backend)) stop("`backend` must be a function(prompt, model, row).", call. = FALSE)
+  52+   if (!is.function(backend)) stop("`backend` must be a function(prompt, model, row).", call. = TRUE)
+run.R  FALSE → TRUE
+  53-   if (!is.function(parse)) stop("`parse` must be a function(text).", call. = FALSE)
+  53+   if (!is.function(parse)) stop("`parse` must be a function(text).", call. = TRUE)
+run.R  FALSE → TRUE
+  59-       stop("`parse_by_prompt` must be a list of functions with unique, non-empty names.", call. = FALSE)
+  59+       stop("`parse_by_prompt` must be a list of functions with unique, non-empty names.", call. = TRUE)
+run.R  FALSE → TRUE
+  63-   if (!is.null(block)) todo <- todo[todo$block %in% block, , drop = FALSE]
+  63+   if (!is.null(block)) todo <- todo[todo$block %in% block, , drop = TRUE]
+run.R  FALSE → TRUE
+  77-     row <- todo[i, , drop = FALSE]
+  77+     row <- todo[i, , drop = TRUE]
+run.R  FALSE → TRUE
+  118-   runs <- runs[order(runs$block, runs$position), , drop = FALSE]
+  118+   runs <- runs[order(runs$block, runs$position), , drop = TRUE]
+run.R  FALSE → TRUE
+  152-       stop("Writing to SQLite needs packages DBI and RSQLite.", call. = FALSE)
+  152+       stop("Writing to SQLite needs packages DBI and RSQLite.", call. = TRUE)
+run.R  FALSE → TRUE
+  172-                                     check.names = FALSE))
+  172+                                     check.names = TRUE))
+run.R  FALSE → TRUE
+  176-     x <- utils::read.csv(path, colClasses = types, stringsAsFactors = FALSE,
+  176+     x <- utils::read.csv(path, colClasses = types, stringsAsFactors = TRUE,
+run.R  FALSE → TRUE
+  203-   x <- as.data.frame(x, stringsAsFactors = FALSE)
+  203+   x <- as.data.frame(x, stringsAsFactors = TRUE)
+run.R  FALSE → TRUE
+  227-   print(utils::head(as.data.frame(x)[, intersect(c("block", "item_id", "prompt_id", "model_id", "rep", "value"), names(x))]), row.names = FALSE)
+  227+   print(utils::head(as.data.frame(x)[, intersect(c("block", "item_id", "prompt_id", "model_id", "rep", "value"), names(x))]), row.names = TRUE)
+run.R  NA → NULL
+  99-     val <- if (is.na(err)) tryCatch(parser(txt), error = function(e) NA) else NA
+  99+     val <- if (is.na(err)) tryCatch(parser(txt), error = function(e) NULL) else NA
+run.R  NA → NULL
+  99-     val <- if (is.na(err)) tryCatch(parser(txt), error = function(e) NA) else NA
+  99+     val <- if (is.na(err)) tryCatch(parser(txt), error = function(e) NA) else NULL
+run.R  NA → NULL
+  100-     if (length(val) != 1) val <- NA
+  100+     if (length(val) != 1) val <- NULL
+run.R  NA → NA_real_
+  99-     val <- if (is.na(err)) tryCatch(parser(txt), error = function(e) NA) else NA
+  99+     val <- if (is.na(err)) tryCatch(parser(txt), error = function(e) NA_real_) else NA
+run.R  NA → NA_real_
+  99-     val <- if (is.na(err)) tryCatch(parser(txt), error = function(e) NA) else NA
+  99+     val <- if (is.na(err)) tryCatch(parser(txt), error = function(e) NA) else NA_real_
+run.R  NA → NA_real_
+  100-     if (length(val) != 1) val <- NA
+  100+     if (length(val) != 1) val <- NA_real_
+run.R  NA → NA_integer_
+  99-     val <- if (is.na(err)) tryCatch(parser(txt), error = function(e) NA) else NA
+  99+     val <- if (is.na(err)) tryCatch(parser(txt), error = function(e) NA_integer_) else NA
+run.R  NA → NA_integer_
+  99-     val <- if (is.na(err)) tryCatch(parser(txt), error = function(e) NA) else NA
+  99+     val <- if (is.na(err)) tryCatch(parser(txt), error = function(e) NA) else NA_integer_
+run.R  NA → NA_integer_
+  100-     if (length(val) != 1) val <- NA
+  100+     if (length(val) != 1) val <- NA_integer_
+run.R  NA → NA_character_
+  99-     val <- if (is.na(err)) tryCatch(parser(txt), error = function(e) NA) else NA
+  99+     val <- if (is.na(err)) tryCatch(parser(txt), error = function(e) NA_character_) else NA
+run.R  NA → NA_character_
+  99-     val <- if (is.na(err)) tryCatch(parser(txt), error = function(e) NA) else NA
+  99+     val <- if (is.na(err)) tryCatch(parser(txt), error = function(e) NA) else NA_character_
+run.R  NA → NA_character_
+  100-     if (length(val) != 1) val <- NA
+  100+     if (length(val) != 1) val <- NA_character_
+run.R  NA_character_ → NA
+  82-       txt <- NA_character_; meta <- NULL; err <- conditionMessage(res)
+  82+       txt <- NA; meta <- NULL; err <- conditionMessage(res)
+run.R  NULL → NA
+  86-       meta <- if (is.list(res)) res[["meta"]] else NULL
+  86+       meta <- if (is.list(res)) res[["meta"]] else NA
+run.R  TRUE → FALSE
+  140-   if (requireNamespace("jsonlite", quietly = TRUE)) {
+  140+   if (requireNamespace("jsonlite", quietly = FALSE)) {
+run.R  TRUE → FALSE
+  147- is_sqlite_path <- function(path) grepl("\\.(sqlite|sqlite3|db)$", path, ignore.case = TRUE)
+  147+ is_sqlite_path <- function(path) grepl("\\.(sqlite|sqlite3|db)$", path, ignore.case = FALSE)
+run.R  TRUE → FALSE
+  151-     if (!requireNamespace("DBI", quietly = TRUE) || !requireNamespace("RSQLite", quietly = TRUE)) {
+  151+     if (!requireNamespace("DBI", quietly = FALSE) || !requireNamespace("RSQLite", quietly = TRUE)) {
+run.R  TRUE → FALSE
+  151-     if (!requireNamespace("DBI", quietly = TRUE) || !requireNamespace("RSQLite", quietly = TRUE)) {
+  151+     if (!requireNamespace("DBI", quietly = TRUE) || !requireNamespace("RSQLite", quietly = FALSE)) {
+run.R  TRUE → FALSE
+  155-     on.exit(DBI::dbDisconnect(con), add = TRUE)
+  155+     on.exit(DBI::dbDisconnect(con), add = FALSE)
+run.R  TRUE → FALSE
+  168-     on.exit(DBI::dbDisconnect(con), add = TRUE)
+  168+     on.exit(DBI::dbDisconnect(con), add = FALSE)
+run.R  TRUE → FALSE
+  225-     cat(sprintf("  median latency: %.2f s\n", stats::median(x$latency_s, na.rm = TRUE)))
+  225+     cat(sprintf("  median latency: %.2f s\n", stats::median(x$latency_s, na.rm = FALSE)))
+run.R  x[<i>] → x[<i> + 1L]
+  111-     out[[i]] <- rec
+  111+     out[[i + 1L]] <- rec
+
+── Results ─────────────────────────────────────────────────────────────────────
+[ KILLED 1073 | SURVIVED 265 | NO COVERAGE 0 | ERRORS 105 | TOTAL 1443 | SCORE 81.6% ]
+
+r-mutation: 4 Mutanten über dem Zeitlimit, im Bericht als Timeout
+r-mutation: Bericht: /mnt/c/Users/Danie/dev/Llmsa/llmsa/reports/mutation/mutation.json
+mutgate: pass (score=80.25 required=80 baseline=80.25 floor=80)
+
+# stderr
+JSON report: /mnt/c/Users/Danie/dev/Llmsa/llmsa/reports/mutation/mutation.json
 
 # runner
-exit=1 status=fail script=86-mutgate.sh
+exit=0 status=pass script=86-mutgate.sh
