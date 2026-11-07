@@ -1,5 +1,70 @@
 # PROGRESS — Langzeitgedächtnis des Builders
 
+## M3d — REWORK, Runde 2 (07.11.2026)
+
+Der Code-Review der Runde 1 enthält **keine blocking-Befunde** und
+verlangt keine Produktänderung. E11 ist **OUT-OF-TERRITORY [INFRA]**:
+Das tests-Gate scheitert ausschließlich an den drei historischen
+M1d-Abnahmestellen, die das in M3d erlaubte Seed-Attribut noch nicht
+berücksichtigt hatten (ADR-053 Nr. 14.5). Der Reviewer hat sie inzwischen
+korrigiert und seine positiven und negativen Prüfläufe in REVIEW
+dokumentiert. Die Bestätigung durch die Gates der Runde 2 steht aus.
+
+Maßgebliche Gate-Fakten bleiben `orchestrator/state/M3d/gates.json`,
+Runde 1: `result: fail`, nur `tests: fail`, alle anderen Gates `pass`,
+kein Status `error`. Das Log nennt 866 Testblöcke, davon drei fehlgeschlagen
+mit zehn negativen Erwartungen, null Fehler und einen Skip
+(`gate-tests.log:1784–1866`, `:2618`). `mutgate` ist mit 80,25 bei
+geforderten 80 grün (`gate-mutgate.log:2255`); `mutfull` ist nicht fällig.
+
+Die Antworten auf **E11 bis E17**, die Referenzen und vollständigen
+Prüfbefehle stehen in
+[REWORK-NOTES.md](orchestrator/handoff/M3d/REWORK-NOTES.md).
+E12 (CSV-Text NA, BL-139), E13 (Metadatendarstellung, BL-140), E14
+(Bootstrap-Hinweis, BL-141), E15 (Testlücken und Pflege, BL-142), E16
+(Parser-Vektoren, QA-M3d-001/BL-143) und E17 (Kennzeichnung des
+Plot-Snapshots, BL-128) bleiben gemäß Review nonblocking und vertagt.
+Keiner dieser Punkte wird als behoben erklärt. Kein MUT-EQUIV-Antrag
+und keine Freigabe; bestehende Tests bleiben unverändert.
+
+Der frühere PLAN-Befund E9/ACC-17 (4) ist von QA umgesetzt; der
+unveränderte M3b-E2E-Test bestätigt die getrennte Seed-Prüfung unten.
+E10/ACC-17 (1–3) ist die unter E11 eingeordnete Reviewer-Korrektur.
+Kein offener QA-PENDING-Befund im aktuellen Review. Der historische
+Socketbefund M3d-BUILD-INFRA-01 bleibt eine lokale
+OUT-OF-TERRITORY-Prüfgrenze; die betreffenden M3d-Abnahmetests sind im
+regulären Gate der Runde 1 grün. Kein erneuter Socket-Replay und kein
+Scheinfix. Eine ARBITER.md liegt für M3d nicht vor; LESSONS ist gelesen.
+
+Gezielte Läufe in der bytegleichen Paketkopie
+`/tmp/llmsa-m3d-r2-l52al90t/package`, mit Originalankern und
+Betreiberaufzeichnungen über die vorhandenen Testhelfer. Die sieben
+M3d-Unit-Dateien, M3b-QA-E2E und M3d-QA-Fuzz wurden unverändert
+ausgeführt. Alle drei Prozesse Exit 0; echter Output:
+
+```text
+M3d-R2-unit: 45 blocks; 0 failed expectations; 0 error blocks; 0 warnings; 0 skips; 932 passed expectations; elapsed 12.383 s
+M3d-R2-QA-seeds: 3 blocks; 0 failed expectations; 0 error blocks; 0 warnings; 0 skips; 259 passed expectations; elapsed 1.717 s
+M3d-R2-QA-fuzz: 2 blocks; 0 failed expectations; 0 error blocks; 0 warnings; 0 skips; 195 passed expectations; elapsed 1.148 s
+```
+
+50 Blöcke und 1.386 erfolgreiche Erwartungen, keine Warnungen oder Skips.
+Dies ist ein gezielter Builder-Nachweis, keine vollständige Gate-Abnahme.
+Die historischen M1d-Vergleiche verwenden `acc_git()` und bleiben wegen
+des Git-Verbots dem Orchestrator vorbehalten. Kein erneuter Mutationslauf
+und kein Paketbau bei unverändertem Produktcode.
+
+Geändert sind nur dieser Nachtrag und der zugewiesene Handoff.
+Die SHA-256-Inventur (Exit 0) bestätigt eine geänderte Ausgangsdatei,
+eine neue Datei und keine Löschung; die übrigen 473 von 474 erfassten
+Ausgangsdateien sind bytegleich, darunter alle 15 R-Dateien, 169 Tests
+und 22 Zustandsdateien von M3d. Vollständiger Output: REWORK-NOTES, P3.
+Produktcode, Hilfeseiten, Vorlagen, Tests, Anker, BACKLOG und Gate-Zustand
+bleiben erhalten. Keine Git-Kommandos, Abhängigkeitsinstallationen,
+Live-API-Aufrufe, Schwellenänderungen oder eigener Verdict. Der
+Orchestrator prüft das Territorium, erzeugt den Phasen-Commit und führt
+die Gates der Runde 2 aus.
+
 ## M3d — BUILD, Runde 1 (06.11.2026)
 
 Der freigegebene PLAN ist gemäß ADR-053 im Builder-Territorium umgesetzt.
