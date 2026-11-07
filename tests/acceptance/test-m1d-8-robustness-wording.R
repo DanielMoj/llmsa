@@ -5,7 +5,8 @@
 # perturbations" no longer occurs in R/ and inst/templates/. With factors above
 # ME, both outputs name every such factor with "above ME only" or "also above
 # SME" (column active_simultaneous). The object of msa_robustness() and the
-# bands stay unchanged: compared with done/M1c (ANK-34) on the same inputs.
+# bands stay unchanged: compared with done/M1c (ANK-34) on the same inputs,
+# apart from the seed attribute added in M3d (ADR-053 Nr. 14.2, 14.5).
 # Contract details: ACC-11.
 
 acc_m1d_8_expected <- function(x) {
@@ -80,7 +81,11 @@ test_that("K-M1d-8: \"robust to all screened perturbations\" occurs in no file u
   expect_identical(hits, character(), label = "files with the old phrase")
 })
 
-test_that("K-M1d-8: the object of msa_robustness() is identical to done/M1c (ankerRef: ANK-34)", {
+# Since M3d, msa_robustness() copies attr(design, "seed") and acmg_robustness()
+# carries it on `effects` (ADR-053 Nr. 14.2). The two tests below take that
+# attribute off, check it on its own and compare everything else with done/M1c
+# (ADR-053 Nr. 14.5).
+test_that("K-M1d-8: the object of msa_robustness() is identical to done/M1c apart from the seed attribute (ankerRef: ANK-34)", {
   old_fun <- get("msa_robustness", envir = acc_m1d_baseline(), inherits = FALSE)
   cases <- acc_m1d_robustness_cases()
   d <- cases$mixed$design
@@ -92,13 +97,19 @@ test_that("K-M1d-8: the object of msa_robustness() is identical to done/M1c (ank
     "factor subset" = list(design = d, response = cases$mixed$response, factors = c("F1", "F2", "F5", "F7", "F9")),
     "plain data.frame" = list(design = plain, response = cases$mixed$response, factors = names(plain))
   )
+  expect_true(!is.null(attr(d, "seed", exact = TRUE)), label = "the seeded Plackett-Burman design carries a seed attribute")
+  expect_null(attr(plain, "seed", exact = TRUE), label = "seed attribute of the plain data.frame")
   for (n in names(calls)) {
-    expect_identical(do.call(msa_robustness, calls[[n]]), do.call(old_fun, calls[[n]]), label = paste("msa_robustness(),", n),
+    new <- do.call(msa_robustness, calls[[n]])
+    expect_identical(attr(new, "seed", exact = TRUE), attr(calls[[n]]$design, "seed", exact = TRUE),
+                     label = paste("seed attribute of msa_robustness(),", n), expected.label = "attr(design, \"seed\")")
+    attr(new, "seed") <- NULL
+    expect_identical(new, do.call(old_fun, calls[[n]]), label = paste("msa_robustness() without the seed attribute,", n),
                      expected.label = "done/M1c")
   }
 })
 
-test_that("K-M1d-8: the robustness bands of acmg_robustness() are identical to done/M1c for acceptable, marginal and unacceptable (ankerRef: ANK-34, ANK-58)", {
+test_that("K-M1d-8: the robustness bands of acmg_robustness() are identical to done/M1c for acceptable, marginal and unacceptable, apart from the seed attribute (ankerRef: ANK-34, ANK-58)", {
   plan <- llmsa:::acmg_plan()
   old_fun <- get("acmg_robustness", envir = acc_m1d_baseline(), inherits = FALSE)
   k <- length(plan$robustness$factors)
@@ -109,12 +120,19 @@ test_that("K-M1d-8: the robustness bands of acmg_robustness() are identical to d
     mixed = c(0.9, 0.25, -0.2, 0.15, rep(0, k - 4L)),
     small = c(0.05, -0.04, 0.03, rep(0, k - 3L))
   )
+  expect_true(!is.null(plan$design$seed), label = "the AP1 plan holds a design seed")
   bands <- character()
   for (n in names(settings)) {
     s <- acc_m1d_pb_runs(plan, settings[[n]])
     new <- llmsa:::acmg_robustness(s$runs, s$modal, s$item_ids, plan)
     old <- old_fun(s$runs, s$modal, s$item_ids, plan)
-    expect_identical(new, old, label = paste("acmg_robustness(),", n), expected.label = "done/M1c")
+    expect_true(!is.null(new$effects), label = paste("acmg_robustness() returns effects,", n))
+    if (is.null(new$effects)) next
+    expect_identical(attr(new$effects, "seed", exact = TRUE), plan$design$seed,
+                     label = paste("seed attribute of acmg_robustness()$effects,", n), expected.label = "plan$design$seed")
+    attr(new$effects, "seed") <- NULL
+    expect_identical(new, old, label = paste("acmg_robustness() without the seed attribute of effects,", n),
+                     expected.label = "done/M1c")
     bands <- c(bands, new$band)
   }
   expect_setequal(intersect(bands, c("acceptable", "marginal", "unacceptable")), c("acceptable", "marginal", "unacceptable"))

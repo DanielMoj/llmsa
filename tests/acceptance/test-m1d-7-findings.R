@@ -136,12 +136,21 @@ test_that("K-M1d-7: the help pages of msa_fit() and msa_boot() name every scenar
   }
 })
 
-test_that("K-M1d-7: R/fit.R and R/grr.R differ from done/M1c only in roxygen lines (docs/02 M1d; ankerRef: ANK-34)", {
+# The rule of docs/02 M1d binds the state that completed M1d: R/fit.R and
+# R/grr.R in the tag done/M1d against done/M1c, both read from the git objects
+# with acc_m1c_baseline_text(), done/M1c checked against ANK-34. Later
+# milestones change these files under their own rules (M3d: ADR-053 Nr. 14.3,
+# checked in the code review at the diff since plan/M3d; ADR-053 Nr. 14.5).
+test_that("K-M1d-7: R/fit.R and R/grr.R of done/M1d differ from done/M1c only in roxygen lines (docs/02 M1d; ankerRef: ANK-34)", {
   for (path in c("R/fit.R", "R/grr.R")) {
     old <- acc_m1d_baseline_file(path)
     on.exit(unlink(old), add = TRUE)
-    a <- acc_m1d_code_lines(file.path(acc_pkg_root(), path))
+    done <- acc_m1c_baseline_text("done/M1d", path)
+    on.exit(unlink(done), add = TRUE)
+    a <- acc_m1d_code_lines(done)
     b <- acc_m1d_code_lines(old)
-    expect_identical(a, b, label = sprintf("%s without roxygen lines equals done/M1c (%d vs %d lines)", path, length(a), length(b)))
+    expect_true(length(a) > 0L, label = sprintf("done/M1d:%s holds code lines", path))
+    expect_identical(a, b, label = sprintf("done/M1d:%s without roxygen lines (%d vs %d lines)", path, length(a), length(b)),
+                     expected.label = "done/M1c")
   }
 })

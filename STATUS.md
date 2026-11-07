@@ -1,6 +1,6 @@
 # STATUS — llmsa
 
-Stand: 2026-11-07T09:07:54+01:00 · Fortschritt: **8/10 fertig**
+Stand: 2026-11-07T09:37:25+01:00 · Fortschritt: **8/10 fertig**
 
 `▓▓▓▓▓▓▓▓░▒`  (▓ fertig · ▒ in Arbeit · ░ offen · ✖ geparkt)
 
@@ -15,6 +15,6 @@ Stand: 2026-11-07T09:07:54+01:00 · Fortschritt: **8/10 fertig**
 | M3a | Übereinstimmung (Cohen, Fleiss, Krippendorff, Attributkennzahlen), Bias und Linearität nach Prüfstandard | ✅ | fertig |
 | M3b | Robustheit: Plackett-Burman-Pläne, Lenth, Half-Normal-Plot, Fehlalarmrate | ✅ | fertig |
 | M3c | Systemeignung: Westgard-Regelkarte, Simulator und Fallzahlplanung | ⬜ | offen |
-| M3d | Ausführung mit Fortsetzen, Parser, Backends gegen Aufzeichnungen, zahlentreuer Bericht mit SHA-256 | 🔨 | Phase gates · Runde 1 |
+| M3d | Ausführung mit Fortsetzen, Parser, Backends gegen Aufzeichnungen, zahlentreuer Bericht mit SHA-256 | 🔨 | Phase 50-code-review · Runde 1 |
 
 _Automatisch aus `orchestrator/state/` erzeugt; Maschinenvertrag: `orchestrator/state/summary.json`._

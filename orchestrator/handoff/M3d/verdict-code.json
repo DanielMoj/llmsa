@@ -1,0 +1,44 @@
+{
+  "milestone": "M3d",
+  "phase": "code",
+  "round": 1,
+  "verdict": "REWORK",
+  "blocking": [],
+  "nonblocking": [
+    {
+      "id": "E11",
+      "ref": "[INFRA] Gate tests (fail, gate-tests.log Z. 1784-1866, Z. 2618); ADR-053 Nr. 14.5.4 (\"Bis dahin sind genau diese drei Tests rot. Das ist kein Befund gegen den Builder.\"); BL-144",
+      "note": "Rot sind nur tests/acceptance/test-m1d-7-findings.R:145 und test-m1d-8-robustness-wording.R:96, :117 (10 Erwartungen, Zeilen im Gate-Stand), alle durch das in M3d zugelassene Attribut seed (ADR-053 Nr. 14.2). Ursache im Reviewer-Territorium; in dieser Phase nach ADR-053 Nr. 14.5 zurückgeführt und ohne Git geprüft (REVIEW r1 Prüflauf 3: m1d-8 8 Blöcke mit 49 Erwartungen grün, m1d-7 9 Blöcke mit 514 grün; neun verfälschte Varianten rot, roxygen-Variante grün). REWORK nur, weil PASS gates.result = pass verlangt; Runde 2 bestätigt die Gates. Für den Builder kein Auftrag."
+    },
+    {
+      "id": "E12",
+      "ref": "ADR-053 Nr. 18.3 (\"jede andere Spalte als Text\"); ?msa_run (\"CSV stores retain text exactly\", R/run.R:10); R/run.R:171-177; BL-139",
+      "note": "Ein Antworttext \"NA\" wird mit qmethod = \"double\" in Anführungszeichen gespeichert, read.csv() liest ihn mit na.strings = \"NA\" als fehlend. Nach resume = TRUE tragen solche Zeilen response NA (mit parse_identity() auch value), im ununterbrochenen Lauf den Text. Speicherdatei bytegleich, K-M3d-1 erfüllt, SQLite nicht betroffen (REVIEW r1 Prüflauf 4). Nach dem 26.11.2026: Grenze in ?msa_run nennen oder zitatbewusster CSV-Leser; Test mit dem Antworttext \"NA\" über resume."
+    },
+    {
+      "id": "E13",
+      "ref": "ADR-053 Nr. 12.2 (\"ohne Wert 'not reported'\"), Nr. 18.2 (\"Meldung, die die Art nennt\"); R/report-data.R:84-95; Vorlage, Chunk model-metadata; R/backends.R:230; BL-140",
+      "note": "Darstellung, Werte richtig (REVIEW r1 Prüflauf 5): (1) Die Modelltabelle hängt \"not reported\" an beobachtete Werte, sobald eine Zeile des Modells kein meta hat (Transportfehler): \"gpt-6.1-sol; not reported\"; in AP1 träfe das jedes Modell mit einem Backendfehler. (2) \"Missing values are not reported.\" liest sich als \"werden weggelassen\". (3) backend_openai_compatible() macht aus message.content null ein NA; die Fehlerzeile heißt \"Empty response: message content is NA.\". Vorschlag: \"not reported\" nur ohne jeden Wert oder mit Zeilenzahl, Satz umformulieren, NULL durchreichen; ohne ADR zulässig (docs/01 §4)."
+    },
+    {
+      "id": "E14",
+      "ref": "Sichtbarer Defekt im Bestand; inst/templates/validation_report.Rmd, Chunk boot (seit plan/M3d unverändert); BL-141",
+      "note": "Ohne boot erscheint in Abschnitt 3 \"*Not assessed in this validation.*\" als eingerückter Codeblock, weil der Chunk boot kein results='asis' hat; die anderen Abschnitte zeigen den Satz kursiv (REVIEW r1 Prüflauf 5). Nach dem 26.11.2026: results='asis' und print(knitr::kable(...)), Leser der Bootstrap-Tabelle (K-M1c-3, K-M3d-4) gegenprüfen."
+    },
+    {
+      "id": "E15",
+      "ref": "Gate mutgate (pass, gate-mutgate.log Z. 2251-2255); reports/mutation/mutation.json; BL-142",
+      "note": "Score 80,25 bei verlangten 80, 0 NoCoverage, kein MUT-EQUIV.json, daher keine Freigabe. Testlücken bei richtigem Produkt: R/parse.R:154 TRUE -> FALSE (exact = TRUE; Feld \"class\" neben \"classification\" ungeprüft), R/report-data.R:40 TRUE -> FALSE (na.last; fehlende Schlüsselwerte weder im Unit- noch im Abnahmetest), :117 (big.mark, trim), :91 & -> |, R/run.R:86 NULL -> NA, R/backends.R:169 (client = \"ellmer\"), R/backends.R:100, :101, :103 (die in ?backends unter seed dokumentierte Faltung mit Trennzeichen, Startwert, Faktor 131 und + ist durch keine unabhängige Nachrechnung belegt). Dazu: hash_object() (R/utils.R:13-18, MD5) ohne Aufrufer seit M3d; 1.41 und c(1, 9) doppelt (R/grr.R:61, :102; R/report.R:107). Beim nächsten Eingriff, frühestens nach dem 26.11.2026."
+    },
+    {
+      "id": "E16",
+      "ref": "orchestrator/handoff/M3d/QA.md QA-M3d-001; ADR-053 Nr. 2-4, 15.2; R/parse.R:53, :109; BL-143",
+      "note": "parse_number() und parse_choice(whole_word = FALSE) enden bei Vektoren der Länge 2 mit \"'length = 2' in coercion to 'logical(1)'\" (REVIEW r1 Prüflauf 4 (b)). Herabstufung begründet: kein roter reproduzierender Test, der Vertrag regelt Skalare, NULL, Länge 0 und NA; Bestand aus 332a2d5; msa_run() übergibt immer einen Skalar (R/run.R:87). Nach dem 26.11.2026 einheitlich length(text) != 1L || is.na(text)."
+    },
+    {
+      "id": "E17",
+      "ref": "Prüfauftrag 50-code-review (Momentaufnahme der eigenen Ausgabe nur gekennzeichnet); BL-128 (1)",
+      "note": "tests/testthat/test-robustness-properties.R:277-312 vergleicht Titel, Achsentitel, pch, lty, pos und cex mit Literalen, ohne Kennzeichnung als Momentaufnahme; die übrigen Stellen aus BL-128 sind gekennzeichnet, BL-128 (2) ist erledigt. Kommentar beim nächsten Eingriff."
+    }
+  ]
+}
