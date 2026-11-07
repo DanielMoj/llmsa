@@ -178,7 +178,7 @@
     },
     {
       "id": "ACC-17",
-      "status": "Hinweis des Reviewers (30-plan-review M3d, Runde 1, 06.11.2026); für den Builder nonblocking; (1) bis (3) zurückgeführt im Code-Review M3d, Runde 1 (07.11.2026, ADR-053 Nr. 14.5, REVIEW r1 E11 und Prüflauf 3), (4) von QA r1 umgesetzt (ADR-053 Nr. 14.6, 3a77744)",
+      "status": "Hinweis des Reviewers (30-plan-review M3d, Runde 1, 06.11.2026); für den Builder nonblocking; (1) bis (3) zurückgeführt im Code-Review M3d, Runde 1 (07.11.2026, ADR-053 Nr. 14.5, REVIEW r1 E11 und Prüflauf 3), (4) von QA r1 umgesetzt (ADR-053 Nr. 14.6, 3a77744); im tests-Gate der Runde 2 grün (m1d-7 514, m1d-8 49, m3b-qa-e2e 259 Erwartungen; gate-tests.log M3d r2 Z. 1774, 1782, 2352; M3d REVIEW r2)",
       "ref": "ADR-053 Nr. 14; docs/01 §4: „Ohne ADR erlaubt: … zusätzliche Attribute“; K-M3d-6: „alle Seeds (Design, Bootstrap, Plackett-Burman)“; PLAN.md P-M3d-01",
       "kind": "Hinweis",
       "owner": "Reviewer, QA, Betreiber",
