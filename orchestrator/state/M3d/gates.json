@@ -1,11 +1,11 @@
 {
   "milestone": "M3d",
-  "round": 1,
+  "round": 2,
   "base": "a4115ae4e9bf8b536a6ec49825385787b77fe737",
   "baseRef": "plan/M3d",
   "env": {
-    "ts": "2026-11-07T09:07:54+01:00",
-    "sha": "3a777444cf929d3d5a745512206c2f62df24979d",
+    "ts": "2026-11-08T00:31:18+01:00",
+    "sha": "f091eaa0854b58b5e6910a457cf1ada1c7a86c7e",
     "bash": "5.3.9(1)-release",
     "git": "2.53.0",
     "toolchain": {
@@ -16,7 +16,7 @@
   "gates": {
     "deps": "pass",
     "lint": "pass",
-    "tests": "fail",
+    "tests": "pass",
     "trace": "pass",
     "territory": "pass",
     "mutgate": "pass",
@@ -26,12 +26,12 @@
   "summaries": {
     "deps": "deps: Kommando erfolgreich",
     "lint": "lint: Kommando erfolgreich",
-    "tests": "tests: Kommando meldet fachlichen Fehlschlag rc=1",
+    "tests": "tests: Kommando erfolgreich",
     "trace": "trace: alle Kriterien sind wörtlich und beidseitig verknüpft",
-    "territory": "territory: letzter Diff sauber (qa/45-qa, Runde 1, Basis 414e1a93dc9d278fc458c3bb95ade83152682806, 2026-11-06T13:07:00+01:00)",
-    "mutgate": "mutgate: pass (score=80.25 required=80 baseline=80.25 floor=80)",
+    "territory": "territory: letzter Diff sauber (builder/60-rework, Runde 2, Basis ad96b547c238794b595f6dd2dfe6c281b32d1925, 2026-11-07T09:45:12+01:00)",
+    "mutgate": "mutgate: pass (score=80.25 required=80.00 baseline=80.25 floor=80)",
     "golden-adr": "golden-adr: keine Golden-/Ankeränderung",
     "mutfull": "mutfull: pass (nicht fällig in M3d)"
   },
-  "result": "fail"
+  "result": "pass"
 }
