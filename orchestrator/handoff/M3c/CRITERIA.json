@@ -34,7 +34,7 @@
   "open": [
     {
       "id": "ACC-1",
-      "status": "Anker geerntet in ACCEPTANCE M3c (08.11.2026); ADR folgt in 30-plan-review (10-acceptance darf docs/decisions/ nicht schreiben)",
+      "status": "Anker geerntet in ACCEPTANCE M3c (08.11.2026); ADR folgt in 30-plan-review (10-acceptance darf docs/decisions/ nicht schreiben); festgehalten in ADR-054 Nr. 8",
       "ref": "ANKER-TODO.md, Abschnitt „M3c — Westgard, Simulator, Planung“, Zeilen ANK-86, ANK-87, ANK-89; docs/01 §6: „Anker erntet der Reviewer in der ACCEPTANCE-Phase nach `ANKER-TODO.md`.“",
       "kind": "Anker",
       "owner": "Reviewer",
@@ -43,7 +43,7 @@
     },
     {
       "id": "ACC-2",
-      "status": "Auslegung des Reviewers (Spec schweigt zu „genau an der Grenze“, Prüfreihen und Rechengenauigkeit der Standardisierung)",
+      "status": "Auslegung des Reviewers (Spec schweigt zu „genau an der Grenze“, Prüfreihen und Rechengenauigkeit der Standardisierung); festgehalten in ADR-054 Nr. 1",
       "ref": "K-M3c-1: „Jede Regel löst auf konstruierten z-Reihen genau an der Grenze aus und knapp darunter nicht“; Formelsammlung §8 (Regeltabelle, Standardisierung); ANK-86",
       "kind": "Auslegung",
       "owner": "Reviewer",
@@ -52,7 +52,7 @@
     },
     {
       "id": "ACC-3",
-      "status": "Auslegung des Reviewers (Spec schweigt zu Paarbildung, Fehlerfall, Objektgleichheit und dazu, was als Nennen der Lesart gilt)",
+      "status": "Auslegung des Reviewers (Spec schweigt zu Paarbildung, Fehlerfall, Objektgleichheit und dazu, was als Nennen der Lesart gilt); festgehalten in ADR-054 Nr. 2",
       "ref": "K-M3c-2: „`\"westgard\"` bei einem Wert > 2 und dem anderen < −2 innerhalb desselben Laufs (Paare aufeinanderfolgender Werte); `print` und `msa_report()` nennen die verwendete Lesart“; docs/01 §3 Nr. 6; docs/01 §4 (neue Argumente mit Vorgabewert am Ende); ANK-02; M3d ACC-11",
       "kind": "Auslegung",
       "owner": "Reviewer",
@@ -61,7 +61,7 @@
     },
     {
       "id": "ACC-4",
-      "status": "Auslegung des Reviewers (Spec schweigt zu Reihenlänge, Wiederholungszahl über dem Minimum, Vorlauf, Abbruchregel und Toleranzform)",
+      "status": "Auslegung des Reviewers (Spec schweigt zu Reihenlänge, Wiederholungszahl über dem Minimum, Vorlauf, Abbruchregel und Toleranzform); festgehalten in ADR-054 Nr. 3",
       "ref": "K-M3c-3 (criteria); docs/01 §2 Nr. 3, §5, §8; Formelsammlung §8 und §9; ANK-06; ANK-TOL.mc_factor; ANK-86; ANK-87",
       "kind": "Auslegung",
       "owner": "Reviewer",
@@ -70,7 +70,7 @@
     },
     {
       "id": "ACC-5",
-      "status": "Auslegung des Reviewers (Spec schweigt dazu, wo die Grenzen der Karte abzulesen sind)",
+      "status": "Auslegung des Reviewers (Spec schweigt dazu, wo die Grenzen der Karte abzulesen sind); festgehalten in ADR-054 Nr. 4",
       "ref": "K-M3c-4: „Die Shewhart-Grenzen (center ± 1, 2, 3 sd) der Karte stimmen mit `qcc::qcc(type = \"xbar.one\")` bei vorgegebenem `center` und `std.dev` überein, zur Testlaufzeit aufgerufen (Toleranz `ankerRef: ANK-TOL.oracle`, Wert für geschlossene Formeln)“; Formelsammlung §8",
       "kind": "Auslegung",
       "owner": "Reviewer",
@@ -79,7 +79,7 @@
     },
     {
       "id": "ACC-6",
-      "status": "Auslegung des Reviewers (Spec schweigt zu Seeds, Namen der Komponenten und dazu, wie „entspricht der Itemwahrheit“ geprüft wird)",
+      "status": "Auslegung des Reviewers (Spec schweigt zu Seeds, Namen der Komponenten und dazu, wie „entspricht der Itemwahrheit“ geprüft wird); festgehalten in ADR-054 Nr. 5",
       "ref": "K-M3c-5 (criteria); Formelsammlung §2 und §9 („die Itemwahrheit wird mitgeführt (`latent`)“); docs/02 M1c, Szenario S-boot-1; ANK-06; ANK-TOL.mc_factor",
       "kind": "Auslegung",
       "owner": "Reviewer",
@@ -88,7 +88,7 @@
     },
     {
       "id": "ACC-7",
-      "status": "Auslegung des Reviewers (Spec schweigt zu Spaltennamen, Form von replicates und Quantildefinition)",
+      "status": "Auslegung des Reviewers (Spec schweigt zu Spaltennamen, Form von replicates und Quantildefinition); festgehalten in ADR-054 Nr. 6",
       "ref": "K-M3c-6: „`msa_plan()` gibt je Kandidatenplan zusätzlich Bias, EmpSE und deren MCSE aus (neue Spalten, Schnittstellenregel), den wahren %GRR nach Formelsammlung §9 und die Einzelschätzer der Wiederholungen als Attribut `replicates` (neu); der Abnahmetest rechnet Bias, EmpSE, MCSE, Quantile, RMSE und Fehlklassifikationsanteil aus `replicates` nach Formelsammlung §9 von Hand nach (Toleranz `ankerRef: ANK-TOL.arithmetic`)“",
       "kind": "Auslegung",
       "owner": "Reviewer",
@@ -97,7 +97,7 @@
     },
     {
       "id": "ACC-8",
-      "status": "Auslegung des Reviewers (Spec schweigt zu Kandidatenplänen, Komponenten, Seeds, Grenzschätzung, CV-Definition, Tabellenform und dazu, wie die Zahlen des Klasse-A-Tests in die Vignette gelangen)",
+      "status": "Auslegung des Reviewers (Spec schweigt zu Kandidatenplänen, Komponenten, Seeds, Grenzschätzung, CV-Definition, Tabellenform und dazu, wie die Zahlen des Klasse-A-Tests in die Vignette gelangen); festgehalten in ADR-054 Nr. 7",
       "ref": "K-M3c-6: „Der Vergleich des empirischen Variationskoeffizienten der Prompt-Komponente mit der Planungsregel CV ≈ √(2/ν), ν = a − 1 (`ankerRef: ANK-89`), wird je Kandidatenplan zusammen mit dem Anteil der Grenzschätzungen in `vignettes/validation.Rmd` berichtet und ist kein Bestehenskriterium; `tests/simulation/test-plan-satterthwaite.R` (Klasse A) erzeugt die Zahlen und prüft nur deren Vollständigkeit.“; docs/01 §2 Nr. 3; docs/01 §8; BL-50",
       "kind": "Auslegung",
       "owner": "Reviewer",
@@ -106,7 +106,7 @@
     },
     {
       "id": "ACC-9",
-      "status": "offen: Frage an den Betreiber (Spec-Lücke), für den Builder nonblocking",
+      "status": "offen: Frage an den Betreiber (Spec-Lücke), für den Builder nonblocking; festgehalten in ADR-054 Nr. 9",
       "ref": "docs/01 §2 Nr. 3: „mit festem Seed, mindestens `ankerRef: ANK-06` Wiederholungen je Szenario und angegebenem Monte-Carlo-Standardfehler für jede berichtete Kennzahl (Formeln: Formelsammlung §9)“; Formelsammlung §9",
       "kind": "Spec-Lücke",
       "owner": "Betreiber",
@@ -115,7 +115,7 @@
     },
     {
       "id": "ACC-10",
-      "status": "Hinweis an Builder und Betreiber, nonblocking",
+      "status": "Hinweis an Builder und Betreiber, nonblocking; festgehalten in ADR-054 Nr. 10",
       "ref": "docs/01 §5: „Suggests dürfen ergänzt werden; die Validierungssuite nutzt … `qcc` …“; docs/01 §8 (ANK-TOL.sim_runtime); orchestrator/config.env MUT_TEST_DIRS, MUT_TEST_EXCLUDE",
       "kind": "Hinweis",
       "owner": "Builder, Betreiber",
@@ -133,7 +133,7 @@
     },
     {
       "id": "ACC-12",
-      "status": "Hinweis an Builder, QA und Betreiber, nonblocking",
+      "status": "Hinweis an Builder, QA und Betreiber, nonblocking; festgehalten in ADR-054 Nr. 10",
       "ref": "K-M3c-2 (criteria); ACC-3; tests/e2e/test-m3d-qa-e2e.R Z. 369 (QA-M3d-E2E-3); tests/testthat/test-report-provenance.R Z. 103–119",
       "kind": "Hinweis",
       "owner": "Builder, QA, Betreiber",
