@@ -1,6 +1,6 @@
 # STATUS — llmsa
 
-Stand: 2026-11-08T10:13:09+01:00 · Fortschritt: **9/10 fertig**
+Stand: 2026-11-08T10:13:12+01:00 · Fortschritt: **9/10 fertig**
 
 `▓▓▓▓▓▓▓▓▒▓`  (▓ fertig · ▒ in Arbeit · ░ offen · ✖ geparkt)
 
@@ -14,7 +14,7 @@ Stand: 2026-11-08T10:13:09+01:00 · Fortschritt: **9/10 fertig**
 | M1d | Vignetten auf echten Daten ohne Modellaufruf (llm-stability, ClinVar-Einreichungen) und Abnahme der Klasse-B-Simulationsergebnisse aus M1b und M1c | ✅ | fertig |
 | M3a | Übereinstimmung (Cohen, Fleiss, Krippendorff, Attributkennzahlen), Bias und Linearität nach Prüfstandard | ✅ | fertig |
 | M3b | Robustheit: Plackett-Burman-Pläne, Lenth, Half-Normal-Plot, Fehlalarmrate | ✅ | fertig |
-| M3c | Systemeignung: Westgard-Regelkarte, Simulator und Fallzahlplanung | 🔨 | Phase 30-plan-review · Runde 1 |
+| M3c | Systemeignung: Westgard-Regelkarte, Simulator und Fallzahlplanung | 🔨 | Phase 30-plan-approved · Runde 1 |
 | M3d | Ausführung mit Fortsetzen, Parser, Backends gegen Aufzeichnungen, zahlentreuer Bericht mit SHA-256 | ✅ | fertig |
 
 _Automatisch aus `orchestrator/state/` erzeugt; Maschinenvertrag: `orchestrator/state/summary.json`._
