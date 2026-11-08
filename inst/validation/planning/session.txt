@@ -1,0 +1,73 @@
+Planning rule comparison: class A documentation results (K-M3c-6).
+Source settings: docs/02 S-boot-1; ADR-054 Nr. 7 (ACC-8).
+n_sim: 1000
+RNG: Mersenne-Twister/Inversion/Rejection
+Method: Delta method: first two empirical raw moments
+All singular fits and exact zeros are retained; no fitted repetitions are dropped.
+Boundary: prompt == 0; CV: sample SD / mean; MCSE(boundary): sqrt(p * (1-p) / n_sim).
+CV MCSE: delta approximation using cov(cbind(prompt, prompt^2)) / n_sim; not a pass criterion.
+Workers: 1; elapsed seconds: 515.084
+S-plan-1: seed 20261109; n_sim 1000; elapsed seconds 85.806
+S-plan-2: seed 20261110; n_sim 1000; elapsed seconds 103.720
+S-plan-3: seed 20261111; n_sim 1000; elapsed seconds 149.128
+S-plan-4: seed 20261112; n_sim 1000; elapsed seconds 176.430
+Function SHA-256:
+msa_plan 2fea9047c8442a00b382665300f25a05545efc6c51257989f9b204f55b8a9453
+msa_simulate 61ce4ae8672d5f017cc8ff1c6c6fad18153bfe1f6146b811381ba7b8eef344c6
+msa_fit 661a8b8ba50918963716e5d0ae5e6ab9e8818cd65def8f1b829895054ef3d225
+grr_stats 136e5a1352609e9a8182f6d7166d51442ccbe6c17ed362c8a58f0615e752bbb6
+as_msa_runs 6d467b9f7598b3fd425e456d3ad0debb58498e20df1b45b5fe97b6cf416652c7
+Source SHA-256:
+R/acmg.R bfb54917035787ca86a2c90f1781c9064f852fbfbf900ba8847427799863611f
+R/agreement.R 8087442ef28f1aa60b5da37dad79e00da5a2dc816c010e871d3b57b264b7e490
+R/backends.R 02c37bac4954d9f4868bae23247b1b82344de73165603b718c5126eeefe02638
+R/data.R 3762c06061cd9bc087bef98ccbd18a0eb2ec5361dd91e181fac4c707f56d0e6f
+R/design.R f7685ba99e5816ae31f2229886556da2fb50caba1eb890e65f8129a0055435ed
+R/fit.R 00806b1d352a6167354eb3ab39023e199a082309d85879e64e5f8f92d60bc5bf
+R/grr.R 03c065deee938726f83b3c1d23bed3a082b7c0dc6857cabdc5d0e10f1c414409
+R/parse.R e9f2c0b6cea8ede3c6bb1216e1a7a85a5191e0d64e0ef0c0fc3956bd724f1c34
+R/plan.R da7973832f5eb7bd16e2e6369d0d94db6fccaf8b57629efdc3de823f1aecfb6a
+R/report-data.R dafe3a326f934c6661aed6879cb552fb7e022795de9c3641ea503c17a1020caa
+R/report.R bc008584fe84021f06c244210593dce16ef398720422339f333f92bd8cbf3de6
+R/robustness.R a79ffe2de23ba8f337975ccc8428d297984e43694c259ea67b56f919281326ce
+R/run.R ca9b9f24f2f89697c998f7d619d2c9fe67ee244d4da31600e0396059db95352d
+R/spc.R c783a8f8377bf091adb8e684902875d2c0a10119ff32662637e3bc989dd25268
+R/utils.R 3352d76837ddcfd3a11fe5123ae95c68421639f8e770efd35eb2c46097cacfe2
+inst/validation/sim/planning_rule.R caae3736cc6b9caa7ad0a82562221fca8a81a574206f3610b2c7fd77814362f8
+inst/validation/planning/reference_checks.R 7b385a7f0f243c1706d93cc16b1e77f6638a952157835cc7c081678d326c5d67
+Session:
+R version 4.6.1 (2026-06-24)
+Platform: x86_64-pc-linux-gnu
+Running under: Ubuntu 26.04 LTS
+
+Matrix products: default
+BLAS:   /usr/lib/x86_64-linux-gnu/blas/libblas.so.3.12.1 
+LAPACK: /usr/lib/x86_64-linux-gnu/lapack/liblapack.so.3.12.1;  LAPACK version 3.12.0
+
+locale:
+ [1] LC_CTYPE=C.UTF-8       LC_NUMERIC=C           LC_TIME=C.UTF-8       
+ [4] LC_COLLATE=C.UTF-8     LC_MONETARY=C.UTF-8    LC_MESSAGES=C.UTF-8   
+ [7] LC_PAPER=C.UTF-8       LC_NAME=C              LC_ADDRESS=C          
+[10] LC_TELEPHONE=C         LC_MEASUREMENT=C.UTF-8 LC_IDENTIFICATION=C   
+
+time zone: Europe/Berlin
+tzcode source: system (glibc)
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+[1] llmsa_0.1.0    testthat_3.3.2
+
+loaded via a namespace (and not attached):
+ [1] nlme_3.1-168        cli_3.6.6           rlang_1.3.0        
+ [4] otel_0.2.0          reformulas_0.4.4    pkgload_1.5.3      
+ [7] jsonlite_2.0.0      minqa_1.2.8         rprojroot_2.1.1    
+[10] pkgbuild_1.4.8      lme4_2.0-6          brio_1.1.5         
+[13] grid_4.6.1          MASS_7.3-65         lifecycle_1.0.5    
+[16] numDeriv_2016.8-1.1 compiler_4.6.1      Rcpp_1.1.2         
+[19] ucminf_1.2.3        digest_0.6.39       lattice_0.22-9     
+[22] nloptr_2.2.1        R6_2.6.1            Rdpack_2.6.6       
+[25] splines_4.6.1       rbibutils_2.4.1     magrittr_2.0.5     
+[28] Matrix_1.7-4        tools_4.6.1         boot_1.3-32        
+[31] ordinal_2026.7-26   desc_1.4.3         

@@ -57,7 +57,9 @@
 #'   `NULL` retains the original report. Application rules belong to the caller.
 #' @param control_chart Optional result of [msa_control_chart()]. The report
 #'   lists TRUE counts and sorted index positions for each rule and `reject`,
-#'   and identifies the range interpretation of R_4s on consecutive values.
+#'   and identifies the selected R_4s reading on consecutive values. Older
+#'   objects without a reading attribute use the original range interpretation;
+#'   an invalid reading attribute is an error.
 #' @return The path of the rendered report, invisibly.
 #' @examples
 #' \donttest{
@@ -85,6 +87,7 @@ msa_report <- function(grr, runs = NULL, boot = NULL, agreement = NULL, bias = N
   if (!is.null(control_chart) && !inherits(control_chart, "msa_control_chart")) {
     stop("`control_chart` must come from msa_control_chart().", call. = FALSE)
   }
+  control_chart_reading <- if (is.null(control_chart)) NULL else msa_control_chart_reading(control_chart)
   risk <- match.arg(risk)
   if (!requireNamespace("rmarkdown", quietly = TRUE) || !requireNamespace("knitr", quietly = TRUE)) {
     stop("Rendering needs packages `rmarkdown` and `knitr`.", call. = FALSE)
@@ -103,6 +106,7 @@ msa_report <- function(grr, runs = NULL, boot = NULL, agreement = NULL, bias = N
     plackett_burman_seed = msa_report_seed(robustness),
     model_metadata = models$table, metadata_notes = models$notes,
     control_chart = msa_report_control_chart(control_chart),
+    control_chart_reading = control_chart_reading,
     # AIAG and contribution conventions: reference/anchors/ANK-16.json.
     ndc_constant = 1.41, contribution_thresholds = c(1, 9),
     package_version = as.character(utils::packageVersion("llmsa")),

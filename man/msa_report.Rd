@@ -62,7 +62,9 @@ verdict is used in the conclusion; GRR remains in the precision section.
 
 \item{control_chart}{Optional result of \code{\link[=msa_control_chart]{msa_control_chart()}}. The report
 lists TRUE counts and sorted index positions for each rule and \code{reject},
-and identifies the range interpretation of R_4s on consecutive values.}
+and identifies the selected R_4s reading on consecutive values. Older
+objects without a reading attribute use the original range interpretation;
+an invalid reading attribute is an error.}
 }
 \value{
 The path of the rendered report, invisibly.

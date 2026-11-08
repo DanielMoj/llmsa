@@ -53,6 +53,7 @@ Suggests:
     performance,
     pkgload,
     psych,
+    qcc,
     rmarkdown,
     rptR,
     RSQLite,

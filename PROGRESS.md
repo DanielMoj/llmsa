@@ -1,5 +1,505 @@
 # PROGRESS — Langzeitgedächtnis des Builders
 
+## M3c — BUILD, Runde 1 (08.11.2026)
+
+Der freigegebene PLAN ist nach ADR-054 umgesetzt. Die vollständige lokale
+M3c-Abnahme, Unit-Suite, QA-Fuzz-Suite und Klasse-A-Simulationssuite bestehen.
+Der bekannte lokale Socketbefund M3d-BUILD-INFRA-01 begrenzt weiterhin einen
+QA-E2E- und einen M3d-Metadaten-Abnahmeblock. Dieser Eintrag dokumentiert
+ausgeführte Builder-Prüfungen; die Gate- und Abnahmeentscheidung steht aus.
+
+### Grundlage und Änderungen
+
+Gelesen: AGENTS, IMPLEMENTATION-RULES, PROTOCOLS, Handoff-Schema, PROGRESS,
+LESSONS, PLAN und PLAN-REVIEW (Runde 1, Reviewer-PASS), CRITERIA einschließlich
+ACC-1 bis ACC-12, ADR-054, die M3c-Abnahmetests und Klasse-A-Studien samt
+Helfern, docs/01, docs/04 M3c, docs/02 S-boot-1 und Formelsammlung §§2, 8, 9.
+PLAN-UPDATE und ARBITER liegen für M3c nicht vor. Die LESSONS-Vorgabe zur
+allgemeinen Ursachenbehebung ist berücksichtigt; kein Befund erforderte einen
+Umbau des Fit-Kerns.
+
+- `R/spc.R`: letztes Argument `r4s = c("range", "westgard")`, vektorisierte
+  alternative Paarbedingung, einzelnes Lesartattribut und ausdrückliche
+  Lesart in `print()`. Alte Karten ohne Attribut verwenden `range`;
+  ungültige vorhandene Attribute lösen denselben benannten Fehler in Druck
+  und Bericht aus. Die Hilfe erklärt strikte Grenzen, vollständige Fenster,
+  Stichproben-SD und Westgards Anwendung innerhalb eines Kontrolllaufs.
+- `R/plan.R`: vollständige Einzelreplikate aus genau den bestehenden Fits,
+  neue Bias-/EmpSE-/MCSE-Spalten und Zusammenfassungen ausschließlich aus
+  diesen Replikaten. Ein Prompt erhält `NA_real_`, mehrere Prompts erfordern
+  eine gültige REML-Komponente. Alle singulären Fits und exakten Nullen
+  bleiben enthalten. Ungültige `nsim`, fehlende Komponenten und nichtendliche
+  Schätzer brechen benannt ab; Fit-Fehler propagieren. `nsim = 1` bleibt mit
+  ausdrücklich typisierten NA-Streuungskennzahlen ausführbar. Die Hilfe und
+  NEWS beschreiben diesen Vertrag; alte Planobjekte bleiben druckbar.
+- `R/report.R` und Vorlage: eigener interner Parameter
+  `control_chart_reading`; öffentliche Signatur und attributfreie
+  Verletzungstabelle bleiben erhalten. Der bisherige Range-Satz bleibt
+  wörtlich; der Westgard-Satz nennt aufeinanderfolgende standardisierte Werte
+  und beide strikten Grenzen.
+- `inst/validation/planning/`: echte Klasse-A-Dokumentationsdaten,
+  vollständige Replikate, Quellen-/Ergebnismanifest, Sitzungsprotokoll und
+  reiner Leser mit Hash-, Schema-, Schlüssel- und Arithmetikprüfung. Der
+  getrennte Erzeuger unter `inst/validation/sim/planning_rule.R` verwendet
+  genau einen gesetzten Seed und einen `msa_plan()`-Aufruf je Kandidat;
+  standardmäßig sequentiell, optional unter Unix je ganzem Kandidaten parallel.
+  Die Vignette lädt keine Simulation beim Knitten. Der öffentliche Leser
+  vergleicht keine aktuellen Produktquellhashes als Ersatz für Fachprüfungen.
+- `data-raw/make_validation_planning.R`: nur ANK-89 wird vollständig und
+  bytegleich neu kopiert; ANK-06, ANK-16 und ANK-TOL werden über bestehende
+  geprüfte Kopien wiederverwendet. Die Vignette erhält den Methodentext zu
+  K-M3c-1 bis K-M3c-5 sowie die neunspaltige Planungstabelle und die getrennte
+  ergänzende CV-MCSE-Tabelle. Keine Änderung vorhandener Klasse-B-Ergebnisse.
+- Vier neue Unit-Dateien prüfen Regeln, Invarianzen, tatsächliche Druck- und
+  Plot-Ausgaben, unabhängige Replikatnachrechnung, RNG und Fehlerpfade,
+  Rendervertrag/HTML und Ressourcenbeschädigung. Die CV-MCSE-Nachrechnung
+  verwendet unabhängig die Parametrisierung mit zentriertem zweitem Moment.
+  `qcc` steht zusätzlich in Suggests; keine Imports oder Exporte hinzugefügt.
+  Nur die drei betroffenen Hilfen wurden mit roxygen2 neu erzeugt.
+
+Der angeforderte Builder-ADR ist
+`docs/decisions/ADR-055-m3c-planungsressourcen.md`. Er dokumentiert die
+Ressourcenablage, Delta-Methode und die ergänzende Druckkorrektur:
+`rules = "R_4s"` ließ zuvor vorhandene Ablehnungen aus der gedruckten Tabelle
+verschwinden, weil die nicht ausgewählte Warnungsspalte einen leeren Index
+erzeugte. Das ist mit der Baseline reproduziert und allgemein korrigiert;
+Regeln und Kennzahlen ändern sich dadurch nicht. Die Abweichungen gegenüber
+dem ursprünglichen PLAN (NA statt Null bei einem Prompt, nur benutzte
+Ankerkopien) folgen ausdrücklich ADR-054. Keine ungeklärte Vertragsfrage
+wurde durch eine neue fachliche Annahme ersetzt.
+
+### Antworten auf PLAN-REVIEW
+
+| ID | Umsetzung und Beleg |
+| --- | --- |
+| E1 | `prompt = NA_real_` bei einer Prompt-Variante, REML-Schätzer sonst zwingend; Hilfe, reale Ein-Prompt-Fits und Fehlermocks in `test-plan.R`. |
+| E2 | Gemeinsame Lesartprüfung für Druck und Bericht; alte Karten und ungültige Attributformen in Druck-, Renderparameter- und echten HTML-Tests. |
+| E3 | Westgard-Bedingung mit vektorisiertem `&`/`\|`; bestehende Behandlung fehlender Nachbarn und `%in% TRUE` im Ablehnungsindikator; Unit-Fälle mit fehlenden Werten. |
+| E4 | Ausschließlich ANK-89 neu kopiert; vollständige bestehende Kopien von ANK-06/16/TOL wiederverwendet und gehasht. Keine unbenutzte Kopie von ANK-86/87. |
+| E5 | Methodentext zu Regeln, Fehlalarmen, Parvin, qcc-Linien und Simulator mit Anker-IDs und Testpfaden. Bestehende Numerik-/Latent-/Vignetten-Literalwachen bestehen. Historische Git-verwendende Prüfwege bleiben beim Orchestrator. |
+| E6 | Ganze Ausgaben beider Druckmethoden, echte Plot-Displayliste, Replikatreplay mit identischem Ziehungsablauf, unabhängige Simulatorgleichung, alle vorgesehenen Eingabeteilbedingungen und exakte Fehler einschließlich `conditionCall()` geprüft. Neue Tests laufen in Sekunden. Kein eigener Mutationsscore, keine Exklusion oder Äquivalenzfreigabe. |
+| E7 | Zahlen als `sprintf("%.17g")`, feste Lesetypen; Zusammenfassung aus gespeicherten Replikaten. Synthetischer Serialisierungstest bewahrt auch kleinste positive Doubles und trennt sie von null; echte Reproduktion unten. |
+| E8 | Westgard-Berichtssatz gemäß ADR-054 Nr. 17; Hilfetext zu innerhalb desselben Laufs verglichenen Nachbarn. Range-Satz und Verletzungstabelle bleiben erhalten. |
+| E9 | Positive ganze `nsim` früh geprüft und in NEWS benannt; Einzelsimulation weiterhin ausführbar. Ungültige Eingaben mit exakten Fehlermeldungen geprüft. |
+
+### Umgebung und Testtreiber
+
+Alle ausführenden Prüfungen liefen in Positivlisten-Kopien unter
+`/tmp/llmsa-m3c-build-qg68yr8l/`: `baseline/`, `work/`, `docs-src/` und die
+getrennten Paketcheck-Verzeichnisse `public/` und `full/`. Keine Git- oder
+Schlüsseldateien wurden kopiert. Originalanker, geschützte Datenblätter und
+Betreiberaufzeichnungen wurden ausschließlich gelesen. Die Ausgangsinventur
+umfasst 461 Dateien.
+
+Für die nachstehenden Befehle gilt die Pfadabkürzung:
+
+```bash
+M3C_BUILD_DIR=/tmp/llmsa-m3c-build-qg68yr8l
+```
+
+`run-suite.R` nimmt Paketverzeichnis, Testverzeichnis, Filter, Label und
+Ergebnispräfix entgegen. Er setzt `REPO_ROOT` auf das Originalrepo,
+`NOT_CRAN=true`, `TZ=Europe/Berlin` und die vorhandene Testoption
+`llmsa.test.ap1_recordings` auf die Originalaufzeichnungen, öffnet `pdf(NULL)`
+und setzt `testthat::set_max_fails(Inf)`. Ausgeführt wird unverändert
+`testthat::test_dir(testdir, filter = filter, load_package = "source",
+reporter = "summary", stop_on_failure = FALSE)`. Alle Ergebnisse werden
+als RDS gespeichert; Fehler/negative Erwartungen bestimmen Exit 1. Kein
+Abnahmehelfer und keine Erwartung wird dabei ersetzt.
+
+Rein lesender Abhängigkeitscheck aus `work/` (Exit 0):
+
+```bash
+Rscript --vanilla /mnt/c/Users/Danie/dev/Llmsa/llmsa/orchestrator/lib/r-deps.R --check-only
+```
+
+```text
+r-deps: pass — 32 Anforderungen erfüllt (R 4.6.1)
+```
+
+Verwendet wurden die installierten eingefrorenen Abhängigkeiten, darunter
+lme4 2.0.6, Matrix 1.7.4, ordinal 2026.7.26, qcc 2.7, testthat 3.3.2,
+jsonlite 2.0.0, digest 0.6.39, rmarkdown 2.32, knitr 1.52 und roxygen2 8.1.1.
+Keine Abhängigkeit wurde installiert oder aktualisiert. Alle Studien
+verwenden Mersenne-Twister/Inversion/Rejection und die vorgeschriebenen Seeds.
+
+### Frühe Diagnosen und direkte Prüfungen
+
+```bash
+Rscript --vanilla "$M3C_BUILD_DIR/run-suite.R" "$M3C_BUILD_DIR/baseline" tests/acceptance '^m3c-' 'M3c baseline acceptance' "$M3C_BUILD_DIR/acceptance-before"
+Rscript --vanilla "$M3C_BUILD_DIR/run-suite.R" "$M3C_BUILD_DIR/work" tests/acceptance '^m3c-(1|2|4|5|6-plan)' 'M3c deterministic acceptance' "$M3C_BUILD_DIR/acceptance-core"
+Rscript --vanilla "$M3C_BUILD_DIR/run-suite.R" "$M3C_BUILD_DIR/work" tests/testthat '^(control-chart|plan|report-control-chart)$' 'M3c new core unit initial' "$M3C_BUILD_DIR/unit-core-initial"
+Rscript --vanilla "$M3C_BUILD_DIR/run-suite.R" "$M3C_BUILD_DIR/work" tests/testthat '^(control-chart|plan|report-control-chart)$' 'M3c new core unit corrected' "$M3C_BUILD_DIR/unit-core-corrected"
+Rscript --vanilla "$M3C_BUILD_DIR/run-suite.R" "$M3C_BUILD_DIR/work" tests/testthat '^validation-planning$' 'M3c planning-resource unit' "$M3C_BUILD_DIR/unit-planning"
+```
+
+Echte Schlusszeilen aus den gleichnamigen Logs; Exit-Codes 1, 0, 1, 0, 0:
+
+```text
+M3c baseline acceptance: 25 blocks; 19 failed expectations; 0 error blocks; 0 warnings; 0 skips; 323 passed expectations; elapsed 30.133 s
+M3c deterministic acceptance: 22 blocks; 0 failed expectations; 0 error blocks; 0 warnings; 0 skips; 477 passed expectations; elapsed 8.611 s
+M3c new core unit initial: 22 blocks; 6 failed expectations; 0 error blocks; 0 warnings; 0 skips; 443 passed expectations; elapsed 4.878 s
+M3c new core unit corrected: 22 blocks; 0 failed expectations; 0 error blocks; 0 warnings; 0 skips; 451 passed expectations; elapsed 5.450 s
+M3c planning-resource unit: 8 blocks; 0 failed expectations; 0 error blocks; 0 warnings; 0 skips; 126 passed expectations; elapsed 1.991 s
+```
+
+Der erwartete Baseline-Fehlschlag belegt die zuvor fehlenden M3c-Verträge.
+Der erste neue Core-Unit-Lauf scheiterte ausschließlich an sechs eigenen
+HTML-Prüfungen, die `<th>` ohne die tatsächlich vorhandenen Ausrichtungsattribute
+erwarteten. Die Spaltenprüfung akzeptiert jetzt diese gültigen Attribute und
+prüft weiterhin die tatsächlichen Überschriften und den vollständigen Satz.
+Keine bestehende Erwartung wurde geändert.
+
+Roxygen lief in `docs-src/` mit folgendem Befehl (Exit 0):
+
+```bash
+Rscript --vanilla -e 'roxygen2::roxygenise("/tmp/llmsa-m3c-build-qg68yr8l/docs-src", roclets = "rd")'
+```
+
+Übernommen wurden nur
+`msa_control_chart.Rd`, `msa_plan.Rd`, `msa_report.Rd`; die zusätzliche
+Roxygen-Formatänderung der Paketübersichtsseite wurde nicht übernommen.
+Syntaxprüfung (Exit 0): `10 changed or added R files parsed successfully.`
+
+Der direkte ANK-02-Vergleich (`Rscript --vanilla
+"$M3C_BUILD_DIR/check-api.R"`, Exit 0) und der Ausdrucksvergleich der
+unveränderten Funktionen liefern:
+
+```text
+ANK-02: 22 exports and 108 original ordered arguments/defaults preserved; no new exports.
+msa_control_chart: final argument r4s = c("range", "westgard"); msa_report signature preserved.
+msa_simulate: identical parsed function before and after BUILD.
+plot.msa_control_chart: identical parsed function before and after BUILD.
+msa_report_control_chart: identical parsed function before and after BUILD.
+```
+
+### Echte Planungsdaten und Reproduktion
+
+Offline-Vorbereitung aus dem Repository:
+
+```bash
+Rscript --vanilla data-raw/make_validation_planning.R
+```
+
+```text
+Planning inputs: 1 byte-identical anchor; 3 existing anchor copies reused; SHA-256 provenance recorded.
+```
+
+Der erste Erzeugungslauf führte alle Fits aus, brach anschließend aber beim
+Lesen der Zusammenfassung ab: Der CSV-Schreiber hatte numerische Zellen
+ebenfalls zitiert. Relevanter Originaloutput (`planning-generation.log`,
+Exit 1): `scan() expected 'a real', got '"46.442036401282401"'`.
+Es wurden keine Ergebnisse dieses abgebrochenen Laufs publiziert. Die
+Korrektur zitiert nur Textspalten und verwendet explizite Lesetypen.
+Ein kleiner ausdrücklich synthetischer CSV-Test lieferte nach Korrektur:
+
+```text
+Synthetic CSV check: all summary columns and replicate values round-trip exactly with explicit reader types.
+```
+
+Danach wurden die echten Fits erneut gerechnet; kein Ergebnis wurde aus
+Fixtures oder einem fehlgeschlagenen Lauf ergänzt. Erzeugung und unabhängige
+sequentielle Wiederholung in getrennte Ausgabeziele:
+
+```bash
+env REPO_ROOT=/mnt/c/Users/Danie/dev/Llmsa/llmsa TZ=Europe/Berlin Rscript --vanilla "$M3C_BUILD_DIR/work/inst/validation/sim/planning_rule.R" --out /mnt/c/Users/Danie/dev/Llmsa/llmsa/inst/validation/planning --workers 4 --package "$M3C_BUILD_DIR/work"
+env REPO_ROOT=/mnt/c/Users/Danie/dev/Llmsa/llmsa TZ=Europe/Berlin Rscript --vanilla "$M3C_BUILD_DIR/work/inst/validation/sim/planning_rule.R" --out "$M3C_BUILD_DIR/reproduction" --workers 1 --package "$M3C_BUILD_DIR/work"
+```
+
+Echter Output des korrigierten ersten Laufs (`planning-generation-corrected.log`):
+
+```text
+Planning S-plan-1: starting 1000 repetitions with seed 20261109.
+Planning S-plan-2: starting 1000 repetitions with seed 20261110.
+Planning S-plan-3: starting 1000 repetitions with seed 20261111.
+Planning S-plan-4: starting 1000 repetitions with seed 20261112.
+Planning S-plan-1: completed 1000 repetitions in 73.502 s.
+Planning S-plan-2: completed 1000 repetitions in 89.685 s.
+Planning S-plan-3: completed 1000 repetitions in 128.363 s.
+Planning S-plan-4: completed 1000 repetitions in 180.467 s.
+     plan items prompts nu cv_rule cv_empirical boundary_share mcse_boundary
+ S-plan-1    20       3  2  1.0000       1.0722         0.0460        0.0066
+ S-plan-2    20       5  4  0.7071       0.7436         0.0070        0.0026
+ S-plan-3    40       3  2  1.0000       1.0334         0.0340        0.0057
+ S-plan-4    40       5  4  0.7071       0.7513         0.0080        0.0028
+ n_sim
+  1000
+  1000
+  1000
+  1000
+     plan cv_empirical mcse_cv                                mcse_cv_method
+ S-plan-1       1.0722  0.0435 Delta method: first two empirical raw moments
+ S-plan-2       0.7436  0.0192 Delta method: first two empirical raw moments
+ S-plan-3       1.0334  0.0279 Delta method: first two empirical raw moments
+ S-plan-4       0.7513  0.0186 Delta method: first two empirical raw moments
+                                                 mcse_cv_note
+ approximate; all prompt estimates, including zeros, retained
+ approximate; all prompt estimates, including zeros, retained
+ approximate; all prompt estimates, including zeros, retained
+ approximate; all prompt estimates, including zeros, retained
+Planning generation: 4 plans; 4000 replicates; n_sim 1000 per plan; 180.477 s; RNG Mersenne-Twister/Inversion/Rejection.
+```
+
+Die sequentielle Wiederholung verwendet die abschließende Version des
+Erzeugers einschließlich fester Replikat-Lesetypen. Ihre Sitzungs- und
+Manifestdateien werden gemeinsam mit ihren wirklich neu erzeugten Ergebnissen
+übernommen. Quellen-/Funktionshashes beschreiben diesen Lauf; es wird kein
+Hash auf alte Daten umetikettiert. Die numerischen Dateien beider Läufe sind
+bytegleich; Laufzeit und Sitzungsangaben werden ausdrücklich nicht gleichgesetzt.
+
+```text
+Planning S-plan-1: starting 1000 repetitions with seed 20261109.
+Planning S-plan-1: completed 1000 repetitions in 85.805 s.
+Planning S-plan-2: starting 1000 repetitions with seed 20261110.
+Planning S-plan-2: completed 1000 repetitions in 103.720 s.
+Planning S-plan-3: starting 1000 repetitions with seed 20261111.
+Planning S-plan-3: completed 1000 repetitions in 149.128 s.
+Planning S-plan-4: starting 1000 repetitions with seed 20261112.
+Planning S-plan-4: completed 1000 repetitions in 176.430 s.
+Planning generation: 4 plans; 4000 replicates; n_sim 1000 per plan; 515.084 s; RNG Mersenne-Twister/Inversion/Rejection.
+summary.csv: byte-identical across 4-worker and 1-worker runs; SHA-256 ac4913aaf78336975931de642f155963efd8ebc2a921fd732528e0686e175af9; 2172 bytes.
+replicates.csv.gz: byte-identical across 4-worker and 1-worker runs; SHA-256 398ac8d834efcb040cda0d8b396f0a912e668514ed2958ef611fe6fdf21306eb; 89871 bytes.
+Final run provenance: all 17 recorded source hashes match the actual final source files.
+Session records differ as expected: each run retains its actual worker count and elapsed times.
+Published all files from the actual sequential regeneration; no historical hashes were relabelled.
+```
+
+Nach Übernahme dieses Laufprotokolls wurden die Ressourcenprüfungen erneut
+ausgeführt (Exit 0):
+
+```bash
+Rscript --vanilla "$M3C_BUILD_DIR/run-suite.R" "$M3C_BUILD_DIR/work" tests/testthat '^validation-planning$' 'Final planning-resource provenance' "$M3C_BUILD_DIR/unit-planning-final"
+```
+
+```text
+Final planning-resource provenance: 8 blocks; 0 failed expectations; 0 error blocks; 0 warnings; 0 skips; 126 passed expectations; elapsed 1.927 s
+```
+
+Die Vignette berichtet die Abweichung der vier empirischen CV von der Regel
+beschreibend. Exakte Nullen und singuläre Fits bleiben erhalten. ACC-9 bleibt
+beim Betreiber offen; die separat ausgewiesene Delta-MCSE-Näherung folgt
+PLAN und ADR-054 Nr. 9 und erzeugt keine Bestehensschwelle.
+
+### Vollständige lokale Tests und Klasse A
+
+```bash
+Rscript --vanilla "$M3C_BUILD_DIR/run-suite.R" "$M3C_BUILD_DIR/work" tests/acceptance '^m3c-' 'M3c full acceptance' "$M3C_BUILD_DIR/acceptance-m3c"
+Rscript --vanilla "$M3C_BUILD_DIR/run-suite.R" "$M3C_BUILD_DIR/work" tests/testthat . 'Full unit suite' "$M3C_BUILD_DIR/unit-full"
+Rscript --vanilla "$M3C_BUILD_DIR/run-suite.R" "$M3C_BUILD_DIR/work" tests/e2e . 'Full QA E2E suite' "$M3C_BUILD_DIR/qa-e2e"
+Rscript --vanilla "$M3C_BUILD_DIR/run-suite.R" "$M3C_BUILD_DIR/work" tests/fuzz . 'Full QA fuzz suite' "$M3C_BUILD_DIR/qa-fuzz"
+Rscript --vanilla "$M3C_BUILD_DIR/run-suite.R" "$M3C_BUILD_DIR/work" tests/acceptance '^(m1a-|m1b-7-vignette|m1c-5-vignette|m3d-(4|5|6))' 'Numerical, vignette and report regression' "$M3C_BUILD_DIR/acceptance-regression"
+Rscript --vanilla "$M3C_BUILD_DIR/run-suite.R" "$M3C_BUILD_DIR/work" tests/simulation . 'Full class A simulation suite' "$M3C_BUILD_DIR/simulations"
+```
+
+Echte Schlusszeilen; Exit-Codes 0, 0, 1, 0, 1, 0:
+
+```text
+M3c full acceptance: 25 blocks; 0 failed expectations; 0 error blocks; 0 warnings; 0 skips; 528 passed expectations; elapsed 32.477 s
+Full unit suite: 410 blocks; 0 failed expectations; 0 error blocks; 0 warnings; 1 skips; 8065 passed expectations; elapsed 148.773 s
+Full QA E2E suite: 28 blocks; 0 failed expectations; 1 error blocks; 0 warnings; 0 skips; 773 passed expectations; elapsed 45.748 s
+Full QA fuzz suite: 15 blocks; 0 failed expectations; 0 error blocks; 0 warnings; 0 skips; 1580 passed expectations; elapsed 10.553 s
+Numerical, vignette and report regression: 92 blocks; 0 failed expectations; 1 error blocks; 0 warnings; 0 skips; 1905 passed expectations; elapsed 154.512 s
+Full class A simulation suite: 6 blocks; 0 failed expectations; 0 error blocks; 0 warnings; 0 skips; 257 passed expectations; elapsed 302.668 s
+```
+
+Der einzige Unit-Skip stammt unverändert aus `test-backends.R:32`: der
+Negativfall „backend_ellmer needs ellmer“ wird bei installiertem ellmer
+übersprungen. Kein M3c-Test wird übersprungen. Die M3d-HTML-/Markdown-Prüfung
+QA-M3d-E2E-3 besteht einschließlich des unveränderten Range-Satzes.
+
+Die Zeitmessung von 302,668 s umfasst die gesamte unveränderte
+`tests/simulation/`-Suite, einschließlich Bias-Coverage und Lenth-H0.
+Sie liegt unter ANK-TOL.sim_runtime (20 Minuten, 14 Kerne). Es liefen
+gleichzeitig weitere lokale Prüfungen; keine Stichprobengröße, Workerzahl oder
+Toleranz wurde dafür reduziert. Die Planungskandidaten wurden durch die
+Reviewer-Studie mit frischen Fits geprüft; die gerenderte Tabelle stimmt.
+Vollständiger fachlicher Output der M3c-Studien aus `simulations.log`:
+
+```text
+K-M3c-6 (tests/simulation/test-plan-satterthwaite.R, msa_plan, 217.3 s):
+S-plan-1 (items 20, prompts 3, models 3, replicates 2, blocks 2): nu 2, rule 1.0000, empirical CV 1.0722, boundary share 0.0460 (MCSE 0.0066); n_sim 1000, seed 20261109, RNG Mersenne-Twister/Inversion/Rejection, R version 4.6.1 (2026-06-24), llmsa 0.1.0
+S-plan-2 (items 20, prompts 5, models 3, replicates 2, blocks 2): nu 4, rule 0.7071, empirical CV 0.7436, boundary share 0.0070 (MCSE 0.0026); n_sim 1000, seed 20261110, RNG Mersenne-Twister/Inversion/Rejection, R version 4.6.1 (2026-06-24), llmsa 0.1.0
+S-plan-3 (items 40, prompts 3, models 3, replicates 2, blocks 2): nu 2, rule 1.0000, empirical CV 1.0334, boundary share 0.0340 (MCSE 0.0057); n_sim 1000, seed 20261111, RNG Mersenne-Twister/Inversion/Rejection, R version 4.6.1 (2026-06-24), llmsa 0.1.0
+S-plan-4 (items 40, prompts 5, models 3, replicates 2, blocks 2): nu 4, rule 0.7071, empirical CV 0.7513, boundary share 0.0080 (MCSE 0.0028); n_sim 1000, seed 20261112, RNG Mersenne-Twister/Inversion/Rejection, R version 4.6.1 (2026-06-24), llmsa 0.1.0
+K-M3c-5 (tests/simulation/test-simulator-recovery.R, 17.1 s):
+S-sim-1 (items 40, prompts 3, models 3, replicates 2, blocks 2), n_sim 1000, seeds 20261108 + s, seed 20261108, RNG Mersenne-Twister/Inversion/Rejection, R version 4.6.1 (2026-06-24), llmsa 0.1.0
+item          mean 1.002651 given 1      bias +0.002651 MCSE 0.007477 (+0.35 MCSE); estimates at 0: 0
+prompt        mean 0.048579 given 0.05   bias -0.001421 MCSE 0.001608 (-0.88 MCSE); estimates at 0: 41
+model         mean 0.050043 given 0.05   bias +0.000043 MCSE 0.001744 (+0.02 MCSE); estimates at 0: 49
+block         mean 0.009371 given 0.01   bias -0.000629 MCSE 0.000428 (-1.47 MCSE); estimates at 0: 93
+item:prompt   mean 0.010178 given 0.01   bias +0.000178 MCSE 0.000097 (+1.84 MCSE); estimates at 0: 0
+item:model    mean 0.049645 given 0.05   bias -0.000355 MCSE 0.000297 (-1.20 MCSE); estimates at 0: 0
+prompt:model  mean 0.005187 given 0.005  bias +0.000187 MCSE 0.000132 (+1.42 MCSE); estimates at 0: 24
+Residual      mean 0.100067 given 0.1    bias +0.000067 MCSE 0.000128 (+0.52 MCSE); estimates at 0: 0
+item variance of latent: mean 1.001603 expected 1 MCSE 0.007267 (+0.22 MCSE)
+mean of latent: mean 0.005786 expected 0 MCSE 0.005101 (+1.13 MCSE)
+mean of value - latent: mean 0.000172 expected 0 MCSE 0.006404 (+0.03 MCSE)
+covariance of latent with the item means of value - latent: mean 0.000421 expected 0 MCSE 0.000777 (+0.54 MCSE)
+
+K-M3c-3 (tests/simulation/test-westgard-false-alarm.R, firing per rule and position, 11.5 s):
+range    1_2s  analytic 0.045500; share per position 0.045100 to 0.046300 (MCSE 0.000659)
+range    1_3s  analytic 0.002700; share per position 0.002280 to 0.003050 (MCSE 0.000164)
+range    2_2s  analytic 0.001035; share per position 0.000950 to 0.001250 (MCSE 0.000102)
+range    R_4s  analytic 0.004678; share per position 0.004440 to 0.005280 (MCSE 0.000216)
+range    4_1s  analytic 0.001267; share per position 0.001210 to 0.001400 (MCSE 0.000112)
+range    10_x  analytic 0.001953; share per position 0.001860 to 0.001930 (MCSE 0.000140)
+range    largest deviation R_4s at position 12: +2.79 MCSE; n_sim 100000 series of 12 values, seed 20261208, RNG Mersenne-Twister/Inversion/Rejection, R version 4.6.1 (2026-06-24), llmsa 0.1.0
+westgard 1_2s  analytic 0.045500; share per position 0.043940 to 0.046660 (MCSE 0.000659)
+westgard 1_3s  analytic 0.002700; share per position 0.002240 to 0.002940 (MCSE 0.000164)
+westgard 2_2s  analytic 0.001035; share per position 0.000800 to 0.001270 (MCSE 0.000102)
+westgard R_4s  analytic 0.001035; share per position 0.000880 to 0.001290 (MCSE 0.000102)
+westgard 4_1s  analytic 0.001267; share per position 0.000980 to 0.001360 (MCSE 0.000112)
+westgard 10_x  analytic 0.001953; share per position 0.001940 to 0.002070 (MCSE 0.000140)
+westgard largest deviation 1_3s at position 11: -2.80 MCSE; n_sim 100000 series of 12 values, seed 20261308, RNG Mersenne-Twister/Inversion/Rejection, R version 4.6.1 (2026-06-24), llmsa 0.1.0
+K-M3c-3 (tests/simulation/test-westgard-false-alarm.R, Parvin 1992, 21.2 s):
+SE 0: ARL 179.685 (MCSE 1.277), 1/ARL 0.00557 (MCSE 0.00004), Parvin 0.005, difference +0.00057 (tolerance 0.016); 20000 trials, seed 20262108, RNG Mersenne-Twister/Inversion/Rejection, R version 4.6.1 (2026-06-24), llmsa 0.1.0
+SE 1: ARL 12.555 (MCSE 0.071), 1/ARL 0.07965 (MCSE 0.00045), Parvin 0.082, difference -0.00235 (tolerance 0.016); 20000 trials, seed 20262118, RNG Mersenne-Twister/Inversion/Rejection, R version 4.6.1 (2026-06-24), llmsa 0.1.0
+SE 2: ARL 3.332 (MCSE 0.015), 1/ARL 0.30010 (MCSE 0.00131), Parvin 0.301, difference -0.00090 (tolerance 0.016); 20000 trials, seed 20262128, RNG Mersenne-Twister/Inversion/Rejection, R version 4.6.1 (2026-06-24), llmsa 0.1.0
+```
+
+**M3d-BUILD-INFRA-01 — erneut in M3c, OUT-OF-TERRITORY [INFRA].**
+Ref: QA-M3d-E2E-2 (`tests/e2e/test-m3d-qa-e2e.R:180`),
+K-M3d-6 Metadaten (`tests/acceptance/test-m3d-6-report-conventions.R:119`,
+`setup-m3d.R:545`) und der unveränderte HTTP-Replay in `setup-m2.R`.
+Der QA-Replay verwendet `httr2::req_dry_run()` und damit einen lokalen
+Echo-Server; der Sandbox fehlen Socketrechte. Echter Abbruch:
+
+```text
+Error: System failure for: socket() (Operation not permitted)
+httr2::req_dry_run(req, quiet = TRUE)
+curl::curl_echo(handle, progress = FALSE)
+httpuv::startServer("0.0.0.0", port, list(call = echo_handler))
+```
+
+Der Metadaten-Abnahmehelfer erreicht nach denselben gespeicherten
+Backendfehlern `jsonlite::fromJSON(runs$meta[i])` mit fehlenden Metadaten und
+bricht dort mit `missing value where TRUE/FALSE needed` ab, bevor die
+Berichtstabelle geprüft wird. Derselbe Zusammenhang ist bereits im M3d-BUILD
+dokumentiert. Kein neuer Produktfix, kein Retry mit geänderten Rechten und
+kein Eingriff in QA/Abnahme. Vorschlag an Reviewer/Betreiber für die
+Backlog-Nachführung: unveränderte Prüfwege im regulären Gate-Kontext mit
+lokalen Sockets ausführen. Die beiden betreffenden Gesamtläufe sind lokal
+ausdrücklich nicht vollständig grün.
+
+### Paketbau und Paketchecks
+
+`public/src` und `full/src` enthalten nur Paketdateien, Builder-Unit-Tests
+und die unveränderte `tests/testthat.R`; keine Originalanker, lokalen
+Datenblätter, API-Aufzeichnungen, Harness- oder Git-Dateien. Jeder Kontext
+führt aus seinem eigenen Verzeichnis aus:
+
+```bash
+R CMD build --no-manual src
+R CMD check --as-cran --no-manual llmsa_0.1.0.tar.gz
+```
+
+Der öffentliche Prozess hat kein `REPO_ROOT`, der vollständige Prozess
+verweist auf das Originalrepo. `TZ=Europe/Berlin`; wie in
+`orchestrator/lib/r-check.sh` ist lediglich
+`_R_CHECK_CRAN_INCOMING_REMOTE_=false` gesetzt. Der Systemzeitcheck bleibt
+aktiv. Startbefehle: `python3 "$M3C_BUILD_DIR/run-check.py" public` und
+entsprechend `full`. Echter Schluss beider Prozesse:
+
+```text
+public R CMD build: exit 0
+public R CMD check: exit 0
+Status: 1 NOTE
+full R CMD build: exit 0
+full R CMD check: exit 0
+Status: 1 NOTE
+```
+
+Im gebauten öffentlichen Paket meldet `testthat.R` unverändert kontextbedingte
+Skips (sechs nicht ausgelieferte API-Aufzeichnungen, zwei Originalanker-Vergleiche,
+ein CRAN-Skip und der ellmer-Negativfall); mit REPO_ROOT entfallen die beiden
+Originalanker-Skips. Die direkte vollständige Unit-Suite oben hat dagegen die
+Betreiberaufzeichnungen und `NOT_CRAN=true`. Echte Paket-Testausgaben:
+
+```text
+public: [ FAIL 0 | WARN 0 | SKIP 10 | PASS 7774 ]
+full:   [ FAIL 0 | WARN 0 | SKIP 8 | PASS 7776 ]
+```
+
+Die NOTE lautet `Unable to verify current time.`; der externe CRAN-Index
+ist ebenfalls nicht erreichbar, die installierten Abhängigkeiten bestehen
+aber den Check. Keine ERROR/WARNING im abschließenden Checkstatus und keine
+Abschwächung einer Prüfregel. Vier Vignetten werden je Kontext gebaut und
+beim Check erneut gebaut. Die tatsächlichen HTML-Tabellen in den Tarballs
+wurden gelesen und gegen die enthaltenen Ergebnisspalten verglichen:
+
+```text
+public: all 4 HTML vignettes built; planning table has exactly 4 plans and 9 columns, matching stored results; context public; no private or harness files shipped.
+full: all 4 HTML vignettes built; planning table has exactly 4 plans and 9 columns, matching stored results; context full; no private or harness files shipped.
+Public and full planning HTML tables are identical.
+```
+
+Der erste eigene Tarball-Inspektor verwendete versehentlich den installierten
+Pfad statt `inst/validation/` im Quellarchiv (KeyError); nach Korrektur des
+Inspektors bestehen unverändert gebaute Archive die Prüfung. Kein
+Paketinhalt musste dafür geändert werden. Nach den Paketchecks wurden nur
+die echten neuen Sitzungs-/Provenienzdateien der sequentiellen Wiederholung
+übernommen; Code, Tests, Dokumentation und numerische Dateien bleiben
+bytegleich. Die abschließende Ressourcenprüfung oben umfasst diese neuen
+Dateien. Der direkte Dateivergleich ergibt:
+
+```text
+public check input vs final package: only SOURCES.json and session.txt changed for the new real run; product code, unit tests, documentation and numerical data remain byte-identical.
+full check input vs final package: only SOURCES.json and session.txt changed for the new real run; product code, unit tests, documentation and numerical data remain byte-identical.
+```
+
+Windows/macOS wurden lokal nicht ausgeführt und bleiben Release-/CI-Prüfungen
+des Betreibers.
+
+### Backlog, Integrität und Übergabe
+
+Die vollständige Zuordnung aller 144 Backlog-Einträge aus PLAN bleibt
+maßgeblich; es wird kein Eintrag eigenmächtig geschlossen. Aktualisierungen
+gegenüber PLAN für Reviewer/Betreiber:
+
+- BL-50: Vergleich samt Grenzanteilen und MCSE ist aus echten Replikaten
+  berichtet und unabhängig reproduziert; keine Übereinstimmungsschwelle.
+- BL-13/BL-46: gemeinsame Klasse-A-Laufzeit und beide vollständigen
+  Paketprüfungen sind oben belegt; die Gesamtdauer regulärer Gates und
+  Mutationsläufe bleibt Betreiberbeobachtung.
+- BL-57: direkt geladener ANK-02 bestätigt das alte API-Präfix; das neue
+  Argument hat eine Vorgabe und steht am Ende. Die Prüferpflicht bleibt.
+- BL-76: dokumentierter Fit-Abbruch bleibt erhalten und ist gezielt geprüft.
+- BL-142: die von E6 verlangten `validate_assessment()`-Teilbedingungen und
+  Berichtsfehler sind ergänzt. Weitere Parser-/Backend-/Hash-Pflege und die
+  Zusammenführung alter Konstanten bleiben nach PLAN/ADR-054 vertagt.
+- ACC-9: verbindliche Aufnahme einer CV-MCSE-Formel bleibt Betreiberfrage;
+  der erlaubte benannte Zusatz wird dokumentiert, keine Entscheidung vorweggenommen.
+
+Die übrigen Gründe/Zuständigkeiten der PLAN-Vertagungen gelten unverändert,
+insbesondere AP1/Betreiber-Volläufe, historische Reviewer-/QA-Restaufgaben
+und die nach dem 26.11.2026 vorgesehene Pflege. Der Socketbefund ist oben
+mit stabiler ID, Fundstellen und ausgeführtem Beleg übergeben.
+
+Abschließende SHA-256-Inventur ohne Git:
+
+```text
+Inventory: 461 baseline files; 11 changed; 450 byte-identical; 0 deleted.
+New files in inventoried trees: 14; all belong to the approved Builder file list.
+Existing tests: 179/179 byte-identical.
+Original anchor files: 59/59 byte-identical.
+M3c handoffs and LESSONS: 5/5 byte-identical.
+Historical PROGRESS body: byte-identical suffix.
+R/fit.R, R/grr.R, R/report-data.R, NAMESPACE: byte-identical.
+All remaining inventoried specs, contracts, rules, toolchain and BACKLOG files: byte-identical.
+No changed or new inventoried file outside the approved Builder file list.
+```
+
+Die ältere PROGRESS-Historie bleibt bytegleich als Suffix erhalten.
+`R/fit.R`, `R/grr.R`, `R/report-data.R`, NAMESPACE, alle vorhandenen Tests,
+Originalanker, Spezifikationen, Verträge, BACKLOG, Toolchain und erfasste
+M3c-Handoffs sind unverändert. Keine Gate-Fakten oder Orchestrator-Dateien
+geschrieben. Keine Git-Kommandos, Live-API-Aufrufe, Installation oder
+Äquivalenzfreigabe. Der reguläre kumulative Gate-Lauf einschließlich
+historischer Git-verwendender Tests, Mutation mit unveränderter
+Schwelle/Floor/Ratchet und 14 Workern, Territoriumsprüfung, Reviewer-Verdict
+und Phasen-Commit bleiben beim Orchestrator. Ein Mutationsscore für diesen
+BUILD wird ohne ausgeführten Lauf nicht behauptet.
+
 ## M3d — REWORK, Runde 2 (07.11.2026)
 
 Der Code-Review der Runde 1 enthält **keine blocking-Befunde** und

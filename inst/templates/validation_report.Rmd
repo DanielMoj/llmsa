@@ -28,6 +28,7 @@ params:
   model_metadata: NULL
   metadata_notes: NULL
   control_chart: NULL
+  control_chart_reading: NULL
   ndc_constant: NULL
   contribution_thresholds: NULL
   package_version: ""
@@ -217,7 +218,11 @@ if (is.null(params$control_chart)) {
   cat(na_text)
 } else {
   print(knitr::kable(params$control_chart, row.names = FALSE))
-  cat("\n\nR_4s uses the range of two consecutive standardized values.\n")
+  if (params$control_chart_reading == "range") {
+    cat("\n\nR_4s uses the range of two consecutive standardized values.\n")
+  } else {
+    cat("\n\nR_4s uses the Westgard reading: one of two consecutive standardized values is above 2 and the other below -2.\n")
+  }
 }
 ```
 

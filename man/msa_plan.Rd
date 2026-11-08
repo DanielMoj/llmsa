@@ -19,7 +19,7 @@ design.}
 
 \item{vc}{Assumed variance components, see \code{\link[=msa_simulate]{msa_simulate()}}.}
 
-\item{nsim}{Simulations per scenario.}
+\item{nsim}{Positive integer number of simulations per scenario.}
 
 \item{seed}{Optional seed.}
 
@@ -30,7 +30,26 @@ A data.frame of class \code{msa_plan} with, per scenario, the true
 \%GRR, the mean and the 2.5 \%, 50 \% and 97.5 \% quantiles of the
 estimates, the root-mean-square error, the share of singular fits and
 the share of simulations that misclassify the system relative to the
-10 \% / 30 \% thresholds.
+10 \% / 30 \% thresholds (both exact thresholds are marginal).
+Additional columns are \code{bias} (mean estimate minus truth), \code{empse}
+(sample standard deviation of estimates), \code{mcse_bias} (EmpSE / sqrt(nsim))
+and \code{mcse_empse} (approximately EmpSE / sqrt(2 * (nsim - 1))). With
+\code{nsim = 1}, EmpSE and both MCSE columns are \code{NA_real_}.
+
+The \code{replicates} attribute is a data.frame with \code{scenario} (input row
+number), \code{sim} (repetition within the scenario), \code{estimate} (\%GRR in
+percent study variation), \code{singular} (logical) and \code{prompt} (the REML
+prompt variance from that fit). With only one prompt variant there is
+no estimated prompt component, so \code{prompt} is \code{NA_real_}, not a boundary
+estimate of zero. For multiple prompt variants a missing or invalid
+prompt estimate is an error. Singular fits, including estimates exactly
+zero, remain in every summary. Non-finite \%GRR estimates stop the run.
+
+All summaries use these same replicates without rounding. Quantiles use
+definition 7; true \%GRR includes every non-item component, including the
+block and pairwise interactions. Print rounds summaries to one decimal
+place and returns the unchanged object invisibly. See the planning-rule
+comparison in \code{vignette("validation", package = "llmsa")}.
 }
 \description{
 How many items, prompt variants, models and replicates does a study

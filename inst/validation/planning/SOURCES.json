@@ -1,0 +1,139 @@
+{
+  "schema": 1,
+  "preparation": "data-raw/make_validation_planning.R",
+  "anchors": {
+    "ANK-89": {
+      "original": "reference/anchors/ANK-89.json",
+      "copied": "inst/validation/planning/anchors/ANK-89.json",
+      "original_sha256": "25968a312e365ef087e0973a5139fe03029e24d3110979bd5618058297dc1b4e",
+      "copied_sha256": "25968a312e365ef087e0973a5139fe03029e24d3110979bd5618058297dc1b4e"
+    },
+    "ANK-06": {
+      "original": "reference/anchors/ANK-06.json",
+      "copied": "inst/validation/latent/anchors/ANK-06.json",
+      "original_sha256": "7d04a3080c869567bd97de7a61bcbaef062e78407268ec4492951220d218790f",
+      "copied_sha256": "7d04a3080c869567bd97de7a61bcbaef062e78407268ec4492951220d218790f"
+    },
+    "ANK-16": {
+      "original": "reference/anchors/ANK-16.json",
+      "copied": "inst/validation/numeric/anchors/ANK-16.json",
+      "original_sha256": "4517d6c82780ba10b4f94b6de89696431105dc82467d11a1f4b3b0bf4a8facc0",
+      "copied_sha256": "4517d6c82780ba10b4f94b6de89696431105dc82467d11a1f4b3b0bf4a8facc0"
+    },
+    "ANK-TOL": {
+      "original": "reference/anchors/ANK-TOL.json",
+      "copied": "inst/validation/numeric/anchors/ANK-TOL.json",
+      "original_sha256": "dfa241fe399a817e725091cafa6047e0054e0bd50f4b53813d48459a474451fd",
+      "copied_sha256": "dfa241fe399a817e725091cafa6047e0054e0bd50f4b53813d48459a474451fd"
+    }
+  },
+  "generator": "inst/validation/sim/planning_rule.R",
+  "study": {
+    "specification": "docs/02 S-boot-1; ADR-054 Nr. 7 (ACC-8)",
+    "designs": [
+      {
+        "plan": "S-plan-1",
+        "scenario": 1,
+        "n_items": 20,
+        "n_prompts": 3,
+        "n_models": 3,
+        "n_reps": 2,
+        "n_blocks": 2,
+        "seed": 20261109
+      },
+      {
+        "plan": "S-plan-2",
+        "scenario": 2,
+        "n_items": 20,
+        "n_prompts": 5,
+        "n_models": 3,
+        "n_reps": 2,
+        "n_blocks": 2,
+        "seed": 20261110
+      },
+      {
+        "plan": "S-plan-3",
+        "scenario": 3,
+        "n_items": 40,
+        "n_prompts": 3,
+        "n_models": 3,
+        "n_reps": 2,
+        "n_blocks": 2,
+        "seed": 20261111
+      },
+      {
+        "plan": "S-plan-4",
+        "scenario": 4,
+        "n_items": 40,
+        "n_prompts": 5,
+        "n_models": 3,
+        "n_reps": 2,
+        "n_blocks": 2,
+        "seed": 20261112
+      }
+    ],
+    "vc": {
+      "item": 1,
+      "prompt": 0.05,
+      "model": 0.05,
+      "block": 0.01,
+      "item_prompt": 0.01,
+      "item_model": 0.05,
+      "prompt_model": 0.005,
+      "residual": 0.1
+    },
+    "n_sim": 1000,
+    "rng": ["Mersenne-Twister", "Inversion", "Rejection"]
+  },
+  "provenance": {
+    "versions": {
+      "llmsa": "0.1.0",
+      "lme4": "2.0.6",
+      "Matrix": "1.7.4",
+      "ordinal": "2026.7.26",
+      "jsonlite": "2.0.0",
+      "digest": "0.6.39",
+      "R": "R version 4.6.1 (2026-06-24)"
+    },
+    "function_sha256": {
+      "msa_plan": "2fea9047c8442a00b382665300f25a05545efc6c51257989f9b204f55b8a9453",
+      "msa_simulate": "61ce4ae8672d5f017cc8ff1c6c6fad18153bfe1f6146b811381ba7b8eef344c6",
+      "msa_fit": "661a8b8ba50918963716e5d0ae5e6ab9e8818cd65def8f1b829895054ef3d225",
+      "grr_stats": "136e5a1352609e9a8182f6d7166d51442ccbe6c17ed362c8a58f0615e752bbb6",
+      "as_msa_runs": "6d467b9f7598b3fd425e456d3ad0debb58498e20df1b45b5fe97b6cf416652c7"
+    },
+    "source_sha256": {
+      "R/acmg.R": "bfb54917035787ca86a2c90f1781c9064f852fbfbf900ba8847427799863611f",
+      "R/agreement.R": "8087442ef28f1aa60b5da37dad79e00da5a2dc816c010e871d3b57b264b7e490",
+      "R/backends.R": "02c37bac4954d9f4868bae23247b1b82344de73165603b718c5126eeefe02638",
+      "R/data.R": "3762c06061cd9bc087bef98ccbd18a0eb2ec5361dd91e181fac4c707f56d0e6f",
+      "R/design.R": "f7685ba99e5816ae31f2229886556da2fb50caba1eb890e65f8129a0055435ed",
+      "R/fit.R": "00806b1d352a6167354eb3ab39023e199a082309d85879e64e5f8f92d60bc5bf",
+      "R/grr.R": "03c065deee938726f83b3c1d23bed3a082b7c0dc6857cabdc5d0e10f1c414409",
+      "R/parse.R": "e9f2c0b6cea8ede3c6bb1216e1a7a85a5191e0d64e0ef0c0fc3956bd724f1c34",
+      "R/plan.R": "da7973832f5eb7bd16e2e6369d0d94db6fccaf8b57629efdc3de823f1aecfb6a",
+      "R/report-data.R": "dafe3a326f934c6661aed6879cb552fb7e022795de9c3641ea503c17a1020caa",
+      "R/report.R": "bc008584fe84021f06c244210593dce16ef398720422339f333f92bd8cbf3de6",
+      "R/robustness.R": "a79ffe2de23ba8f337975ccc8428d297984e43694c259ea67b56f919281326ce",
+      "R/run.R": "ca9b9f24f2f89697c998f7d619d2c9fe67ee244d4da31600e0396059db95352d",
+      "R/spc.R": "c783a8f8377bf091adb8e684902875d2c0a10119ff32662637e3bc989dd25268",
+      "R/utils.R": "3352d76837ddcfd3a11fe5123ae95c68421639f8e770efd35eb2c46097cacfe2",
+      "inst/validation/sim/planning_rule.R": "caae3736cc6b9caa7ad0a82562221fca8a81a574206f3610b2c7fd77814362f8",
+      "inst/validation/planning/reference_checks.R": "7b385a7f0f243c1706d93cc16b1e77f6638a952157835cc7c081678d326c5d67"
+    },
+    "workers": 1,
+    "elapsed_seconds": 515.084,
+    "cv_mcse_method": "Delta method: first two empirical raw moments"
+  },
+  "results": {
+    "summary.csv": {
+      "sha256": "ac4913aaf78336975931de642f155963efd8ebc2a921fd732528e0686e175af9"
+    },
+    "replicates.csv.gz": {
+      "sha256": "398ac8d834efcb040cda0d8b396f0a912e668514ed2958ef611fe6fdf21306eb"
+    },
+    "session.txt": {
+      "sha256": "7436f49401c5eb0f4fbc9b2a189bfb9e4a48a64404f7f668d2fa0e1418e88778"
+    }
+  }
+}

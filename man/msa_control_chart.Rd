@@ -9,7 +9,8 @@ msa_control_chart(
   center = NULL,
   sd = NULL,
   n_baseline = 10,
-  rules = c("1_2s", "1_3s", "2_2s", "R_4s", "4_1s", "10_x")
+  rules = c("1_2s", "1_3s", "2_2s", "R_4s", "4_1s", "10_x"),
+  r4s = c("range", "westgard")
 )
 }
 \arguments{
@@ -24,11 +25,15 @@ across its replicates). If \code{NULL}, estimated from the first
 \code{sd} when they are not given.}
 
 \item{rules}{Rules to evaluate.}
+
+\item{r4s}{Reading of R_4s: \code{"range"} (absolute difference greater than
+4 sd) or \code{"westgard"} (one value above 2 sd and the other below -2 sd).}
 }
 \value{
 A data.frame of class \code{msa_control_chart} with \code{x}, \code{z}, a
 logical column per rule and \code{reject} (any rejection rule fired;
-\verb{1_2s} is a warning only).
+\verb{1_2s} is a warning only). The \code{r4s} attribute records the selected
+reading, which is also named by \code{print()} and \code{\link[=msa_report]{msa_report()}}.
 }
 \description{
 A validation is a snapshot; providers change models silently, prompts
@@ -43,9 +48,18 @@ value) over time.
 Implemented rules on the z-scores \code{(x - center) / sd}:
 \verb{1_2s} (warning, one value beyond 2 sd), \verb{1_3s} (one value beyond 3 sd),
 \verb{2_2s} (two consecutive values beyond 2 sd on the same side),
-\code{R_4s} (two consecutive values differing by more than 4 sd),
+\code{R_4s} (two consecutive values, interpreted according to \code{r4s}),
 \verb{4_1s} (four consecutive values beyond 1 sd on the same side),
 \verb{10_x} (ten consecutive values on the same side of the center).
+All limits are strict, and a rule cannot fire before its window is full.
+The baseline standard deviation uses the sample divisor (n - 1).
+
+The default R_4s reading uses the range of each consecutive pair. The
+Westgard reading requires one standardized value above 2 and the other
+below -2, in either order. Westgard's original multirule procedure uses
+N = 2 to 4 controls within a run; R_4s is not intended for use across runs
+(Westgard et al., 1981, pp. 498, 500). This interface has no run identifiers:
+callers must ensure that compared neighbors belong to the same control run.
 }
 \examples{
 set.seed(3)
