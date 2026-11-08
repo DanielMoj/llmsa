@@ -72,7 +72,8 @@ failed measurement).</p>
 
 
 <dt id="arg-decimal">decimal<a class="anchor" aria-label="anchor" href="#arg-decimal"></a></dt>
-<dd><p>Decimal mark for <code>parse_number()</code>.</p></dd>
+<dd><p>Decimal mark for <code>parse_number()</code>. Both ASCII minus and
+the Unicode minus sign U+2212 are accepted.</p></dd>
 
 
 <dt id="arg-levels">levels<a class="anchor" aria-label="anchor" href="#arg-levels"></a></dt>
@@ -96,7 +97,12 @@ label are allowed. The default retains the substring parser.</p></dd>
 
 <dt id="arg-field">field<a class="anchor" aria-label="anchor" href="#arg-field"></a></dt>
 <dd><p>For <code>parse_json_field()</code>: the name of the field to extract
-from a JSON object in the response (the first <code>{...}</code> block is used).</p></dd>
+from a JSON object in the response (the first <code>{...}</code> block is used).
+The complete first object must be valid JSON; only its top-level field
+is read. Strings are decoded and numbers returned as character values.
+Missing fields, malformed input and non-scalar field values return <code>NA</code>.
+The factory requires jsonlite; without it the diagnostic is:
+"Package <code>jsonlite</code> is required for parse_json_field(); install it to use this parser."</p></dd>
 
 </dl></div>
     <div class="section level2">

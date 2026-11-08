@@ -120,7 +120,17 @@ to exercise failure handling.</p></dd>
 
 
 <dt id="arg-seed">seed<a class="anchor" aria-label="anchor" href="#arg-seed"></a></dt>
-<dd><p>Seed for the mock's private random number stream.</p></dd>
+<dd><p>Seed for the mock's private random number stream.
+With an explicit seed, each row's noise and failure draw depend only on
+<code>block</code>, <code>item_id</code>, <code>prompt_id</code>, <code>model_id</code> and <code>rep</code>, so a newly created
+mock can resume a stored run. Missing <code>block</code> and <code>rep</code> default to 1.
+The row stream starts at the seed modulo 2147483647, then folds the
+UTF-8 bytes of each length-prefixed part (<code>byte_length:part</code>, concatenated
+in that order) with <code>s = (131 * s + byte) %% 2147483647</code>. These are
+integer hash parameters, not statistical reference constants. Prompt
+and model effects retain their separate per-ID streams. Private draws
+restore the caller's RNG state, including an absent state. With <code>NULL</code>,
+construction samples a private seed from the caller's RNG as before.</p></dd>
 
 
 <dt id="arg-chats">chats<a class="anchor" aria-label="anchor" href="#arg-chats"></a></dt>
@@ -165,7 +175,11 @@ that contains the resulting label or number, so that the whole chain
 from prompt to parser can be exercised offline.</p></li>
 <li><p><code>backend_ellmer()</code> wraps one or several <code>ellmer</code> chat objects (one per
 model id). Each call uses a fresh clone, so no conversation history
-leaks between calls.</p></li>
+leaks between calls.
+The last turn's response fields <code>model</code>, <code>provider</code> and <code>usage</code>, when
+present, are retained as <code>model_snapshot</code>, <code>provider</code> and <code>usage</code> in
+<code>meta</code>. Missing fields are not inferred from the request. Without ellmer
+the diagnostic is: "Package <code>ellmer</code> is required for backend_ellmer()."</p></li>
 <li><p><code>backend_openai_compatible()</code> talks to any server that implements the
 OpenAI chat-completions API: OpenAI itself, Ollama (<code>base_url = "http://localhost:11434/v1"</code>), vLLM, LM Studio, Azure-style proxies.</p></li>
 </ul></div>
@@ -177,14 +191,14 @@ OpenAI chat-completions API: OpenAI itself, Ollama (<code>base_url = "http://loc
 <span class="r-in"><span>                   thresholds <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">0.5</span>, <span class="fl">0.5</span><span class="op">)</span>, seed <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">bk</span><span class="op">(</span><span class="st">"Classify v1"</span>, <span class="st">"model-a"</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>item_id <span class="op">=</span> <span class="st">"v1"</span>, prompt_id <span class="op">=</span> <span class="st">"P1"</span>, model_id <span class="op">=</span> <span class="st">"model-a"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $text</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "The result is: VUS."</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "The result is: Pathogenic."</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $meta</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $meta$mock</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $meta$latent</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.3877586</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.7722709</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 </code></pre></div>

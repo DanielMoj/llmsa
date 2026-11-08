@@ -45,7 +45,9 @@ A data.frame with the point estimate and interval for each statistic,
 plus the bootstrap replicates as attribute `boot`, the confidence
 `level`, and counts `n_failed` (replicates with at least one non-finite
 statistic) and `n_singular` (singular replicates with all statistics
-finite).
+finite). An explicitly supplied `seed` is retained as the `seed`
+attribute for reporting; with `seed = NULL` no seed provenance is
+claimed.
 
 ## Details
 

@@ -94,7 +94,10 @@ design that accommodates the factors.</p></dd>
     <p>A data.frame of class <code>pb_design</code> with one row per run, a column
 <code>run</code>, one coded column per factor (<code>-1</code>/<code>+1</code>), and, when levels were
 given, one labelled column per factor (suffix <code>_level</code>). The design
-matrix is stored as attribute <code>coded</code>.</p>
+matrix is stored as attribute <code>coded</code>.
+With <code>randomize = TRUE</code>, an explicitly supplied <code>seed</code> is retained as
+the <code>seed</code> attribute. No seed is recorded for an unrandomised design or
+when <code>seed = NULL</code>.</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>

@@ -70,7 +70,18 @@ backend_openai_compatible(
 
 - seed:
 
-  Seed for the mock's private random number stream.
+  Seed for the mock's private random number stream. With an explicit
+  seed, each row's noise and failure draw depend only on `block`,
+  `item_id`, `prompt_id`, `model_id` and `rep`, so a newly created mock
+  can resume a stored run. Missing `block` and `rep` default to 1. The
+  row stream starts at the seed modulo 2147483647, then folds the UTF-8
+  bytes of each length-prefixed part (`byte_length:part`, concatenated
+  in that order) with `s = (131 * s + byte) %% 2147483647`. These are
+  integer hash parameters, not statistical reference constants. Prompt
+  and model effects retain their separate per-ID streams. Private draws
+  restore the caller's RNG state, including an absent state. With
+  `NULL`, construction samples a private seed from the caller's RNG as
+  before.
 
 - chats:
 
@@ -114,7 +125,11 @@ A backend function.
 
 - `backend_ellmer()` wraps one or several `ellmer` chat objects (one per
   model id). Each call uses a fresh clone, so no conversation history
-  leaks between calls.
+  leaks between calls. The last turn's response fields `model`,
+  `provider` and `usage`, when present, are retained as
+  `model_snapshot`, `provider` and `usage` in `meta`. Missing fields are
+  not inferred from the request. Without ellmer the diagnostic is:
+  "Package `ellmer` is required for backend_ellmer()."
 
 - `backend_openai_compatible()` talks to any server that implements the
   OpenAI chat-completions API: OpenAI itself, Ollama
@@ -129,14 +144,14 @@ bk <- backend_mock(truth, levels = c("Benign", "VUS", "Pathogenic"),
                    thresholds = c(-0.5, 0.5), seed = 1)
 bk("Classify v1", "model-a", list(item_id = "v1", prompt_id = "P1", model_id = "model-a"))
 #> $text
-#> [1] "The result is: VUS."
+#> [1] "The result is: Pathogenic."
 #> 
 #> $meta
 #> $meta$mock
 #> [1] TRUE
 #> 
 #> $meta$latent
-#> [1] 0.3877586
+#> [1] 0.7722709
 #> 
 #> 
 ```

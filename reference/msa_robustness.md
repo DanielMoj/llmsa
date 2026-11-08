@@ -56,7 +56,9 @@ An object of class `msa_robustness`: a data.frame of effects (`effect` =
 mean at high level minus mean at low level, `t_lenth` = effect / PSE,
 `active` flag) with attributes `pse`, `me`, `sme`, plus the response
 summary. With `transform = "logit"`, effects, PSE, ME, SME and the
-attributes `response_mean` and `response_sd` are on the logit scale.
+attributes `response_mean` and `response_sd` are on the logit scale. If
+`design` carries a `seed` attribute it is copied unchanged to the result
+for reporting. Otherwise no seed provenance is claimed.
 
 ## References
 

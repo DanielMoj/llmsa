@@ -42,7 +42,9 @@ pb_design(factors, n_runs = NULL, randomize = TRUE, seed = NULL)
 A data.frame of class `pb_design` with one row per run, a column `run`,
 one coded column per factor (`-1`/`+1`), and, when levels were given,
 one labelled column per factor (suffix `_level`). The design matrix is
-stored as attribute `coded`.
+stored as attribute `coded`. With `randomize = TRUE`, an explicitly
+supplied `seed` is retained as the `seed` attribute. No seed is recorded
+for an unrandomised design or when `seed = NULL`.
 
 ## References
 

@@ -112,7 +112,9 @@ logits with <code>transform = "none"</code>.</p></dd>
 effect / PSE, <code>active</code> flag) with attributes <code>pse</code>, <code>me</code>, <code>sme</code>,
 plus the response summary. With <code>transform = "logit"</code>, effects, PSE, ME,
 SME and the attributes <code>response_mean</code> and <code>response_sd</code> are on the
-logit scale.</p>
+logit scale.
+If <code>design</code> carries a <code>seed</code> attribute it is copied unchanged to the
+result for reporting. Otherwise no seed provenance is claimed.</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>

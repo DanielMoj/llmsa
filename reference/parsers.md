@@ -27,7 +27,8 @@ parse_json_field(field)
 
 - decimal:
 
-  Decimal mark for `parse_number()`.
+  Decimal mark for `parse_number()`. Both ASCII minus and the Unicode
+  minus sign U+2212 are accepted.
 
 - levels:
 
@@ -51,7 +52,13 @@ parse_json_field(field)
 - field:
 
   For `parse_json_field()`: the name of the field to extract from a JSON
-  object in the response (the first `{...}` block is used).
+  object in the response (the first `{...}` block is used). The complete
+  first object must be valid JSON; only its top-level field is read.
+  Strings are decoded and numbers returned as character values. Missing
+  fields, malformed input and non-scalar field values return `NA`. The
+  factory requires jsonlite; without it the diagnostic is: "Package
+  `jsonlite` is required for parse_json_field(); install it to use this
+  parser."
 
 ## Value
 

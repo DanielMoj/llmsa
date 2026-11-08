@@ -87,7 +87,9 @@ a caller-supplied cluster <code>cl</code>.</p></dd>
 statistic, plus the bootstrap replicates as attribute <code>boot</code>, the
 confidence <code>level</code>, and counts <code>n_failed</code> (replicates with at least one
 non-finite statistic) and <code>n_singular</code> (singular replicates with all
-statistics finite).</p>
+statistics finite).
+An explicitly supplied <code>seed</code> is retained as the <code>seed</code> attribute for
+reporting; with <code>seed = NULL</code> no seed provenance is claimed.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>

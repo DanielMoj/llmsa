@@ -6,7 +6,15 @@ hash of the exact prompt, raw response, parsed value, latency and any
 error. Rows are appended to `store` as they arrive, so that an
 interrupted study can be resumed with `resume = TRUE` and no response is
 ever lost. Numeric metadata retain their precision when serialized as
-JSON.
+JSON. CSV stores retain text exactly, including numeric-looking
+identifiers and responses. Only `block`, `position`, `rep` and
+`latency_s` are read as numbers. Backend errors and null, length-zero,
+missing or empty responses are stored as error rows with a missing
+value, without invoking the parser. Available metadata are retained.
+Whitespace-only text is passed to the parser. Interrupts and other
+conditions that are not errors leave the run without adding a row.
+Resuming skips every stored call, including error rows and unparseable
+responses; it does not reparse or rewrite the stored answers.
 
 ## Usage
 

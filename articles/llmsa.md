@@ -103,22 +103,22 @@ store <- tempfile(fileext = ".csv")
 runs <- msa_run(design, backend, parse = parse_choice(tiers), store = store, verbose = FALSE)
 runs
 #> LLM runs: 864 calls, 24 items, 3 prompt variants, 2 models, 2 block(s)
-#>   backend errors: 0   unparseable responses: 16
+#>   backend errors: 0   unparseable responses: 17
 #>   median latency: 0.00 s
 #>  block item_id prompt_id model_id rep             value
 #>      1   VAR03  criteria  model-a   1            Benign
-#>      1   VAR18  criteria  model-a   3               VUS
+#>      1   VAR18  criteria  model-a   3        Pathogenic
 #>      1   VAR09      role  model-a   3 Likely pathogenic
-#>      1   VAR05   concise  model-a   2     Likely benign
+#>      1   VAR05   concise  model-a   2 Likely pathogenic
 #>      1   VAR13      role  model-b   3     Likely benign
 #>      1   VAR09   concise  model-a   2 Likely pathogenic
 msa_counts(runs)
 #>   prompt_id model_id   n n_valid
-#> 1   concise  model-a 144     140
-#> 2  criteria  model-a 144     141
+#> 1   concise  model-a 144     139
+#> 2  criteria  model-a 144     142
 #> 3      role  model-a 144     142
-#> 4   concise  model-b 144     140
-#> 5  criteria  model-b 144     143
+#> 4   concise  model-b 144     142
+#> 5  criteria  model-b 144     140
 #> 6      role  model-b 144     142
 ```
 
@@ -133,40 +133,40 @@ variance components live on the latent (probit) scale.
 ``` r
 
 fit <- msa_fit(runs, type = "ordinal", levels = tiers)
-#> Warning: 16 missing response(s) were dropped.
+#> Warning: 17 missing response(s) were dropped.
 #> Warning: Two-level component(s) model, block use the range method
 #> (beta-hat^2/2), with positive bias: E[beta-hat^2/2] = sigma^2 +
 #> Var(beta-hat)/2; see ?msa_fit.
 fit
 #> Variance components of an LLM measurement system (ordinal outcome, probit link, latent scale)
 #>   formula: y ~ 1 + model + block + (1 | item) + (1 | prompt)
-#>   24 items x 3 prompts x 2 models x 2 block(s); 848 observations; 2-3 valid replicates per cell
+#>   24 items x 3 prompts x 2 models x 2 block(s); 847 observations; 1-3 valid replicates per cell
 #>    source variance     sd    pct
-#>      item  10.8201 3.2894 86.2 %
-#>    prompt   0.3957 0.6290  3.2 %
-#>     model   0.3351 0.5789  2.7 %
-#>     block   0.0002 0.0148  0.0 %
-#>  Residual   1.0000 1.0000  8.0 %
+#>      item  10.9079 3.3027 84.1 %
+#>    prompt   0.4698 0.6855  3.6 %
+#>     model   0.5954 0.7716  4.6 %
+#>     block   0.0032 0.0568  0.0 %
+#>  Residual   1.0000 1.0000  7.7 %
 #>   model: range method, see ?msa_fit
 #>   block: range method, see ?msa_fit
 grr <- msa_grr(fit)
 grr
 #> Gauge R&R of an LLM measurement system
-#>   outcome: ordinal (latent scale); 24 items x 3 prompts x 2 models x 2 block(s), 848 observations
+#>   outcome: ordinal (latent scale); 24 items x 3 prompts x 2 models x 2 block(s), 847 observations
 #>  Source               Variance SD     % Contribution % Study Var
-#>  Total gauge R&R      1.7310   1.3157 13.8 %         37.1 %     
-#>    Repeatability      1.0000   1.0000 8.0 %          28.2 %     
-#>    Reproducibility    0.7310   0.8550 5.8 %          24.1 %     
-#>      prompt           0.3957   0.6290 3.2 %          17.8 %     
-#>      model            0.3351   0.5789 2.7 %          16.3 %     
-#>      block (time)     0.0002   0.0148 0.0 %          0.4 %      
-#>  Part-to-part (items) 10.8201  3.2894 86.2 %         92.8 %     
-#>  Total variation      12.5511  3.5428 100.0 %        100.0 %    
+#>  Total gauge R&R      2.0685   1.4382 15.9 %         39.9 %     
+#>    Repeatability      1.0000   1.0000 7.7 %          27.8 %     
+#>    Reproducibility    1.0685   1.0337 8.2 %          28.7 %     
+#>      prompt           0.4698   0.6855 3.6 %          19.0 %     
+#>      model            0.5954   0.7716 4.6 %          21.4 %     
+#>      block (time)     0.0032   0.0568 0.0 %          1.6 %      
+#>  Part-to-part (items) 10.9079  3.3027 84.1 %         91.7 %     
+#>  Total variation      12.9764  3.6023 100.0 %        100.0 %    
 #>   On the latent scale, Repeatability is the residual variance fixed by the link, not a measurement of disagreement between replicates; see the share of cells with identical replicates from msa_agreement().
 #> 
-#>   total gauge R&R: 37.1 % of study variation (13.8 % contribution)
+#>   total gauge R&R: 39.9 % of study variation (15.9 % contribution)
 #>   number of distinct categories (ndc): 3
-#>   ICC (items): 0.862
+#>   ICC (items): 0.841
 #>   verdict: UNACCEPTABLE  [basis: % study variation, thresholds 10 / 30]
 #>   model: range method, see ?msa_fit
 #>   block: range method, see ?msa_fit
@@ -191,35 +191,35 @@ reference, accuracy and Cohen’s kappa.
 ag <- msa_agreement(runs, levels = tiers, reference = "reference", weights = "linear")
 ag
 #> Attribute agreement of an LLM measurement system
-#>   24 items, 864 responses (16 missing/unparseable); categories: Benign < Likely benign < VUS < Likely pathogenic < Pathogenic; weights: linear
+#>   24 items, 864 responses (17 missing/unparseable); categories: Benign < Likely benign < VUS < Likely pathogenic < Pathogenic; weights: linear
 #> 
-#> Repeatability: 20.8 % of item-prompt-model cells have identical replicates
+#> Repeatability: 25.7 % of item-prompt-model cells have identical replicates
 #>  prompt_id model_id pct_items_consistent
-#>    concise  model-a               29.2 %
-#>   criteria  model-a               29.2 %
-#>       role  model-a               29.2 %
-#>    concise  model-b                8.3 %
-#>   criteria  model-b                8.3 %
-#>       role  model-b               20.8 %
+#>    concise  model-a               33.3 %
+#>   criteria  model-a               33.3 %
+#>       role  model-a               25.0 %
+#>    concise  model-b               12.5 %
+#>   criteria  model-b               25.0 %
+#>       role  model-b               25.0 %
 #> 
-#> Reproducibility: items consistent across prompts 12.5 %, across models 11.1 %, overall 8.3 %
+#> Reproducibility: items consistent across prompts 12.5 %, across models 12.5 %, overall 8.3 %
 #> 
 #> Krippendorff's alpha:
 #>                               scope alpha n_units_excluded
-#>  replicates (within prompt & model) 0.850                0
-#>       across prompts (within model) 0.825                0
-#>       across models (within prompt) 0.833                0
-#>                      all conditions 0.807                0
+#>  replicates (within prompt & model) 0.856                0
+#>       across prompts (within model) 0.823                0
+#>       across models (within prompt) 0.825                0
+#>                      all conditions 0.794                0
 #> 
-#> Accuracy vs reference: 63.4 % of responses correct; 8.3 % of items correct in every call
+#> Accuracy vs reference: 62.7 % of responses correct; 8.3 % of items correct in every call
 #>  prompt_id model_id pct_correct
-#>    concise  model-a      76.4 %
-#>   criteria  model-a      62.4 %
-#>       role  model-a      74.6 %
-#>    concise  model-b      56.4 %
-#>   criteria  model-b      41.3 %
-#>       role  model-b      69.7 %
-#>   Cohen's kappa (linear): modal response vs reference 0.872; all responses vs reference 0.727
+#>    concise  model-a      69.1 %
+#>   criteria  model-a      72.5 %
+#>       role  model-a      61.3 %
+#>    concise  model-b      57.0 %
+#>   criteria  model-b      42.1 %
+#>       role  model-b      73.9 %
+#>   Cohen's kappa (linear): modal response vs reference 0.883; all responses vs reference 0.722
 ```
 
 A pipeline can score well on the modal answer while a single call is
