@@ -1,0 +1,45 @@
+{
+  "id": "ANK-89",
+  "title": "Planungsregel CV(σ̂²_Y) ≈ √(2/ν_Y) mit ν = a − 1 für die Prompt-Komponente (a Prompt-Varianten), aus Var(γ̂) = 2 Σ c_q² θ_q²/n_q (Burdick & Graybill 1992, S. 30); berichteter Vergleichswert, kein Bestehenskriterium",
+  "criteria": "K-M3c-6",
+  "value": {
+    "rule": "CV(sigma2_hat_Y) ~ sqrt(2 / nu_Y)",
+    "numerator": 2,
+    "nu": "a - 1 (a = Zahl der Prompt-Varianten eines Kandidatenplans)",
+    "nu_offset": 1,
+    "variance_formula": "Var(gamma_hat) = 2 * sum_q c_q^2 theta_q^2 / n_q",
+    "single_mean_square": "für eine Komponente aus einem Mittelquadrat (Q = 1, c_1 = 1, n_1 = nu): Var = 2 theta^2 / nu, also CV = sqrt(2 / nu)",
+    "role": "Vergleichswert, kein Bestehenskriterium (K-M3c-6, BL-50)"
+  },
+  "unit": "Variationskoeffizient (dimensionslos); nu als Zahl der Freiheitsgrade",
+  "tolerance": {
+    "rule_value": "sqrt(2 / nu) wird aus nu gerechnet (ANK-TOL.arithmetic.abs_tol); eine angezeigte Zahl gilt mit der halben Einheit ihrer letzten Stelle",
+    "comparison": "keine: der Abgleich mit dem empirischen CV wird nur berichtet"
+  },
+  "tolerance_note": "Die Regel ist eine Näherung (Formelsammlung §2: „Der Variationskoeffizient einer Varianzschätzung hängt fast nur von ihren Freiheitsgraden ab“); für Differenzen von Mittelquadraten und Schätzungen an der Grenze null weicht der empirische CV ab (BL-50). Deshalb kein Bestehenskriterium.",
+  "source_url": "BurdickGraybill1992 (reference/privat/QUELLENKATALOG.md): Burdick, R. K., Graybill, F. A. (1992), Confidence Intervals on Variance Components, Marcel Dekker, New York, ISBN 0-8247-8644-0; Abschnitt 3.2.3, Druckseite 30 (PDF-Seite 30); lokale Kopie quellen/literatur/C_soll-formeln/Burdick_Graybill_1992_Confidence_Intervals_on_Variance_Components_Dekker_Scan.pdf (SHA-256 d76996643b319505b1e24b3aa4a61deaf4660238cd7ef4797b0b3765a84af976); Planungsregel: Formelsammlung §2, reference/privat/07_Formelsammlung_llmsa.md (Teil der Spec nach docs/01 §1; SHA-256 5861b9521089a2ca40a63c8b81a1f4a79bc74574f9536307a4ff425d1a462434)",
+  "source": "Literatur, geschützt (lokal; Scan, Textschicht per OCR mit tesseract; Formel am Seitenbild gelesen) + Formelsammlung §2 (Teil der Spec)",
+  "quote": "approaches infinity where Var(γ̂) = 2Σ_q^Q c_q^2 θ_q^2/n_q.",
+  "quote_location": "Druckseite 30 (PDF-Seite 30), Abschnitt 3.2.3 Welch’s Procedure, am Seitenbild gelesen; Summe über q = 1 bis Q, Exponenten hochgestellt (Textspiegel Zeile 1241: „Var(¥) = 2302 c70;/n,“)",
+  "further_quotes": [
+    {
+      "quote": "**Planungsregel.** Der Variationskoeffizient einer Varianzschätzung hängt fast nur von ihren Freiheitsgraden ab; die Komponente eines Faktors mit a Stufen hat höchstens a − 1 Freiheitsgrade (aus Var(γ̂) = 2 Σ c\\_q² θ\\_q²/n\\_q, Burdick & Graybill 1992, S. 30):",
+      "location": "Formelsammlung §2, Zeile 90"
+    },
+    {
+      "quote": "CV(\\hat\\sigma^2_Y) \\approx \\sqrt{\\frac{2}{\\nu_Y}},\\qquad \\nu_\\beta \\le a - 1",
+      "location": "Formelsammlung §2, Zeile 93 (LaTeX-Quelltext)"
+    },
+    {
+      "quote": "Drei Prompt-Varianten ergeben ν ≤ 2 und damit einen Variationskoeffizienten um 100 %. Deshalb bestimmt die Zahl der Prompt-Varianten und Modelle, nicht die Zahl der Items, wie genau die Vergleichspräzision geschätzt wird.",
+      "location": "Formelsammlung §2, Zeile 96"
+    },
+    {
+      "quote": "Soll: Bias, EmpSE und MCSE wie oben ergänzen; Abgleich mit der Planungsregel aus Abschnitt 2 bei balancierten Plänen.",
+      "location": "Formelsammlung §9, Fallzahlplanung, Zeile 411"
+    }
+  ],
+  "retrieved": "2026-11-08",
+  "method": "Reviewer, ACCEPTANCE M3c (08.11.2026): SHA-256 der PDF mit tools::sha256sum() aus Rscript; Druckseite 30 mit pdftoppm -r 130 gerendert und am Seitenbild gelesen; das Bild wurde sofort gelöscht. Formelsammlung §2 im Repository gelesen; Zeilen wörtlich übernommen.",
+  "verification": "Nachrechnung: sqrt(2/2) = 1, sqrt(2/4) = 0,7071068; Probe des Reviewers (ACCEPTANCE M3c, 08.11.2026) mit msa_simulate() und msa_fit() auf dem Stand vor M3c, Komponenten wie S-boot-1, 20 Items, 3 Modelle, 3 Replikate, 2 Blöcke, je 1000 Wiederholungen: Prompt-Komponente bei a = 3 empirischer CV (sd/Mittel) 1,078 gegen 1, Grenzschätzungen 3,6 %; bei a = 5 0,724 gegen 0,707, Grenzschätzungen 0,1 %."
+}

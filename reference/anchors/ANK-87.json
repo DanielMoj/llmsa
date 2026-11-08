@@ -1,0 +1,114 @@
+{
+  "id": "ANK-87",
+  "title": "Parvin (1992), Tab. 1: mittlere bedingte Ablehnungswahrscheinlichkeit je Lauf p̄_cr = 1/ARL der Westgard-Kombination 1_3s/2_2s/4_1s/10_x ohne R_4s, N = 1 Kontrollwert je Lauf, unter Kontrolle (SE = 0) und bei konstanter Verschiebung um 1σ und 2σ (fortlaufender Fall); Monte-Carlo-Toleranz S. 360",
+  "criteria": "K-M3c-3",
+  "value": {
+    "rules": ["1_3s", "2_2s", "4_1s", "10_x"],
+    "controls_per_run": 1,
+    "p_cr": [
+      {
+        "se": 0,
+        "value": 0.005,
+        "trials": 10000
+      },
+      {
+        "se": 1,
+        "value": 0.082,
+        "trials": 1000
+      },
+      {
+        "se": 2,
+        "value": 0.301,
+        "trials": 1000
+      }
+    ],
+    "decimals": 3,
+    "table1_westgard_row": {
+      "N": [1, 2, 3, 4],
+      "SE_0.0": [0.005, 0.009, 0.012, 0.016],
+      "SE_1.0": [0.082, 0.129, 0.191, 0.224],
+      "SE_2.0": [0.301, 0.507, 0.645, 0.784]
+    },
+    "p_cr_definition": "gewichtetes Mittel der bedingten Ablehnungswahrscheinlichkeiten, Gewicht des i-ten Laufs = Wahrscheinlichkeit, die ersten i − 1 Läufe nicht abzulehnen; algebraisch gleich 1/ARL (S. 361, Anhang S. 363)",
+    "procedure": {
+      "case": "fortlaufender Fall (ongoing case): der Fehler beginnt nach einer Phase unter Kontrolle",
+      "history_runs": 10,
+      "history_rule": "Vorlauf aus so vielen Läufen unter Kontrolle, wie die Regeln brauchen (10 bei N = 1); lehnt eine Regel ab, beginnt der Versuch neu (Schritt 5)",
+      "shift": "ab dem ersten Lauf mit Fehler C = mu + SE · sigma + epsilon, bis zur Ablehnung (Schritte 6 bis 9)",
+      "run_length": "Laufnummer der Ablehnung, gezählt ab dem ersten Lauf mit Fehler; ARL = Mittel über die Versuche",
+      "trials": "1000 Versuche je Fehlerbedingung (Schritt 10), 10 000 ohne Fehler (SE = 0)"
+    }
+  },
+  "unit": "Ablehnungswahrscheinlichkeit je Lauf (Anteil, dimensionslos); SE in Einheiten der analytischen Standardabweichung",
+  "tolerance": 0.016,
+  "tolerance_note": "Absolute Toleranz 0,016 je Wert: Parvins Schranke für den Standardfehler der kumulierten Wahrscheinlichkeiten bei 1000 Versuchen (S. 360); die Formelsammlung §8 verlangt, die Werte nur mit dieser Toleranz zu verwenden. Sie übertrifft die halbe Einheit der letzten gedruckten Stelle (0,0005) und gilt für alle drei Werte der Spalte N = 1 (K-M3c-3: „innerhalb der Toleranz von Parvin (1992)“).",
+  "source_url": "Parvin1992 (reference/privat/QUELLENKATALOG.md): Parvin, C. A. (1992), Comparing the power of quality-control rules to detect persistent systematic error, Clinical Chemistry 38(3), 358–363, doi:10.1093/clinchem/38.3.358; Regelkombination Druckseiten 358–359, Verfahren Druckseite 359 (PDF-Seite 2), Toleranz Druckseite 360 (PDF-Seite 3), Tab. 1 und p̄_cr Druckseite 361 (PDF-Seite 4); lokale Kopie quellen/literatur/B_bausteine/Parvin_1992_Comparing_Power_QC_Rules_Persistent_Systematic_Error_ClinChem38_358.pdf (SHA-256 e05ba467aa59011d4aeaafe8ed27495dda1e7407f59fee602a5348a440847361)",
+  "source": "Literatur, geschützt (lokal; pdfinfo: Producer iTextSharp 4.1.6, Textschicht des Verlags; Tabelle und Formeln am Seitenbild gelesen)",
+  "quote": "Table 1. Average Conditional Probabilities of Rejection, p̄_cr, for Different Numbers of Control Samples per Run (N)",
+  "quote_location": "Druckseite 361 (PDF-Seite 4), linke Spalte unten, am Seitenbild gelesen; tiefgestellte Indizes hier und in allen Zitaten als _cr, _3s usw. geschrieben",
+  "further_quotes": [
+    {
+      "quote": "1_3s/2_2s/4_1s/10_x̄ 0.0 0.005 0.009 0.012 0.016",
+      "location": "Tab. 1, erste Zeile (Rule, SE, N = 1 bis 4; Indizes tiefgestellt)"
+    },
+    {
+      "quote": "1_3s/2_2s/4_1s/10_x̄ 1.0 0.082 0.129 0.191 0.224",
+      "location": "Tab. 1, zweite Zeile"
+    },
+    {
+      "quote": "1_3s/2_2s/4_1s/10_x̄ 2.0 0.301 0.507 0.645 0.784",
+      "location": "Tab. 1, dritte Zeile"
+    },
+    {
+      "quote": "Systematic error, in analytical standard deviation units.",
+      "location": "Tab. 1, Fußnote a"
+    },
+    {
+      "quote": "With 1000 independent trials per simulation, the standard error of the cumulative probability estimates is no larger than √(0.5(1 − 0.5)/1000) = 0.016, which occurs when the cumulative probability is 0.5.",
+      "location": "Druckseite 360 (PDF-Seite 3), linke Spalte"
+    },
+    {
+      "quote": "this weighted average of the conditional probabilities of rejection as a function of run number, denoted p̄_cr, is algebraically equivalent to the inverse of the average run length to rejection.",
+      "location": "Druckseite 361, linke Spalte"
+    },
+    {
+      "quote": "Westgard’s multirule (without the range rule that is intended to detect increases in random error) rejects a run if a single control observation is more than three analytical standard deviations (3 SD) from the quality-control mean, or if two successive control observations are more than 2 SD from the control mean in the same direction, or if four successive control observations are more than 1 SD from the control mean in the same direction, or if 10 successive control observations are on the same side of the control mean (5).",
+      "location": "Druckseite 358, rechte Spalte unten, bis Druckseite 359, linke Spalte oben"
+    },
+    {
+      "quote": "5. Apply all the quality-control rules. If any rule rejects, start over at step 2; otherwise, continue with step 6.",
+      "location": "Druckseite 359, linke Spalte, Methods"
+    },
+    {
+      "quote": "6. Simulate an out-of-control observation (C = μ + SE + ε for a constant shift or C = μ + b · i + ε for a linear trend at the ith run with error).",
+      "location": "Druckseite 359, linke Spalte unten"
+    },
+    {
+      "quote": "9. Repeat steps 6 through 8 until all quality-control rules being compared have rejected a run, storing the run number (counting from the first run with error) where rejection occurred for each rule.",
+      "location": "Druckseite 359, rechte Spalte"
+    },
+    {
+      "quote": "10. Repeat steps 2 through 9 for 1000 times.",
+      "location": "Druckseite 359, rechte Spalte"
+    },
+    {
+      "quote": "The 1_3s/2_2s/4_1s/10_x̄ rule requires 10 runs with one control observation per run",
+      "location": "Druckseite 359, rechte Spalte"
+    },
+    {
+      "quote": "This was accomplished by performing a separate simulation of 10 000 trials without error (SE = 0.0)",
+      "location": "Druckseite 359, rechte Spalte"
+    },
+    {
+      "quote": "Die Werte sind Simulationsergebnisse (1 000 Läufe je Fehlerbedingung, 10 000 bei SE = 0; Monte-Carlo-Fehler der kumulierten Wahrscheinlichkeiten bis 0,016, S. 360) und als Anker nur mit dieser Toleranz zu verwenden.",
+      "location": "Formelsammlung §8, Zeile 359 (reference/privat/07_Formelsammlung_llmsa.md (Teil der Spec nach docs/01 §1; SHA-256 5861b9521089a2ca40a63c8b81a1f4a79bc74574f9536307a4ff425d1a462434))"
+    },
+    {
+      "quote": "Die Spalte N = 1 ist der Vergleichswert für die Simulation des Codes (ein Kontrollwert je Lauf)",
+      "location": "Formelsammlung §8, Zeile 359"
+    }
+  ],
+  "retrieved": "2026-11-08",
+  "method": "Reviewer, ACCEPTANCE M3c (08.11.2026): SHA-256 der PDF mit tools::sha256sum() aus Rscript; Druckseiten 358 bis 361 (PDF-Seiten 1 bis 4) mit pdftoppm -r 110 gerendert und am Seitenbild gelesen (Tab. 1, Verfahrensschritte, Toleranzsatz, Definition von p̄_cr); die Bilder wurden sofort gelöscht.",
+  "verification": "Probe des Reviewers (ACCEPTANCE M3c, 08.11.2026, R version 4.6.1 (2026-06-24)) mit msa_control_chart(rules = c(\"1_3s\", \"2_2s\", \"4_1s\", \"10_x\"), center = 0, sd = 1) auf dem Stand vor M3c, fortlaufender Fall nach S. 359 mit 10 Werten Vorlauf, je Bedingung 20 000 Versuche: 1/ARL = 0,00549 (SE = 0; ARL 182,2), 0,0796 (SE = 1; ARL 12,56), 0,3012 (SE = 2; ARL 3,320); mit Neustart bei jeder Ablehnung im Vorlauf 0,00555, 0,0792, 0,3019. Abstand zu Tab. 1 höchstens 0,0024, also innerhalb von 0,016. Die Formelsammlung §8 berichtet aus der Zweitprüfung 0,0055, 0,077 und 0,293."
+}

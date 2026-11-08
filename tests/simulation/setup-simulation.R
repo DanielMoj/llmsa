@@ -77,3 +77,31 @@ sim_session_note <- function(seed) {
   paste0("seed ", seed, ", RNG ", paste(sim_rng_kind, collapse = "/"), ", ", R.version.string,
          ", llmsa ", as.character(utils::packageVersion("llmsa")))
 }
+
+# The acceptance helpers of M3c (mini-reference of the Westgard rules,
+# candidate plans, vignette knit and table) in an environment of their own:
+# tests/acceptance/setup-acceptance.R, setup-m1a.R, setup-m3a.R and setup-m3c.R
+# (reviewer territory), read once per test run.
+sim_m3c_env <- local({
+  env <- NULL
+  function() {
+    if (is.null(env)) {
+      e <- new.env(parent = globalenv())
+      dir <- file.path(sim_repo_root(), "tests", "acceptance")
+      for (f in c("setup-acceptance.R", "setup-m1a.R", "setup-m3a.R", "setup-m3c.R")) sys.source(file.path(dir, f), envir = e)
+      env <<- e
+    }
+    env
+  }
+})
+
+# Runs fun(i) for i in `index` with parallel::mclapply (allowed in
+# tests/simulation, docs/01 §5); an error in a worker stops the test with its
+# message instead of returning a try-error.
+sim_parallel <- function(index, fun, cores = 14L) {
+  out <- parallel::mclapply(index, function(i) tryCatch(fun(i), error = function(e) structure(conditionMessage(e), class = "sim_error")),
+                            mc.cores = cores)
+  failed <- vapply(out, function(x) inherits(x, "sim_error") || inherits(x, "try-error"), logical(1))
+  if (any(failed)) stop("simulation: worker failed: ", as.character(out[[which(failed)[1]]]), call. = FALSE)
+  out
+}

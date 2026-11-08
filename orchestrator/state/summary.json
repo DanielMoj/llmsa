@@ -1,33 +1,24 @@
 {
   "contract": 1,
   "project": "llmsa",
-  "ts": "2026-11-08T00:43:08+01:00",
+  "ts": "2026-11-08T03:22:02+01:00",
   "milestone": {
-    "id": "M3d",
-    "index": 10,
+    "id": "M3c",
+    "index": 9,
     "total": 10
   },
-  "phase": "done",
-  "round": 2,
+  "phase": "10-acceptance",
+  "round": 1,
   "needs_human": false,
   "reason": "",
-  "gates": {
-    "deps": "pass",
-    "lint": "pass",
-    "tests": "pass",
-    "trace": "pass",
-    "territory": "pass",
-    "mutgate": "pass",
-    "golden-adr": "pass",
-    "mutfull": "pass"
-  },
+  "gates": {},
   "parked": [],
   "last_events": [
-    "[20261106-112352] RUN builder 40-build (M3d r1, Versuch 1) -> /mnt/c/Users/Danie/dev/Llmsa/llmsa/orchestrator/logs/M3d-40-build-r1-a1-20261106-112352.log",
-    "[20261106-124927] RUN qa 45-qa (M3d r1, Versuch 1) -> /mnt/c/Users/Danie/dev/Llmsa/llmsa/orchestrator/logs/M3d-45-qa-r1-a1-20261106-124927.log",
-    "[20261107-090829] RUN reviewer 50-code-review (M3d r1, Versuch 1) -> /mnt/c/Users/Danie/dev/Llmsa/llmsa/orchestrator/logs/M3d-50-code-review-r1-a1-20261107-090829.log",
-    "[20261107-093755] RUN builder 60-rework (M3d r2, Versuch 1) -> /mnt/c/Users/Danie/dev/Llmsa/llmsa/orchestrator/logs/M3d-60-rework-r2-a1-20261107-093755.log",
-    "[20261108-003153] RUN reviewer 50-code-review (M3d r2, Versuch 1) -> /mnt/c/Users/Danie/dev/Llmsa/llmsa/orchestrator/logs/M3d-50-code-review-r2-a1-20261108-003153.log"
+    "[20261108-004311] Lauf beendet.",
+    "[20261108-021024] CONFIG: AUTONOMY=0 PLAN<=2 REWORK<=5 REBUILD@r6 ARBITER+2 TIMEOUT=28800 RETRY=2x/120s GATE_ERROR_RETRIES=2 MAX_MS=1 QA=1(ab M2) ROLE_GUARDS=on NOTIFY=an BUILDER=codex REVIEWER=claude",
+    "[20261108-021035] QA-Routenprobe bestanden (gemini-4-argon); Ausgabe: orchestrator/logs/qa-probe-20261108-021024-1.log",
+    "[20261108-021035] === M3c start ===",
+    "[20261108-021101] RUN reviewer 10-acceptance (M3c r1, Versuch 1) -> /mnt/c/Users/Danie/dev/Llmsa/llmsa/orchestrator/logs/M3c-10-acceptance-r1-a1-20261108-021101.log"
   ],
   "exit": null,
   "role_guards": "on"

@@ -1,0 +1,144 @@
+{
+  "criteria": [
+    {
+      "id": "K-M3c-1",
+      "quote": "**K-M3c-1:** Jede Regel löst auf konstruierten z-Reihen genau an der Grenze aus und knapp darunter nicht: 1_2s (Warnung) bei |z| > 2, 1_3s bei |z| > 3, 2_2s bei zwei aufeinanderfolgenden Werten > 2 oder < −2 auf derselben Seite, 4_1s bei vier aufeinanderfolgenden Werten > 1 oder < −1 auf derselben Seite, 10_x bei zehn aufeinanderfolgenden Werten auf einer Seite von 0, R_4s nach K-M3c-2; Standardisierung mit übergebenem `center`/`sd` oder aus den ersten `n_baseline` Werten (Formelsammlung §8). (Prüfweg: Test)",
+      "source": "docs/04-weitere-bausteine.md"
+    },
+    {
+      "id": "K-M3c-2",
+      "quote": "**K-M3c-2:** `msa_control_chart()` erhält ein Argument `r4s = c(\"range\", \"westgard\")` (Vorgabe `\"range\"`): `\"range\"` löst bei |z_t − z_{t−1}| > 4 aus, `\"westgard\"` bei einem Wert > 2 und dem anderen < −2 innerhalb desselben Laufs (Paare aufeinanderfolgender Werte); `print` und `msa_report()` nennen die verwendete Lesart (Formelsammlung Nr. 6). (Prüfweg: Test)",
+      "source": "docs/04-weitere-bausteine.md"
+    },
+    {
+      "id": "K-M3c-3",
+      "quote": "**K-M3c-3:** Fehlalarm (Klasse A, `tests/simulation/test-westgard-false-alarm.R`): Für unabhängige standardnormale z liegt die Auslösewahrscheinlichkeit je Regel und Position innerhalb von `ankerRef: ANK-TOL.mc_factor` (Bestehenskriterium) Monte-Carlo-Standardfehlern um die analytischen Werte aus Formelsammlung §8 (`ankerRef: ANK-86`), und die mittlere Ablehnungswahrscheinlichkeit je Lauf der Kombination 1_3s/2_2s/4_1s/10_x ohne R_4s bei N = 1 liegt unter Kontrolle sowie bei Verschiebungen um 1σ und 2σ innerhalb der Toleranz von Parvin (1992), Tabelle 1 (`ankerRef: ANK-87`); `n_sim` ≥ `ANK-06`. (Prüfweg: Test)",
+      "source": "docs/04-weitere-bausteine.md"
+    },
+    {
+      "id": "K-M3c-4",
+      "quote": "**K-M3c-4:** Die Shewhart-Grenzen (center ± 1, 2, 3 sd) der Karte stimmen mit `qcc::qcc(type = \"xbar.one\")` bei vorgegebenem `center` und `std.dev` überein, zur Testlaufzeit aufgerufen (Toleranz `ankerRef: ANK-TOL.oracle`, Wert für geschlossene Formeln). (Prüfweg: Test)",
+      "source": "docs/04-weitere-bausteine.md"
+    },
+    {
+      "id": "K-M3c-5",
+      "quote": "**K-M3c-5:** Simulator (Klasse A, `tests/simulation/test-simulator-recovery.R`): Daten aus `msa_simulate()` mit vorgegebenen Komponenten (Szenario S-sim-1: Items 40, Prompts 3, Modelle 3, Replikate 2, Blöcke 2; Komponenten wie S-boot-1) ergeben über `n_sim` ≥ `ANK-06` Wiederholungen mit `msa_fit` Mittelwerte der Komponenten innerhalb von `ankerRef: ANK-TOL.mc_factor` (Bestehenskriterium) Monte-Carlo-Standardfehlern um die Vorgaben, und die mitgeführte Spalte `latent` entspricht der Itemwahrheit. (Prüfweg: Test)",
+      "source": "docs/04-weitere-bausteine.md"
+    },
+    {
+      "id": "K-M3c-6",
+      "quote": "**K-M3c-6:** `msa_plan()` gibt je Kandidatenplan zusätzlich Bias, EmpSE und deren MCSE aus (neue Spalten, Schnittstellenregel), den wahren %GRR nach Formelsammlung §9 und die Einzelschätzer der Wiederholungen als Attribut `replicates` (neu); der Abnahmetest rechnet Bias, EmpSE, MCSE, Quantile, RMSE und Fehlklassifikationsanteil aus `replicates` nach Formelsammlung §9 von Hand nach (Toleranz `ankerRef: ANK-TOL.arithmetic`). Der Vergleich des empirischen Variationskoeffizienten der Prompt-Komponente mit der Planungsregel CV ≈ √(2/ν), ν = a − 1 (`ankerRef: ANK-89`), wird je Kandidatenplan zusammen mit dem Anteil der Grenzschätzungen in `vignettes/validation.Rmd` berichtet und ist kein Bestehenskriterium; `tests/simulation/test-plan-satterthwaite.R` (Klasse A) erzeugt die Zahlen und prüft nur deren Vollständigkeit. (Prüfweg: Test)",
+      "source": "docs/04-weitere-bausteine.md"
+    }
+  ],
+  "open": [
+    {
+      "id": "ACC-1",
+      "status": "Anker geerntet in ACCEPTANCE M3c (08.11.2026); ADR folgt in 30-plan-review (10-acceptance darf docs/decisions/ nicht schreiben)",
+      "ref": "ANKER-TODO.md, Abschnitt „M3c — Westgard, Simulator, Planung“, Zeilen ANK-86, ANK-87, ANK-89; docs/01 §6: „Anker erntet der Reviewer in der ACCEPTANCE-Phase nach `ANKER-TODO.md`.“",
+      "kind": "Anker",
+      "owner": "Reviewer",
+      "blocking_builder": false,
+      "note": "Neu: ANK-86 (Westgard et al. 1981, Druckseiten 494, 498, 500 am Seitenbild gelesen, PDF SHA-256 54733d00…e71c; Regeln mit kind, limit, window, role, die beiden R_4s-Lesarten range und westgard, Auslösewahrscheinlichkeiten unter Unabhängigkeit als Formel und gedruckt aus Formelsammlung §8: 1_2s 0,0455, 1_3s 0,0027, 2_2s 0,00104, 4_1s 0,00127, 10_x 0,00195, R_4s Spannweite 0,0047, R_4s Westgard 0,00104; Standardisierung mit n_0 = 10; Shewhart-Multiplikatoren 1, 2, 3). ANK-87 (Parvin 1992, Druckseiten 358–361 am Seitenbild, PDF SHA-256 e05ba467…7361; Tab. 1, Spalte N = 1: p̄_cr 0,005 (SE 0), 0,082 (SE 1), 0,301 (SE 2); Verfahren des fortlaufenden Falls mit 10 Vorlaufwerten; Toleranz 0,016 nach S. 360 und Formelsammlung §8). ANK-89 (Burdick & Graybill 1992, Druckseite 30 am Seitenbild, Scan SHA-256 d7699664…f976: Var(γ̂) = 2 Σ c_q² θ_q²/n_q; Planungsregel CV ≈ √(2/ν), ν = a − 1, aus Formelsammlung §2; kein Bestehenskriterium). Wiederverwendet: ANK-06 (n_sim ≥ 1000), ANK-16 (Verdiktschwellen 10/30), ANK-02 (Argumente von msa_control_chart in v0.1.0), ANK-TOL.mc_factor (4), ANK-TOL.oracle.closed_form_rel_tol (1e-8), ANK-TOL.arithmetic (1e-10). Die Seitenbilder wurden sofort gelöscht. Die Anker liegen vor dem Tag plan/M3c (Gate golden-adr unberührt)."
+    },
+    {
+      "id": "ACC-2",
+      "status": "Auslegung des Reviewers (Spec schweigt zu „genau an der Grenze“, Prüfreihen und Rechengenauigkeit der Standardisierung)",
+      "ref": "K-M3c-1: „Jede Regel löst auf konstruierten z-Reihen genau an der Grenze aus und knapp darunter nicht“; Formelsammlung §8 (Regeltabelle, Standardisierung); ANK-86",
+      "kind": "Auslegung",
+      "owner": "Reviewer",
+      "blocking_builder": false,
+      "note": "Die Bedingungen sind strikt (|z| > 2 usw.): „genau an der Grenze auslösen“ heißt, eine Regel schlägt bei Grenze + ε an und weder genau auf der Grenze noch bei Grenze − ε; ε = 2^-30, damit Summen mit den Grenzen in Gleitkomma exakt bleiben. Je Regel eine konstruierte Reihe mit von Hand bestimmten Auslösepositionen (1_2s und 1_3s je an 4 und 8; 2_2s an 2 und 11, nicht bei 2 und 2 + ε, nicht über Kreuz und nicht mit Lücke; 4_1s an 4, 14, 15, nicht mit einem Wert genau 1; 10_x an 10, 31, 32, nicht bei neun Werten und nicht mit einer 0). Zusätzlich gleichen alle Regelspalten und reject der Mini-Referenz acc_m3c_reference() (setup-m3c.R; Läufe Wert für Wert gezählt, vor dem vollständigen Fenster löst nichts aus; reject = Vereinigung der Ablehnungsregeln, 1_2s ist nur Warnung). Standardisierung: mit übergebenem center/sd tragen die Attribute center und sd die übergebenen Werte, x bleibt unverändert, z = (x − center)/sd bis ANK-TOL.arithmetic, Prüfung mit center/sd 5/0,25 und −3,5/2 (binär exakt, die Grenzen werden genau getroffen); ohne center/sd Mittelwert und Standardabweichung (n − 1, wie stats::sd() in v0.1.0) der ersten n_baseline Werte, Basiswerte so gewählt, dass mean() und stats::sd() genau 10 und 1 ergeben (n_baseline = 10 und 3); übergebene Werte haben Vorrang vor der Basis. Zufallsreihen: 1500 Reihen der Länge 1 bis 16 aus Werten auf und neben den Grenzen und N(0; 1,5)-Werten (Seed 31081), alle Spalten gleich der Mini-Referenz. Fehlende Kontrollwerte sind nicht Teil dieses Vertrags (Verhalten wie v0.1.0)."
+    },
+    {
+      "id": "ACC-3",
+      "status": "Auslegung des Reviewers (Spec schweigt zu Paarbildung, Fehlerfall, Objektgleichheit und dazu, was als Nennen der Lesart gilt)",
+      "ref": "K-M3c-2: „`\"westgard\"` bei einem Wert > 2 und dem anderen < −2 innerhalb desselben Laufs (Paare aufeinanderfolgender Werte); `print` und `msa_report()` nennen die verwendete Lesart“; docs/01 §3 Nr. 6; docs/01 §4 (neue Argumente mit Vorgabewert am Ende); ANK-02; M3d ACC-11",
+      "kind": "Auslegung",
+      "owner": "Reviewer",
+      "blocking_builder": false,
+      "note": "Schnittstelle: msa_control_chart() erhält r4s hinter den Argumenten von v0.1.0 (x, center, sd, n_baseline, rules aus ANK-02), Vorgabe deparse gleich c(\"range\", \"westgard\"); ein unbekannter Wert (etwa \"spread\") ist ein Fehler. Ohne r4s ist das Ergebnis identisch (identical(), Attribute eingeschlossen) mit r4s = \"range\". Lesart westgard: an jeder Position t ≥ 2 das Paar (z_(t−1), z_t), wie bei der Spannweitenlesart; R_4s schlägt an, wenn ein Wert > 2 und der andere < −2 ist (strikt, beide Reihenfolgen), sonst nicht. Die übrigen Regelspalten sind unter beiden Lesarten gleich; reject enthält R_4s der gewählten Lesart. Grenzreihen: range an 5, 8, 11, 17 (nicht bei einer Differenz von genau 4 und nicht bei 2,5/−1,5), westgard dort nirgends; zweite Reihe range an 2, 5, 8, 11, 14 und westgard an 2, 5, 14 (nicht bei 2/−2 − ε oder 2 + ε/−2), auch mit center 5 und sd 0,25; dazu 1500 Zufallsreihen je Lesart gegen die Mini-Referenz (Seed 31082). print(): eine Zeile nennt R_4s (auch R4s, R 4s, R-4s) und unter der Vorgabe das Wort range, unter r4s = \"westgard\" das Wort westgard; die Menge dieser Zeilen unterscheidet sich zwischen den Lesarten; geprüft mit und ohne Verletzungen. msa_report(control_chart =): Abschnitt wie M3d ACC-11; mit der Vorgabe nennt eine Zeile R_4s, range und consecutive oder successive (wie K-M3d-6), mit der Westgard-Lesart eine Zeile R_4s und westgard; die R_4s-Zeilen beider Berichte unterscheiden sich; die Zeilen R_4s und reject der Verletzungstabelle nennen die Positionen der gewählten Lesart. Testkarte z = 0, 2,5, −1,6, 0, 2,1, −2,1, 0, −0,5, 0,3, 3,2, 0: R_4s range an 3 und 6, westgard an 6; reject westgard an 6 und 10. Westgards Einschränkungen (N = 2 bis 4, nicht über Läufe, ANK-86) prüft der Test nicht; die Hilfeseite sollte sie bei r4s nennen (Vorschlag)."
+    },
+    {
+      "id": "ACC-4",
+      "status": "Auslegung des Reviewers (Spec schweigt zu Reihenlänge, Wiederholungszahl über dem Minimum, Vorlauf, Abbruchregel und Toleranzform)",
+      "ref": "K-M3c-3 (criteria); docs/01 §2 Nr. 3, §5, §8; Formelsammlung §8 und §9; ANK-06; ANK-TOL.mc_factor; ANK-86; ANK-87",
+      "kind": "Auslegung",
+      "owner": "Reviewer",
+      "blocking_builder": false,
+      "note": "Klasse-A-Test tests/simulation/test-westgard-false-alarm.R (Hilfen in tests/simulation/setup-simulation.R; Mini-Referenz aus tests/acceptance/setup-m3c.R). Teil 1: je Lesart 100 × ANK-06 = 100 000 Reihen aus 12 unabhängigen N(0, 1)-Werten (Seeds 20261208 + w bzw. 20261308 + w für die Worker w = 1 bis 14, mclapply), center 0, sd 1, alle sechs Regeln; je Regel und Position 1 bis 12 Anteil der Auslösungen gegen den Formelwert aus ANK-86 mit MCSE √(p(1 − p)/n_sim); bestanden bei |Anteil − p| ≤ ANK-TOL.mc_factor (4) · MCSE, vor dem vollständigen Fenster genau 0; jede Karte gleicht in allen Spalten der Mini-Referenz. Die Lesart range wird ohne r4s aufgerufen (Vorgabe). Warum 100 × ANK-06: mit n_sim = 1000 läge eine Regel 2_2s, die nie auslöst, innerhalb von 4 MCSE um 0,00104. Teil 2: fortlaufender Fall nach Parvin (1992, S. 359): 10 Vorlaufwerte (ANK-87 history_runs), neu gezogen, solange reject am zehnten Wert TRUE ist (Schritt 5: „Apply all the quality-control rules“ am letzten Vorlauf); danach Werte z + SE (SE in σ, positive Richtung) in Blöcken zu 200 bis zur ersten Ablehnung; Lauflänge ab dem ersten Wert mit Fehler; Regeln 1_3s, 2_2s, 4_1s, 10_x (rules = …), 20 × ANK-06 = 20 000 Versuche je Bedingung SE 0, 1, 2 (Seeds 20262108 + 10·SE + w); 1/ARL mit MCSE der mittleren Lauflänge (§9) und Delta-Methode für 1/ARL (nur berichtet); bestanden bei |1/ARL − p̄_cr| ≤ 0,016 (Toleranz von ANK-87). Der eigene Monte-Carlo-Fehler wird nicht addiert (wörtlich „innerhalb der Toleranz von Parvin“); er bleibt mit 20 000 Versuchen unter 0,0014. Jede Karte eines Versuchs gleicht der Mini-Referenz in reject. Ein Neustart bei jeder Ablehnung im Vorlauf statt nur am letzten Wert ändert die Ergebnisse innerhalb des MCSE (Probe: 0,00555/0,0792/0,3019 gegen 0,00549/0,0796/0,3012)."
+    },
+    {
+      "id": "ACC-5",
+      "status": "Auslegung des Reviewers (Spec schweigt dazu, wo die Grenzen der Karte abzulesen sind)",
+      "ref": "K-M3c-4: „Die Shewhart-Grenzen (center ± 1, 2, 3 sd) der Karte stimmen mit `qcc::qcc(type = \"xbar.one\")` bei vorgegebenem `center` und `std.dev` überein, zur Testlaufzeit aufgerufen (Toleranz `ankerRef: ANK-TOL.oracle`, Wert für geschlossene Formeln)“; Formelsammlung §8",
+      "kind": "Auslegung",
+      "owner": "Reviewer",
+      "blocking_builder": false,
+      "note": "Die Grenzen der Karte sind die waagerechten Linien, die plot() zeichnet (Displayliste von recordPlot(): h von abline(), Segmente mit gleichen Enden, Linien konstanter Höhe), wie in v0.1.0. Für drei Karten mit übergebenem center/sd (10,3/0,7; 0,92/0,02; −4,1/1,3; keine Grenze bei 0) ruft der Test qcc::qcc(x, type = \"xbar.one\", center, std.dev, nsigmas = k, plot = FALSE) für k = 1, 2, 3 (Multiplikatoren aus ANK-86); beide Grenzen und die Mittellinie müssen unter den gezeichneten Linien liegen (relativ 1e-8, ANK-TOL.oracle.closed_form_rel_tol); die Attribute center und sd tragen die übergebenen Werte. qcc steht nicht in DESCRIPTION Suggests (docs/01 §5 nennt es für die Validierungssuite; lokal installiert ist qcc 2.7): der Builder ergänzt es. Stand vor M3c: grün (43 Erwartungen)."
+    },
+    {
+      "id": "ACC-6",
+      "status": "Auslegung des Reviewers (Spec schweigt zu Seeds, Namen der Komponenten und dazu, wie „entspricht der Itemwahrheit“ geprüft wird)",
+      "ref": "K-M3c-5 (criteria); Formelsammlung §2 und §9 („die Itemwahrheit wird mitgeführt (`latent`)“); docs/02 M1c, Szenario S-boot-1; ANK-06; ANK-TOL.mc_factor",
+      "kind": "Auslegung",
+      "owner": "Reviewer",
+      "blocking_builder": false,
+      "note": "Klasse-A-Test tests/simulation/test-simulator-recovery.R: S-sim-1 (40 Items, 3 Prompts, 3 Modelle, 2 Replikate, 2 Blöcke), Komponenten von S-boot-1 (Item 1; Prompt 0,05; Modell 0,05; Block 0,01; Item×Prompt 0,01; Item×Modell 0,05; Prompt×Modell 0,005; Rest 0,1), je Wiederholung s msa_simulate(…, seed = 20261108 + s) und msa_fit(type = \"numeric\") mit Vorgaben, n_sim = ANK-06; Komponenten über msa_fit()$vc$source (item, prompt, model, block, item:prompt, item:model, prompt:model, Residual); bestanden bei |Mittel − Vorgabe| ≤ 4 MCSE (MCSE eines Mittelwerts, §9). Itemwahrheit: latent ist in jeder Wiederholung innerhalb eines Items konstant (40 Werte); über die Wiederholungen liegen das Mittel der Item-Varianz von latent (Teiler n − 1) bei der Item-Komponente, das Mittel von latent beim Gesamtmittel 0, das Mittel von value − latent bei 0 und die Kovarianz von latent mit den Item-Mitteln von value − latent bei 0, je innerhalb von 4 MCSE. Deterministischer Teil im Abnahmetest test-m3c-5-simulator-latent.R (läuft je Mutant): im S-sim-1-Plan latent je Item konstant und value innerhalb der Items verschieden; mit vc = list(item = 1) (fehlende Komponenten sind null, Hilfeseite) value = latent; mit Item-Komponente 0 ist latent das Gesamtmittel; eine Verschiebung von mean um 3,25 bei gleichem Seed verschiebt latent und value um 3,25 (ANK-TOL.arithmetic). Stand vor M3c: grün (Probe: alle Komponenten innerhalb von 1,6 MCSE)."
+    },
+    {
+      "id": "ACC-7",
+      "status": "Auslegung des Reviewers (Spec schweigt zu Spaltennamen, Form von replicates und Quantildefinition)",
+      "ref": "K-M3c-6: „`msa_plan()` gibt je Kandidatenplan zusätzlich Bias, EmpSE und deren MCSE aus (neue Spalten, Schnittstellenregel), den wahren %GRR nach Formelsammlung §9 und die Einzelschätzer der Wiederholungen als Attribut `replicates` (neu); der Abnahmetest rechnet Bias, EmpSE, MCSE, Quantile, RMSE und Fehlklassifikationsanteil aus `replicates` nach Formelsammlung §9 von Hand nach (Toleranz `ankerRef: ANK-TOL.arithmetic`)“",
+      "kind": "Auslegung",
+      "owner": "Reviewer",
+      "blocking_builder": false,
+      "note": "Neue Spalten von msa_plan(): bias, empse, mcse_bias, mcse_empse (die Spalten von v0.1.0 bleiben). attr(plan, \"replicates\"): data.frame mit einer Zeile je Kandidatenplan und Wiederholung und mindestens den Spalten scenario (Zeilennummer des Plans in scenarios), sim (1 bis nsim), estimate (geschätzter %GRR der Wiederholung in % Studienvariation, θ̂_s), singular (logisch, ohne NA) und prompt (REML-Schätzung der Prompt-Komponente aus msa_fit()$vc, ≥ 0); weitere Spalten sind erlaubt. Nachrechnung je Plan nach §9 mit θ = grr_true: mean, bias = mean − θ, empse (Teiler n − 1), mcse_bias = √(Σ(θ̂ − θ̄)²/(n(n − 1))), mcse_empse = empse/√(2(n − 1)), Quantile 2,5/50/97,5 % nach Definition 7 von Hyndman & Fan (Vorgabe von stats::quantile), rmse = √(mean((θ̂ − θ)²)), pct_singular = 100 · Anteil singulär, pct_misclassified = 100 · Anteil Verdikt(θ̂_s) ≠ Verdikt(θ) mit den Schwellen aus ANK-16 (akzeptabel < 10, bedingt 10 bis einschließlich 30, sonst nicht akzeptabel); Toleranz ANK-TOL.arithmetic. grr_true = 100 · √(GRR/(GRR + Item)) mit allen Nicht-Item-Komponenten (fehlende null). Testfall: zwei Pläne (6/3/2/2/1 und 8/2/2/2/2), Komponenten Item 1, Prompt 0,02, Modell 0,02, Block 0,005, Item×Prompt 0,005, Item×Modell 0,005, Prompt×Modell 0,003, Rest 0,032 (wahrer %GRR 28,7, also Schätzungen beiderseits von 30), nsim 25, Seed 31106; gleicher Seed gibt dasselbe Objekt. Stand vor M3c: rot (Spalten und Attribut fehlen); grr_true grün."
+    },
+    {
+      "id": "ACC-8",
+      "status": "Auslegung des Reviewers (Spec schweigt zu Kandidatenplänen, Komponenten, Seeds, Grenzschätzung, CV-Definition, Tabellenform und dazu, wie die Zahlen des Klasse-A-Tests in die Vignette gelangen)",
+      "ref": "K-M3c-6: „Der Vergleich des empirischen Variationskoeffizienten der Prompt-Komponente mit der Planungsregel CV ≈ √(2/ν), ν = a − 1 (`ankerRef: ANK-89`), wird je Kandidatenplan zusammen mit dem Anteil der Grenzschätzungen in `vignettes/validation.Rmd` berichtet und ist kein Bestehenskriterium; `tests/simulation/test-plan-satterthwaite.R` (Klasse A) erzeugt die Zahlen und prüft nur deren Vollständigkeit.“; docs/01 §2 Nr. 3; docs/01 §8; BL-50",
+      "kind": "Auslegung",
+      "owner": "Reviewer",
+      "blocking_builder": false,
+      "note": "Kandidatenpläne S-plan-1 bis S-plan-4: 20/20/40/40 Items, 3/5/3/5 Prompts, je 3 Modelle, 2 Replikate, 2 Blöcke (S-plan-3 ist der Plan von S-sim-1), Komponenten von S-boot-1; je Plan i ein Aufruf msa_plan(plan, vc, nsim = ANK-06, seed = 20261108 + i, verbose = FALSE) mit dem RNG aus docs/01 §5. Empirischer CV = Standardabweichung/Mittel der Prompt-Schätzungen (replicates$prompt) über alle Wiederholungen einschließlich der Nullen; Grenzschätzung = Prompt-Schätzung genau 0; Anteil mit MCSE √(p(1 − p)/n_sim). Vignette: ein Abschnitt, dessen Überschrift „planning rule“ enthält (Groß-/Kleinschreibung egal), mit einer Tabelle mit genau den Spalten plan, items, prompts, nu, cv_rule, cv_empirical, boundary_share, mcse_boundary, n_sim (Reihenfolge frei), eine Zeile je Plan; nu = prompts − 1; cv_rule = √(2/nu) (ANK-89); cv_empirical mit mindestens zwei Nachkommastellen; boundary_share und mcse_boundary als Anteil mit mindestens drei Nachkommastellen oder in Prozent mit mindestens einer; n_sim ≥ ANK-06; keine Zahl der Tabelle als Literal im Rmd (Regel wie K-M3a-7). Der Klasse-A-Test erzeugt die Zahlen mit genau diesen Aufrufen (parallel je Plan), prüft ihre Vollständigkeit (Spalten und n_sim Zeilen in replicates, Prompt-Schätzungen endlich und ≥ 0, CV endlich, Anteil in [0, 1]) und dass die gestrickte Vignette genau diese Zahlen berichtet (halbe Einheit der letzten gezeigten Stelle zuzüglich ANK-TOL.arithmetic): Vollständig ist der Bericht, wenn er für jeden Plan jede Kennzahl so zeigt, wie sie herauskommt. Den Abgleich mit der Planungsregel prüft kein Test. Hinweis zur Umsetzung: Der gemeinsame Knit der Abnahmetests läuft je Mutant; die Vignette sollte msa_plan() nicht mit 1000 Wiederholungen beim Knit rechnen (Probe: rund 3 min mit vier Kernen), sondern etwa eine Ergebnisdatei unter inst/validation/ einlesen, die ein Skript mit genau diesen Aufrufen erzeugt (Ort, Name und Form wählt der Builder; mclapply ist nach docs/01 §5 nur unter inst/validation/sim/ zulässig); ändert sich danach msa_plan(), msa_simulate() oder msa_fit() in einer Weise, die die Zahlen ändert, ist die Datei neu zu erzeugen, sonst wird der Klasse-A-Test rot. Probe mit der Attrappe: S-plan-1 CV 1,072 gegen 1, Grenzschätzungen 4,6 %; S-plan-2 0,744 gegen 0,707, 0,7 %; S-plan-3 1,033 gegen 1, 3,4 %; S-plan-4 0,751 gegen 0,707, 0,8 %."
+    },
+    {
+      "id": "ACC-9",
+      "status": "offen: Frage an den Betreiber (Spec-Lücke), für den Builder nonblocking",
+      "ref": "docs/01 §2 Nr. 3: „mit festem Seed, mindestens `ankerRef: ANK-06` Wiederholungen je Szenario und angegebenem Monte-Carlo-Standardfehler für jede berichtete Kennzahl (Formeln: Formelsammlung §9)“; Formelsammlung §9",
+      "kind": "Spec-Lücke",
+      "owner": "Betreiber",
+      "blocking_builder": false,
+      "note": "Formelsammlung §9 nennt MCSE-Formeln für Bias, EmpSE, Coverage und MSE, aber keine für einen Variationskoeffizienten (K-M3c-6, empirischer CV der Prompt-Komponente) und keine für 1/ARL (K-M3c-3). Die Tests verlangen deshalb keinen MCSE für cv_empirical; der Klasse-A-Test zu K-M3c-3 berichtet den MCSE von 1/ARL nur über die Delta-Methode aus dem MCSE der mittleren Lauflänge. Frage: Soll die Vignette für den CV einen MCSE mit benannter Methode zeigen (etwa Delta-Methode oder Bootstrap über die Wiederholungen), und gehört die Formel in die Formelsammlung? Bis zur Entscheidung darf der Builder einen MCSE mit benannter Methode zeigen; der Test prüft ihn nicht."
+    },
+    {
+      "id": "ACC-10",
+      "status": "Hinweis an Builder und Betreiber, nonblocking",
+      "ref": "docs/01 §5: „Suggests dürfen ergänzt werden; die Validierungssuite nutzt … `qcc` …“; docs/01 §8 (ANK-TOL.sim_runtime); orchestrator/config.env MUT_TEST_DIRS, MUT_TEST_EXCLUDE",
+      "kind": "Hinweis",
+      "owner": "Builder, Betreiber",
+      "blocking_builder": false,
+      "note": "qcc in DESCRIPTION Suggests ergänzen (ACC-5). Laufzeit der M3c-Abnahmetests auf dem Stand vor M3c 31,5 s, davon 24 s der gemeinsame Vignetten-Knit, der im Gesamtlauf ohnehin anfällt; ohne Knit rund 8 s. MUT_TEST_EXCLUDE nimmt m3c- nicht aus: die Abnahmetests laufen je Mutant. Klasse A unter tests/simulation/ mit der Attrappe: Westgard 28 s, Wiederfinden 15 s, Planung 203 s (vier Pläne parallel, msa_plan() sequenziell je Plan, dazu ein Knit), mit den beiden vorhandenen Dateien zusammen rund 4,5 min, unter ANK-TOL.sim_runtime (20 min). Die Klasse-A-Tests lesen die Hilfen aus tests/acceptance/setup-acceptance.R, setup-m1a.R, setup-m3a.R und setup-m3c.R (sim_m3c_env() in tests/simulation/setup-simulation.R)."
+    },
+    {
+      "id": "ACC-11",
+      "status": "erledigt (Reviewer-Probe, 08.11.2026)",
+      "ref": "docs/01 §2 Nr. 1: „Ein Test zählt erst, wenn er ein falsches Ergebnis erkennen würde.“",
+      "kind": "Prüflauf",
+      "owner": "Reviewer",
+      "blocking_builder": false,
+      "note": "Stand vor M3c (HEAD dcaafd1; test_dir(tests/acceptance, filter = \"m3c\", load_package = \"source\") mit REPO_ROOT): 25 Tests, 342 Erwartungen, 14 Tests rot, 0 Fehler, 0 übersprungen, 31,5 s. Grün: K-M3c-1 (alle sechs Tests, 223 Erwartungen; v0.1.0 wertet die Regeln richtig aus), K-M3c-4 (43), K-M3c-5 deterministischer Teil (16), aus K-M3c-6 grr_true. Rot: K-M3c-2 (alle sieben Tests, das Argument r4s fehlt), K-M3c-6 (neue Spalten, replicates, Nachrechnung, Seed-Wiederholung des Attributs, Vignettenabschnitt). Klasse A auf dem Stand vor M3c (225 s): K-M3c-5 grün (alle acht Komponenten innerhalb von 1,84 MCSE; Item-Varianz von latent 1,0016, +0,22 MCSE); K-M3c-3 Parvin grün (1/ARL 0,00557, 0,07965, 0,30010 für SE 0, 1, 2; Abstand zu Tab. 1 höchstens 0,0024); K-M3c-3 je Regel und Position mit der Lesart range grün, mit westgard Fehler „unused argument (r4s = reading)“; K-M3c-6 rot (replicates fehlt). Attrappe (Paketkopie unter /tmp mit R/zzz-mock.R: r4s mit Westgard-Lesart, Lesart in print und Berichtszeile, msa_plan() mit neuen Spalten und replicates, Vignettenabschnitt aus einer CSV mit genau den Aufrufen aus ACC-8): 25 M3c-Tests grün, 528 Erwartungen; K-M3d-4 und die R_4s-Prüfung von K-M3d-6 bleiben grün; Klasse A grün: Westgard 166 Erwartungen in 28 s, größte Abweichung 2,8 MCSE; Wiederfinden 22 Erwartungen; Planung 59 Erwartungen in 203 s. Sechzehn verfälschte Varianten der Attrappe sind am vorgesehenen Abnahmetest rot: 2_2s mit ≥ (m3c-1, m3c-2), 10_x mit Fenster 9 (m3c-1, m3c-2), Basis-sd mit Teiler n (m3c-1), Westgard-Lesart mit ≥ (m3c-2), Westgard-Lesart als Spannweite (m3c-2), print nennt immer range (m3c-2), Bericht nennt immer range (m3c-2), 2-sd-Linie bei 2,05 sd (m3c-4), latent mit Prompt-Effekt (m3c-5), latent ohne Gesamtmittel (m3c-5), grr_true ohne Block (m3c-6), Quantile Typ 6 (m3c-6), EmpSE mit Teiler n (m3c-6), MCSE(EmpSE) mit √n (m3c-6), Fehlklassifikation immer 0 (m3c-6), replicates zwischen den Plänen vertauscht (m3c-6). Vier Varianten in Klasse A rot: Westgard-Lesart als Spannweite (Anteil 0,00474 gegen 0,001035, +36 MCSE), 10_x mit Fenster 9 (Auslösung an Position 9), latent mit Prompt-Effekt (in 0 von 1000 Wiederholungen je Item konstant), veraltete Zahlen in der Vignette (S-plan-1 cv_empirical 1,0258 statt 1,0722)."
+    },
+    {
+      "id": "ACC-12",
+      "status": "Hinweis an Builder, QA und Betreiber, nonblocking",
+      "ref": "K-M3c-2 (criteria); ACC-3; tests/e2e/test-m3d-qa-e2e.R Z. 369 (QA-M3d-E2E-3); tests/testthat/test-report-provenance.R Z. 103–119",
+      "kind": "Hinweis",
+      "owner": "Builder, QA, Betreiber",
+      "blocking_builder": false,
+      "note": "Bestehende Tests, die die Umsetzung von K-M3c-2 berühren: (1) QA-M3d-E2E-3 (tests/e2e/test-m3d-qa-e2e.R Z. 369, QA-Territorium) verlangt für eine Karte mit der Vorgabe wörtlich den Satz „R_4s uses the range of two consecutive standardized values.“; bleibt dieser Satz für die Lesart range unverändert, bleibt der Test grün (so in der Attrappe), sonst wird er rot und hält auch mutgate im unmutierten Vorlauf an (MUT_TEST_DIRS enthält tests/e2e); eine Änderung dort kann nur QA vornehmen. (2) Der Unit-Test „control chart reporting counts TRUE flags and sorts actual index positions“ (tests/testthat/test-report-provenance.R Z. 103–119, Builder-Territorium) vergleicht msa_report_control_chart() mit identical() gegen einen data.frame ohne Attribute und verlangt control_chart als letztes Argument von msa_report(); gibt der Builder die Lesart als Attribut der Tabelle an die Vorlage weiter (wie die Attrappe), passt er diesen eigenen Test an, ohne dessen geprüfte Inhalte zu schwächen (AGENTS.md, Integrität der Abnahme Nr. 1). (3) tests/testthat/test-robustness-plan-spc.R prüft msa_plan() und msa_control_chart() nur auf Inhalte, die gleich bleiben."
+    }
+  ]
+}

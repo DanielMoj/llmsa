@@ -1,0 +1,211 @@
+{
+  "id": "ANK-86",
+  "title": "Westgard et al. (1981): Regeln 1_2s, 1_3s, 2_2s, R_4s, 4_1s, 10_x (Definitionen, R_4s-Lesart, N); Auslösewahrscheinlichkeit je Regel und Position unter unabhängigen standardnormalen z (Herleitung Formelsammlung §8); Standardisierung und Shewhart-Grenzen (Formelsammlung §8)",
+  "criteria": ["K-M3c-1", "K-M3c-2", "K-M3c-3", "K-M3c-4"],
+  "value": {
+    "rules": {
+      "1_2s": {
+        "kind": "single",
+        "limit": 2,
+        "window": 1,
+        "role": "warning",
+        "condition": "|z_t| > 2"
+      },
+      "1_3s": {
+        "kind": "single",
+        "limit": 3,
+        "window": 1,
+        "role": "rejection",
+        "condition": "|z_t| > 3"
+      },
+      "2_2s": {
+        "kind": "same_side_run",
+        "limit": 2,
+        "window": 2,
+        "role": "rejection",
+        "condition": "z_(t-1) > 2 und z_t > 2, oder beide < -2"
+      },
+      "4_1s": {
+        "kind": "same_side_run",
+        "limit": 1,
+        "window": 4,
+        "role": "rejection",
+        "condition": "z_(t-3), ..., z_t alle > 1 oder alle < -1"
+      },
+      "10_x": {
+        "kind": "same_side_run",
+        "limit": 0,
+        "window": 10,
+        "role": "rejection",
+        "condition": "z_(t-9), ..., z_t alle > 0 oder alle < 0"
+      },
+      "R_4s_range": {
+        "kind": "range",
+        "limit": 4,
+        "window": 2,
+        "role": "rejection",
+        "reading": "range",
+        "condition": "|z_t - z_(t-1)| > 4 (Spannweitenlesart des Codes v0.1.0 auf zwei aufeinanderfolgenden Werten)"
+      },
+      "R_4s_westgard": {
+        "kind": "opposite_pair",
+        "limit": 2,
+        "window": 2,
+        "role": "rejection",
+        "reading": "westgard",
+        "condition": "ein Wert des Paares (z_(t-1), z_t) > 2 und der andere < -2 (Westgard 1981, S. 494)"
+      }
+    },
+    "probability": {
+      "assumption": "z_t unabhängig standardnormal (Prozess unter Kontrolle); Wahrscheinlichkeit, dass die Regel an einer Position t anschlägt, deren Fenster vollständig ist (t >= window); an Positionen t < window kann die Regel nicht anschlagen (0)",
+      "single": "2 * (1 - pnorm(limit))",
+      "same_side_run": "2 * (1 - pnorm(limit))^window",
+      "range": "2 * (1 - pnorm(limit / sqrt(2)))",
+      "opposite_pair": "2 * (1 - pnorm(limit))^2",
+      "before_window": 0
+    },
+    "printed": [
+      {
+        "rule": "1_2s",
+        "value": 0.0455,
+        "decimals": 4
+      },
+      {
+        "rule": "1_3s",
+        "value": 0.0027,
+        "decimals": 4
+      },
+      {
+        "rule": "2_2s",
+        "value": 0.00104,
+        "decimals": 5
+      },
+      {
+        "rule": "4_1s",
+        "value": 0.00127,
+        "decimals": 5
+      },
+      {
+        "rule": "10_x",
+        "value": 0.00195,
+        "decimals": 5
+      },
+      {
+        "rule": "R_4s_range",
+        "value": 0.0047,
+        "decimals": 4
+      },
+      {
+        "rule": "R_4s_westgard",
+        "value": 0.00104,
+        "decimals": 5
+      }
+    ],
+    "standardization": {
+      "formula": "z_t = (x_t - mu_0) / sigma_0",
+      "source_of_mu_sigma": "aus der Validierungsstudie (Argumente center und sd); fehlen sie, aus den ersten n_0 Kontrollwerten",
+      "n0_default": 10
+    },
+    "shewhart_limits": {
+      "formula": "mu_0 +- k * sigma_0",
+      "multipliers": [1, 2, 3]
+    },
+    "r4s_readings": {
+      "range": "Spannweite |z_t - z_(t-1)| > 4 zweier aufeinanderfolgender Werte (Code v0.1.0; Formelsammlung §8: „Der Code wendet die Spannweitenlesart auf zwei aufeinanderfolgende Werte an“)",
+      "westgard": "eine Kontrolle über +2s und die andere unter -2s innerhalb eines Laufs (Westgard 1981, S. 494); für N = 2 bis 4 Kontrollen je Lauf gedacht (S. 498) und nicht über Läufe hinweg (S. 500)",
+      "option": "docs/01 §3 Nr. 6: r4s = c(\"range\", \"westgard\"), Vorgabe range"
+    }
+  },
+  "unit": "Auslösewahrscheinlichkeit je Regel und Position als Anteil (dimensionslos); Grenzen und z in Einheiten von sigma_0",
+  "tolerance": {
+    "formula": "exakt aus der Formel (pnorm); Rechenvergleiche mit ANK-TOL.arithmetic.abs_tol",
+    "printed": "halbe Einheit der letzten gedruckten Stelle (0,5 · 10^-decimals)",
+    "simulation": "ANK-TOL.mc_factor.pass Monte-Carlo-Standardfehler sqrt(p (1 - p) / n_sim) um den Formelwert (K-M3c-3)"
+  },
+  "tolerance_note": "Die Wahrscheinlichkeiten sind Herleitungen der Formelsammlung unter Unabhängigkeit, keine Literaturwerte; der Test rechnet sie aus kind, limit und window mit pnorm() und prüft dabei die gedruckten Werte dieses Ankers mit der halben Einheit ihrer letzten Stelle.",
+  "source_url": "Westgard1981 (reference/privat/QUELLENKATALOG.md): Westgard, J. O., Barry, P. L., Hunt, M. R., Groth, T. (1981), A multi-rule Shewhart chart for quality control in clinical chemistry, Clinical Chemistry 27(3), 493–501, doi:10.1093/clinchem/27.3.493; Regeldefinitionen Druckseite 494 (PDF-Seite 2), N und R_4s Druckseite 498 (PDF-Seite 6), R_4s nicht über Läufe Druckseite 500 (PDF-Seite 8); lokale Kopie quellen/literatur/B_bausteine/Westgard_Barry_Hunt_Groth_1981_Multi_Rule_Shewhart_Chart_ClinChem27_493.pdf (SHA-256 54733d00e0cfa842e475b4a7a0b5955c2e57ac3c8f0941d7b544d36a2555e71c); Wahrscheinlichkeiten, Standardisierung und Grenzen: Formelsammlung §8, reference/privat/07_Formelsammlung_llmsa.md (Teil der Spec nach docs/01 §1; SHA-256 5861b9521089a2ca40a63c8b81a1f4a79bc74574f9536307a4ff425d1a462434)",
+  "source": "Literatur, geschützt (lokal; pdfinfo: Producer iTextSharp 4.1.6, Textschicht des Verlags mit OCR-Fehlern: R_4s als „R48“, 2_2s als „22..“, Indizes verloren) + Betreiberfestlegung (Formelsammlung §8, eigene Herleitungen unter Unabhängigkeit, Teil der Spec)",
+  "quote": "R_4s is the control rule according to which the run is rejected when the range or difference between the two control observations within the run exceeds 4s.",
+  "quote_location": "Druckseite 494 (PDF-Seite 2), rechte Spalte, am Seitenbild gelesen; tiefgestellte Indizes der Regelsymbole hier und in allen Zitaten als _4s, _2s usw. geschrieben (Textspiegel .layout.txt Zeile 131–133 mit „R48“)",
+  "further_quotes": [
+    {
+      "quote": "The rule is invoked when the observation in one control material exceeds a +2s limit and the observation on the other exceeds a −2s limit, i.e., each observation is out by 2s, but in opposite directions, making a total of 4s difference between them.",
+      "location": "Druckseite 494, rechte Spalte, Fortsetzung der R_4s-Definition"
+    },
+    {
+      "quote": "1_2s represents the control rule where one control observation exceeds control limits set as x̄ ± 2s. This is the “warning” rule for a Shewhart chart",
+      "location": "Druckseite 494, rechte Spalte"
+    },
+    {
+      "quote": "1_3s symbolizes the control rule where a run is rejected when one control observation exceeds control limits set as x̄ ± 3s.",
+      "location": "Druckseite 494, rechte Spalte"
+    },
+    {
+      "quote": "2_2s is the control rule where the run is rejected when two consecutive control observations exceed the same limit, which is either x̄ + 2s or x̄ − 2s.",
+      "location": "Druckseite 494, rechte Spalte"
+    },
+    {
+      "quote": "4_1s is the control rule where the run is rejected when four consecutive control observations exceed the same limit, which is either x̄ + 1s or x̄ − 1s.",
+      "location": "Druckseite 494, rechte Spalte"
+    },
+    {
+      "quote": "10_x̄ is the control rule which says the run is rejected when 10 consecutive control observations fall on the same side of the mean (x̄).",
+      "location": "Druckseite 494, rechte Spalte"
+    },
+    {
+      "quote": "Note: Reviewer R.B. points out that this range rule could be applied when one control observation exceeds, say, +2.5s and the other, say, −1.5s.",
+      "location": "Druckseite 494, rechte Spalte, Anmerkung zur R_4s-Regel"
+    },
+    {
+      "quote": "However, when N = 6, the probability for false rejection exceeds 5%. This is primarily ascribable to the R_4s rule, and elimination of that rule will decrease the false rejections to an acceptable proportion.",
+      "location": "Druckseite 498 (PDF-Seite 6), rechte Spalte"
+    },
+    {
+      "quote": "the control procedure recommended here should be satisfactory for N from 2 to 4.",
+      "location": "Druckseite 498, rechte Spalte"
+    },
+    {
+      "quote": "it should be remembered that the R_4s rule is not intended for use across runs, only within a single run.",
+      "location": "Druckseite 500 (PDF-Seite 8), rechte Spalte"
+    },
+    {
+      "quote": "Die Werte sind eigene Herleitungen unter Unabhängigkeit, keine Quellenwerte; Arithmetik am 24.10. nachgerechnet.",
+      "location": "Formelsammlung §8, Absatz „Prüfwerte für die Simulation“ (Zeile 345)"
+    },
+    {
+      "quote": "P(1_{3s}) = 2\\,(1-\\Phi(3)) = 0{,}0027,\\qquad P(1_{2s}) = 2\\,(1-\\Phi(2)) = 0{,}0455",
+      "location": "Formelsammlung §8, Zeile 348 (LaTeX-Quelltext)"
+    },
+    {
+      "quote": "P(2_{2s}) = 2\\,(1-\\Phi(2))^2 = 2\\,(0{,}02275)^2 = 0{,}00104,\\qquad P(4_{1s}) = 2\\,(1-\\Phi(1))^4 = 0{,}00127",
+      "location": "Formelsammlung §8, Zeile 352 (LaTeX-Quelltext)"
+    },
+    {
+      "quote": "P(10_x) = 2 \\cdot 0{,}5^{10} = 0{,}00195,\\qquad P(R_{4s}) = 2\\,\\big(1-\\Phi(4/\\sqrt{2})\\big) = 0{,}0047\\ \\text{(Spannweite)},\\qquad P(R_{4s}^{\\text{Westgard}}) = 2\\,(1-\\Phi(2))^2 = 0{,}00104",
+      "location": "Formelsammlung §8, Zeile 356 (LaTeX-Quelltext)"
+    },
+    {
+      "quote": "**Standardisierung.** Mittelwert μ₀ und Standardabweichung σ₀ stammen aus der Validierungsstudie; fehlen sie, aus den ersten n₀ Kontrollwerten (Vorgabe n₀ = 10).",
+      "location": "Formelsammlung §8, Zeile 320"
+    },
+    {
+      "quote": "\\mu_0 \\pm 1\\,\\sigma_0,\\qquad \\mu_0 \\pm 2\\,\\sigma_0,\\qquad \\mu_0 \\pm 3\\,\\sigma_0",
+      "location": "Formelsammlung §8, Shewhart-Grenzen, Zeile 342 (LaTeX-Quelltext)"
+    },
+    {
+      "quote": "Westgards R\\_4s vergleicht zwei Kontrollniveaus innerhalb eines Laufs und gilt als ausgelöst, wenn eine Kontrolle +2s überschreitet und die andere −2s unterschreitet",
+      "location": "Formelsammlung §8, Zeile 337"
+    },
+    {
+      "quote": "Der Code wendet die Spannweitenlesart auf zwei aufeinanderfolgende Werte an und benennt das im Bericht.",
+      "location": "Formelsammlung §8, Zeile 337"
+    },
+    {
+      "quote": "beide Lesarten als Option `r4s = c(\"range\", \"westgard\")`; Vorgabe bleibt die Spannweiten-Lesart des Codes; Bericht und `print` nennen die Lesart",
+      "location": "docs/01-fachspezifikation.md §3, Tabelle, Nr. 6 (Zeile 35)"
+    }
+  ],
+  "retrieved": "2026-11-08",
+  "method": "Reviewer, ACCEPTANCE M3c (08.11.2026): SHA-256 der PDF mit tools::sha256sum() aus Rscript; Druckseiten 494, 498 und 500 (PDF-Seiten 2, 6, 8) mit pdftoppm -r 110 gerendert und am Seitenbild gelesen, weil die Textschicht die Regelsymbole verfälscht; die Bilder wurden sofort gelöscht. Formelsammlung §8 im Repository gelesen (SHA-256 oben); Zeilen wörtlich übernommen.",
+  "verification": "Nachrechnung (R version 4.6.1 (2026-06-24)): 1_2s 0.0455003; 1_3s 0.0026998; 2_2s 0.0010351; 4_1s 0.0012672; 10_x 0.0019531; R_4s_range 0.0046777; R_4s_westgard 0.0010351; gerundet auf die gedruckten Stellen gleich der Formelsammlung. Probe des Reviewers (ACCEPTANCE M3c, 08.11.2026) mit msa_control_chart() auf dem Stand vor M3c (Vorgabe r4s nicht vorhanden, also Spannweitenlesart): 140 000 Reihen der Länge 12 aus unabhängigen N(0, 1)-Werten, je Regel und Position höchstens 2,4 MCSE vom Formelwert, vor dem vollständigen Fenster keine Auslösung."
+}
