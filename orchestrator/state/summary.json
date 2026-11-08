@@ -1,24 +1,24 @@
 {
   "contract": 1,
   "project": "llmsa",
-  "ts": "2026-11-08T03:22:02+01:00",
+  "ts": "2026-11-08T08:27:53+01:00",
   "milestone": {
     "id": "M3c",
     "index": 9,
     "total": 10
   },
-  "phase": "10-acceptance",
+  "phase": "20-plan",
   "round": 1,
   "needs_human": false,
   "reason": "",
   "gates": {},
   "parked": [],
   "last_events": [
-    "[20261108-004311] Lauf beendet.",
-    "[20261108-021024] CONFIG: AUTONOMY=0 PLAN<=2 REWORK<=5 REBUILD@r6 ARBITER+2 TIMEOUT=28800 RETRY=2x/120s GATE_ERROR_RETRIES=2 MAX_MS=1 QA=1(ab M2) ROLE_GUARDS=on NOTIFY=an BUILDER=codex REVIEWER=claude",
-    "[20261108-021035] QA-Routenprobe bestanden (gemini-4-argon); Ausgabe: orchestrator/logs/qa-probe-20261108-021024-1.log",
-    "[20261108-021035] === M3c start ===",
-    "[20261108-021101] RUN reviewer 10-acceptance (M3c r1, Versuch 1) -> /mnt/c/Users/Danie/dev/Llmsa/llmsa/orchestrator/logs/M3c-10-acceptance-r1-a1-20261108-021101.log"
+    "[20261108-032206] AUTONOMY_LEVEL=0: Halt nach Phase 10-acceptance",
+    "[20261108-080921] CONFIG: AUTONOMY=1 PLAN<=2 REWORK<=5 REBUILD@r6 ARBITER+2 TIMEOUT=28800 RETRY=2x/120s GATE_ERROR_RETRIES=2 MAX_MS=1 QA=1(ab M2) ROLE_GUARDS=on NOTIFY=an BUILDER=codex REVIEWER=claude",
+    "[20261108-080927] QA-Routenprobe bestanden (gemini-4-argon); Ausgabe: orchestrator/logs/qa-probe-20261108-080921-1.log",
+    "[20261108-080927] === M3c start ===",
+    "[20261108-080953] RUN builder 20-plan (M3c r1, Versuch 1) -> /mnt/c/Users/Danie/dev/Llmsa/llmsa/orchestrator/logs/M3c-20-plan-r1-a1-20261108-080953.log"
   ],
   "exit": null,
   "role_guards": "on"
