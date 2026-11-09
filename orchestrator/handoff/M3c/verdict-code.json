@@ -1,0 +1,34 @@
+{
+  "milestone": "M3c",
+  "phase": "code",
+  "round": 1,
+  "verdict": "PASS",
+  "blocking": [],
+  "nonblocking": [
+    {
+      "id": "E10",
+      "ref": "Gate mutgate (pass, gate-mutgate.log Z. 593-694, Z. 700); reports/mutation/mutation.json; BL-146",
+      "note": "Zehn von 34 Überlebenden sind Testlücken bei richtigem Produkt: R/plan.R:113 (gültige Schätzungen an den Grenzen von [0, 100]; genau 100 kommt vor), :140 (nsim > 2), :151 (Druck der Zeile true %GRR bei einem Plan mit einer Zeile), R/spc.R:119 (plot mit fehlendem Kontrollwert), R/report.R:113 (Format rendered_at), :127 (|| -> &&). Übrige 24 äquivalent oder ohne beobachtbare Wirkung (REVIEW, Mutation). Kein MUT-EQUIV.json, nichts zu genehmigen. Tests beim nächsten Eingriff."
+    },
+    {
+      "id": "E11",
+      "ref": "orchestrator/handoff/M3c/QA.md QA-M3c-001; R/spc.R:74-85; ADR-035; BL-145",
+      "note": "Unbekannte Regelnamen in rules werden still ignoriert, n_baseline unter 2 endet erst über sd in einem Fehler. Reproduziert (Prüflauf 5). Herabstufung begründet: kein roter reproduzierender Test, QA-Vorschlag nonblocking, Bestand seit v0.1.0, außerhalb von ADR-054 Nr. 1 und 2, Abschlussregel ADR-035. Nach dem 26.11.2026."
+    },
+    {
+      "id": "E12",
+      "ref": "R/plan.R:90; vignettes/validation.Rmd:447; inst/templates/validation_report.Rmd:221-225; BL-146",
+      "note": "(1) is.complex(nsim) ist unerreichbar (!is.numeric(1i) greift zuerst). (2) Vignette: the caller supplies that grouping; gemeint ist must ensure (Schnittstelle nimmt keine Laufzuordnung an). (3) Der Satz zur R_4s-Lesart erscheint auch, wenn R_4s nicht in rules liegt (Bestand seit M3d). Beim nächsten Eingriff."
+    },
+    {
+      "id": "E13",
+      "ref": "ACC-9; ADR-054 Nr. 9; BL-147",
+      "note": "Betreiberfrage bleibt offen: MCSE eines Variationskoeffizienten in die Formelsammlung? Bis dahin die zulässige benannte Delta-Methode in eigener Tabelle der Vignette, keine Bestehensschwelle."
+    },
+    {
+      "id": "E14",
+      "ref": "README.md:188-190; BUILDER_EXTRA_PATHS_REGEX; BL-148",
+      "note": "Statustabelle des README veraltet nach M3a, M3c und M3d (implemented; not yet validated bzw. validation in progress); die Datei liegt außerhalb der Builder-Pfade. Betreiber nach Abschluss der Meilensteine."
+    }
+  ]
+}
