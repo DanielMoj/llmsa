@@ -1312,7 +1312,7 @@ rendering.
 | S-bias-1 | 0.959000 | 0.006270 | 1000 | 1.435295 | within report threshold |
 | S-bias-2 | 0.952000 | 0.006760 | 1000 | 0.295863 | within report threshold |
 
-Elapsed time: 11.773 seconds, with R 4.6.2 and llmsa 0.2.0. The
+Elapsed time: 11.701 seconds, with R 4.6.2 and llmsa 0.2.0. The
 independent class A acceptance study checks the same scenarios and each
 interval against the t formula. These results assess the bias interval
 with independent residuals; they do not establish linearity-band

@@ -518,16 +518,18 @@ decision record and a deprecation period.
 - Nested validation of LLM-as-judge scoring for free-text outcomes.
 - Detection-limit style experiments: how much evidence a document must
   contain before a finding is extracted reliably.
-- First release with a Zenodo DOI, then CRAN.
+- Release on CRAN.
 
 ## Citation
 
     Moj, D. A. (2026). llmsa: Measurement System Analysis for Pipelines Built on
     Large Language Models. R package version 0.2.0.
-    https://github.com/DanielMoj/llmsa
+    https://doi.org/10.5281/zenodo.24143759
 
 `citation("llmsa")` returns the same entry; a `CITATION.cff` is
-included. A Zenodo DOI will be added with the first release.
+included. Version 0.2.0 is archived at Zenodo under the DOI above. The
+DOI [10.5281/zenodo.24143758](https://doi.org/10.5281/zenodo.24143758)
+stands for all versions and resolves to the latest one.
 
 ## References
 
