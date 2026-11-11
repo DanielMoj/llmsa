@@ -1312,7 +1312,7 @@ rendering.
 | S-bias-1 | 0.959000 | 0.006270 | 1000 | 1.435295 | within report threshold |
 | S-bias-2 | 0.952000 | 0.006760 | 1000 | 0.295863 | within report threshold |
 
-Elapsed time: 11.606 seconds, with R 4.6.2 and llmsa 0.1.0. The
+Elapsed time: 11.219 seconds, with R 4.6.2 and llmsa 0.1.0. The
 independent class A acceptance study checks the same scenarios and each
 interval against the t formula. These results assess the bias interval
 with independent residuals; they do not establish linearity-band
@@ -1357,3 +1357,116 @@ supplied with `transform = "none"`. The default analyses the supplied
 response without transformation. Unit tests check the transformation
 against regression, input errors, invariance to relabelling and row
 order, and reproducibility of the randomised design.
+
+## System suitability and simulator validation
+
+ANK-86 records the Westgard definitions, their strict boundaries,
+complete windows and standardization. The harness checks constructed
+boundary series and an independent rule evaluator in
+`tests/acceptance/test-m3c-1-westgard-rules.R` and
+`test-m3c-2-r4s-reading.R`. The warning rule does not reject a run. Both
+R_4s readings use consecutive controls; the Westgard reading requires
+that the compared controls belong to the same run. The interface has no
+run identifiers, so the caller supplies that grouping. Printed and
+rendered reports identify the reading and the actual positions that
+fired.
+
+The class A study `tests/simulation/test-westgard-false-alarm.R`
+compares each rule’s firing rate at each position with the analytic
+probability in ANK-86, with Monte Carlo standard errors and the
+allowance from ANK-TOL.mc_factor. It separately reproduces Parvin’s
+ongoing procedure from ANK-87, including the in-control history before a
+shift, and compares inverse average run length with the published values
+using that anchor’s tolerance. The inverse run-length MCSE is reported
+using a delta approximation. These are harness studies; building this
+document does not rerun them.
+
+`tests/acceptance/test-m3c-4-qcc-limits.R` observes the horizontal lines
+actually drawn by the chart and compares them with the closed formulas
+and live `qcc::qcc(type = "xbar.one")` results under a supplied center
+and SD. `test-m3c-5-simulator-latent.R` checks the item truth and mean
+shifts deterministically. `tests/simulation/test-simulator-recovery.R`
+uses S-sim-1 and the S-boot-1 variance components to check recovery with
+[`msa_fit()`](https://danielmoj.github.io/llmsa/reference/msa_fit.md)
+and the distribution of item truth, with seeds, versions and MCSE. The
+sample size comes from ANK-06 and the comparison allowance from
+ANK-TOL.mc_factor.
+
+## Planning rule for prompt-variance precision
+
+The rule from ANK-89 is CV(sigma2_hat_Y) ~ sqrt(2 / nu_Y), with prompt
+degrees of freedom equal to the number of prompt variants minus 1. Each
+candidate below uses **n_sim = 1000** actual repetitions. The empirical
+CV is the sample SD divided by the mean of **all** prompt variance
+estimates, including zeros. A boundary estimate means exactly zero,
+before display rounding; its share has MCSE given by the binomial
+standard-error formula. Singular fits remain in every denominator.
+Failed fits stop the generation.
+
+| plan | items | prompts | nu | cv_rule | cv_empirical | boundary_share | mcse_boundary | n_sim |
+|:---|---:|---:|---:|:---|:---|:---|:---|---:|
+| S-plan-1 | 20 | 3 | 2 | 1.0000 | 1.0722 | 0.0460 | 0.0066 | 1000 |
+| S-plan-2 | 20 | 5 | 4 | 0.7071 | 0.7436 | 0.0070 | 0.0026 | 1000 |
+| S-plan-3 | 40 | 3 | 2 | 1.0000 | 1.0334 | 0.0340 | 0.0057 | 1000 |
+| S-plan-4 | 40 | 5 | 4 | 0.7071 | 0.7513 | 0.0080 | 0.0028 | 1000 |
+
+The comparison is descriptive and has no pass threshold. The simple rule
+describes the precision of a variance estimate based on a single mean
+square; residual and interaction estimation and the nonnegative REML
+boundary affect the empirical distribution. More items do not replace
+independent prompt levels. The boundary shares make visible where the
+unconstrained approximation does not describe the fitted distribution
+well.
+
+The empirical CV exceeds the rule value for S-plan-1, S-plan-2,
+S-plan-3, S-plan-4.
+
+The supplementary CV MCSE below uses the **delta method over the first
+two empirical raw moments**, including the sample-SD correction and
+their estimated covariance. It is an approximation requiring positive
+mean and variance and finite moments; an undefined value is labelled
+explicitly. This named method is allowed by ADR-054 pending the
+operator’s ACC-9 decision about the formula collection. It adds no
+acceptance threshold.
+
+| plan | cv_empirical | mcse_cv | mcse_cv_method | mcse_cv_note |
+|:---|:---|:---|:---|:---|
+| S-plan-1 | 1.0722 | 0.0435 | Delta method: first two empirical raw moments | approximate; all prompt estimates, including zeros, retained |
+| S-plan-2 | 0.7436 | 0.0192 | Delta method: first two empirical raw moments | approximate; all prompt estimates, including zeros, retained |
+| S-plan-3 | 1.0334 | 0.0279 | Delta method: first two empirical raw moments | approximate; all prompt estimates, including zeros, retained |
+| S-plan-4 | 0.7513 | 0.0186 | Delta method: first two empirical raw moments | approximate; all prompt estimates, including zeros, retained |
+
+The files were generated by `validation/sim/planning_rule.R`, with
+exactly one
+[`msa_plan()`](https://danielmoj.github.io/llmsa/reference/msa_plan.md)
+call per candidate and RNG Mersenne-Twister/Inversion/Rejection. The
+design settings and seeds come from the generation manifest:
+
+| plan     | scenario | n_items | n_prompts | n_models | n_reps | n_blocks |     seed |
+|:---------|---------:|--------:|----------:|---------:|-------:|---------:|---------:|
+| S-plan-1 |        1 |      20 |         3 |        3 |      2 |        2 | 20261109 |
+| S-plan-2 |        2 |      20 |         5 |        3 |      2 |        2 | 20261110 |
+| S-plan-3 |        3 |      40 |         3 |        3 |      2 |        2 | 20261111 |
+| S-plan-4 |        4 |      40 |         5 |        3 |      2 |        2 | 20261112 |
+
+| component    | variance |
+|:-------------|---------:|
+| item         |    1.000 |
+| prompt       |    0.050 |
+| model        |    0.050 |
+| block        |    0.010 |
+| item_prompt  |    0.010 |
+| item_model   |    0.050 |
+| prompt_model |    0.005 |
+| residual     |    0.100 |
+
+`validation/planning/README.md` records ADEMP, formulas and reproduction
+commands. `SOURCES.json` and `session.txt` preserve hashes, methods,
+versions and actual elapsed times. This reader uses the **public**
+context, verifies anchor and result hashes and recomputes summaries from
+stored repetitions. With `REPO_ROOT`, the original anchors must also
+match. There is no automatic simulation during knitting. The class A
+harness test `tests/simulation/test-plan-satterthwaite.R` independently
+repeats the seeded calls and checks that this table reports the
+resulting numbers. Numerical changes to planning, simulation or fitting
+require a fresh generation run.

@@ -36,7 +36,7 @@ msa_plan(
 
 - nsim:
 
-  Simulations per scenario.
+  Positive integer number of simulations per scenario.
 
 - seed:
 
@@ -52,7 +52,27 @@ A data.frame of class `msa_plan` with, per scenario, the true %GRR, the
 mean and the 2.5 %, 50 % and 97.5 % quantiles of the estimates, the
 root-mean-square error, the share of singular fits and the share of
 simulations that misclassify the system relative to the 10 % / 30 %
-thresholds.
+thresholds (both exact thresholds are marginal). Additional columns are
+`bias` (mean estimate minus truth), `empse` (sample standard deviation
+of estimates), `mcse_bias` (EmpSE / sqrt(nsim)) and `mcse_empse`
+(approximately EmpSE / sqrt(2 \* (nsim - 1))). With `nsim = 1`, EmpSE
+and both MCSE columns are `NA_real_`.
+
+The `replicates` attribute is a data.frame with `scenario` (input row
+number), `sim` (repetition within the scenario), `estimate` (%GRR in
+percent study variation), `singular` (logical) and `prompt` (the REML
+prompt variance from that fit). With only one prompt variant there is no
+estimated prompt component, so `prompt` is `NA_real_`, not a boundary
+estimate of zero. For multiple prompt variants a missing or invalid
+prompt estimate is an error. Singular fits, including estimates exactly
+zero, remain in every summary. Non-finite %GRR estimates stop the run.
+
+All summaries use these same replicates without rounding. Quantiles use
+definition 7; true %GRR includes every non-item component, including the
+block and pairwise interactions. Print rounds summaries to one decimal
+place and returns the unchanged object invisibly. See the planning-rule
+comparison in
+[`vignette("validation", package = "llmsa")`](https://danielmoj.github.io/llmsa/articles/validation.md).
 
 ## Examples
 
@@ -72,10 +92,10 @@ msa_plan(sc, vc = list(item = 1, prompt = 0.05, model = 0.05, residual = 0.1),
 #>       40         3        3      3        1 41.3 32.8   38.9  54.3  6.4
 #>       20         6        3      3        1 41.1 28.8   40.2  54.5  6.8
 #>       40         6        3      3        1 40.6 32.6   40.3  51.4  5.1
-#>  pct_singular pct_misclassified
-#>          90.0               5.0
-#>          80.0               0.0
-#>          85.0               5.0
-#>         100.0               0.0
+#>  pct_singular pct_misclassified bias empse mcse_bias mcse_empse
+#>          90.0               5.0  0.2   8.9       2.0        1.5
+#>          80.0               0.0  0.5   6.6       1.5        1.1
+#>          85.0               5.0  0.3   7.0       1.6        1.1
+#>         100.0               0.0 -0.2   5.3       1.2        0.9
 # }
 ```

@@ -64,7 +64,8 @@ value) over time.</p>
 <span>  center <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  sd <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  n_baseline <span class="op">=</span> <span class="fl">10</span>,</span>
-<span>  rules <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"1_2s"</span>, <span class="st">"1_3s"</span>, <span class="st">"2_2s"</span>, <span class="st">"R_4s"</span>, <span class="st">"4_1s"</span>, <span class="st">"10_x"</span><span class="op">)</span></span>
+<span>  rules <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"1_2s"</span>, <span class="st">"1_3s"</span>, <span class="st">"2_2s"</span>, <span class="st">"R_4s"</span>, <span class="st">"4_1s"</span>, <span class="st">"10_x"</span><span class="op">)</span>,</span>
+<span>  r4s <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"range"</span>, <span class="st">"westgard"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -91,21 +92,35 @@ across its replicates). If <code>NULL</code>, estimated from the first
 <dt id="arg-rules">rules<a class="anchor" aria-label="anchor" href="#arg-rules"></a></dt>
 <dd><p>Rules to evaluate.</p></dd>
 
+
+<dt id="arg-r-s">r4s<a class="anchor" aria-label="anchor" href="#arg-r-s"></a></dt>
+<dd><p>Reading of R_4s: <code>"range"</code> (absolute difference greater than
+4 sd) or <code>"westgard"</code> (one value above 2 sd and the other below -2 sd).</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>A data.frame of class <code>msa_control_chart</code> with <code>x</code>, <code>z</code>, a
 logical column per rule and <code>reject</code> (any rejection rule fired;
-<code>1_2s</code> is a warning only).</p>
+<code>1_2s</code> is a warning only). The <code>r4s</code> attribute records the selected
+reading, which is also named by <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code> and <code><a href="msa_report.html">msa_report()</a></code>.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>Implemented rules on the z-scores <code>(x - center) / sd</code>:
 <code>1_2s</code> (warning, one value beyond 2 sd), <code>1_3s</code> (one value beyond 3 sd),
 <code>2_2s</code> (two consecutive values beyond 2 sd on the same side),
-<code>R_4s</code> (two consecutive values differing by more than 4 sd),
+<code>R_4s</code> (two consecutive values, interpreted according to <code>r4s</code>),
 <code>4_1s</code> (four consecutive values beyond 1 sd on the same side),
-<code>10_x</code> (ten consecutive values on the same side of the center).</p>
+<code>10_x</code> (ten consecutive values on the same side of the center).
+All limits are strict, and a rule cannot fire before its window is full.
+The baseline standard deviation uses the sample divisor (n - 1).</p>
+<p>The default R_4s reading uses the range of each consecutive pair. The
+Westgard reading requires one standardized value above 2 and the other
+below -2, in either order. Westgard's original multirule procedure uses
+N = 2 to 4 controls within a run; R_4s is not intended for use across runs
+(Westgard et al., 1981, pp. 498, 500). This interface has no run identifiers:
+callers must ensure that compared neighbors belong to the same control run.</p>
     </div>
 
     <div class="section level2">
@@ -115,6 +130,7 @@ logical column per rule and <code>reject</code> (any rejection rule fired;
 <span class="r-in"><span><span class="va">cc</span> <span class="op">&lt;-</span> <span class="fu">msa_control_chart</span><span class="op">(</span><span class="va">acc</span>, center <span class="op">=</span> <span class="fl">0.92</span>, sd <span class="op">=</span> <span class="fl">0.02</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">cc</span><span class="op">[</span><span class="va">cc</span><span class="op">$</span><span class="va">reject</span>, <span class="op">]</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Control chart: 6 points, center 0.9200, sd 0.0200; 6 rejection(s)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   R_4s reading: range</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   rules fired: 1_3s (5), 2_2s (5), R_4s (1), 4_1s (3) </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  index         x         z 1_2s  1_3s  2_2s  R_4s  4_1s  10_x reject</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     16 0.8338469 -4.307656 TRUE  TRUE FALSE  TRUE FALSE FALSE   TRUE</span>

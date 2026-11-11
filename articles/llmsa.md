@@ -371,11 +371,11 @@ msa_plan(scenarios, vc = list(item = 1, prompt = 0.05, model = 0.05, residual = 
 #>       40         3        3      3        1 40.3 35.1   39.4  46.1  3.5
 #>       20         6        3      3        1 42.5 32.1   42.0  51.6  6.4
 #>       40         6        3      3        1 40.7 29.7   41.7  52.5  7.3
-#>  pct_singular pct_misclassified
-#>         100.0              10.0
-#>          90.0               0.0
-#>         100.0               0.0
-#>          90.0              10.0
+#>  pct_singular pct_misclassified bias empse mcse_bias mcse_empse
+#>         100.0              10.0 -4.4   5.7       1.8        1.3
+#>          90.0               0.0 -0.5   3.7       1.2        0.9
+#>         100.0               0.0  1.6   6.5       2.1        1.5
+#>          90.0              10.0 -0.1   7.7       2.4        1.8
 ```
 
 (Use a few hundred simulations in practice.) The share of singular fits
@@ -396,6 +396,7 @@ control <- c(rnorm(15, 0.92, 0.02), rnorm(6, 0.84, 0.02))   # drift after a sile
 cc <- msa_control_chart(control, center = 0.92, sd = 0.02)
 cc
 #> Control chart: 21 points, center 0.9200, sd 0.0200; 6 rejection(s)
+#>   R_4s reading: range
 #>   rules fired: 1_3s (5), 2_2s (5), R_4s (1), 4_1s (3) 
 #>  index         x         z 1_2s  1_3s  2_2s  R_4s  4_1s  10_x reject
 #>     16 0.8338469 -4.307656 TRUE  TRUE FALSE  TRUE FALSE FALSE   TRUE

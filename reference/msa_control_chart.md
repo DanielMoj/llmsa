@@ -16,7 +16,8 @@ msa_control_chart(
   center = NULL,
   sd = NULL,
   n_baseline = 10,
-  rules = c("1_2s", "1_3s", "2_2s", "R_4s", "4_1s", "10_x")
+  rules = c("1_2s", "1_3s", "2_2s", "R_4s", "4_1s", "10_x"),
+  r4s = c("range", "westgard")
 )
 ```
 
@@ -41,20 +42,37 @@ msa_control_chart(
 
   Rules to evaluate.
 
+- r4s:
+
+  Reading of R_4s: `"range"` (absolute difference greater than 4 sd) or
+  `"westgard"` (one value above 2 sd and the other below -2 sd).
+
 ## Value
 
 A data.frame of class `msa_control_chart` with `x`, `z`, a logical
 column per rule and `reject` (any rejection rule fired; `1_2s` is a
-warning only).
+warning only). The `r4s` attribute records the selected reading, which
+is also named by [`print()`](https://rdrr.io/r/base/print.html) and
+[`msa_report()`](https://danielmoj.github.io/llmsa/reference/msa_report.md).
 
 ## Details
 
 Implemented rules on the z-scores `(x - center) / sd`: `1_2s` (warning,
 one value beyond 2 sd), `1_3s` (one value beyond 3 sd), `2_2s` (two
 consecutive values beyond 2 sd on the same side), `R_4s` (two
-consecutive values differing by more than 4 sd), `4_1s` (four
+consecutive values, interpreted according to `r4s`), `4_1s` (four
 consecutive values beyond 1 sd on the same side), `10_x` (ten
-consecutive values on the same side of the center).
+consecutive values on the same side of the center). All limits are
+strict, and a rule cannot fire before its window is full. The baseline
+standard deviation uses the sample divisor (n - 1).
+
+The default R_4s reading uses the range of each consecutive pair. The
+Westgard reading requires one standardized value above 2 and the other
+below -2, in either order. Westgard's original multirule procedure uses
+N = 2 to 4 controls within a run; R_4s is not intended for use across
+runs (Westgard et al., 1981, pp. 498, 500). This interface has no run
+identifiers: callers must ensure that compared neighbors belong to the
+same control run.
 
 ## Examples
 
@@ -64,6 +82,7 @@ acc <- c(rnorm(15, 0.92, 0.02), rnorm(6, 0.84, 0.02))  # drift after a silent mo
 cc <- msa_control_chart(acc, center = 0.92, sd = 0.02)
 cc[cc$reject, ]
 #> Control chart: 6 points, center 0.9200, sd 0.0200; 6 rejection(s)
+#>   R_4s reading: range
 #>   rules fired: 1_3s (5), 2_2s (5), R_4s (1), 4_1s (3) 
 #>  index         x         z 1_2s  1_3s  2_2s  R_4s  4_1s  10_x reject
 #>     16 0.8338469 -4.307656 TRUE  TRUE FALSE  TRUE FALSE FALSE   TRUE

@@ -2,6 +2,27 @@
 
 ## llmsa (development version)
 
+- [`msa_control_chart()`](https://danielmoj.github.io/llmsa/reference/msa_control_chart.md)
+  adds `r4s = c("range", "westgard")`. The default retains the range
+  rule; the Westgard reading requires opposite strict two-SD exceedances
+  in adjacent controls. Printing and reports name the selected reading,
+  including the original range reading for older objects.
+
+- [`msa_plan()`](https://danielmoj.github.io/llmsa/reference/msa_plan.md)
+  retains every fitted repetition in `attr(x, "replicates")` and adds
+  Bias, EmpSE and their Monte Carlo standard errors. Singular fits
+  remain in every summary. A plan with one prompt has no estimated
+  prompt component (`NA`); one simulation has undefined EmpSE and MCSE.
+  `nsim` now requires a positive integer instead of accepting unusable
+  zero or fractional counts. Failed fits or invalid estimates stop with
+  a diagnostic.
+
+- The validation vignette documents the control-chart and simulator
+  checks and reads reproducible planning results, including
+  prompt-variance CV, exact-zero estimates and an explicitly labelled
+  delta approximation for the CV’s MCSE. Building the vignette does not
+  rerun the planning study.
+
 - CSV resume preserves text identifiers and responses. Seeded mock
   responses depend on the complete call key, so a new backend reproduces
   an interrupted run. Backend errors and empty responses are recorded

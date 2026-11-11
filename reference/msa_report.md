@@ -102,8 +102,9 @@ msa_report(
   Optional result of
   [`msa_control_chart()`](https://danielmoj.github.io/llmsa/reference/msa_control_chart.md).
   The report lists TRUE counts and sorted index positions for each rule
-  and `reject`, and identifies the range interpretation of R_4s on
-  consecutive values.
+  and `reject`, and identifies the selected R_4s reading on consecutive
+  values. Older objects without a reading attribute use the original
+  range interpretation; an invalid reading attribute is an error.
 
 ## Value
 
@@ -152,6 +153,6 @@ if (requireNamespace("rmarkdown", quietly = TRUE) && rmarkdown::pandoc_available
                     output_file = tempfile(fileext = ".html"))
   out
 }
-#> [1] "/tmp/RtmpMnFhd5/file194245b66dc0.html"
+#> [1] "/tmp/RtmpjnlnCS/file19511f3143fa.html"
 # }
 ```
