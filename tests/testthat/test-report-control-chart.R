@@ -98,7 +98,9 @@ test_that("the render contract carries the reading separately from the unchanged
   expect_false(recorded$quiet)
   expect_identical(recorded$decimal, ".")
   expect_identical(getOption("OutDec"), ",")
-  expect_identical(returned$value, output)
+  # On Windows dirname() and rmarkdown::render() return forward slashes; compare normalized paths.
+  expect_identical(normalizePath(returned$value, winslash = "/", mustWork = FALSE),
+                   normalizePath(output, winslash = "/", mustWork = FALSE))
   expect_false(returned$visible)
   template <- system.file("templates", "validation_report.Rmd", package = "llmsa", mustWork = TRUE)
   expect_identical(readLines(recorded$input), readLines(template))
@@ -126,7 +128,7 @@ test_that("actual HTML reports distinguish both readings and support old cards",
     before <- chart
     path <- tempfile(fileext = ".html")
     result <- withVisible(msa_report(grr, control_chart = chart, output_file = path))
-    expect_identical(result$value, normalizePath(path))
+    expect_identical(normalizePath(result$value, winslash = "/"), normalizePath(path, winslash = "/"))
     expect_false(result$visible)
     text <- gsub("[[:space:]]+", " ", paste(readLines(path, warn = FALSE), collapse = " "))
     sentence <- if (reading == "westgard") paste0("R_4s uses the Westgard reading: one of two consecutive ",
