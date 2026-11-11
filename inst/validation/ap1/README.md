@@ -2,8 +2,9 @@
 
 AP1 is an internal application of llmsa. The approved design is in `plan.yaml`;
 the four entry points are `llmsa:::acmg_items()`, `acmg_prompts()`, `acmg_plan()`
-and `acmg_evaluate()`. Statistics remain provisional until M1 is accepted.
-Re-evaluate the same store after M1 without collecting new responses.
+and `acmg_evaluate()`. Milestone M1 was accepted on 2026-11-04. Evaluations made
+before that date were provisional; they are superseded by a re-evaluation of the
+same store without collecting new responses (ADR-057).
 
 Run the commands below from the source-package root with the frozen toolchain.
 The runner uses the source package through `pkgload`. Every invocation requires

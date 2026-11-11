@@ -1240,7 +1240,7 @@ acmg_evaluate <- function(runs, plan) {
     models[[key]]$report <- msa_report(m$grr, runs = data, agreement = m$agreement, robustness = m$robustness$effects,
         cou = plan$cou, risk = plan$risk$tier, acceptance = paste(plan$acceptance$overall, "Thresholds: see criteria and the approved AP1 plan."),
         question = "Does this preclassification pipeline satisfy the approved AP1 criteria?",
-        title = paste("AP1", key, "-", provenance, "- provisional"),
+        title = paste("AP1", key, "-", provenance),
         output_file = file.path(output, paste0("ap1-", key, ".html")), assessment = assessment)
   }
   list(models = models, joint = joint, provenance = provenance)

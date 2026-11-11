@@ -59,11 +59,15 @@ test_that("AP1 reports render provenance, overall criteria, warnings, policies a
   for (model in result$models) expect_true(file.exists(model$report))
   html <- paste(readLines(result$models$sol$report, warn = FALSE), collapse = " ")
   html <- gsub("[[:space:]]+", " ", html)
-  for (text in c("synthetic", "Statistics are provisional until M1", "overall verdict is", "NOT ASSESSED",
+  for (text in c("synthetic", "Statistics use the statistical core accepted in milestone M1", "overall verdict is", "NOT ASSESSED",
                  "Model failed to converge: synthetic reporting case", "Complete-case agreement diagnostics",
                  "Half-normal plot of robustness effects", "Frozen data provenance", "insaid_references_loaded")) {
     expect_true(grepl(text, html, fixed = TRUE), info = text)
   }
+  # ADR-057: after the acceptance of M1 neither the title nor the status line calls the report provisional.
+  expect_true(grepl("<title>AP1 sol - synthetic</title>", html, fixed = TRUE))
+  expect_false(grepl("- provisional", html, fixed = TRUE))
+  expect_false(grepl("Statistics are provisional", html, fixed = TRUE))
   for (policy in p$reporting$policies) expect_true(grepl(policy$url, html, fixed = TRUE))
   expect_true(grepl("data:image/png;base64", html, fixed = TRUE))
   expect_false(grepl("p.SyntheticProtected", html, fixed = TRUE))

@@ -324,8 +324,8 @@ templates:
     one of "Benign", "Likely benign", "Uncertain significance", "Likely pathogenic",
     "Pathogenic". Output the JSON object only.'
 reporting:
-  provisional: Statistics are provisional until M1 is accepted. Re-evaluate the same
-    store after M1 (BL-52).
+  provisional: Statistics use the statistical core accepted in milestone M1 (2026-11-04).
+    Evaluations made before that date were provisional and are superseded (BL-52, ADR-057).
   policies:
   - provider: DeepInfra via OpenRouter (qwen/qwen3-32b, endpoint deepinfra/fp8)
     summary: OpenRouter lists this endpoint with training, prompt retention, publication

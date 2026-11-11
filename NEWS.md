@@ -1,5 +1,8 @@
 # llmsa (development version)
 
+* Reports of the internal AP1 pipeline no longer carry the label
+  `provisional`. Milestone M1 accepted the statistical core, and the status
+  line of the AP1 plan now says so. No statistic changes.
 * `msa_control_chart()` adds `r4s = c("range", "westgard")`. The default
   retains the range rule; the Westgard reading requires opposite strict
   two-SD exceedances in adjacent controls. Printing and reports name the
