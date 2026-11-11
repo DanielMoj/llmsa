@@ -2,8 +2,8 @@ cff-version: 1.2.0
 message: "If you use this software, please cite it as below."
 type: software
 title: "llmsa: Measurement System Analysis for Pipelines Built on Large Language Models"
-version: 0.1.0
-date-released: 2026-10-20
+version: 0.2.0
+date-released: 2026-11-11
 license: MIT
 repository-code: "https://github.com/DanielMoj/llmsa"
 url: "https://github.com/DanielMoj/llmsa"

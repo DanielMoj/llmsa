@@ -1,4 +1,4 @@
-# llmsa (development version)
+# llmsa 0.2.0
 
 * Reports of the internal AP1 pipeline no longer carry the label
   `provisional`. Milestone M1 accepted the statistical core, and the status
