@@ -153,6 +153,6 @@ if (requireNamespace("rmarkdown", quietly = TRUE) && rmarkdown::pandoc_available
                     output_file = tempfile(fileext = ".html"))
   out
 }
-#> [1] "/tmp/Rtmp8vnDC4/file1ad953c15fea.html"
+#> [1] "/tmp/RtmpWgNTDS/file19944569673b.html"
 # }
 ```

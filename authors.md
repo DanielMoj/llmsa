@@ -8,7 +8,7 @@
 ## Citation
 
 Source:
-[`inst/CITATION`](https://github.com/DanielMoj/llmsa/blob/main/inst/CITATION)
+[`inst/CITATION`](https://github.com/DanielMoj/llmsa/blob/v0.2.0/inst/CITATION)
 
 Moj, D. A. (2026). llmsa: Measurement System Analysis for Pipelines
 Built on Large Language Models. R package version 0.2.0.
