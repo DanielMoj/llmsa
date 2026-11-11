@@ -195,12 +195,12 @@ Imported counts from msa_counts(); missing responses are included.
 |:---|:---|:---|:---|:---|:---|:---|
 | college_mathematics | 1.744 | 0.4297 | 67.11 | 3253 | TRUE | FALSE |
 | geometric_shapes | 4.115 | 0.7245 | 54.35 | 11972 | TRUE | FALSE |
-| high_school_european_history | 44.1 | 0.2339 | 16.5 | 6911 | TRUE | FALSE |
+| high_school_european_history | 44.1 | 0.234 | 16.5 | 6911 | TRUE | FALSE |
 | logical_deduction | 1.68 | 1.39 | 76.64 | 11784 | TRUE | FALSE |
 | navigate | 1.78 | 0.5192 | 67.86 | 12263 | TRUE | FALSE |
 | professional_accounting | 4.5 | 1.197 | 57.28 | 10230 | TRUE | FALSE |
-| public_relations | 42.14 | 0.1916 | 16.58 | 3920 | TRUE | FALSE |
-| ruin_names | 5.37 | 0.4123 | 45.63 | 11447 | TRUE | FALSE |
+| public_relations | 42.15 | 0.1916 | 16.58 | 3920 | TRUE | FALSE |
+| ruin_names | 5.37 | 0.4125 | 45.64 | 11447 | TRUE | FALSE |
 
 Latent variance components and percent GRR study variation. {.table}
 
