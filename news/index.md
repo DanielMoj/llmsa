@@ -1,6 +1,10 @@
 # Changelog
 
-## llmsa (development version)
+## llmsa 0.2.0
+
+- Reports of the internal AP1 pipeline no longer carry the label
+  `provisional`. Milestone M1 accepted the statistical core, and the
+  status line of the AP1 plan now says so. No statistic changes.
 
 - [`msa_control_chart()`](https://danielmoj.github.io/llmsa/reference/msa_control_chart.md)
   adds `r4s = c("range", "westgard")`. The default retains the range

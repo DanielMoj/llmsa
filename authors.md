@@ -11,13 +11,13 @@ Source:
 [`inst/CITATION`](https://github.com/DanielMoj/llmsa/blob/main/inst/CITATION)
 
 Moj, D. A. (2026). llmsa: Measurement System Analysis for Pipelines
-Built on Large Language Models. R package version 0.1.0.
+Built on Large Language Models. R package version 0.2.0.
 https://github.com/DanielMoj/llmsa
 
     @Manual{,
       title = {llmsa: Measurement System Analysis for Pipelines Built on Large Language Models},
       author = {Daniel Andreas Moj},
       year = {2026},
-      note = {R package version 0.1.0},
+      note = {R package version 0.2.0},
       url = {https://github.com/DanielMoj/llmsa},
     }

@@ -184,9 +184,9 @@ are tested explicitly.
 | Ordinal and binary outcomes (latent scale) | verified | equal to direct fits with [`ordinal::clmm()`](https://rdrr.io/pkg/ordinal/man/clmm.html) and [`lme4::glmer()`](https://rdrr.io/pkg/lme4/man/glmer.html); latent ICC against rptR and performance; recovery of simulated components with MCSE |
 | Bootstrap intervals ([`msa_boot()`](https://danielmoj.github.io/llmsa/reference/msa_boot.md)) | verified | quantiles equal to [`lme4::bootMer()`](https://rdrr.io/pkg/lme4/man/bootMer.html); coverage measured in seven scenarios with MCSE |
 | Robustness screening (Plackett-Burman, Lenth) | verified | generator rows equal to Plackett and Burman (1946), cross-checked with the NIST/SEMATECH e-Handbook and FrF2; examples II and IV of Lenth (1989), with unrepx and DoE.base as live comparisons; false-alarm rate in a simulation with MCSE, equal to an independent calculation (Lenth’s limits are conservative: about 2 to 3 % per effect at a nominal 5 %) |
-| Agreement (Cohen, Krippendorff), bias and linearity | implemented; validation in progress | planned: published values for every weighting and scale level, established packages, AIAG examples, simulated coverage |
-| Westgard rules, simulator, study planning | implemented; not yet validated | planned: each rule exactly at its limit, false-alarm rates against Westgard et al. (1981), recovery of simulated components |
-| Execution, parsers, backends, report | implemented; not yet validated | planned: an interrupted and resumed run gives the same store, parsers on random input, recorded real API responses, every number in the report equal to the object value |
+| Agreement (Cohen, Fleiss, Krippendorff), bias and linearity | verified | worked examples of Cohen (1968) for unweighted, linear and quadratic weights, of Fleiss (1971) and of Krippendorff (2011) for nominal, ordinal and interval data with missing values; irr, psych and DescTools as live comparisons; attribute measures on constructed data with values determined by hand; AIAG bias, linearity and attribute examples, the bias interval also against [`stats::t.test()`](https://rdrr.io/r/stats/t.test.html); coverage of the bias interval in a simulation with MCSE (independent deviations) |
+| Westgard rules, simulator, study planning | verified | on constructed series each rule fires just above its limit and neither on nor below it, for both readings of `R_4s`; firing probability of each rule at each position in a simulation with MCSE against the analytical values for independent controls; mean rejection probability per run of the combination `1_3s`/`2_2s`/`4_1s`/`10_x`, in control and after shifts of 1 and 2 SD, within the tolerance of Parvin (1992), Table 1; Shewhart limits against qcc as a live comparison; recovery of simulated variance components with MCSE; bias, empirical standard error, their MCSE, quantiles, RMSE and misclassification share of a planning run recalculated by hand from its stored repetitions |
+| Execution, parsers, backends, report | verified | 50 runs, each interrupted at a random point and resumed, leave the same store as the uninterrupted run, without duplicates (CSV and SQLite); each parser on 10,000 randomly generated inputs returns the expected value for valid forms and `NA` for invalid ones, never an error (decimal point and comma, signs, exponents, units in text; aliases, case and surrounding text; JSON inside text and broken JSON); both backends return text and metadata as in recorded API responses, and HTTP errors, timeouts and empty answers become error rows without ending the run; every number in the rendered report equals the object value at the rounding of the template; the SHA-256 data hash equals an independent calculation and does not depend on the row order; the report names the conventions, all seeds and, per model, identifier, provider and quantization |
 
 The test suite of the statistical core detects 92.8 % of 1,478
 deliberately injected faults (mutation testing of `R/fit.R` and
@@ -505,9 +505,6 @@ decision record and a deprecation period.
 
 ## Roadmap
 
-- Validation of the remaining components (agreement, bias and linearity,
-  robustness, control charts, planning, execution and report) to the
-  standard above.
 - Comparison of model versions as fixed levels, for revalidation after a
   change.
 - Measures for binary results after CLSI EP12: sensitivity and
@@ -526,7 +523,7 @@ decision record and a deprecation period.
 ## Citation
 
     Moj, D. A. (2026). llmsa: Measurement System Analysis for Pipelines Built on
-    Large Language Models. R package version 0.1.0.
+    Large Language Models. R package version 0.2.0.
     https://github.com/DanielMoj/llmsa
 
 `citation("llmsa")` returns the same entry; a `CITATION.cff` is
@@ -593,6 +590,9 @@ included. A Zenodo DOI will be added with the first release.
   (EU) 2026/1744 of 8 July 2026 amending Regulations (EU) 2024/1689,
   (EU) 2018/1139 and (EU) 2023/1230 (Digital Omnibus on AI). OJ L,
   2026/1744, 24.7.2026. <http://data.europa.eu/eli/reg/2026/1744/oj>
+- Fleiss, J. L. (1971). Measuring nominal scale agreement among many
+  raters. *Psychological Bulletin* 76(5), 378–382.
+  <https://doi.org/10.1037/h0031619>
 - He, H., Thinking Machines Lab (2025). Defeating nondeterminism in LLM
   inference. *Thinking Machines Lab: Connectionism*, 10 September 2025.
   <https://doi.org/10.64434/tml.20250910>
@@ -643,6 +643,9 @@ included. A Zenodo DOI will be added with the first release.
   Engineering Division. *Statistical Reference Datasets (StRD): Analysis
   of Variance*. <https://itl.nist.gov/div898/strd/anova/anova.html>
   (retrieved 22 October 2026).
+- Parvin, C. A. (1992). Comparing the power of quality-control rules to
+  detect persistent systematic error. *Clinical Chemistry* 38(3),
+  358–363. <https://doi.org/10.1093/clinchem/38.3.358>
 - Plackett, R. L., Burman, J. P. (1946). The design of optimum
   multifactorial experiments. *Biometrika* 33(4), 305–325.
   <https://doi.org/10.1093/biomet/33.4.305>
