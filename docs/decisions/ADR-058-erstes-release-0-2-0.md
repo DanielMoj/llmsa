@@ -28,3 +28,12 @@ Angenommen (Betreiber, 11.11.2026). Betreiber-Commit außerhalb des Harness, ohn
 - Berichte und Sitzungsdateien, die ab dem Release-Commit entstehen, nennen 0.2.0.
 - Der Stand mit dem Tag `v0.2.0` enthält im README noch den Satz, dass der DOI mit dem ersten Release folgt; der DOI steht erst im Folge-Commit.
 - BL-148 ist erledigt. BL-142 (Testlücken in den Dateien der Ausführung) bleibt offen.
+
+## Nachtrag 11.11.2026: Ausführung
+
+- Release-Commit `97e30f5`. Seine CI blieb unter Linux im Schritt `setup-r` stehen (Störung der Ubuntu-Runner von GitHub, BL-151); Windows und macOS waren grün.
+- Commit `75ee3f4` legt den Linux-Runner auf `ubuntu-24.04` fest und ändert nur die beiden Workflow-Dateien und `BACKLOG.md`. R-CMD-check 43072899568 ist für diesen Commit unter Ubuntu 24.04, Windows und macOS grün.
+- Bestätigungslauf von AP1: auf `97e30f5` vollständig mit Bootstrap, auf `75ee3f4` ohne Bootstrap. Beide ohne Abweichung von der Endauswertung vom 11.11.2026; die Berichte unterscheiden sich nur in Titel, Datumszeile, Statuszeile, Zeitstempel und Versionsangabe.
+- Der Tag `v0.2.0` zeigt auf `75ee3f4`. GitHub-Release veröffentlicht am 11.11.2026.
+- Zenodo: Version 0.2.0 unter DOI 10.5281/zenodo.24143759, alle Versionen unter DOI 10.5281/zenodo.24143758. Der Eintrag trägt die Version aus dem Tag (`v0.2.0`) und die Lizenz MIT.
+- Der Folge-Commit nach Nr. 7 trägt die DOI in README, `CITATION.cff` und `inst/CITATION` ein und ergänzt diesen Nachtrag. `inst/CITATION` nennt für Version 0.2.0 die DOI der Version und für jede andere Version die DOI für alle Versionen.

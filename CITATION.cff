@@ -4,6 +4,11 @@ type: software
 title: "llmsa: Measurement System Analysis for Pipelines Built on Large Language Models"
 version: 0.2.0
 date-released: 2026-11-11
+doi: 10.5281/zenodo.24143759
+identifiers:
+  - type: doi
+    value: 10.5281/zenodo.24143758
+    description: "All versions; resolves to the latest version."
 license: MIT
 repository-code: "https://github.com/DanielMoj/llmsa"
 url: "https://github.com/DanielMoj/llmsa"

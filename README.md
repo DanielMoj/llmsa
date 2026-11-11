@@ -4,6 +4,7 @@
 [![R-CMD-check](https://github.com/DanielMoj/llmsa/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/DanielMoj/llmsa/actions/workflows/R-CMD-check.yaml)
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE.md)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.24143758.svg)](https://doi.org/10.5281/zenodo.24143758)
 <!-- badges: end -->
 
 `llmsa` treats a pipeline built on a large language model (LLM) as what it
@@ -496,18 +497,20 @@ period.
 * Nested validation of LLM-as-judge scoring for free-text outcomes.
 * Detection-limit style experiments: how much evidence a document must
   contain before a finding is extracted reliably.
-* First release with a Zenodo DOI, then CRAN.
+* Release on CRAN.
 
 ## Citation
 
 ```
 Moj, D. A. (2026). llmsa: Measurement System Analysis for Pipelines Built on
 Large Language Models. R package version 0.2.0.
-https://github.com/DanielMoj/llmsa
+https://doi.org/10.5281/zenodo.24143759
 ```
 
 `citation("llmsa")` returns the same entry; a `CITATION.cff` is included.
-A Zenodo DOI will be added with the first release.
+Version 0.2.0 is archived at Zenodo under the DOI above. The DOI
+[10.5281/zenodo.24143758](https://doi.org/10.5281/zenodo.24143758) stands for
+all versions and resolves to the latest one.
 
 ## References
 

@@ -1,5 +1,9 @@
 citHeader("To cite llmsa in publications use:")
 
+# Version 0.2.0 is archived under its own DOI. Any other version cites the DOI
+# that stands for all versions and resolves to the latest one.
+doi <- if (identical(meta$Version, "0.2.0")) "10.5281/zenodo.24143759" else "10.5281/zenodo.24143758"
+
 bibentry(
   bibtype = "Manual",
   title   = "llmsa: Measurement System Analysis for Pipelines Built on Large Language Models",
@@ -7,9 +11,10 @@ bibentry(
                    comment = c(ORCID = "0009-0008-1594-6065")),
   year    = "2026",
   note    = paste("R package version", meta$Version),
+  doi     = doi,
   url     = "https://github.com/DanielMoj/llmsa",
   textVersion = paste0(
     "Moj, D. A. (2026). llmsa: Measurement System Analysis for Pipelines Built on ",
     "Large Language Models. R package version ", meta$Version,
-    ". https://github.com/DanielMoj/llmsa")
+    ". https://doi.org/", doi)
 )
